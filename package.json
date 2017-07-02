@@ -1,0 +1,35 @@
+{
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-env": "^1.5.2",
+    "webpack": "^3.0.0"
+  },
+  "name": "neo-wallet-js",
+  "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "dependencies": {
+  },
+  "scripts": {
+    "test": "mocha tests/index",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CityOfZion/neo-wallet-js.git"
+  },
+  "keywords": [
+    "neo",
+    "antshares",
+    "javascript",
+    "libraries"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CityOfZion/neo-wallet-js/issues"
+  },
+  "homepage": "https://github.com/CityOfZion/neo-wallet-js#readme"
+}
