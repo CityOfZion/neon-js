@@ -1,6 +1,6 @@
 import ecurve from 'ecurve';
 import BigInteger from 'bigi';
-import { secp256k1 as secp256r1 } from 'secp256k1';
+import secp256r1 from 'secp256k1';
 import CryptoJS from 'crypto-js';
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 // import * as baseX from 'base-x';
@@ -15,7 +15,7 @@ import { ab2str,
 
 var base58 = require('base-x')(BASE58)
 
-import Buffer from 'buffer';
+import buffer from 'buffer';
 import SQL from 'sql.js';
 
 
@@ -162,8 +162,8 @@ class Wallet {
   GetInputData($coin, $amount) {
   	// sort
   	var coin_ordered = $coin['list'];
-  	for (i = 0; i < coin_ordered.length - 1; i++) {
-  		for (j = 0; j < coin_ordered.length - 1 - i; j++) {
+  	for (let i = 0; i < coin_ordered.length - 1; i++) {
+  		for (let j = 0; j < coin_ordered.length - 1 - i; j++) {
   			if (parseFloat(coin_ordered[j].value) < parseFloat(coin_ordered[j + 1].value)) {
   				var temp = coin_ordered[j];
   				coin_ordered[j] = coin_ordered[j + 1];
@@ -176,7 +176,7 @@ class Wallet {
 
   	// calc sum
   	var sum = 0;
-  	for (i = 0; i < coin_ordered.length; i++) {
+  	for (let i = 0; i < coin_ordered.length; i++) {
   		sum = sum + parseFloat(coin_ordered[i].value);
   	}
 
@@ -210,7 +210,7 @@ class Wallet {
 
   		// index
   		pos = 1 + (x * 34) + 32;
-  		inputIndex = numStoreInMemory(coin_ordered[x]['n'].toString(16),4);
+  		let inputIndex = numStoreInMemory(coin_ordered[x]['n'].toString(16),4);
   		//inputIndex = numStoreInMemory(coin_ordered[x]['n'].toString(16), 2);
   		data.set(hexstring2ab(inputIndex), pos);
   	}
@@ -219,7 +219,7 @@ class Wallet {
 
   	// calc coin_amount
   	var coin_amount = 0;
-  	for (i = 0; i < k + 1; i++) {
+  	for (let i = 0; i < k + 1; i++) {
   		coin_amount = coin_amount + parseFloat(coin_ordered[i].value);
   	}
 
@@ -258,8 +258,8 @@ class Wallet {
   	data = data + $issueAssetID
 
   	// Outputs[0] Amount
-  	num1 = $issueAmount * 100000000;
-  	num1str = numStoreInMemory(num1.toString(16), 16);
+  	const num1 = $issueAmount * 100000000;
+  	const num1str = numStoreInMemory(num1.toString(16), 16);
   	data = data + num1str;
 
   	// Outputs[0] ProgramHash
@@ -277,7 +277,7 @@ class Wallet {
   	var curvePt = ecurve.Point.decodeFrom(ecparams,new Buffer($publicKeyEncoded,"hex"));
   	var curvePtX = curvePt.affineX.toBuffer(32);
   	var curvePtY = curvePt.affineY.toBuffer(32);
-  	var publicKey = Buffer.concat([new Buffer([0x04]), curvePtX, curvePtY]);
+  	var publicKey = buffer.concat([new Buffer([0x04]), curvePtX, curvePtY]);
 
   	var signatureScript = this.createSignatureScript($publicKeyEncoded);
   	console.log( signatureScript.toString('hex') );
@@ -307,8 +307,8 @@ class Wallet {
   	data = data + "00";
 
   	// asset amount
-  	num1 = $assetAmount * 100000000;
-  	num1str = numStoreInMemory(num1.toString(16), 16);
+  	const num1 = $assetAmount * 100000000;
+  	const num1str = numStoreInMemory(num1.toString(16), 16);
   	data = data + num1str;
 
   	// publickey
@@ -447,8 +447,8 @@ class Wallet {
   		//data.set(hexstring2ab($coin['assetid']), inputLen + 4);
 
   		// output value
-  		num1 = $Amount * 100000000;
-  		num1str = numStoreInMemory(num1.toString(16), 16);
+  		const num1 = $Amount * 100000000;
+  		const num1str = numStoreInMemory(num1.toString(16), 16);
   		data.set(hexstring2ab(num1str), inputLen + 36);
 
   		// output ProgramHash
@@ -469,8 +469,8 @@ class Wallet {
   		//data.set(hexstring2ab($coin['assetid']), inputLen + 4);
 
   		// output value
-  		num1 = $Amount * 100000000;
-  		num1str = numStoreInMemory(num1.toString(16), 16);
+  		const num1 = $Amount * 100000000;
+  		const num1str = numStoreInMemory(num1.toString(16), 16);
   		data.set(hexstring2ab(num1str), inputLen + 36);
 
   		// output ProgramHash
@@ -484,8 +484,8 @@ class Wallet {
   		//data.set(hexstring2ab($coin['assetid']), inputLen + 64);
 
   		// output value
-  		num2 = inputAmount * 100000000 - num1;
-  		num2str = numStoreInMemory(num2.toString(16), 16);
+  		const num2 = inputAmount * 100000000 - num1;
+  		const num2str = numStoreInMemory(num2.toString(16), 16);
   		data.set(hexstring2ab(num2str), inputLen + 96);
 
   		// output ProgramHash
@@ -542,8 +542,8 @@ class Wallet {
   	data = data + ab2hexstring(reverseArray(hexstring2ab($claims['assetid'])))
 
   	// Outputs[0] Amount
-  	num1 = parseInt($Amount);
-  	num1str = numStoreInMemory(num1.toString(16), 16);
+  	const num1 = parseInt($Amount);
+  	const num1str = numStoreInMemory(num1.toString(16), 16);
   	data = data + num1str;
 
   	// Outputs[0] ProgramHash
