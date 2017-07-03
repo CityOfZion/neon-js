@@ -4,6 +4,11 @@
     "babel-loader": "^7.1.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.5.2",
+    "chai": "^4.0.2",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.6.1",
+    "mocha": "^3.4.2",
     "webpack": "^3.0.0"
   },
   "name": "neo-wallet-js",
@@ -11,10 +16,23 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "dependencies": {
+    "Buffer": "^0.0.0",
+    "base-x": "^3.0.2",
+    "bigi": "^1.4.2",
+    "buffer": "^5.0.6",
+    "crypto": "^0.0.3",
+    "crypto-js": "^3.1.9-1",
+    "ecdsa": "^0.7.0",
+    "ecurve": "^1.0.5",
+    "fs": "^0.0.1-security",
+    "secp256k1": "^3.3.0",
+    "secure-random": "^1.1.1",
+    "sql.js": "^0.4.0"
   },
   "scripts": {
-    "test": "mocha tests/index",
-    "build": "webpack"
+    "test":  "mocha --compilers js:babel-core/register --recursive ./tests/**.js",
+    "build": "webpack",
+    "lint": "eslint src/**.js"
   },
   "repository": {
     "type": "git",
