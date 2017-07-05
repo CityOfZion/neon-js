@@ -409,7 +409,7 @@ class Wallet {
   	var inputLen = inputData.data.length;
   	var inputAmount = inputData.amount;
 
-    console.log(inputAmount, $Amount);
+    console.log(inputLen, inputAmount, $Amount);
   	// Set SignableData Len
   	var signableDataLen = 124 + inputLen;
   	if (inputAmount == $Amount) {

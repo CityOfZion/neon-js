@@ -114,7 +114,7 @@ describe('Wallet', () => {
   it.only('should send ANS from address 1 to address 2', function() {
     this.timeout(15000);
 
-    const from = myTestnetWallet.address2;
+    const from = myTestnetWallet.address1;
     const to = myTestnetWallet.address2;
 
     // this is really just getting your public address e.g. ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s
@@ -160,7 +160,7 @@ describe('Wallet', () => {
             }
 
             var publicKeyEncoded = from.pubKeyEncoded;
-            const toAddress = 'Ad8DSN28J2oniT7rfdMw49pWm75S9wUwzh';
+            const toAddress = to.address;
             console.log('coinsData', coinsData);
             const amountToTransfer = 1;
             var txData = wallet.TransferTransaction(coinsData, publicKeyEncoded, toAddress, amountToTransfer);
