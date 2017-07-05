@@ -20,7 +20,8 @@ describe('Wallet', () => {
 		hostProvider : "otcgo.cn",
 		restapi_host : "http://api.otcgo.cn",
 		restapi_port : "20332",
-		webapi_host  : "http://testnet.antchain.org",
+		// webapi_host  : "http://testnet.antchain.org",
+		webapi_host  : "http://testnet.antchain.xyz",
 		webapi_port  : "80",
 	}
 
@@ -86,7 +87,7 @@ describe('Wallet', () => {
     address.should.be.a('string');
     // console.log(address);
 
-    axios.get(apiEndpoint + '/api/v1/address/get_unspent/' + address)
+    axios.get(apiEndpoint + '/api/v1/address/info/' + address)
       .then((res) => {
         console.log(res.data);
         res.data.should.be.an('array');
@@ -110,8 +111,10 @@ describe('Wallet', () => {
     done();
   })
 
-  it('should send ANS from address 1 to address 2', (done) => {
-    const from = myTestnetWallet.address1;
+  it.only('should send ANS from address 1 to address 2', function() {
+    this.timeout(15000);
+
+    const from = myTestnetWallet.address2;
     const to = myTestnetWallet.address2;
 
     // this is really just getting your public address e.g. ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s
@@ -122,40 +125,70 @@ describe('Wallet', () => {
     address.should.be.a('string');
     // console.log('address from', address);
 
-    // gets a list of accounts (ANS or ANC) - should really be checkingwhich account is ANC (小蚁币) or ANS (小蚁股)
-    return axios.get(apiEndpoint + '/api/v1/address/get_unspent/' + address)
+    // gets a list of accounts (ANS or ANC) - should really be checking which account is ANC (小蚁币) or ANS (小蚁股)
+    return axios.get(apiEndpoint + '/api/v1/address/info/' + address)
       .then((res) => {
-        // console.log("res.data",  res.data);
-        var publicKeyEncoded = from.pubKeyEncoded;
-        const toAddress = to.address;
-        var txData = wallet.TransferTransaction(res.data[0], publicKeyEncoded, toAddress, 1);
-        var privateKey = from.privKey;
-        // console.log('txData', txData);
-        // console.log('privateKey', privateKey)
-        var sign = wallet.signatureData(txData, privateKey);
-        // console.log('sign', sign);
-        var txRawData = wallet.AddContract(txData, sign, publicKeyEncoded);
+        console.log(1, res.data);
+        const data = res.data;
+        data.address.should.equal(address);
+        data.balance.should.be.a('array');
+        // balance contains ANS, ANC or both.
+        let balance = {};
+        data.balance.forEach((e) => {
+          parseInt(e.balance).should.be.a('number');
+          if (e.unit === "\u5c0f\u8681\u80a1") {
+            balance['ANS'] = e;
+          } else {
+            balance['ANC'] = e;
+          }
+        })
 
-        var instance = axios.create({
-          headers: {"Content-Type": "application/json"}
+        // only doing ANS for now
+        // get transactions
+        return axios.get(apiEndpoint + '/api/v1/address/utxo/' + address)
+          .then((res) => {
+            console.log(2, 'res', res.data);
+            res.data.utxo.should.be.an('object');
+            // console.log(res.data.utxo);
+            // find the ANS transactions via the ANS asset id
+            const ansTransactions = res.data.utxo[balance['ANS'].asset];
+            // console.log(ansTransactions);
+
+            const coinsData = {
+              "assetid": balance['ANS'].asset,
+              "list": ansTransactions
+            }
+
+            var publicKeyEncoded = from.pubKeyEncoded;
+            const toAddress = 'Ad8DSN28J2oniT7rfdMw49pWm75S9wUwzh';
+            console.log('coinsData', coinsData);
+            const amountToTransfer = 1;
+            var txData = wallet.TransferTransaction(coinsData, publicKeyEncoded, toAddress, amountToTransfer);
+            var privateKey = from.privKey;
+            // console.log('txData', txData);
+            // console.log('privateKey', privateKey)
+            var sign = wallet.signatureData(txData, privateKey);
+            console.log('sign', sign);
+            var txRawData = wallet.AddContract(txData, sign, publicKeyEncoded);
+
+            var instance = axios.create({
+              headers: {"Content-Type": "application/json"}
+            });
+
+            const jsonRpcData = {"jsonrpc": "2.0", "method": "sendrawtransaction", "params": [txRawData], "id": 4};
+            return instance.post(rpcEndpoint, jsonRpcData)
+              .then((res) => {
+                // console.log(res);
+                console.log(res.data);
+                // res.data.result will be true for transaction that went through, or false for failed transaction
+                var txhash = reverseArray(hexstring2ab(wallet.GetTxHash(txData.substring(0, txData.length - 103 * 2))));
+                // console.log('txhash is', txhash);
+                res.data.result.should.equal(true);
+              })
         });
-
-        const jsonRpcData = {"jsonrpc": "2.0", "method": "sendrawtransaction", "params": [txRawData], "id": 4};
-        return instance.post(rpcEndpoint, jsonRpcData);
-      }).then(function(res) {
-        // console.log(res.status);
-        // console.log(res.data);
-
-        // res.data.result will be true for transaction that went through, or false for failed transaction
-        if (res.status == 200) {
-          // var txhash = reverseArray(hexstring2ab(wallet.GetTxHash(txData.substring(0, txData.length - 103 * 2))));
-          // console.log('txhash is', txhash);
-          res.data.result.should.equal(true);
-        }
-        done();
       }).catch((err) => {
         console.log('error', err);
-        done(err)
+        return Promise.reject(err);
       })
   })
 });

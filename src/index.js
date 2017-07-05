@@ -170,7 +170,7 @@ class Wallet {
   		}
   	}
 
-  	//console.log( coin_ordered );
+  	console.log('coin_ordered', coin_ordered );
 
   	// calc sum
   	var sum = 0;
@@ -208,7 +208,7 @@ class Wallet {
 
   		// index
   		pos = 1 + (x * 34) + 32;
-  		let inputIndex = numStoreInMemory(coin_ordered[x]['n'].toString(16),4);
+  		let inputIndex = numStoreInMemory(coin_ordered[x]['index'].toString(16),4);
   		//inputIndex = numStoreInMemory(coin_ordered[x]['n'].toString(16), 2);
   		data.set(hexstring2ab(inputIndex), pos);
   	}
@@ -404,11 +404,12 @@ class Wallet {
   	// INPUT CONSTRUCT
   	var inputData = this.GetInputData($coin, $Amount);
   	if (inputData == -1) return null;
-  	//console.log( inputData );
+  	// console.log('wallet inputData', inputData );
 
   	var inputLen = inputData.data.length;
   	var inputAmount = inputData.amount;
 
+    console.log(inputAmount, $Amount);
   	// Set SignableData Len
   	var signableDataLen = 124 + inputLen;
   	if (inputAmount == $Amount) {
