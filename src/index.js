@@ -1,6 +1,5 @@
 import ecurve from 'ecurve';
 import BigInteger from 'bigi';
-import secp256k1 from 'secp256k1/elliptic';
 import { ec } from 'elliptic';
 import CryptoJS from 'crypto-js';
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'

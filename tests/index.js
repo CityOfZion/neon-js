@@ -84,7 +84,7 @@ describe('Wallet', () => {
 
     const address = ret[0].address;
     address.should.be.a('string');
-    console.log(address);
+    // console.log(address);
 
     axios.get(apiEndpoint + '/api/v1/address/get_unspent/' + address)
       .then((res) => {
@@ -113,24 +113,27 @@ describe('Wallet', () => {
   it('should send ANS from address 1 to address 2', (done) => {
     const from = myTestnetWallet.address1;
     const to = myTestnetWallet.address2;
+
+    // this is really just getting your public address e.g. ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s
     const ret = wallet.GetAccountsFromPrivateKey(from.privKey);
     ret.should.not.equal(-1);
 
     const address = ret[0].address;
     address.should.be.a('string');
-    console.log('address from', address);
+    // console.log('address from', address);
 
+    // gets a list of accounts (ANS or ANC) - should really be checkingwhich account is ANC (小蚁币) or ANS (小蚁股)
     return axios.get(apiEndpoint + '/api/v1/address/get_unspent/' + address)
       .then((res) => {
-        console.log("res.data",  res.data);
+        // console.log("res.data",  res.data);
         var publicKeyEncoded = from.pubKeyEncoded;
         const toAddress = to.address;
         var txData = wallet.TransferTransaction(res.data[0], publicKeyEncoded, toAddress, 1);
         var privateKey = from.privKey;
-        console.log('txData', txData);
-        console.log('privateKey', privateKey)
+        // console.log('txData', txData);
+        // console.log('privateKey', privateKey)
         var sign = wallet.signatureData(txData, privateKey);
-        console.log('sign', sign);
+        // console.log('sign', sign);
         var txRawData = wallet.AddContract(txData, sign, publicKeyEncoded);
 
         var instance = axios.create({
@@ -140,8 +143,10 @@ describe('Wallet', () => {
         const jsonRpcData = {"jsonrpc": "2.0", "method": "sendrawtransaction", "params": [txRawData], "id": 4};
         return instance.post(rpcEndpoint, jsonRpcData);
       }).then(function(res) {
-        console.log(res.status);
-        console.log(res.data);
+        // console.log(res.status);
+        // console.log(res.data);
+
+        // res.data.result will be true for transaction that went through, or false for failed transaction
         if (res.status == 200) {
           // var txhash = reverseArray(hexstring2ab(wallet.GetTxHash(txData.substring(0, txData.length - 103 * 2))));
           // console.log('txhash is', txhash);
