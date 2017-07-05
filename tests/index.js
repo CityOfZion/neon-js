@@ -12,7 +12,8 @@ var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 const should = chai.should();
 
-describe.only('Wallet', () => {
+
+describe('Wallet', () => {
   let wallet;
   const testnet = {
 		hostName	 : "Testnet otcgo",
@@ -25,15 +26,16 @@ describe.only('Wallet', () => {
 
   const myTestnetWallet = {
     address1: {
-      pubKey: "ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s",
+      address: "ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s",
       privKey: "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69",
       pubKeyEncoded:"031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
       wif: "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG"
     },
 
     address2: {
-      pubKey: "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
+      address: "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
       privKey: "3edee7036b8fd9cef91de47386b191dd76db2888a553e7736bb02808932a915b",
+      pubKeyEncoded: "03232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
       wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG"
     }
   }
@@ -61,14 +63,14 @@ describe.only('Wallet', () => {
   })
 
   it('should generate a new private key', (done) => {
-    const privateKey = utils.ab2hexstring(wallet.generatePrivateKey());
+    const privateKey = ab2hexstring(wallet.generatePrivateKey());
     privateKey.should.have.length(64);
     done();
   });
 
   it('should generate new wallet from new password', (done) => {
     const password =  Math.random().toString(36).slice(-8); // generates a random password
-    const privateKey = utils.ab2hexstring(wallet.generatePrivateKey());
+    const privateKey = ab2hexstring(wallet.generatePrivateKey());
     // console.log(privateKey);
 
     const walletBlob = wallet.generateWalletFileBlob(privateKey, password);
@@ -93,34 +95,62 @@ describe.only('Wallet', () => {
       })
   });
 
-  it.only('should send ANC from address 1 to address 2', (done) => {
-    const ret = wallet.GetAccountsFromPrivateKey(myTestnetWallet.address1.privKey);
+  // it.only('should create signature data', (done) => {
+  //   const txData = '8000000121d55c8859b58a36a28a88679f235409ff144ff509576e74f3588e22e108f70e0100029b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc500e1f505000000009847e26135152874355e324afd5cc99f002acb339b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc500c6665e7400000035b20010db73bf86371075ddfba4e6596f1ff35d';
+  //   const privKey = '9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69';
+  //   const sign = wallet.signatureData(txData, privKey);
+  //   console.log(sign);
+  //   done();
+  // })
+
+  it('should get the public key from private key', (done) => {
+
+    const publicKey = wallet.getPublicKey(myTestnetWallet.address2.privKey, 'hex').toString('hex');
+    console.log('publicKey', publicKey);
+    publicKey.should.equal(myTestnetWallet.address2.pubKeyEncoded);
+    done();
+  })
+
+  it.only('should send ANS from address 1 to address 2', (done) => {
+    const from = myTestnetWallet.address1;
+    const to = myTestnetWallet.address2;
+    const ret = wallet.GetAccountsFromPrivateKey(from.privKey);
     ret.should.not.equal(-1);
 
     const address = ret[0].address;
     address.should.be.a('string');
+    console.log('address from', address);
 
     return axios.get(apiEndpoint + '/api/v1/address/get_unspent/' + address)
       .then((res) => {
-        var txData = wallet.TransferTransaction(res.data[0], myTestnetWallet.address1.pubKeyEncoded, myTestnetWallet.address2.pubKey, 1);
-        var sign = wallet.signatureData(txData, myTestnetWallet.address1.privKey);
-        var txRawData = wallet.AddContract(txData, sign, myTestnetWallet.address1.pubKeyEncoded);
+        console.log("res.data",  res.data);
+        var publicKeyEncoded = from.pubKeyEncoded;
+        const toAddress = to.address;
+        var txData = wallet.TransferTransaction(res.data[0], publicKeyEncoded, toAddress, 1);
+        var privateKey = from.privKey;
+        console.log('txData', txData);
+        console.log('privateKey', privateKey)
+        var sign = wallet.signatureData(txData, privateKey);
+        console.log('sign', sign);
+        var txRawData = wallet.AddContract(txData, sign, publicKeyEncoded);
+
         var instance = axios.create({
           headers: {"Content-Type": "application/json"}
         });
 
         const jsonRpcData = {"jsonrpc": "2.0", "method": "sendrawtransaction", "params": [txRawData], "id": 4};
-        return instance.post(rpcEndpoint, jsonRpcData)        
+        return instance.post(rpcEndpoint, jsonRpcData);
       }).then(function(res) {
         console.log(res.status);
-        // console.log(res.data);
+        console.log(res.data);
         if (res.status == 200) {
           // var txhash = reverseArray(hexstring2ab(wallet.GetTxHash(txData.substring(0, txData.length - 103 * 2))));
           // console.log('txhash is', txhash);
           res.data.result.should.equal(true);
-          done()
         }
+        done();
       }).catch((err) => {
+        console.log('error', err);
         done(err)
       })
   })

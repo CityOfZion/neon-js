@@ -78,9 +78,9 @@
 
 
 
-var base64 = __webpack_require__(94)
-var ieee754 = __webpack_require__(95)
-var isArray = __webpack_require__(49)
+var base64 = __webpack_require__(93)
+var ieee754 = __webpack_require__(94)
+var isArray = __webpack_require__(48)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -12477,6 +12477,17 @@ function getr(priv) {
 
 /***/ }),
 /* 48 */
+/***/ (function(module, exports) {
+
+var toString = {}.toString;
+
+module.exports = Array.isArray || function (arr) {
+  return toString.call(arr) == '[object Array]';
+};
+
+
+/***/ }),
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var assert = __webpack_require__(34)
@@ -12724,17 +12735,6 @@ Point.prototype.toString = function () {
 module.exports = Point
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0).Buffer))
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports) {
-
-var toString = {}.toString;
-
-module.exports = Array.isArray || function (arr) {
-  return toString.call(arr) == '[object Array]';
-};
-
 
 /***/ }),
 /* 50 */
@@ -14258,7 +14258,7 @@ module.exports = BigInteger
 var assert = __webpack_require__(34)
 var BigInteger = __webpack_require__(24)
 
-var Point = __webpack_require__(48)
+var Point = __webpack_require__(49)
 
 function Curve (p, a, b, Gx, Gy, n, h) {
   this.p = p
@@ -14411,7 +14411,7 @@ var processNextTick = __webpack_require__(26);
 module.exports = Readable;
 
 /*<replacement>*/
-var isArray = __webpack_require__(49);
+var isArray = __webpack_require__(48);
 /*</replacement>*/
 
 /*<replacement>*/
@@ -19276,7 +19276,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ecurve = __webpack_require__(93);
+var _ecurve = __webpack_require__(95);
 
 var _ecurve2 = _interopRequireDefault(_ecurve);
 
@@ -19284,9 +19284,11 @@ var _bigi = __webpack_require__(24);
 
 var _bigi2 = _interopRequireDefault(_bigi);
 
-var _secp256k = __webpack_require__(103);
+var _elliptic = __webpack_require__(103);
 
-var _secp256k2 = _interopRequireDefault(_secp256k);
+var _elliptic2 = _interopRequireDefault(_elliptic);
+
+var _elliptic3 = __webpack_require__(5);
 
 var _cryptoJs = __webpack_require__(148);
 
@@ -19307,9 +19309,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-// import * as baseX from 'base-x';
 
-// const base58 = baseX(BASE58);
 
 var base58 = __webpack_require__(213)(BASE58);
 
@@ -19631,7 +19631,7 @@ var Wallet = function () {
     key: 'AddContract',
     value: function AddContract($txData, $sign, $publicKeyEncoded) {
       var signatureScript = this.createSignatureScript($publicKeyEncoded);
-
+      console.log(signatureScript);
       // sign num
       var data = $txData + "01";
       // sign struct len
@@ -19644,7 +19644,7 @@ var Wallet = function () {
       data = data + "23";
       // script data
       data = data + signatureScript;
-
+      console.log(data);
       return data;
     }
   }, {
@@ -19956,14 +19956,16 @@ var Wallet = function () {
     value: function signatureData($data, $privateKey) {
       var msg = _cryptoJs2.default.enc.Hex.parse($data);
       var msgHash = _cryptoJs2.default.SHA256(msg);
-      //console.log( "msgHash:", msgHash.toString() );
+      var msgHashHex = new Buffer(msgHash.toString(), "hex");
+      var privateKeyHex = new Buffer($privateKey, "hex");
+      // console.log( "msgHash:", msgHashHex.toString('hex'));
+      // console.log('buffer', privateKeyHex.toString('hex'));
 
-      var pubKey = _secp256k2.default.publicKeyCreate(new Buffer($privateKey, "HEX"));
-      //console.log( pubKey.toString('hex') );
-
-      var signature = _secp256k2.default.sign(new Buffer(msgHash.toString(), "HEX"), new Buffer($privateKey, "HEX"));
-      //console.log( signature.signature.toString('hex') );
-
+      var elliptic = new _elliptic3.ec('p256');
+      var sig = elliptic.sign(msgHashHex, $privateKey, null);
+      var signature = {
+        signature: Buffer.concat([sig.r.toArrayLike(Buffer, 'be', 32), sig.s.toArrayLike(Buffer, 'be', 32)])
+      };
       return signature.signature.toString('hex');
     }
   }, {
@@ -20154,22 +20156,6 @@ exports.default = Wallet;
 /* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Point = __webpack_require__(48)
-var Curve = __webpack_require__(51)
-
-var getCurveByName = __webpack_require__(101)
-
-module.exports = {
-  Curve: Curve,
-  Point: Point,
-  getCurveByName: getCurveByName
-}
-
-
-/***/ }),
-/* 94 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 
 
@@ -20288,7 +20274,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 95 */
+/* 94 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -20374,6 +20360,22 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
 
   buffer[offset + i - d] |= s * 128
+}
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Point = __webpack_require__(49)
+var Curve = __webpack_require__(51)
+
+var getCurveByName = __webpack_require__(101)
+
+module.exports = {
+  Curve: Curve,
+  Point: Point,
+  getCurveByName: getCurveByName
 }
 
 
@@ -21338,6 +21340,7 @@ module.exports = function (secp256k1) {
     },
 
     publicKeyCreate: function (privateKey, compressed) {
+      console.log('asdfasdfasdfasdf?');
       assert.isBuffer(privateKey, messages.EC_PRIVATE_KEY_TYPE_INVALID)
       assert.isBufferLength(privateKey, 32, messages.EC_PRIVATE_KEY_LENGTH_INVALID)
 
@@ -23125,37 +23128,73 @@ module.exports = function(module) {
 /***/ (function(module, exports) {
 
 module.exports = {
-	"name": "elliptic",
-	"version": "6.4.0",
-	"description": "EC cryptography",
-	"main": "lib/elliptic.js",
-	"files": [
-		"lib"
+	"_args": [
+		[
+			{
+				"raw": "elliptic@^6.4.0",
+				"scope": null,
+				"escapedName": "elliptic",
+				"name": "elliptic",
+				"rawSpec": "^6.4.0",
+				"spec": ">=6.4.0 <7.0.0",
+				"type": "range"
+			},
+			"/Users/vince/Documents/git/neo/neo-wallet-js"
+		]
 	],
-	"scripts": {
-		"jscs": "jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js",
-		"jshint": "jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js",
-		"lint": "npm run jscs && npm run jshint",
-		"unit": "istanbul test _mocha --reporter=spec test/index.js",
-		"test": "npm run lint && npm run unit",
-		"version": "grunt dist && git add dist/"
+	"_from": "elliptic@>=6.4.0 <7.0.0",
+	"_id": "elliptic@6.4.0",
+	"_inCache": true,
+	"_location": "/elliptic",
+	"_nodeVersion": "7.0.0",
+	"_npmOperationalInternal": {
+		"host": "packages-18-east.internal.npmjs.com",
+		"tmp": "tmp/elliptic-6.4.0.tgz_1487798866428_0.30510620190761983"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:indutny/elliptic"
+	"_npmUser": {
+		"name": "indutny",
+		"email": "fedor@indutny.com"
 	},
-	"keywords": [
-		"EC",
-		"Elliptic",
-		"curve",
-		"Cryptography"
+	"_npmVersion": "3.10.8",
+	"_phantomChildren": {},
+	"_requested": {
+		"raw": "elliptic@^6.4.0",
+		"scope": null,
+		"escapedName": "elliptic",
+		"name": "elliptic",
+		"rawSpec": "^6.4.0",
+		"spec": ">=6.4.0 <7.0.0",
+		"type": "range"
+	},
+	"_requiredBy": [
+		"#USER",
+		"/",
+		"/browserify-sign",
+		"/create-ecdh",
+		"/secp256k1"
 	],
-	"author": "Fedor Indutny <fedor@indutny.com>",
-	"license": "MIT",
+	"_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz",
+	"_shasum": "cac9af8762c85836187003c8dfe193e5e2eae5df",
+	"_shrinkwrap": null,
+	"_spec": "elliptic@^6.4.0",
+	"_where": "/Users/vince/Documents/git/neo/neo-wallet-js",
+	"author": {
+		"name": "Fedor Indutny",
+		"email": "fedor@indutny.com"
+	},
 	"bugs": {
 		"url": "https://github.com/indutny/elliptic/issues"
 	},
-	"homepage": "https://github.com/indutny/elliptic",
+	"dependencies": {
+		"bn.js": "^4.4.0",
+		"brorand": "^1.0.1",
+		"hash.js": "^1.0.0",
+		"hmac-drbg": "^1.0.0",
+		"inherits": "^2.0.1",
+		"minimalistic-assert": "^1.0.0",
+		"minimalistic-crypto-utils": "^1.0.0"
+	},
+	"description": "EC cryptography",
 	"devDependencies": {
 		"brfs": "^1.4.3",
 		"coveralls": "^2.11.3",
@@ -23172,15 +23211,46 @@ module.exports = {
 		"jshint": "^2.6.0",
 		"mocha": "^2.1.0"
 	},
-	"dependencies": {
-		"bn.js": "^4.4.0",
-		"brorand": "^1.0.1",
-		"hash.js": "^1.0.0",
-		"hmac-drbg": "^1.0.0",
-		"inherits": "^2.0.1",
-		"minimalistic-assert": "^1.0.0",
-		"minimalistic-crypto-utils": "^1.0.0"
-	}
+	"directories": {},
+	"dist": {
+		"shasum": "cac9af8762c85836187003c8dfe193e5e2eae5df",
+		"tarball": "https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz"
+	},
+	"files": [
+		"lib"
+	],
+	"gitHead": "6b0d2b76caae91471649c8e21f0b1d3ba0f96090",
+	"homepage": "https://github.com/indutny/elliptic",
+	"keywords": [
+		"EC",
+		"Elliptic",
+		"curve",
+		"Cryptography"
+	],
+	"license": "MIT",
+	"main": "lib/elliptic.js",
+	"maintainers": [
+		{
+			"name": "indutny",
+			"email": "fedor@indutny.com"
+		}
+	],
+	"name": "elliptic",
+	"optionalDependencies": {},
+	"readme": "ERROR: No README data found!",
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/indutny/elliptic.git"
+	},
+	"scripts": {
+		"jscs": "jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js",
+		"jshint": "jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js",
+		"lint": "npm run jscs && npm run jshint",
+		"test": "npm run lint && npm run unit",
+		"unit": "istanbul test _mocha --reporter=spec test/index.js",
+		"version": "grunt dist && git add dist/"
+	},
+	"version": "6.4.0"
 };
 
 /***/ }),

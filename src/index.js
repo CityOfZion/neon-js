@@ -1,9 +1,9 @@
 import ecurve from 'ecurve';
 import BigInteger from 'bigi';
-import secp256r1 from 'secp256k1';
+import secp256k1 from 'secp256k1/elliptic';
+import { ec } from 'elliptic';
 import CryptoJS from 'crypto-js';
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-// import * as baseX from 'base-x';
 import { ab2str,
   str2ab,
   hexstring2ab,
@@ -11,7 +11,6 @@ import { ab2str,
   reverseArray,
   numStoreInMemory,
   stringToBytes } from './utils';
-// const base58 = baseX(BASE58);
 
 var base58 = require('base-x')(BASE58)
 
@@ -326,7 +325,7 @@ class Wallet {
 
   AddContract( $txData, $sign, $publicKeyEncoded ) {
   	var signatureScript = this.createSignatureScript($publicKeyEncoded);
-
+    console.log(signatureScript);
   	// sign num
   	var data = $txData + "01";
   	// sign struct len
@@ -339,7 +338,7 @@ class Wallet {
   	data = data + "23";
   	// script data
   	data = data + signatureScript;
-
+    console.log(data);
   	return data;
   }
 
@@ -640,14 +639,19 @@ class Wallet {
   signatureData($data, $privateKey) {
   	var msg = CryptoJS.enc.Hex.parse($data);
   	var msgHash = CryptoJS.SHA256(msg);
-  	//console.log( "msgHash:", msgHash.toString() );
+    const msgHashHex = new Buffer(msgHash.toString(), "hex")
+    const privateKeyHex = new Buffer($privateKey, "hex");
+  	// console.log( "msgHash:", msgHashHex.toString('hex'));
+    // console.log('buffer', privateKeyHex.toString('hex'));
 
-  	var pubKey = secp256r1.publicKeyCreate(new Buffer($privateKey, "HEX"));
-  	//console.log( pubKey.toString('hex') );
-
-  	var signature = secp256r1.sign(new Buffer(msgHash.toString(), "HEX"), new Buffer($privateKey, "HEX"));
-  	//console.log( signature.signature.toString('hex') );
-
+    var elliptic = new ec('p256');
+    const sig = elliptic.sign(msgHashHex, $privateKey, null);
+    const signature = {
+      signature: Buffer.concat([
+        sig.r.toArrayLike(Buffer, 'be', 32),
+        sig.s.toArrayLike(Buffer, 'be', 32)
+      ])
+    }
   	return signature.signature.toString('hex');
   };
 
