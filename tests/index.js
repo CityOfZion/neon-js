@@ -128,7 +128,6 @@ describe('Wallet', () => {
     // gets a list of accounts (ANS or ANC) - should really be checking which account is ANC (小蚁币) or ANS (小蚁股)
     return axios.get(apiEndpoint + '/api/v1/address/info/' + address)
       .then((res) => {
-        console.log(1, res.data);
         const data = res.data;
         data.address.should.equal(address);
         data.balance.should.be.a('array');
@@ -147,7 +146,6 @@ describe('Wallet', () => {
         // get transactions
         return axios.get(apiEndpoint + '/api/v1/address/utxo/' + address)
           .then((res) => {
-            console.log(2, 'res', res.data);
             res.data.utxo.should.be.an('object');
             // console.log(res.data.utxo);
             // find the ANS transactions via the ANS asset id
@@ -156,23 +154,23 @@ describe('Wallet', () => {
 
             const coinsData = {
               "assetid": balance['ANS'].asset,
-              "list": ansTransactions
+              "list": ansTransactions,
+              "balance": balance['ANS'].balance,
+              "name": balance['ANS'].unit
             }
-
-            var publicKeyEncoded = from.pubKeyEncoded;
+            const publicKeyEncoded = wallet.GetAccountsFromPrivateKey(from.privKey)[0].publickeyEncoded;
             const toAddress = to.address;
-            console.log('coinsData', coinsData);
+            // console.log('coinsData', coinsData);
             const amountToTransfer = 1;
             var txData = wallet.TransferTransaction(coinsData, publicKeyEncoded, toAddress, amountToTransfer);
             var privateKey = from.privKey;
             // console.log('txData', txData);
             // console.log('privateKey', privateKey)
             var sign = wallet.signatureData(txData, privateKey);
-            console.log('sign', sign);
+            // console.log('sign', sign);
             var txRawData = wallet.AddContract(txData, sign, publicKeyEncoded);
-
             var instance = axios.create({
-              headers: {"Content-Type": "application/json"}
+              headers: {"Content-Tyxpe": "application/json"}
             });
 
             const jsonRpcData = {"jsonrpc": "2.0", "method": "sendrawtransaction", "params": [txRawData], "id": 4};

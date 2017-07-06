@@ -384,7 +384,6 @@ class Wallet {
   }
 
   TransferTransaction($coin, $publicKeyEncoded, $toAddress, $Amount) {
-
   	var ProgramHash = base58.decode($toAddress);
   	var ProgramHexString = CryptoJS.enc.Hex.parse(ab2hexstring(ProgramHash.slice(0, 21)));
   	var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
@@ -400,7 +399,6 @@ class Wallet {
 
   	var signatureScript = this.createSignatureScript($publicKeyEncoded);
   	var myProgramHash = this.getHash(signatureScript);
-
   	// INPUT CONSTRUCT
   	var inputData = this.GetInputData($coin, $Amount);
   	if (inputData == -1) return null;
