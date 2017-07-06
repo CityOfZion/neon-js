@@ -170,7 +170,7 @@ describe('Wallet', () => {
             // console.log('sign', sign);
             var txRawData = wallet.AddContract(txData, sign, publicKeyEncoded);
             var instance = axios.create({
-              headers: {"Content-Tyxpe": "application/json"}
+              headers: {"Content-Type": "application/json"}
             });
 
             const jsonRpcData = {"jsonrpc": "2.0", "method": "sendrawtransaction", "params": [txRawData], "id": 4};
