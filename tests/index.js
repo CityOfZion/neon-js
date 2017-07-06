@@ -36,7 +36,7 @@ describe('Wallet', () => {
     address2: {
       address: "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
       privKey: "3edee7036b8fd9cef91de47386b191dd76db2888a553e7736bb02808932a915b",
-      pubKeyEncoded: "03232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
+      pubKeyEncoded: "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
       wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG"
     }
   }
@@ -107,11 +107,13 @@ describe('Wallet', () => {
   it('should get the public key from private key', (done) => {
     const publicKey = wallet.getPublicKey(myTestnetWallet.address2.privKey, 'hex').toString('hex');
     console.log('publicKey', publicKey);
-    publicKey.should.equal(myTestnetWallet.address2.pubKeyEncoded);
+    const publicKeyEncoded = wallet.getPublicKeyEncoded(publicKey);
+    console.log('publicKeyEncoded', publicKeyEncoded);
+    publicKeyEncoded.should.equal(myTestnetWallet.address2.pubKeyEncoded);
     done();
   })
 
-  it.only('should send ANS from address 1 to address 2', function() {
+  it('should send ANS from address 1 to address 2', function() {
     this.timeout(15000);
 
     const from = myTestnetWallet.address1;
