@@ -48,9 +48,8 @@ describe('Wallet', function() {
   const rpcEndpoint = testnet.restapi_host + ":" + testnet.restapi_port;
   const apiEndpoint = testnet.webapi_host;
 
-  beforeEach((done) => {
+  beforeEach(function() {
     wallet = new Wallet();
-    done();
   })
 
   it('should connect to the testnet node and get block count', (done) => {
