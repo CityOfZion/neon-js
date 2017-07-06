@@ -30,6 +30,9 @@ describe('Wallet', function() {
 	}
 
   const myTestnetWallet = {
+    'onlyWIF': {
+      wif: 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g'
+    },
     address1: {
       address: "ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s",
       privKey: "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69",
@@ -72,13 +75,21 @@ describe('Wallet', function() {
     done();
   });
 
-  it('should generate new wallet from new password', (done) => {
-    const password =  Math.random().toString(36).slice(-8); // generates a random password
+  it('should verify publicKeyEncoded', (done) => {
     const privateKey = ab2hexstring(wallet.generatePrivateKey());
-    // console.log(privateKey);
+    const accounts = wallet.GetAccountsFromPrivateKey(privateKey);
+    accounts.should.not.equal(-1);
+    const verify = wallet.VerifyPublicKeyEncoded(accounts[0].publickeyEncoded);
+    verify.should.equal(true);
+    done();
+  });
 
-    const walletBlob = wallet.generateWalletFileBlob(privateKey, password);
-    walletBlob.should.be.an('Uint8Array');
+  it('should verify address', (done) => {
+    const privateKey = ab2hexstring(wallet.generatePrivateKey());
+    const accounts = wallet.GetAccountsFromPrivateKey(privateKey);
+    accounts.should.not.equal(-1);
+    const verify = wallet.VerifyAddress(accounts[0].address);
+    accounts.should.equal(true);
     done();
   });
 
@@ -94,7 +105,7 @@ describe('Wallet', function() {
           if (typeof ans !== 'undefined') {
             parseInt(ans.balance).should.be.a('number');
           }
-
+          // get ANC
           const anc = getAnc(res.data.balance);
           if (typeof anc !== 'undefined') {
             parseInt(anc.balance).should.be.a('number');
@@ -107,6 +118,14 @@ describe('Wallet', function() {
         }
       })
   }
+
+  it('should get balance from wif', () => {
+    const ret = wallet.GetAccountsFromWIFKey(myTestnetWallet.onlyWIF.wif);
+    ret.should.not.equal(-1);
+    const address = ret[0].address;
+    address.should.be.a('string');
+    return getBalance(address);
+  });
 
   it('should get balance from private key', () => {
     const ret = wallet.GetAccountsFromPrivateKey(myTestnetWallet.address1.privKey);

@@ -14,7 +14,6 @@ import { ab2str,
 var base58 = require('base-x')(BASE58)
 
 import buffer from 'buffer';
-import SQL from 'sql.js';
 
 
 class Wallet {
@@ -24,129 +23,6 @@ class Wallet {
   	this.masterKey = masterKey;
   	this.publicKeyHash = publicKeyHash;
   	this.privateKeyEncrypted = privateKeyEncrypted;
-  }
-
-  generateWalletFileBlob($privateKey, $password) {
-    //console.log( "privateKey: ", $privateKey );
-    //console.log( "password: ", $password );
-
-    var publicKey = this.getPublicKey($privateKey, false);
-    //console.log( "publicKey: ", publicKey.toString('hex') );
-
-    var publicKeyEncoded = this.getPublicKey($privateKey, true);
-    //console.log( "publicKeyEncoded: ", publicKeyEncoded.toString('hex') );
-
-    var scriptCode = this.createSignatureScript(publicKeyEncoded);
-    //console.log( "scriptCode: ", scriptCode );
-
-    var scriptHash = this.getHash(scriptCode);
-    //console.log( "scriptHash: ", scriptHash.toString() );
-
-    var publicKeyHash = this.getHash(publicKeyEncoded.toString('hex'));
-    //console.log( "publicKeyHash: ", publicKeyHash.toString() );
-
-    var passwordKey = CryptoJS.SHA256(CryptoJS.SHA256($password));
-    var passwordHash = CryptoJS.SHA256(passwordKey);
-    //console.log( "passwordHash: ", passwordHash.toString() );
-
-    var iv = this.generateRandomArray(16);
-    //console.log( "iv: ", ab2hexstring(iv) );
-
-    var masterKey = this.generateRandomArray(32);
-    //console.log( "masterKey: ", ab2hexstring(masterKey) );
-
-    // Encrypt MasterKey
-    var masterKeyPlain = CryptoJS.enc.Hex.parse(ab2hexstring(masterKey));
-    var key = CryptoJS.enc.Hex.parse(passwordKey.toString());
-    var ivData = CryptoJS.enc.Hex.parse(ab2hexstring(iv));
-    var masterKeyEncrypt = CryptoJS.AES.encrypt(masterKeyPlain, key, {
-      iv: ivData,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.NoPadding
-    });
-    //console.log( "masterKeyEncrypt: ", masterKeyEncrypt.ciphertext.toString() );
-
-    // PrivateKey Data
-    var privateKeyData = publicKey.slice(1, 65).toString('hex') + $privateKey;
-    //console.log( "privateKeyData: ", privateKeyData );
-
-    // Encrypt PrivateKey Data
-    var privateKeyDataPlain = CryptoJS.enc.Hex.parse(privateKeyData);
-    var privateKeyDataEncrypted = CryptoJS.AES.encrypt(privateKeyDataPlain, masterKeyPlain, {
-      iv: ivData,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.NoPadding
-    });
-    //console.log( "privateKeyDataEncrypted: ", privateKeyDataEncrypted.ciphertext.toString() );
-
-    var db = new SQL.Database();
-
-    var sqlstr = "CREATE TABLE Account ( PublicKeyHash BINARY NOT NULL CONSTRAINT PK_Account PRIMARY KEY, PrivateKeyEncrypted VARBINARY NOT NULL );";
-    sqlstr += "CREATE TABLE Address ( ScriptHash BINARY NOT NULL CONSTRAINT PK_Address PRIMARY KEY );"
-    sqlstr += "CREATE TABLE Coin ( TxId BINARY  NOT NULL, [Index] INTEGER NOT NULL, AssetId BINARY NOT NULL, ScriptHash BINARY  NOT NULL, State INTEGER NOT NULL, Value INTEGER NOT NULL, CONSTRAINT PK_Coin PRIMARY KEY ( TxId, [Index] ), CONSTRAINT FK_Coin_Address_ScriptHash FOREIGN KEY ( ScriptHash ) REFERENCES Address (ScriptHash) ON DELETE CASCADE );"
-    sqlstr += "CREATE TABLE Contract ( ScriptHash BINARY NOT NULL CONSTRAINT PK_Contract PRIMARY KEY, PublicKeyHash BINARY NOT NULL, RawData VARBINARY NOT NULL, CONSTRAINT FK_Contract_Account_PublicKeyHash FOREIGN KEY ( PublicKeyHash ) REFERENCES Account (PublicKeyHash) ON DELETE CASCADE, CONSTRAINT FK_Contract_Address_ScriptHash FOREIGN KEY ( ScriptHash ) REFERENCES Address (ScriptHash) ON DELETE CASCADE );"
-    sqlstr += "CREATE TABLE [Key] ( Name VARCHAR NOT NULL CONSTRAINT PK_Key PRIMARY KEY, Value VARBINARY NOT NULL );"
-    sqlstr += "CREATE TABLE [Transaction] ( Hash BINARY NOT NULL CONSTRAINT PK_Transaction PRIMARY KEY, Height INTEGER, RawData VARBINARY NOT NULL, Time TEXT NOT NULL, Type INTEGER NOT NULL );"
-    db.run(sqlstr);
-
-    // Account table
-    var stmtAccount = db.prepare("INSERT INTO Account(PublicKeyHash,PrivateKeyEncrypted) VALUES (?,?)");
-    stmtAccount.run([hexstring2ab(publicKeyHash.toString()), hexstring2ab(privateKeyDataEncrypted.ciphertext.toString())]);
-    stmtAccount.free();
-
-    // Address table
-    var stmtAddress = db.prepare("INSERT INTO Address(ScriptHash) VALUES (?)");
-    stmtAddress.run([hexstring2ab(scriptHash.toString())]);
-    stmtAddress.free();
-
-    // Contract table
-    var stmtContract = db.prepare("INSERT INTO Contract(ScriptHash,PublicKeyHash,RawData) VALUES (?,?,?)");
-    stmtContract.run([hexstring2ab(scriptHash.toString()), hexstring2ab(publicKeyHash.toString()), hexstring2ab(publicKeyHash.toString() + "010023" + scriptCode)]);
-    stmtContract.free();
-
-    // Key table
-    var stmtKey = db.prepare("INSERT INTO Key(Name,Value) VALUES (?,?)");
-    stmtKey.run(['PasswordHash', hexstring2ab(passwordHash.toString())]);
-    stmtKey.free();
-
-    stmtKey = db.prepare("INSERT INTO Key(Name,Value) VALUES (?,?)");
-    stmtKey.run(['IV', iv]);
-    stmtKey.free();
-
-    stmtKey = db.prepare("INSERT INTO Key(Name,Value) VALUES (?,?)");
-    stmtKey.run(['MasterKey', hexstring2ab(masterKeyEncrypt.ciphertext.toString())]);
-    stmtKey.free();
-
-    stmtKey = db.prepare("INSERT INTO Key(Name,Value) VALUES (?,?)");
-    stmtKey.run(['Version', hexstring2ab("01000000060000000000000000000000")]);
-    stmtKey.free();
-
-    stmtKey = db.prepare("INSERT INTO Key(Name,Value) VALUES (?,?)");
-    stmtKey.run(['Height', hexstring2ab("00000000")]);
-    stmtKey.free();
-
-    var binaryArray = db.export();
-
-    return binaryArray;
-  }
-
-
-  Sha256($data) {
-  	var DataHexString = CryptoJS.enc.Hex.parse($data);
-  	var DataSha256 = CryptoJS.SHA256(DataHexString);
-
-  	return DataSha256.toString();
-  }
-
-  SM3($data) {
-  	var x = sm3();
-  	var DataHexString = hexstring2ab( $data );
-  	return ab2hexstring( x.sum(DataHexString) );
-  }
-
-  MD5($data) {
-  	var DataHexString = CryptoJS.enc.Hex.parse($data);
-  	return CryptoJS.MD5(DataHexString).toString();
   }
 
   GetTxHash($data) {
@@ -229,6 +105,7 @@ class Wallet {
   	}
   }
 
+  // TODO: We many not need to keep this function in the API
   IssueTransaction($issueAssetID, $issueAmount, $publicKeyEncoded) {
   	var signatureScript = this.createSignatureScript($publicKeyEncoded);
   	//console.log( signatureScript.toString('hex') );
@@ -268,6 +145,7 @@ class Wallet {
   	return data;
   }
 
+  // TODO: we probably don't need to keep this function in the API, people aren't going to be using the wallet to register new assets
   RegisterTransaction($assetName, $assetAmount, $publicKeyEncoded) {
   	console.log( "publicKeyEncoded:", $publicKeyEncoded );
 
@@ -684,6 +562,8 @@ class Wallet {
   	return accounts;
   }
 
+  // TODO: why does this wrap return info in a list? seems unnecessary
+  // ditto for all the other GetAccounts methods
   GetAccountsFromPrivateKey($privateKey) {
   	if ($privateKey.length != 64) {
   		return -1;
@@ -724,106 +604,5 @@ class Wallet {
 
   	return this.GetAccountsFromPrivateKey(privateKey);
   }
-
-  decryptWallet(wallet, password) {
-  	var accounts = [];
-  	var passwordhash1 = CryptoJS.SHA256(password);
-  	var passwordhash2 = CryptoJS.SHA256(passwordhash1);
-  	var passwordhash3 = CryptoJS.SHA256(passwordhash2);
-  	if (passwordhash3.toString() != ab2hexstring(wallet.passwordHash)) {
-  		//PASSWORD WRONG
-  		return -1;
-  	}
-
-  	console.log("password verify success.");
-
-  	// Decrypt MasterKey
-  	var data = CryptoJS.enc.Hex.parse(ab2hexstring(wallet.masterKey));
-  	var dataBase64 = CryptoJS.enc.Base64.stringify(data);
-  	var key = CryptoJS.enc.Hex.parse(passwordhash2.toString());
-  	var iv = CryptoJS.enc.Hex.parse(ab2hexstring(wallet.iv));
-  	//console.log( "MasterKey:", ab2hexstring(wallet.masterKey) );
-  	//console.log(data);
-  	//console.log( "Password:", passwordhash2.toString() );
-  	//console.log(key);
-  	//console.log( "IV:",ab2hexstring(wallet.iv) );
-  	//console.log(iv);
-
-  	var plainMasterKey = CryptoJS.AES.decrypt(dataBase64, key, {
-  		iv: iv,
-  		mode: CryptoJS.mode.CBC,
-  		padding: CryptoJS.pad.NoPadding
-  	});
-
-  	//console.log( "plainMasterKey:", plainMasterKey.toString());
-
-  	for (k = 0; k < wallet.privateKeyEncrypted.length; k++) {
-
-  		// Decrypt PrivateKey
-  		var privateKeyEncrypted = CryptoJS.enc.Hex.parse(ab2hexstring(wallet.privateKeyEncrypted[k]));
-  		var privateKeyBase64 = CryptoJS.enc.Base64.stringify(privateKeyEncrypted);
-  		var plainprivateKey = CryptoJS.AES.decrypt(privateKeyBase64, plainMasterKey, {
-  			iv: iv,
-  			mode: CryptoJS.mode.CBC,
-  			padding: CryptoJS.pad.NoPadding
-  		});
-
-  		//console.log( "plainprivateKey:", plainprivateKey.toString() );
-
-  		var privateKeyHexString = plainprivateKey.toString().slice(128, 192);
-  		//console.log( "privateKeyHexString:", privateKeyHexString);
-
-  		// Verify PublicKeyHash
-  		var ecparams = ecurve.getCurveByName('secp256r1');
-  		var curvePt = ecparams.G.multiply(BigInteger.fromBuffer(hexstring2ab(privateKeyHexString)));
-
-  		// Get PublicKey
-  		//var x = curvePt.affineX.toBuffer(32);
-  		//var y = curvePt.affineY.toBuffer(32);
-  		//var publicKey = new Uint8Array(1+x.length+y.length);
-  		//publicKey.set([0x04]);
-  		//publicKey.set(x,1);
-  		//publicKey.set(y,1+x.length);
-  		//console.log(publicKey.toString('hex'));
-
-  		// Get PublicKeyEncoded
-  		var publicKeyEncoded = curvePt.getEncoded(true);
-  		//console.log( "publicKeyEncoded:", publicKeyEncoded.toString('hex') );
-
-  		// Get PublicKeyHash
-  		var publicKeyEncodedHexString = CryptoJS.enc.Hex.parse(publicKeyEncoded.toString('hex'));
-  		var publicKeyEncodedSha256 = CryptoJS.SHA256(publicKeyEncodedHexString);
-  		var publicKeyHash = CryptoJS.RIPEMD160(publicKeyEncodedSha256);
-
-  		// Get ProgramHash
-  		var ProgramHexString = CryptoJS.enc.Hex.parse("21" + publicKeyEncoded.toString('hex') + "ac");
-  		var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
-  		var ProgramHash = CryptoJS.RIPEMD160(ProgramSha256);
-  		//console.log( "ProgramHexString:", ProgramHexString.toString() );
-  		//console.log( "ProgramHash:", ProgramHash.toString() );
-
-  		// Get Address
-  		var address = Wallet.ToAddress(hexstring2ab(ProgramHash.toString()));
-  		console.log("address:", address);
-
-  		//console.log( "k=", k );
-  		//console.log( "publicKeyHash:", publicKeyHash.toString() );
-  		//console.log( ab2hexstring(wallet.publicKeyHash[k]) );
-  		if (publicKeyHash.toString() != ab2hexstring(wallet.publicKeyHash[k])) {
-  			return -2;
-  		}
-
-  		accounts[k] = {
-  			privatekey: privateKeyHexString,
-  			publickeyEncoded: publicKeyEncoded.toString('hex'),
-  			publickeyHash: publicKeyHash.toString(),
-  			programHash: ProgramHash.toString(),
-  			address: address,
-  		};
-  	}
-
-  	return accounts
-  };
-}
 
 export default Wallet;
