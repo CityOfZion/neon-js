@@ -170,7 +170,7 @@ class Wallet {
   		}
   	}
 
-  	console.log('coin_ordered', coin_ordered );
+  	// console.log('coin_ordered', coin_ordered );
 
   	// calc sum
   	var sum = 0;
@@ -324,7 +324,7 @@ class Wallet {
 
   AddContract( $txData, $sign, $publicKeyEncoded ) {
   	var signatureScript = this.createSignatureScript($publicKeyEncoded);
-    console.log(signatureScript);
+    // console.log(signatureScript);
   	// sign num
   	var data = $txData + "01";
   	// sign struct len
@@ -337,7 +337,7 @@ class Wallet {
   	data = data + "23";
   	// script data
   	data = data + signatureScript;
-    console.log(data);
+    // console.log(data);
   	return data;
   }
 
@@ -407,7 +407,7 @@ class Wallet {
   	var inputLen = inputData.data.length;
   	var inputAmount = inputData.amount;
 
-    console.log(inputLen, inputAmount, $Amount);
+    // console.log(inputLen, inputAmount, $Amount);
   	// Set SignableData Len
   	var signableDataLen = 124 + inputLen;
   	if (inputAmount == $Amount) {

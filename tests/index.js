@@ -12,8 +12,12 @@ var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 const should = chai.should();
 
+const ANS = '\u5c0f\u8681\u80a1';
+const ANC = '\u5c0f\u8681\u5e01';
 
-describe('Wallet', () => {
+describe('Wallet', function() {
+  this.timeout(15000);
+
   let wallet;
   const testnet = {
 		hostName	 : "Testnet otcgo",
@@ -79,22 +83,45 @@ describe('Wallet', () => {
     done();
   });
 
-  it('should open wallet and get a balance', (done) => {
+  const getAns = balance => balance.filter((val) => { return val.unit === ANS })[0];
+  const getAnc = balance => balance.filter((val) => { return val.unit === ANC })[0];
+
+  const getBalance = address => {
+    return axios.get(apiEndpoint + '/api/v1/address/info/' + address)
+      .then((res) => {
+        if (res.data.result !== 'No Address!') {
+          // get ANS
+          const ans = getAns(res.data.balance);
+          if (typeof ans !== 'undefined') {
+            parseInt(ans.balance).should.be.a('number');
+          }
+
+          const anc = getAnc(res.data.balance);
+          if (typeof anc !== 'undefined') {
+            parseInt(anc.balance).should.be.a('number');
+          }
+          res.data.should.be.an('object');
+          res.data.address.should.equal(address)
+          res.data.balance.should.be.an('array');
+        } else {
+          res.data.result.should.equal('No Address!');
+        }
+      })
+  }
+
+  it('should get balance from private key', () => {
     const ret = wallet.GetAccountsFromPrivateKey(myTestnetWallet.address1.privKey);
     ret.should.not.equal(-1);
 
     const address = ret[0].address;
     address.should.be.a('string');
     // console.log(address);
-
-    axios.get(apiEndpoint + '/api/v1/address/info/' + address)
-      .then((res) => {
-        console.log(res.data);
-        res.data.should.be.an('array');
-        parseInt(res.data[0].balance).should.be.a('number');
-        done();
-      })
+    return getBalance(address);
   });
+
+  it('should get balance from address', () => {
+    return getBalance(myTestnetWallet.address1.address);
+  })
 
   // it.only('should create signature data', (done) => {
   //   const txData = '8000000121d55c8859b58a36a28a88679f235409ff144ff509576e74f3588e22e108f70e0100029b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc500e1f505000000009847e26135152874355e324afd5cc99f002acb339b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc500c6665e7400000035b20010db73bf86371075ddfba4e6596f1ff35d';
@@ -106,15 +133,14 @@ describe('Wallet', () => {
 
   it('should get the public key from private key', (done) => {
     const publicKey = wallet.getPublicKey(myTestnetWallet.address2.privKey, 'hex').toString('hex');
-    console.log('publicKey', publicKey);
+    // console.log('publicKey', publicKey);
     const publicKeyEncoded = wallet.getPublicKeyEncoded(publicKey);
-    console.log('publicKeyEncoded', publicKeyEncoded);
+    // console.log('publicKeyEncoded', publicKeyEncoded);
     publicKeyEncoded.should.equal(myTestnetWallet.address2.pubKeyEncoded);
     done();
   })
 
   it('should send ANS from address 1 to address 2', function() {
-    this.timeout(15000);
 
     const from = myTestnetWallet.address1;
     const to = myTestnetWallet.address2;
@@ -137,7 +163,7 @@ describe('Wallet', () => {
         let balance = {};
         data.balance.forEach((e) => {
           parseInt(e.balance).should.be.a('number');
-          if (e.unit === "\u5c0f\u8681\u80a1") {
+          if (e.unit === ANS) {
             balance['ANS'] = e;
           } else {
             balance['ANC'] = e;
@@ -179,7 +205,7 @@ describe('Wallet', () => {
             return instance.post(rpcEndpoint, jsonRpcData)
               .then((res) => {
                 // console.log(res);
-                console.log(res.data);
+                // console.log(res.data);
                 // res.data.result will be true for transaction that went through, or false for failed transaction
                 var txhash = reverseArray(hexstring2ab(wallet.GetTxHash(txData.substring(0, txData.length - 103 * 2))));
                 // console.log('txhash is', txhash);
