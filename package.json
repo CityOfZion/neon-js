@@ -31,7 +31,8 @@
     "fs": "^0.0.1-security",
     "secp256k1": "^3.3.0",
     "secure-random": "^1.1.1",
-    "sql.js": "^0.4.0"
+    "sql.js": "^0.4.0",
+    "wif": "^2.0.6"
   },
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --recursive ./tests/**.js",

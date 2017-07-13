@@ -70,6 +70,14 @@ describe('Wallet', function() {
     done();
   });
 
+  it('should generate a valid WIF', (done) => {
+    const privateKey = ab2hexstring(wallet.generatePrivateKey());
+    const wif = wallet.getWIFFromPrivateKey(privateKey);
+    const account = wallet.getAccountsFromWIFKey(wif)[0];
+    account.privatekey.should.equal(privateKey);
+    done();
+  });
+
   it('should verify publicKeyEncoded', (done) => {
     const privateKey = ab2hexstring(wallet.generatePrivateKey());
     const accounts = wallet.getAccountsFromPrivateKey(privateKey);
