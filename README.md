@@ -2,7 +2,7 @@
 
 This is COZ's JS SDK for the NEO blockchain platform.
 
-Special thanks to [neowallet.js](https://github.com/neochainio/neowallet/blob/master/js/wallet.js) for providing many of the underlying cryptography and network methods.
+Special thanks to [neowallet.js](https://github.com/neochainio/neowallet/blob/master/js/wallet.js) for providing many of the underlying cryptography and network methods!
 
 ## Quick Start
 
