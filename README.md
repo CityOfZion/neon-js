@@ -6,7 +6,7 @@ Our thanks to [neowallet.js](https://github.com/neochainio/neowallet/blob/master
 
 ## Quick Start
 
-Take a look at the tests to find more examples API functions.
+Take a look at the tests to find examples for all API functions.
 
 ```javascript
 import * as api from '../src/api';
