@@ -29,8 +29,19 @@ describe('Wallet', function() {
     c: {
       address: "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
       wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG"
+    },
+    d: {
+      address: 'AdWDaCmhPmxgksr2iTVuGcLcncSouV6XGv',
+      wif: 'L4xZjMnkwcN3eCfhMNPkoz7Q6xaj3oq586WYDUdVFAqMcasxGxVv'
     }
   }
+
+  it('should claim ANC', (done) =>{
+    api.sendClaimTransaction(api.TESTNET, testKeys.a.wif).then((response) => {
+      console.log(response);
+      done();
+    })
+  });
 
   it('should connect to the testnet node and get block count', (done) => {
     api.getBlockCount(api.TESTNET).then((response) => {

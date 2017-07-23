@@ -1,7 +1,7 @@
 // this file contains high level API functions for connecting with network resources
 
 import axios from 'axios';
-import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract } from './wallet.js';
+import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransactionRewrite } from './wallet.js';
 
 const apiEndpoint = "http://testnet.antchain.xyz";
 const rpcEndpoint = "http://api.otcgo.cn:20332"; // testnet = 20332
@@ -35,7 +35,7 @@ export const getNetworkEndpoints = (net) => {
   } else {
     return {
       apiEndpoint: "http://testnet.antchain.xyz",
-      rpcEndpoint: "http://api.otcgo.cn:20332"
+      rpcEndpoint: "http://testnet.rpc.neeeo.org:20332/" // "http://api.otcgo.cn:20332" //
     }
   }
 };
@@ -88,6 +88,20 @@ export const getTransactions = (net, address, assetId) => {
     return response.data.utxo[assetId];
   });
 };
+
+export const sendClaimTransaction = (net, fromWif) => {
+  const network = getNetworkEndpoints(net);
+  const account = getAccountsFromWIFKey(fromWif)[0];
+  // TODO: when fully working replace this with mainnet/testnet switch
+  return axios.get("http://localhost:5000/get_claim/" + account.address).then((response) => {
+    const claims = response.data["claims"];
+    const total_claim = response.data["total_claim"];
+    const txData = claimTransactionRewrite(claims, account.publickeyEncoded, account.address, total_claim);
+    const sign = signatureData(txData, account.privatekey);
+    const txRawData = addContract(txData, sign, account.publickeyEncoded);
+    return queryRPC(net, "sendrawtransaction", [txRawData], 2)
+  });
+}
 
 // send ANS or ANC over the network
 // "net" is "MainNet" or "TestNet"

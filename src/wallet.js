@@ -387,6 +387,79 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 	return ab2hexstring(data);
 };
 
+export const claimTransactionRewrite = (claims, publicKeyEncoded, toAddress, amount) => {
+
+	var signatureScript = createSignatureScript(publicKeyEncoded);
+	var myProgramHash = getHash(signatureScript);
+
+	// Type = ClaimTransaction
+	let data = "02";
+
+	// Version is always 0 in protocol for now
+	data = data + "00";
+
+	// Transaction-specific attributs: claims
+
+	// 1) store number of claims (txids)
+	let claims.length;
+	let lenstr = numStoreInMemory(len.toString(16), 2);
+	data = data + lenstr;
+
+  let total_amount = 0;
+
+  // 2) iterate over claim txids
+	for ( let k=0; k<len; k++ ) {
+    // get the txid
+		let txid = claims[k]['txid'];
+    console.log(txid);
+    console.log(claims[k]['index']);
+    // add txid to data
+		data = data + ab2hexstring(reverseArray(hexstring2ab(txid)));
+
+		let vout = claims[k]['index'].toString(16);
+		data = data + numStoreInMemory(vout, 4);
+	}
+
+	// Don't need any attributes
+	data = data + "00";
+
+	// Don't need any inputs
+	data = data + "00";
+
+	// One output for where the claim will be sent
+	data = data + "01";
+
+	// First add assetId for GAS
+	data = data + ab2hexstring(reverseArray(hexstring2ab("602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")))
+
+	// Net add total amount of the claim
+  console.log(total_amount, amount);
+	const num1 = amount; //claims[0].claim;
+  console.log(num1);
+	const num1str = numStoreInMemory(num1.toString(16), 16);
+	data = data + num1str;
+
+	// Finally add program hash
+	data = data + myProgramHash.toString();
+
+	//console.log(data);
+
+	return data;
+};
+
+// don't work
+// 4ec3148b7a7fdc98a391e9551249d5763cb5a93fec2ce272c3aed12ca0d9a3bc
+// 794ed2564f85720e84a660ef583067a63e5e72782870205692efc874df203d72
+// 2608db13970b8f8655c8deb19472374d41e46ba009d9c89976b0234d481f7a18
+
+// work
+// 67a18d71c04772ac3ab92dbc7936fa0a3422fda8631ecae4e4a3d5cc1f108e8e
+// 95da63b4310aec6a1d104fb32f9b650266012f7261b8d659f6d22815c9b79e28
+// 48f8241f41a1dabf55c8b367193bd770703595ef78b5a29d78d962c8a1638d1e
+// 2190525f51297cf0fe2c92bd820ac9b663d6b59265b12c001263dd329abc555b
+// fe950deef57bc7e32b213e125fdc175a0d0c8a9b1761d43afb9adaa0e6808c48
+// 49992532d6bec0dcf8eadcfd588ba7bb2c5286692342f7a885af19d1c00a6003
+
 export const claimTransaction = ($claims, $publicKeyEncoded, $toAddress, $Amount) => {
 
 	var signatureScript = createSignatureScript($publicKeyEncoded);
@@ -404,7 +477,7 @@ export const claimTransaction = ($claims, $publicKeyEncoded, $toAddress, $Amount
 
 	// claim
 	// TODO: !!! var int
-	len = $claims['claims'].length
+	len = $claims['claims'].length;
 	lenstr = numStoreInMemory(len.toString(16), 2);
 	data = data + lenstr
 
