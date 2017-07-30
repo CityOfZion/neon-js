@@ -19,6 +19,9 @@ const ancName = "小蚁币";
 const getAns = balance => balance.filter((val) => { return val.unit === ANS })[0];
 const getAnc = balance => balance.filter((val) => { return val.unit === ANC })[0];
 
+// API methods (using neon wallet API)
+
+// get neon wallet API endpoint for MainNet or TestNet
 export const getAPIEndpoint = (net) => {
   if (net === "MainNet"){
     return "http://neo.herokuapp.com";
@@ -27,6 +30,7 @@ export const getAPIEndpoint = (net) => {
   }
 };
 
+// get node RPC endpoint on MainNet or TestNet based on block height status from neon wallet API
 export const getRPCEndpoint = (net) => {
   const apiEndpoint = getAPIEndpoint(net);
   return axios.get(apiEndpoint + '/v1/network/best_node').then((response) => {
@@ -34,27 +38,7 @@ export const getRPCEndpoint = (net) => {
   });
 };
 
-// wrapper for querying node RPC
-const queryRPC = (net, method, params, id = 1) => {
-  let jsonRequest = axios.create({
-    headers: {"Content-Type": "application/json"}
-  });
-  const jsonRpcData = {"jsonrpc": "2.0", "method": method, "params": params, "id": id};
-  return getRPCEndpoint(net).then((rpcEndpoint) => {
-    return jsonRequest.post(rpcEndpoint, jsonRpcData).then((response) => {
-      return response.data;
-    });
-  });
-};
-
-export const getBlockByIndex = (net, block) => {
-  return queryRPC(net, "getblock", [block, 1]);
-}
-
-export const getBlockCount = (net, block) => {
-  return queryRPC(net, "getblockcount", []);
-}
-
+// get all available claim on an account using neon wallet API
 export const getAvailableClaim = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net);
   return axios.get(apiEndpoint + '/v1/address/claims/' + address).then((res) => {
@@ -62,20 +46,8 @@ export const getAvailableClaim = (net, address) => {
   });
 }
 
-export const claimAllGAS = (net, fromWif) => {
-  const apiEndpoint = getAPIEndpoint(net);
-  const account = getAccountsFromWIFKey(fromWif)[0];
-  // TODO: when fully working replace this with mainnet/testnet switch
-  return axios.get(apiEndpoint + "/v1/address/claims/" + account.address).then((response) => {
-    const claims = response.data["claims"];
-    const total_claim = response.data["total_claim"];
-    const txData = claimTransaction(claims, account.publickeyEncoded, account.address, total_claim);
-    const sign = signatureData(txData, account.privatekey);
-    const txRawData = addContract(txData, sign, account.publickeyEncoded);
-    return queryRPC(net, "sendrawtransaction", [txRawData], 2);
-  });
-}
 
+// get the balance at an address using the neon wallet API
 export const getBalance = (net, address) => {
     const apiEndpoint = getAPIEndpoint(net);
     return axios.get(apiEndpoint + '/v1/address/balance/' + address)
@@ -106,6 +78,7 @@ export const getMarketPriceUSD = (amount) => {
   });
 };
 
+// get history of balance over time using neon wallet API
 export const getTransactionHistory = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net);
   return axios.get(apiEndpoint + '/v1/address/history/' + address).then((response) => {
@@ -113,6 +86,7 @@ export const getTransactionHistory = (net, address) => {
   });
 };
 
+// get block height reported by neon wallet API
 export const getWalletDBHeight = (net) => {
   const apiEndpoint = getAPIEndpoint(net);
   return axios.get(apiEndpoint + '/v1/block/height').then((response) => {
@@ -120,6 +94,47 @@ export const getWalletDBHeight = (net) => {
   });
 }
 
+// RPC methods
+
+// wrapper for querying node RPC on MainNet or TestNet
+const queryRPC = (net, method, params, id = 1) => {
+  let jsonRequest = axios.create({
+    headers: {"Content-Type": "application/json"}
+  });
+  const jsonRpcData = {"jsonrpc": "2.0", "method": method, "params": params, "id": id};
+  return getRPCEndpoint(net).then((rpcEndpoint) => {
+    return jsonRequest.post(rpcEndpoint, jsonRpcData).then((response) => {
+      return response.data;
+    });
+  });
+};
+
+// get a block from the RPC
+export const getBlockByIndex = (net, block) => {
+  return queryRPC(net, "getblock", [block, 1]);
+}
+
+// get block height from the RPC
+export const getBlockCount = (net, block) => {
+  return queryRPC(net, "getblockcount", []);
+}
+
+// submit a claim request for all available GAS at an address
+export const claimAllGAS = (net, fromWif) => {
+  const apiEndpoint = getAPIEndpoint(net);
+  const account = getAccountsFromWIFKey(fromWif)[0];
+  // TODO: when fully working replace this with mainnet/testnet switch
+  return axios.get(apiEndpoint + "/v1/address/claims/" + account.address).then((response) => {
+    const claims = response.data["claims"];
+    const total_claim = response.data["total_claim"];
+    const txData = claimTransaction(claims, account.publickeyEncoded, account.address, total_claim);
+    const sign = signatureData(txData, account.privatekey);
+    const txRawData = addContract(txData, sign, account.publickeyEncoded);
+    return queryRPC(net, "sendrawtransaction", [txRawData], 2);
+  });
+}
+
+// send an asset (NEO or GAS) over the node RPC
 export const sendAssetTransaction = (net, toAddress, fromWif, assetType, amount) => {
   let assetId, assetName, assetSymbol;
   if (assetType === "AntShares"){

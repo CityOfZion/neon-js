@@ -36,6 +36,7 @@ describe('Wallet', function() {
     }
   }
 
+  // TODO: this works, but will not work repeatedly for obvious reasons :)
   // it('should claim ANC', (done) =>{
   //   api.sendClaimTransaction(api.TESTNET, testKeys.c.wif).then((response) => {
   //     console.log(response);
