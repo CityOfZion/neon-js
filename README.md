@@ -1,6 +1,6 @@
-# Neo JavaScript SDK
+# Neon JavaScript SDK
 
-This is COZ's JS SDK for the NEO blockchain platform. It is currently in use by the NEO [electron wallet](https://github.com/CityOfZion/neo-electron-wallet/tree/jaxx-skin).
+This the Neon Wallet's JS SDK for the NEO blockchain platform. It is currently in use by [Neon](https://github.com/CityOfZion/neo-electron-wallet/tree/jaxx-skin).
 
 Special thanks to [neowallet.js](https://github.com/neochainio/neowallet/blob/master/js/wallet.js) for providing many of the underlying cryptography and network methods!
 
@@ -22,12 +22,22 @@ const testKeys = {
   }
 }
 
-// Get balance of account "a"
+// Get balance of account "a" on TestNet using Neon Wallet API
 api.getBalance(api.TESTNET, testKeys.a.address).then((balance) => {
   console.log(balance);
 });
 
-// Send 1 ANS to "a" from "b"
+// Get balance of account "a" on TestNet using Neon Wallet API
+api.getBalance(api.MAINNET, testKeys.a.address).then((balance) => {
+  console.log(balance);
+});
+
+// Claim all available GAS for account "a" on TestNet
+api.claimAllGAS(api.MAINNET, testKeys.a.wif).then((response) => {
+  console.log(response);
+});
+
+// Send 1 ANS to "a" from "b" on TestNet
 api.sendAssetTransaction(api.TESTNET, testKeys.a.address, testKeys.b.wif, "AntShares", 1).then((response) => {
   console.log("Transaction complete!");
 });
