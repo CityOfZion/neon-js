@@ -33,7 +33,7 @@ api.getBalance(api.MAINNET, testKeys.a.address).then((balance) => {
 });
 
 // Claim all available GAS for account "a" on TestNet
-api.claimAllGAS(api.MAINNET, testKeys.a.wif).then((response) => {
+api.claimAllGAS(api.TESTNET, testKeys.a.wif).then((response) => {
   console.log(response);
 });
 
