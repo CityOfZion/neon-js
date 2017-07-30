@@ -27,7 +27,7 @@ api.getBalance(api.TESTNET, testKeys.a.address).then((balance) => {
   console.log(balance);
 });
 
-// Get balance of account "a" on TestNet using Neon Wallet API
+// Get balance of account "a" on MainNet using Neon Wallet API
 api.getBalance(api.MAINNET, testKeys.a.address).then((balance) => {
   console.log(balance);
 });
