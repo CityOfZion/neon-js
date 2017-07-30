@@ -65,7 +65,7 @@ describe('Wallet', function() {
 
   it('should generate a valid WIF', (done) => {
     const privateKey = ab2hexstring(wallet.generatePrivateKey());
-    const wif = wallet.getWIFFromPrivateKey(privateKey);
+    const wif = wallet.getWIFFromHex(privateKey);
     const account = wallet.getAccountsFromWIFKey(wif)[0];
     account.privatekey.should.equal(privateKey);
     done();

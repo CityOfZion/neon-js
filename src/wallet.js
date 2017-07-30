@@ -1,5 +1,3 @@
-// this file contains lower-level API functions mostly concerned with cryptography
-
 import ecurve from 'ecurve';
 import BigInteger from 'bigi';
 import { ec } from 'elliptic';
@@ -18,14 +16,19 @@ var base58 = require('base-x')(BASE58)
 
 import buffer from 'buffer';
 
+
 // All of this stuff was wrapped in a class before, but really unnecessary as none of these were stateful
 // This flat structure should be more interpretable, and we can export them all as a module instead
 
 // TODO: exporting ALL of these, but some of them are probably helpers and don't need to be exported
 // TODO: go through and add at least a basic description of everything these methods are doing
 
-// compute WIF from privateKey
 export const getWIFFromPrivateKey = (privateKey) => {
+    const hexKey = ab2hexstring(privateKey);
+    return WIF.encode(128, new Buffer(hexKey, 'hex'), true)
+};
+
+export const getWIFFromHex = (privateKey) => {
     return WIF.encode(128, new Buffer(privateKey, 'hex'), true)
 };
 
@@ -50,8 +53,6 @@ export const getInputData = ($coin, $amount) => {
 			}
 		}
 	}
-
-	// console.log('coin_ordered', coin_ordered );
 
 	// calc sum
 	var sum = 0;
@@ -154,8 +155,6 @@ export const issueTransaction = ($issueAssetID, $issueAmount, $publicKeyEncoded)
 // TODO: we probably don't need to keep this function in the API, people aren't going to be using the wallet to register new assets
 // for now, leaving as reference
 export const registerTransaction = ($assetName, $assetAmount, $publicKeyEncoded) => {
-	console.log( "publicKeyEncoded:", $publicKeyEncoded );
-
 	var ecparams = ecurve.getCurveByName('secp256r1');
 	var curvePt = ecurve.Point.decodeFrom(ecparams,new Buffer($publicKeyEncoded,"hex"));
 	var curvePtX = curvePt.affineX.toBuffer(32);
@@ -163,10 +162,8 @@ export const registerTransaction = ($assetName, $assetAmount, $publicKeyEncoded)
 	var publicKey = buffer.concat([new Buffer([0x04]), curvePtX, curvePtY]);
 
 	var signatureScript = createSignatureScript($publicKeyEncoded);
-	console.log( signatureScript.toString('hex') );
 
 	var myProgramHash = getHash(signatureScript);
-	console.log( myProgramHash.toString() );
 
 	// data
 	var data = "40";
@@ -201,8 +198,6 @@ export const registerTransaction = ($assetName, $assetAmount, $publicKeyEncoded)
 	data = data + "20" + publicKeyXStr + "20" + publicKeyYStr;
 	data = data + myProgramHash.toString();
 	data = data + "000000";
-
-	console.log(data);
 
 	return data;
 };
@@ -387,7 +382,7 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 	return ab2hexstring(data);
 };
 
-export const claimTransactionRewrite = (claims, publicKeyEncoded, toAddress, amount) => {
+export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) => {
 
 	var signatureScript = createSignatureScript(publicKeyEncoded);
 	var myProgramHash = getHash(signatureScript);
@@ -411,8 +406,6 @@ export const claimTransactionRewrite = (claims, publicKeyEncoded, toAddress, amo
 	for ( let k=0; k<len; k++ ) {
     // get the txid
 		let txid = claims[k]['txid'];
-    console.log(txid);
-    console.log(claims[k]['index']);
     // add txid to data
 		data = data + ab2hexstring(reverseArray(hexstring2ab(txid)));
 
@@ -433,82 +426,11 @@ export const claimTransactionRewrite = (claims, publicKeyEncoded, toAddress, amo
 	data = data + ab2hexstring(reverseArray(hexstring2ab("602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")))
 
 	// Net add total amount of the claim
-  console.log(total_amount, amount);
-	const num1 = amount; //claims[0].claim;
-  console.log(num1);
-	const num1str = numStoreInMemory(num1.toString(16), 16);
+	const num1str = numStoreInMemory(amount.toString(16), 16);
 	data = data + num1str;
 
 	// Finally add program hash
 	data = data + myProgramHash.toString();
-
-	//console.log(data);
-
-	return data;
-};
-
-// don't work
-// 4ec3148b7a7fdc98a391e9551249d5763cb5a93fec2ce272c3aed12ca0d9a3bc
-// 794ed2564f85720e84a660ef583067a63e5e72782870205692efc874df203d72
-// 2608db13970b8f8655c8deb19472374d41e46ba009d9c89976b0234d481f7a18
-
-// work
-// 67a18d71c04772ac3ab92dbc7936fa0a3422fda8631ecae4e4a3d5cc1f108e8e
-// 95da63b4310aec6a1d104fb32f9b650266012f7261b8d659f6d22815c9b79e28
-// 48f8241f41a1dabf55c8b367193bd770703595ef78b5a29d78d962c8a1638d1e
-// 2190525f51297cf0fe2c92bd820ac9b663d6b59265b12c001263dd329abc555b
-// fe950deef57bc7e32b213e125fdc175a0d0c8a9b1761d43afb9adaa0e6808c48
-// 49992532d6bec0dcf8eadcfd588ba7bb2c5286692342f7a885af19d1c00a6003
-
-export const claimTransaction = ($claims, $publicKeyEncoded, $toAddress, $Amount) => {
-
-	var signatureScript = createSignatureScript($publicKeyEncoded);
-	//console.log( signatureScript.toString('hex') );
-
-	var myProgramHash = getHash(signatureScript);
-	//console.log( myProgramHash.toString() );
-
-	////////////////////////////////////////////////////////////////////////
-	// data
-	var data = "02";
-
-	// version
-	data = data + "00";
-
-	// claim
-	// TODO: !!! var int
-	len = $claims['claims'].length;
-	lenstr = numStoreInMemory(len.toString(16), 2);
-	data = data + lenstr
-
-	//console.log("len: ", len);
-	for ( var k=0; k<len; k++ ) {
-		txid = $claims['claims'][k]['txid'];
-		data = data + ab2hexstring(reverseArray(hexstring2ab(txid)));
-
-		vout = $claims['claims'][k]['vout'].toString(16);
-		data = data + numStoreInMemory(vout, 4);
-	}
-
-	// attribute
-	data = data + "00";
-
-	// Inputs
-	data = data + "00";
-
-	// Outputs len
-	data = data + "01";
-
-	// Outputs[0] AssetID
-	data = data + ab2hexstring(reverseArray(hexstring2ab($claims['assetid'])))
-
-	// Outputs[0] Amount
-	const num1 = parseInt($Amount);
-	const num1str = numStoreInMemory(num1.toString(16), 16);
-	data = data + num1str;
-
-	// Outputs[0] ProgramHash
-	data = data + myProgramHash.toString()
 
 	//console.log(data);
 
@@ -557,6 +479,7 @@ export const getPrivateKeyFromWIF = ($wif) => {
 	var data = base58.decode($wif);
 
 	if (data.length != 38 || data[0] != 0x80 || data[33] != 0x01) {
+    // basic encoding errors
 		return -1;
 	}
 
@@ -683,6 +606,9 @@ export const getAccountsFromPrivateKey = ($privateKey) => {
 	return accounts;
 };
 
+// lookup account data (publicKey, privateKey, address, etc. from WIF)
+// returns -1 for basic encoding errors
+// returns -2 for WIF verify fail
 export const getAccountsFromWIFKey = ($WIFKey) => {
 	var privateKey = getPrivateKeyFromWIF($WIFKey);
 	if (privateKey == -1 || privateKey == -2) {
