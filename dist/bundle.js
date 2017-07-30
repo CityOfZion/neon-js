@@ -16558,7 +16558,7 @@ module.exports = Sha512
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.sendAssetTransaction = exports.sendClaimTransaction = exports.getTransactions = exports.getBalance = exports.getBlockCount = exports.getBlockByIndex = exports.getNetworkEndpoints = exports.allAssetIds = exports.ancId = exports.ansId = exports.TESTNET = exports.MAINNET = undefined;
+exports.sendAssetTransaction = exports.getWalletDBHeight = exports.getTransactionHistory = exports.getMarketPriceUSD = exports.getBalance = exports.claimAllGAS = exports.getAvailableClaim = exports.getBlockByIndex = exports.getRPCEndpoint = exports.getAPIEndpoint = exports.allAssetIds = exports.ancId = exports.ansId = undefined;
 
 var _axios = __webpack_require__(56);
 
@@ -16568,14 +16568,11 @@ var _wallet = __webpack_require__(75);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// this file contains high level API functions for connecting with network resources
-
 var apiEndpoint = "http://testnet.antchain.xyz";
 var rpcEndpoint = "http://api.otcgo.cn:20332"; // testnet = 20332
 
-// network name variables
-var MAINNET = exports.MAINNET = "MainNet";
-var TESTNET = exports.TESTNET = "TestNet";
+var ANS = '\u5C0F\u8681\u80A1';
+var ANC = '\u5C0F\u8681\u5E01';
 
 // hard-code asset ids for ANS and ANC
 var ansId = exports.ansId = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
@@ -16586,9 +16583,6 @@ var allAssetIds = exports.allAssetIds = [ansId, ancId];
 var ansName = "小蚁股";
 var ancName = "小蚁币";
 
-// destructure explorer json responses
-var ANS = '\u5C0F\u8681\u80A1';
-var ANC = '\u5C0F\u8681\u5E01';
 var getAns = function getAns(balance) {
   return balance.filter(function (val) {
     return val.unit === ANS;
@@ -16600,92 +16594,106 @@ var getAnc = function getAnc(balance) {
   })[0];
 };
 
-// return Netwok endpoints that correspond to MainNet and TestNet
-var getNetworkEndpoints = exports.getNetworkEndpoints = function getNetworkEndpoints(net) {
-  if (net === MAINNET) {
-    return {
-      apiEndpoint: "https://antchain.xyz",
-      rpcEndpoint: "http://api.otcgo.cn:10332"
-    };
+var getAPIEndpoint = exports.getAPIEndpoint = function getAPIEndpoint(net) {
+  if (net === "MainNet") {
+    return "http://neo.herokuapp.com";
   } else {
-    return {
-      apiEndpoint: "http://testnet.antchain.xyz",
-      rpcEndpoint: "http://testnet.rpc.neeeo.org:20332/" // "http://api.otcgo.cn:20332" //
-    };
+    return "http://neo-testnet.herokuapp.com"; //, //"http://testnet.antchain.xyz",
   }
 };
 
+var getRPCEndpoint = exports.getRPCEndpoint = function getRPCEndpoint(net) {
+  var apiEndpoint = getAPIEndpoint(net);
+  return _axios2.default.get(apiEndpoint + '/v1/network/best_node').then(function (response) {
+    return response.data.node;
+  });
+};
+
 // wrapper for querying node RPC
-// see antshares node API documentation for details
 var queryRPC = function queryRPC(net, method, params) {
   var id = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
 
-  var network = getNetworkEndpoints(net);
   var jsonRequest = _axios2.default.create({
     headers: { "Content-Type": "application/json" }
   });
   var jsonRpcData = { "jsonrpc": "2.0", "method": method, "params": params, "id": id };
-  return jsonRequest.post(network.rpcEndpoint, jsonRpcData).then(function (response) {
-    return response.data;
+  return getRPCEndpoint(net).then(function (rpcEndpoint) {
+    return jsonRequest.post(rpcEndpoint, jsonRpcData).then(function (response) {
+      return response.data;
+    });
   });
 };
 
-// get a given block by index, passing verbose (the "1" param) to have the node
-// destructure metadata for us
 var getBlockByIndex = exports.getBlockByIndex = function getBlockByIndex(net, block) {
   return queryRPC(net, "getblock", [block, 1]);
 };
 
-// get the current height of the blockchain
-var getBlockCount = exports.getBlockCount = function getBlockCount(net) {
-  return queryRPC(net, "getblockcount", []);
-};
-
-// use a public blockchain explorer (currently antchain.xyz) to get the current balance of an account
-// returns dictionary with both ANS and ANC
-var getBalance = exports.getBalance = function getBalance(net, address) {
-  var network = getNetworkEndpoints(net);
-  return _axios2.default.get(network.apiEndpoint + '/api/v1/address/info/' + address).then(function (res) {
-    if (res.data.result !== 'No Address!') {
-      // get ANS
-      var ans = getAns(res.data.balance);
-      var anc = getAnc(res.data.balance);
-      return { ANS: ans, ANC: anc };
-    }
+var getAvailableClaim = exports.getAvailableClaim = function getAvailableClaim(net, address) {
+  var apiEndpoint = getAPIEndpoint(net);
+  return _axios2.default.get(apiEndpoint + '/v1/address/claims/' + address).then(function (res) {
+    return parseInt(res.data.total_claim);
   });
 };
 
-// use a public blockchain explorer (currently antchain.xyz) to get unspent transaction for an account
-// TODO: rename this to getUnspentTransactions
-// TODO: what we really need is an API to get all transactions. new blockchain explorer!
-var getTransactions = exports.getTransactions = function getTransactions(net, address, assetId) {
-  var network = getNetworkEndpoints(net);
-  return _axios2.default.get(network.apiEndpoint + '/api/v1/address/utxo/' + address).then(function (response) {
-    return response.data.utxo[assetId];
-  });
-};
-
-var sendClaimTransaction = exports.sendClaimTransaction = function sendClaimTransaction(net, fromWif) {
-  var network = getNetworkEndpoints(net);
+var claimAllGAS = exports.claimAllGAS = function claimAllGAS(net, fromWif) {
+  var apiEndpoint = getAPIEndpoint(net);
   var account = (0, _wallet.getAccountsFromWIFKey)(fromWif)[0];
-  return _axios2.default.get("http://localhost:5000/get_claim/" + account.address).then(function (response) {
+  // TODO: when fully working replace this with mainnet/testnet switch
+  return _axios2.default.get(apiEndpoint + "/v1/address/claims/" + account.address).then(function (response) {
     var claims = response.data["claims"];
     var total_claim = response.data["total_claim"];
-    var txData = (0, _wallet.claimTransactionRewrite)(claims, account.publickeyEncoded, account.address, total_claim);
+    var txData = (0, _wallet.claimTransaction)(claims, account.publickeyEncoded, account.address, total_claim);
     var sign = (0, _wallet.signatureData)(txData, account.privatekey);
     var txRawData = (0, _wallet.addContract)(txData, sign, account.publickeyEncoded);
     return queryRPC(net, "sendrawtransaction", [txRawData], 2);
   });
 };
 
-// send ANS or ANC over the network
-// "net" is "MainNet" or "TestNet"
-// "toAddress" is reciever address as string
-// "fromWif" is sender WIF as string
-// "assetType" is "AntShares" or "AntCoins"
-// "amount" is integer amount to send (or float for ANC)
+var getBalance = exports.getBalance = function getBalance(net, address) {
+  var apiEndpoint = getAPIEndpoint(net);
+  return _axios2.default.get(apiEndpoint + '/v1/address/balance/' + address).then(function (res) {
+    var ans = res.data.NEO.balance;
+    var anc = res.data.GAS.balance;
+    return { ANS: ans, ANC: anc, unspent: { ANS: res.data.NEO.unspent, ANC: res.data.GAS.unspent } };
+  });
+};
+
+/**
+ * @function
+ * @description
+ * Hit the bittrex api getticker to fetch the latest BTC to ANS price
+ * then hit the latest USDT to BTC conversion rate
+ *
+ * @param {number} amount - The current ANS amount in wallet
+ * @return {string} - The converted ANS to USDT fiat amount
+ */
+var getMarketPriceUSD = exports.getMarketPriceUSD = function getMarketPriceUSD(amount) {
+  var lastBTCANS = void 0,
+      lastUSDBTC = void 0;
+  return _axios2.default.get('https://bittrex.com/api/v1.1/public/getticker?market=BTC-ANS').then(function (response) {
+    lastBTCANS = response.data.result.Last;
+    return _axios2.default.get('https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC').then(function (response) {
+      lastUSDBTC = response.data.result.Last;
+      return '$' + (lastBTCANS * lastUSDBTC * amount).toFixed(2).toString();
+    });
+  });
+};
+
+var getTransactionHistory = exports.getTransactionHistory = function getTransactionHistory(net, address) {
+  var apiEndpoint = getAPIEndpoint(net);
+  return _axios2.default.get(apiEndpoint + '/v1/address/history/' + address).then(function (response) {
+    return response.data.history;
+  });
+};
+
+var getWalletDBHeight = exports.getWalletDBHeight = function getWalletDBHeight(net) {
+  var apiEndpoint = getAPIEndpoint(net);
+  return _axios2.default.get(apiEndpoint + '/v1/block/height').then(function (response) {
+    return parseInt(response.data.block_height);
+  });
+};
+
 var sendAssetTransaction = exports.sendAssetTransaction = function sendAssetTransaction(net, toAddress, fromWif, assetType, amount) {
-  var network = getNetworkEndpoints(net);
   var assetId = void 0,
       assetName = void 0,
       assetSymbol = void 0;
@@ -16700,25 +16708,16 @@ var sendAssetTransaction = exports.sendAssetTransaction = function sendAssetTran
   }
   var fromAccount = (0, _wallet.getAccountsFromWIFKey)(fromWif)[0];
   return getBalance(net, fromAccount.address).then(function (response) {
-    var balance = response[assetSymbol];
-    return getTransactions(net, fromAccount.address, assetId).then(function (transactions) {
-      var coinsData = {
-        "assetid": assetId,
-        "list": transactions,
-        "balance": balance,
-        "name": assetName
-      };
-      var txData = (0, _wallet.transferTransaction)(coinsData, fromAccount.publickeyEncoded, toAddress, amount);
-      var sign = (0, _wallet.signatureData)(txData, fromAccount.privatekey);
-      var txRawData = (0, _wallet.addContract)(txData, sign, fromAccount.publickeyEncoded);
-      var jsonRequest = _axios2.default.create({
-        headers: { "Content-Type": "application/json" }
-      });
-      var jsonRpcData = { "jsonrpc": "2.0", "method": "sendrawtransaction", "params": [txRawData], "id": 4 };
-      return jsonRequest.post(network.rpcEndpoint, jsonRpcData).then(function (response) {
-        return response.data;
-      });
-    });
+    var coinsData = {
+      "assetid": assetId,
+      "list": response.unspent[assetSymbol],
+      "balance": response[assetSymbol],
+      "name": assetName
+    };
+    var txData = (0, _wallet.transferTransaction)(coinsData, fromAccount.publickeyEncoded, toAddress, amount);
+    var sign = (0, _wallet.signatureData)(txData, fromAccount.privatekey);
+    var txRawData = (0, _wallet.addContract)(txData, sign, fromAccount.publickeyEncoded);
+    return queryRPC(net, "sendrawtransaction", [txRawData], 4);
   });
 };
 
@@ -18020,24 +18019,24 @@ var claimTransactionRewrite = exports.claimTransactionRewrite = function claimTr
 	// Transaction-specific attributs: claims
 
 	// 1) store number of claims (txids)
-	var len = 1; //claims.length;
+	var len = claims.length;
 	var lenstr = (0, _utils.numStoreInMemory)(len.toString(16), 2);
 	data = data + lenstr;
 
 	var total_amount = 0;
 
 	// 2) iterate over claim txids
-	// for ( let k=0; k<len; k++ ) {
-	// get the txid
-	var txid = claims[1]['txid'];
-	console.log(txid);
-	console.log(claims[1]['index']);
-	// add txid to data
-	data = data + (0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)(txid)));
+	for (var k = 0; k < len; k++) {
+		// get the txid
+		var _txid = claims[k]['txid'];
+		console.log(_txid);
+		console.log(claims[k]['index']);
+		// add txid to data
+		data = data + (0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)(_txid)));
 
-	var vout = claims[1]['index'].toString(16);
-	data = data + (0, _utils.numStoreInMemory)(vout, 4);
-	// }
+		var _vout = claims[k]['index'].toString(16);
+		data = data + (0, _utils.numStoreInMemory)(_vout, 4);
+	}
 
 	// Don't need any attributes
 	data = data + "00";
@@ -18053,7 +18052,7 @@ var claimTransactionRewrite = exports.claimTransactionRewrite = function claimTr
 
 	// Net add total amount of the claim
 	console.log(total_amount, amount);
-	var num1 = claims[1].claim;
+	var num1 = amount; //claims[0].claim;
 	console.log(num1);
 	var num1str = (0, _utils.numStoreInMemory)(num1.toString(16), 16);
 	data = data + num1str;

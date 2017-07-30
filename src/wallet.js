@@ -401,7 +401,7 @@ export const claimTransactionRewrite = (claims, publicKeyEncoded, toAddress, amo
 	// Transaction-specific attributs: claims
 
 	// 1) store number of claims (txids)
-	let claims.length;
+	let len = claims.length;
 	let lenstr = numStoreInMemory(len.toString(16), 2);
 	data = data + lenstr;
 

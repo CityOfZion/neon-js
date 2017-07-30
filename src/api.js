@@ -1,14 +1,11 @@
-// this file contains high level API functions for connecting with network resources
-
 import axios from 'axios';
-import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransactionRewrite } from './wallet.js';
+import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransaction } from './wallet.js';
 
 const apiEndpoint = "http://testnet.antchain.xyz";
 const rpcEndpoint = "http://api.otcgo.cn:20332"; // testnet = 20332
 
-// network name variables
-export const MAINNET = "MainNet";
-export const TESTNET = "TestNet";
+const ANS = '\u5c0f\u8681\u80a1';
+const ANC = '\u5c0f\u8681\u5e01';
 
 // hard-code asset ids for ANS and ANC
 export const ansId = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
@@ -19,98 +16,111 @@ export const allAssetIds = [ansId, ancId];
 const ansName = "小蚁股";
 const ancName = "小蚁币";
 
-// destructure explorer json responses
-const ANS = '\u5c0f\u8681\u80a1';
-const ANC = '\u5c0f\u8681\u5e01';
 const getAns = balance => balance.filter((val) => { return val.unit === ANS })[0];
 const getAnc = balance => balance.filter((val) => { return val.unit === ANC })[0];
 
-// return Netwok endpoints that correspond to MainNet and TestNet
-export const getNetworkEndpoints = (net) => {
-  if (net === MAINNET){
-    return {
-      apiEndpoint: "https://antchain.xyz",
-      rpcEndpoint: "http://api.otcgo.cn:10332"
-    }
+export const getAPIEndpoint = (net) => {
+  if (net === "MainNet"){
+    return "http://neo.herokuapp.com";
   } else {
-    return {
-      apiEndpoint: "http://testnet.antchain.xyz",
-      rpcEndpoint: "http://testnet.rpc.neeeo.org:20332/" // "http://api.otcgo.cn:20332" //
-    }
+    return "http://neo-testnet.herokuapp.com"; //, //"http://testnet.antchain.xyz",
   }
 };
 
+export const getRPCEndpoint = (net) => {
+  const apiEndpoint = getAPIEndpoint(net);
+  return axios.get(apiEndpoint + '/v1/network/best_node').then((response) => {
+      return response.data.node;
+  });
+};
+
 // wrapper for querying node RPC
-// see antshares node API documentation for details
 const queryRPC = (net, method, params, id = 1) => {
-  const network = getNetworkEndpoints(net);
   let jsonRequest = axios.create({
     headers: {"Content-Type": "application/json"}
   });
   const jsonRpcData = {"jsonrpc": "2.0", "method": method, "params": params, "id": id};
-  return jsonRequest.post(network.rpcEndpoint, jsonRpcData).then((response) => {
-    return response.data;
+  return getRPCEndpoint(net).then((rpcEndpoint) => {
+    return jsonRequest.post(rpcEndpoint, jsonRpcData).then((response) => {
+      return response.data;
+    });
   });
 };
 
-// get a given block by index, passing verbose (the "1" param) to have the node
-// destructure metadata for us
 export const getBlockByIndex = (net, block) => {
   return queryRPC(net, "getblock", [block, 1]);
 }
 
-// get the current height of the blockchain
-export const getBlockCount = (net) => {
+export const getBlockCount = (net, block) => {
   return queryRPC(net, "getblockcount", []);
 }
 
-// use a public blockchain explorer (currently antchain.xyz) to get the current balance of an account
-// returns dictionary with both ANS and ANC
-export const getBalance = (net, address) => {
-    const network = getNetworkEndpoints(net);
-    return axios.get(network.apiEndpoint + '/api/v1/address/info/' + address)
-      .then((res) => {
-        if (res.data.result !== 'No Address!') {
-          // get ANS
-          const ans = getAns(res.data.balance);
-          const anc = getAnc(res.data.balance);
-          return {ANS: ans, ANC: anc};
-        }
-      })
-};
-
-// use a public blockchain explorer (currently antchain.xyz) to get unspent transaction for an account
-// TODO: rename this to getUnspentTransactions
-// TODO: what we really need is an API to get all transactions. new blockchain explorer!
-export const getTransactions = (net, address, assetId) => {
-  const network = getNetworkEndpoints(net);
-  return axios.get(network.apiEndpoint + '/api/v1/address/utxo/' + address).then((response) => {
-    return response.data.utxo[assetId];
-  });
-};
-
-export const sendClaimTransaction = (net, fromWif) => {
-  const network = getNetworkEndpoints(net);
-  const account = getAccountsFromWIFKey(fromWif)[0];
-  // TODO: when fully working replace this with mainnet/testnet switch
-  return axios.get("http://localhost:5000/get_claim/" + account.address).then((response) => {
-    const claims = response.data["claims"];
-    const total_claim = response.data["total_claim"];
-    const txData = claimTransactionRewrite(claims, account.publickeyEncoded, account.address, total_claim);
-    const sign = signatureData(txData, account.privatekey);
-    const txRawData = addContract(txData, sign, account.publickeyEncoded);
-    return queryRPC(net, "sendrawtransaction", [txRawData], 2)
+export const getAvailableClaim = (net, address) => {
+  const apiEndpoint = getAPIEndpoint(net);
+  return axios.get(apiEndpoint + '/v1/address/claims/' + address).then((res) => {
+    return parseInt(res.data.total_claim);
   });
 }
 
-// send ANS or ANC over the network
-// "net" is "MainNet" or "TestNet"
-// "toAddress" is reciever address as string
-// "fromWif" is sender WIF as string
-// "assetType" is "AntShares" or "AntCoins"
-// "amount" is integer amount to send (or float for ANC)
+export const claimAllGAS = (net, fromWif) => {
+  const apiEndpoint = getAPIEndpoint(net);
+  const account = getAccountsFromWIFKey(fromWif)[0];
+  // TODO: when fully working replace this with mainnet/testnet switch
+  return axios.get(apiEndpoint + "/v1/address/claims/" + account.address).then((response) => {
+    const claims = response.data["claims"];
+    const total_claim = response.data["total_claim"];
+    const txData = claimTransaction(claims, account.publickeyEncoded, account.address, total_claim);
+    const sign = signatureData(txData, account.privatekey);
+    const txRawData = addContract(txData, sign, account.publickeyEncoded);
+    return queryRPC(net, "sendrawtransaction", [txRawData], 2);
+  });
+}
+
+export const getBalance = (net, address) => {
+    const apiEndpoint = getAPIEndpoint(net);
+    return axios.get(apiEndpoint + '/v1/address/balance/' + address)
+      .then((res) => {
+          const ans = res.data.NEO.balance;
+          const anc = res.data.GAS.balance;
+          return {ANS: ans, ANC: anc, unspent: {ANS: res.data.NEO.unspent, ANC: res.data.GAS.unspent}};
+      })
+};
+
+/**
+ * @function
+ * @description
+ * Hit the bittrex api getticker to fetch the latest BTC to ANS price
+ * then hit the latest USDT to BTC conversion rate
+ *
+ * @param {number} amount - The current ANS amount in wallet
+ * @return {string} - The converted ANS to USDT fiat amount
+ */
+export const getMarketPriceUSD = (amount) => {
+  let lastBTCANS, lastUSDBTC;
+  return axios.get('https://bittrex.com/api/v1.1/public/getticker?market=BTC-ANS').then((response) => {
+      lastBTCANS = response.data.result.Last;
+      return axios.get('https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC').then((response) => {
+          lastUSDBTC = response.data.result.Last;
+          return ('$' + (lastBTCANS * lastUSDBTC * amount).toFixed(2).toString());
+      });
+  });
+};
+
+export const getTransactionHistory = (net, address) => {
+  const apiEndpoint = getAPIEndpoint(net);
+  return axios.get(apiEndpoint + '/v1/address/history/' + address).then((response) => {
+    return response.data.history;
+  });
+};
+
+export const getWalletDBHeight = (net) => {
+  const apiEndpoint = getAPIEndpoint(net);
+  return axios.get(apiEndpoint + '/v1/block/height').then((response) => {
+    return parseInt(response.data.block_height);
+  });
+}
+
 export const sendAssetTransaction = (net, toAddress, fromWif, assetType, amount) => {
-  const network = getNetworkEndpoints(net);
   let assetId, assetName, assetSymbol;
   if (assetType === "AntShares"){
     assetId = ansId;
@@ -123,24 +133,15 @@ export const sendAssetTransaction = (net, toAddress, fromWif, assetType, amount)
   }
   const fromAccount = getAccountsFromWIFKey(fromWif)[0];
   return getBalance(net, fromAccount.address).then((response) => {
-    const balance = response[assetSymbol];
-    return getTransactions(net, fromAccount.address, assetId).then((transactions) => {
-      const coinsData = {
-        "assetid": assetId,
-        "list": transactions,
-        "balance": balance,
-        "name": assetName
-      }
-      const txData = transferTransaction(coinsData, fromAccount.publickeyEncoded, toAddress, amount);
-      const sign = signatureData(txData, fromAccount.privatekey);
-      const txRawData = addContract(txData, sign, fromAccount.publickeyEncoded);
-      let jsonRequest = axios.create({
-        headers: {"Content-Type": "application/json"}
-      });
-      const jsonRpcData = {"jsonrpc": "2.0", "method": "sendrawtransaction", "params": [txRawData], "id": 4};
-      return jsonRequest.post(network.rpcEndpoint, jsonRpcData).then((response) => {
-        return response.data;
-      });
-    });
+    const coinsData = {
+      "assetid": assetId,
+      "list": response.unspent[assetSymbol],
+      "balance": response[assetSymbol],
+      "name": assetName
+    }
+    const txData = transferTransaction(coinsData, fromAccount.publickeyEncoded, toAddress, amount);
+    const sign = signatureData(txData, fromAccount.privatekey);
+    const txRawData = addContract(txData, sign, fromAccount.publickeyEncoded);
+    return queryRPC(net, "sendrawtransaction", [txRawData], 4);
   });
 };

@@ -36,14 +36,14 @@ describe('Wallet', function() {
     }
   }
 
-  it('should claim ANC', (done) =>{
-    api.sendClaimTransaction(api.TESTNET, testKeys.a.wif).then((response) => {
-      console.log(response);
-      done();
-    })
-  });
+  // it('should claim ANC', (done) =>{
+  //   api.sendClaimTransaction(api.TESTNET, testKeys.c.wif).then((response) => {
+  //     console.log(response);
+  //     done();
+  //   })
+  // });
 
-  it('should connect to the testnet node and get block count', (done) => {
+  it('should connect to the light wallet API and get block count', (done) => {
     api.getBlockCount(api.TESTNET).then((response) => {
       response.result.should.be.a('number');
       done();
@@ -98,22 +98,16 @@ describe('Wallet', function() {
 
   it('should get balance from address', (done) => {
     api.getBalance(api.TESTNET, testKeys.a.address).then((response) =>{
-      response.ANS.should.be.an('object');
-      response.ANC.should.be.an('object');
+      response.ANS.should.be.a('number');
+      response.ANC.should.be.a('number');
       done();
     });
   });
 
-  it('should get unspent ANS transactions', (done) => {
-    api.getTransactions(api.TESTNET, testKeys.a.address, api.ansId).then((response) => {
-      response.should.be.an('array');
-      done();
-    })
-  });
-
-  it('should get unspent ANC transactions', (done) => {
-    api.getTransactions(api.TESTNET, testKeys.a.address, api.ancId).then((response) => {
-      response.should.be.an('array');
+  it('should get unspent transactions', (done) => {
+    api.getBalance(api.TESTNET, testKeys.a.address, api.ansId).then((response) => {
+      response.unspent.ANS.should.be.an('array');
+      response.unspent.ANC.should.be.an('array');
       done();
     })
   });
