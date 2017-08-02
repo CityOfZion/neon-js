@@ -27,13 +27,13 @@ api.getBalance(api.TESTNET, testKeys.a.address).then((balance) => {
   console.log(balance);
 });
 
-// Get balance of account "a" on TestNet using Neon Wallet API
+// Get balance of account "a" on MainNet using Neon Wallet API
 api.getBalance(api.MAINNET, testKeys.a.address).then((balance) => {
   console.log(balance);
 });
 
 // Claim all available GAS for account "a" on TestNet
-api.claimAllGAS(api.MAINNET, testKeys.a.wif).then((response) => {
+api.claimAllGAS(api.TESTNET, testKeys.a.wif).then((response) => {
   console.log(response);
 });
 
