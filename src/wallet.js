@@ -384,18 +384,6 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 	return ab2hexstring(data);
 };
 
-export const checkOverflow = (totalAmount, toSend) => {
-  const num1 = parseInt(toSend * 100000000);
-  const num2 = parseInt(totalAmount * 100000000 - num1);
-  console.log(num1, num2, num1 + num2, totalAmount);
-  // console.log(Buffer.from(num2.toString(), "hex"));
-  console.log(num2.toString(16));
-  const num2str = numStoreInMemory(num2.toString(16), 16);
-  console.log(hexstring2ab(num2str));
-  console.log(parseInt(ab2hexstring(reverseArray(hexstring2ab(num2str))), 16));
-
-};
-
 export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) => {
 
 	var signatureScript = createSignatureScript(publicKeyEncoded);
