@@ -13,6 +13,8 @@ import { ab2str,
   stringToBytes } from './utils';
 
 var base58 = require('base-x')(BASE58)
+import secureRandom from 'secure-random';
+
 
 import buffer from 'buffer';
 
@@ -330,7 +332,7 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 		//data.set(hexstring2ab($coin['assetid']), inputLen + 4);
 
 		// output value
-		const num1 = $Amount * 100000000;
+		const num1 = parseInt($Amount * 100000000);
 		const num1str = numStoreInMemory(num1.toString(16), 16);
 		data.set(hexstring2ab(num1str), inputLen + 36);
 
@@ -352,7 +354,7 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 		//data.set(hexstring2ab($coin['assetid']), inputLen + 4);
 
 		// output value
-		const num1 = $Amount * 100000000;
+		const num1 = parseInt($Amount * 100000000);
 		const num1str = numStoreInMemory(num1.toString(16), 16);
 		data.set(hexstring2ab(num1str), inputLen + 36);
 
@@ -367,7 +369,7 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 		//data.set(hexstring2ab($coin['assetid']), inputLen + 64);
 
 		// output value
-		const num2 = inputAmount * 100000000 - num1;
+		const num2 = parseInt(inputAmount * 100000000 - num1);
 		const num2str = numStoreInMemory(num2.toString(16), 16);
 		data.set(hexstring2ab(num2str), inputLen + 96);
 
@@ -380,6 +382,18 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 	}
 
 	return ab2hexstring(data);
+};
+
+export const checkOverflow = (totalAmount, toSend) => {
+  const num1 = parseInt(toSend * 100000000);
+  const num2 = parseInt(totalAmount * 100000000 - num1);
+  console.log(num1, num2, num1 + num2, totalAmount);
+  // console.log(Buffer.from(num2.toString(), "hex"));
+  console.log(num2.toString(16));
+  const num2str = numStoreInMemory(num2.toString(16), 16);
+  console.log(hexstring2ab(num2str));
+  console.log(parseInt(ab2hexstring(reverseArray(hexstring2ab(num2str))), 16));
+
 };
 
 export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) => {
@@ -395,23 +409,27 @@ export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) =>
 
 	// Transaction-specific attributs: claims
 
+  //
+
 	// 1) store number of claims (txids)
-	let len = claims.length;
+	let len = 1;// claims.length;
+  let i = 0;
 	let lenstr = numStoreInMemory(len.toString(16), 2);
 	data = data + lenstr;
 
   let total_amount = 0;
 
   // 2) iterate over claim txids
-	for ( let k=0; k<len; k++ ) {
+	// for ( let k=0; k<len; k++ ) {
     // get the txid
-		let txid = claims[k]['txid'];
+		let txid = claims[i]['txid'];
+    console.log(txid);
     // add txid to data
 		data = data + ab2hexstring(reverseArray(hexstring2ab(txid)));
 
-		let vout = claims[k]['index'].toString(16);
+		let vout = claims[i]['index'].toString(16);
 		data = data + numStoreInMemory(vout, 4);
-	}
+	// }
 
 	// Don't need any attributes
 	data = data + "00";
@@ -426,7 +444,7 @@ export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) =>
 	data = data + ab2hexstring(reverseArray(hexstring2ab("602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")))
 
 	// Net add total amount of the claim
-	const num1str = numStoreInMemory(amount.toString(16), 16);
+	const num1str = numStoreInMemory(claims[i]['claim'].toString(16), 16);
 	data = data + num1str;
 
 	// Finally add program hash
@@ -458,19 +476,19 @@ export const toAddress = ($ProgramHash) => {
 };
 
 export const generateRandomArray = ($arrayLen) => {
-  var randomArray = new Uint8Array($arrayLen);
-	for (let i = 0; i < $arrayLen; i++) {
-		randomArray[i] = Math.floor(Math.random() * 256);
-	}
+  var randomArray = secureRandom($arrayLen);
+	// for (let i = 0; i < $arrayLen; i++) {
+	// 	randomArray[i] = Math.floor(Math.random() * 256);
+	// }
 
 	return randomArray;
 }
 
 export const generatePrivateKey = () => {
-	var privateKey = new Uint8Array(32);
-	for (let i = 0; i < 32; i++) {
-		privateKey[i] = Math.floor(Math.random() * 256);
-	}
+	var privateKey = secureRandom(32);
+	// for (let i = 0; i < 32; i++) {
+	// 	privateKey[i] = Math.floor(Math.random() * 256);
+	// }
 
 	return privateKey;
 };

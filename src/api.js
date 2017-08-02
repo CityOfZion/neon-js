@@ -12,6 +12,9 @@ export const ansId = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6da
 export const ancId = "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
 export const allAssetIds = [ansId, ancId];
 
+export const MAINNET = "MainNet";
+export const TESTNET = "TestNet";
+
 // hard-code asset names for ANS and ANC
 const ansName = "小蚁股";
 const ancName = "小蚁币";
@@ -125,6 +128,7 @@ export const claimAllGAS = (net, fromWif) => {
   const account = getAccountsFromWIFKey(fromWif)[0];
   // TODO: when fully working replace this with mainnet/testnet switch
   return axios.get(apiEndpoint + "/v1/address/claims/" + account.address).then((response) => {
+    console.log(response.data['claims']);
     const claims = response.data["claims"];
     const total_claim = response.data["total_claim"];
     const txData = claimTransaction(claims, account.publickeyEncoded, account.address, total_claim);

@@ -16558,7 +16558,7 @@ module.exports = Sha512
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.sendAssetTransaction = exports.getWalletDBHeight = exports.getTransactionHistory = exports.getMarketPriceUSD = exports.getBalance = exports.claimAllGAS = exports.getAvailableClaim = exports.getBlockByIndex = exports.getRPCEndpoint = exports.getAPIEndpoint = exports.allAssetIds = exports.ancId = exports.ansId = undefined;
+exports.sendAssetTransaction = exports.claimAllGAS = exports.getBlockCount = exports.getBlockByIndex = exports.getWalletDBHeight = exports.getTransactionHistory = exports.getMarketPriceUSD = exports.getBalance = exports.getAvailableClaim = exports.getRPCEndpoint = exports.getAPIEndpoint = exports.TESTNET = exports.MAINNET = exports.allAssetIds = exports.ancId = exports.ansId = undefined;
 
 var _axios = __webpack_require__(56);
 
@@ -16579,6 +16579,9 @@ var ansId = exports.ansId = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faeb
 var ancId = exports.ancId = "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
 var allAssetIds = exports.allAssetIds = [ansId, ancId];
 
+var MAINNET = exports.MAINNET = "MainNet";
+var TESTNET = exports.TESTNET = "TestNet";
+
 // hard-code asset names for ANS and ANC
 var ansName = "小蚁股";
 var ancName = "小蚁币";
@@ -16594,6 +16597,9 @@ var getAnc = function getAnc(balance) {
   })[0];
 };
 
+// API methods (using neon wallet API)
+
+// get neon wallet API endpoint for MainNet or TestNet
 var getAPIEndpoint = exports.getAPIEndpoint = function getAPIEndpoint(net) {
   if (net === "MainNet") {
     return "http://neo.herokuapp.com";
@@ -16602,6 +16608,7 @@ var getAPIEndpoint = exports.getAPIEndpoint = function getAPIEndpoint(net) {
   }
 };
 
+// get node RPC endpoint on MainNet or TestNet based on block height status from neon wallet API
 var getRPCEndpoint = exports.getRPCEndpoint = function getRPCEndpoint(net) {
   var apiEndpoint = getAPIEndpoint(net);
   return _axios2.default.get(apiEndpoint + '/v1/network/best_node').then(function (response) {
@@ -16609,25 +16616,7 @@ var getRPCEndpoint = exports.getRPCEndpoint = function getRPCEndpoint(net) {
   });
 };
 
-// wrapper for querying node RPC
-var queryRPC = function queryRPC(net, method, params) {
-  var id = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
-
-  var jsonRequest = _axios2.default.create({
-    headers: { "Content-Type": "application/json" }
-  });
-  var jsonRpcData = { "jsonrpc": "2.0", "method": method, "params": params, "id": id };
-  return getRPCEndpoint(net).then(function (rpcEndpoint) {
-    return jsonRequest.post(rpcEndpoint, jsonRpcData).then(function (response) {
-      return response.data;
-    });
-  });
-};
-
-var getBlockByIndex = exports.getBlockByIndex = function getBlockByIndex(net, block) {
-  return queryRPC(net, "getblock", [block, 1]);
-};
-
+// get all available claim on an account using neon wallet API
 var getAvailableClaim = exports.getAvailableClaim = function getAvailableClaim(net, address) {
   var apiEndpoint = getAPIEndpoint(net);
   return _axios2.default.get(apiEndpoint + '/v1/address/claims/' + address).then(function (res) {
@@ -16635,20 +16624,7 @@ var getAvailableClaim = exports.getAvailableClaim = function getAvailableClaim(n
   });
 };
 
-var claimAllGAS = exports.claimAllGAS = function claimAllGAS(net, fromWif) {
-  var apiEndpoint = getAPIEndpoint(net);
-  var account = (0, _wallet.getAccountsFromWIFKey)(fromWif)[0];
-  // TODO: when fully working replace this with mainnet/testnet switch
-  return _axios2.default.get(apiEndpoint + "/v1/address/claims/" + account.address).then(function (response) {
-    var claims = response.data["claims"];
-    var total_claim = response.data["total_claim"];
-    var txData = (0, _wallet.claimTransaction)(claims, account.publickeyEncoded, account.address, total_claim);
-    var sign = (0, _wallet.signatureData)(txData, account.privatekey);
-    var txRawData = (0, _wallet.addContract)(txData, sign, account.publickeyEncoded);
-    return queryRPC(net, "sendrawtransaction", [txRawData], 2);
-  });
-};
-
+// get the balance at an address using the neon wallet API
 var getBalance = exports.getBalance = function getBalance(net, address) {
   var apiEndpoint = getAPIEndpoint(net);
   return _axios2.default.get(apiEndpoint + '/v1/address/balance/' + address).then(function (res) {
@@ -16679,6 +16655,7 @@ var getMarketPriceUSD = exports.getMarketPriceUSD = function getMarketPriceUSD(a
   });
 };
 
+// get history of balance over time using neon wallet API
 var getTransactionHistory = exports.getTransactionHistory = function getTransactionHistory(net, address) {
   var apiEndpoint = getAPIEndpoint(net);
   return _axios2.default.get(apiEndpoint + '/v1/address/history/' + address).then(function (response) {
@@ -16686,6 +16663,7 @@ var getTransactionHistory = exports.getTransactionHistory = function getTransact
   });
 };
 
+// get block height reported by neon wallet API
 var getWalletDBHeight = exports.getWalletDBHeight = function getWalletDBHeight(net) {
   var apiEndpoint = getAPIEndpoint(net);
   return _axios2.default.get(apiEndpoint + '/v1/block/height').then(function (response) {
@@ -16693,6 +16671,50 @@ var getWalletDBHeight = exports.getWalletDBHeight = function getWalletDBHeight(n
   });
 };
 
+// RPC methods
+
+// wrapper for querying node RPC on MainNet or TestNet
+var queryRPC = function queryRPC(net, method, params) {
+  var id = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
+
+  var jsonRequest = _axios2.default.create({
+    headers: { "Content-Type": "application/json" }
+  });
+  var jsonRpcData = { "jsonrpc": "2.0", "method": method, "params": params, "id": id };
+  return getRPCEndpoint(net).then(function (rpcEndpoint) {
+    return jsonRequest.post(rpcEndpoint, jsonRpcData).then(function (response) {
+      return response.data;
+    });
+  });
+};
+
+// get a block from the RPC
+var getBlockByIndex = exports.getBlockByIndex = function getBlockByIndex(net, block) {
+  return queryRPC(net, "getblock", [block, 1]);
+};
+
+// get block height from the RPC
+var getBlockCount = exports.getBlockCount = function getBlockCount(net, block) {
+  return queryRPC(net, "getblockcount", []);
+};
+
+// submit a claim request for all available GAS at an address
+var claimAllGAS = exports.claimAllGAS = function claimAllGAS(net, fromWif) {
+  var apiEndpoint = getAPIEndpoint(net);
+  var account = (0, _wallet.getAccountsFromWIFKey)(fromWif)[0];
+  // TODO: when fully working replace this with mainnet/testnet switch
+  return _axios2.default.get(apiEndpoint + "/v1/address/claims/" + account.address).then(function (response) {
+    console.log(response.data['claims']);
+    var claims = response.data["claims"];
+    var total_claim = response.data["total_claim"];
+    var txData = (0, _wallet.claimTransaction)(claims, account.publickeyEncoded, account.address, total_claim);
+    var sign = (0, _wallet.signatureData)(txData, account.privatekey);
+    var txRawData = (0, _wallet.addContract)(txData, sign, account.publickeyEncoded);
+    return queryRPC(net, "sendrawtransaction", [txRawData], 2);
+  });
+};
+
+// send an asset (NEO or GAS) over the node RPC
 var sendAssetTransaction = exports.sendAssetTransaction = function sendAssetTransaction(net, toAddress, fromWif, assetType, amount) {
   var assetId = void 0,
       assetName = void 0,
@@ -17605,7 +17627,7 @@ module.exports = function spread(callback) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.getAccountsFromWIFKey = exports.getAccountsFromPrivateKey = exports.fetchAccountsFromPublicKeyEncoded = exports.signatureData = exports.getHash = exports.createSignatureScript = exports.getPublicKeyEncoded = exports.getPublicKey = exports.getPrivateKeyFromWIF = exports.generatePrivateKey = exports.generateRandomArray = exports.toAddress = exports.claimTransaction = exports.claimTransactionRewrite = exports.transferTransaction = exports.verifyPublicKeyEncoded = exports.verifyAddress = exports.addContract = exports.registerTransaction = exports.issueTransaction = exports.getInputData = exports.getTxHash = exports.getWIFFromPrivateKey = undefined;
+exports.getAccountsFromWIFKey = exports.getAccountsFromPrivateKey = exports.fetchAccountsFromPublicKeyEncoded = exports.signatureData = exports.getHash = exports.createSignatureScript = exports.getPublicKeyEncoded = exports.getPublicKey = exports.getPrivateKeyFromWIF = exports.generatePrivateKey = exports.generateRandomArray = exports.toAddress = exports.claimTransaction = exports.checkOverflow = exports.transferTransaction = exports.verifyPublicKeyEncoded = exports.verifyAddress = exports.addContract = exports.registerTransaction = exports.issueTransaction = exports.getInputData = exports.getTxHash = exports.getWIFFromHex = exports.getWIFFromPrivateKey = undefined;
 
 var _ecurve = __webpack_require__(78);
 
@@ -17633,7 +17655,8 @@ var _buffer2 = _interopRequireDefault(_buffer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'; // this file contains lower-level API functions mostly concerned with cryptography
+var BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+
 
 var base58 = __webpack_require__(47)(BASE58);
 
@@ -17643,8 +17666,12 @@ var base58 = __webpack_require__(47)(BASE58);
 // TODO: exporting ALL of these, but some of them are probably helpers and don't need to be exported
 // TODO: go through and add at least a basic description of everything these methods are doing
 
-// compute WIF from privateKey
 var getWIFFromPrivateKey = exports.getWIFFromPrivateKey = function getWIFFromPrivateKey(privateKey) {
+	var hexKey = (0, _utils.ab2hexstring)(privateKey);
+	return _wif2.default.encode(128, new Buffer(hexKey, 'hex'), true);
+};
+
+var getWIFFromHex = exports.getWIFFromHex = function getWIFFromHex(privateKey) {
 	return _wif2.default.encode(128, new Buffer(privateKey, 'hex'), true);
 };
 
@@ -17669,8 +17696,6 @@ var getInputData = exports.getInputData = function getInputData($coin, $amount) 
 			}
 		}
 	}
-
-	// console.log('coin_ordered', coin_ordered );
 
 	// calc sum
 	var sum = 0;
@@ -17773,8 +17798,6 @@ var issueTransaction = exports.issueTransaction = function issueTransaction($iss
 // TODO: we probably don't need to keep this function in the API, people aren't going to be using the wallet to register new assets
 // for now, leaving as reference
 var registerTransaction = exports.registerTransaction = function registerTransaction($assetName, $assetAmount, $publicKeyEncoded) {
-	console.log("publicKeyEncoded:", $publicKeyEncoded);
-
 	var ecparams = _ecurve2.default.getCurveByName('secp256r1');
 	var curvePt = _ecurve2.default.Point.decodeFrom(ecparams, new Buffer($publicKeyEncoded, "hex"));
 	var curvePtX = curvePt.affineX.toBuffer(32);
@@ -17782,10 +17805,8 @@ var registerTransaction = exports.registerTransaction = function registerTransac
 	var publicKey = _buffer2.default.concat([new Buffer([0x04]), curvePtX, curvePtY]);
 
 	var signatureScript = createSignatureScript($publicKeyEncoded);
-	console.log(signatureScript.toString('hex'));
 
 	var myProgramHash = getHash(signatureScript);
-	console.log(myProgramHash.toString());
 
 	// data
 	var data = "40";
@@ -17820,8 +17841,6 @@ var registerTransaction = exports.registerTransaction = function registerTransac
 	data = data + "20" + publicKeyXStr + "20" + publicKeyYStr;
 	data = data + myProgramHash.toString();
 	data = data + "000000";
-
-	console.log(data);
 
 	return data;
 };
@@ -18005,7 +18024,17 @@ var transferTransaction = exports.transferTransaction = function transferTransac
 	return (0, _utils.ab2hexstring)(data);
 };
 
-var claimTransactionRewrite = exports.claimTransactionRewrite = function claimTransactionRewrite(claims, publicKeyEncoded, toAddress, amount) {
+var checkOverflow = exports.checkOverflow = function checkOverflow(totalAmount, toSend) {
+	var num1 = toSend * 100000000;
+	var num2 = totalAmount * 100000000 - num1;
+	console.log(num2.toString(16));
+	new Buffer.from(num2.toString(16), "hex");
+	var num2str = (0, _utils.numStoreInMemory)(num2.toString(16), 10);
+	console.log((0, _utils.hexstring2ab)(num2str));
+	console.log(parseInt((0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)(num2str))), 16));
+};
+
+var claimTransaction = exports.claimTransaction = function claimTransaction(claims, publicKeyEncoded, toAddress, amount) {
 
 	var signatureScript = createSignatureScript(publicKeyEncoded);
 	var myProgramHash = getHash(signatureScript);
@@ -18018,25 +18047,27 @@ var claimTransactionRewrite = exports.claimTransactionRewrite = function claimTr
 
 	// Transaction-specific attributs: claims
 
+	//
+
 	// 1) store number of claims (txids)
-	var len = claims.length;
+	var len = 1; // claims.length;
+	var i = 0;
 	var lenstr = (0, _utils.numStoreInMemory)(len.toString(16), 2);
 	data = data + lenstr;
 
 	var total_amount = 0;
 
 	// 2) iterate over claim txids
-	for (var k = 0; k < len; k++) {
-		// get the txid
-		var _txid = claims[k]['txid'];
-		console.log(_txid);
-		console.log(claims[k]['index']);
-		// add txid to data
-		data = data + (0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)(_txid)));
+	// for ( let k=0; k<len; k++ ) {
+	// get the txid
+	var txid = claims[i]['txid'];
+	console.log(txid);
+	// add txid to data
+	data = data + (0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)(txid)));
 
-		var _vout = claims[k]['index'].toString(16);
-		data = data + (0, _utils.numStoreInMemory)(_vout, 4);
-	}
+	var vout = claims[i]['index'].toString(16);
+	data = data + (0, _utils.numStoreInMemory)(vout, 4);
+	// }
 
 	// Don't need any attributes
 	data = data + "00";
@@ -18051,81 +18082,10 @@ var claimTransactionRewrite = exports.claimTransactionRewrite = function claimTr
 	data = data + (0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)("602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")));
 
 	// Net add total amount of the claim
-	console.log(total_amount, amount);
-	var num1 = amount; //claims[0].claim;
-	console.log(num1);
-	var num1str = (0, _utils.numStoreInMemory)(num1.toString(16), 16);
+	var num1str = (0, _utils.numStoreInMemory)(claims[i]['claim'].toString(16), 16);
 	data = data + num1str;
 
 	// Finally add program hash
-	data = data + myProgramHash.toString();
-
-	//console.log(data);
-
-	return data;
-};
-
-// don't work
-// 4ec3148b7a7fdc98a391e9551249d5763cb5a93fec2ce272c3aed12ca0d9a3bc
-// 794ed2564f85720e84a660ef583067a63e5e72782870205692efc874df203d72
-// 2608db13970b8f8655c8deb19472374d41e46ba009d9c89976b0234d481f7a18
-
-// work
-// 67a18d71c04772ac3ab92dbc7936fa0a3422fda8631ecae4e4a3d5cc1f108e8e
-// 95da63b4310aec6a1d104fb32f9b650266012f7261b8d659f6d22815c9b79e28
-// 48f8241f41a1dabf55c8b367193bd770703595ef78b5a29d78d962c8a1638d1e
-// 2190525f51297cf0fe2c92bd820ac9b663d6b59265b12c001263dd329abc555b
-// fe950deef57bc7e32b213e125fdc175a0d0c8a9b1761d43afb9adaa0e6808c48
-// 49992532d6bec0dcf8eadcfd588ba7bb2c5286692342f7a885af19d1c00a6003
-
-var claimTransaction = exports.claimTransaction = function claimTransaction($claims, $publicKeyEncoded, $toAddress, $Amount) {
-
-	var signatureScript = createSignatureScript($publicKeyEncoded);
-	//console.log( signatureScript.toString('hex') );
-
-	var myProgramHash = getHash(signatureScript);
-	//console.log( myProgramHash.toString() );
-
-	////////////////////////////////////////////////////////////////////////
-	// data
-	var data = "02";
-
-	// version
-	data = data + "00";
-
-	// claim
-	// TODO: !!! var int
-	len = $claims['claims'].length;
-	lenstr = (0, _utils.numStoreInMemory)(len.toString(16), 2);
-	data = data + lenstr;
-
-	//console.log("len: ", len);
-	for (var k = 0; k < len; k++) {
-		txid = $claims['claims'][k]['txid'];
-		data = data + (0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)(txid)));
-
-		vout = $claims['claims'][k]['vout'].toString(16);
-		data = data + (0, _utils.numStoreInMemory)(vout, 4);
-	}
-
-	// attribute
-	data = data + "00";
-
-	// Inputs
-	data = data + "00";
-
-	// Outputs len
-	data = data + "01";
-
-	// Outputs[0] AssetID
-	data = data + (0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)($claims['assetid'])));
-
-	// Outputs[0] Amount
-	var num1 = parseInt($Amount);
-	var num1str = (0, _utils.numStoreInMemory)(num1.toString(16), 16);
-	data = data + num1str;
-
-	// Outputs[0] ProgramHash
 	data = data + myProgramHash.toString();
 
 	//console.log(data);
@@ -18175,6 +18135,7 @@ var getPrivateKeyFromWIF = exports.getPrivateKeyFromWIF = function getPrivateKey
 	var data = base58.decode($wif);
 
 	if (data.length != 38 || data[0] != 0x80 || data[33] != 0x01) {
+		// basic encoding errors
 		return -1;
 	}
 
@@ -18297,6 +18258,9 @@ var getAccountsFromPrivateKey = exports.getAccountsFromPrivateKey = function get
 	return accounts;
 };
 
+// lookup account data (publicKey, privateKey, address, etc. from WIF)
+// returns -1 for basic encoding errors
+// returns -2 for WIF verify fail
 var getAccountsFromWIFKey = exports.getAccountsFromWIFKey = function getAccountsFromWIFKey($WIFKey) {
 	var privateKey = getPrivateKeyFromWIF($WIFKey);
 	if (privateKey == -1 || privateKey == -2) {

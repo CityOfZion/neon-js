@@ -14,6 +14,7 @@ chai.use(chaiAsPromised);
 const should = chai.should();
 
 
+
 describe('Wallet', function() {
   this.timeout(15000);
 
@@ -29,16 +30,12 @@ describe('Wallet', function() {
     c: {
       address: "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
       wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG"
-    },
-    d: {
-      address: 'AdWDaCmhPmxgksr2iTVuGcLcncSouV6XGv',
-      wif: 'L4xZjMnkwcN3eCfhMNPkoz7Q6xaj3oq586WYDUdVFAqMcasxGxVv'
     }
   }
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
   // it('should claim ANC', (done) =>{
-  //   api.sendClaimTransaction(api.TESTNET, testKeys.c.wif).then((response) => {
+  //   api.claimAllGAS(api.MAINNET, testKeys.c.wif).then((response) => {
   //     console.log(response);
   //     done();
   //   })
