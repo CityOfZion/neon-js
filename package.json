@@ -14,9 +14,9 @@
     "mocha": "^3.4.2",
     "webpack": "^3.0.0"
   },
-  "name": "neo-wallet-js",
+  "name": "neon-js",
   "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/index.js",
   "dependencies": {
     "Buffer": "^0.0.0",
@@ -41,7 +41,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CityOfZion/neo-wallet-js.git"
+    "url": "git+https://github.com/CityOfZion/neon-js.git"
   },
   "keywords": [
     "neo",
@@ -49,10 +49,10 @@
     "javascript",
     "libraries"
   ],
-  "author": "",
+  "author": "Ethan Fast <ejhfast@gmail.com> (https://github.com/Ejhfast)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/CityOfZion/neo-wallet-js/issues"
+    "url": "https://github.com/CityOfZion/neon-js/issues"
   },
-  "homepage": "https://github.com/CityOfZion/neo-wallet-js#readme"
+  "homepage": "https://github.com/CityOfZion/neon-js#readme"
 }
