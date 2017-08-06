@@ -3861,7 +3861,7 @@ var elliptic = exports;
 elliptic.version = __webpack_require__(86).version;
 elliptic.utils = __webpack_require__(87);
 elliptic.rand = __webpack_require__(89);
-elliptic.curve = __webpack_require__(19);
+elliptic.curve = __webpack_require__(20);
 elliptic.curves = __webpack_require__(95);
 
 // Protocols
@@ -7985,7 +7985,7 @@ var objectKeys = Object.keys || function (obj) {
 module.exports = Duplex;
 
 /*<replacement>*/
-var util = __webpack_require__(17);
+var util = __webpack_require__(18);
 util.inherits = __webpack_require__(2);
 /*</replacement>*/
 
@@ -8657,6 +8657,74 @@ BlockHash.prototype._pad = function pad() {
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/* eslint-disable node/no-deprecated-api */
+var buffer = __webpack_require__(1)
+var Buffer = buffer.Buffer
+
+// alternative to using Object.keys for old browsers
+function copyProps (src, dst) {
+  for (var key in src) {
+    dst[key] = src[key]
+  }
+}
+if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
+  module.exports = buffer
+} else {
+  // Copy properties from require('buffer')
+  copyProps(buffer, exports)
+  exports.Buffer = SafeBuffer
+}
+
+function SafeBuffer (arg, encodingOrOffset, length) {
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+// Copy static methods from Buffer
+copyProps(Buffer, SafeBuffer)
+
+SafeBuffer.from = function (arg, encodingOrOffset, length) {
+  if (typeof arg === 'number') {
+    throw new TypeError('Argument must not be a number')
+  }
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+SafeBuffer.alloc = function (size, fill, encoding) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  var buf = Buffer(size)
+  if (fill !== undefined) {
+    if (typeof encoding === 'string') {
+      buf.fill(fill, encoding)
+    } else {
+      buf.fill(fill)
+    }
+  } else {
+    buf.fill(0)
+  }
+  return buf
+}
+
+SafeBuffer.allocUnsafe = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return Buffer(size)
+}
+
+SafeBuffer.allocUnsafeSlow = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return buffer.SlowBuffer(size)
+}
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
 /* WEBPACK VAR INJECTION */(function(Buffer) {// Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -8768,7 +8836,7 @@ function objectToString(o) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var BigInteger = __webpack_require__(39)
@@ -8779,7 +8847,7 @@ __webpack_require__(83)
 module.exports = BigInteger
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8794,7 +8862,7 @@ curve.edwards = __webpack_require__(94);
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 ;(function (root, factory) {
@@ -9101,74 +9169,6 @@ curve.edwards = __webpack_require__(94);
 	return CryptoJS;
 
 }));
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* eslint-disable node/no-deprecated-api */
-var buffer = __webpack_require__(1)
-var Buffer = buffer.Buffer
-
-// alternative to using Object.keys for old browsers
-function copyProps (src, dst) {
-  for (var key in src) {
-    dst[key] = src[key]
-  }
-}
-if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
-  module.exports = buffer
-} else {
-  // Copy properties from require('buffer')
-  copyProps(buffer, exports)
-  exports.Buffer = SafeBuffer
-}
-
-function SafeBuffer (arg, encodingOrOffset, length) {
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-// Copy static methods from Buffer
-copyProps(Buffer, SafeBuffer)
-
-SafeBuffer.from = function (arg, encodingOrOffset, length) {
-  if (typeof arg === 'number') {
-    throw new TypeError('Argument must not be a number')
-  }
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.alloc = function (size, fill, encoding) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  var buf = Buffer(size)
-  if (fill !== undefined) {
-    if (typeof encoding === 'string') {
-      buf.fill(fill, encoding)
-    } else {
-      buf.fill(fill)
-    }
-  } else {
-    buf.fill(0)
-  }
-  return buf
-}
-
-SafeBuffer.allocUnsafe = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return Buffer(size)
-}
-
-SafeBuffer.allocUnsafeSlow = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return buffer.SlowBuffer(size)
-}
-
 
 /***/ }),
 /* 22 */
@@ -10461,7 +10461,7 @@ exports.Readable = exports;
 exports.Writable = __webpack_require__(30);
 exports.Duplex = __webpack_require__(12);
 exports.Transform = __webpack_require__(52);
-exports.PassThrough = __webpack_require__(147);
+exports.PassThrough = __webpack_require__(148);
 
 
 /***/ }),
@@ -10535,13 +10535,13 @@ var Duplex;
 Writable.WritableState = WritableState;
 
 /*<replacement>*/
-var util = __webpack_require__(17);
+var util = __webpack_require__(18);
 util.inherits = __webpack_require__(2);
 /*</replacement>*/
 
 /*<replacement>*/
 var internalUtil = {
-  deprecate: __webpack_require__(146)
+  deprecate: __webpack_require__(147)
 };
 /*</replacement>*/
 
@@ -10550,7 +10550,7 @@ var Stream = __webpack_require__(50);
 /*</replacement>*/
 
 /*<replacement>*/
-var Buffer = __webpack_require__(21).Buffer;
+var Buffer = __webpack_require__(17).Buffer;
 var OurUint8Array = global.Uint8Array || function () {};
 function _uint8ArrayToBuffer(chunk) {
   return Buffer.from(chunk);
@@ -11647,7 +11647,7 @@ module.exports = Array.isArray || function (arr) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var assert = __webpack_require__(24)
-var BigInteger = __webpack_require__(18)
+var BigInteger = __webpack_require__(19)
 
 var THREE = BigInteger.valueOf(3)
 
@@ -13412,7 +13412,7 @@ module.exports = BigInteger
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(24)
-var BigInteger = __webpack_require__(18)
+var BigInteger = __webpack_require__(19)
 
 var Point = __webpack_require__(38)
 
@@ -14271,7 +14271,7 @@ function g1_512_lo(xh, xl) {
 ;(function (root, factory, undef) {
 	if (true) {
 		// CommonJS
-		module.exports = exports = factory(__webpack_require__(0), __webpack_require__(20));
+		module.exports = exports = factory(__webpack_require__(0), __webpack_require__(21));
 	}
 	else if (typeof define === "function" && define.amd) {
 		// AMD
@@ -14604,7 +14604,7 @@ function g1_512_lo(xh, xl) {
 // Merged Buffer refactorings from base58-native by Stephen Pair
 // Copyright (c) 2013 BitPay Inc
 
-var Buffer = __webpack_require__(21).Buffer
+var Buffer = __webpack_require__(17).Buffer
 
 module.exports = function base (ALPHABET) {
   var ALPHABET_MAP = {}
@@ -14721,10 +14721,10 @@ var inherits = __webpack_require__(2);
 
 inherits(Stream, EE);
 Stream.Readable = __webpack_require__(29);
-Stream.Writable = __webpack_require__(148);
-Stream.Duplex = __webpack_require__(149);
-Stream.Transform = __webpack_require__(150);
-Stream.PassThrough = __webpack_require__(151);
+Stream.Writable = __webpack_require__(149);
+Stream.Duplex = __webpack_require__(150);
+Stream.Transform = __webpack_require__(151);
+Stream.PassThrough = __webpack_require__(152);
 
 // Backwards-compat with node 0.4.x
 Stream.Stream = Stream;
@@ -14882,7 +14882,7 @@ var Stream = __webpack_require__(50);
 // TODO(bmeurer): Change this back to const once hole checks are
 // properly optimized away early in Ignition+TurboFan.
 /*<replacement>*/
-var Buffer = __webpack_require__(21).Buffer;
+var Buffer = __webpack_require__(17).Buffer;
 var OurUint8Array = global.Uint8Array || function () {};
 function _uint8ArrayToBuffer(chunk) {
   return Buffer.from(chunk);
@@ -14893,7 +14893,7 @@ function _isUint8Array(obj) {
 /*</replacement>*/
 
 /*<replacement>*/
-var util = __webpack_require__(17);
+var util = __webpack_require__(18);
 util.inherits = __webpack_require__(2);
 /*</replacement>*/
 
@@ -15996,7 +15996,7 @@ module.exports = Transform;
 var Duplex = __webpack_require__(12);
 
 /*<replacement>*/
-var util = __webpack_require__(17);
+var util = __webpack_require__(18);
 util.inherits = __webpack_require__(2);
 /*</replacement>*/
 
@@ -16558,57 +16558,31 @@ module.exports = Sha512
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.sendAssetTransaction = exports.claimAllGAS = exports.getBlockCount = exports.getBlockByIndex = exports.getWalletDBHeight = exports.getTransactionHistory = exports.getMarketPriceUSD = exports.getBalance = exports.getAvailableClaim = exports.getRPCEndpoint = exports.getAPIEndpoint = exports.TESTNET = exports.MAINNET = exports.allAssetIds = exports.ancId = exports.ansId = undefined;
+exports.doSendAsset = exports.getWalletDBHeight = exports.getTransactionHistory = exports.getMarketPriceUSD = exports.getBalance = exports.doClaimAllGas = exports.getClaimAmounts = exports.getRPCEndpoint = exports.getAPIEndpoint = exports.allAssetIds = exports.gasId = exports.neoId = undefined;
 
 var _axios = __webpack_require__(56);
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _wallet = __webpack_require__(75);
+var _index = __webpack_require__(75);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var apiEndpoint = "http://testnet.antchain.xyz";
-var rpcEndpoint = "http://api.otcgo.cn:20332"; // testnet = 20332
+// hard-code asset ids for NEO and GAS
+var neoId = exports.neoId = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
+var gasId = exports.gasId = "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
+var allAssetIds = exports.allAssetIds = [neoId, gasId];
 
-var ANS = '\u5C0F\u8681\u80A1';
-var ANC = '\u5C0F\u8681\u5E01';
-
-// hard-code asset ids for ANS and ANC
-var ansId = exports.ansId = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
-var ancId = exports.ancId = "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
-var allAssetIds = exports.allAssetIds = [ansId, ancId];
-
-var MAINNET = exports.MAINNET = "MainNet";
-var TESTNET = exports.TESTNET = "TestNet";
-
-// hard-code asset names for ANS and ANC
-var ansName = "小蚁股";
-var ancName = "小蚁币";
-
-var getAns = function getAns(balance) {
-  return balance.filter(function (val) {
-    return val.unit === ANS;
-  })[0];
-};
-var getAnc = function getAnc(balance) {
-  return balance.filter(function (val) {
-    return val.unit === ANC;
-  })[0];
-};
-
-// API methods (using neon wallet API)
-
-// get neon wallet API endpoint for MainNet or TestNet
+// switch between APIs for MainNet and TestNet
 var getAPIEndpoint = exports.getAPIEndpoint = function getAPIEndpoint(net) {
   if (net === "MainNet") {
-    return "http://neo.herokuapp.com";
+    return "http://api.wallet.cityofzion.io";
   } else {
-    return "http://neo-testnet.herokuapp.com"; //, //"http://testnet.antchain.xyz",
+    return "http://testnet-api.wallet.cityofzion.io";
   }
 };
 
-// get node RPC endpoint on MainNet or TestNet based on block height status from neon wallet API
+// return the best performing (highest block + fastest) node RPC
 var getRPCEndpoint = exports.getRPCEndpoint = function getRPCEndpoint(net) {
   var apiEndpoint = getAPIEndpoint(net);
   return _axios2.default.get(apiEndpoint + '/v1/network/best_node').then(function (response) {
@@ -16616,64 +16590,7 @@ var getRPCEndpoint = exports.getRPCEndpoint = function getRPCEndpoint(net) {
   });
 };
 
-// get all available claim on an account using neon wallet API
-var getAvailableClaim = exports.getAvailableClaim = function getAvailableClaim(net, address) {
-  var apiEndpoint = getAPIEndpoint(net);
-  return _axios2.default.get(apiEndpoint + '/v1/address/claims/' + address).then(function (res) {
-    return parseInt(res.data.total_claim);
-  });
-};
-
-// get the balance at an address using the neon wallet API
-var getBalance = exports.getBalance = function getBalance(net, address) {
-  var apiEndpoint = getAPIEndpoint(net);
-  return _axios2.default.get(apiEndpoint + '/v1/address/balance/' + address).then(function (res) {
-    var ans = res.data.NEO.balance;
-    var anc = res.data.GAS.balance;
-    return { ANS: ans, ANC: anc, unspent: { ANS: res.data.NEO.unspent, ANC: res.data.GAS.unspent } };
-  });
-};
-
-/**
- * @function
- * @description
- * Hit the bittrex api getticker to fetch the latest BTC to ANS price
- * then hit the latest USDT to BTC conversion rate
- *
- * @param {number} amount - The current ANS amount in wallet
- * @return {string} - The converted ANS to USDT fiat amount
- */
-var getMarketPriceUSD = exports.getMarketPriceUSD = function getMarketPriceUSD(amount) {
-  var lastBTCANS = void 0,
-      lastUSDBTC = void 0;
-  return _axios2.default.get('https://bittrex.com/api/v1.1/public/getticker?market=BTC-ANS').then(function (response) {
-    lastBTCANS = response.data.result.Last;
-    return _axios2.default.get('https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC').then(function (response) {
-      lastUSDBTC = response.data.result.Last;
-      return '$' + (lastBTCANS * lastUSDBTC * amount).toFixed(2).toString();
-    });
-  });
-};
-
-// get history of balance over time using neon wallet API
-var getTransactionHistory = exports.getTransactionHistory = function getTransactionHistory(net, address) {
-  var apiEndpoint = getAPIEndpoint(net);
-  return _axios2.default.get(apiEndpoint + '/v1/address/history/' + address).then(function (response) {
-    return response.data.history;
-  });
-};
-
-// get block height reported by neon wallet API
-var getWalletDBHeight = exports.getWalletDBHeight = function getWalletDBHeight(net) {
-  var apiEndpoint = getAPIEndpoint(net);
-  return _axios2.default.get(apiEndpoint + '/v1/block/height').then(function (response) {
-    return parseInt(response.data.block_height);
-  });
-};
-
-// RPC methods
-
-// wrapper for querying node RPC on MainNet or TestNet
+// wrapper for querying node RPC
 var queryRPC = function queryRPC(net, method, params) {
   var id = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
 
@@ -16688,57 +16605,91 @@ var queryRPC = function queryRPC(net, method, params) {
   });
 };
 
-// get a block from the RPC
-var getBlockByIndex = exports.getBlockByIndex = function getBlockByIndex(net, block) {
-  return queryRPC(net, "getblock", [block, 1]);
-};
-
-// get block height from the RPC
-var getBlockCount = exports.getBlockCount = function getBlockCount(net, block) {
-  return queryRPC(net, "getblockcount", []);
-};
-
-// submit a claim request for all available GAS at an address
-var claimAllGAS = exports.claimAllGAS = function claimAllGAS(net, fromWif) {
+// get amounts of available (spent) and unavailable claims
+var getClaimAmounts = exports.getClaimAmounts = function getClaimAmounts(net, address) {
   var apiEndpoint = getAPIEndpoint(net);
-  var account = (0, _wallet.getAccountsFromWIFKey)(fromWif)[0];
+  return _axios2.default.get(apiEndpoint + '/v1/address/claims/' + address).then(function (res) {
+    return { available: parseInt(res.data.total_claim), unavailable: parseInt(res.data.total_unspent_claim) };
+  });
+};
+
+// do a claim transaction on all available (spent) gas
+var doClaimAllGas = exports.doClaimAllGas = function doClaimAllGas(net, fromWif) {
+  var apiEndpoint = getAPIEndpoint(net);
+  var account = (0, _index.getAccountsFromWIFKey)(fromWif)[0];
   // TODO: when fully working replace this with mainnet/testnet switch
   return _axios2.default.get(apiEndpoint + "/v1/address/claims/" + account.address).then(function (response) {
-    console.log(response.data['claims']);
     var claims = response.data["claims"];
     var total_claim = response.data["total_claim"];
-    var txData = (0, _wallet.claimTransaction)(claims, account.publickeyEncoded, account.address, total_claim);
-    var sign = (0, _wallet.signatureData)(txData, account.privatekey);
-    var txRawData = (0, _wallet.addContract)(txData, sign, account.publickeyEncoded);
+    var txData = (0, _index.claimTransaction)(claims, account.publickeyEncoded, account.address, total_claim);
+    var sign = (0, _index.signatureData)(txData, account.privatekey);
+    var txRawData = (0, _index.addContract)(txData, sign, account.publickeyEncoded);
     return queryRPC(net, "sendrawtransaction", [txRawData], 2);
   });
 };
 
-// send an asset (NEO or GAS) over the node RPC
-var sendAssetTransaction = exports.sendAssetTransaction = function sendAssetTransaction(net, toAddress, fromWif, assetType, amount) {
+// get Neo and Gas balance for an account
+var getBalance = exports.getBalance = function getBalance(net, address) {
+  var apiEndpoint = getAPIEndpoint(net);
+  return _axios2.default.get(apiEndpoint + '/v1/address/balance/' + address).then(function (res) {
+    var neo = res.data.NEO.balance;
+    var gas = res.data.GAS.balance;
+    return { Neo: neo, Gas: gas, unspent: { Neo: res.data.NEO.unspent, Gas: res.data.GAS.unspent } };
+  });
+};
+
+/**
+ * @function
+ * @description
+ * Hit the bittrex api getticker to fetch the latest USDT to NEO price
+ *
+ * @param {number} amount - The current NEO amount in wallet
+ * @return {string} - The converted NEO to USDT fiat amount
+ */
+var getMarketPriceUSD = exports.getMarketPriceUSD = function getMarketPriceUSD(amount) {
+  return _axios2.default.get('https://bittrex.com/api/v1.1/public/getticker?market=USDT-NEO').then(function (response) {
+    var lastUSDNEO = response.data.result.Last;
+    return '$' + (lastUSDNEO * amount).toFixed(2).toString();
+  });
+};
+
+// get transaction history for an account
+var getTransactionHistory = exports.getTransactionHistory = function getTransactionHistory(net, address) {
+  var apiEndpoint = getAPIEndpoint(net);
+  return _axios2.default.get(apiEndpoint + '/v1/address/history/' + address).then(function (response) {
+    return response.data.history;
+  });
+};
+
+// get the current height of the light wallet DB
+var getWalletDBHeight = exports.getWalletDBHeight = function getWalletDBHeight(net) {
+  var apiEndpoint = getAPIEndpoint(net);
+  return _axios2.default.get(apiEndpoint + '/v1/block/height').then(function (response) {
+    return parseInt(response.data.block_height);
+  });
+};
+
+// send an asset to an address
+var doSendAsset = exports.doSendAsset = function doSendAsset(net, toAddress, fromWif, assetType, amount) {
   var assetId = void 0,
       assetName = void 0,
       assetSymbol = void 0;
-  if (assetType === "AntShares") {
-    assetId = ansId;
-    assetName = ansName;
-    assetSymbol = 'ANS';
-  } else if (assetType === "AntCoins") {
-    assetId = ancId;
-    assetName = ancName;
-    assetSymbol = 'ANC';
+  if (assetType === "Neo") {
+    assetId = neoId;
+  } else {
+    assetId = gasId;
   }
-  var fromAccount = (0, _wallet.getAccountsFromWIFKey)(fromWif)[0];
+  var fromAccount = (0, _index.getAccountsFromWIFKey)(fromWif)[0];
   return getBalance(net, fromAccount.address).then(function (response) {
     var coinsData = {
       "assetid": assetId,
-      "list": response.unspent[assetSymbol],
-      "balance": response[assetSymbol],
-      "name": assetName
+      "list": response.unspent[assetType],
+      "balance": response[assetType],
+      "name": assetType
     };
-    var txData = (0, _wallet.transferTransaction)(coinsData, fromAccount.publickeyEncoded, toAddress, amount);
-    var sign = (0, _wallet.signatureData)(txData, fromAccount.privatekey);
-    var txRawData = (0, _wallet.addContract)(txData, sign, fromAccount.publickeyEncoded);
+    var txData = (0, _index.transferTransaction)(coinsData, fromAccount.publickeyEncoded, toAddress, amount);
+    var sign = (0, _index.signatureData)(txData, fromAccount.privatekey);
+    var txRawData = (0, _index.addContract)(txData, sign, fromAccount.publickeyEncoded);
     return queryRPC(net, "sendrawtransaction", [txRawData], 4);
   });
 };
@@ -17627,13 +17578,13 @@ module.exports = function spread(callback) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.getAccountsFromWIFKey = exports.getAccountsFromPrivateKey = exports.fetchAccountsFromPublicKeyEncoded = exports.signatureData = exports.getHash = exports.createSignatureScript = exports.getPublicKeyEncoded = exports.getPublicKey = exports.getPrivateKeyFromWIF = exports.generatePrivateKey = exports.generateRandomArray = exports.toAddress = exports.claimTransaction = exports.checkOverflow = exports.transferTransaction = exports.verifyPublicKeyEncoded = exports.verifyAddress = exports.addContract = exports.registerTransaction = exports.issueTransaction = exports.getInputData = exports.getTxHash = exports.getWIFFromHex = exports.getWIFFromPrivateKey = undefined;
+exports.getAccountsFromWIFKey = exports.getAccountsFromPrivateKey = exports.fetchAccountsFromPublicKeyEncoded = exports.signatureData = exports.getHash = exports.createSignatureScript = exports.getPublicKeyEncoded = exports.getPublicKey = exports.getPrivateKeyFromWIF = exports.generatePrivateKey = exports.generateRandomArray = exports.toAddress = exports.claimTransaction = exports.transferTransaction = exports.verifyPublicKeyEncoded = exports.verifyAddress = exports.addContract = exports.registerTransaction = exports.issueTransaction = exports.getInputData = exports.getTxHash = exports.getWIFFromPrivateKey = undefined;
 
 var _ecurve = __webpack_require__(78);
 
 var _ecurve2 = _interopRequireDefault(_ecurve);
 
-var _bigi = __webpack_require__(18);
+var _bigi = __webpack_require__(19);
 
 var _bigi2 = _interopRequireDefault(_bigi);
 
@@ -17647,7 +17598,11 @@ var _wif = __webpack_require__(134);
 
 var _wif2 = _interopRequireDefault(_wif);
 
-var _utils = __webpack_require__(158);
+var _utils = __webpack_require__(159);
+
+var _secureRandom = __webpack_require__(160);
+
+var _secureRandom2 = _interopRequireDefault(_secureRandom);
 
 var _buffer = __webpack_require__(1);
 
@@ -17660,6 +17615,7 @@ var BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 
 var base58 = __webpack_require__(47)(BASE58);
 
+
 // All of this stuff was wrapped in a class before, but really unnecessary as none of these were stateful
 // This flat structure should be more interpretable, and we can export them all as a module instead
 
@@ -17669,10 +17625,6 @@ var base58 = __webpack_require__(47)(BASE58);
 var getWIFFromPrivateKey = exports.getWIFFromPrivateKey = function getWIFFromPrivateKey(privateKey) {
 	var hexKey = (0, _utils.ab2hexstring)(privateKey);
 	return _wif2.default.encode(128, new Buffer(hexKey, 'hex'), true);
-};
-
-var getWIFFromHex = exports.getWIFFromHex = function getWIFFromHex(privateKey) {
-	return _wif2.default.encode(128, new Buffer(privateKey, 'hex'), true);
 };
 
 var getTxHash = exports.getTxHash = function getTxHash($data) {
@@ -17973,7 +17925,7 @@ var transferTransaction = exports.transferTransaction = function transferTransac
 		//data.set(hexstring2ab($coin['assetid']), inputLen + 4);
 
 		// output value
-		var num1 = $Amount * 100000000;
+		var num1 = parseInt($Amount * 100000000);
 		var num1str = (0, _utils.numStoreInMemory)(num1.toString(16), 16);
 		data.set((0, _utils.hexstring2ab)(num1str), inputLen + 36);
 
@@ -17994,7 +17946,7 @@ var transferTransaction = exports.transferTransaction = function transferTransac
 		//data.set(hexstring2ab($coin['assetid']), inputLen + 4);
 
 		// output value
-		var _num = $Amount * 100000000;
+		var _num = parseInt($Amount * 100000000);
 		var _num1str = (0, _utils.numStoreInMemory)(_num.toString(16), 16);
 		data.set((0, _utils.hexstring2ab)(_num1str), inputLen + 36);
 
@@ -18009,7 +17961,7 @@ var transferTransaction = exports.transferTransaction = function transferTransac
 		//data.set(hexstring2ab($coin['assetid']), inputLen + 64);
 
 		// output value
-		var num2 = inputAmount * 100000000 - _num;
+		var num2 = parseInt(inputAmount * 100000000 - _num);
 		var num2str = (0, _utils.numStoreInMemory)(num2.toString(16), 16);
 		data.set((0, _utils.hexstring2ab)(num2str), inputLen + 96);
 
@@ -18022,16 +17974,6 @@ var transferTransaction = exports.transferTransaction = function transferTransac
 	}
 
 	return (0, _utils.ab2hexstring)(data);
-};
-
-var checkOverflow = exports.checkOverflow = function checkOverflow(totalAmount, toSend) {
-	var num1 = toSend * 100000000;
-	var num2 = totalAmount * 100000000 - num1;
-	console.log(num2.toString(16));
-	new Buffer.from(num2.toString(16), "hex");
-	var num2str = (0, _utils.numStoreInMemory)(num2.toString(16), 10);
-	console.log((0, _utils.hexstring2ab)(num2str));
-	console.log(parseInt((0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)(num2str))), 16));
 };
 
 var claimTransaction = exports.claimTransaction = function claimTransaction(claims, publicKeyEncoded, toAddress, amount) {
@@ -18047,27 +17989,23 @@ var claimTransaction = exports.claimTransaction = function claimTransaction(clai
 
 	// Transaction-specific attributs: claims
 
-	//
-
 	// 1) store number of claims (txids)
-	var len = 1; // claims.length;
-	var i = 0;
+	var len = claims.length;
 	var lenstr = (0, _utils.numStoreInMemory)(len.toString(16), 2);
 	data = data + lenstr;
 
 	var total_amount = 0;
 
 	// 2) iterate over claim txids
-	// for ( let k=0; k<len; k++ ) {
-	// get the txid
-	var txid = claims[i]['txid'];
-	console.log(txid);
-	// add txid to data
-	data = data + (0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)(txid)));
+	for (var k = 0; k < len; k++) {
+		// get the txid
+		var txid = claims[k]['txid'];
+		// add txid to data
+		data = data + (0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)(txid)));
 
-	var vout = claims[i]['index'].toString(16);
-	data = data + (0, _utils.numStoreInMemory)(vout, 4);
-	// }
+		var vout = claims[k]['index'].toString(16);
+		data = data + (0, _utils.numStoreInMemory)(vout, 4);
+	}
 
 	// Don't need any attributes
 	data = data + "00";
@@ -18082,7 +18020,7 @@ var claimTransaction = exports.claimTransaction = function claimTransaction(clai
 	data = data + (0, _utils.ab2hexstring)((0, _utils.reverseArray)((0, _utils.hexstring2ab)("602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")));
 
 	// Net add total amount of the claim
-	var num1str = (0, _utils.numStoreInMemory)(claims[i]['claim'].toString(16), 16);
+	var num1str = (0, _utils.numStoreInMemory)(amount.toString(16), 16);
 	data = data + num1str;
 
 	// Finally add program hash
@@ -18114,21 +18052,11 @@ var toAddress = exports.toAddress = function toAddress($ProgramHash) {
 };
 
 var generateRandomArray = exports.generateRandomArray = function generateRandomArray($arrayLen) {
-	var randomArray = new Uint8Array($arrayLen);
-	for (var i = 0; i < $arrayLen; i++) {
-		randomArray[i] = Math.floor(Math.random() * 256);
-	}
-
-	return randomArray;
+	return (0, _secureRandom2.default)($arrayLen);
 };
 
 var generatePrivateKey = exports.generatePrivateKey = function generatePrivateKey() {
-	var privateKey = new Uint8Array(32);
-	for (var i = 0; i < 32; i++) {
-		privateKey[i] = Math.floor(Math.random() * 256);
-	}
-
-	return privateKey;
+	return (0, _secureRandom2.default)(32);
 };
 
 var getPrivateKeyFromWIF = exports.getPrivateKeyFromWIF = function getPrivateKeyFromWIF($wif) {
@@ -19135,139 +19063,7 @@ if (typeof Object.create === 'function') {
 /* 82 */
 /***/ (function(module, exports) {
 
-module.exports = {
-	"_args": [
-		[
-			{
-				"raw": "bigi@^1.4.2",
-				"scope": null,
-				"escapedName": "bigi",
-				"name": "bigi",
-				"rawSpec": "^1.4.2",
-				"spec": ">=1.4.2 <2.0.0",
-				"type": "range"
-			},
-			"/Users/ethanfast/Desktop/Code/NEO/neo-wallet-js"
-		]
-	],
-	"_from": "bigi@>=1.4.2 <2.0.0",
-	"_id": "bigi@1.4.2",
-	"_inCache": true,
-	"_location": "/bigi",
-	"_nodeVersion": "6.1.0",
-	"_npmOperationalInternal": {
-		"host": "packages-12-west.internal.npmjs.com",
-		"tmp": "tmp/bigi-1.4.2.tgz_1469584192413_0.6801238611806184"
-	},
-	"_npmUser": {
-		"name": "jprichardson",
-		"email": "jprichardson@gmail.com"
-	},
-	"_npmVersion": "3.8.6",
-	"_phantomChildren": {},
-	"_requested": {
-		"raw": "bigi@^1.4.2",
-		"scope": null,
-		"escapedName": "bigi",
-		"name": "bigi",
-		"rawSpec": "^1.4.2",
-		"spec": ">=1.4.2 <2.0.0",
-		"type": "range"
-	},
-	"_requiredBy": [
-		"/",
-		"/ecdsa",
-		"/ecurve"
-	],
-	"_resolved": "https://registry.npmjs.org/bigi/-/bigi-1.4.2.tgz",
-	"_shasum": "9c665a95f88b8b08fc05cfd731f561859d725825",
-	"_shrinkwrap": null,
-	"_spec": "bigi@^1.4.2",
-	"_where": "/Users/ethanfast/Desktop/Code/NEO/neo-wallet-js",
-	"bugs": {
-		"url": "https://github.com/cryptocoinjs/bigi/issues"
-	},
-	"dependencies": {},
-	"description": "Big integers.",
-	"devDependencies": {
-		"coveralls": "^2.11.2",
-		"istanbul": "^0.3.5",
-		"jshint": "^2.5.1",
-		"mocha": "^2.1.0",
-		"mochify": "^2.1.0"
-	},
-	"directories": {},
-	"dist": {
-		"shasum": "9c665a95f88b8b08fc05cfd731f561859d725825",
-		"tarball": "https://registry.npmjs.org/bigi/-/bigi-1.4.2.tgz"
-	},
-	"gitHead": "c25308081c896ff84702303722bf5ecd8b3f78e3",
-	"homepage": "https://github.com/cryptocoinjs/bigi#readme",
-	"keywords": [
-		"cryptography",
-		"math",
-		"bitcoin",
-		"arbitrary",
-		"precision",
-		"arithmetic",
-		"big",
-		"integer",
-		"int",
-		"number",
-		"biginteger",
-		"bigint",
-		"bignumber",
-		"decimal",
-		"float"
-	],
-	"main": "./lib/index.js",
-	"maintainers": [
-		{
-			"name": "midnightlightning",
-			"email": "boydb@midnightdesign.ws"
-		},
-		{
-			"name": "sidazhang",
-			"email": "sidazhang89@gmail.com"
-		},
-		{
-			"name": "nadav",
-			"email": "npm@shesek.info"
-		},
-		{
-			"name": "jprichardson",
-			"email": "jprichardson@gmail.com"
-		}
-	],
-	"name": "bigi",
-	"optionalDependencies": {},
-	"readme": "ERROR: No README data found!",
-	"repository": {
-		"url": "git+https://github.com/cryptocoinjs/bigi.git",
-		"type": "git"
-	},
-	"scripts": {
-		"browser-test": "mochify --wd -R spec",
-		"coverage": "istanbul cover ./node_modules/.bin/_mocha -- --reporter list test/*.js",
-		"coveralls": "npm run-script coverage && node ./node_modules/.bin/coveralls < coverage/lcov.info",
-		"jshint": "jshint --config jshint.json lib/*.js ; true",
-		"test": "_mocha -- test/*.js",
-		"unit": "mocha"
-	},
-	"testling": {
-		"files": "test/*.js",
-		"harness": "mocha",
-		"browsers": [
-			"ie/9..latest",
-			"firefox/latest",
-			"chrome/latest",
-			"safari/6.0..latest",
-			"iphone/6.0..latest",
-			"android-browser/4.2..latest"
-		]
-	},
-	"version": "1.4.2"
-};
+module.exports = {"_args":[["bigi@^1.4.2","/Users/Habib/Desktop/neon-js"]],"_from":"bigi@>=1.4.2 <2.0.0","_id":"bigi@1.4.2","_inCache":true,"_installable":true,"_location":"/bigi","_nodeVersion":"6.1.0","_npmOperationalInternal":{"host":"packages-12-west.internal.npmjs.com","tmp":"tmp/bigi-1.4.2.tgz_1469584192413_0.6801238611806184"},"_npmUser":{"email":"jprichardson@gmail.com","name":"jprichardson"},"_npmVersion":"3.8.6","_phantomChildren":{},"_requested":{"name":"bigi","raw":"bigi@^1.4.2","rawSpec":"^1.4.2","scope":null,"spec":">=1.4.2 <2.0.0","type":"range"},"_requiredBy":["/","/ecdsa","/ecurve"],"_resolved":"https://registry.npmjs.org/bigi/-/bigi-1.4.2.tgz","_shasum":"9c665a95f88b8b08fc05cfd731f561859d725825","_shrinkwrap":null,"_spec":"bigi@^1.4.2","_where":"/Users/Habib/Desktop/neon-js","bugs":{"url":"https://github.com/cryptocoinjs/bigi/issues"},"dependencies":{},"description":"Big integers.","devDependencies":{"coveralls":"^2.11.2","istanbul":"^0.3.5","jshint":"^2.5.1","mocha":"^2.1.0","mochify":"^2.1.0"},"directories":{},"dist":{"shasum":"9c665a95f88b8b08fc05cfd731f561859d725825","tarball":"https://registry.npmjs.org/bigi/-/bigi-1.4.2.tgz"},"gitHead":"c25308081c896ff84702303722bf5ecd8b3f78e3","homepage":"https://github.com/cryptocoinjs/bigi#readme","keywords":["arbitrary","arithmetic","big","bigint","biginteger","bignumber","bitcoin","cryptography","decimal","float","int","integer","math","number","precision"],"main":"./lib/index.js","maintainers":[{"name":"midnightlightning","email":"boydb@midnightdesign.ws"},{"name":"sidazhang","email":"sidazhang89@gmail.com"},{"name":"nadav","email":"npm@shesek.info"},{"name":"jprichardson","email":"jprichardson@gmail.com"}],"name":"bigi","optionalDependencies":{},"readme":"ERROR: No README data found!","repository":{"type":"git","url":"git+https://github.com/cryptocoinjs/bigi.git"},"scripts":{"browser-test":"mochify --wd -R spec","coverage":"istanbul cover ./node_modules/.bin/_mocha -- --reporter list test/*.js","coveralls":"npm run-script coverage && node ./node_modules/.bin/coveralls < coverage/lcov.info","jshint":"jshint --config jshint.json lib/*.js ; true","test":"_mocha -- test/*.js","unit":"mocha"},"testling":{"browsers":["android-browser/4.2..latest","chrome/latest","firefox/latest","ie/9..latest","iphone/6.0..latest","safari/6.0..latest"],"files":"test/*.js","harness":"mocha"},"version":"1.4.2"}
 
 /***/ }),
 /* 83 */
@@ -19371,7 +19167,7 @@ BigInteger.prototype.toHex = function(size) {
 /* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var BigInteger = __webpack_require__(18)
+var BigInteger = __webpack_require__(19)
 
 var curves = __webpack_require__(85)
 var Curve = __webpack_require__(40)
@@ -19398,200 +19194,13 @@ module.exports = getCurveByName
 /* 85 */
 /***/ (function(module, exports) {
 
-module.exports = {
-	"secp128r1": {
-		"p": "fffffffdffffffffffffffffffffffff",
-		"a": "fffffffdfffffffffffffffffffffffc",
-		"b": "e87579c11079f43dd824993c2cee5ed3",
-		"n": "fffffffe0000000075a30d1b9038a115",
-		"h": "01",
-		"Gx": "161ff7528b899b2d0c28607ca52c5b86",
-		"Gy": "cf5ac8395bafeb13c02da292dded7a83"
-	},
-	"secp160k1": {
-		"p": "fffffffffffffffffffffffffffffffeffffac73",
-		"a": "00",
-		"b": "07",
-		"n": "0100000000000000000001b8fa16dfab9aca16b6b3",
-		"h": "01",
-		"Gx": "3b4c382ce37aa192a4019e763036f4f5dd4d7ebb",
-		"Gy": "938cf935318fdced6bc28286531733c3f03c4fee"
-	},
-	"secp160r1": {
-		"p": "ffffffffffffffffffffffffffffffff7fffffff",
-		"a": "ffffffffffffffffffffffffffffffff7ffffffc",
-		"b": "1c97befc54bd7a8b65acf89f81d4d4adc565fa45",
-		"n": "0100000000000000000001f4c8f927aed3ca752257",
-		"h": "01",
-		"Gx": "4a96b5688ef573284664698968c38bb913cbfc82",
-		"Gy": "23a628553168947d59dcc912042351377ac5fb32"
-	},
-	"secp192k1": {
-		"p": "fffffffffffffffffffffffffffffffffffffffeffffee37",
-		"a": "00",
-		"b": "03",
-		"n": "fffffffffffffffffffffffe26f2fc170f69466a74defd8d",
-		"h": "01",
-		"Gx": "db4ff10ec057e9ae26b07d0280b7f4341da5d1b1eae06c7d",
-		"Gy": "9b2f2f6d9c5628a7844163d015be86344082aa88d95e2f9d"
-	},
-	"secp192r1": {
-		"p": "fffffffffffffffffffffffffffffffeffffffffffffffff",
-		"a": "fffffffffffffffffffffffffffffffefffffffffffffffc",
-		"b": "64210519e59c80e70fa7e9ab72243049feb8deecc146b9b1",
-		"n": "ffffffffffffffffffffffff99def836146bc9b1b4d22831",
-		"h": "01",
-		"Gx": "188da80eb03090f67cbf20eb43a18800f4ff0afd82ff1012",
-		"Gy": "07192b95ffc8da78631011ed6b24cdd573f977a11e794811"
-	},
-	"secp256k1": {
-		"p": "fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f",
-		"a": "00",
-		"b": "07",
-		"n": "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
-		"h": "01",
-		"Gx": "79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798",
-		"Gy": "483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8"
-	},
-	"secp256r1": {
-		"p": "ffffffff00000001000000000000000000000000ffffffffffffffffffffffff",
-		"a": "ffffffff00000001000000000000000000000000fffffffffffffffffffffffc",
-		"b": "5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b",
-		"n": "ffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551",
-		"h": "01",
-		"Gx": "6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296",
-		"Gy": "4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5"
-	}
-};
+module.exports = {"secp128r1":{"p":"fffffffdffffffffffffffffffffffff","a":"fffffffdfffffffffffffffffffffffc","b":"e87579c11079f43dd824993c2cee5ed3","n":"fffffffe0000000075a30d1b9038a115","h":"01","Gx":"161ff7528b899b2d0c28607ca52c5b86","Gy":"cf5ac8395bafeb13c02da292dded7a83"},"secp160k1":{"p":"fffffffffffffffffffffffffffffffeffffac73","a":"00","b":"07","n":"0100000000000000000001b8fa16dfab9aca16b6b3","h":"01","Gx":"3b4c382ce37aa192a4019e763036f4f5dd4d7ebb","Gy":"938cf935318fdced6bc28286531733c3f03c4fee"},"secp160r1":{"p":"ffffffffffffffffffffffffffffffff7fffffff","a":"ffffffffffffffffffffffffffffffff7ffffffc","b":"1c97befc54bd7a8b65acf89f81d4d4adc565fa45","n":"0100000000000000000001f4c8f927aed3ca752257","h":"01","Gx":"4a96b5688ef573284664698968c38bb913cbfc82","Gy":"23a628553168947d59dcc912042351377ac5fb32"},"secp192k1":{"p":"fffffffffffffffffffffffffffffffffffffffeffffee37","a":"00","b":"03","n":"fffffffffffffffffffffffe26f2fc170f69466a74defd8d","h":"01","Gx":"db4ff10ec057e9ae26b07d0280b7f4341da5d1b1eae06c7d","Gy":"9b2f2f6d9c5628a7844163d015be86344082aa88d95e2f9d"},"secp192r1":{"p":"fffffffffffffffffffffffffffffffeffffffffffffffff","a":"fffffffffffffffffffffffffffffffefffffffffffffffc","b":"64210519e59c80e70fa7e9ab72243049feb8deecc146b9b1","n":"ffffffffffffffffffffffff99def836146bc9b1b4d22831","h":"01","Gx":"188da80eb03090f67cbf20eb43a18800f4ff0afd82ff1012","Gy":"07192b95ffc8da78631011ed6b24cdd573f977a11e794811"},"secp256k1":{"p":"fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f","a":"00","b":"07","n":"fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141","h":"01","Gx":"79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798","Gy":"483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8"},"secp256r1":{"p":"ffffffff00000001000000000000000000000000ffffffffffffffffffffffff","a":"ffffffff00000001000000000000000000000000fffffffffffffffffffffffc","b":"5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b","n":"ffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551","h":"01","Gx":"6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296","Gy":"4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5"}}
 
 /***/ }),
 /* 86 */
 /***/ (function(module, exports) {
 
-module.exports = {
-	"_args": [
-		[
-			{
-				"raw": "elliptic@^6.4.0",
-				"scope": null,
-				"escapedName": "elliptic",
-				"name": "elliptic",
-				"rawSpec": "^6.4.0",
-				"spec": ">=6.4.0 <7.0.0",
-				"type": "range"
-			},
-			"/Users/ethanfast/Desktop/Code/NEO/neo-wallet-js"
-		]
-	],
-	"_from": "elliptic@>=6.4.0 <7.0.0",
-	"_id": "elliptic@6.4.0",
-	"_inCache": true,
-	"_location": "/elliptic",
-	"_nodeVersion": "7.0.0",
-	"_npmOperationalInternal": {
-		"host": "packages-18-east.internal.npmjs.com",
-		"tmp": "tmp/elliptic-6.4.0.tgz_1487798866428_0.30510620190761983"
-	},
-	"_npmUser": {
-		"name": "indutny",
-		"email": "fedor@indutny.com"
-	},
-	"_npmVersion": "3.10.8",
-	"_phantomChildren": {},
-	"_requested": {
-		"raw": "elliptic@^6.4.0",
-		"scope": null,
-		"escapedName": "elliptic",
-		"name": "elliptic",
-		"rawSpec": "^6.4.0",
-		"spec": ">=6.4.0 <7.0.0",
-		"type": "range"
-	},
-	"_requiredBy": [
-		"/",
-		"/browserify-sign",
-		"/create-ecdh",
-		"/secp256k1"
-	],
-	"_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz",
-	"_shasum": "cac9af8762c85836187003c8dfe193e5e2eae5df",
-	"_shrinkwrap": null,
-	"_spec": "elliptic@^6.4.0",
-	"_where": "/Users/ethanfast/Desktop/Code/NEO/neo-wallet-js",
-	"author": {
-		"name": "Fedor Indutny",
-		"email": "fedor@indutny.com"
-	},
-	"bugs": {
-		"url": "https://github.com/indutny/elliptic/issues"
-	},
-	"dependencies": {
-		"bn.js": "^4.4.0",
-		"brorand": "^1.0.1",
-		"hash.js": "^1.0.0",
-		"hmac-drbg": "^1.0.0",
-		"inherits": "^2.0.1",
-		"minimalistic-assert": "^1.0.0",
-		"minimalistic-crypto-utils": "^1.0.0"
-	},
-	"description": "EC cryptography",
-	"devDependencies": {
-		"brfs": "^1.4.3",
-		"coveralls": "^2.11.3",
-		"grunt": "^0.4.5",
-		"grunt-browserify": "^5.0.0",
-		"grunt-cli": "^1.2.0",
-		"grunt-contrib-connect": "^1.0.0",
-		"grunt-contrib-copy": "^1.0.0",
-		"grunt-contrib-uglify": "^1.0.1",
-		"grunt-mocha-istanbul": "^3.0.1",
-		"grunt-saucelabs": "^8.6.2",
-		"istanbul": "^0.4.2",
-		"jscs": "^2.9.0",
-		"jshint": "^2.6.0",
-		"mocha": "^2.1.0"
-	},
-	"directories": {},
-	"dist": {
-		"shasum": "cac9af8762c85836187003c8dfe193e5e2eae5df",
-		"tarball": "https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz"
-	},
-	"files": [
-		"lib"
-	],
-	"gitHead": "6b0d2b76caae91471649c8e21f0b1d3ba0f96090",
-	"homepage": "https://github.com/indutny/elliptic",
-	"keywords": [
-		"EC",
-		"Elliptic",
-		"curve",
-		"Cryptography"
-	],
-	"license": "MIT",
-	"main": "lib/elliptic.js",
-	"maintainers": [
-		{
-			"name": "indutny",
-			"email": "fedor@indutny.com"
-		}
-	],
-	"name": "elliptic",
-	"optionalDependencies": {},
-	"readme": "ERROR: No README data found!",
-	"repository": {
-		"type": "git",
-		"url": "git+ssh://git@github.com/indutny/elliptic.git"
-	},
-	"scripts": {
-		"jscs": "jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js",
-		"jshint": "jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js",
-		"lint": "npm run jscs && npm run jshint",
-		"test": "npm run lint && npm run unit",
-		"unit": "istanbul test _mocha --reporter=spec test/index.js",
-		"version": "grunt dist && git add dist/"
-	},
-	"version": "6.4.0"
-};
+module.exports = {"_args":[["elliptic@^6.4.0","/Users/Habib/Desktop/neon-js"]],"_from":"elliptic@>=6.4.0 <7.0.0","_id":"elliptic@6.4.0","_inCache":true,"_installable":true,"_location":"/elliptic","_nodeVersion":"7.0.0","_npmOperationalInternal":{"host":"packages-18-east.internal.npmjs.com","tmp":"tmp/elliptic-6.4.0.tgz_1487798866428_0.30510620190761983"},"_npmUser":{"email":"fedor@indutny.com","name":"indutny"},"_npmVersion":"3.10.8","_phantomChildren":{},"_requested":{"name":"elliptic","raw":"elliptic@^6.4.0","rawSpec":"^6.4.0","scope":null,"spec":">=6.4.0 <7.0.0","type":"range"},"_requiredBy":["/","/browserify-sign","/create-ecdh","/secp256k1"],"_resolved":"https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz","_shasum":"cac9af8762c85836187003c8dfe193e5e2eae5df","_shrinkwrap":null,"_spec":"elliptic@^6.4.0","_where":"/Users/Habib/Desktop/neon-js","author":{"email":"fedor@indutny.com","name":"Fedor Indutny"},"bugs":{"url":"https://github.com/indutny/elliptic/issues"},"dependencies":{"bn.js":"^4.4.0","brorand":"^1.0.1","hash.js":"^1.0.0","hmac-drbg":"^1.0.0","inherits":"^2.0.1","minimalistic-assert":"^1.0.0","minimalistic-crypto-utils":"^1.0.0"},"description":"EC cryptography","devDependencies":{"brfs":"^1.4.3","coveralls":"^2.11.3","grunt":"^0.4.5","grunt-browserify":"^5.0.0","grunt-cli":"^1.2.0","grunt-contrib-connect":"^1.0.0","grunt-contrib-copy":"^1.0.0","grunt-contrib-uglify":"^1.0.1","grunt-mocha-istanbul":"^3.0.1","grunt-saucelabs":"^8.6.2","istanbul":"^0.4.2","jscs":"^2.9.0","jshint":"^2.6.0","mocha":"^2.1.0"},"directories":{},"dist":{"shasum":"cac9af8762c85836187003c8dfe193e5e2eae5df","tarball":"https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz"},"files":["lib"],"gitHead":"6b0d2b76caae91471649c8e21f0b1d3ba0f96090","homepage":"https://github.com/indutny/elliptic","keywords":["Cryptography","EC","Elliptic","curve"],"license":"MIT","main":"lib/elliptic.js","maintainers":[{"name":"indutny","email":"fedor@indutny.com"}],"name":"elliptic","optionalDependencies":{},"readme":"ERROR: No README data found!","repository":{"type":"git","url":"git+ssh://git@github.com/indutny/elliptic.git"},"scripts":{"jscs":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","jshint":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","lint":"npm run jscs && npm run jshint","test":"npm run lint && npm run unit","unit":"istanbul test _mocha --reporter=spec test/index.js","version":"grunt dist && git add dist/"},"version":"6.4.0"}
 
 /***/ }),
 /* 87 */
@@ -20214,7 +19823,7 @@ BasePoint.prototype.dblp = function dblp(k) {
 "use strict";
 
 
-var curve = __webpack_require__(19);
+var curve = __webpack_require__(20);
 var elliptic = __webpack_require__(5);
 var BN = __webpack_require__(7);
 var inherits = __webpack_require__(2);
@@ -21159,7 +20768,7 @@ JPoint.prototype.isInfinity = function isInfinity() {
 "use strict";
 
 
-var curve = __webpack_require__(19);
+var curve = __webpack_require__(20);
 var BN = __webpack_require__(7);
 var inherits = __webpack_require__(2);
 var Base = curve.base;
@@ -21346,7 +20955,7 @@ Point.prototype.getX = function getX() {
 "use strict";
 
 
-var curve = __webpack_require__(19);
+var curve = __webpack_require__(20);
 var elliptic = __webpack_require__(5);
 var BN = __webpack_require__(7);
 var inherits = __webpack_require__(2);
@@ -24101,7 +23710,7 @@ module.exports = Signature;
 ;(function (root, factory, undef) {
 	if (true) {
 		// CommonJS
-		module.exports = exports = factory(__webpack_require__(0), __webpack_require__(20), __webpack_require__(111), __webpack_require__(112), __webpack_require__(13), __webpack_require__(14), __webpack_require__(26), __webpack_require__(45), __webpack_require__(113), __webpack_require__(46), __webpack_require__(114), __webpack_require__(115), __webpack_require__(116), __webpack_require__(27), __webpack_require__(117), __webpack_require__(11), __webpack_require__(3), __webpack_require__(118), __webpack_require__(119), __webpack_require__(120), __webpack_require__(121), __webpack_require__(122), __webpack_require__(123), __webpack_require__(124), __webpack_require__(125), __webpack_require__(126), __webpack_require__(127), __webpack_require__(128), __webpack_require__(129), __webpack_require__(130), __webpack_require__(131), __webpack_require__(132), __webpack_require__(133));
+		module.exports = exports = factory(__webpack_require__(0), __webpack_require__(21), __webpack_require__(111), __webpack_require__(112), __webpack_require__(13), __webpack_require__(14), __webpack_require__(26), __webpack_require__(45), __webpack_require__(113), __webpack_require__(46), __webpack_require__(114), __webpack_require__(115), __webpack_require__(116), __webpack_require__(27), __webpack_require__(117), __webpack_require__(11), __webpack_require__(3), __webpack_require__(118), __webpack_require__(119), __webpack_require__(120), __webpack_require__(121), __webpack_require__(122), __webpack_require__(123), __webpack_require__(124), __webpack_require__(125), __webpack_require__(126), __webpack_require__(127), __webpack_require__(128), __webpack_require__(129), __webpack_require__(130), __webpack_require__(131), __webpack_require__(132), __webpack_require__(133));
 	}
 	else if (typeof define === "function" && define.amd) {
 		// AMD
@@ -24444,7 +24053,7 @@ module.exports = Signature;
 ;(function (root, factory, undef) {
 	if (true) {
 		// CommonJS
-		module.exports = exports = factory(__webpack_require__(0), __webpack_require__(20), __webpack_require__(46));
+		module.exports = exports = factory(__webpack_require__(0), __webpack_require__(21), __webpack_require__(46));
 	}
 	else if (typeof define === "function" && define.amd) {
 		// AMD
@@ -24532,7 +24141,7 @@ module.exports = Signature;
 ;(function (root, factory, undef) {
 	if (true) {
 		// CommonJS
-		module.exports = exports = factory(__webpack_require__(0), __webpack_require__(20));
+		module.exports = exports = factory(__webpack_require__(0), __webpack_require__(21));
 	}
 	else if (typeof define === "function" && define.amd) {
 		// AMD
@@ -27649,9 +27258,9 @@ module.exports = basex(ALPHABET)
 var inherits = __webpack_require__(2)
 var md5 = __webpack_require__(138)
 var RIPEMD160 = __webpack_require__(140)
-var sha = __webpack_require__(152)
+var sha = __webpack_require__(153)
 
-var Base = __webpack_require__(157)
+var Base = __webpack_require__(158)
 
 function HashNoConstructor (hash) {
   Base.call(this, 'digest')
@@ -28303,7 +27912,7 @@ module.exports = HashBase
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Buffer = __webpack_require__(21).Buffer;
+var Buffer = __webpack_require__(17).Buffer;
 /*</replacement>*/
 
 function copyBuffer(src, target, offset) {
@@ -28427,8 +28036,9 @@ exports._unrefActive = exports.active = function(item) {
 
 // setimmediate attaches itself to the global object
 __webpack_require__(145);
-exports.setImmediate = setImmediate;
-exports.clearImmediate = clearImmediate;
+var global = __webpack_require__(146);
+exports.setImmediate = global.setImmediate;
+exports.clearImmediate = global.clearImmediate;
 
 
 /***/ }),
@@ -28628,6 +28238,26 @@ exports.clearImmediate = clearImmediate;
 /* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/* WEBPACK VAR INJECTION */(function(global) {var win;
+
+if (typeof window !== "undefined") {
+    win = window;
+} else if (typeof global !== "undefined") {
+    win = global;
+} else if (typeof self !== "undefined"){
+    win = self;
+} else {
+    win = {};
+}
+
+module.exports = win;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+
+/***/ }),
+/* 147 */
+/***/ (function(module, exports, __webpack_require__) {
+
 /* WEBPACK VAR INJECTION */(function(global) {
 /**
  * Module exports.
@@ -28699,7 +28329,7 @@ function config (name) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28735,7 +28365,7 @@ module.exports = PassThrough;
 var Transform = __webpack_require__(52);
 
 /*<replacement>*/
-var util = __webpack_require__(17);
+var util = __webpack_require__(18);
 util.inherits = __webpack_require__(2);
 /*</replacement>*/
 
@@ -28752,35 +28382,35 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
 };
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(30);
 
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(12);
 
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(29).Transform
 
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(29).PassThrough
 
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var exports = module.exports = function SHA (algorithm) {
@@ -28792,16 +28422,16 @@ var exports = module.exports = function SHA (algorithm) {
   return new Algorithm()
 }
 
-exports.sha = __webpack_require__(153)
-exports.sha1 = __webpack_require__(154)
-exports.sha224 = __webpack_require__(155)
+exports.sha = __webpack_require__(154)
+exports.sha1 = __webpack_require__(155)
+exports.sha224 = __webpack_require__(156)
 exports.sha256 = __webpack_require__(53)
-exports.sha384 = __webpack_require__(156)
+exports.sha384 = __webpack_require__(157)
 exports.sha512 = __webpack_require__(54)
 
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {/*
@@ -28901,7 +28531,7 @@ module.exports = Sha
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {/*
@@ -29006,7 +28636,7 @@ module.exports = Sha1
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {/**
@@ -29065,7 +28695,7 @@ module.exports = Sha224
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var inherits = __webpack_require__(2)
@@ -29128,14 +28758,14 @@ module.exports = Sha384
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(Buffer) {var Transform = __webpack_require__(48).Transform
-var inherits = __webpack_require__(2)
+var Buffer = __webpack_require__(17).Buffer
+var Transform = __webpack_require__(48).Transform
 var StringDecoder = __webpack_require__(31).StringDecoder
-module.exports = CipherBase
-inherits(CipherBase, Transform)
+var inherits = __webpack_require__(2)
+
 function CipherBase (hashMode) {
   Transform.call(this)
   this.hashMode = typeof hashMode === 'string'
@@ -29144,25 +28774,31 @@ function CipherBase (hashMode) {
   } else {
     this.final = this._finalOrDigest
   }
+  if (this._final) {
+    this.__final = this._final
+    this._final = null
+  }
   this._decoder = null
   this._encoding = null
 }
+inherits(CipherBase, Transform)
+
 CipherBase.prototype.update = function (data, inputEnc, outputEnc) {
   if (typeof data === 'string') {
-    data = new Buffer(data, inputEnc)
+    data = Buffer.from(data, inputEnc)
   }
+
   var outData = this._update(data)
-  if (this.hashMode) {
-    return this
-  }
+  if (this.hashMode) return this
+
   if (outputEnc) {
     outData = this._toString(outData, outputEnc)
   }
+
   return outData
 }
 
 CipherBase.prototype.setAutoPadding = function () {}
-
 CipherBase.prototype.getAuthTag = function () {
   throw new Error('trying to get auth tag in unsupported state')
 }
@@ -29192,15 +28828,15 @@ CipherBase.prototype._transform = function (data, _, next) {
 CipherBase.prototype._flush = function (done) {
   var err
   try {
-    this.push(this._final())
+    this.push(this.__final())
   } catch (e) {
     err = e
-  } finally {
-    done(err)
   }
+
+  done(err)
 }
 CipherBase.prototype._finalOrDigest = function (outputEnc) {
-  var outData = this._final() || new Buffer('')
+  var outData = this.__final() || Buffer.alloc(0)
   if (outputEnc) {
     outData = this._toString(outData, outputEnc, true)
   }
@@ -29212,20 +28848,22 @@ CipherBase.prototype._toString = function (value, enc, fin) {
     this._decoder = new StringDecoder(enc)
     this._encoding = enc
   }
-  if (this._encoding !== enc) {
-    throw new Error('can\'t switch encodings')
-  }
+
+  if (this._encoding !== enc) throw new Error('can\'t switch encodings')
+
   var out = this._decoder.write(value)
   if (fin) {
     out += this._decoder.end()
   }
+
   return out
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
+module.exports = CipherBase
+
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29360,6 +28998,98 @@ exports.reverseArray = reverseArray;
 exports.numStoreInMemory = numStoreInMemory;
 exports.stringToBytes = stringToBytes;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
+
+/***/ }),
+/* 160 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process, Buffer) {var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!function(globals){
+'use strict'
+
+//*** UMD BEGIN
+if (true) { //require.js / AMD
+  !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
+    return secureRandom
+  }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))
+} else if (typeof module !== 'undefined' && module.exports) { //CommonJS
+  module.exports = secureRandom
+} else { //script / browser
+  globals.secureRandom = secureRandom
+}
+//*** UMD END
+
+//options.type is the only valid option
+function secureRandom(count, options) {
+  options = options || {type: 'Array'}
+  //we check for process.pid to prevent browserify from tricking us
+  if (typeof process != 'undefined' && typeof process.pid == 'number') {
+    return nodeRandom(count, options)
+  } else {
+    var crypto = window.crypto || window.msCrypto
+    if (!crypto) throw new Error("Your browser does not support window.crypto.")
+    return browserRandom(count, options)
+  }
+}
+
+function nodeRandom(count, options) {
+  var crypto = __webpack_require__(161)
+  var buf = crypto.randomBytes(count)
+
+  switch (options.type) {
+    case 'Array':
+      return [].slice.call(buf)
+    case 'Buffer':
+      return buf
+    case 'Uint8Array':
+      var arr = new Uint8Array(count)
+      for (var i = 0; i < count; ++i) { arr[i] = buf.readUInt8(i) }
+      return arr
+    default:
+      throw new Error(options.type + " is unsupported.")
+  }
+}
+
+function browserRandom(count, options) {
+  var nativeArr = new Uint8Array(count)
+  var crypto = window.crypto || window.msCrypto
+  crypto.getRandomValues(nativeArr)
+
+  switch (options.type) {
+    case 'Array':
+      return [].slice.call(nativeArr)
+    case 'Buffer':
+      try { var b = new Buffer(1) } catch(e) { throw new Error('Buffer not supported in this environment. Use Node.js or Browserify for browser support.')}
+      return new Buffer(nativeArr)
+    case 'Uint8Array':
+      return nativeArr
+    default:
+      throw new Error(options.type + " is unsupported.")
+  }
+}
+
+secureRandom.randomArray = function(byteCount) {
+  return secureRandom(byteCount, {type: 'Array'})
+}
+
+secureRandom.randomUint8Array = function(byteCount) {
+  return secureRandom(byteCount, {type: 'Uint8Array'})
+}
+
+secureRandom.randomBuffer = function(byteCount) {
+  return secureRandom(byteCount, {type: 'Buffer'})
+}
+
+
+}(this);
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(1).Buffer))
+
+/***/ }),
+/* 161 */
+/***/ (function(module, exports) {
+
+/* (ignored) */
 
 /***/ })
 /******/ ]);
