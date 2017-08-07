@@ -43,9 +43,7 @@ describe('api.js', function() {
     api.getWalletDBHeight(api.TESTNET).then((response) => {
       response.should.be.a('number');
       done();
-    }).catch((e) => {
-      console.error(e)
-    });
+    })
   });
 
 
