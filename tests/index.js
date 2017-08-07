@@ -6,17 +6,15 @@ import { ab2str,
   reverseArray,
   numStoreInMemory,
   stringToBytes } from '../src/utils';
-import * as wallet from '../src/wallet';
+import * as wallet from '../src/index';
 import * as api from '../src/api';
 import axios from 'axios';
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 const should = chai.should();
 
-
-
-describe('Wallet', function() {
-  this.timeout(15000);
+describe('api.js', function() {
+  this.timeout(5000);
 
   const testKeys = {
     'a': {
@@ -41,31 +39,27 @@ describe('Wallet', function() {
   //   })
   // });
 
-  it('should connect to the light wallet API and get block count', (done) => {
-    api.getBlockCount(api.TESTNET).then((response) => {
-      response.result.should.be.a('number');
+  it('should connect to the light wallet API and get wallet DB height', (done) => {
+    api.getWalletDBHeight(api.TESTNET).then((response) => {
+      response.should.be.a('number');
       done();
+    }).catch((e) => {
+      console.error(e)
     });
   });
 
-  it('should get a block from the testnet', (done) => {
-    api.getBlockByIndex(api.TESTNET, 100000).then((response) => {
-      response.result.should.be.an('object');
-      done();
-    });
-  });
 
   it('should generate a new private key', (done) => {
     const privateKey = ab2hexstring(wallet.generatePrivateKey());
     privateKey.should.have.length(64);
     done();
   });
-
+  //
   it('should generate a valid WIF', (done) => {
-    const privateKey = ab2hexstring(wallet.generatePrivateKey());
-    const wif = wallet.getWIFFromHex(privateKey);
+    const privateKey = wallet.generatePrivateKey();
+    const wif = wallet.getWIFFromPrivateKey(privateKey);
     const account = wallet.getAccountsFromWIFKey(wif)[0];
-    account.privatekey.should.equal(privateKey);
+    account.privatekey.should.equal(ab2hexstring(privateKey));
     done();
   });
 
@@ -96,36 +90,37 @@ describe('Wallet', function() {
 
   it('should get balance from address', (done) => {
     api.getBalance(api.TESTNET, testKeys.a.address).then((response) =>{
-      response.ANS.should.be.a('number');
-      response.ANC.should.be.a('number');
+      response.Neo.should.be.a('number');
+      response.Gas.should.be.a('number');
       done();
     });
   });
 
   it('should get unspent transactions', (done) => {
-    api.getBalance(api.TESTNET, testKeys.a.address, api.ansId).then((response) => {
-      response.unspent.ANS.should.be.an('array');
-      response.unspent.ANC.should.be.an('array');
+    api.getBalance(api.TESTNET, testKeys.a.address, api.neoId).then((response) => {
+      response.unspent.Neo.should.be.an('array');
+      response.unspent.Gas.should.be.an('array');
       done();
     })
   });
 
-  it('should send ANS', (done) => {
-    api.sendAssetTransaction(api.TESTNET, testKeys.b.address, testKeys.a.wif, "AntShares", 1).then((response) => {
+  it('should send NEO', (done) => {
+    api.doSendAsset(api.TESTNET, testKeys.b.address, testKeys.a.wif, "Neo", 1).then((response) => {
+      console.log('response', response)
       response.result.should.equal(true);
       // send back so we can re-run
-      api.sendAssetTransaction(api.TESTNET, testKeys.a.address, testKeys.b.wif, "AntShares", 1).then((response) => {
+      api.doSendAsset(api.TESTNET, testKeys.a.address, testKeys.b.wif, "Neo", 1).then((response) => {
         response.result.should.equal(true);
         done();
       });
     })
   });
 
-  it('should send ANC', (done) => {
-    api.sendAssetTransaction(api.TESTNET, testKeys.b.address, testKeys.a.wif, "AntCoins", 1).then((response) => {
+  it('should send GAS', (done) => {
+    api.doSendAsset(api.TESTNET, testKeys.b.address, testKeys.a.wif, "Gas", 1).then((response) => {
       response.result.should.equal(true);
       // send back so we can re-run
-      api.sendAssetTransaction(api.TESTNET, testKeys.a.address, testKeys.b.wif, "AntCoins", 1).then((response) => {
+      api.doSendAsset(api.TESTNET, testKeys.a.address, testKeys.b.wif, "Gas", 1).then((response) => {
         response.result.should.equal(true);
         done();
       });

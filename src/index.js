@@ -14,8 +14,6 @@ import { ab2str,
 
 var base58 = require('base-x')(BASE58)
 import secureRandom from 'secure-random';
-
-
 import buffer from 'buffer';
 
 
@@ -28,10 +26,6 @@ import buffer from 'buffer';
 export const getWIFFromPrivateKey = (privateKey) => {
     const hexKey = ab2hexstring(privateKey);
     return WIF.encode(128, new Buffer(hexKey, 'hex'), true)
-};
-
-export const getWIFFromHex = (privateKey) => {
-    return WIF.encode(128, new Buffer(privateKey, 'hex'), true)
 };
 
 export const getTxHash = ($data) => {
@@ -397,27 +391,23 @@ export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) =>
 
 	// Transaction-specific attributs: claims
 
-  //
-
 	// 1) store number of claims (txids)
-	let len = 1;// claims.length;
-  let i = 0;
+	let len = claims.length;
 	let lenstr = numStoreInMemory(len.toString(16), 2);
 	data = data + lenstr;
 
   let total_amount = 0;
 
   // 2) iterate over claim txids
-	// for ( let k=0; k<len; k++ ) {
+	for ( let k=0; k<len; k++ ) {
     // get the txid
-		let txid = claims[i]['txid'];
-    console.log(txid);
+		let txid = claims[k]['txid'];
     // add txid to data
 		data = data + ab2hexstring(reverseArray(hexstring2ab(txid)));
 
-		let vout = claims[i]['index'].toString(16);
+		let vout = claims[k]['index'].toString(16);
 		data = data + numStoreInMemory(vout, 4);
-	// }
+	}
 
 	// Don't need any attributes
 	data = data + "00";
@@ -432,7 +422,7 @@ export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) =>
 	data = data + ab2hexstring(reverseArray(hexstring2ab("602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")))
 
 	// Net add total amount of the claim
-	const num1str = numStoreInMemory(claims[i]['claim'].toString(16), 16);
+	const num1str = numStoreInMemory(amount.toString(16), 16);
 	data = data + num1str;
 
 	// Finally add program hash
@@ -464,21 +454,11 @@ export const toAddress = ($ProgramHash) => {
 };
 
 export const generateRandomArray = ($arrayLen) => {
-  var randomArray = secureRandom($arrayLen);
-	// for (let i = 0; i < $arrayLen; i++) {
-	// 	randomArray[i] = Math.floor(Math.random() * 256);
-	// }
-
-	return randomArray;
+ 	return secureRandom($arrayLen);
 }
 
 export const generatePrivateKey = () => {
-	var privateKey = secureRandom(32);
-	// for (let i = 0; i < 32; i++) {
-	// 	privateKey[i] = Math.floor(Math.random() * 256);
-	// }
-
-	return privateKey;
+	return secureRandom(32);
 };
 
 export const getPrivateKeyFromWIF = ($wif) => {
