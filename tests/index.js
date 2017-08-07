@@ -6,13 +6,11 @@ import { ab2str,
   reverseArray,
   numStoreInMemory,
   stringToBytes } from '../src/utils';
-import * as wallet from '../src/index';
-import * as api from '../src/api';
+import * as api from '../lib/index';
 import axios from 'axios';
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 const should = chai.should();
-
 
 
 describe('Wallet', function() {
@@ -44,40 +42,40 @@ describe('Wallet', function() {
   // });
 
   it('should generate a new private key', (done) => {
-    const privateKey = ab2hexstring(wallet.generatePrivateKey());
+    const privateKey = ab2hexstring(api.generatePrivateKey());
     privateKey.should.have.length(64);
     done();
   });
 
   it('should generate a valid WIF', (done) => {
-    const privateKey = wallet.generatePrivateKey();
-    const wif = wallet.getWIFFromPrivateKey(privateKey);
-    const account = wallet.getAccountsFromWIFKey(wif)[0];
+    const privateKey = api.generatePrivateKey();
+    const wif = api.getWIFFromPrivateKey(privateKey);
+    const account = api.getAccountsFromWIFKey(wif)[0];
     account.privatekey.should.equal(ab2hexstring(privateKey));
     done();
   });
 
   it('should get keys from a WIF', (done) =>{
-    const account = wallet.getAccountsFromWIFKey(testKeys.a.wif)[0];
+    const account = api.getAccountsFromWIFKey(testKeys.a.wif)[0];
     account.privatekey.should.be.a('string');
     account.address.should.equal(testKeys.a.address);
     done();
   });
 
   it('should verify publicKeyEncoded', (done) => {
-    const privateKey = ab2hexstring(wallet.generatePrivateKey());
-    const accounts = wallet.getAccountsFromPrivateKey(privateKey);
+    const privateKey = ab2hexstring(api.generatePrivateKey());
+    const accounts = api.getAccountsFromPrivateKey(privateKey);
     accounts.should.not.equal(-1);
-    const verify = wallet.verifyPublicKeyEncoded(accounts[0].publickeyEncoded);
+    const verify = api.verifyPublicKeyEncoded(accounts[0].publickeyEncoded);
     verify.should.equal(true);
     done();
   });
 
   it('should verify address', (done) => {
-    const privateKey = ab2hexstring(wallet.generatePrivateKey());
-    const accounts = wallet.getAccountsFromPrivateKey(privateKey);
+    const privateKey = ab2hexstring(api.generatePrivateKey());
+    const accounts = api.getAccountsFromPrivateKey(privateKey);
     accounts.should.not.equal(-1);
-    const verify = wallet.verifyAddress(accounts[0].address);
+    const verify = api.verifyAddress(accounts[0].address);
     verify.should.equal(true);
     done();
   });
