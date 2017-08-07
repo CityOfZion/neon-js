@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransaction } from './index.js';
+import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransaction } from './wallet';
+
+export * from './wallet.js';
 
 // hard-code asset ids for NEO and GAS
 export const neoId = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
@@ -73,14 +75,14 @@ export const getBalance = (net, address) => {
 /**
  * @function
  * @description
- * Hit the bittrex api getticker to fetch the latest USDT to NEO price
+ * Hit the coinmarketcap api ticket to fetch the latest USD to NEO price
  *
  * @param {number} amount - The current NEO amount in wallet
- * @return {string} - The converted NEO to USDT fiat amount
+ * @return {string} - The converted NEO to USD fiat amount
  */
 export const getMarketPriceUSD = (amount) => {
-  return axios.get('https://bittrex.com/api/v1.1/public/getticker?market=USDT-NEO').then((response) => {
-      let lastUSDNEO = response.data.result.Last;
+  return axios.get('https://api.coinmarketcap.com/v1/ticker/NEO/?convert=USD').then((response) => {
+      let lastUSDNEO = Number(response.data[0].price_usd);
       return ('$' + (lastUSDNEO * amount).toFixed(2).toString());
   });
 };
