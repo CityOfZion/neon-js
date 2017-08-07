@@ -53,7 +53,7 @@ npm run test
 npm run build
 ```
 
-## To import
+### To import
 ```
 npm install --save git+https://github.com/CityOfZion/neon-js.git
 ```
