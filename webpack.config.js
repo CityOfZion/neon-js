@@ -2,9 +2,11 @@
 
 module.exports = {
   entry: './src/api.js',
+  target: 'node',
   output: {
       path: __dirname,
-      filename: './dist/bundle.js'
+      filename: './lib/index.js',
+      libraryTarget: 'umd'
   },
   module: {
     loaders: [

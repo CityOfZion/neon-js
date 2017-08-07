@@ -6,13 +6,11 @@ import { ab2str,
   reverseArray,
   numStoreInMemory,
   stringToBytes } from '../src/utils';
-import * as wallet from '../src/wallet';
-import * as api from '../src/api';
+import * as api from '../lib/index';
 import axios from 'axios';
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 const should = chai.should();
-
 
 
 describe('Wallet', function() {
@@ -31,7 +29,9 @@ describe('Wallet', function() {
       address: "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
       wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG"
     }
-  }
+  };
+
+  const testNet = api.getAPIEndpoint('TestNet');
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
   // it('should claim ANC', (done) =>{
@@ -41,91 +41,77 @@ describe('Wallet', function() {
   //   })
   // });
 
-  it('should connect to the light wallet API and get block count', (done) => {
-    api.getBlockCount(api.TESTNET).then((response) => {
-      response.result.should.be.a('number');
-      done();
-    });
-  });
-
-  it('should get a block from the testnet', (done) => {
-    api.getBlockByIndex(api.TESTNET, 100000).then((response) => {
-      response.result.should.be.an('object');
-      done();
-    });
-  });
-
   it('should generate a new private key', (done) => {
-    const privateKey = ab2hexstring(wallet.generatePrivateKey());
+    const privateKey = ab2hexstring(api.generatePrivateKey());
     privateKey.should.have.length(64);
     done();
   });
 
   it('should generate a valid WIF', (done) => {
-    const privateKey = ab2hexstring(wallet.generatePrivateKey());
-    const wif = wallet.getWIFFromHex(privateKey);
-    const account = wallet.getAccountsFromWIFKey(wif)[0];
-    account.privatekey.should.equal(privateKey);
+    const privateKey = api.generatePrivateKey();
+    const wif = api.getWIFFromPrivateKey(privateKey);
+    const account = api.getAccountsFromWIFKey(wif)[0];
+    account.privatekey.should.equal(ab2hexstring(privateKey));
     done();
   });
 
   it('should get keys from a WIF', (done) =>{
-    const account = wallet.getAccountsFromWIFKey(testKeys.a.wif)[0];
+    const account = api.getAccountsFromWIFKey(testKeys.a.wif)[0];
     account.privatekey.should.be.a('string');
     account.address.should.equal(testKeys.a.address);
     done();
   });
 
   it('should verify publicKeyEncoded', (done) => {
-    const privateKey = ab2hexstring(wallet.generatePrivateKey());
-    const accounts = wallet.getAccountsFromPrivateKey(privateKey);
+    const privateKey = ab2hexstring(api.generatePrivateKey());
+    const accounts = api.getAccountsFromPrivateKey(privateKey);
     accounts.should.not.equal(-1);
-    const verify = wallet.verifyPublicKeyEncoded(accounts[0].publickeyEncoded);
+    const verify = api.verifyPublicKeyEncoded(accounts[0].publickeyEncoded);
     verify.should.equal(true);
     done();
   });
 
   it('should verify address', (done) => {
-    const privateKey = ab2hexstring(wallet.generatePrivateKey());
-    const accounts = wallet.getAccountsFromPrivateKey(privateKey);
+    const privateKey = ab2hexstring(api.generatePrivateKey());
+    const accounts = api.getAccountsFromPrivateKey(privateKey);
     accounts.should.not.equal(-1);
-    const verify = wallet.verifyAddress(accounts[0].address);
+    const verify = api.verifyAddress(accounts[0].address);
     verify.should.equal(true);
     done();
   });
 
   it('should get balance from address', (done) => {
     api.getBalance(api.TESTNET, testKeys.a.address).then((response) =>{
-      response.ANS.should.be.a('number');
-      response.ANC.should.be.a('number');
+      response.Neo.should.be.a('number');
+      response.Gas.should.be.a('number');
       done();
     });
   });
 
   it('should get unspent transactions', (done) => {
     api.getBalance(api.TESTNET, testKeys.a.address, api.ansId).then((response) => {
-      response.unspent.ANS.should.be.an('array');
-      response.unspent.ANC.should.be.an('array');
+      response.unspent.Neo.should.be.an('array');
+      response.unspent.Gas.should.be.an('array');
       done();
     })
   });
 
-  it('should send ANS', (done) => {
-    api.sendAssetTransaction(api.TESTNET, testKeys.b.address, testKeys.a.wif, "AntShares", 1).then((response) => {
+  it('should send NEO', (done) => {
+    api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, "Neo", 1).then((response) => {
       response.result.should.equal(true);
       // send back so we can re-run
-      api.sendAssetTransaction(api.TESTNET, testKeys.a.address, testKeys.b.wif, "AntShares", 1).then((response) => {
+      api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, "Neo", 1).then((response) => {
         response.result.should.equal(true);
         done();
       });
     })
   });
 
-  it('should send ANC', (done) => {
-    api.sendAssetTransaction(api.TESTNET, testKeys.b.address, testKeys.a.wif, "AntCoins", 1).then((response) => {
+  it('should send GAS', (done) => {
+    api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, "Gas", 1).then((response) => {
       response.result.should.equal(true);
       // send back so we can re-run
-      api.sendAssetTransaction(api.TESTNET, testKeys.a.address, testKeys.b.wif, "AntCoins", 1).then((response) => {
+      api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, "Gas", 1).then((response) => {
         response.result.should.equal(true);
         done();
       });
