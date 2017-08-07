@@ -6,8 +6,54 @@ Special thanks to [neowallet.js](https://github.com/neochainio/neowallet/blob/ma
 
 ## Quick Start
 
-Import the package using `npm install --save git+https://github.com/CityOfZion/neon-js.git`.
-
-Alternatively, download the source files and build using `npm run build` and test using `npm test`.
-
 Take a look at the tests to find examples for all API functions.
+
+```javascript
+import * as api from 'neon-js';
+
+const testKeys = {
+  a: {
+    address: "ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s",
+    wif: "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG"
+  },
+  b: {
+    address: "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
+    wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG"
+  }
+}
+
+// Get balance of account "a" on TestNet using Neon Wallet API
+api.getBalance(api.TESTNET, testKeys.a.address).then((balance) => {
+  console.log(balance);
+});
+
+// Get balance of account "a" on MainNet using Neon Wallet API
+api.getBalance(api.MAINNET, testKeys.a.address).then((balance) => {
+  console.log(balance);
+});
+
+// Claim all available GAS for account "a" on TestNet
+api.claimAllGAS(api.TESTNET, testKeys.a.wif).then((response) => {
+  console.log(response);
+});
+
+// Send 1 ANS to "a" from "b" on TestNet
+api.sendAssetTransaction(api.TESTNET, testKeys.a.address, testKeys.b.wif, "AntShares", 1).then((response) => {
+  console.log("Transaction complete!");
+});
+```
+
+### To run tests
+```
+npm run test
+```
+
+### To build to /dist:
+```
+npm run build
+```
+
+## To import
+```
+npm install --save git+https://github.com/CityOfZion/neon-js.git
+```
