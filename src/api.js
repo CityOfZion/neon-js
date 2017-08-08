@@ -87,6 +87,31 @@ export const getMarketPriceUSD = (amount) => {
   });
 };
 
+/**
+ * @function
+ * @description
+ * Fetches the latest price of NEO for a given currency
+ *
+ * @param amount - The amount of NEO
+ * @param currencyCode - A valid currency code (e.g. USD, EUR)
+ * @returns {number} the price for the specified currency code
+ */
+export const getMarketPrice = (amount, currencyCode) => {
+  return axios.default.get(`https://api.coinmarketcap.com/v1/ticker/NEO/?convert=${currencyCode}`).then(function (response) {
+    var fieldName = 'price_' + currencyCode.toLowerCase();
+
+    if (response.data[0].hasOwnProperty(fieldName)) {
+      var lastPrice = Number(response.data[0][fieldName]);
+      return (lastPrice * amount);
+    }
+
+    throw new Error(`There is no field ${fieldName} in response json from coinmarketcap.`);
+
+  }).catch( () => {
+    throw new Error(`CurrencyCode ${currencyCode} is not supported by coinmarketcap api.`);
+  })
+};
+
 // get transaction history for an account
 export const getTransactionHistory = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net);
