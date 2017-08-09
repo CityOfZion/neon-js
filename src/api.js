@@ -73,21 +73,28 @@ export const getBalance = (net, address) => {
 };
 
 // Returns the current asset price according to coinmarketcap
-export const getAssetMarketPrice = (amount, currency, asset) => {
-  return axios.get(`https://api.coinmarketcap.com/v1/ticker/${asset}/?convert=${currency}`).then((response) => {
-    let price = response.data[0][`price_${currency}`]
+export const getAssetMarketPrice = (amount, currencyCode, asset) => {
+  return axios.get(`https://api.coinmarketcap.com/v1/ticker/${asset}/?convert=${currencyCode}`).then((response) => {
+    let price = response.data[0][`price_${currencyCode}`]
     if (isNaN(price)) {
       return '--';
     }
-    return '$' + (price * amount).toFixed(2).toString();
+    let currencySymbols = {
+      'usd': '$', // US Dollar
+      'eur': '€', // Euro
+      'gbp': '£', // British Pound Sterling
+      'jpy': '¥', // Japanese Yen
+      'cny': '¥', // Chinese Yuan
+    };
+    return currencySymbols[currencyCode] + (price * amount).toFixed(2).toString();
   }).catch((exception) => {
     return '--';
   });
 }
 
 // Returns the current Neo/Gas price according to coinmarketcap
-export const getMarketPrices = (amounts, currency) => {
-  return axios.all([getAssetMarketPrice(amounts.neo, currency, 'neo'), getAssetMarketPrice(amounts.gas, currency, 'gas')])
+export const getMarketPrices = (amounts, currencyCode) => {
+  return axios.all([getAssetMarketPrice(amounts.neo, currencyCode, 'neo'), getAssetMarketPrice(amounts.gas, currencyCode, 'gas')])
     .then(axios.spread((neo_price, gas_price) => {
       return {
         Neo: neo_price,
