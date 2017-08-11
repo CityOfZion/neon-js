@@ -1,7 +1,7 @@
 import * as ecurve from 'ecurve';
 import * as BigInteger from 'bigi';
 import { ec } from 'elliptic';
-import CryptoJS from 'crypto-js';
+import * as CryptoJS from 'crypto-js';
 import WIF from 'wif';
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 import { ab2str,
@@ -16,6 +16,18 @@ var base58 = require('base-x')(BASE58)
 import secureRandom from 'secure-random';
 import * as buffer from 'buffer';
 
+type TransferTransaction = HexString;
+interface InputData {
+	amount : number,
+	data : any
+};
+interface Account {
+    privatekey: string,
+    publickeyEncoded: string,
+    publickeyHash: string,
+    programHash: string,
+    address: any
+};
 
 // All of this stuff was wrapped in a class before, but really unnecessary as none of these were stateful
 // This flat structure should be more interpretable, and we can export them all as a module instead
@@ -28,7 +40,7 @@ export const getWIFFromPrivateKey = function(privateKey : Array<number>): string
     return WIF.encode(128, new Buffer(hexKey, 'hex'), true)
 };
 
-export const getTxHash = ($data) => {
+export const getTxHash = function($data : string): string {
 	var DataHexString = CryptoJS.enc.Hex.parse($data);
 	var DataSha256 = CryptoJS.SHA256(DataHexString);
 	var DataSha256_2 = CryptoJS.SHA256(DataSha256);
@@ -37,7 +49,7 @@ export const getTxHash = ($data) => {
 };
 
 // TODO: this needs a lot of documentation, also better name!
-export const getInputData = ($coin, $amount) => {
+export const getInputData = function($coin, $amount : number): -1 | InputData {
 	// sort
 	var coin_ordered = $coin['list'];
 	for (let i = 0; i < coin_ordered.length - 1; i++) {
@@ -81,7 +93,7 @@ export const getInputData = ($coin, $amount) => {
 
 		// txid
 		var pos = 1 + (x * 34);
-		data.set(reverseArray(hexstring2ab(coin_ordered[x]['txid'])),pos);
+		data.set(reverseArray(hexstring2ab(coin_ordered[x]['txid'])), pos);
 		//data.set(hexstring2ab(coin_ordered[x]['txid']), pos);
 
 		// index
@@ -109,7 +121,7 @@ export const getInputData = ($coin, $amount) => {
 
 // TODO: We may not need to keep this function in the API
 // for now, leaving as reference
-export const issueTransaction = function($issueAssetID : string, $issueAmount : number, $publicKeyEncoded): string {
+export const issueTransaction = function($issueAssetID : string, $issueAmount : number, $publicKeyEncoded: string): string {
 	var signatureScript = createSignatureScript($publicKeyEncoded);
 	//console.log( signatureScript.toString('hex') );
 
@@ -150,7 +162,7 @@ export const issueTransaction = function($issueAssetID : string, $issueAmount : 
 
 // TODO: we probably don't need to keep this function in the API, people aren't going to be using the wallet to register new assets
 // for now, leaving as reference
-export const registerTransaction = function($assetName, $assetAmount, $publicKeyEncoded): string {
+export const registerTransaction = function($assetName : string, $assetAmount : number, $publicKeyEncoded : string): string {
 	var ecparams = ecurve.getCurveByName('secp256r1');
 	var curvePt = ecurve.Point.decodeFrom(ecparams,new Buffer($publicKeyEncoded,"hex"));
 	var curvePtX = curvePt.affineX.toBuffer(32);
@@ -220,7 +232,7 @@ export const addContract = function($txData : string, $sign : string, $publicKey
 };
 
 // verify that an ANS address is valid
-export const verifyAddress = ( $toAddress ) => {
+export const verifyAddress = function($toAddress : string): boolean {
 	var ProgramHash = base58.decode($toAddress);
 	var ProgramHexString = CryptoJS.enc.Hex.parse(ab2hexstring(ProgramHash.slice(0, 21)));
 	var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
@@ -236,7 +248,7 @@ export const verifyAddress = ( $toAddress ) => {
 }
 
 // verify that public key is valid
-export const verifyPublicKeyEncoded = ( $publicKeyEncoded ) => {
+export const verifyPublicKeyEncoded = function($publicKeyEncoded : string): boolean{
 	var publicKeyArray = hexstring2ab( $publicKeyEncoded );
 	if ( publicKeyArray[0] != 0x02 && publicKeyArray[0] != 0x03 ) {
 		return false;
@@ -262,10 +274,11 @@ export const verifyPublicKeyEncoded = ( $publicKeyEncoded ) => {
 	return false;
 };
 
+
 // TODO: important, requires significant documentation
 // all of these arguments should be documented and made clear, what $coin looks like etc.
 // also, remove $ variable names, most likey
-export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amount) => {
+export const transferTransaction = function($coin, $publicKeyEncoded : string, $toAddress : string, $Amount : number): -1 | TransferTransaction {
 	var ProgramHash = base58.decode($toAddress);
 	var ProgramHexString = CryptoJS.enc.Hex.parse(ab2hexstring(ProgramHash.slice(0, 21)));
 	var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
@@ -283,7 +296,7 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 	var myProgramHash = getHash(signatureScript);
 	// INPUT CONSTRUCT
 	var inputData = getInputData($coin, $Amount);
-	if (inputData == -1) return null;
+	if (inputData === -1) return null;
 	// console.log('wallet inputData', inputData );
 
 	var inputLen = inputData.data.length;
@@ -326,7 +339,7 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 		//data.set(hexstring2ab($coin['assetid']), inputLen + 4);
 
 		// output value
-		const num1 = parseInt($Amount * 100000000);
+		const num1 = $Amount * 100000000;
 		const num1str = numStoreInMemory(num1.toString(16), 16);
 		data.set(hexstring2ab(num1str), inputLen + 36);
 
@@ -348,7 +361,7 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 		//data.set(hexstring2ab($coin['assetid']), inputLen + 4);
 
 		// output value
-		const num1 = parseInt($Amount * 100000000);
+		const num1 = $Amount * 100000000;
 		const num1str = numStoreInMemory(num1.toString(16), 16);
 		data.set(hexstring2ab(num1str), inputLen + 36);
 
@@ -363,7 +376,7 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 		//data.set(hexstring2ab($coin['assetid']), inputLen + 64);
 
 		// output value
-		const num2 = parseInt(inputAmount * 100000000 - num1);
+		const num2 = inputAmount * 100000000 - num1;
 		const num2str = numStoreInMemory(num2.toString(16), 16);
 		data.set(hexstring2ab(num2str), inputLen + 96);
 
@@ -378,7 +391,7 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 	return ab2hexstring(data);
 };
 
-export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) => {
+export const claimTransaction = function(claims, publicKeyEncoded : string, toAddress : string, amount : number): HexString {
 
 	var signatureScript = createSignatureScript(publicKeyEncoded);
 	var myProgramHash = getHash(signatureScript);
@@ -433,7 +446,7 @@ export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) =>
 	return data;
 };
 
-export const toAddress = ($ProgramHash) => {
+export const toAddress = function ($ProgramHash : ArrayLike<number>): string{
 	var data = new Uint8Array(1 + $ProgramHash.length);
 	data.set([23]);
 	data.set($ProgramHash, 1);
@@ -453,7 +466,7 @@ export const toAddress = ($ProgramHash) => {
 	return base58.encode(datas);
 };
 
-export const generateRandomArray = ($arrayLen) => {
+export const generateRandomArray = function($arrayLen : number) {
  	return secureRandom($arrayLen);
 }
 
@@ -461,7 +474,7 @@ export const generatePrivateKey = () => {
 	return secureRandom(32);
 };
 
-export const getPrivateKeyFromWIF = ($wif : string) => {
+export const getPrivateKeyFromWIF = function($wif : string): -1 | -2 | string {
 	var data = base58.decode($wif);
 
 	if (data.length != 38 || data[0] != 0x80 || data[33] != 0x01) {
@@ -502,13 +515,13 @@ export const createSignatureScript = function($publicKeyEncoded): string {
 	return "21" + $publicKeyEncoded.toString('hex') + "ac";
 };
 
-export const getHash = ($SignatureScript) => {
+export const getHash = function($SignatureScript : string): string {
 	var ProgramHexString = CryptoJS.enc.Hex.parse($SignatureScript);
 	var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
 	return CryptoJS.RIPEMD160(ProgramSha256);
 };
 
-export const signatureData = ($data, $privateKey) => {
+export const signatureData = function($data: string, $privateKey: string): string {
 	var msg = CryptoJS.enc.Hex.parse($data);
 	var msgHash = CryptoJS.SHA256(msg);
   const msgHashHex = new Buffer(msgHash.toString(), "hex")
@@ -527,10 +540,10 @@ export const signatureData = ($data, $privateKey) => {
 	return signature.signature.toString('hex');
 };
 
-export const fetchAccountsFromPublicKeyEncoded = ($publicKeyEncoded) => {
+export const fetchAccountsFromPublicKeyEncoded = function($publicKeyEncoded : string): -1 | Array<Account> {
 	if ( !verifyPublicKeyEncoded( $publicKeyEncoded ) ) {
 		// verify failed.
-		return -1
+		return -1;
 	}
 
 	var accounts = [];
@@ -560,7 +573,7 @@ export const fetchAccountsFromPublicKeyEncoded = ($publicKeyEncoded) => {
 
 // TODO: why does this wrap return info in a list? seems unnecessary
 // ditto for all the other GetAccounts methods
-export const getAccountsFromPrivateKey = ($privateKey) => {
+export const getAccountsFromPrivateKey = function($privateKey : string): -1 | Array<Account> {
 	if ($privateKey.length != 64) {
 		return -1;
 	}
@@ -595,9 +608,9 @@ export const getAccountsFromPrivateKey = ($privateKey) => {
 // lookup account data (publicKey, privateKey, address, etc. from WIF)
 // returns -1 for basic encoding errors
 // returns -2 for WIF verify fail
-export const getAccountsFromWIFKey = ($WIFKey : string) => {
+export const getAccountsFromWIFKey = function($WIFKey : string): -1 | -2 | Array<Account> {
 	var privateKey = getPrivateKeyFromWIF($WIFKey);
-	if (privateKey == -1 || privateKey == -2) {
+	if (privateKey === -1 || privateKey === -2) {
 		return privateKey;
 	}
 

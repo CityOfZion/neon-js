@@ -136,6 +136,9 @@ export const doSendAsset = function(net : string, toAddress : string, fromWif : 
       "name": assetType
     }
     const txData = transferTransaction(coinsData, fromAccount.publickeyEncoded, toAddress, amount);
+    if (txData === -1) {
+      throw "transfer data failed";
+    }
     const sign = signatureData(txData, fromAccount.privatekey);
     const txRawData = addContract(txData, sign, fromAccount.publickeyEncoded);
     return queryRPC(net, "sendrawtransaction", [txRawData], 4);

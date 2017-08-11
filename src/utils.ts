@@ -21,7 +21,7 @@ const hexstring2ab = function(str : string): Array<number> {
 	return result;
 }
 
-const ab2hexstring = function(arr : Uint8Array): string {
+const ab2hexstring = function(arr : Uint8Array | Array<number>): string {
   var result = "";
   for (var i = 0; i < arr.length; i++) {
     var str = arr[i].toString(16);
@@ -33,7 +33,7 @@ const ab2hexstring = function(arr : Uint8Array): string {
   return result;
 }
 
-const reverseArray = function(arr : Buffer): Uint8Array {
+const reverseArray = function(arr : Buffer | Array<number>): Uint8Array {
   var result = new Uint8Array(arr.length);
   for (var i = 0; i < arr.length; i++) {
     result[i] = arr[arr.length - 1 - i];
@@ -69,7 +69,7 @@ interface Transaction {
   outputs: Array<any>
 }
 
-const getTransferTxData = function(txData): Transaction {
+const getTransferTxData = function(txData : string): Transaction {
   var ba = new Buffer(txData, "hex")
   var tx = <Transaction>{};
 
