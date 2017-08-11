@@ -1,4 +1,4 @@
-import 'chai';
+import * as chai from 'chai';
 import { ab2str,
   str2ab,
   hexstring2ab,

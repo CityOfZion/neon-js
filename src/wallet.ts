@@ -1,8 +1,8 @@
 import * as ecurve from 'ecurve';
 import * as BigInteger from 'bigi';
-import { ec } from 'elliptic';
+const EC = require("elliptic").ec;
 import * as CryptoJS from 'crypto-js';
-import WIF from 'wif';
+const WIF = require('wif');
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 import { ab2str,
   str2ab,
@@ -13,10 +13,10 @@ import { ab2str,
   stringToBytes } from './utils';
 
 var base58 = require('base-x')(BASE58)
-import secureRandom from 'secure-random';
+const secureRandom = require('secure-random');
 import * as buffer from 'buffer';
 
-type TransferTransaction = HexString;
+type TransferTransaction = string;
 interface InputData {
 	amount : number,
 	data : Uint8Array
@@ -49,7 +49,7 @@ export const getTxHash = function($data : string): string {
 };
 
 // TODO: this needs a lot of documentation, also better name!
-export const getInputData = function($coin, amount : number): -1 | InputData {
+export const getInputData = function($coin: any, amount : number): -1 | InputData {
 	// sort
 	var coin_ordered = $coin['list'];
 	for (let i = 0; i < coin_ordered.length - 1; i++) {
@@ -277,7 +277,7 @@ export const verifyPublicKeyEncoded = function($publicKeyEncoded : string): bool
 // TODO: important, requires significant documentation
 // all of these arguments should be documented and made clear, what $coin looks like etc.
 // also, remove $ variable names, most likey
-export const transferTransaction = function($coin, $publicKeyEncoded : string, $toAddress : string, $Amount : number): -1 | TransferTransaction {
+export const transferTransaction = function($coin: any, $publicKeyEncoded : string, $toAddress : string, $Amount : number): -1 | TransferTransaction {
 	var ProgramHash = base58.decode($toAddress);
 	var ProgramHexString = CryptoJS.enc.Hex.parse(ab2hexstring(ProgramHash.slice(0, 21)));
 	var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
@@ -390,7 +390,7 @@ export const transferTransaction = function($coin, $publicKeyEncoded : string, $
 	return ab2hexstring(data);
 };
 
-export const claimTransaction = function(claims, publicKeyEncoded : string, toAddress : string, amount : number): string {
+export const claimTransaction = function(claims: any, publicKeyEncoded : string, toAddress : string, amount : number): string {
 
 	var signatureScript = createSignatureScript(publicKeyEncoded);
 	var myProgramHash = getHash(signatureScript);
@@ -510,32 +510,30 @@ export const getPublicKeyEncoded = function($publicKey : string): string {
 	}
 };
 
-export const createSignatureScript = function($publicKeyEncoded): string {
+export const createSignatureScript = function($publicKeyEncoded : any /* BUG */): string {
 	return "21" + $publicKeyEncoded.toString('hex') + "ac";
 };
 
 export const getHash = function($SignatureScript : string): string {
-	var ProgramHexString = CryptoJS.enc.Hex.parse($SignatureScript);
-	var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
+	let ProgramHexString : string = CryptoJS.enc.Hex.parse($SignatureScript);
+	let ProgramSha256 : string = CryptoJS.SHA256(ProgramHexString);
 	return CryptoJS.RIPEMD160(ProgramSha256);
 };
 
 export const signatureData = function($data: string, $privateKey: string): string {
 	var msg = CryptoJS.enc.Hex.parse($data);
 	var msgHash = CryptoJS.SHA256(msg);
-  const msgHashHex = new Buffer(msgHash.toString(), "hex")
-  const privateKeyHex = new Buffer($privateKey, "hex");
-	// console.log( "msgHash:", msgHashHex.toString('hex'));
-  // console.log('buffer', privateKeyHex.toString('hex'));
+    const msgHashHex = new Buffer(msgHash.toString(), "hex")
+    const privateKeyHex = new Buffer($privateKey, "hex");
 
-  var elliptic = new ec('p256');
-  const sig = elliptic.sign(msgHashHex, $privateKey, null);
-  const signature = {
-    signature: Buffer.concat([
-      sig.r.toArrayLike(Buffer, 'be', 32),
-      sig.s.toArrayLike(Buffer, 'be', 32)
-    ])
-  }
+    var elliptic = new EC('p256');
+    const sig = elliptic.sign(msgHashHex, $privateKey, null);
+    const signature = {
+      signature: Buffer.concat([
+        sig.r.toArrayLike(Buffer, 'be', 32),
+        sig.s.toArrayLike(Buffer, 'be', 32)
+      ])
+    }
 	return signature.signature.toString('hex');
 };
 

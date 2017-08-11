@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransaction } from './wallet';
 
-export * from './wallet.js';
+export * from './wallet';
 
 // hard-code asset ids for NEO and GAS
 export const neoId = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
@@ -49,7 +49,11 @@ export const getClaimAmounts = (net : String, address : String) => {
 // do a claim transaction on all available (spent) gas
 export const doClaimAllGas = function(net : string, fromWif : string): Promise<any> {
   const apiEndpoint = getAPIEndpoint(net);
-  const account = getAccountsFromWIFKey(fromWif)[0];
+  const accounts = getAccountsFromWIFKey(fromWif);
+  if (accounts === -1 || accounts === -2) {
+    throw "Account Error";
+  }
+  const account = accounts[0];
   // TODO: when fully working replace this with mainnet/testnet switch
   return axios.get(apiEndpoint + "/v1/address/claims/" + account.address).then((response) => {
     const claims = response.data["claims"];
@@ -127,7 +131,11 @@ export const doSendAsset = function(net : string, toAddress : string, fromWif : 
   } else {
     assetId = gasId;
   }
-  const fromAccount = getAccountsFromWIFKey(fromWif)[0];
+  const accounts = getAccountsFromWIFKey(fromWif);
+  if (accounts === -1 || accounts === -2) {
+    throw "Account Error";
+  }
+  const fromAccount = accounts[0];
   return getBalance(net, fromAccount.address).then((balance : Balance) => {
     const coinsData = {
       "assetid": assetId,

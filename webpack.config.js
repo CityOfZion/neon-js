@@ -1,11 +1,14 @@
 
 
 module.exports = {
-  entry: './src/api.ts',
+  entry: {
+	  api: './src/api.ts',
+	  tests: './tests/index.ts',
+  },
   target: 'node',
   output: {
       path: __dirname,
-      filename: './lib/index.js',
+      filename: './lib/[name].js',
       libraryTarget: 'umd'
   },
   resolve: {
