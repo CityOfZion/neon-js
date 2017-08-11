@@ -1,7 +1,11 @@
 {
   "devDependencies": {
+    "@types/bigi": "^1.4.0",
     "@types/chai": "^4.0.2",
+    "@types/crypto-js": "^3.1.33",
+    "@types/ecurve": "^1.0.0",
     "@types/mocha": "^2.2.41",
+    "@types/node": "^8.0.20",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
