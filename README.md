@@ -1,10 +1,12 @@
-# Neon JavaScript SDK
+# Neon TypeScript SDK
 
-This the Neon Wallet's JS SDK for the NEO blockchain platform. It is currently in use by [Neon](https://github.com/CityOfZion/neon-wallet/).
+[![Build Status](https://travis-ci.org/CityOfZion/neon-ts.svg?branch=master)](https://travis-ci.org/CityOfZion/neon-ts)
 
-Special thanks to [neowallet.js](https://github.com/neochainio/neowallet/blob/master/js/wallet.js) for providing many of the underlying cryptography and network methods!
+This the Neon Wallet's TS SDK for the NEO blockchain platform.
 
-## Quick Start
+Ported from neon-js.
+
+## Quickstart
 
 Take a look at the tests to find examples for all API functions.
 
@@ -45,15 +47,11 @@ api.sendAssetTransaction(api.TESTNET, testKeys.a.address, testKeys.b.wif, "AntSh
 
 ### To run tests
 ```
-npm run test
+webpack
+mocha lib
 ```
 
 ### To build to /dist:
 ```
-npm run build
-```
-
-### To import
-```
-npm install --save git+https://github.com/CityOfZion/neon-js.git
+webpack
 ```
