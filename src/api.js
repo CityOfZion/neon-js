@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransaction } from './wallet';
 
+let currencyFormatter = require('currency-formatter');
+
+
 export * from './wallet.js';
 
 // hard-code asset ids for NEO and GAS
@@ -93,24 +96,36 @@ export const getMarketPriceUSD = (amount) => {
  * Fetches the latest price of NEO for a given currency
  *
  * @param amount - The amount of NEO
+ * @param asset - Either NEO or GAS
  * @param currencyCode - A valid currency code (e.g. USD, EUR)
  * @returns {number} the price for the specified currency code
  */
-export const getMarketPrice = (amount, currencyCode) => {
-  return axios.default.get(`https://api.coinmarketcap.com/v1/ticker/NEO/?convert=${currencyCode}`).then(function (response) {
-    var fieldName = 'price_' + currencyCode.toLowerCase();
+export const getMarketPrice = (amount, currencyCode, asset) => {
+  return axios.get(`https://api.coinmarketcap.com/v1/ticker/${asset}/?convert=${currencyCode}`).then(function (response) {
+    let fieldName = 'price_' + currencyCode.toLowerCase();
 
     if (response.data[0].hasOwnProperty(fieldName)) {
-      var lastPrice = Number(response.data[0][fieldName]);
-      return (lastPrice * amount);
+      let lastPrice = Number(response.data[0][fieldName]);
+
+      return currencyFormatter.format(lastPrice * amount, {code : currencyCode});
     }
 
     throw new Error(`There is no field ${fieldName} in response json from coinmarketcap.`);
-
-  }).catch( () => {
+  }).catch(() => {
     throw new Error(`CurrencyCode ${currencyCode} is not supported by coinmarketcap api.`);
   })
 };
+
+export const getMarketPrices = (amounts, currencyCode) => {
+    return axios.all([getMarketPrice(amounts.neo, currencyCode, 'neo'), getMarketPrice(amounts.gas, currencyCode, 'gas')])
+            .then(axios.spread((neo_price, gas_price) => {
+              return {
+                    Neo: neo_price,
+                    Gas: gas_price
+              };
+            }))
+};
+
 
 // get transaction history for an account
 export const getTransactionHistory = (net, address) => {
