@@ -31,7 +31,7 @@ describe('Wallet', function() {
     }
   };
 
-  const testNet = api.getAPIEndpoint('TestNet');
+  const testNet = new api.NeonAPI("TestNet");
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
   // it('should claim ANC', (done) =>{
@@ -89,7 +89,7 @@ describe('Wallet', function() {
   });
 
   it('should get balance from address', (done) => {
-    api.getBalance(api.getAPIEndpoint('testnet'), testKeys.a.address).then((response) =>{
+    testNet.getBalance(testKeys.a.address).then((response) =>{
       response.Neo.should.be.a('number');
       response.Gas.should.be.a('number');
       done();
@@ -97,7 +97,7 @@ describe('Wallet', function() {
   });
 
   it('should get unspent transactions', (done) => {
-    api.getBalance(api.getAPIEndpoint('testnet'), testKeys.a.address).then((response) => {
+    testNet.getBalance(testKeys.a.address).then((response) => {
       response.unspent.Neo.should.be.an('array');
       response.unspent.Gas.should.be.an('array');
       done();

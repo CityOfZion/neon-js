@@ -15,22 +15,7 @@ import { ab2str,
 var base58 = require('base-x')(BASE58)
 const secureRandom = require('secure-random');
 import * as buffer from 'buffer';
-
-type BasicEncodingError = -1;
-type WIFVerifyFailError = -2;
-type Errors = BasicEncodingError | WIFVerifyFailError;
-type TransferTransaction = string;
-interface InputData {
-	amount : number,
-	data : Uint8Array
-};
-interface Account {
-    privatekey: string,
-    publickeyEncoded: string,
-    publickeyHash: string,
-    programHash: string,
-    address: string
-};
+import * as t from "./types";
 
 // All of this stuff was wrapped in a class before, but really unnecessary as none of these were stateful
 // This flat structure should be more interpretable, and we can export them all as a module instead
@@ -52,7 +37,7 @@ export const getTxHash = function($data : string): string {
 };
 
 // TODO: this needs a lot of documentation, also better name!
-export const getInputData = function($coin: any, amount : number): -1 | InputData {
+export const getInputData = function($coin: any, amount : number): -1 | t.InputData {
 	// sort
 	var coin_ordered = $coin['list'];
 	for (let i = 0; i < coin_ordered.length - 1; i++) {
@@ -280,7 +265,7 @@ export const verifyPublicKeyEncoded = function($publicKeyEncoded : string): bool
 // TODO: important, requires significant documentation
 // all of these arguments should be documented and made clear, what $coin looks like etc.
 // also, remove $ variable names, most likey
-export const transferTransaction = function($coin: any, $publicKeyEncoded : string, $toAddress : string, $Amount : number): -1 | TransferTransaction {
+export const transferTransaction = function($coin: t.Asset, $publicKeyEncoded : string, $toAddress : string, $Amount : number): -1 | string {
 	var ProgramHash = base58.decode($toAddress);
 	var ProgramHexString = CryptoJS.enc.Hex.parse(ab2hexstring(ProgramHash.slice(0, 21)));
 	var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
@@ -546,13 +531,13 @@ export const signatureData = function($data: string, $privateKey: string): strin
 	return signature.signature.toString('hex');
 };
 
-export const fetchAccountsFromPublicKeyEncoded = function($publicKeyEncoded : string): BasicEncodingError | Array<Account> {
+export const fetchAccountsFromPublicKeyEncoded = function($publicKeyEncoded : string): t.BasicEncodingError | Array<t.Account> {
 	if ( !verifyPublicKeyEncoded( $publicKeyEncoded ) ) {
 		// verify failed.
 		return -1;
 	}
 
-	var accounts = [];
+	var accounts = <Array<t.Account>>[];
 
 	var publicKeyHash = getHash($publicKeyEncoded);
 	//console.log( publicKeyHash );
@@ -566,7 +551,7 @@ export const fetchAccountsFromPublicKeyEncoded = function($publicKeyEncoded : st
 	var address = toAddress(hexstring2ab(programHash.toString()));
 	//console.log( address );
 
-	accounts[0] = <Account>{
+	accounts[0] = <t.Account>{
 		privatekey: '',
 		publickeyEncoded: $publicKeyEncoded,
 		publickeyHash: publicKeyHash.toString(),
@@ -579,12 +564,12 @@ export const fetchAccountsFromPublicKeyEncoded = function($publicKeyEncoded : st
 
 // TODO: why does this wrap return info in a list? seems unnecessary
 // ditto for all the other GetAccounts methods
-export const getAccountsFromPrivateKey = function($privateKey : string): BasicEncodingError | Array<Account> {
+export const getAccountsFromPrivateKey = function($privateKey : string): t.BasicEncodingError | Array<t.Account> {
 	if ($privateKey.length != 64) {
 		return -1;
 	}
 
-	var accounts = [];
+	var accounts = <Array<t.Account>>[];
 	var publicKeyEncoded = getPublicKey($privateKey, true);
 	//console.log( publicKeyEncoded );
 
@@ -600,7 +585,7 @@ export const getAccountsFromPrivateKey = function($privateKey : string): BasicEn
 	var address = toAddress(hexstring2ab(programHash.toString()));
 	//console.log( address );
 
-	accounts[0] = <Account>{
+	accounts[0] = <t.Account>{
 		privatekey: $privateKey,
 		publickeyEncoded: publicKeyEncoded.toString('hex'),
 		publickeyHash: publicKeyHash.toString(),
@@ -614,7 +599,7 @@ export const getAccountsFromPrivateKey = function($privateKey : string): BasicEn
 // lookup account data (publicKey, privateKey, address, etc. from WIF)
 // returns -1 for basic encoding errors
 // returns -2 for WIF verify fail
-export const getAccountsFromWIFKey = function($WIFKey : string): Errors | Array<Account> {
+export const getAccountsFromWIFKey = function($WIFKey : string): t.Errors | Array<t.Account> {
 	var privateKey = getPrivateKeyFromWIF($WIFKey);
 	if (privateKey === -1 || privateKey === -2) {
 		return privateKey;

@@ -24,23 +24,25 @@ const testKeys = {
   }
 }
 
+const testNet = new api.NeonAPI("TestNet");
+
 // Get balance of account "a" on TestNet using Neon Wallet API
-api.getBalance(api.TESTNET, testKeys.a.address).then((balance) => {
+testNet.getBalance(testKeys.a.address).then((balance) => {
   console.log(balance);
 });
 
 // Get balance of account "a" on MainNet using Neon Wallet API
-api.getBalance(api.MAINNET, testKeys.a.address).then((balance) => {
+testNet.getBalance(testKeys.a.address).then((balance) => {
   console.log(balance);
 });
 
 // Claim all available GAS for account "a" on TestNet
-api.claimAllGAS(api.TESTNET, testKeys.a.wif).then((response) => {
+testNet.claimAllGAS(testKeys.a.wif).then((response) => {
   console.log(response);
 });
 
 // Send 1 ANS to "a" from "b" on TestNet
-api.sendAssetTransaction(api.TESTNET, testKeys.a.address, testKeys.b.wif, "AntShares", 1).then((response) => {
+testNet.sendAssetTransaction(testKeys.a.address, testKeys.b.wif, "AntShares", 1).then((response) => {
   console.log("Transaction complete!");
 });
 ```
