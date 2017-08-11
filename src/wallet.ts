@@ -19,14 +19,14 @@ import * as buffer from 'buffer';
 type TransferTransaction = HexString;
 interface InputData {
 	amount : number,
-	data : any
+	data : Uint8Array
 };
 interface Account {
     privatekey: string,
     publickeyEncoded: string,
     publickeyHash: string,
     programHash: string,
-    address: any
+    address: string
 };
 
 // All of this stuff was wrapped in a class before, but really unnecessary as none of these were stateful
@@ -49,7 +49,7 @@ export const getTxHash = function($data : string): string {
 };
 
 // TODO: this needs a lot of documentation, also better name!
-export const getInputData = function($coin, $amount : number): -1 | InputData {
+export const getInputData = function($coin, amount : number): -1 | InputData {
 	// sort
 	var coin_ordered = $coin['list'];
 	for (let i = 0; i < coin_ordered.length - 1; i++) {
@@ -69,7 +69,6 @@ export const getInputData = function($coin, $amount : number): -1 | InputData {
 	}
 
 	// if sum < amount then exit;
-	var amount = parseFloat($amount);
 	if (sum < amount) return -1;
 
 	// find input coins
@@ -167,7 +166,7 @@ export const registerTransaction = function($assetName : string, $assetAmount : 
 	var curvePt = ecurve.Point.decodeFrom(ecparams,new Buffer($publicKeyEncoded,"hex"));
 	var curvePtX = curvePt.affineX.toBuffer(32);
 	var curvePtY = curvePt.affineY.toBuffer(32);
-	var publicKey = buffer.concat([new Buffer([0x04]), curvePtX, curvePtY]);
+	var publicKey = buffer.Buffer.concat([new Buffer([0x04]), curvePtX, curvePtY]);
 
 	var signatureScript = createSignatureScript($publicKeyEncoded);
 
@@ -391,7 +390,7 @@ export const transferTransaction = function($coin, $publicKeyEncoded : string, $
 	return ab2hexstring(data);
 };
 
-export const claimTransaction = function(claims, publicKeyEncoded : string, toAddress : string, amount : number): HexString {
+export const claimTransaction = function(claims, publicKeyEncoded : string, toAddress : string, amount : number): string {
 
 	var signatureScript = createSignatureScript(publicKeyEncoded);
 	var myProgramHash = getHash(signatureScript);
@@ -496,7 +495,7 @@ export const getPrivateKeyFromWIF = function($wif : string): -1 | -2 | string {
 };
 
 
-export const getPublicKey = ($privateKey : string, $encode) => {
+export const getPublicKey = function($privateKey : string, $encode: boolean): Buffer {
 	var ecparams = ecurve.getCurveByName('secp256r1');
 	var curvePt = ecparams.G.multiply(BigInteger.fromBuffer(hexstring2ab($privateKey)));
 	return curvePt.getEncoded($encode);
