@@ -1,5 +1,5 @@
 import * as ecurve from 'ecurve';
-import BigInteger from 'bigi';
+import * as BigInteger from 'bigi';
 import { ec } from 'elliptic';
 import CryptoJS from 'crypto-js';
 import WIF from 'wif';
@@ -14,7 +14,7 @@ import { ab2str,
 
 var base58 = require('base-x')(BASE58)
 import secureRandom from 'secure-random';
-import buffer from 'buffer';
+import * as buffer from 'buffer';
 
 
 // All of this stuff was wrapped in a class before, but really unnecessary as none of these were stateful
@@ -107,9 +107,9 @@ export const getInputData = ($coin, $amount) => {
 	}
 };
 
-// TODO: We many not need to keep this function in the API
+// TODO: We may not need to keep this function in the API
 // for now, leaving as reference
-export const issueTransaction = ($issueAssetID, $issueAmount, $publicKeyEncoded) => {
+export const issueTransaction = ($issueAssetID : string, $issueAmount : number, $publicKeyEncoded) => {
 	var signatureScript = createSignatureScript($publicKeyEncoded);
 	//console.log( signatureScript.toString('hex') );
 
@@ -483,13 +483,13 @@ export const getPrivateKeyFromWIF = ($wif : string) => {
 };
 
 
-export const getPublicKey = ($privateKey, $encode) => {
+export const getPublicKey = ($privateKey : string, $encode) => {
 	var ecparams = ecurve.getCurveByName('secp256r1');
 	var curvePt = ecparams.G.multiply(BigInteger.fromBuffer(hexstring2ab($privateKey)));
 	return curvePt.getEncoded($encode);
 };
 
-export const getPublicKeyEncoded = ($publicKey) => {
+export const getPublicKeyEncoded = function($publicKey : string): string {
 	var publicKeyArray = hexstring2ab($publicKey);
 	if ( publicKeyArray[64] % 2 == 1 ) {
 		return "03" + ab2hexstring(publicKeyArray.slice(1, 33));
@@ -498,7 +498,7 @@ export const getPublicKeyEncoded = ($publicKey) => {
 	}
 };
 
-export const createSignatureScript = ($publicKeyEncoded) => {
+export const createSignatureScript = function($publicKeyEncoded): string {
 	return "21" + $publicKeyEncoded.toString('hex') + "ac";
 };
 

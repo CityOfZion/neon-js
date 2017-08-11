@@ -1,6 +1,8 @@
-const ab2str = buf => { return String.fromCharCode.apply(null, new Uint8Array(buf)); }
+const ab2str = function(buf : Array<number>): string {
+  return String.fromCharCode.apply(null, new Uint8Array(buf));
+}
 
-const str2ab = str => {
+const str2ab = function(str : string): Uint8Array {
   var bufView = new Uint8Array(str.length);
 	for (var i = 0, strLen = str.length; i < strLen; i++) {
 		bufView[i] = str.charCodeAt(i);
@@ -8,17 +10,16 @@ const str2ab = str => {
 	return bufView;
 }
 
-const hexstring2ab = str => {
+const hexstring2ab = function(str : string): Array<number> {
   var result = [];
 	while (str.length >= 2) {
 		result.push(parseInt(str.substring(0, 2), 16));
 		str = str.substring(2, str.length);
-	}
-
+	};
 	return result;
 }
 
-const ab2hexstring = arr => {
+const ab2hexstring = function(arr : Array<number>): string {
   var result = "";
   for (var i = 0; i < arr.length; i++) {
     var str = arr[i].toString(16);
@@ -30,12 +31,11 @@ const ab2hexstring = arr => {
   return result;
 }
 
-const reverseArray = arr => {
+const reverseArray = function(arr : Array<number>): Uint8Array {
   var result = new Uint8Array(arr.length);
   for (var i = 0; i < arr.length; i++) {
     result[i] = arr[arr.length - 1 - i];
-  }
-
+  };
   return result;
 }
 

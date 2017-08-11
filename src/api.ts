@@ -9,7 +9,7 @@ export const gasId = "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969
 export const allAssetIds = [neoId, gasId];
 
 // switch between APIs for MainNet and TestNet
-export const getAPIEndpoint = (net : String) => {
+export const getAPIEndpoint = function(net : String) : string {
   if (net === "MainNet"){
     return "http://api.wallet.cityofzion.io";
   } else {
@@ -18,7 +18,7 @@ export const getAPIEndpoint = (net : String) => {
 };
 
 // return the best performing (highest block + fastest) node RPC
-export const getRPCEndpoint = (net : string) => {
+export const getRPCEndpoint = function(net : string): Promise<any> {
   const apiEndpoint = getAPIEndpoint(net);
   return axios.get(apiEndpoint + '/v1/network/best_node').then((response) => {
       return response.data.node;
@@ -26,7 +26,7 @@ export const getRPCEndpoint = (net : string) => {
 };
 
 // wrapper for querying node RPC
-const queryRPC = (net : string, method : string, params : object, id : number = 1) => {
+const queryRPC = function(net : string, method : string, params : object, id : number = 1): Promise<any> {
   let jsonRequest = axios.create({
     headers: {"Content-Type": "application/json"}
   });
@@ -47,7 +47,7 @@ export const getClaimAmounts = (net : String, address : String) => {
 }
 
 // do a claim transaction on all available (spent) gas
-export const doClaimAllGas = (net : String, fromWif : String) => {
+export const doClaimAllGas = function(net : string, fromWif : string): Promise<any> {
   const apiEndpoint = getAPIEndpoint(net);
   const account = getAccountsFromWIFKey(fromWif)[0];
   // TODO: when fully working replace this with mainnet/testnet switch
@@ -61,16 +61,25 @@ export const doClaimAllGas = (net : String, fromWif : String) => {
   });
 }
 
+interface Balance {
+  [key : string]: number | object,
+  Neo : number,
+  Gas : number,
+  unspent: {
+    [key : string] : number,
+    Neo : number,
+    Gas : number,
+  }
+}
+
 // get Neo and Gas balance for an account
-export const getBalance = (net : String, address : String) => {
+export const getBalance = function(net : String, address : String): Promise<Balance> {
     const apiEndpoint = getAPIEndpoint(net);
     return axios.get(apiEndpoint + '/v1/address/balance/' + address)
       .then((res) => {
-          const neo = res.data.NEO.balance;
-          const gas = res.data.GAS.balance;
-          return {
-            Neo: neo,
-            Gas: gas,
+          return <Balance>{
+            Neo: res.data.NEO.balance,
+            Gas: res.data.GAS.balance,
             unspent: {
               Neo: res.data.NEO.unspent,
               Gas: res.data.GAS.unspent
@@ -87,15 +96,15 @@ export const getBalance = (net : String, address : String) => {
  * @param {number} amount - The current NEO amount in wallet
  * @return {string} - The converted NEO to USD fiat amount
  */
-export const getMarketPriceUSD = (amount : number) => {
+export const getMarketPriceUSD = function(amount : number): Promise<string> {
   return axios.get('https://api.coinmarketcap.com/v1/ticker/NEO/?convert=USD').then((response) => {
       let lastUSDNEO = Number(response.data[0].price_usd);
-      return ('$' + (lastUSDNEO * amount).toFixed(2).toString());
+      return `$${(lastUSDNEO * amount).toFixed(2).toString()}`;
   });
 };
 
 // get transaction history for an account
-export const getTransactionHistory = (net : string, address : string) => {
+export const getTransactionHistory = function(net : string, address : string): Promise<any> {
   const apiEndpoint = getAPIEndpoint(net);
   return axios.get(apiEndpoint + '/v1/address/history/' + address).then((response) => {
     return response.data.history;
@@ -103,7 +112,7 @@ export const getTransactionHistory = (net : string, address : string) => {
 };
 
 // get the current height of the light wallet DB
-export const getWalletDBHeight = (net) => {
+export const getWalletDBHeight = function(net : string): Promise<number> {
   const apiEndpoint = getAPIEndpoint(net);
   return axios.get(apiEndpoint + '/v1/block/height').then((response) => {
     return parseInt(response.data.block_height);
@@ -111,7 +120,7 @@ export const getWalletDBHeight = (net) => {
 }
 
 // send an asset to an address
-export const doSendAsset = (net : string, toAddress : string, fromWif : string, assetType : string, amount : number) => {
+export const doSendAsset = function(net : string, toAddress : string, fromWif : string, assetType : string, amount : number): Promise<any> {
   let assetId : string, assetName : string, assetSymbol : string;
   if (assetType === "Neo"){
     assetId = neoId;
@@ -119,11 +128,11 @@ export const doSendAsset = (net : string, toAddress : string, fromWif : string, 
     assetId = gasId;
   }
   const fromAccount = getAccountsFromWIFKey(fromWif)[0];
-  return getBalance(net, fromAccount.address).then((response) => {
+  return getBalance(net, fromAccount.address).then((balance : Balance) => {
     const coinsData = {
       "assetid": assetId,
-      "list": response.unspent[assetType],
-      "balance": response[assetType],
+      "list": balance.unspent[assetType],
+      "balance": balance[assetType],
       "name": assetType
     }
     const txData = transferTransaction(coinsData, fromAccount.publickeyEncoded, toAddress, amount);
