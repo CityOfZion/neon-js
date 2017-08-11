@@ -97,32 +97,40 @@ describe('Wallet', function() {
   });
 
   it('should get unspent transactions', (done) => {
-    testNet.getBalance(testKeys.a.address).then((response) => {
+    testNet.getBalance(testKeys.a.address)
+    .then((response) => {
       response.unspent.Neo.should.be.an('array');
       response.unspent.Gas.should.be.an('array');
       done();
     })
   });
 
-  // it('should send NEO', (done) => {
-  //   api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, "Neo", 1).then((response) => {
-  //     response.result.should.equal(true);
-  //     // send back so we can re-run
-  //     api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, "Neo", 1).then((response) => {
-  //       response.result.should.equal(true);
-  //       done();
-  //     });
-  //   })
-  // });
+  it('should send NEO', (done) => {
+    testNet.doSendAsset(testKeys.b.address, testKeys.a.wif, "Neo", 1)
+    .then((response) => {
+      console.log(response);
+      response.result.should.equal(true);
+      // send back so we can re-run
+      testNet.doSendAsset( testKeys.a.address, testKeys.b.wif, "Neo", 1)
+      .then((response) => {
+        response.result.should.equal(true);
+        done();
+      })
+    })
+    .catch((err) => done(err));
+  });
 
   // it('should send GAS', (done) => {
-  //   api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, "Gas", 1).then((response) => {
+  //   testNet.doSendAsset(testKeys.b.address, testKeys.a.wif, "Gas", 1)
+  //   .then((response) => {
   //     response.result.should.equal(true);
   //     // send back so we can re-run
-  //     api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, "Gas", 1).then((response) => {
+  //     testNet.doSendAsset(testKeys.a.address, testKeys.b.wif, "Gas", 1)
+  //     .then((response) => {
   //       response.result.should.equal(true);
   //       done();
-  //     });
+  //     })
   //   })
+  //   .catch((err) => done(err));
   // });
 });

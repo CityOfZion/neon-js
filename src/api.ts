@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransaction } from './wallet';
-import * as t from "./types";
+import * as t from "./typings";
 
 export * from './wallet';
 
@@ -72,7 +72,7 @@ export class NeonAPI {
   public getBalance(address : String): Promise<t.Balance> {
     return axios.get(this.apiEndpoint + '/v1/address/balance/' + address)
       .then((res) => {
-          let bal : t.Balance = <t.Balance>{
+          return <t.Balance>{
             Neo: <t.AssetTransaction[]>res.data.NEO.balance,
             Gas: <t.AssetTransaction[]>res.data.GAS.balance,
             unspent: {
@@ -80,8 +80,7 @@ export class NeonAPI {
               Gas: <t.AssetTransaction[]>res.data.GAS.unspent
             }
           };
-          console.log(bal.unspent.Neo);
-          return bal;
+
       })
   };
 

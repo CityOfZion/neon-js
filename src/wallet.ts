@@ -15,7 +15,7 @@ import { ab2str,
 var base58 = require('base-x')(BASE58)
 const secureRandom = require('secure-random');
 import * as buffer from 'buffer';
-import * as t from "./types";
+import * as t from "./typings";
 
 // All of this stuff was wrapped in a class before, but really unnecessary as none of these were stateful
 // This flat structure should be more interpretable, and we can export them all as a module instead
@@ -558,8 +558,6 @@ export const fetchAccountsFromPublicKeyEncoded = function(publicKeyEncoded : str
 	return accounts;
 };
 
-// TODO: why does this wrap return info in a list? seems unnecessary
-// ditto for all the other GetAccounts methods
 export const getAccountsFromPrivateKey = function(privateKey : string): t.BasicEncodingError | Array<t.Account> {
 	if (privateKey.length != 64) {
 		return -1;
@@ -592,7 +590,6 @@ export const getAccountsFromPrivateKey = function(privateKey : string): t.BasicE
 	return accounts;
 };
 
-// 
 /**
  * @function getAccountsFromWIFKey
  * @return -1 for basic encoding errors, -2 for WIF verify fail, or accounts
