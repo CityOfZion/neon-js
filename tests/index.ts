@@ -104,25 +104,25 @@ describe('Wallet', function() {
     })
   });
 
-  it('should send NEO', (done) => {
-    api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, "Neo", 1).then((response) => {
-      response.result.should.equal(true);
-      // send back so we can re-run
-      api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, "Neo", 1).then((response) => {
-        response.result.should.equal(true);
-        done();
-      });
-    })
-  });
+  // it('should send NEO', (done) => {
+  //   api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, "Neo", 1).then((response) => {
+  //     response.result.should.equal(true);
+  //     // send back so we can re-run
+  //     api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, "Neo", 1).then((response) => {
+  //       response.result.should.equal(true);
+  //       done();
+  //     });
+  //   })
+  // });
 
-  it('should send GAS', (done) => {
-    api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, "Gas", 1).then((response) => {
-      response.result.should.equal(true);
-      // send back so we can re-run
-      api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, "Gas", 1).then((response) => {
-        response.result.should.equal(true);
-        done();
-      });
-    })
-  });
+  // it('should send GAS', (done) => {
+  //   api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, "Gas", 1).then((response) => {
+  //     response.result.should.equal(true);
+  //     // send back so we can re-run
+  //     api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, "Gas", 1).then((response) => {
+  //       response.result.should.equal(true);
+  //       done();
+  //     });
+  //   })
+  // });
 });
