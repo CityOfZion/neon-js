@@ -51,8 +51,11 @@ export class NeonAPI {
 
   public doClaimAllGas(fromWif : string): Promise<any> {
     const accounts = getAccountsFromWIFKey(fromWif);
-    if (accounts === -1 || accounts === -2) {
-      throw "Account Error";
+    if (accounts === -1) {
+      throw "BasicEncodingError: getAccountsFromWIFKey";
+    }
+    else if(accounts === -2) {
+      throw "WIFError: getAccountsFromWIFKey";
     }
     const account = accounts[0];
     // TODO: when fully working replace this with mainnet/testnet switch
@@ -115,9 +118,9 @@ export class NeonAPI {
 
     const accounts = getAccountsFromWIFKey(fromWif);
     if (accounts === -1) {
-      throw "Decode Error";
+      throw "BasicDecodingError: getAccountsFromWIFKey";
     } else if (accounts === -2) {
-      throw "WIF Error";
+      throw "WIFError: getAccountsFromWIFKey";
     }
 
     const fromAccount = accounts[0];
@@ -130,7 +133,7 @@ export class NeonAPI {
       }
       const txData = transferTransaction(coinsData, fromAccount.publickeyEncoded, toAddress, amount);
       if (txData === -1) {
-        throw "transfer data failed";
+        throw "BasicEncodingError: TransferTransaction";
       }
       const sign = signatureData(txData, fromAccount.privatekey);
       const txRawData = addContract(txData, sign, fromAccount.publickeyEncoded);

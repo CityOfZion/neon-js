@@ -592,9 +592,12 @@ export const getAccountsFromPrivateKey = function(privateKey : string): t.BasicE
 	return accounts;
 };
 
-// lookup account data (publicKey, privateKey, address, etc. from WIF)
-// returns -1 for basic encoding errors
-// returns -2 for WIF verify fail
+// 
+/**
+ * @function getAccountsFromWIFKey
+ * @return -1 for basic encoding errors, -2 for WIF verify fail, or accounts
+ * lookup account data (publicKey, privateKey, address, etc. from WIF)
+ */
 export const getAccountsFromWIFKey = function(WIFKey : string): t.Errors | Array<t.Account> {
 	var privateKey = getPrivateKeyFromWIF(WIFKey);
 	if (privateKey === -1 || privateKey === -2) {
