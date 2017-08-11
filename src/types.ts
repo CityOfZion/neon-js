@@ -23,19 +23,23 @@ export interface Account {
 };
 
 export interface Balance {
-  [key : string]: number | object,
-  Neo : number,
-  Gas : number,
+  Neo : AssetTransaction[],
+  Gas : AssetTransaction[],
   unspent: {
-    [key : string] : number,
-    Neo : number,
-    Gas : number,
+    Neo : AssetTransaction[],
+    Gas : AssetTransaction[],
   }
 }
 
-export interface Asset {
+export interface CoinData {
   assetid: AssetID,
-  list: number,
-  balance: number,
+  list: AssetTransaction[],
+  balance: AssetTransaction[],
   name: AssetName
+}
+
+export interface AssetTransaction {
+  index: number,
+  txid: string,
+  value: string
 }

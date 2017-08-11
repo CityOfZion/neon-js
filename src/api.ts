@@ -69,14 +69,16 @@ export class NeonAPI {
   public getBalance(address : String): Promise<t.Balance> {
     return axios.get(this.apiEndpoint + '/v1/address/balance/' + address)
       .then((res) => {
-          return <t.Balance>{
-            Neo: res.data.NEO.balance,
-            Gas: res.data.GAS.balance,
+          let bal : t.Balance = <t.Balance>{
+            Neo: <t.AssetTransaction[]>res.data.NEO.balance,
+            Gas: <t.AssetTransaction[]>res.data.GAS.balance,
             unspent: {
-              Neo: res.data.NEO.unspent,
-              Gas: res.data.GAS.unspent
+              Neo: <t.AssetTransaction[]>res.data.NEO.unspent,
+              Gas: <t.AssetTransaction[]>res.data.GAS.unspent
             }
           };
+          console.log(bal.unspent.Neo);
+          return bal;
       })
   };
 
@@ -120,7 +122,7 @@ export class NeonAPI {
 
     const fromAccount = accounts[0];
     return this.getBalance(fromAccount.address).then((balance : t.Balance) => {
-      const coinsData = <t.Asset>{
+      const coinsData = <t.CoinData>{
         assetid: assetId,
         list: balance.unspent[assetType],
         balance: balance[assetType],
