@@ -3,6 +3,6 @@ node_js:
 - '8'
 before_install:
 - npm install -g typescript webpack
-- webpack
 script:
+- webpack
 - mocha lib
