@@ -1,4 +1,4 @@
-import ecurve from 'ecurve';
+import * as ecurve from 'ecurve';
 import BigInteger from 'bigi';
 import { ec } from 'elliptic';
 import CryptoJS from 'crypto-js';
@@ -461,7 +461,7 @@ export const generatePrivateKey = () => {
 	return secureRandom(32);
 };
 
-export const getPrivateKeyFromWIF = ($wif) => {
+export const getPrivateKeyFromWIF = ($wif : string) => {
 	var data = base58.decode($wif);
 
 	if (data.length != 38 || data[0] != 0x80 || data[33] != 0x01) {
@@ -595,7 +595,7 @@ export const getAccountsFromPrivateKey = ($privateKey) => {
 // lookup account data (publicKey, privateKey, address, etc. from WIF)
 // returns -1 for basic encoding errors
 // returns -2 for WIF verify fail
-export const getAccountsFromWIFKey = ($WIFKey) => {
+export const getAccountsFromWIFKey = ($WIFKey : string) => {
 	var privateKey = getPrivateKeyFromWIF($WIFKey);
 	if (privateKey == -1 || privateKey == -2) {
 		return privateKey;

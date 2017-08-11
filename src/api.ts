@@ -9,7 +9,7 @@ export const gasId = "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969
 export const allAssetIds = [neoId, gasId];
 
 // switch between APIs for MainNet and TestNet
-export const getAPIEndpoint = (net) => {
+export const getAPIEndpoint = (net : String) => {
   if (net === "MainNet"){
     return "http://api.wallet.cityofzion.io";
   } else {
@@ -18,7 +18,7 @@ export const getAPIEndpoint = (net) => {
 };
 
 // return the best performing (highest block + fastest) node RPC
-export const getRPCEndpoint = (net) => {
+export const getRPCEndpoint = (net : string) => {
   const apiEndpoint = getAPIEndpoint(net);
   return axios.get(apiEndpoint + '/v1/network/best_node').then((response) => {
       return response.data.node;
@@ -26,7 +26,7 @@ export const getRPCEndpoint = (net) => {
 };
 
 // wrapper for querying node RPC
-const queryRPC = (net, method, params, id = 1) => {
+const queryRPC = (net : string, method : string, params : object, id : number = 1) => {
   let jsonRequest = axios.create({
     headers: {"Content-Type": "application/json"}
   });
@@ -39,7 +39,7 @@ const queryRPC = (net, method, params, id = 1) => {
 };
 
 // get amounts of available (spent) and unavailable claims
-export const getClaimAmounts = (net, address) => {
+export const getClaimAmounts = (net : String, address : String) => {
   const apiEndpoint = getAPIEndpoint(net);
   return axios.get(apiEndpoint + '/v1/address/claims/' + address).then((res) => {
     return {available: parseInt(res.data.total_claim), unavailable:parseInt(res.data.total_unspent_claim)};
@@ -47,7 +47,7 @@ export const getClaimAmounts = (net, address) => {
 }
 
 // do a claim transaction on all available (spent) gas
-export const doClaimAllGas = (net, fromWif) => {
+export const doClaimAllGas = (net : String, fromWif : String) => {
   const apiEndpoint = getAPIEndpoint(net);
   const account = getAccountsFromWIFKey(fromWif)[0];
   // TODO: when fully working replace this with mainnet/testnet switch
@@ -62,13 +62,20 @@ export const doClaimAllGas = (net, fromWif) => {
 }
 
 // get Neo and Gas balance for an account
-export const getBalance = (net, address) => {
+export const getBalance = (net : String, address : String) => {
     const apiEndpoint = getAPIEndpoint(net);
     return axios.get(apiEndpoint + '/v1/address/balance/' + address)
       .then((res) => {
           const neo = res.data.NEO.balance;
           const gas = res.data.GAS.balance;
-          return {Neo: neo, Gas: gas, unspent: {Neo: res.data.NEO.unspent, Gas: res.data.GAS.unspent}};
+          return {
+            Neo: neo,
+            Gas: gas,
+            unspent: {
+              Neo: res.data.NEO.unspent,
+              Gas: res.data.GAS.unspent
+            }
+          };
       })
 };
 
@@ -80,7 +87,7 @@ export const getBalance = (net, address) => {
  * @param {number} amount - The current NEO amount in wallet
  * @return {string} - The converted NEO to USD fiat amount
  */
-export const getMarketPriceUSD = (amount) => {
+export const getMarketPriceUSD = (amount : number) => {
   return axios.get('https://api.coinmarketcap.com/v1/ticker/NEO/?convert=USD').then((response) => {
       let lastUSDNEO = Number(response.data[0].price_usd);
       return ('$' + (lastUSDNEO * amount).toFixed(2).toString());
@@ -88,7 +95,7 @@ export const getMarketPriceUSD = (amount) => {
 };
 
 // get transaction history for an account
-export const getTransactionHistory = (net, address) => {
+export const getTransactionHistory = (net : string, address : string) => {
   const apiEndpoint = getAPIEndpoint(net);
   return axios.get(apiEndpoint + '/v1/address/history/' + address).then((response) => {
     return response.data.history;
@@ -104,8 +111,8 @@ export const getWalletDBHeight = (net) => {
 }
 
 // send an asset to an address
-export const doSendAsset = (net, toAddress, fromWif, assetType, amount) => {
-  let assetId, assetName, assetSymbol;
+export const doSendAsset = (net : string, toAddress : string, fromWif : string, assetType : string, amount : number) => {
+  let assetId : string, assetName : string, assetSymbol : string;
   if (assetType === "Neo"){
     assetId = neoId;
   } else {
