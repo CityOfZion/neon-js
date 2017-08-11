@@ -23,7 +23,7 @@ import * as buffer from 'buffer';
 // TODO: exporting ALL of these, but some of them are probably helpers and don't need to be exported
 // TODO: go through and add at least a basic description of everything these methods are doing
 
-export const getWIFFromPrivateKey = (privateKey) => {
+export const getWIFFromPrivateKey = function(privateKey : Array<number>): string {
     const hexKey = ab2hexstring(privateKey);
     return WIF.encode(128, new Buffer(hexKey, 'hex'), true)
 };
@@ -109,7 +109,7 @@ export const getInputData = ($coin, $amount) => {
 
 // TODO: We may not need to keep this function in the API
 // for now, leaving as reference
-export const issueTransaction = ($issueAssetID : string, $issueAmount : number, $publicKeyEncoded) => {
+export const issueTransaction = function($issueAssetID : string, $issueAmount : number, $publicKeyEncoded): string {
 	var signatureScript = createSignatureScript($publicKeyEncoded);
 	//console.log( signatureScript.toString('hex') );
 
@@ -150,7 +150,7 @@ export const issueTransaction = ($issueAssetID : string, $issueAmount : number, 
 
 // TODO: we probably don't need to keep this function in the API, people aren't going to be using the wallet to register new assets
 // for now, leaving as reference
-export const registerTransaction = ($assetName, $assetAmount, $publicKeyEncoded) => {
+export const registerTransaction = function($assetName, $assetAmount, $publicKeyEncoded): string {
 	var ecparams = ecurve.getCurveByName('secp256r1');
 	var curvePt = ecurve.Point.decodeFrom(ecparams,new Buffer($publicKeyEncoded,"hex"));
 	var curvePtX = curvePt.affineX.toBuffer(32);
@@ -200,7 +200,7 @@ export const registerTransaction = ($assetName, $assetAmount, $publicKeyEncoded)
 
 // TODO: this is important
 // Also, likely want some high level wrapper that combines TransferTransaction, addContract, and signatureData
-export const addContract =( $txData, $sign, $publicKeyEncoded ) => {
+export const addContract = function($txData : string, $sign : string, $publicKeyEncoded : string): string {
 	var signatureScript = createSignatureScript($publicKeyEncoded);
   // console.log(signatureScript);
 	// sign num

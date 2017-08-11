@@ -1,4 +1,6 @@
-const ab2str = function(buf : Array<number>): string {
+import { unescape } from "querystring";
+
+const ab2str = function (buf: Array<number>): string {
   return String.fromCharCode.apply(null, new Uint8Array(buf));
 }
 
@@ -19,7 +21,7 @@ const hexstring2ab = function(str : string): Array<number> {
 	return result;
 }
 
-const ab2hexstring = function(arr : Array<number>): string {
+const ab2hexstring = function(arr : Uint8Array): string {
   var result = "";
   for (var i = 0; i < arr.length; i++) {
     var str = arr[i].toString(16);
@@ -31,7 +33,7 @@ const ab2hexstring = function(arr : Array<number>): string {
   return result;
 }
 
-const reverseArray = function(arr : Array<number>): Uint8Array {
+const reverseArray = function(arr : Buffer): Uint8Array {
   var result = new Uint8Array(arr.length);
   for (var i = 0; i < arr.length; i++) {
     result[i] = arr[arr.length - 1 - i];
@@ -39,7 +41,7 @@ const reverseArray = function(arr : Array<number>): Uint8Array {
   return result;
 }
 
-const numStoreInMemory = (num, length) => {
+const numStoreInMemory = function(num : string, length : number): string {
   for (var i = num.length; i < length; i++) {
     num = '0' + num;
   }
@@ -48,7 +50,7 @@ const numStoreInMemory = (num, length) => {
   return ab2hexstring(data);
 }
 
-const stringToBytes = str => {
+const stringToBytes = function(str : string): Array<number> {
   var utf8 = unescape(encodeURIComponent(str));
 
   var arr = [];
@@ -59,17 +61,17 @@ const stringToBytes = str => {
   return arr;
 }
 
-const getTransferTxData = (txData) => {
-  var ba = new Buffer(txData, "hex");
-  const Transaction = () => {
-      this.type = 0;
-      this.version = 0;
-      this.attributes = "";
-      this.inputs = [];
-      this.outputs = [];
-  };
+interface Transaction {
+  type: number,
+  version: number,
+  attributes: string,
+  inputs: Array<any>,
+  outputs: Array<any>
+}
 
-  var tx = new Transaction();
+const getTransferTxData = function(txData): Transaction {
+  var ba = new Buffer(txData, "hex")
+  var tx = <Transaction>{};
 
   // Transfer Type
   if (ba[0] != 0x80) return;
@@ -81,14 +83,14 @@ const getTransferTxData = (txData) => {
   // Attributes
   var k = 2;
   var len = ba[k];
-  for (i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) {
       k = k + 1;
   }
 
   // Inputs
   k = k + 1;
   len = ba[k];
-  for (i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) {
       tx.inputs.push({
           txid: ba.slice(k + 1, k + 33),
           index: ba.slice(k + 33, k + 35)
@@ -101,7 +103,7 @@ const getTransferTxData = (txData) => {
   // Outputs
   k = k + 1;
   len = ba[k];
-  for (i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) {
       tx.outputs.push({
           assetid: ba.slice(k + 1, k + 33),
           value: ba.slice(k + 33, k + 41),
