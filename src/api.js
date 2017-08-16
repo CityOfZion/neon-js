@@ -36,7 +36,7 @@ export const getAPIEndpoint = (net) => {
 // get node RPC endpoint on MainNet or TestNet based on block height status from neon wallet API
 export const getRPCEndpoint = (net) => {
   const apiEndpoint = getAPIEndpoint(net);
-  return axios.get(apiEndpoint + '/v1/network/best_node').then((response) => {
+  return axios.get(apiEndpoint + '/v2/network/best_node').then((response) => {
       return response.data.node;
   });
 };
@@ -44,7 +44,7 @@ export const getRPCEndpoint = (net) => {
 // get all available claim on an account using neon wallet API
 export const getAvailableClaim = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net);
-  return axios.get(apiEndpoint + '/v1/address/claims/' + address).then((res) => {
+  return axios.get(apiEndpoint + '/v2/address/claims/' + address).then((res) => {
     return parseInt(res.data.total_claim);
   });
 }
@@ -53,7 +53,7 @@ export const getAvailableClaim = (net, address) => {
 // get the balance at an address using the neon wallet API
 export const getBalance = (net, address) => {
     const apiEndpoint = getAPIEndpoint(net);
-    return axios.get(apiEndpoint + '/v1/address/balance/' + address)
+    return axios.get(apiEndpoint + '/v2/address/balance/' + address)
       .then((res) => {
           const ans = res.data.NEO.balance;
           const anc = res.data.GAS.balance;
@@ -84,7 +84,7 @@ export const getMarketPriceUSD = (amount) => {
 // get history of balance over time using neon wallet API
 export const getTransactionHistory = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net);
-  return axios.get(apiEndpoint + '/v1/address/history/' + address).then((response) => {
+  return axios.get(apiEndpoint + '/v2/address/history/' + address).then((response) => {
     return response.data.history;
   });
 };
@@ -92,7 +92,7 @@ export const getTransactionHistory = (net, address) => {
 // get block height reported by neon wallet API
 export const getWalletDBHeight = (net) => {
   const apiEndpoint = getAPIEndpoint(net);
-  return axios.get(apiEndpoint + '/v1/block/height').then((response) => {
+  return axios.get(apiEndpoint + '/v2/block/height').then((response) => {
     return parseInt(response.data.block_height);
   });
 }
@@ -127,7 +127,7 @@ export const claimAllGAS = (net, fromWif) => {
   const apiEndpoint = getAPIEndpoint(net);
   const account = getAccountsFromWIFKey(fromWif)[0];
   // TODO: when fully working replace this with mainnet/testnet switch
-  return axios.get(apiEndpoint + "/v1/address/claims/" + account.address).then((response) => {
+  return axios.get(apiEndpoint + "/v2/address/claims/" + account.address).then((response) => {
     console.log(response.data['claims']);
     const claims = response.data["claims"];
     const total_claim = response.data["total_claim"];
