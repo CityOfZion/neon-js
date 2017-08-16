@@ -9,7 +9,7 @@ Special thanks to [neowallet.js](https://github.com/neochainio/neowallet/blob/ma
 Take a look at the tests to find examples for all API functions.
 
 ```javascript
-import * as api from '../src/api';
+import * as api from 'neon-js';
 
 const testKeys = {
   a: {
@@ -51,4 +51,9 @@ npm run test
 ### To build to /dist:
 ```
 npm run build
+```
+
+### To import
+```
+npm install --save git+https://github.com/CityOfZion/neon-js.git
 ```

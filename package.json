@@ -1,6 +1,5 @@
 {
   "devDependencies": {
-    "axios": "^0.16.2",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
@@ -14,11 +13,12 @@
     "mocha": "^3.4.2",
     "webpack": "^3.0.0"
   },
-  "name": "neo-wallet-js",
+  "name": "neon-js",
   "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "dependencies": {
+    "axios": "^0.16.2",
     "Buffer": "^0.0.0",
     "base-x": "^3.0.2",
     "bigi": "^1.4.2",
@@ -37,11 +37,12 @@
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --recursive ./tests/**.js",
     "build": "webpack",
+    "prepublish": "npm run build",
     "lint": "eslint src/**.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CityOfZion/neo-wallet-js.git"
+    "url": "git+https://github.com/CityOfZion/neon-js.git"
   },
   "keywords": [
     "neo",
@@ -49,10 +50,10 @@
     "javascript",
     "libraries"
   ],
-  "author": "",
+  "author": "Ethan Fast <ejhfast@gmail.com> (https://github.com/Ejhfast)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/CityOfZion/neo-wallet-js/issues"
+    "url": "https://github.com/CityOfZion/neon-js/issues"
   },
-  "homepage": "https://github.com/CityOfZion/neo-wallet-js#readme"
+  "homepage": "https://github.com/CityOfZion/neon-js#readme"
 }
