@@ -83,7 +83,7 @@ export const getBalance = (net, address) => {
 export const getMarketPriceUSD = (amount) => {
   return axios.get('https://api.coinmarketcap.com/v1/ticker/NEO/?convert=USD').then((response) => {
       let lastUSDNEO = Number(response.data[0].price_usd);
-      return ('$' + (lastUSDNEO * amount).toFixed(2).toString());
+      return ('$' + (lastUSDNEO * amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
   });
 };
 
