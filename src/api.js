@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransaction } from './wallet';
 
-export * from './wallet.js';
+export * from './wallet';
 
 // hard-code asset ids for NEO and GAS
 export const neoId = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
@@ -72,19 +72,35 @@ export const getBalance = (net, address) => {
       })
 };
 
-/**
- * @function
- * @description
- * Hit the coinmarketcap api ticket to fetch the latest USD to NEO price
- *
- * @param {number} amount - The current NEO amount in wallet
- * @return {string} - The converted NEO to USD fiat amount
- */
-export const getMarketPriceUSD = (amount) => {
-  return axios.get('https://api.coinmarketcap.com/v1/ticker/NEO/?convert=USD').then((response) => {
-      let lastUSDNEO = Number(response.data[0].price_usd);
-      return ('$' + (lastUSDNEO * amount).toFixed(2).toString());
+// Returns the current asset price according to coinmarketcap
+export const getAssetMarketPrice = (amount, currencyCode, asset) => {
+  return axios.get(`https://api.coinmarketcap.com/v1/ticker/${asset}/?convert=${currencyCode}`).then((response) => {
+    let price = response.data[0][`price_${currencyCode}`]
+    if (isNaN(price)) {
+      return '--';
+    }
+    let currencySymbols = {
+      'usd': '$', // US Dollar
+      'eur': '€', // Euro
+      'gbp': '£', // British Pound Sterling
+      'jpy': '¥', // Japanese Yen
+      'cny': '¥', // Chinese Yuan
+    };
+    return currencySymbols[currencyCode] + (price * amount).toFixed(2).toString();
+  }).catch((exception) => {
+    return '--';
   });
+}
+
+// Returns the current Neo/Gas price according to coinmarketcap
+export const getMarketPrices = (amounts, currencyCode) => {
+  return axios.all([getAssetMarketPrice(amounts.neo, currencyCode, 'neo'), getAssetMarketPrice(amounts.gas, currencyCode, 'gas')])
+    .then(axios.spread((neo_price, gas_price) => {
+      return {
+        Neo: neo_price,
+        Gas: gas_price
+      };
+    }));
 };
 
 // get transaction history for an account
