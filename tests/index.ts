@@ -17,7 +17,7 @@ describe('Wallet', function() {
   this.timeout(15000);
 
   const testKeys = {
-    'a': {
+    a: {
       address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW',
       wif: 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g'
     },
@@ -105,20 +105,20 @@ describe('Wallet', function() {
     })
   });
 
-  // it('should send NEO', (done) => {
-  //   testNet.doSendAsset(testKeys.b.address, testKeys.a.wif, "Neo", 1)
-  //   .then((response) => {
-  //     console.log(response);
-  //     response.result.should.equal(true);
-  //     // send back so we can re-run
-  //     testNet.doSendAsset( testKeys.a.address, testKeys.b.wif, "Neo", 1)
-  //     .then((response) => {
-  //       response.result.should.equal(true);
-  //       done();
-  //     })
-  //   })
-  //   .catch((err) => done(err));
-  // });
+  it('should send NEO', (done) => {
+    testNet.doSendAsset(testKeys.c.address, testKeys.b.wif, "Neo", 10)
+    .then((response) => {
+      console.log(response);
+      response.result.should.equal(true);
+      // send back so we can re-run
+      testNet.doSendAsset( testKeys.b.address, testKeys.c.wif, "Neo", 10)
+      .then((response) => {
+        response.result.should.equal(true);
+        done();
+      })
+    })
+    .catch((err) => done(err));
+  });
 
   // it('should send GAS', (done) => {
   //   testNet.doSendAsset(testKeys.b.address, testKeys.a.wif, "Gas", 1)
