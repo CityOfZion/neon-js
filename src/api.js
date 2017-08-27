@@ -25,19 +25,6 @@ export const getRPCEndpoint = (net) => {
   });
 };
 
-// wrapper for querying node RPC
-const queryRPC = (net, method, params, id = 1) => {
-  let jsonRequest = axios.create({
-    headers: {"Content-Type": "application/json"}
-  });
-  const jsonRpcData = {"jsonrpc": "2.0", "method": method, "params": params, "id": id};
-  return getRPCEndpoint(net).then((rpcEndpoint) => {
-    return jsonRequest.post(rpcEndpoint, jsonRpcData).then((response) => {
-      return response.data;
-    });
-  });
-};
-
 // get amounts of available (spent) and unavailable claims
 export const getClaimAmounts = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net);
