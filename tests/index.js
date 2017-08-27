@@ -19,7 +19,9 @@ describe('Wallet', function() {
   const testKeys = {
     'a': {
       address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW',
-      wif: 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g'
+      wif: 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g',
+      passphrase: 'city of zion',
+      encryptedWif: '6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF'
     },
     b: {
       address: "ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s",
@@ -53,6 +55,20 @@ describe('Wallet', function() {
     const account = api.getAccountsFromWIFKey(wif)[0];
     account.privatekey.should.equal(ab2hexstring(privateKey));
     done();
+  });
+
+  it('should encrypt a WIF using nep2', (done) => {
+    api.encrypt_wif(testKeys.a.wif, testKeys.a.passphrase).then((result) => {
+      result.should.equal(testKeys.a.encryptedWif);
+      done();
+    })
+  });
+
+  it('should decrypt a WIF using nep2', (done) => {
+    api.decrypt_wif(testKeys.a.encryptedWif, testKeys.a.passphrase).then((result) => {
+      result.should.equal(testKeys.a.wif);
+      done();
+    })
   });
 
   it('should get keys from a WIF', (done) =>{

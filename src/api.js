@@ -2,6 +2,7 @@ import axios from 'axios';
 import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransaction } from './wallet';
 
 export * from './wallet.js';
+export * from './nep2.js';
 
 // hard-code asset ids for NEO and GAS
 export const neoId = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
@@ -20,7 +21,7 @@ export const getAPIEndpoint = (net) => {
 // return the best performing (highest block + fastest) node RPC
 export const getRPCEndpoint = (net) => {
   const apiEndpoint = getAPIEndpoint(net);
-  return axios.get(apiEndpoint + '/v1/network/best_node').then((response) => {
+  return axios.get(apiEndpoint + '/v2/network/best_node').then((response) => {
       return response.data.node;
   });
 };
@@ -41,7 +42,7 @@ const queryRPC = (net, method, params, id = 1) => {
 // get amounts of available (spent) and unavailable claims
 export const getClaimAmounts = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net);
-  return axios.get(apiEndpoint + '/v1/address/claims/' + address).then((res) => {
+  return axios.get(apiEndpoint + '/v2/address/claims/' + address).then((res) => {
     return {available: parseInt(res.data.total_claim), unavailable:parseInt(res.data.total_unspent_claim)};
   });
 }
@@ -51,7 +52,7 @@ export const doClaimAllGas = (net, fromWif) => {
   const apiEndpoint = getAPIEndpoint(net);
   const account = getAccountsFromWIFKey(fromWif)[0];
   // TODO: when fully working replace this with mainnet/testnet switch
-  return axios.get(apiEndpoint + "/v1/address/claims/" + account.address).then((response) => {
+  return axios.get(apiEndpoint + "/v2/address/claims/" + account.address).then((response) => {
     const claims = response.data["claims"];
     const total_claim = response.data["total_claim"];
     const txData = claimTransaction(claims, account.publickeyEncoded, account.address, total_claim);
@@ -64,7 +65,7 @@ export const doClaimAllGas = (net, fromWif) => {
 // get Neo and Gas balance for an account
 export const getBalance = (net, address) => {
     const apiEndpoint = getAPIEndpoint(net);
-    return axios.get(apiEndpoint + '/v1/address/balance/' + address)
+    return axios.get(apiEndpoint + '/v2/address/balance/' + address)
       .then((res) => {
           const neo = res.data.NEO.balance;
           const gas = res.data.GAS.balance;
@@ -72,25 +73,10 @@ export const getBalance = (net, address) => {
       })
 };
 
-/**
- * @function
- * @description
- * Hit the coinmarketcap api ticket to fetch the latest USD to NEO price
- *
- * @param {number} amount - The current NEO amount in wallet
- * @return {string} - The converted NEO to USD fiat amount
- */
-export const getMarketPriceUSD = (amount) => {
-  return axios.get('https://api.coinmarketcap.com/v1/ticker/NEO/?convert=USD').then((response) => {
-      let lastUSDNEO = Number(response.data[0].price_usd);
-      return ('$' + (lastUSDNEO * amount).toFixed(2).toString());
-  });
-};
-
 // get transaction history for an account
 export const getTransactionHistory = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net);
-  return axios.get(apiEndpoint + '/v1/address/history/' + address).then((response) => {
+  return axios.get(apiEndpoint + '/v2/address/history/' + address).then((response) => {
     return response.data.history;
   });
 };
@@ -98,7 +84,7 @@ export const getTransactionHistory = (net, address) => {
 // get the current height of the light wallet DB
 export const getWalletDBHeight = (net) => {
   const apiEndpoint = getAPIEndpoint(net);
-  return axios.get(apiEndpoint + '/v1/block/height').then((response) => {
+  return axios.get(apiEndpoint + '/v2/block/height').then((response) => {
     return parseInt(response.data.block_height);
   });
 }

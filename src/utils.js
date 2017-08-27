@@ -30,6 +30,19 @@ const ab2hexstring = arr => {
   return result;
 }
 
+const hexXor = (str1, str2) => {
+  console.log(str1, str2);
+  if (str1.length !== str2.length) throw new Error()
+  if (str1.length % 2 !== 0) throw new Error()
+  const result = []
+  for (let i = 0; i < str1.length; i += 2) {
+    const num1 = parseInt(str1.substr(i, 2), 16)
+    const num2 = parseInt(str2.substr(i, 2), 16)
+    result.push(num1 ^ num2)
+  }
+  return ab2hexstring(result)
+}
+
 const reverseArray = arr => {
   var result = new Uint8Array(arr.length);
   for (var i = 0; i < arr.length; i++) {
@@ -123,5 +136,6 @@ export {
   ab2hexstring,
   reverseArray,
   numStoreInMemory,
-  stringToBytes
+  stringToBytes,
+  hexXor
 }
