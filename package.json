@@ -18,8 +18,8 @@
   "version": "1.0.0",
   "main": "lib/index.js",
   "dependencies": {
-    "axios": "^0.16.2",
     "Buffer": "^0.0.0",
+    "axios": "^0.16.2",
     "base-x": "^3.0.2",
     "bigi": "^1.4.2",
     "buffer": "^5.0.6",
@@ -29,6 +29,7 @@
     "ecurve": "^1.0.5",
     "elliptic": "^6.4.0",
     "fs": "^0.0.1-security",
+    "js-scrypt": "^0.2.0",
     "secp256k1": "^3.3.0",
     "secure-random": "^1.1.1",
     "sql.js": "^0.4.0",
