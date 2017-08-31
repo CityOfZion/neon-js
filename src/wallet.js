@@ -232,6 +232,11 @@ export const verifyAddress = ( $toAddress ) => {
 		return false;
 	}
 
+  if (toAddress(ProgramHash.slice(1,21)) !== $toAddress) {
+    //address is not valid Neo address, could be btc, ltc etc.
+    return false;
+  }
+
 	return true;
 }
 
@@ -278,6 +283,10 @@ export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amoun
 	}
 
 	ProgramHash = ProgramHash.slice(1, 21)
+
+  if(toAddress(ProgramHash) !== $toAddress){
+    throw "Not a valid Neo address!"
+  }
 
 	var signatureScript = createSignatureScript($publicKeyEncoded);
 	var myProgramHash = getHash(signatureScript);
@@ -481,7 +490,6 @@ export const getPrivateKeyFromWIF = ($wif) => {
 
 	return data.slice(1, 33).toString("hex");
 };
-
 
 export const getPublicKey = ($privateKey, $encode) => {
 	var ecparams = ecurve.getCurveByName('secp256r1');

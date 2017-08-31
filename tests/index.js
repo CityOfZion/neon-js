@@ -6,12 +6,14 @@ import { ab2str,
   reverseArray,
   numStoreInMemory,
   stringToBytes } from '../src/utils';
-import * as api from '../lib/index';
+import * as api from '../src/api';
 import axios from 'axios';
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 const should = chai.should();
 
+const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+var base58 = require('base-x')(BASE58)
 
 describe('Wallet', function() {
   this.timeout(15000);
@@ -62,6 +64,28 @@ describe('Wallet', function() {
       result.should.equal(testKeys.a.encryptedWif);
       done();
     })
+  });
+
+  it('should verify that script has produces the same address', (done) => {
+    for (let i = 0; i < 100; i++){
+      const privateKey = ab2hexstring(api.generatePrivateKey());
+      const account = api.getAccountsFromPrivateKey(privateKey)[0];
+      const addressFromScript1 = api.toAddress(base58.decode(account.address).slice(1, 21));
+      const addressFromScript2 = api.toAddress(hexstring2ab(api.getHash(api.createSignatureScript(account.publickeyEncoded)).toString()));
+      addressFromScript1.should.equal(account.address);
+      addressFromScript2.should.equal(account.address);
+    }
+    done();
+  });
+
+  it('should show that Neo address passes validation', (done) => {
+    api.verifyAddress(testKeys.a.address).should.equal(true);
+    done();
+  });
+
+  it('should show that btc address fails validation', (done) => {
+    api.verifyAddress("1BoatSLRHtKNngkdXEeobR76b53LETtpyT").should.equal(false);
+    done();
   });
 
   it('should decrypt a WIF using nep2', (done) => {
