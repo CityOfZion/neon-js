@@ -19,6 +19,20 @@ const scrypt_options = {
   size: 64
 };
 
+// encrypts a given wif given passphrase,
+// retuns account object
+export const encryptWifAccount = (wif, passphrase) => {
+  return encrypt_wif(wif, passphrase).then((encWif) => {
+    const loadAccount = getAccountsFromWIFKey(wif);
+    return {
+      wif: wif,
+      address: loadAccount[0].address,
+      encryptedWif: encWif,
+      passphrase: passphrase
+    };
+  });
+};
+
 // generate new encrypted wif given passphrase
 // (returns a promise)
 export const generateEncryptedWif = (passphrase) => {
