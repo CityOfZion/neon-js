@@ -20,7 +20,7 @@ const scrypt_options = {
 };
 
 // encrypts a given wif given passphrase,
-// retuns account object
+// retuns account object...
 export const encryptWifAccount = (wif, passphrase) => {
   return encrypt_wif(wif, passphrase).then((encWif) => {
     const loadAccount = getAccountsFromWIFKey(wif);
