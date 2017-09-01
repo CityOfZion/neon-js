@@ -26,19 +26,6 @@ export const getRPCEndpoint = (net) => {
   });
 };
 
-// wrapper for querying node RPC
-const queryRPC = (net, method, params, id = 1) => {
-  let jsonRequest = axios.create({
-    headers: {"Content-Type": "application/json"}
-  });
-  const jsonRpcData = {"jsonrpc": "2.0", "method": method, "params": params, "id": id};
-  return getRPCEndpoint(net).then((rpcEndpoint) => {
-    return jsonRequest.post(rpcEndpoint, jsonRpcData).then((response) => {
-      return response.data;
-    });
-  });
-};
-
 // get amounts of available (spent) and unavailable claims
 export const getClaimAmounts = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net);
@@ -89,8 +76,49 @@ export const getWalletDBHeight = (net) => {
   });
 }
 
-// send an asset to an address
-export const doSendAsset = (net, toAddress, fromWif, assetType, amount) => {
+// RPC methods
+
+// wrapper for querying node RPC on MainNet or TestNet
+const queryRPC = (net, method, params, id = 1) => {
+  let jsonRequest = axios.create({
+    headers: {"Content-Type": "application/json"}
+  });
+  const jsonRpcData = {"jsonrpc": "2.0", "method": method, "params": params, "id": id};
+  return getRPCEndpoint(net).then((rpcEndpoint) => {
+    return jsonRequest.post(rpcEndpoint, jsonRpcData).then((response) => {
+      return response.data;
+    });
+  });
+};
+
+// get a block from the RPC
+export const getBlockByIndex = (net, block) => {
+  return queryRPC(net, "getblock", [block, 1]);
+}
+
+// get block height from the RPC
+export const getBlockCount = (net, block) => {
+  return queryRPC(net, "getblockcount", []);
+}
+
+// submit a claim request for all available GAS at an address
+export const claimAllGAS = (net, fromWif) => {
+  const apiEndpoint = getAPIEndpoint(net);
+  const account = getAccountsFromWIFKey(fromWif)[0];
+  // TODO: when fully working replace this with mainnet/testnet switch
+  return axios.get(apiEndpoint + "/v2/address/claims/" + account.address).then((response) => {
+    console.log(response.data['claims']);
+    const claims = response.data["claims"];
+    const total_claim = response.data["total_claim"];
+    const txData = claimTransaction(claims, account.publickeyEncoded, account.address, total_claim);
+    const sign = signatureData(txData, account.privatekey);
+    const txRawData = addContract(txData, sign, account.publickeyEncoded);
+    return queryRPC(net, "sendrawtransaction", [txRawData], 2);
+  });
+}
+
+// send an asset (NEO or GAS) over the node RPC
+export const sendAssetTransaction = (net, toAddress, fromWif, assetType, amount) => {
   let assetId, assetName, assetSymbol;
   if (assetType === "Neo"){
     assetId = neoId;
