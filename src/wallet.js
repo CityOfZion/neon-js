@@ -1,21 +1,19 @@
-import ecurve from 'ecurve';
-import BigInteger from 'bigi';
-import { ec } from 'elliptic';
-import CryptoJS from 'crypto-js';
-import WIF from 'wif';
-const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-import { ab2str,
-  str2ab,
+import ecurve from 'ecurve'
+import BigInteger from 'bigi'
+import { ec as EC } from 'elliptic'
+import CryptoJS from 'crypto-js'
+import WIF from 'wif'
+import {
   hexstring2ab,
   ab2hexstring,
   reverseArray,
   numStoreInMemory,
-  stringToBytes } from './utils';
+  stringToBytes
+} from './utils'
+import secureRandom from 'secure-random'
 
+const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 var base58 = require('base-x')(BASE58)
-import secureRandom from 'secure-random';
-import buffer from 'buffer';
-
 
 // All of this stuff was wrapped in a class before, but really unnecessary as none of these were stateful
 // This flat structure should be more interpretable, and we can export them all as a module instead
@@ -23,548 +21,597 @@ import buffer from 'buffer';
 // TODO: exporting ALL of these, but some of them are probably helpers and don't need to be exported
 // TODO: go through and add at least a basic description of everything these methods are doing
 
+/**
+ * Encodes Private Key into WIF
+ * @param {ArrayBuffer} privateKey - Private Key
+ * @returns {string} WIF key as a string
+ */
 export const getWIFFromPrivateKey = (privateKey) => {
-    const hexKey = ab2hexstring(privateKey);
-    return WIF.encode(128, new Buffer(hexKey, 'hex'), true)
-};
+  const hexKey = ab2hexstring(privateKey)
+  return WIF.encode(128, Buffer.from(hexKey, 'hex'), true)
+}
 
-export const getTxHash = ($data) => {
-	var DataHexString = CryptoJS.enc.Hex.parse($data);
-	var DataSha256 = CryptoJS.SHA256(DataHexString);
-	var DataSha256_2 = CryptoJS.SHA256(DataSha256);
-
-	return DataSha256_2.toString();
-};
+/**
+ * Get Transaction ID from transaction.
+ * @param {string} serialisedTx - Serialised unsigned transaction
+ * @returns {string} Transaction ID
+ */
+export const getTxHash = (serialisedTx) => {
+  var txHexString = CryptoJS.enc.Hex.parse(serialisedTx)
+  var txSha256 = CryptoJS.SHA256(txHexString)
+  var txHash = CryptoJS.SHA256(txSha256)
+  return txHash.toString()
+}
 
 // TODO: this needs a lot of documentation, also better name!
-export const getInputData = ($coin, $amount) => {
-	// sort
-	var coin_ordered = $coin['list'];
-	for (let i = 0; i < coin_ordered.length - 1; i++) {
-		for (let j = 0; j < coin_ordered.length - 1 - i; j++) {
-			if (parseFloat(coin_ordered[j].value) < parseFloat(coin_ordered[j + 1].value)) {
-				var temp = coin_ordered[j];
-				coin_ordered[j] = coin_ordered[j + 1];
-				coin_ordered[j + 1] = temp;
-			}
-		}
-	}
+/**
+ * Get input data for a new transaction given a list of coins and the amount for the transaction.
+ * @param {Coin[]} coins - A list of coins available in the address.
+ * @param {number|string} amount - Amount wanted in the transaction.
+ * @return {object} Returns {amount: number, data: ArrayBuffer}. data can be directly appended to transaction as Inputs
+ */
+export const getInputData = (coins, amount) => {
+  // sort in ascending order
+  // TODO: improve this sort (Current implementation is bubble sort)
+  var orderedCoins = coins['list']
+  for (let i = 0; i < orderedCoins.length - 1; i++) {
+    for (let j = 0; j < orderedCoins.length - 1 - i; j++) {
+      if (parseFloat(orderedCoins[j].value) < parseFloat(orderedCoins[j + 1].value)) {
+        var temp = orderedCoins[j]
+        orderedCoins[j] = orderedCoins[j + 1]
+        orderedCoins[j + 1] = temp
+      }
+    }
+  }
 
-	// calc sum
-	var sum = 0;
-	for (let i = 0; i < coin_ordered.length; i++) {
-		sum = sum + parseFloat(coin_ordered[i].value);
-	}
+  // Calculate total sum of coins available. If insufficient, exit
+  var sum = 0
+  for (let i = 0; i < orderedCoins.length; i++) {
+    sum = sum + parseFloat(orderedCoins[i].value)
+  }
+  amount = parseFloat(amount)
+  if (sum < amount) return -1
 
-	// if sum < amount then exit;
-	var amount = parseFloat($amount);
-	if (sum < amount) return -1;
+  // Find the number of coins we need to use to satisfy amount
+  var k = 0
+  while (parseFloat(orderedCoins[k].value) <= amount) {
+    amount = amount - parseFloat(orderedCoins[k].value)
+    if (amount === 0) break
+    k = k + 1
+  }
 
-	// find input coins
-	var k = 0;
-	while (parseFloat(coin_ordered[k].value) <= amount) {
-		amount = amount - parseFloat(coin_ordered[k].value);
-		if (amount == 0) break;
-		k = k + 1;
-	}
+  // Array for serialised coin data
+  var data = new Uint8Array(1 + 34 * (k + 1))
 
-	/////////////////////////////////////////////////////////////////////////
-	// coin[0]- coin[k]
-	var data = new Uint8Array(1 + 34 * (k + 1));
+  // Array length indicator
+  var inputNum = numStoreInMemory((k + 1).toString(16), 2)
+  data.set(hexstring2ab(inputNum))
 
-	// input num
-	var inputNum = numStoreInMemory((k + 1).toString(16), 2);
-	data.set(hexstring2ab(inputNum));
+  // For each coin
+  for (var x = 0; x < k + 1; x++) {
+    // Serialise txid
+    var pos = 1 + (x * 34)
+    data.set(reverseArray(hexstring2ab(orderedCoins[x]['txid'])), pos)
+    // data.set(hexstring2ab(coin_ordered[x]['txid']), pos)
 
-	// input coins
-	for (var x = 0; x < k + 1; x++) {
+    // Serialise index
+    pos = 1 + (x * 34) + 32
+    let inputIndex = numStoreInMemory(orderedCoins[x]['index'].toString(16), 4)
+    // inputIndex = numStoreInMemory(coin_ordered[x]['n'].toString(16), 2)
+    data.set(hexstring2ab(inputIndex), pos)
+  }
 
-		// txid
-		var pos = 1 + (x * 34);
-		data.set(reverseArray(hexstring2ab(coin_ordered[x]['txid'])),pos);
-		//data.set(hexstring2ab(coin_ordered[x]['txid']), pos);
+  // calc totalAmount being serialised
+  var totalAmount = 0
+  for (let i = 0; i < k + 1; i++) {
+    totalAmount = totalAmount + parseFloat(orderedCoins[i].value)
+  }
 
-		// index
-		pos = 1 + (x * 34) + 32;
-		let inputIndex = numStoreInMemory(coin_ordered[x]['index'].toString(16),4);
-		//inputIndex = numStoreInMemory(coin_ordered[x]['n'].toString(16), 2);
-		data.set(hexstring2ab(inputIndex), pos);
-	}
-
-	/////////////////////////////////////////////////////////////////////////
-
-	// calc coin_amount
-	var coin_amount = 0;
-	for (let i = 0; i < k + 1; i++) {
-		coin_amount = coin_amount + parseFloat(coin_ordered[i].value);
-	}
-
-	/////////////////////////////////////////////////////////////////////////
-
-	return {
-		amount: coin_amount,
-		data: data
-	}
-};
+  return {
+    amount: totalAmount,
+    data: data
+  }
+}
 
 // TODO: We many not need to keep this function in the API
 // for now, leaving as reference
 export const issueTransaction = ($issueAssetID, $issueAmount, $publicKeyEncoded) => {
-	var signatureScript = createSignatureScript($publicKeyEncoded);
-	//console.log( signatureScript.toString('hex') );
+  var signatureScript = createSignatureScript($publicKeyEncoded)
+  // console.log( signatureScript.toString('hex') );
 
-	var myProgramHash = getHash(signatureScript);
-	//console.log( myProgramHash.toString() );
+  var myProgramHash = getHash(signatureScript)
+  // console.log( myProgramHash.toString() );
 
-	////////////////////////////////////////////////////////////////////////
-	// data
-	var data = "01";
+  /// /////////////////////////////////////////////////////////////////////
+  // data
+  var data = '01'
 
-	// version
-	data = data + "00";
+  // version
+  data = data + '00'
 
-	// attribute
-	data = data + "00";
+  // attribute
+  data = data + '00'
 
-	// Inputs
-	data = data + "00";
+  // Inputs
+  data = data + '00'
 
-	// Outputs len
-	data = data + "01";
+  // Outputs len
+  data = data + '01'
 
-	// Outputs[0] AssetID
-	data = data + $issueAssetID
+  // Outputs[0] AssetID
+  data = data + $issueAssetID
 
-	// Outputs[0] Amount
-	const num1 = $issueAmount * 100000000;
-	const num1str = numStoreInMemory(num1.toString(16), 16);
-	data = data + num1str;
+  // Outputs[0] Amount
+  const num1 = $issueAmount * 100000000
+  const num1str = numStoreInMemory(num1.toString(16), 16)
+  data = data + num1str
 
-	// Outputs[0] ProgramHash
-	data = data + myProgramHash.toString()
+  // Outputs[0] ProgramHash
+  data = data + myProgramHash.toString()
 
-	//console.log(data);
+  // console.log(data);
 
-	return data;
-};
+  return data
+}
 
 // TODO: we probably don't need to keep this function in the API, people aren't going to be using the wallet to register new assets
 // for now, leaving as reference
 export const registerTransaction = ($assetName, $assetAmount, $publicKeyEncoded) => {
-	var ecparams = ecurve.getCurveByName('secp256r1');
-	var curvePt = ecurve.Point.decodeFrom(ecparams,new Buffer($publicKeyEncoded,"hex"));
-	var curvePtX = curvePt.affineX.toBuffer(32);
-	var curvePtY = curvePt.affineY.toBuffer(32);
-	var publicKey = buffer.concat([new Buffer([0x04]), curvePtX, curvePtY]);
+  var ecparams = ecurve.getCurveByName('secp256r1')
+  var curvePt = ecurve.Point.decodeFrom(ecparams, Buffer.from($publicKeyEncoded, 'hex'))
+  var curvePtX = curvePt.affineX.toBuffer(32)
+  var curvePtY = curvePt.affineY.toBuffer(32)
+  // var publicKey = buffer.concat([Buffer.from([0x04]), curvePtX, curvePtY])
 
-	var signatureScript = createSignatureScript($publicKeyEncoded);
+  var signatureScript = createSignatureScript($publicKeyEncoded)
 
-	var myProgramHash = getHash(signatureScript);
+  var myProgramHash = getHash(signatureScript)
 
-	// data
-	var data = "40";
+  // data
+  var data = '40'
 
-	// version
-	data = data + "00";
+  // version
+  data = data + '00'
 
-	// asset name
-	var assetName = ab2hexstring(stringToBytes($assetName));
-	var assetNameLen = (assetName.length / 2).toString()
-	if (assetNameLen.length == 1) assetNameLen = "0" + assetNameLen;
-	data = data + assetNameLen + assetName;
+  // asset name
+  var assetName = ab2hexstring(stringToBytes($assetName))
+  var assetNameLen = (assetName.length / 2).toString()
+  if (assetNameLen.length === 1) assetNameLen = '0' + assetNameLen
+  data = data + assetNameLen + assetName
 
-	// asset precision
-	data = data + "00";
+  // asset precision
+  data = data + '00'
 
-	// asset type
-	data = data + "01";
+  // asset type
+  data = data + '01'
 
-	// asset recordtype
-	data = data + "00";
+  // asset recordtype
+  data = data + '00'
 
-	// asset amount
-	const num1 = $assetAmount * 100000000;
-	const num1str = numStoreInMemory(num1.toString(16), 16);
-	data = data + num1str;
+  // asset amount
+  const num1 = $assetAmount * 100000000
+  const num1str = numStoreInMemory(num1.toString(16), 16)
+  data = data + num1str
 
-	// publickey
-	var publicKeyXStr = curvePtX.toString('hex');
-	var publicKeyYStr = curvePtY.toString('hex');
+  // publickey
+  var publicKeyXStr = curvePtX.toString('hex')
+  var publicKeyYStr = curvePtY.toString('hex')
 
-	data = data + "20" + publicKeyXStr + "20" + publicKeyYStr;
-	data = data + myProgramHash.toString();
-	data = data + "000000";
+  data = data + '20' + publicKeyXStr + '20' + publicKeyYStr
+  data = data + myProgramHash.toString()
+  data = data + '000000'
 
-	return data;
-};
+  return data
+}
 
 // TODO: this is important
 // Also, likely want some high level wrapper that combines TransferTransaction, addContract, and signatureData
-export const addContract =( $txData, $sign, $publicKeyEncoded ) => {
-	var signatureScript = createSignatureScript($publicKeyEncoded);
+export const addContract = ($txData, $sign, $publicKeyEncoded) => {
+  var signatureScript = createSignatureScript($publicKeyEncoded)
   // console.log(signatureScript);
-	// sign num
-	var data = $txData + "01";
-	// sign struct len
-	data = data + "41";
-	// sign data len
-	data = data + "40";
-	// sign data
-	data = data + $sign;
-	// Contract data len
-	data = data + "23";
-	// script data
-	data = data + signatureScript;
+  // sign num
+  var data = $txData + '01'
+  // sign struct len
+  data = data + '41'
+  // sign data len
+  data = data + '40'
+  // sign data
+  data = data + $sign
+  // Contract data len
+  data = data + '23'
+  // script data
+  data = data + signatureScript
   // console.log(data);
-	return data;
-};
-
-// verify that an ANS address is valid
-export const verifyAddress = ( $toAddress ) => {
-	var ProgramHash = base58.decode($toAddress);
-	var ProgramHexString = CryptoJS.enc.Hex.parse(ab2hexstring(ProgramHash.slice(0, 21)));
-	var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
-	var ProgramSha256_2 = CryptoJS.SHA256(ProgramSha256);
-	var ProgramSha256Buffer = hexstring2ab(ProgramSha256_2.toString());
-
-	if (ab2hexstring(ProgramSha256Buffer.slice(0, 4)) != ab2hexstring(ProgramHash.slice(21, 25))) {
-		//address verify failed.
-		return false;
-	}
-
-  if (toAddress(ProgramHash.slice(1,21)) !== $toAddress) {
-    //address is not valid Neo address, could be btc, ltc etc.
-    return false;
-  }
-
-	return true;
+  return data
 }
 
-// verify that public key is valid
-export const verifyPublicKeyEncoded = ( $publicKeyEncoded ) => {
-	var publicKeyArray = hexstring2ab( $publicKeyEncoded );
-	if ( publicKeyArray[0] != 0x02 && publicKeyArray[0] != 0x03 ) {
-		return false;
-	}
+/**
+ * Verifies if the string is a valid NEO address.
+ * @param {string} address - A string that can be a NEO address.
+ * @returns {bool} True if the string is a valid NEO address.
+ */
+export const verifyAddress = (address) => {
+  var programHash = base58.decode(address)
+  var programHexString = CryptoJS.enc.Hex.parse(ab2hexstring(programHash.slice(0, 21)))
+  var programSha256 = CryptoJS.SHA256(programHexString)
+  var programSha256Twice = CryptoJS.SHA256(programSha256)
+  var programSha256Buffer = hexstring2ab(programSha256Twice.toString())
 
-	var ecparams = ecurve.getCurveByName('secp256r1');
-	var curvePt = ecurve.Point.decodeFrom(ecparams,new Buffer($publicKeyEncoded,"hex"));
-	var curvePtX = curvePt.affineX.toBuffer(32);
-	var curvePtY = curvePt.affineY.toBuffer(32);
+  // We use the checksum to verify the address
+  if (ab2hexstring(programSha256Buffer.slice(0, 4)) !== ab2hexstring(programHash.slice(21, 25))) {
+    return false
+  }
 
-	// console.log( "publicKeyArray", publicKeyArray );
-	// console.log( "curvePtX", curvePtX );
-	// console.log( "curvePtY", curvePtY );
+  // As other chains use similar checksum methods, we need to attempt to transform the programHash back into the address
+  if (toAddress(programHash.slice(1, 21)) !== address) {
+    // address is not valid Neo address, could be btc, ltc etc.
+    return false
+  }
 
-	if ( publicKeyArray[0] == 0x02 && curvePtY[31] % 2 == 0 ) {
-		return true;
-	}
+  return true
+}
 
-	if ( publicKeyArray[0] == 0x03 && curvePtY[31] % 2 == 1 ) {
-		return true;
-	}
+/**
+ * Verifies if the string is a valid public key.
+ * @param {string} publicKeyEncoded - A string that is a possible public key in encoded form.
+ * @returns {bool} True if the string is a valid encoded public key.
+ */
+export const verifyPublicKeyEncoded = (publicKeyEncoded) => {
+  var publicKeyArray = hexstring2ab(publicKeyEncoded)
+  if (publicKeyArray[0] !== 0x02 && publicKeyArray[0] !== 0x03) {
+    return false
+  }
 
-	return false;
-};
+  var ecparams = ecurve.getCurveByName('secp256r1')
+  var curvePt = ecurve.Point.decodeFrom(ecparams, Buffer.from(publicKeyEncoded, 'hex'))
+  // var curvePtX = curvePt.affineX.toBuffer(32)
+  var curvePtY = curvePt.affineY.toBuffer(32)
+
+  // console.log( "publicKeyArray", publicKeyArray )
+  // console.log( "curvePtX", curvePtX )
+  // console.log( "curvePtY", curvePtY )
+
+  if (publicKeyArray[0] === 0x02 && curvePtY[31] % 2 === 0) {
+    return true
+  }
+
+  if (publicKeyArray[0] === 0x03 && curvePtY[31] % 2 === 1) {
+    return true
+  }
+
+  return false
+}
 
 // TODO: important, requires significant documentation
 // all of these arguments should be documented and made clear, what $coin looks like etc.
 // also, remove $ variable names, most likey
-export const transferTransaction = ($coin, $publicKeyEncoded, $toAddress, $Amount) => {
-	var ProgramHash = base58.decode($toAddress);
-	var ProgramHexString = CryptoJS.enc.Hex.parse(ab2hexstring(ProgramHash.slice(0, 21)));
-	var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
-	var ProgramSha256_2 = CryptoJS.SHA256(ProgramSha256);
-	var ProgramSha256Buffer = hexstring2ab(ProgramSha256_2.toString());
 
-	if (ab2hexstring(ProgramSha256Buffer.slice(0, 4)) != ab2hexstring(ProgramHash.slice(21, 25))) {
-		//address verify failed.
-		return -1;
-	}
-
-	ProgramHash = ProgramHash.slice(1, 21)
-
-  if(toAddress(ProgramHash) !== $toAddress){
-    throw "Not a valid Neo address!"
+/**
+ * Constructs a ContractTransaction based on the given params. A ContractTransaction is a basic transaction to send NEO/GAS.
+ * @param {Coin[]} coins - A list of relevant assets available at the address which the public key is provided.
+ * @param {string} publicKeyEncoded - The encoded public key of the address from which the assets are coming from.
+ * @param {string} toAddress - The address which the assets are going to.
+ * @param {number|string} amount - The amount of assets to send.
+ * @returns {string} A serialised transaction ready to be signed with the corresponding private key of publicKeyEncoded.
+ */
+export const transferTransaction = (coins, publicKeyEncoded, toAddress, amount) => {
+  var ProgramHash = base58.decode(toAddress)
+  if (!verifyAddress(toAddress)) {
+    throw new Error('Invalid toAddress')
   }
 
-	var signatureScript = createSignatureScript($publicKeyEncoded);
-	var myProgramHash = getHash(signatureScript);
-	// INPUT CONSTRUCT
-	var inputData = getInputData($coin, $Amount);
-	if (inputData == -1) return null;
-	// console.log('wallet inputData', inputData );
+  var signatureScript = createSignatureScript(publicKeyEncoded)
+  var myProgramHash = getHash(signatureScript)
 
-	var inputLen = inputData.data.length;
-	var inputAmount = inputData.amount;
+  // Construct Inputs
+  var inputData = getInputData(coins, amount)
+  if (inputData === -1) return null
+  // console.log('wallet inputData', inputData )
 
-  // console.log(inputLen, inputAmount, $Amount);
-	// Set SignableData Len
-	var signableDataLen = 124 + inputLen;
-	if (inputAmount == $Amount) {
-		signableDataLen = 64 + inputLen;
-	}
+  var inputLen = inputData.data.length
+  var inputAmount = inputData.amount
 
-	// CONSTRUCT
-	var data = new Uint8Array(signableDataLen);
+  // console.log(inputLen, inputAmount, $Amount)
 
-	// type
-	data.set(hexstring2ab("80"), 0);
+  // Set SignableData Len
+  // We can do this because this method assumes only one receipent.
+  var signableDataLen = 124 + inputLen
+  if (inputAmount === amount) {
+    signableDataLen = 64 + inputLen
+  }
 
-	// version
-	data.set(hexstring2ab("00"), 1);
+  // Initialise transaction array
+  var data = new Uint8Array(signableDataLen)
 
-	// Attributes
-	data.set(hexstring2ab("00"), 2);
+  // Type
+  data.set(hexstring2ab('80'), 0)
 
-	// INPUT
-	data.set(inputData.data, 3);
+  // Version
+  data.set(hexstring2ab('00'), 1)
 
-	// OUTPUT
-	if (inputAmount == $Amount) {
-		// only one output
+  // Attributes
+  data.set(hexstring2ab('00'), 2)
 
-		// output num
-		data.set(hexstring2ab("01"), inputLen + 3);
+  // INPUT array
+  data.set(inputData.data, 3)
 
-		////////////////////////////////////////////////////////////////////
-		// OUTPUT - 0
+  // Construct Outputs
+  if (inputAmount === amount) {
+    // only one output
 
-		// output asset
-		data.set(reverseArray(hexstring2ab($coin['assetid'])),inputLen+4);
-		//data.set(hexstring2ab($coin['assetid']), inputLen + 4);
+    // output array length indicator
+    data.set(hexstring2ab('01'), inputLen + 3)
 
-		// output value
-		const num1 = parseInt($Amount * 100000000);
-		const num1str = numStoreInMemory(num1.toString(16), 16);
-		data.set(hexstring2ab(num1str), inputLen + 36);
+    // OUTPUT - 0
+    // output asset
+    data.set(reverseArray(hexstring2ab(coins['assetid'])), inputLen + 4)
+    // data.set(hexstring2ab($coin['assetid']), inputLen + 4)
 
-		// output ProgramHash
-		data.set(ProgramHash, inputLen + 44);
+    // output value
+    const num1 = parseInt(amount * 100000000)
+    const num1str = numStoreInMemory(num1.toString(16), 16)
+    data.set(hexstring2ab(num1str), inputLen + 36)
 
-		////////////////////////////////////////////////////////////////////
+    // output ProgramHash
+    data.set(ProgramHash, inputLen + 44)
+  } else {
+    // output num
+    data.set(hexstring2ab('02'), inputLen + 3)
 
-	} else {
+    /// /////////////////////////////////////////////////////////////////
+    // OUTPUT - 0
 
-		// output num
-		data.set(hexstring2ab("02"), inputLen + 3);
+    // output asset
+    data.set(reverseArray(hexstring2ab(coins['assetid'])), inputLen + 4)
+    // data.set(hexstring2ab($coin['assetid']), inputLen + 4);
 
-		////////////////////////////////////////////////////////////////////
-		// OUTPUT - 0
+    // output value
+    const num1 = parseInt(amount * 100000000)
+    const num1str = numStoreInMemory(num1.toString(16), 16)
+    data.set(hexstring2ab(num1str), inputLen + 36)
 
-		// output asset
-		data.set(reverseArray(hexstring2ab($coin['assetid'])),inputLen+4);
-		//data.set(hexstring2ab($coin['assetid']), inputLen + 4);
+    // output ProgramHash
+    data.set(ProgramHash, inputLen + 44)
 
-		// output value
-		const num1 = parseInt($Amount * 100000000);
-		const num1str = numStoreInMemory(num1.toString(16), 16);
-		data.set(hexstring2ab(num1str), inputLen + 36);
+    /// /////////////////////////////////////////////////////////////////
+    // OUTPUT - 1
 
-		// output ProgramHash
-		data.set(ProgramHash, inputLen + 44);
+    // output asset
+    data.set(reverseArray(hexstring2ab(coins['assetid'])), inputLen + 64)
+    // data.set(hexstring2ab($coin['assetid']), inputLen + 64);
 
-		////////////////////////////////////////////////////////////////////
-		// OUTPUT - 1
+    // output value
+    const num2 = parseInt(inputAmount * 100000000 - num1)
+    const num2str = numStoreInMemory(num2.toString(16), 16)
+    data.set(hexstring2ab(num2str), inputLen + 96)
 
-		// output asset
-		data.set(reverseArray(hexstring2ab($coin['assetid'])),inputLen+64);
-		//data.set(hexstring2ab($coin['assetid']), inputLen + 64);
+    // output ProgramHash
+    data.set(hexstring2ab(myProgramHash.toString()), inputLen + 104)
 
-		// output value
-		const num2 = parseInt(inputAmount * 100000000 - num1);
-		const num2str = numStoreInMemory(num2.toString(16), 16);
-		data.set(hexstring2ab(num2str), inputLen + 96);
+    /// /////////////////////////////////////////////////////////////////
 
-		// output ProgramHash
-		data.set(hexstring2ab(myProgramHash.toString()), inputLen + 104);
+    // console.log( "Signature Data:", ab2hexstring(data) );
+  }
 
-		////////////////////////////////////////////////////////////////////
+  return ab2hexstring(data)
+}
 
-		//console.log( "Signature Data:", ab2hexstring(data) );
-	}
-
-	return ab2hexstring(data);
-};
-
+/**
+ * Construct a ClaimTransaction from the given params.
+ * @param {string[]} claims - A list of transactions to claim GAS from.
+ * @param {string} publicKeyEncoded - Encoded public key.
+ * @param {string} toAddress - Redundant param.
+ * @param {number|string} amount - The amount of GAS to claim.
+ * @returns {string} A serialised transaction ready to be signed with the corresponding private key of publicKeyEncoded.
+ */
+// TODO: Remove toAddress as it is redundant (not used in code).
 export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) => {
+  var signatureScript = createSignatureScript(publicKeyEncoded)
+  var myProgramHash = getHash(signatureScript)
 
-	var signatureScript = createSignatureScript(publicKeyEncoded);
-	var myProgramHash = getHash(signatureScript);
+  // Type = ClaimTransaction
+  let data = '02'
 
-	// Type = ClaimTransaction
-	let data = "02";
+  // Version is always 0 in protocol for now
+  data = data + '00'
 
-	// Version is always 0 in protocol for now
-	data = data + "00";
+  // Transaction-specific attributes: claims
 
-	// Transaction-specific attributs: claims
-
-	// 1) store number of claims (txids)
-	let len = claims.length;
-	let lenstr = numStoreInMemory(len.toString(16), 2);
-	data = data + lenstr;
-
-  let total_amount = 0;
+  // 1) store number of claims (txids)
+  let len = claims.length
+  let lenstr = numStoreInMemory(len.toString(16), 2)
+  data = data + lenstr
 
   // 2) iterate over claim txids
-	for ( let k=0; k<len; k++ ) {
+  for (let k = 0; k < len; k++) {
     // get the txid
-		let txid = claims[k]['txid'];
+    let txid = claims[k]['txid']
     // add txid to data
-		data = data + ab2hexstring(reverseArray(hexstring2ab(txid)));
+    data = data + ab2hexstring(reverseArray(hexstring2ab(txid)))
 
-		let vout = claims[k]['index'].toString(16);
-		data = data + numStoreInMemory(vout, 4);
-	}
+    let vout = claims[k]['index'].toString(16)
+    data = data + numStoreInMemory(vout, 4)
+  }
 
-	// Don't need any attributes
-	data = data + "00";
+  // Don't need any attributes
+  data = data + '00'
 
-	// Don't need any inputs
-	data = data + "00";
+  // Don't need any inputs
+  data = data + '00'
 
-	// One output for where the claim will be sent
-	data = data + "01";
+  // One output for where the claim will be sent
+  data = data + '01'
 
-	// First add assetId for GAS
-	data = data + ab2hexstring(reverseArray(hexstring2ab("602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")))
+  // First add assetId for GAS
+  data = data + ab2hexstring(reverseArray(hexstring2ab('602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7')))
 
-	// Net add total amount of the claim
-	const num1str = numStoreInMemory(amount.toString(16), 16);
-	data = data + num1str;
+  // Net add total amount of the claim
+  const num1str = numStoreInMemory(amount.toString(16), 16)
+  data = data + num1str
 
-	// Finally add program hash
-	data = data + myProgramHash.toString();
+  // Finally add program hash
+  data = data + myProgramHash.toString()
+  // console.log(data)
 
-	//console.log(data);
+  return data
+}
 
-	return data;
-};
+/**
+ * Constructs a valid address from a scriptHash
+ * @param {string} scriptHash - scriptHash obtained from hashing the address
+ * @returns A valid NEO address
+ */
+export const toAddress = (scriptHash) => {
+  if (scriptHash.length !== 20) throw new Error('Invalid ScriptHash length')
+  var data = new Uint8Array(1 + scriptHash.length)
+  data.set([23]) // Wallet addressVersion
+  data.set(scriptHash, 1)
+  // console.log(ab2hexstring(data))
 
-export const toAddress = ($ProgramHash) => {
-	var data = new Uint8Array(1 + $ProgramHash.length);
-	data.set([23]);
-	data.set($ProgramHash, 1);
-	//console.log(ab2hexstring(data));
+  var scriptHashHex = CryptoJS.enc.Hex.parse(ab2hexstring(data))
+  var scriptHashSha = CryptoJS.SHA256(scriptHashHex)
+  var scriptHashSha2 = CryptoJS.SHA256(scriptHashSha)
+  var scriptHashShaBuffer = hexstring2ab(scriptHashSha2.toString())
+  // console.log(ab2hexstring(ProgramSha256Buffer))
 
-	var ProgramHexString = CryptoJS.enc.Hex.parse(ab2hexstring(data));
-	var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
-	var ProgramSha256_2 = CryptoJS.SHA256(ProgramSha256);
-	var ProgramSha256Buffer = hexstring2ab(ProgramSha256_2.toString());
-	//console.log(ab2hexstring(ProgramSha256Buffer));
+  var datas = new Uint8Array(1 + scriptHash.length + 4)
+  datas.set(data)
+  datas.set(scriptHashShaBuffer.slice(0, 4), 21)
+  // console.log(ab2hexstring(datas))
 
-	var datas = new Uint8Array(1 + $ProgramHash.length + 4);
-	datas.set(data);
-	datas.set(ProgramSha256Buffer.slice(0, 4), 21);
-	//console.log(ab2hexstring(datas));
-
-	return base58.encode(datas);
-};
+  return base58.encode(datas)
+}
 
 export const generateRandomArray = ($arrayLen) => {
- 	return secureRandom($arrayLen);
+  return secureRandom($arrayLen)
 }
 
 export const generatePrivateKey = () => {
-	return secureRandom(32);
-};
+  return secureRandom(32)
+}
 
+/**
+ * Get private key from WIF key.
+ * @param {string} wif - WIF key
+ * @return {string} Private key
+ */
 export const getPrivateKeyFromWIF = ($wif) => {
-	var data = base58.decode($wif);
+  var data = base58.decode($wif)
 
-	if (data.length != 38 || data[0] != 0x80 || data[33] != 0x01) {
+  if (data.length !== 38 || data[0] !== 0x80 || data[33] !== 0x01) {
     // basic encoding errors
-		return -1;
-	}
+    return -1
+  }
 
-	var dataHexString = CryptoJS.enc.Hex.parse(ab2hexstring(data.slice(0, data.length - 4)));
-	var dataSha256 = CryptoJS.SHA256(dataHexString);
-	var dataSha256_2 = CryptoJS.SHA256(dataSha256);
-	var dataSha256Buffer = hexstring2ab(dataSha256_2.toString());
+  var dataHexString = CryptoJS.enc.Hex.parse(ab2hexstring(data.slice(0, data.length - 4)))
+  var dataSha = CryptoJS.SHA256(dataHexString)
+  var dataSha2 = CryptoJS.SHA256(dataSha)
+  var dataShaBuffer = hexstring2ab(dataSha2.toString())
 
-	if (ab2hexstring(dataSha256Buffer.slice(0, 4)) != ab2hexstring(data.slice(data.length - 4, data.length))) {
-		//wif verify failed.
-		return -2;
-	}
+  if (ab2hexstring(dataShaBuffer.slice(0, 4)) !== ab2hexstring(data.slice(data.length - 4, data.length))) {
+    // wif verify failed.
+    return -2
+  }
 
-	return data.slice(1, 33).toString("hex");
-};
+  return data.slice(1, 33).toString('hex')
+}
 
-export const getPublicKey = ($privateKey, $encode) => {
-	var ecparams = ecurve.getCurveByName('secp256r1');
-	var curvePt = ecparams.G.multiply(BigInteger.fromBuffer(hexstring2ab($privateKey)));
-	return curvePt.getEncoded($encode);
-};
+/**
+ * Get public key from private key.
+ * @param {string} privateKey - Private Key.
+ * @param {boolean} encode - If the returned public key should be encrypted. Defaults to true
+ * @return {ArrayBuffer} ArrayBuffer containing the public key.
+ */
+export const getPublicKey = (privateKey, encode) => {
+  var ecparams = ecurve.getCurveByName('secp256r1')
+  var curvePt = ecparams.G.multiply(BigInteger.fromBuffer(hexstring2ab(privateKey)))
+  return curvePt.getEncoded(encode)
+}
 
-export const getPublicKeyEncoded = ($publicKey) => {
-	var publicKeyArray = hexstring2ab($publicKey);
-	if ( publicKeyArray[64] % 2 == 1 ) {
-		return "03" + ab2hexstring(publicKeyArray.slice(1, 33));
-	} else {
-		return "02" + ab2hexstring(publicKeyArray.slice(1, 33));
-	}
-};
+/**
+ * Encodes an unencoded public key.
+ * @param {string} publicKey - Unencoded public key.
+ * @return {string} Encoded public key.
+ */
+export const getPublicKeyEncoded = (publicKey) => {
+  var publicKeyArray = hexstring2ab(publicKey)
+  if (publicKeyArray[64] % 2 === 1) {
+    return '03' + ab2hexstring(publicKeyArray.slice(1, 33))
+  } else {
+    return '02' + ab2hexstring(publicKeyArray.slice(1, 33))
+  }
+}
 
-export const createSignatureScript = ($publicKeyEncoded) => {
-	return "21" + $publicKeyEncoded.toString('hex') + "ac";
-};
+export const createSignatureScript = (publicKeyEncoded) => {
+  return '21' + publicKeyEncoded.toString('hex') + 'ac'
+}
 
-export const getHash = ($SignatureScript) => {
-	var ProgramHexString = CryptoJS.enc.Hex.parse($SignatureScript);
-	var ProgramSha256 = CryptoJS.SHA256(ProgramHexString);
-	return CryptoJS.RIPEMD160(ProgramSha256);
-};
+/**
+ * Get hash of string input
+ * @param {string} signatureScript - String input
+ * @returns {string} Hashed output
+ */
+export const getHash = (signatureScript) => {
+  var ProgramHexString = CryptoJS.enc.Hex.parse(signatureScript)
+  var ProgramSha256 = CryptoJS.SHA256(ProgramHexString)
+  return CryptoJS.RIPEMD160(ProgramSha256)
+}
 
+/**
+ * Signs a transaction with a private key
+ * @param {string} data - Serialised transaction data.
+ * @param {string} privateKey - Private Key
+ * @returns {string} Signature data.
+ */
 export const signatureData = ($data, $privateKey) => {
-	var msg = CryptoJS.enc.Hex.parse($data);
-	var msgHash = CryptoJS.SHA256(msg);
-  const msgHashHex = new Buffer(msgHash.toString(), "hex")
-  const privateKeyHex = new Buffer($privateKey, "hex");
-	// console.log( "msgHash:", msgHashHex.toString('hex'));
+  var msg = CryptoJS.enc.Hex.parse($data)
+  var msgHash = CryptoJS.SHA256(msg)
+  const msgHashHex = Buffer.from(msgHash.toString(), 'hex')
+  // const privateKeyHex = Buffer.from($privateKey, 'hex')
+  // console.log( "msgHash:", msgHashHex.toString('hex'));
   // console.log('buffer', privateKeyHex.toString('hex'));
 
-  var elliptic = new ec('p256');
-  const sig = elliptic.sign(msgHashHex, $privateKey, null);
+  var elliptic = new EC('p256')
+  const sig = elliptic.sign(msgHashHex, $privateKey, null)
   const signature = {
     signature: Buffer.concat([
       sig.r.toArrayLike(Buffer, 'be', 32),
       sig.s.toArrayLike(Buffer, 'be', 32)
     ])
   }
-	return signature.signature.toString('hex');
-};
+  return signature.signature.toString('hex')
+}
 
 export const fetchAccountsFromPublicKeyEncoded = ($publicKeyEncoded) => {
-	if ( !verifyPublicKeyEncoded( $publicKeyEncoded ) ) {
-		// verify failed.
-		return -1
-	}
+  if (!verifyPublicKeyEncoded($publicKeyEncoded)) {
+    // verify failed.
+    return -1
+  }
 
-	var accounts = [];
+  var accounts = []
 
-	var publicKeyHash = getHash($publicKeyEncoded);
-	//console.log( publicKeyHash );
+  var publicKeyHash = getHash($publicKeyEncoded)
+  // console.log( publicKeyHash );
 
-	var script = createSignatureScript($publicKeyEncoded);
-	//console.log( script );
+  var script = createSignatureScript($publicKeyEncoded)
+  // console.log( script );
 
-	var programHash = getHash(script);
-	//console.log( programHash );
+  var programHash = getHash(script)
+  // console.log( programHash );
 
-	var address = toAddress(hexstring2ab(programHash.toString()));
-	//console.log( address );
+  var address = toAddress(hexstring2ab(programHash.toString()))
+  // console.log( address );
 
-	accounts[0] = {
-		privatekey: '',
-		publickeyEncoded: $publicKeyEncoded,
-		publickeyHash: publicKeyHash.toString(),
-		programHash: programHash.toString(),
-		address: address,
-	};
+  accounts[0] = {
+    privatekey: '',
+    publickeyEncoded: $publicKeyEncoded,
+    publickeyHash: publicKeyHash.toString(),
+    programHash: programHash.toString(),
+    address: address
+  }
 
-	return accounts;
-};
+  return accounts
+}
 
 // TODO: why does this wrap return info in a list? seems unnecessary
 // ditto for all the other GetAccounts methods
@@ -605,14 +652,15 @@ export const getAccountsFromPublicKey = (publicKeyEncoded,$privateKey) => {
   return accounts;
 };
 
-// lookup account data (publicKey, privateKey, address, etc. from WIF)
-// returns -1 for basic encoding errors
-// returns -2 for WIF verify fail
+/**
+ * Get Account from WIF
+ * @param {string} WIFKey - WIF Key
+ * @returns {Account|number} An Account object with {} or -1 for basic encoding errors, -2 for failed verification of WIF
+ */
 export const getAccountsFromWIFKey = ($WIFKey) => {
-	var privateKey = getPrivateKeyFromWIF($WIFKey);
-	if (privateKey == -1 || privateKey == -2) {
-		return privateKey;
-	}
-
-	return getAccountsFromPrivateKey(privateKey);
-};
+  var privateKey = getPrivateKeyFromWIF($WIFKey)
+  if (privateKey === -1 || privateKey === -2) {
+    return privateKey
+  }
+  return getAccountsFromPrivateKey(privateKey)
+}
