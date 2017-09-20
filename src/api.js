@@ -1,11 +1,6 @@
 import axios from 'axios'
 import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransaction } from './wallet'
 
-export * from './wallet.js'
-export * from './nep2.js'
-
-export * from './utils.js';
-
 // hard-code asset ids for NEO and GAS
 export const neoId = 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b'
 export const gasId = '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7'

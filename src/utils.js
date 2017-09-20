@@ -79,11 +79,11 @@ const hexXor = (str1, str2) => {
   console.log(str1, str2)
   if (str1.length !== str2.length) throw new Error()
   if (str1.length % 2 !== 0) throw new Error()
-  const result = [];
+  const result = []
   for (let i = 0; i < str1.length; i += 2) {
-    result.push(parseInt(str1.substr(i, 2), 16) ^ parseInt(str2.substr(i, 2), 16));
+    result.push(parseInt(str1.substr(i, 2), 16) ^ parseInt(str2.substr(i, 2), 16))
   }
-  return ab2hexstring(result);
+  return ab2hexstring(result)
 }
 
 const reverseArray = arr => {
