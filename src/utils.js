@@ -1,15 +1,15 @@
 const ab2str = buf => { return String.fromCharCode.apply(null, new Uint8Array(buf)) }
 
 const str2ab = str => {
-  var bufView = new Uint8Array(str.length)
-  for (var i = 0, strLen = str.length; i < strLen; i++) {
+  let bufView = new Uint8Array(str.length)
+  for (let i = 0, strLen = str.length; i < strLen; i++) {
     bufView[i] = str.charCodeAt(i)
   }
   return bufView
 }
 
 const hexstring2ab = str => {
-  var result = []
+  let result = []
   while (str.length >= 2) {
     result.push(parseInt(str.substring(0, 2), 16))
     str = str.substring(2, str.length)
@@ -19,9 +19,9 @@ const hexstring2ab = str => {
 }
 
 const ab2hexstring = arr => {
-  var result = ''
-  for (var i = 0; i < arr.length; i++) {
-    var str = arr[i].toString(16)
+  let result = ''
+  for (let i = 0; i < arr.length; i++) {
+    let str = arr[i].toString(16)
     str = str.length === 0 ? '00'
       : str.length === 1 ? '0' + str
         : str
@@ -87,8 +87,8 @@ const hexXor = (str1, str2) => {
 }
 
 const reverseArray = arr => {
-  var result = new Uint8Array(arr.length)
-  for (var i = 0; i < arr.length; i++) {
+  let result = new Uint8Array(arr.length)
+  for (let i = 0; i < arr.length; i++) {
     result[i] = arr[arr.length - 1 - i]
   }
 
@@ -105,19 +105,19 @@ const reverseHex = hex => {
 }
 
 const numStoreInMemory = (num, length) => {
-  for (var i = num.length; i < length; i++) {
+  for (let i = num.length; i < length; i++) {
     num = '0' + num
   }
-  var data = reverseArray(Buffer.from(num, 'HEX'))
+  let data = reverseArray(Buffer.from(num, 'HEX'))
 
   return ab2hexstring(data)
 }
 
 const stringToBytes = str => {
-  var utf8 = unescape(encodeURIComponent(str))
+  let utf8 = unescape(encodeURIComponent(str))
 
-  var arr = []
-  for (var i = 0; i < utf8.length; i++) {
+  let arr = []
+  for (let i = 0; i < utf8.length; i++) {
     arr.push(utf8.charCodeAt(i))
   }
 
@@ -125,7 +125,7 @@ const stringToBytes = str => {
 }
 
 const getTransferTxData = (txData) => {
-  var ba = Buffer.from(txData, 'hex')
+  let ba = Buffer.from(txData, 'hex')
   const Transaction = () => {
     this.type = 0
     this.version = 0
@@ -134,7 +134,7 @@ const getTransferTxData = (txData) => {
     this.outputs = []
   }
 
-  var tx = new Transaction()
+  let tx = new Transaction()
 
   // Transfer Type
   if (ba[0] !== 0x80) return
@@ -144,8 +144,8 @@ const getTransferTxData = (txData) => {
   tx.version = ba[1]
 
   // Attributes
-  var k = 2
-  var len = ba[k]
+  let k = 2
+  let len = ba[k]
   for (let i = 0; i < len; i++) {
     k = k + 1
   }

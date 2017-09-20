@@ -13,7 +13,7 @@ import {
 import secureRandom from 'secure-random'
 
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-var base58 = require('base-x')(BASE58)
+let base58 = require('base-x')(BASE58)
 
 // All of this stuff was wrapped in a class before, but really unnecessary as none of these were stateful
 // This flat structure should be more interpretable, and we can export them all as a module instead
@@ -24,7 +24,7 @@ var base58 = require('base-x')(BASE58)
 /**
  * Encodes Private Key into WIF
  * @param {ArrayBuffer} privateKey - Private Key
- * @returns {string} WIF key as a string
+ * @returns {string} WIF key
  */
 export const getWIFFromPrivateKey = (privateKey) => {
   const hexKey = ab2hexstring(privateKey)
@@ -33,13 +33,13 @@ export const getWIFFromPrivateKey = (privateKey) => {
 
 /**
  * Get Transaction ID from transaction.
- * @param {string} serialisedTx - Serialised unsigned transaction
+ * @param {string} serializedTx - Serialized unsigned transaction
  * @returns {string} Transaction ID
  */
-export const getTxHash = (serialisedTx) => {
-  var txHexString = CryptoJS.enc.Hex.parse(serialisedTx)
-  var txSha256 = CryptoJS.SHA256(txHexString)
-  var txHash = CryptoJS.SHA256(txSha256)
+export const getTxHash = (serializedTx) => {
+  let txHexString = CryptoJS.enc.Hex.parse(serializedTx)
+  let txSha256 = CryptoJS.SHA256(txHexString)
+  let txHash = CryptoJS.SHA256(txSha256)
   return txHash.toString()
 }
 
@@ -53,11 +53,11 @@ export const getTxHash = (serialisedTx) => {
 export const getInputData = (coins, amount) => {
   // sort in ascending order
   // TODO: improve this sort (Current implementation is bubble sort)
-  var orderedCoins = coins['list']
+  let orderedCoins = coins['list']
   for (let i = 0; i < orderedCoins.length - 1; i++) {
     for (let j = 0; j < orderedCoins.length - 1 - i; j++) {
       if (parseFloat(orderedCoins[j].value) < parseFloat(orderedCoins[j + 1].value)) {
-        var temp = orderedCoins[j]
+        let temp = orderedCoins[j]
         orderedCoins[j] = orderedCoins[j + 1]
         orderedCoins[j + 1] = temp
       }
@@ -65,7 +65,7 @@ export const getInputData = (coins, amount) => {
   }
 
   // Calculate total sum of coins available. If insufficient, exit
-  var sum = 0
+  let sum = 0
   for (let i = 0; i < orderedCoins.length; i++) {
     sum = sum + parseFloat(orderedCoins[i].value)
   }
@@ -73,7 +73,7 @@ export const getInputData = (coins, amount) => {
   if (sum < amount) return -1
 
   // Find the number of coins we need to use to satisfy amount
-  var k = 0
+  let k = 0
   while (parseFloat(orderedCoins[k].value) <= amount) {
     amount = amount - parseFloat(orderedCoins[k].value)
     if (amount === 0) break
@@ -81,16 +81,16 @@ export const getInputData = (coins, amount) => {
   }
 
   // Array for serialised coin data
-  var data = new Uint8Array(1 + 34 * (k + 1))
+  let data = new Uint8Array(1 + 34 * (k + 1))
 
   // Array length indicator
-  var inputNum = numStoreInMemory((k + 1).toString(16), 2)
+  let inputNum = numStoreInMemory((k + 1).toString(16), 2)
   data.set(hexstring2ab(inputNum))
 
   // For each coin
-  for (var x = 0; x < k + 1; x++) {
+  for (let x = 0; x < k + 1; x++) {
     // Serialise txid
-    var pos = 1 + (x * 34)
+    let pos = 1 + (x * 34)
     data.set(reverseArray(hexstring2ab(orderedCoins[x]['txid'])), pos)
     // data.set(hexstring2ab(coin_ordered[x]['txid']), pos)
 
@@ -102,7 +102,7 @@ export const getInputData = (coins, amount) => {
   }
 
   // calc totalAmount being serialised
-  var totalAmount = 0
+  let totalAmount = 0
   for (let i = 0; i < k + 1; i++) {
     totalAmount = totalAmount + parseFloat(orderedCoins[i].value)
   }
@@ -116,15 +116,15 @@ export const getInputData = (coins, amount) => {
 // TODO: We many not need to keep this function in the API
 // for now, leaving as reference
 export const issueTransaction = ($issueAssetID, $issueAmount, $publicKeyEncoded) => {
-  var signatureScript = createSignatureScript($publicKeyEncoded)
+  let signatureScript = createSignatureScript($publicKeyEncoded)
   // console.log( signatureScript.toString('hex') );
 
-  var myProgramHash = getHash(signatureScript)
+  let myProgramHash = getHash(signatureScript)
   // console.log( myProgramHash.toString() );
 
   /// /////////////////////////////////////////////////////////////////////
   // data
-  var data = '01'
+  let data = '01'
 
   // version
   data = data + '00'
@@ -157,25 +157,25 @@ export const issueTransaction = ($issueAssetID, $issueAmount, $publicKeyEncoded)
 // TODO: we probably don't need to keep this function in the API, people aren't going to be using the wallet to register new assets
 // for now, leaving as reference
 export const registerTransaction = ($assetName, $assetAmount, $publicKeyEncoded) => {
-  var ecparams = ecurve.getCurveByName('secp256r1')
-  var curvePt = ecurve.Point.decodeFrom(ecparams, Buffer.from($publicKeyEncoded, 'hex'))
-  var curvePtX = curvePt.affineX.toBuffer(32)
-  var curvePtY = curvePt.affineY.toBuffer(32)
-  // var publicKey = buffer.concat([Buffer.from([0x04]), curvePtX, curvePtY])
+  let ecparams = ecurve.getCurveByName('secp256r1')
+  let curvePt = ecurve.Point.decodeFrom(ecparams, Buffer.from($publicKeyEncoded, 'hex'))
+  let curvePtX = curvePt.affineX.toBuffer(32)
+  let curvePtY = curvePt.affineY.toBuffer(32)
+  // let publicKey = buffer.concat([Buffer.from([0x04]), curvePtX, curvePtY])
 
-  var signatureScript = createSignatureScript($publicKeyEncoded)
+  let signatureScript = createSignatureScript($publicKeyEncoded)
 
-  var myProgramHash = getHash(signatureScript)
+  let myProgramHash = getHash(signatureScript)
 
   // data
-  var data = '40'
+  let data = '40'
 
   // version
   data = data + '00'
 
   // asset name
-  var assetName = ab2hexstring(stringToBytes($assetName))
-  var assetNameLen = (assetName.length / 2).toString()
+  let assetName = ab2hexstring(stringToBytes($assetName))
+  let assetNameLen = (assetName.length / 2).toString()
   if (assetNameLen.length === 1) assetNameLen = '0' + assetNameLen
   data = data + assetNameLen + assetName
 
@@ -194,8 +194,8 @@ export const registerTransaction = ($assetName, $assetAmount, $publicKeyEncoded)
   data = data + num1str
 
   // publickey
-  var publicKeyXStr = curvePtX.toString('hex')
-  var publicKeyYStr = curvePtY.toString('hex')
+  let publicKeyXStr = curvePtX.toString('hex')
+  let publicKeyYStr = curvePtY.toString('hex')
 
   data = data + '20' + publicKeyXStr + '20' + publicKeyYStr
   data = data + myProgramHash.toString()
@@ -207,10 +207,10 @@ export const registerTransaction = ($assetName, $assetAmount, $publicKeyEncoded)
 // TODO: this is important
 // Also, likely want some high level wrapper that combines TransferTransaction, addContract, and signatureData
 export const addContract = ($txData, $sign, $publicKeyEncoded) => {
-  var signatureScript = createSignatureScript($publicKeyEncoded)
+  let signatureScript = createSignatureScript($publicKeyEncoded)
   // console.log(signatureScript);
   // sign num
-  var data = $txData + '01'
+  let data = $txData + '01'
   // sign struct len
   data = data + '41'
   // sign data len
@@ -231,11 +231,11 @@ export const addContract = ($txData, $sign, $publicKeyEncoded) => {
  * @returns {bool} True if the string is a valid NEO address.
  */
 export const verifyAddress = (address) => {
-  var programHash = base58.decode(address)
-  var programHexString = CryptoJS.enc.Hex.parse(ab2hexstring(programHash.slice(0, 21)))
-  var programSha256 = CryptoJS.SHA256(programHexString)
-  var programSha256Twice = CryptoJS.SHA256(programSha256)
-  var programSha256Buffer = hexstring2ab(programSha256Twice.toString())
+  let programHash = base58.decode(address)
+  let programHexString = CryptoJS.enc.Hex.parse(ab2hexstring(programHash.slice(0, 21)))
+  let programSha256 = CryptoJS.SHA256(programHexString)
+  let programSha256Twice = CryptoJS.SHA256(programSha256)
+  let programSha256Buffer = hexstring2ab(programSha256Twice.toString())
 
   // We use the checksum to verify the address
   if (ab2hexstring(programSha256Buffer.slice(0, 4)) !== ab2hexstring(programHash.slice(21, 25))) {
@@ -257,15 +257,15 @@ export const verifyAddress = (address) => {
  * @returns {bool} True if the string is a valid encoded public key.
  */
 export const verifyPublicKeyEncoded = (publicKeyEncoded) => {
-  var publicKeyArray = hexstring2ab(publicKeyEncoded)
+  let publicKeyArray = hexstring2ab(publicKeyEncoded)
   if (publicKeyArray[0] !== 0x02 && publicKeyArray[0] !== 0x03) {
     return false
   }
 
-  var ecparams = ecurve.getCurveByName('secp256r1')
-  var curvePt = ecurve.Point.decodeFrom(ecparams, Buffer.from(publicKeyEncoded, 'hex'))
-  // var curvePtX = curvePt.affineX.toBuffer(32)
-  var curvePtY = curvePt.affineY.toBuffer(32)
+  let ecparams = ecurve.getCurveByName('secp256r1')
+  let curvePt = ecurve.Point.decodeFrom(ecparams, Buffer.from(publicKeyEncoded, 'hex'))
+  // let curvePtX = curvePt.affineX.toBuffer(32)
+  let curvePtY = curvePt.affineY.toBuffer(32)
 
   // console.log( "publicKeyArray", publicKeyArray )
   // console.log( "curvePtX", curvePtX )
@@ -295,33 +295,33 @@ export const verifyPublicKeyEncoded = (publicKeyEncoded) => {
  * @returns {string} A serialised transaction ready to be signed with the corresponding private key of publicKeyEncoded.
  */
 export const transferTransaction = (coins, publicKeyEncoded, toAddress, amount) => {
-  var ProgramHash = base58.decode(toAddress)
+  let ProgramHash = base58.decode(toAddress)
   if (!verifyAddress(toAddress)) {
     throw new Error('Invalid toAddress')
   }
 
-  var signatureScript = createSignatureScript(publicKeyEncoded)
-  var myProgramHash = getHash(signatureScript)
+  let signatureScript = createSignatureScript(publicKeyEncoded)
+  let myProgramHash = getHash(signatureScript)
 
   // Construct Inputs
-  var inputData = getInputData(coins, amount)
+  let inputData = getInputData(coins, amount)
   if (inputData === -1) return null
   // console.log('wallet inputData', inputData )
 
-  var inputLen = inputData.data.length
-  var inputAmount = inputData.amount
+  let inputLen = inputData.data.length
+  let inputAmount = inputData.amount
 
   // console.log(inputLen, inputAmount, $Amount)
 
   // Set SignableData Len
   // We can do this because this method assumes only one receipent.
-  var signableDataLen = 124 + inputLen
+  let signableDataLen = 124 + inputLen
   if (inputAmount === amount) {
     signableDataLen = 64 + inputLen
   }
 
   // Initialise transaction array
-  var data = new Uint8Array(signableDataLen)
+  let data = new Uint8Array(signableDataLen)
 
   // Type
   data.set(hexstring2ab('80'), 0)
@@ -406,8 +406,8 @@ export const transferTransaction = (coins, publicKeyEncoded, toAddress, amount) 
  */
 // TODO: Remove toAddress as it is redundant (not used in code).
 export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) => {
-  var signatureScript = createSignatureScript(publicKeyEncoded)
-  var myProgramHash = getHash(signatureScript)
+  let signatureScript = createSignatureScript(publicKeyEncoded)
+  let myProgramHash = getHash(signatureScript)
 
   // Type = ClaimTransaction
   let data = '02'
@@ -463,18 +463,18 @@ export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) =>
  */
 export const toAddress = (scriptHash) => {
   if (scriptHash.length !== 20) throw new Error('Invalid ScriptHash length')
-  var data = new Uint8Array(1 + scriptHash.length)
+  let data = new Uint8Array(1 + scriptHash.length)
   data.set([23]) // Wallet addressVersion
   data.set(scriptHash, 1)
   // console.log(ab2hexstring(data))
 
-  var scriptHashHex = CryptoJS.enc.Hex.parse(ab2hexstring(data))
-  var scriptHashSha = CryptoJS.SHA256(scriptHashHex)
-  var scriptHashSha2 = CryptoJS.SHA256(scriptHashSha)
-  var scriptHashShaBuffer = hexstring2ab(scriptHashSha2.toString())
+  let scriptHashHex = CryptoJS.enc.Hex.parse(ab2hexstring(data))
+  let scriptHashSha = CryptoJS.SHA256(scriptHashHex)
+  let scriptHashSha2 = CryptoJS.SHA256(scriptHashSha)
+  let scriptHashShaBuffer = hexstring2ab(scriptHashSha2.toString())
   // console.log(ab2hexstring(ProgramSha256Buffer))
 
-  var datas = new Uint8Array(1 + scriptHash.length + 4)
+  let datas = new Uint8Array(1 + scriptHash.length + 4)
   datas.set(data)
   datas.set(scriptHashShaBuffer.slice(0, 4), 21)
   // console.log(ab2hexstring(datas))
@@ -496,17 +496,17 @@ export const generatePrivateKey = () => {
  * @return {string} Private key
  */
 export const getPrivateKeyFromWIF = ($wif) => {
-  var data = base58.decode($wif)
+  let data = base58.decode($wif)
 
   if (data.length !== 38 || data[0] !== 0x80 || data[33] !== 0x01) {
     // basic encoding errors
     return -1
   }
 
-  var dataHexString = CryptoJS.enc.Hex.parse(ab2hexstring(data.slice(0, data.length - 4)))
-  var dataSha = CryptoJS.SHA256(dataHexString)
-  var dataSha2 = CryptoJS.SHA256(dataSha)
-  var dataShaBuffer = hexstring2ab(dataSha2.toString())
+  let dataHexString = CryptoJS.enc.Hex.parse(ab2hexstring(data.slice(0, data.length - 4)))
+  let dataSha = CryptoJS.SHA256(dataHexString)
+  let dataSha2 = CryptoJS.SHA256(dataSha)
+  let dataShaBuffer = hexstring2ab(dataSha2.toString())
 
   if (ab2hexstring(dataShaBuffer.slice(0, 4)) !== ab2hexstring(data.slice(data.length - 4, data.length))) {
     // wif verify failed.
@@ -523,8 +523,8 @@ export const getPrivateKeyFromWIF = ($wif) => {
  * @return {ArrayBuffer} ArrayBuffer containing the public key.
  */
 export const getPublicKey = (privateKey, encode) => {
-  var ecparams = ecurve.getCurveByName('secp256r1')
-  var curvePt = ecparams.G.multiply(BigInteger.fromBuffer(hexstring2ab(privateKey)))
+  let ecparams = ecurve.getCurveByName('secp256r1')
+  let curvePt = ecparams.G.multiply(BigInteger.fromBuffer(hexstring2ab(privateKey)))
   return curvePt.getEncoded(encode)
 }
 
@@ -534,7 +534,7 @@ export const getPublicKey = (privateKey, encode) => {
  * @return {string} Encoded public key.
  */
 export const getPublicKeyEncoded = (publicKey) => {
-  var publicKeyArray = hexstring2ab(publicKey)
+  let publicKeyArray = hexstring2ab(publicKey)
   if (publicKeyArray[64] % 2 === 1) {
     return '03' + ab2hexstring(publicKeyArray.slice(1, 33))
   } else {
@@ -552,8 +552,8 @@ export const createSignatureScript = (publicKeyEncoded) => {
  * @returns {string} Hashed output
  */
 export const getHash = (signatureScript) => {
-  var ProgramHexString = CryptoJS.enc.Hex.parse(signatureScript)
-  var ProgramSha256 = CryptoJS.SHA256(ProgramHexString)
+  let ProgramHexString = CryptoJS.enc.Hex.parse(signatureScript)
+  let ProgramSha256 = CryptoJS.SHA256(ProgramHexString)
   return CryptoJS.RIPEMD160(ProgramSha256)
 }
 
@@ -564,14 +564,14 @@ export const getHash = (signatureScript) => {
  * @returns {string} Signature data.
  */
 export const signatureData = ($data, $privateKey) => {
-  var msg = CryptoJS.enc.Hex.parse($data)
-  var msgHash = CryptoJS.SHA256(msg)
+  let msg = CryptoJS.enc.Hex.parse($data)
+  let msgHash = CryptoJS.SHA256(msg)
   const msgHashHex = Buffer.from(msgHash.toString(), 'hex')
   // const privateKeyHex = Buffer.from($privateKey, 'hex')
   // console.log( "msgHash:", msgHashHex.toString('hex'));
   // console.log('buffer', privateKeyHex.toString('hex'));
 
-  var elliptic = new EC('p256')
+  let elliptic = new EC('p256')
   const sig = elliptic.sign(msgHashHex, $privateKey, null)
   const signature = {
     signature: Buffer.concat([
@@ -588,18 +588,18 @@ export const fetchAccountsFromPublicKeyEncoded = ($publicKeyEncoded) => {
     return -1
   }
 
-  var accounts = []
+  let accounts = []
 
-  var publicKeyHash = getHash($publicKeyEncoded)
+  let publicKeyHash = getHash($publicKeyEncoded)
   // console.log( publicKeyHash );
 
-  var script = createSignatureScript($publicKeyEncoded)
+  let script = createSignatureScript($publicKeyEncoded)
   // console.log( script );
 
-  var programHash = getHash(script)
+  let programHash = getHash(script)
   // console.log( programHash );
 
-  var address = toAddress(hexstring2ab(programHash.toString()))
+  let address = toAddress(hexstring2ab(programHash.toString()))
   // console.log( address );
 
   accounts[0] = {
@@ -658,7 +658,7 @@ export const getAccountsFromPublicKey = (publicKeyEncoded,$privateKey) => {
  * @returns {Account|number} An Account object with {} or -1 for basic encoding errors, -2 for failed verification of WIF
  */
 export const getAccountsFromWIFKey = ($WIFKey) => {
-  var privateKey = getPrivateKeyFromWIF($WIFKey)
+  let privateKey = getPrivateKeyFromWIF($WIFKey)
   if (privateKey === -1 || privateKey === -2) {
     return privateKey
   }
