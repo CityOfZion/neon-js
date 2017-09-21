@@ -1,1 +1,6 @@
 node_modules
+/.jshintrc
+/.npmignore
+/.project
+/.settings/
+/npm-debug.log
