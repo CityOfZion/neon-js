@@ -569,35 +569,40 @@ export const fetchAccountsFromPublicKeyEncoded = ($publicKeyEncoded) => {
 // TODO: why does this wrap return info in a list? seems unnecessary
 // ditto for all the other GetAccounts methods
 export const getAccountsFromPrivateKey = ($privateKey) => {
-	if ($privateKey.length != 64) {
-		return -1;
-	}
+  if ($privateKey.length != 64) {
+    return -1;
+  }
 
-	var accounts = [];
-	var publicKeyEncoded = getPublicKey($privateKey, true);
-	//console.log( publicKeyEncoded );
+  var publicKeyEncoded = getPublicKey($privateKey, true);
+  
+  // console.log( publicKeyEncoded );
+  return getAccountsFromPublicKey(publicKeyEncoded,$privateKey);
+}
 
-	var publicKeyHash = getHash(publicKeyEncoded.toString('hex'));
-	//console.log( publicKeyHash );
-
-	var script = createSignatureScript(publicKeyEncoded);
-	//console.log( script );
-
-	var programHash = getHash(script);
-	//console.log( programHash );
-
-	var address = toAddress(hexstring2ab(programHash.toString()));
-	//console.log( address );
-
-	accounts[0] = {
-		privatekey: $privateKey,
-		publickeyEncoded: publicKeyEncoded.toString('hex'),
-		publickeyHash: publicKeyHash.toString(),
-		programHash: programHash.toString(),
-		address: address,
-	};
-
-	return accounts;
+export const getAccountsFromPublicKey = (publicKeyEncoded,$privateKey) => {
+  var publicKeyHash = getHash(publicKeyEncoded.toString('hex'));
+  //console.log( publicKeyHash );
+  
+  var script = createSignatureScript(publicKeyEncoded);
+  //console.log( script );
+  
+  var programHash = getHash(script);
+  // console.log( programHash );
+  
+  var address = toAddress(hexstring2ab(programHash.toString()));
+  // console.log( address );
+  
+  var accounts = [];
+  
+  accounts[0] = {
+    privatekey: $privateKey,
+    publickeyEncoded: publicKeyEncoded.toString('hex'),
+    publickeyHash: publicKeyHash.toString(),
+    programHash: programHash.toString(),
+    address: address,
+  };
+  
+  return accounts;
 };
 
 // lookup account data (publicKey, privateKey, address, etc. from WIF)
