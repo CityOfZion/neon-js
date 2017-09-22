@@ -160,11 +160,12 @@ export const getTxHash = (serializedTx) => {
  * @returns {string} A serialised transaction ready to be signed with the corresponding private key of publicKeyEncoded.
  */
 export const transferTransaction = (coins, publicKeyEncoded, toAddress, amount) => {
-  let ProgramHash = base58.decode(toAddress)
   if (!verifyAddress(toAddress)) {
     throw new Error('Invalid toAddress')
   }
-
+  let programHash = base58.decode(toAddress)
+  programHash = programHash.slice(1, 21)
+  
   let signatureScript = createSignatureScript(publicKeyEncoded)
   let myProgramHash = getHash(signatureScript)
 
@@ -218,7 +219,7 @@ export const transferTransaction = (coins, publicKeyEncoded, toAddress, amount) 
     data.set(hexstring2ab(num1str), inputLen + 36)
 
     // output ProgramHash
-    data.set(ProgramHash, inputLen + 44)
+    data.set(programHash, inputLen + 44)
   } else {
     // output num
     data.set(hexstring2ab('02'), inputLen + 3)
@@ -235,7 +236,7 @@ export const transferTransaction = (coins, publicKeyEncoded, toAddress, amount) 
     data.set(hexstring2ab(num1str), inputLen + 36)
 
     // output ProgramHash
-    data.set(ProgramHash, inputLen + 44)
+    data.set(programHash, inputLen + 44)
 
     // OUTPUT - 1
 
