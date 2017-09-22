@@ -15,11 +15,14 @@ import secureRandom from 'secure-random'
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 let base58 = require('base-x')(BASE58)
 
-// All of this stuff was wrapped in a class before, but really unnecessary as none of these were stateful
-// This flat structure should be more interpretable, and we can export them all as a module instead
-
-// TODO: exporting ALL of these, but some of them are probably helpers and don't need to be exported
-// TODO: go through and add at least a basic description of everything these methods are doing
+/**
+ * @typedef {Object} Account
+ * @property {string} privateKey The private key in hex
+ * @property {string} publicKeyEncoded The public key in encoded form
+ * @property {string} publicKeyHash Hash of the public key
+ * @property {string} programHash Program Hash to use for signing
+ * @property {string} address Public address of the private key
+ */
 
 /**
  * Encodes Private Key into WIF
@@ -458,7 +461,7 @@ export const claimTransaction = (claims, publicKeyEncoded, toAddress, amount) =>
 
 /**
  * Constructs a valid address from a scriptHash
- * @param {string} scriptHash - scriptHash obtained from hashing the address
+ * @param {ArrayBuffer} scriptHash - scriptHash obtained from hashing the address
  * @returns A valid NEO address
  */
 export const toAddress = (scriptHash) => {
@@ -486,6 +489,10 @@ export const generateRandomArray = ($arrayLen) => {
   return secureRandom($arrayLen)
 }
 
+/**
+ * Generates a random private key
+ * @returns {ArrayBuffer} An ArrayBuffer of 32 bytes
+ */
 export const generatePrivateKey = () => {
   return secureRandom(32)
 }
@@ -495,8 +502,8 @@ export const generatePrivateKey = () => {
  * @param {string} wif - WIF key
  * @return {string} Private key
  */
-export const getPrivateKeyFromWIF = ($wif) => {
-  let data = base58.decode($wif)
+export const getPrivateKeyFromWIF = (wif) => {
+  let data = base58.decode(wif)
 
   if (data.length !== 38 || data[0] !== 0x80 || data[33] !== 0x01) {
     // basic encoding errors
@@ -542,8 +549,14 @@ export const getPublicKeyEncoded = (publicKey) => {
   }
 }
 
+/**
+ * Create Signature Script
+ * @param {string|ArrayBuffer} publicKeyEncoded - Public Key in encoded form
+ * @return {string} Signature Script
+ */
 export const createSignatureScript = (publicKeyEncoded) => {
-  return '21' + publicKeyEncoded.toString('hex') + 'ac'
+  if (publicKeyEncoded instanceof ArrayBuffer) publicKeyEncoded = publicKeyEncoded.toString('hex')
+  return '21' + publicKeyEncoded + 'ac'
 }
 
 /**
@@ -554,7 +567,7 @@ export const createSignatureScript = (publicKeyEncoded) => {
 export const getHash = (signatureScript) => {
   let ProgramHexString = CryptoJS.enc.Hex.parse(signatureScript)
   let ProgramSha256 = CryptoJS.SHA256(ProgramHexString)
-  return CryptoJS.RIPEMD160(ProgramSha256)
+  return CryptoJS.RIPEMD160(ProgramSha256).toString()
 }
 
 /**
@@ -563,8 +576,8 @@ export const getHash = (signatureScript) => {
  * @param {string} privateKey - Private Key
  * @returns {string} Signature data.
  */
-export const signatureData = ($data, $privateKey) => {
-  let msg = CryptoJS.enc.Hex.parse($data)
+export const signatureData = (data, privateKey) => {
+  let msg = CryptoJS.enc.Hex.parse(data)
   let msgHash = CryptoJS.SHA256(msg)
   const msgHashHex = Buffer.from(msgHash.toString(), 'hex')
   // const privateKeyHex = Buffer.from($privateKey, 'hex')
@@ -572,7 +585,7 @@ export const signatureData = ($data, $privateKey) => {
   // console.log('buffer', privateKeyHex.toString('hex'));
 
   let elliptic = new EC('p256')
-  const sig = elliptic.sign(msgHashHex, $privateKey, null)
+  const sig = elliptic.sign(msgHashHex, privateKey, null)
   const signature = {
     signature: Buffer.concat([
       sig.r.toArrayLike(Buffer, 'be', 32),
@@ -585,64 +598,52 @@ export const signatureData = ($data, $privateKey) => {
 /**
  * Get Account from Private Key
  * @param {string} privateKey - Private Key
- * @returns An Account object
+ * @returns {Account} An Account object
  */
-export const getAccountsFromPrivateKey = (privateKey) => {
+export const getAccountFromPrivateKey = (privateKey) => {
   if (privateKey.length !== 64) {
     return -1
   }
-
-  var publicKeyEncoded = getPublicKey(privateKey, true)
+  const publicKeyEncoded = getPublicKey(privateKey, true)
   // console.log( publicKeyEncoded )
-
-  return getAccountsFromPublicKey(publicKeyEncoded, privateKey)
+  return getAccountFromPublicKey(ab2hexstring(publicKeyEncoded), privateKey)
 }
 
 /**
  * Get Account from Public Key
  * @param {string} publicKeyEncoded - Public Key in encoded form
  * @param {string} privateKey - Private Key (optional)
- * @returns An Account object
+ * @returns {Account} An Account object
  */
-export const getAccountsFromPublicKey = (publicKeyEncoded, privateKey) => {
+export const getAccountFromPublicKey = (publicKeyEncoded, privateKey) => {
   if (!verifyPublicKeyEncoded(publicKeyEncoded)) {
     // verify failed.
     return -1
   }
-  var publicKeyHash = getHash(publicKeyEncoded.toString('hex'))
-  // console.log( publicKeyHash );
+  const publicKeyHash = getHash(publicKeyEncoded)
+  // console.log( publicKeyHash )
 
-  var script = createSignatureScript(publicKeyEncoded)
-  // console.log( script );
+  const script = createSignatureScript(publicKeyEncoded)
+  // console.log(script)
 
-  var programHash = getHash(script)
-  // console.log( programHash )
+  const programHash = getHash(script)
+  // console.log(programHash)
 
-  var address = toAddress(hexstring2ab(programHash.toString()))
-  // console.log( address );
+  const address = toAddress(hexstring2ab(programHash))
+  // console.log( address )
 
-  var accounts = []
-
-  accounts[0] = {
-    privatekey: privateKey,
-    publickeyEncoded: publicKeyEncoded.toString('hex'),
-    publickeyHash: publicKeyHash.toString(),
-    programHash: programHash.toString(),
-    address
-  }
-
-  return accounts
+  return { privateKey, publicKeyEncoded, publicKeyHash, programHash, address }
 }
 
 /**
  * Get Account from WIF
  * @param {string} WIFKey - WIF Key
- * @returns {Account|number} An Account object with {} or -1 for basic encoding errors, -2 for failed verification of WIF
+ * @returns {Account|number} An Account object or -1 for basic encoding errors, -2 for failed verification of WIF
  */
-export const getAccountsFromWIFKey = ($WIFKey) => {
-  let privateKey = getPrivateKeyFromWIF($WIFKey)
+export const getAccountFromWIFKey = (WIFKey) => {
+  let privateKey = getPrivateKeyFromWIF(WIFKey)
   if (privateKey === -1 || privateKey === -2) {
     return privateKey
   }
-  return getAccountsFromPrivateKey(privateKey)
+  return getAccountFromPrivateKey(privateKey)
 }

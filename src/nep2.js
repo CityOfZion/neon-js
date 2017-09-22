@@ -3,7 +3,7 @@
 import bs58check from 'bs58check'
 import C, { SHA256, AES, enc } from 'crypto-js'
 import scrypt from 'js-scrypt'
-import { getAccountsFromWIFKey, getAccountsFromPrivateKey, generatePrivateKey, getWIFFromPrivateKey } from './wallet'
+import { getAccountFromWIFKey, getAccountFromPrivateKey, generatePrivateKey, getWIFFromPrivateKey } from './wallet'
 import { ab2hexstring, hexXor } from './utils'
 
 // specified by nep2, same as bip38
@@ -24,19 +24,18 @@ const SCRYPT_OPTS = {
  */
 export const encryptWifAccount = (wif, passphrase) => {
   return encryptWIF(wif, passphrase).then((encWif) => {
-    const loadAccount = getAccountsFromWIFKey(wif)
+    const loadAccount = getAccountFromWIFKey(wif)
     return {
-      wif: wif,
-      address: loadAccount[0].address,
+      wif,
+      address: loadAccount.address,
       encryptedWif: encWif,
-      passphrase: passphrase
+      passphrase
     }
   })
 }
 
 /**
- * Decrypts an NEP2 key with a given passphrase, returning a Promise<Account>.
- * @param {string} wif - The NEP2 key to encrypt.
+ * Generates a new private Key and encrypts it with the given passphrase.
  * @param {string} passphrase - The password.
  * @return {Promise<Account>} A Promise returning an Account object.
  */
@@ -44,12 +43,12 @@ export const generateEncryptedWif = (passphrase) => {
   const newPrivateKey = generatePrivateKey()
   const newWif = getWIFFromPrivateKey(newPrivateKey)
   return encryptWIF(newWif, passphrase).then((encWif) => {
-    const loadAccount = getAccountsFromWIFKey(newWif)
+    const loadAccount = getAccountFromWIFKey(newWif)
     return {
       wif: newWif,
-      address: loadAccount[0].address,
+      address: loadAccount.address,
       encryptedWif: encWif,
-      passphrase: passphrase
+      passphrase
     }
   })
 }
@@ -62,16 +61,15 @@ export const generateEncryptedWif = (passphrase) => {
  * @returns {string} The encrypted key in Base58 (Case sensitive).
  */
 const encrypt = (wifKey, keyphrase, progressCallback) => {
-  const address = getAccountsFromWIFKey(wifKey)[0].address
-  const privateKey = getAccountsFromWIFKey(wifKey)[0].privatekey
+  const account = getAccountFromWIFKey(wifKey)
     // SHA Salt (use the first 4 bytes)
-  const addressHash = SHA256(SHA256(enc.Latin1.parse(address))).toString().slice(0, 8)
+  const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
     // Scrypt
   const derived = scrypt.hashSync(Buffer.from(keyphrase, 'utf8'), Buffer.from(addressHash, 'hex'), SCRYPT_OPTS, progressCallback).toString('hex')
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
     // AES Encrypt
-  const xor = hexXor(privateKey, derived1)
+  const xor = hexXor(account.privateKey, derived1)
   const encrypted = AES.encrypt(enc.Hex.parse(xor), enc.Hex.parse(derived2), { mode: C.mode.ECB, padding: C.pad.NoPadding })
     // Construct
   const assembled = NEP_HEADER + NEP_FLAG + addressHash + encrypted.ciphertext.toString()
@@ -95,7 +93,7 @@ const decrypt = (encryptedKey, keyphrase, progressCallback) => {
   const ciphertext = { ciphertext: enc.Hex.parse(encrypted), salt: '' }
   const decrypted = AES.decrypt(ciphertext, enc.Hex.parse(derived2), { mode: C.mode.ECB, padding: C.pad.NoPadding })
   const privateKey = hexXor(decrypted.toString(), derived1)
-  const address = getAccountsFromPrivateKey(privateKey)[0].address
+  const address = getAccountFromPrivateKey(privateKey).address
   const newAddressHash = SHA256(SHA256(enc.Latin1.parse(address))).toString().slice(0, 8)
   if (addressHash !== newAddressHash) throw new Error('Wrong Password!')
   return getWIFFromPrivateKey(Buffer.from(privateKey, 'hex'))
@@ -104,13 +102,9 @@ const decrypt = (encryptedKey, keyphrase, progressCallback) => {
 // helpers to wrap synchronous functions in promises
 
 export const encryptWIF = (wif, passphrase) => {
-  return (new Promise((resolve, reject) => {
-    resolve(encrypt(wif, passphrase))
-  }))
+  return Promise.resolve(encrypt(wif, passphrase))
 }
 
 export const decryptWIF = (encrypted, passphrase) => {
-  return (new Promise((resolve, reject) => {
-    resolve(decrypt(encrypted, passphrase))
-  }))
+  return Promise.resolve(decrypt(encrypted, passphrase))
 }
