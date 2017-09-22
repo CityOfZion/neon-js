@@ -59,7 +59,7 @@ export const doClaimAllGas = (net, fromWif) => {
     const claims = response.data['claims']
     const totalClaim = response.data['total_claim']
     const txData = claimTransaction(claims, account.publicKeyEncoded, account.address, totalClaim)
-    const sign = signatureData(txData, account.privatekey)
+    const sign = signatureData(txData, account.privateKey)
     const txRawData = addContract(txData, sign, account.publicKeyEncoded)
     return queryRPC(net, 'sendrawtransaction', [txRawData], 2)
   })

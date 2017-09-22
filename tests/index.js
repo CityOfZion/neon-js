@@ -35,7 +35,7 @@ describe('Wallet', function () {
   const testNet = Neon.getAPIEndpoint('TestNet')
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
-  it('should claim ANC', (done) => {
+  it.skip('should claim GAS', (done) => {
     Neon.doClaimAllGas(Neon.MAINNET, testKeys.c.wif).then((response) => {
       console.log(response)
       done()
