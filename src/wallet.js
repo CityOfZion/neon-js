@@ -582,75 +582,57 @@ export const signatureData = ($data, $privateKey) => {
   return signature.signature.toString('hex')
 }
 
-export const fetchAccountsFromPublicKeyEncoded = ($publicKeyEncoded) => {
-  if (!verifyPublicKeyEncoded($publicKeyEncoded)) {
-    // verify failed.
+/**
+ * Get Account from Private Key
+ * @param {string} privateKey - Private Key
+ * @returns An Account object
+ */
+export const getAccountsFromPrivateKey = (privateKey) => {
+  if (privateKey.length !== 64) {
     return -1
   }
 
-  let accounts = []
+  var publicKeyEncoded = getPublicKey(privateKey, true)
+  // console.log( publicKeyEncoded )
 
-  let publicKeyHash = getHash($publicKeyEncoded)
+  return getAccountsFromPublicKey(publicKeyEncoded, privateKey)
+}
+
+/**
+ * Get Account from Public Key
+ * @param {string} publicKeyEncoded - Public Key in encoded form
+ * @param {string} privateKey - Private Key (optional)
+ * @returns An Account object
+ */
+export const getAccountsFromPublicKey = (publicKeyEncoded, privateKey) => {
+  if (!verifyPublicKeyEncoded(publicKeyEncoded)) {
+    // verify failed.
+    return -1
+  }
+  var publicKeyHash = getHash(publicKeyEncoded.toString('hex'))
   // console.log( publicKeyHash );
 
-  let script = createSignatureScript($publicKeyEncoded)
+  var script = createSignatureScript(publicKeyEncoded)
   // console.log( script );
 
-  let programHash = getHash(script)
-  // console.log( programHash );
+  var programHash = getHash(script)
+  // console.log( programHash )
 
-  let address = toAddress(hexstring2ab(programHash.toString()))
+  var address = toAddress(hexstring2ab(programHash.toString()))
   // console.log( address );
 
+  var accounts = []
+
   accounts[0] = {
-    privatekey: '',
-    publickeyEncoded: $publicKeyEncoded,
+    privatekey: privateKey,
+    publickeyEncoded: publicKeyEncoded.toString('hex'),
     publickeyHash: publicKeyHash.toString(),
     programHash: programHash.toString(),
-    address: address
+    address
   }
 
   return accounts
 }
-
-// TODO: why does this wrap return info in a list? seems unnecessary
-// ditto for all the other GetAccounts methods
-export const getAccountsFromPrivateKey = ($privateKey) => {
-  if ($privateKey.length != 64) {
-    return -1;
-  }
-
-  var publicKeyEncoded = getPublicKey($privateKey, true);
-  
-  // console.log( publicKeyEncoded );
-  return getAccountsFromPublicKey(publicKeyEncoded,$privateKey);
-}
-
-export const getAccountsFromPublicKey = (publicKeyEncoded,$privateKey) => {
-  var publicKeyHash = getHash(publicKeyEncoded.toString('hex'));
-  //console.log( publicKeyHash );
-  
-  var script = createSignatureScript(publicKeyEncoded);
-  //console.log( script );
-  
-  var programHash = getHash(script);
-  // console.log( programHash );
-  
-  var address = toAddress(hexstring2ab(programHash.toString()));
-  // console.log( address );
-  
-  var accounts = [];
-  
-  accounts[0] = {
-    privatekey: $privateKey,
-    publickeyEncoded: publicKeyEncoded.toString('hex'),
-    publickeyHash: publicKeyHash.toString(),
-    programHash: programHash.toString(),
-    address: address,
-  };
-  
-  return accounts;
-};
 
 /**
  * Get Account from WIF
