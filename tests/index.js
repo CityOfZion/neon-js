@@ -3,7 +3,7 @@ import {
   hexstring2ab,
   ab2hexstring
 } from '../src/utils'
-import * as api from '../src/api'
+import * as Neon from '../src/index'
 
 var chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
@@ -16,7 +16,7 @@ describe('Wallet', function () {
   this.timeout(15000)
 
   const testKeys = {
-    'a': {
+    a: {
       address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW',
       wif: 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g',
       passphrase: 'city of zion',
@@ -32,32 +32,31 @@ describe('Wallet', function () {
     }
   }
 
-  const testNet = api.getAPIEndpoint('TestNet')
+  const testNet = Neon.getAPIEndpoint('TestNet')
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
   it.skip('should claim ANC', (done) => {
-    api.claimAllGAS(api.MAINNET, testKeys.c.wif).then((response) => {
+    Neon.claimAllGAS(Neon.MAINNET, testKeys.c.wif).then((response) => {
       console.log(response)
       done()
     })
   })
 
   it('should generate a new private key', (done) => {
-    const privateKey = ab2hexstring(api.generatePrivateKey())
+    const privateKey = ab2hexstring(Neon.generatePrivateKey())
     privateKey.should.have.length(64)
     done()
   })
 
-  it('should generate a valid WIF', (done) => {
-    const privateKey = api.generatePrivateKey()
-    const wif = api.getWIFFromPrivateKey(privateKey)
-    const account = api.getAccountsFromWIFKey(wif)[0]
-    account.privatekey.should.equal(ab2hexstring(privateKey))
-    done()
+  it('should generate a valid WIF', () => {
+    const privateKey = Neon.generatePrivateKey()
+    const wif = Neon.getWIFFromPrivateKey(privateKey)
+    const account = Neon.getAccountFromWIFKey(wif)
+    account.privateKey.should.equal(ab2hexstring(privateKey))
   })
 
   it('should encrypt a WIF using nep2', (done) => {
-    api.encryptWIF(testKeys.a.wif, testKeys.a.passphrase).then((result) => {
+    Neon.encryptWIF(testKeys.a.wif, testKeys.a.passphrase).then((result) => {
       result.should.equal(testKeys.a.encryptedWif)
       done()
     })
@@ -65,10 +64,10 @@ describe('Wallet', function () {
 
   it('should verify that script has produces the same address', (done) => {
     for (let i = 0; i < 100; i++) {
-      const privateKey = ab2hexstring(api.generatePrivateKey())
-      const account = api.getAccountsFromPrivateKey(privateKey)[0]
-      const addressFromScript1 = api.toAddress(base58.decode(account.address).slice(1, 21))
-      const addressFromScript2 = api.toAddress(hexstring2ab(api.getHash(api.createSignatureScript(account.publickeyEncoded)).toString()))
+      const privateKey = ab2hexstring(Neon.generatePrivateKey())
+      const account = Neon.getAccountFromPrivateKey(privateKey)
+      const addressFromScript1 = Neon.toAddress(base58.decode(account.address).slice(1, 21))
+      const addressFromScript2 = Neon.toAddress(hexstring2ab(Neon.getHash(Neon.createSignatureScript(account.publicKeyEncoded)).toString()))
       addressFromScript1.should.equal(account.address)
       addressFromScript2.should.equal(account.address)
     }
@@ -76,49 +75,49 @@ describe('Wallet', function () {
   })
 
   it('should show that Neo address passes validation', (done) => {
-    api.verifyAddress(testKeys.a.address).should.equal(true)
+    Neon.verifyAddress(testKeys.a.address).should.equal(true)
     done()
   })
 
   it('should show that btc address fails validation', (done) => {
-    api.verifyAddress('1BoatSLRHtKNngkdXEeobR76b53LETtpyT').should.equal(false)
+    Neon.verifyAddress('1BoatSLRHtKNngkdXEeobR76b53LETtpyT').should.equal(false)
     done()
   })
 
   it('should decrypt a WIF using nep2', (done) => {
-    api.decryptWIF(testKeys.a.encryptedWif, testKeys.a.passphrase).then((result) => {
+    Neon.decryptWIF(testKeys.a.encryptedWif, testKeys.a.passphrase).then((result) => {
       result.should.equal(testKeys.a.wif)
       done()
     })
   })
 
   it('should get keys from a WIF', (done) => {
-    const account = api.getAccountsFromWIFKey(testKeys.a.wif)[0]
-    account.privatekey.should.be.a('string')
+    const account = Neon.getAccountFromWIFKey(testKeys.a.wif)
+    account.privateKey.should.be.a('string')
     account.address.should.equal(testKeys.a.address)
     done()
   })
 
   it('should verify publicKeyEncoded', (done) => {
-    const privateKey = ab2hexstring(api.generatePrivateKey())
-    const accounts = api.getAccountsFromPrivateKey(privateKey)
-    accounts.should.not.equal(-1)
-    const verify = api.verifyPublicKeyEncoded(accounts[0].publickeyEncoded)
+    const privateKey = ab2hexstring(Neon.generatePrivateKey())
+    const account = Neon.getAccountFromPrivateKey(privateKey)
+    account.should.not.equal(-1)
+    const verify = Neon.verifyPublicKeyEncoded(account.publicKeyEncoded)
     verify.should.equal(true)
     done()
   })
 
   it('should verify address', (done) => {
-    const privateKey = ab2hexstring(api.generatePrivateKey())
-    const accounts = api.getAccountsFromPrivateKey(privateKey)
-    accounts.should.not.equal(-1)
-    const verify = api.verifyAddress(accounts[0].address)
+    const privateKey = ab2hexstring(Neon.generatePrivateKey())
+    const account = Neon.getAccountFromPrivateKey(privateKey)
+    account.should.not.equal(-1)
+    const verify = Neon.verifyAddress(account.address)
     verify.should.equal(true)
     done()
   })
 
   it('should get balance from address', (done) => {
-    api.getBalance(api.TESTNET, testKeys.a.address).then((response) => {
+    Neon.getBalance(Neon.TESTNET, testKeys.a.address).then((response) => {
       response.Neo.should.be.a('number')
       response.Gas.should.be.a('number')
       done()
@@ -126,29 +125,29 @@ describe('Wallet', function () {
   })
 
   it('should get unspent transactions', (done) => {
-    api.getBalance(api.TESTNET, testKeys.a.address, api.ansId).then((response) => {
+    Neon.getBalance(Neon.TESTNET, testKeys.a.address, Neon.ansId).then((response) => {
       response.unspent.Neo.should.be.an('array')
       response.unspent.Gas.should.be.an('array')
       done()
     })
   })
 
-  it('should send NEO', (done) => {
-    api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, 'Neo', 1).then((response) => {
+  it.only('should send NEO', (done) => {
+    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, 'Neo', 1).then((response) => {
       response.result.should.equal(true)
       // send back so we can re-run
-      api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, 'Neo', 1).then((response) => {
-        response.result.should.equal(true)
-        done()
-      })
+      return Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, 'Neo', 1)
+    }).then((response) => {
+      response.result.should.equal(true)
+      done()
     })
   })
 
   it('should send GAS', (done) => {
-    api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, 'Gas', 1).then((response) => {
+    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, 'Gas', 1).then((response) => {
       response.result.should.equal(true)
       // send back so we can re-run
-      api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, 'Gas', 1).then((response) => {
+      Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, 'Gas', 1).then((response) => {
         response.result.should.equal(true)
         done()
       })
