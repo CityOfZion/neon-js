@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getAccountsFromWIFKey, transferTransaction, signatureData, addContract, claimTransaction } from './wallet'
+import { getAccountFromWIFKey, transferTransaction, signatureData, addContract, claimTransaction } from './wallet'
 
 // hard-code asset ids for NEO and GAS
 export const neoId = 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b'
@@ -15,7 +15,11 @@ export const getAPIEndpoint = (net) => {
   }
 }
 
-// return the best performing (highest block + fastest) node RPC
+/**
+ * Returns the best performing (highest block + fastest) node RPC
+ * @param {string} net - 'MainNet' or 'TestNet'
+ * @return {Promise<string>} The URL of the best performing node
+ */
 export const getRPCEndpoint = (net) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/network/best_node').then((response) => {
@@ -23,7 +27,14 @@ export const getRPCEndpoint = (net) => {
   })
 }
 
-// wrapper for querying node RPC
+/**
+ * Wrapper for querying node RPC
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} method - RPC Method name.
+ * @param {Array} params - Array of parameters to send.
+ * @param {number} id - Unique id to identity yourself. RPC should reply with same id.
+ * @returns {object} RPC Response
+ */
 export const queryRPC = (net, method, params, id = 1) => {
   const jsonRequest = axios.create({ headers: { 'Content-Type': 'application/json' } })
   const jsonRpcData = { method, params, id, jsonrpc: '2.0' }
@@ -34,7 +45,12 @@ export const queryRPC = (net, method, params, id = 1) => {
   })
 }
 
-// get amounts of available (spent) and unavailable claims
+/**
+ * Get amounts of available (spent) and unavailable claims
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} address - Address to check.
+ * @return {object} { available: <number>, unavailable: <number> }
+ */
 export const getClaimAmounts = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/claims/' + address).then((res) => {
@@ -42,10 +58,15 @@ export const getClaimAmounts = (net, address) => {
   })
 }
 
-// do a claim transaction on all available (spent) gas
+/**
+ * Perform a ClaimTransaction for all available GAS
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} fromWif - WIF key of address you are claiming from.
+ * @return {object} RPC response from sending transaction
+ */
 export const doClaimAllGas = (net, fromWif) => {
   const apiEndpoint = getAPIEndpoint(net)
-  const account = getAccountsFromWIFKey(fromWif)[0]
+  const account = getAccountFromWIFKey(fromWif)
   // TODO: when fully working replace this with mainnet/testnet switch
   return axios.get(apiEndpoint + '/v2/address/claims/' + account.address).then((response) => {
     const claims = response.data['claims']
@@ -58,6 +79,20 @@ export const doClaimAllGas = (net, fromWif) => {
 }
 
 // get Neo and Gas balance for an account
+/**
+ * Get balances of NEO and GAS for an address
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} address - Address to check.
+ * @return {object} Object in the form of:
+ * {
+ *  Neo: {},
+ *  Gas: {},
+ *  unspent: {
+ *    Neo: Coin[],
+ *    Gas: Coin[]
+ *  }
+ * }
+ */
 export const getBalance = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/balance/' + address)
@@ -68,7 +103,12 @@ export const getBalance = (net, address) => {
     })
 }
 
-// get transaction history for an account
+/**
+ * Get transaction history for an account
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} address - Address to check.
+ * @return {Object} History
+ */
 export const getTransactionHistory = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/history/' + address).then((response) => {
@@ -76,7 +116,11 @@ export const getTransactionHistory = (net, address) => {
   })
 }
 
-// get the current height of the light wallet DB
+/**
+ * Get the current height of the light wallet DB
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @return {number} Current height.
+ */
 export const getWalletDBHeight = (net) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/block/height').then((response) => {
@@ -84,7 +128,15 @@ export const getWalletDBHeight = (net) => {
   })
 }
 
-// send an asset to an address
+/**
+ * Send an asset to an address
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} toAddress - The destination address.
+ * @param {string} fromWif - The WIF key of the originating address.
+ * @param {string} assetType - The Asset. 'Neo' or 'Gas'.
+ * @param {number} amount - The amount of asset to send.
+ * @return {Object} RPC Response
+ */
 export const doSendAsset = (net, toAddress, fromWif, assetType, amount) => {
   let assetId
   if (assetType === 'Neo') {
@@ -92,7 +144,7 @@ export const doSendAsset = (net, toAddress, fromWif, assetType, amount) => {
   } else {
     assetId = gasId
   }
-  const fromAccount = getAccountsFromWIFKey(fromWif)[0]
+  const fromAccount = getAccountFromWIFKey(fromWif)
   return getBalance(net, fromAccount.address).then((response) => {
     const coinsData = {
       'assetid': assetId,
@@ -101,8 +153,8 @@ export const doSendAsset = (net, toAddress, fromWif, assetType, amount) => {
       'name': assetType
     }
     const txData = transferTransaction(coinsData, fromAccount.publickeyEncoded, toAddress, amount)
-    const sign = signatureData(txData, fromAccount.privatekey)
-    const txRawData = addContract(txData, sign, fromAccount.publickeyEncoded)
+    const sign = signatureData(txData, fromAccount.privateKey)
+    const txRawData = addContract(txData, sign, fromAccount.publicKeyEncoded)
     return queryRPC(net, 'sendrawtransaction', [txRawData], 4)
   })
 }
