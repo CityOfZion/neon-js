@@ -35,11 +35,11 @@ describe('Wallet', function () {
   const testNet = Neon.getAPIEndpoint('TestNet')
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
-  it.skip('should claim ANC', (done) => {
-    Neon.claimAllGAS(Neon.MAINNET, testKeys.c.wif).then((response) => {
+  it('should claim ANC', (done) => {
+    Neon.doClaimAllGas(Neon.MAINNET, testKeys.c.wif).then((response) => {
       console.log(response)
       done()
-    })
+    }).catch((e) => console.log(e))
   })
 
   it('should generate a new private key', (done) => {
@@ -59,7 +59,7 @@ describe('Wallet', function () {
     Neon.encryptWIF(testKeys.a.wif, testKeys.a.passphrase).then((result) => {
       result.should.equal(testKeys.a.encryptedWif)
       done()
-    })
+    }).catch((e) => console.log(e))
   })
 
   it('should verify that script has produces the same address', (done) => {
@@ -121,7 +121,7 @@ describe('Wallet', function () {
       response.Neo.should.be.a('number')
       response.Gas.should.be.a('number')
       done()
-    })
+    }).catch((e) => console.log(e))
   })
 
   it('should get unspent transactions', (done) => {
@@ -129,10 +129,10 @@ describe('Wallet', function () {
       response.unspent.Neo.should.be.an('array')
       response.unspent.Gas.should.be.an('array')
       done()
-    })
+    }).catch((e) => console.log(e))
   })
 
-  it.only('should send NEO', (done) => {
+  it('should send NEO', (done) => {
     Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, 'Neo', 1).then((response) => {
       response.result.should.equal(true)
       // send back so we can re-run
@@ -140,7 +140,7 @@ describe('Wallet', function () {
     }).then((response) => {
       response.result.should.equal(true)
       done()
-    })
+    }).catch((e) => console.log(e))
   })
 
   it('should send GAS', (done) => {
@@ -150,7 +150,7 @@ describe('Wallet', function () {
       Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, 'Gas', 1).then((response) => {
         response.result.should.equal(true)
         done()
-      })
+      }).catch((e) => console.log(e))
     })
   })
 })
