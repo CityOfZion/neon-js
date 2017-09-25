@@ -40,14 +40,14 @@ api.getBalance(api.MAINNET, testKeys.a.address).then((balance) => {
   console.log(balance);
 });
 
-// Claim all available GAS for account "a" on TestNet
+// Claim all available GAS for account "a" on MainNet
 api.doClaimAllGas(api.MAINNET, testKeys.c.wif).then((response) => {
   console.log(response);
 })
 
 // Send 1 ANS to "a" from "b" on TestNet
 api.doSendAsset(api.TESTNET, testKeys.a.address, testKeys.b.wif, "Neo", 1).then((response) => {
-  console.log('response:',response);
+  console.log(response);
   console.log("Transaction complete!");
 });
 ```
