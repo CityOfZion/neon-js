@@ -10,7 +10,8 @@ import { ab2str,
   ab2hexstring,
   reverseArray,
   numStoreInMemory,
-  stringToBytes } from './utils';
+  stringToBytes,
+  quickSort } from './utils';
 
 const base58 = require('base-x')(BASE58);
 import secureRandom from 'secure-random';
@@ -36,16 +37,7 @@ export const getTxHash = ($data) => {
 // TODO: this needs a lot of documentation, also better name!
 export const getInputData = ($coin, $amount) => {
   // sort
-  var coinOrdered = $coin.list;
-  for (let i = 0; i < coinOrdered.length - 1; i++) {
-    for (let j = 0; j < coinOrdered.length - 1 - i; j++) {
-      if (parseFloat(coinOrdered[j].value) < parseFloat(coinOrdered[j + 1].value)) {
-        var temp = coinOrdered[j];
-        coinOrdered[j] = coinOrdered[j + 1];
-        coinOrdered[j + 1] = temp;
-      }
-    }
-  }
+  let coinOrdered = quickSort($coin.list, 0, $coin.list - 1);
 
   // calc sum
   const sum = coinOrdered.reduce((sum, coin) => sum + parseFloat(coin.value), 0);
