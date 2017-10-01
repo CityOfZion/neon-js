@@ -8,6 +8,10 @@ const should = chai.should()
 
 describe.only('Transactions', function () {
     const deserializedTx = {
+        type: 0x80,
+        version: 0,
+        data: {},
+        attributes: [],
         inputs: [
             {
                 prevHash: '22555bfe765497956f4194d40c0e8cf8068b97517799061e450ad2468db2a7c4',
@@ -36,7 +40,7 @@ describe.only('Transactions', function () {
 
     const serializedTx = {
         stream: '80000001c4a7b28d46d20a451e06997751978b06f88c0e0cd494416f95975476fe5b55220100029b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc500e1f505000000003775292229eccdf904f16fff8e83e7cffdc0f0ce9b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc5002aa1c16d00000035b20010db73bf86371075ddfba4e6596f1ff35d01414051c2e6e2993c6feb43383131ed2091f4953747d3e16ecad752cdd90203a992dea0273e98c8cd09e9bfcf2dab22ce843429cdf0fcb9ba4ac93ef1aeef40b207832321031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9ac',
-        attributes: '',
+        attributes: [],
         inputs: [
             'c4a7b28d46d20a451e06997751978b06f88c0e0cd494416f95975476fe5b55220100'
         ],
@@ -87,17 +91,26 @@ describe.only('Transactions', function () {
 
     describe('Witness', function () {
         it('serialize', () => {
-            for (let i=0; i< deserializedTx.scripts.length;i++) {
-                let s = tx.serialize.scripts(deserializedTx.scripts[i])
+            for (let i = 0; i < deserializedTx.scripts.length; i++) {
+                let s = tx.serialize.script(deserializedTx.scripts[i])
                 s.should.equal(serializedTx.scripts[i])
             }
         })
         it('deserialize', () => {
-            for (let i=0; i< serializedTx.scripts.length;i++) {
+            for (let i = 0; i < serializedTx.scripts.length; i++) {
                 let ss = new StringStream(serializedTx.scripts[i])
-                let s = tx.deserialize.scripts(ss)
+                let s = tx.deserialize.script(ss)
                 s.should.eql(deserializedTx.scripts[i])
             }
         })
+    })
+
+    it('serialize', () => {
+        const hexstring = tx.serializeTransaction(deserializedTx)
+        hexstring.should.equal(serializedTx.stream)
+    })
+    it('deserialize', () => {
+        const transaction = tx.deserializeTransaction(serializedTx.stream)
+        transaction.should.eql(deserializedTx)
     })
 })

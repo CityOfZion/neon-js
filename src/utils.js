@@ -39,6 +39,23 @@ const num2hexstring = (num, size = 2) => {
   return hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length)
 }
 
+/**
+ * Converts a number to a variable length Int. Used for array length header
+ * @param num - The number
+ * @returns {string} hexstring of the variable Int.
+ */
+const num2VarInt = (num) => {
+  if (num < 0xfd) {
+    return num2hexstring(num)
+  } else if (num <= 0xffff) {
+    return 'fd' + num2hexstring(num, 4)
+  } else if (num <= 0xffffffff) {
+    return 'fe' + num2hexstring(num, 8)
+  } else {
+    return 'ff' + num2hexstring(num, 8) + num2hexstring(num / Math.pow(2,32), 8)
+  }
+}
+
 const hexXor = (str1, str2) => {
   console.log(str1, str2);
   if (str1.length !== str2.length) throw new Error()
@@ -141,23 +158,31 @@ const getTransferTxData = (txData) => {
 }
 
 class StringStream {
-  constructor(str) {
+  constructor(str='') {
     this.str = str
     this.pter = 0
   }
+  
+  isEmpty() {
+    return this.pter >= this.str.length
+  }
 
   read(bytes) {
-    const out = this.str.substr(this.pter, bytes*2)
-    this.pter += bytes*2
+    if (this.isEmpty()) throw new Error()
+    const out = this.str.substr(this.pter, bytes * 2)
+    this.pter += bytes * 2
     return out
   }
 
   readVarBytes() {
+    return this.read(this.readVarInt())
+  }
+  readVarInt() {
     let len = parseInt(this.read(1), 16)
     if (len === 0xfd) { len = parseInt(reverseHex(this.read(2)), 16) }
     else if (len === 0xfe) { len = parseInt(reverseHex(this.read(4)), 16) }
     else if (len === 0xff) { len = parseInt(reverseHex(this.read(8)), 16) }
-    return this.read(len)
+    return len
   }
 }
 
@@ -172,5 +197,6 @@ export {
   hexXor,
   num2hexstring,
   StringStream,
-  reverseHex
+  reverseHex,
+  num2VarInt
 }

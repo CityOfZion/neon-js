@@ -1,4 +1,11 @@
-import { num2hexstring, ab2hexstring, StringStream, reverseHex, numStoreInMemory } from '../utils.js'
+import { num2hexstring, num2VarInt, ab2hexstring, StringStream, reverseHex, numStoreInMemory } from '../utils.js'
+
+/**
+ * NEO's default Endianness from RPC calls is Little Endian.
+ * However, we will store our data in Big Endian unless stated.
+ * This helps us in utilising the data we have in terms of displaying
+ * and makes it easy to interact with other tools (eg pasting into block explorer)
+ */
 
 /**
  * @typedef TransactionInput
@@ -39,23 +46,50 @@ const deserializeTransactionOutput = (stream) => {
 /**
  * @typedef TransactionAttribute
  * @property {number} usage - Identifying byte
- * @property {ArrayBuffer} data - Data
+ * @property {string} data - Data
  */
+const maxTransactionAttributeSize = 65535
 
-const serializeTransactionAttribute = (output) => {
-  //TODO
-  return
+const serializeTransactionAttribute = (attr) => {
+  if (attr.data.length > maxTransactionAttributeSize) throw new Error()
+  let out = num2hexstring(attr.usage)
+  if (attr.usage === 0x81) {
+    out += num2hexstring(data.length)
+  } else if (attr.usage === 0x90 || attr.usage >= 0xf0) {
+    out += num2VarInt(data.length)
+  }
+  if (attr.usage === 0x02 || attr.usage === 0x03) {
+    out += attr.data.substr(2, 64)
+  } else {
+    out == attr.data
+  }
+  return out
 }
 
 const deserializeTransactionAttribute = (stream) => {
-  //TODO
-  return
+  const attr = {
+    usage: parseInt(stream.read(1), 16)
+  }
+  if (attr.usage === 0x00 || attr.usage === 0x30 || (attr.usage >= 0xa1 && attr.usage <= 0xaf)) {
+    attr.data = stream.read(32)
+  } else if (attr.usage === 0x02 || attr.usage === 0x03) {
+    attr.data = num2hexstring(attr.usage) + stream.read(32)
+  } else if (attr.usage === 0x20) {
+    attr.data = stream.read(20)
+  } else if (attr.usage === 0x81) {
+    attr.data = stream.read(parseInt(stream.read(1), 16))
+  } else if (attr.usage === 0x90 || attr.usage >= 0xf0) {
+    attr.data = stream.readVarBytes()
+  } else {
+    throw new Error()
+  }
+  return attr
 }
 
 /**
  * @typedef Witness
- * @property {string} invocationScript
- * @property {string} verificationScript
+ * @property {string} invocationScript - This data is stored as is (Little Endian)
+ * @property {string} verificationScript - This data is stored as is (Little Endian)
  */
 
 const serializeWitness = (witness) => {
@@ -84,7 +118,7 @@ export const serialize = {
   attribute: serializeTransactionAttribute,
   input: serializeTransactionInput,
   output: serializeTransactionOutput,
-  scripts: serializeWitness,
+  script: serializeWitness,
   exclusiveData: {
     128: (tx) => { return '' }
   }
@@ -94,9 +128,9 @@ export const deserialize = {
   attribute: deserializeTransactionAttribute,
   input: deserializeTransactionInput,
   output: deserializeTransactionOutput,
-  scripts: deserializeWitness,
+  script: deserializeWitness,
   exclusiveData: {
-    128: () => { return null }
+    128: () => { return {} }
   }
 }
 
@@ -110,22 +144,22 @@ export const serializeTransaction = (tx) => {
   out += num2hexstring(tx.type)
   out += num2hexstring(tx.version)
   out += serialize.exclusiveData[tx.type](tx)
-  out += num2hexstring(tx.attributes.length)
+  out += num2VarInt(tx.attributes.length)
   for (const attribute of tx.attributes) {
     out += serialize.attribute(attribute)
   }
-  out += num2hexstring(tx.inputs.length)
+  out += num2VarInt(tx.inputs.length)
   for (const input of tx.inputs) {
     out += serialize.input(input)
   }
-  out += num2hexstring(tx.outputs.length)
+  out += num2VarInt(tx.outputs.length)
   for (const output of tx.outputs) {
     out += serialize.output(output)
   }
   if (tx.scripts) {
-    out += num2hexstring(tx.scripts.length)
+    out += num2VarInt(tx.scripts.length)
     for (const script of tx.scripts) {
-      out += serialize.witness(script)
+      out += serialize.script(script)
     }
   }
   return out
@@ -139,5 +173,30 @@ export const serializeTransaction = (tx) => {
 export const deserializeTransaction = (data) => {
   const ss = new StringStream(data)
   let tx = {}
-
+  tx.type = parseInt(ss.read(1), 16)
+  tx.version = parseInt(ss.read(1), 16)
+  tx.data = deserialize.exclusiveData[tx.type](ss)
+  tx.attributes = []
+  tx.inputs = []
+  tx.outputs = []
+  tx.scripts = []
+  const attrLength = ss.readVarInt()
+  for (let i = 0; i < attrLength; i++) {
+    tx.inputs.push(deserialize.attribute(ss))
+  }
+  const inputLength = ss.readVarInt()
+  for (let i = 0; i < inputLength; i++) {
+    tx.inputs.push(deserialize.input(ss))
+  }
+  const outputLength = ss.readVarInt()
+  for (let i = 0; i < outputLength; i++) {
+    tx.outputs.push(deserialize.output(ss))
+  }
+  if (!ss.isEmpty()) {
+    const scriptLength = ss.readVarInt()
+    for (let i = 0; i < scriptLength; i++) {
+      tx.scripts.push(deserialize.script(ss))
+    }
+  }
+  return tx
 }
