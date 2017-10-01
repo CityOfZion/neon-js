@@ -29,13 +29,23 @@ const ab2hexstring = arr => {
   return result;
 }
 
+/**
+ * Converts a number to a hexstring of a suitable size
+ * @param num - The number
+ * @param size - The required size in chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.
+ */
+const num2hexstring = (num, size = 2) => {
+  let hexstring = num.toString(16)
+  return hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length)
+}
+
 const hexXor = (str1, str2) => {
   console.log(str1, str2);
   if (str1.length !== str2.length) throw new Error()
   if (str1.length % 2 !== 0) throw new Error()
   const result = [];
   for (let i = 0; i < str1.length; i += 2) {
-    result.push( parseInt(str1.substr(i, 2), 16) ^ parseInt(str2.substr(i, 2), 16) );
+    result.push(parseInt(str1.substr(i, 2), 16) ^ parseInt(str2.substr(i, 2), 16));
   }
   return ab2hexstring(result);
 }
@@ -48,16 +58,25 @@ const reverseArray = arr => {
   return result;
 }
 
+const reverseHex = hex => {
+  if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
+  let out = ''
+  for (let i = hex.length - 2; i >= 0; i -= 2) {
+    out += hex.substr(i, 2)
+  }
+  return out
+}
+
 const numStoreInMemory = (num, length) => {
   for (let i = num.length; i < length; i++) {
     num = `0${num}`;
   }
-  return ab2hexstring(reverseArray(new Buffer(num, 'HEX')));
+  return ab2hexstring(reverseArray(Buffer.from(num, 'hex')));
 }
 
 const stringToBytes = str => {
   const arr = [],
-        utf8 = unescape(encodeURIComponent(str));
+    utf8 = unescape(encodeURIComponent(str));
   for (let i = 0; i < utf8.length; i++) {
     arr.push(utf8.charCodeAt(i));
   }
@@ -66,14 +85,14 @@ const stringToBytes = str => {
 
 const getTransferTxData = (txData) => {
   const ba = new Buffer(txData, 'hex'),
-        Transaction = () => {
-    this.type = 0;
-    this.version = 0;
-    this.attributes = '';
-    this.inputs = [];
-    this.outputs = [];
-  },
-        tx = new Transaction();
+    Transaction = () => {
+      this.type = 0;
+      this.version = 0;
+      this.attributes = '';
+      this.inputs = [];
+      this.outputs = [];
+    },
+    tx = new Transaction();
 
   // Transfer Type
   if (ba[0] != 0x80) return;
@@ -84,7 +103,7 @@ const getTransferTxData = (txData) => {
 
   // Attributes
   let k = 2,
-      len = ba[k];
+    len = ba[k];
 
   for (i = 0; i < len; i++) {
     k = k + 1;
@@ -121,6 +140,27 @@ const getTransferTxData = (txData) => {
   return tx;
 }
 
+class StringStream {
+  constructor(str) {
+    this.str = str
+    this.pter = 0
+  }
+
+  read(bytes) {
+    const out = this.str.substr(this.pter, bytes*2)
+    this.pter += bytes*2
+    return out
+  }
+
+  readVarBytes() {
+    let len = parseInt(this.read(1), 16)
+    if (len === 0xfd) { len = parseInt(reverseHex(this.read(2)), 16) }
+    else if (len === 0xfe) { len = parseInt(reverseHex(this.read(4)), 16) }
+    else if (len === 0xff) { len = parseInt(reverseHex(this.read(8)), 16) }
+    return this.read(len)
+  }
+}
+
 export {
   ab2str,
   str2ab,
@@ -129,5 +169,8 @@ export {
   reverseArray,
   numStoreInMemory,
   stringToBytes,
-  hexXor
+  hexXor,
+  num2hexstring,
+  StringStream,
+  reverseHex
 }
