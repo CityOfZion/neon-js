@@ -31,14 +31,32 @@ const ab2hexstring = arr => {
 
 /**
  * Converts a number to a hexstring of a suitable size
- * @param num - The number
- * @param size - The required size in chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.
+ * @param {number} num
+ * @param {number} size - The required size in chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.
  */
 const num2hexstring = (num, size = 2) => {
   let hexstring = num.toString(16)
   return hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length)
 }
 
+/**
+ * Converts a number to a Fixed8 format string
+ * @param {number} num
+ * @return {string} number in Fixed8 representation.
+ */
+const num2fixed8 = (num) => {
+  const hexValue = (output.value * 100000000).toString(16)
+  return reverseHex(('0000000000000000' + hexValue).substring(hexValue.length))
+}
+
+/**
+ * Converts a Fixed8 string to number
+ * @param {string} fixed8
+ * @return {number}
+ */
+const fixed82num = (fixed8) => {
+  return parseInt(reverseHex(fixed8), 16) / 100000000
+}
 /**
  * Converts a number to a variable length Int. Used for array length header
  * @param num - The number
@@ -52,7 +70,7 @@ const num2VarInt = (num) => {
   } else if (num <= 0xffffffff) {
     return 'fe' + num2hexstring(num, 8)
   } else {
-    return 'ff' + num2hexstring(num, 8) + num2hexstring(num / Math.pow(2,32), 8)
+    return 'ff' + num2hexstring(num, 8) + num2hexstring(num / Math.pow(2, 32), 8)
   }
 }
 
@@ -158,11 +176,11 @@ const getTransferTxData = (txData) => {
 }
 
 class StringStream {
-  constructor(str='') {
+  constructor(str = '') {
     this.str = str
     this.pter = 0
   }
-  
+
   isEmpty() {
     return this.pter >= this.str.length
   }
@@ -198,5 +216,7 @@ export {
   num2hexstring,
   StringStream,
   reverseHex,
-  num2VarInt
+  num2VarInt,
+  num2fixed8,
+  fixed82num
 }
