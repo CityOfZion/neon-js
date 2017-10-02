@@ -23,9 +23,7 @@ export const serialize = {
   input: c.serializeTransactionInput,
   output: c.serializeTransactionOutput,
   script: c.serializeWitness,
-  exclusiveData: {
-    128: (tx) => { return '' }
-  }
+  exclusiveData: e.serialize
 }
 
 export const deserialize = {
@@ -33,9 +31,7 @@ export const deserialize = {
   input: c.deserializeTransactionInput,
   output: c.deserializeTransactionOutput,
   script: c.deserializeWitness,
-  exclusiveData: {
-    128: () => { return {} }
-  }
+  exclusiveData: e.deserialize
 }
 
 /**
