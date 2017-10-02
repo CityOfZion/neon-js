@@ -11,7 +11,7 @@ const deserializeClaimExclusive = (ss) => {
   }
   const claimLength = ss.readVarInt()
   for (let i = 0; i < claimLength; i++) {
-    claims.push(deserializeTransactionInput(ss))
+    out.claims.push(deserializeTransactionInput(ss))
   }
   return out
 }
@@ -22,7 +22,7 @@ const deserializeClaimExclusive = (ss) => {
  */
 const serializeClaimExclusive = (tx) => {
   if (tx.type !== 0x02) throw new Error()
-  out = num2VarInt(tx.claims.length)
+  let out = num2VarInt(tx.claims.length)
   for (const claim of tx.claims) {
     out += serializeTransactionInput(claim)
   }

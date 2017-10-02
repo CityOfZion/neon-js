@@ -56,7 +56,7 @@ export const serializeTransaction = (tx) => {
   for (const output of tx.outputs) {
     out += serialize.output(output)
   }
-  if (tx.scripts) {
+  if (tx.scripts && tx.scripts.length > 0) {
     out += num2VarInt(tx.scripts.length)
     for (const script of tx.scripts) {
       out += serialize.script(script)
