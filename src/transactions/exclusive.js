@@ -51,7 +51,7 @@ const deserializeInvocationExclusive = (ss) => {
 
 const serializeInvocationExclusive = (tx) => {
   if (tx.type !== 0xd1) throw new Error()
-  let out = num2VarInt(tx.script.length)
+  let out = num2VarInt(tx.script.length / 2)
   out += tx.script
   if (tx.version >= 1) out += num2fixed8(tx.gas)
   return out
