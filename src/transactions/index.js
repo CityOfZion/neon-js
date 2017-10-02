@@ -1,4 +1,4 @@
-import { num2VarInt, StringStream } from '../utils.js'
+import { num2VarInt, num2hexstring, StringStream } from '../utils.js'
 import * as c from './components.js'
 import * as e from './exclusive.js'
 /**

@@ -45,7 +45,7 @@ const num2hexstring = (num, size = 2) => {
  * @return {string} number in Fixed8 representation.
  */
 const num2fixed8 = (num) => {
-  const hexValue = (output.value * 100000000).toString(16)
+  const hexValue = (num * 100000000).toString(16)
   return reverseHex(('0000000000000000' + hexValue).substring(hexValue.length))
 }
 

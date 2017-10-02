@@ -1,4 +1,4 @@
-import { StringStream, num2fixed8, fixed82num } from '../utils.js'
+import { StringStream, num2fixed8, fixed82num, num2VarInt } from '../utils.js'
 import { serializeTransactionInput, deserializeTransactionInput } from './components.js'
 
 /**
@@ -51,21 +51,21 @@ const deserializeInvocationExclusive = (ss) => {
 
 const serializeInvocationExclusive = (tx) => {
   if (tx.type !== 0xd1) throw new Error()
-  const out = num2VarInt(tx.script.length)
+  let out = num2VarInt(tx.script.length)
   out += tx.script
   if (tx.version >= 1) out += num2fixed8(tx.gas)
   return out
 }
 
 
-export serialize = {
+export const serialize = {
   2: serializeClaimExclusive,
   128: serializeContractExclusive,
-  201: serializeInvocationExclusive
+  209: serializeInvocationExclusive
 }
 
-export deserialize = {
+export const deserialize = {
   2: deserializeClaimExclusive,
   128: deserializeContractExclusive,
-  201: deserializeInvocationExclusive
+  209: deserializeInvocationExclusive
 }

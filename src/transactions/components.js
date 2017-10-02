@@ -30,7 +30,7 @@ export const serializeTransactionOutput = (output) => {
 
 export const deserializeTransactionOutput = (stream) => {
     const assetId = reverseHex(stream.read(32))
-    const value = fixed82num(stream.read(8)s)
+    const value = fixed82num(stream.read(8))
     const scriptHash = reverseHex(stream.read(20))
     return { assetId, value, scriptHash }
 }
