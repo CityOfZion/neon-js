@@ -1,16 +1,15 @@
 import chai from 'chai'
-import * as tx from '../src/transactions/index.js'
-import { StringStream } from '../src/utils.js'
+import { serialize, deserialize } from '../../src/transactions/index.js'
+import { StringStream } from '../../src/utils.js'
 var chaiAsPromised = require("chai-as-promised")
 chai.use(chaiAsPromised)
 const should = chai.should()
 
 
-describe.only('Transactions', function () {
+describe('Components', function () {
     const deserializedTx = {
         type: 0x80,
         version: 0,
-        data: {},
         attributes: [],
         inputs: [
             {
@@ -54,12 +53,12 @@ describe.only('Transactions', function () {
     }
     describe('TransactionInput', function () {
         it('serialize', () => {
-            let s = tx.serialize.input(deserializedTx.inputs[0])
+            let s = serialize.input(deserializedTx.inputs[0])
             s.should.equal(serializedTx.inputs[0])
         })
         it('deserialize', () => {
             let ss = new StringStream(serializedTx.inputs[0])
-            let s = tx.deserialize.input(ss)
+            let s = deserialize.input(ss)
             s.should.eql(deserializedTx.inputs[0])
         })
     })
@@ -67,14 +66,14 @@ describe.only('Transactions', function () {
     describe('TransactionOutput', function () {
         it('serialize', () => {
             for (let i = 0; i < deserializedTx.outputs.length; i++) {
-                let s = tx.serialize.output(deserializedTx.outputs[i])
+                let s = serialize.output(deserializedTx.outputs[i])
                 s.should.equal(serializedTx.outputs[i])
             }
         })
         it('deserialize', () => {
             for (let i = 0; i < serializedTx.outputs.length; i++) {
                 let ss = new StringStream(serializedTx.outputs[i])
-                let s = tx.deserialize.output(ss)
+                let s = deserialize.output(ss)
                 s.should.eql(deserializedTx.outputs[i])
             }
         })
@@ -92,25 +91,16 @@ describe.only('Transactions', function () {
     describe('Witness', function () {
         it('serialize', () => {
             for (let i = 0; i < deserializedTx.scripts.length; i++) {
-                let s = tx.serialize.script(deserializedTx.scripts[i])
+                let s = serialize.script(deserializedTx.scripts[i])
                 s.should.equal(serializedTx.scripts[i])
             }
         })
         it('deserialize', () => {
             for (let i = 0; i < serializedTx.scripts.length; i++) {
                 let ss = new StringStream(serializedTx.scripts[i])
-                let s = tx.deserialize.script(ss)
+                let s = deserialize.script(ss)
                 s.should.eql(deserializedTx.scripts[i])
             }
         })
-    })
-
-    it('serialize', () => {
-        const hexstring = tx.serializeTransaction(deserializedTx)
-        hexstring.should.equal(serializedTx.stream)
-    })
-    it('deserialize', () => {
-        const transaction = tx.deserializeTransaction(serializedTx.stream)
-        transaction.should.eql(deserializedTx)
     })
 })

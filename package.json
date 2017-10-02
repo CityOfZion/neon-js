@@ -35,7 +35,7 @@
     "wif": "^2.0.6"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --recursive ./tests/**.js",
+    "test": "mocha --compilers js:babel-core/register --recursive ./tests/**",
     "build": "webpack",
     "prepublish": "npm run build",
     "lint": "eslint src/**.js"
