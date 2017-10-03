@@ -9,7 +9,11 @@
     "elliptic": "^6.4.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-plugin-import": "^2.6.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
     "mocha": "^3.4.2",
     "webpack": "^3.0.0"
   },
@@ -24,14 +28,11 @@
     "bigi": "^1.4.2",
     "buffer": "^5.0.6",
     "crypto-js": "^3.1.9-1",
-    "ecdsa": "^0.7.0",
     "ecurve": "^1.0.5",
     "elliptic": "^6.4.0",
     "fs": "^0.0.1-security",
     "js-scrypt": "^0.2.0",
-    "secp256k1": "^3.3.0",
     "secure-random": "^1.1.1",
-    "sql.js": "^0.4.0",
     "wif": "^2.0.6"
   },
   "scripts": {

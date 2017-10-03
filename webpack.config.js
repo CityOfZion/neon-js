@@ -1,12 +1,10 @@
-
-
 module.exports = {
-  entry: './src/api.js',
+  entry: './src/index.js',
   target: 'node',
   output: {
-      path: __dirname,
-      filename: './lib/index.js',
-      libraryTarget: 'umd'
+    path: __dirname,
+    filename: './lib/index.js',
+    libraryTarget: 'umd'
   },
   module: {
     loaders: [

@@ -1,160 +1,156 @@
-import chai from 'chai';
-import { ab2str,
-  str2ab,
+import chai from 'chai'
+import {
   hexstring2ab,
-  ab2hexstring,
-  reverseArray,
-  numStoreInMemory,
-  stringToBytes } from '../src/utils';
-import * as api from '../src/api';
-import axios from 'axios';
-var chaiAsPromised = require("chai-as-promised");
-chai.use(chaiAsPromised);
-const should = chai.should();
+  ab2hexstring
+} from '../src/utils'
+import * as Neon from '../src/index'
+
+var chaiAsPromised = require('chai-as-promised')
+chai.use(chaiAsPromised)
+chai.should()
 
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 var base58 = require('base-x')(BASE58)
 
-describe('Wallet', function() {
-  this.timeout(15000);
+describe('Wallet', function () {
+  this.timeout(15000)
 
   const testKeys = {
-    'a': {
+    a: {
       address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW',
       wif: 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g',
       passphrase: 'city of zion',
       encryptedWif: '6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF'
     },
     b: {
-      address: "ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s",
-      wif: "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG"
+      address: 'ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s',
+      wif: 'L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG'
     },
     c: {
-      address: "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
-      wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG"
+      address: 'AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx',
+      wif: 'KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG'
     }
-  };
+  }
 
-  const testNet = api.getAPIEndpoint('TestNet');
+  const testNet = Neon.getAPIEndpoint('TestNet')
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
-  // it('should claim ANC', (done) =>{
-  //   api.claimAllGAS(api.MAINNET, testKeys.c.wif).then((response) => {
-  //     console.log(response);
-  //     done();
-  //   })
-  // });
+  it.skip('should claim GAS', (done) => {
+    Neon.doClaimAllGas(Neon.MAINNET, testKeys.c.wif).then((response) => {
+      console.log(response)
+      done()
+    }).catch((e) => console.log(e))
+  })
 
   it('should generate a new private key', (done) => {
-    const privateKey = ab2hexstring(api.generatePrivateKey());
-    privateKey.should.have.length(64);
-    done();
-  });
+    const privateKey = ab2hexstring(Neon.generatePrivateKey())
+    privateKey.should.have.length(64)
+    done()
+  })
 
-  it('should generate a valid WIF', (done) => {
-    const privateKey = api.generatePrivateKey();
-    const wif = api.getWIFFromPrivateKey(privateKey);
-    const account = api.getAccountsFromWIFKey(wif)[0];
-    account.privatekey.should.equal(ab2hexstring(privateKey));
-    done();
-  });
+  it('should generate a valid WIF', () => {
+    const privateKey = Neon.generatePrivateKey()
+    const wif = Neon.getWIFFromPrivateKey(privateKey)
+    const account = Neon.getAccountFromWIFKey(wif)
+    account.privateKey.should.equal(ab2hexstring(privateKey))
+  })
 
   it('should encrypt a WIF using nep2', (done) => {
-    api.encrypt_wif(testKeys.a.wif, testKeys.a.passphrase).then((result) => {
-      result.should.equal(testKeys.a.encryptedWif);
-      done();
-    })
-  });
+    Neon.encryptWIF(testKeys.a.wif, testKeys.a.passphrase).then((result) => {
+      result.should.equal(testKeys.a.encryptedWif)
+      done()
+    }).catch((e) => console.log(e))
+  })
 
   it('should verify that script has produces the same address', (done) => {
-    for (let i = 0; i < 100; i++){
-      const privateKey = ab2hexstring(api.generatePrivateKey());
-      const account = api.getAccountsFromPrivateKey(privateKey)[0];
-      const addressFromScript1 = api.toAddress(base58.decode(account.address).slice(1, 21));
-      const addressFromScript2 = api.toAddress(hexstring2ab(api.getHash(api.createSignatureScript(account.publickeyEncoded)).toString()));
-      addressFromScript1.should.equal(account.address);
-      addressFromScript2.should.equal(account.address);
+    for (let i = 0; i < 100; i++) {
+      const privateKey = ab2hexstring(Neon.generatePrivateKey())
+      const account = Neon.getAccountFromPrivateKey(privateKey)
+      const addressFromScript1 = Neon.toAddress(base58.decode(account.address).slice(1, 21))
+      const addressFromScript2 = Neon.toAddress(hexstring2ab(Neon.getHash(Neon.createSignatureScript(account.publicKeyEncoded)).toString()))
+      addressFromScript1.should.equal(account.address)
+      addressFromScript2.should.equal(account.address)
     }
-    done();
-  });
+    done()
+  })
 
   it('should show that Neo address passes validation', (done) => {
-    api.verifyAddress(testKeys.a.address).should.equal(true);
-    done();
-  });
+    Neon.verifyAddress(testKeys.a.address).should.equal(true)
+    done()
+  })
 
   it('should show that btc address fails validation', (done) => {
-    api.verifyAddress("1BoatSLRHtKNngkdXEeobR76b53LETtpyT").should.equal(false);
-    done();
-  });
+    Neon.verifyAddress('1BoatSLRHtKNngkdXEeobR76b53LETtpyT').should.equal(false)
+    done()
+  })
 
   it('should decrypt a WIF using nep2', (done) => {
-    api.decrypt_wif(testKeys.a.encryptedWif, testKeys.a.passphrase).then((result) => {
-      result.should.equal(testKeys.a.wif);
-      done();
+    Neon.decryptWIF(testKeys.a.encryptedWif, testKeys.a.passphrase).then((result) => {
+      result.should.equal(testKeys.a.wif)
+      done()
     })
-  });
+  })
 
-  it('should get keys from a WIF', (done) =>{
-    const account = api.getAccountsFromWIFKey(testKeys.a.wif)[0];
-    account.privatekey.should.be.a('string');
-    account.address.should.equal(testKeys.a.address);
-    done();
-  });
+  it('should get keys from a WIF', (done) => {
+    const account = Neon.getAccountFromWIFKey(testKeys.a.wif)
+    account.privateKey.should.be.a('string')
+    account.address.should.equal(testKeys.a.address)
+    done()
+  })
 
   it('should verify publicKeyEncoded', (done) => {
-    const privateKey = ab2hexstring(api.generatePrivateKey());
-    const accounts = api.getAccountsFromPrivateKey(privateKey);
-    accounts.should.not.equal(-1);
-    const verify = api.verifyPublicKeyEncoded(accounts[0].publickeyEncoded);
-    verify.should.equal(true);
-    done();
-  });
+    const privateKey = ab2hexstring(Neon.generatePrivateKey())
+    const account = Neon.getAccountFromPrivateKey(privateKey)
+    account.should.not.equal(-1)
+    const verify = Neon.verifyPublicKeyEncoded(account.publicKeyEncoded)
+    verify.should.equal(true)
+    done()
+  })
 
   it('should verify address', (done) => {
-    const privateKey = ab2hexstring(api.generatePrivateKey());
-    const accounts = api.getAccountsFromPrivateKey(privateKey);
-    accounts.should.not.equal(-1);
-    const verify = api.verifyAddress(accounts[0].address);
-    verify.should.equal(true);
-    done();
-  });
+    const privateKey = ab2hexstring(Neon.generatePrivateKey())
+    const account = Neon.getAccountFromPrivateKey(privateKey)
+    account.should.not.equal(-1)
+    const verify = Neon.verifyAddress(account.address)
+    verify.should.equal(true)
+    done()
+  })
 
   it('should get balance from address', (done) => {
-    api.getBalance(api.TESTNET, testKeys.a.address).then((response) =>{
-      response.Neo.should.be.a('number');
-      response.Gas.should.be.a('number');
-      done();
-    });
-  });
+    Neon.getBalance(Neon.TESTNET, testKeys.a.address).then((response) => {
+      response.Neo.should.be.a('number')
+      response.Gas.should.be.a('number')
+      done()
+    }).catch((e) => console.log(e))
+  })
 
   it('should get unspent transactions', (done) => {
-    api.getBalance(api.TESTNET, testKeys.a.address, api.ansId).then((response) => {
-      response.unspent.Neo.should.be.an('array');
-      response.unspent.Gas.should.be.an('array');
-      done();
-    })
-  });
+    Neon.getBalance(Neon.TESTNET, testKeys.a.address, Neon.ansId).then((response) => {
+      response.unspent.Neo.should.be.an('array')
+      response.unspent.Gas.should.be.an('array')
+      done()
+    }).catch((e) => console.log(e))
+  })
 
   it('should send NEO', (done) => {
-    api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, "Neo", 1).then((response) => {
-      response.result.should.equal(true);
+    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, 'Neo', 1).then((response) => {
+      response.result.should.equal(true)
       // send back so we can re-run
-      api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, "Neo", 1).then((response) => {
-        response.result.should.equal(true);
-        done();
-      });
-    })
-  });
+      return Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, 'Neo', 1)
+    }).then((response) => {
+      response.result.should.equal(true)
+      done()
+    }).catch((e) => console.log(e))
+  })
 
   it('should send GAS', (done) => {
-    api.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, "Gas", 1).then((response) => {
-      response.result.should.equal(true);
+    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, 'Gas', 1).then((response) => {
+      response.result.should.equal(true)
       // send back so we can re-run
-      api.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, "Gas", 1).then((response) => {
-        response.result.should.equal(true);
-        done();
-      });
+      Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, 'Gas', 1).then((response) => {
+        response.result.should.equal(true)
+        done()
+      }).catch((e) => console.log(e))
     })
-  });
-});
+  })
+})
