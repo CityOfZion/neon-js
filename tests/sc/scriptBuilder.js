@@ -1,6 +1,6 @@
 import ScriptBuilder from '../../src/sc/scriptBuilder.js'
 
-describe.only('ScriptBuilder', function () {
+describe('ScriptBuilder', function () {
   const data = {
     '1': {
       'script': '00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc',
