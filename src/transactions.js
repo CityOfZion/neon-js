@@ -165,7 +165,7 @@ export const transferTransaction = (coins, publicKeyEncoded, toAddress, amount) 
   }
   let programHash = base58.decode(toAddress)
   programHash = programHash.slice(1, 21)
-  
+
   let signatureScript = createSignatureScript(publicKeyEncoded)
   let myProgramHash = getHash(signatureScript)
 
