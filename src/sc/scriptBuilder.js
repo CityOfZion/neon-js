@@ -1,20 +1,33 @@
-import { StringStream, num2hexstring } from '../utils.js'
+import { StringStream, num2hexstring, reverseHex } from '../utils.js'
 import OpCode from './opCode.js'
+
 export default class ScriptBuilder extends StringStream {
   /**
    * Appends a AppCall and scriptHash. Used to end off a script.
-   * @param {string} scriptHash
+   * @param {string} scriptHash - Hexstring(BE)
    * @param {boolean} useTailCall - Defaults to false
    * @return {ScriptBuilder} this
    */
   _emitAppCall (scriptHash, useTailCall = false) {
     if (scriptHash.length !== 40) throw new Error()
-    return this.emit(useTailCall ? OpCode.TAILCALL : OpCode.APPCALL, scriptHash)
+    return this.emit(useTailCall ? OpCode.TAILCALL : OpCode.APPCALL, reverseHex(scriptHash))
+  }
+
+  /**
+   * Private method to append an array
+   * @param {Array} arr
+   * @return {ScriptBuilder} this
+   */
+  _emitArray (arr) {
+    for (let i = arr.length - 1; i >= 0; i--) {
+      this.emitPush(arr[i])
+    }
+    return this.emitPush(arr.length).emit(OpCode.PACK)
   }
 
   /**
    * Private method to append a hexstring.
-   * @param {string} hexstring
+   * @param {string} hexstring - Hexstring(BE)
    * @return {ScriptBuilder} this
    */
   _emitString (hexstring) {
@@ -64,33 +77,28 @@ export default class ScriptBuilder extends StringStream {
 
   /**
    * Appends args, operation and scriptHash
-   * @param {string} scriptHash - Hexstring
-   * @param {string} operation - ASCII
-   * @param {string[]} args - hexstring[]
+   * @param {string} scriptHash - Hexstring(BE)
+   * @param {string|null} operation - ASCII, defaults to null
+   * @param {Array|string|number|boolean} args - any
+   * @param {boolean} useTailCall - Use TailCall instead of AppCall
    * @return {ScriptBuilder} this
    */
-  emitAppCall (scriptHash, operation, args) {
-    if (args) {
-      for (let i = args.length - 1; i >= 0; i--) {
-        this.emitPush(args[i])
+  emitAppCall (scriptHash, operation = null, args = undefined, useTailCall = false) {
+    this.emitPush(args)
+    if (operation) {
+      let hexOp = ''
+      for (let i = 0; i < operation.length; i++) {
+        hexOp += num2hexstring(operation.charCodeAt(i))
       }
-      this.emitPush(args.length)
-      this.emit(OpCode.PACK)
-    } else {
-      this.emitPush(false)
+      this.emitPush(hexOp)
     }
-    let hexOp = ''
-    for (let i = 0; i < operation.length; i++) {
-      hexOp += num2hexstring(operation.charCodeAt(i))
-    }
-    this.emitPush(hexOp)
-    this._emitAppCall(scriptHash)
+    this._emitAppCall(scriptHash, useTailCall)
     return this
   }
 
   /**
    * Appends data depending on type. Used to append params/array lengths.
-   * @param {boolean|string|number} data
+   * @param {Array|string|number|boolean} data
    * @return {ScriptBuilder} this
    */
   emitPush (data) {
@@ -101,6 +109,10 @@ export default class ScriptBuilder extends StringStream {
         return this._emitString(data)
       case 'number':
         return this._emitNum(data)
+      case 'object':
+        return this._emitArray(data)
+      case 'undefined':
+        return this.emitPush(false)
       default:
         throw new Error()
     }

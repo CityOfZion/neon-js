@@ -3,7 +3,7 @@
  * @readonly
  * @enum {number}
  */
-export const OpCode = {
+const OpCode = {
   PUSH0: 0,
   PUSHF: 0,
   PUSHBYTES1: 1,
@@ -105,3 +105,4 @@ export const OpCode = {
   THROW: 240,
   THROWIFNOT: 241
 }
+export default OpCode
