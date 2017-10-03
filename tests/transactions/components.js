@@ -1,9 +1,5 @@
-import chai from 'chai'
 import { serialize, deserialize } from '../../src/transactions/index.js'
 import { StringStream } from '../../src/utils.js'
-var chaiAsPromised = require('chai-as-promised')
-chai.use(chaiAsPromised)
-chai.should()
 
 describe('Components', function () {
   const deserializedTx = {

@@ -1,13 +1,8 @@
-import chai from 'chai'
 import {
   hexstring2ab,
   ab2hexstring
 } from '../src/utils'
 import * as Neon from '../src/index'
-
-var chaiAsPromised = require('chai-as-promised')
-chai.use(chaiAsPromised)
-chai.should()
 
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 var base58 = require('base-x')(BASE58)

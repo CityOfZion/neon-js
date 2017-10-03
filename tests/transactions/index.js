@@ -1,10 +1,5 @@
-import chai from 'chai'
 import { serializeTransaction, deserializeTransaction } from '../../src/transactions/index.js'
 import data from './data.json'
-
-var chaiAsPromised = require('chai-as-promised')
-chai.use(chaiAsPromised)
-chai.should()
 
 describe('Transactions', function () {
   it('serialize', () => {
