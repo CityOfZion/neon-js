@@ -6,7 +6,7 @@ const should = chai.should()
 
 import data from './data.json'
 
-describe.only('Transactions', function () {
+describe('Transactions', function () {
     it('serialize', () => {
         Object.keys(data).map((key) => {
             let tx = data[key]

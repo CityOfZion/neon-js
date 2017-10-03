@@ -1,7 +1,9 @@
 /**
  * Enum for OpCode
+ * @readonly
+ * @enum {number}
  */
-export const opCode = {
+export const OpCode = {
   PUSH0: 0,
   PUSHF: 0,
   PUSHBYTES1: 1,
