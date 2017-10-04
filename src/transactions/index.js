@@ -1,6 +1,8 @@
 import { num2VarInt, num2hexstring, StringStream } from '../utils.js'
-import * as c from './components.js'
+import * as comp from './components.js'
 import * as e from './exclusive.js'
+import * as _c from './create.js'
+
 /**
  * NEO's default Endianness from RPC calls is Little Endian.
  * However, we will store our data in Big Endian unless stated.
@@ -18,19 +20,24 @@ import * as e from './exclusive.js'
  * @property {Witness[]} scripts
  */
 
+export const create = {
+  claim: _c.claimTx,
+  contract: _c.ContractTx
+}
+
 export const serialize = {
-  attribute: c.serializeTransactionAttribute,
-  input: c.serializeTransactionInput,
-  output: c.serializeTransactionOutput,
-  script: c.serializeWitness,
+  attribute: comp.serializeTransactionAttribute,
+  input: comp.serializeTransactionInput,
+  output: comp.serializeTransactionOutput,
+  script: comp.serializeWitness,
   exclusiveData: e.serialize
 }
 
 export const deserialize = {
-  attribute: c.deserializeTransactionAttribute,
-  input: c.deserializeTransactionInput,
-  output: c.deserializeTransactionOutput,
-  script: c.deserializeWitness,
+  attribute: comp.deserializeTransactionAttribute,
+  input: comp.deserializeTransactionInput,
+  output: comp.deserializeTransactionOutput,
+  script: comp.deserializeWitness,
   exclusiveData: e.deserialize
 }
 
