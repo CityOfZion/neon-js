@@ -2,7 +2,7 @@ import { create } from '../../src/transactions/index.js'
 import { getHash, createSignatureScript } from '../../src/wallet.js'
 import data from './createData.json'
 
-describe.only('Create Transactions', function () {
+describe('Create Transactions', function () {
   const publicKey = '02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef'
   it('create claimTransaction', () => {
     const tx = create.claim(publicKey, data.claim)
@@ -41,5 +41,28 @@ describe.only('Create Transactions', function () {
       create.contract(publicKey, data.balance, moreIntents)
     }
     notEnoughNEO.should.throw()
+  })
+  const invo = {
+    'rpxTest': '5b7074e873973a6ed3708862f219a6fbf4d1c411',
+    'outputs': [
+      {
+        assetId: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
+        value: 1,
+        scriptHash: '5b7074e873973a6ed3708862f219a6fbf4d1c411'
+      }
+    ],
+    publicKey: '02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef',
+    invoke: {
+      scriptHash: '5b7074e873973a6ed3708862f219a6fbf4d1c411',
+      operation: 'mintTokens'
+    }
+  }
+  it('create invocationTransaction', () => {
+    const tx = create.invocation(invo.publicKey, data.balance, invo.outputs, invo.invoke, 0.5, { version: 1 })
+    tx.version.should.equal(1)
+    tx.gas.should.equal(0.5)
+    tx.inputs.length.should.equal(2)
+    tx.outputs.length.should.equal(3)
+    console.log(tx)
   })
 })
