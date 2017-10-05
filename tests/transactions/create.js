@@ -9,7 +9,7 @@ describe('Create Transactions', function () {
     tx.type.should.equal(2)
     tx.claims.length.should.equal(data.claim.claims.length)
     tx.outputs.length.should.equal(1)
-    tx.outputs[0].value.should.equal(data.claim['total_claim'])
+    tx.outputs[0].value.should.equal(data.claim['total_claim'] / 100000000)
   })
 
   const intents = [
@@ -62,7 +62,6 @@ describe('Create Transactions', function () {
     tx.version.should.equal(1)
     tx.gas.should.equal(0.5)
     tx.inputs.length.should.equal(2)
-    tx.outputs.length.should.equal(3)
-    console.log(tx)
+    tx.outputs.length.should.equal(2)
   })
 })

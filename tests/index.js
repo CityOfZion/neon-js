@@ -31,7 +31,7 @@ describe('Wallet', function () {
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
   it.skip('should claim GAS', (done) => {
-    Neon.doClaimAllGas(Neon.MAINNET, testKeys.c.wif).then((response) => {
+    Neon.doClaimAllGas('TestNet', testKeys.c.wif).then((response) => {
       console.log(response)
       done()
     }).catch((e) => console.log(e))
