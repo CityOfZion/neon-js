@@ -1,4 +1,5 @@
 import { num2VarInt, num2hexstring, StringStream } from '../utils.js'
+import { signatureData, createSignatureScript, getAccountFromPrivateKey } from '../wallet.js'
 import * as comp from './components.js'
 import * as e from './exclusive.js'
 import * as _c from './create.js'
@@ -45,9 +46,10 @@ export const deserialize = {
 /**
  * Serializes a given transaction object
  * @param {Transaction} tx
+ * @param {boolean} signed - If the signatures should be serialized
  * @returns {string} Hexstring of transaction
  */
-export const serializeTransaction = (tx) => {
+export const serializeTransaction = (tx, signed = true) => {
   let out = ''
   out += num2hexstring(tx.type)
   out += num2hexstring(tx.version)
@@ -64,7 +66,7 @@ export const serializeTransaction = (tx) => {
   for (const output of tx.outputs) {
     out += serialize.output(output)
   }
-  if (tx.scripts && tx.scripts.length > 0) {
+  if (signed && tx.scripts && tx.scripts.length > 0) {
     out += num2VarInt(tx.scripts.length)
     for (const script of tx.scripts) {
       out += serialize.script(script)
@@ -107,4 +109,19 @@ export const deserializeTransaction = (data) => {
     }
   }
   return Object.assign(tx, exclusiveData)
+}
+
+/**
+ * Signs a transaction with the corresponding privateKey. We are dealing with it as an Transaction object as multi-sig transactions require us to sign the transaction without signatures.
+ * @param {Object} transaction - Transaction as an object
+ * @param {string} privateKey - The private key. This method does not check if the private key is valid (aka that the inputs come from the corresponding address)
+ * @return {Object} Signed transaction as an object.
+ */
+export const signTransaction = (transaction, privateKey) => {
+  const tx = typeof (transaction) === 'object' ? transaction : deserializeTransaction(transaction)
+  const invocationScript = signatureData(serializeTransaction(tx, false), privateKey)
+  const verificationScript = createSignatureScript(getAccountFromPrivateKey(privateKey).publicKeyEncoded)
+  const witness = { invocationScript, verificationScript }
+  tx.scripts ? tx.scripts.push(witness) : tx.scripts = [witness]
+  return tx
 }
