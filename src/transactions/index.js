@@ -22,7 +22,8 @@ import * as _c from './create.js'
 
 export const create = {
   claim: _c.claimTx,
-  contract: _c.ContractTx
+  contract: _c.ContractTx,
+  invocation: _c.invocationTx
 }
 
 export const serialize = {
