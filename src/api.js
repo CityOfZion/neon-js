@@ -67,6 +67,16 @@ export const doClaimAllGas = (net, fromWif) => {
 }
 
 /**
+ * Lookup key in SC storage
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} scriptHash of SC
+ * @return {Promise<Response>} RPC response looking up key from storage
+ */
+export const getStorage = (net, scriptHash, key) => {
+  return queryRPC(net, "getstorage", [scriptHash, key])
+}
+
+/**
  * Send an asset to an address
  * @param {string} net - 'MainNet' or 'TestNet'.
  * @param {string} toAddress - The destination address.
@@ -83,6 +93,31 @@ export const doSendAsset = (net, toAddress, fromWif, assetAmounts) => {
       return {assetId: ASSETS[k], value: v, scriptHash: toScriptHash}
     })
     const unsignedTx = tx.create.contract(account.publicKeyEncoded, balances, intents)
+    const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
+    const hexTx = tx.serializeTransaction(signedTx)
+    return queryRPC(net, 'sendrawtransaction', [hexTx], 4)
+  })
+}
+
+/**
+ * Call mintTokens for RPX
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} fromWif - The WIF key of the originating address.
+ * @param {neo} amount - The amount of neo to send to RPX.
+ * @param {gasCost} amount - The Gas to send as SC fee.
+ * @return {Promise<Response>} RPC Response
+ */
+export const doMintTokens = (net, fromWif, neo, gasCost) => {
+  const RPX = "5b7074e873973a6ed3708862f219a6fbf4d1c411"
+  const account = getAccountFromWIFKey(fromWif)
+  const myScriptHash = addressToScriptHash(account.address)
+  return getBalance(net, account.address).then((balances) => {
+    // TODO: maybe have transactions handle this construction?
+    const intents = [
+      {assetId: ASSETS["NEO"], value: neo, scriptHash: RPX}
+    ]
+    const invoke = {operation: "mintTokens", scriptHash: RPX}
+    const unsignedTx = tx.create.invocation(account.publicKeyEncoded, balances, intents, invoke, gasCost, {version: 1})
     const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
     const hexTx = tx.serializeTransaction(signedTx)
     return queryRPC(net, 'sendrawtransaction', [hexTx], 4)
@@ -195,5 +230,13 @@ export const queryRPC = (net, method, params, id = 1) => {
     return jsonRequest.post(rpcEndpoint, jsonRpcData).then((response) => {
       return response.data
     })
+  })
+}
+
+export const testInvokeRPC = (script) => {
+  const jsonRequest = axios.create({ headers: { 'Content-Type': 'application/json' } })
+  const jsonRpcData = { method: "invokescript", params: [script], id: 1, jsonrpc: '2.0' }
+  return jsonRequest.post("http://test1.cityofzion.io:8880/", jsonRpcData).then((response) => {
+    return response.data
   })
 }
