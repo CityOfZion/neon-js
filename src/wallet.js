@@ -5,7 +5,8 @@ import CryptoJS from 'crypto-js'
 import WIF from 'wif'
 import {
   hexstring2ab,
-  ab2hexstring
+  ab2hexstring,
+  reverseHex
 } from './utils'
 import secureRandom from 'secure-random'
 
@@ -196,15 +197,15 @@ export const getPublicKeyEncoded = (publicKey) => {
 }
 
 /**
- * Constructs a valid address from a scriptHash
- * @param {ArrayBuffer} scriptHash - scriptHash obtained from hashing the address
+ * Constructs a valid address from a ProgramHash
+ * @param {ArrayBuffer} ProgramHash - ProgramHash obtained from hashing the address
  * @returns {string} A valid NEO address
  */
-export const toAddress = (scriptHash) => {
-  if (scriptHash.length !== 20) throw new Error('Invalid ScriptHash length')
-  let data = new Uint8Array(1 + scriptHash.length)
+export const toAddress = (ProgramHash) => {
+  if (ProgramHash.length !== 20) throw new Error('Invalid ProgramHash length')
+  let data = new Uint8Array(1 + ProgramHash.length)
   data.set([23]) // Wallet addressVersion
-  data.set(scriptHash, 1)
+  data.set(ProgramHash, 1)
   // console.log(ab2hexstring(data))
 
   let scriptHashHex = CryptoJS.enc.Hex.parse(ab2hexstring(data))
@@ -213,7 +214,7 @@ export const toAddress = (scriptHash) => {
   let scriptHashShaBuffer = hexstring2ab(scriptHashSha2.toString())
   // console.log(ab2hexstring(ProgramSha256Buffer))
 
-  let datas = new Uint8Array(1 + scriptHash.length + 4)
+  let datas = new Uint8Array(1 + ProgramHash.length + 4)
   datas.set(data)
   datas.set(scriptHashShaBuffer.slice(0, 4), 21)
   // console.log(ab2hexstring(datas))
@@ -221,6 +222,24 @@ export const toAddress = (scriptHash) => {
   return base58.encode(datas)
 }
 
+/**
+ * Gets the scriptHash of an address.
+ * @param {string} address - The address
+ * @return {string} scriptHash (BE)
+ */
+export const getScriptHashFromAddress = (address) => {
+  let hash = ab2hexstring(base58.decode(address))
+  return reverseHex(hash.substr(2, 40))
+}
+
+/**
+ * Gets the scriptHash of a Public key.
+ * @param {string} publicKey
+ * @return {string} scriptHash (BE)
+ */
+export const getScriptHashFromPublicKey = (publicKey) => {
+  return getScriptHashFromAddress(toAddress(hexstring2ab(getHash(createSignatureScript(publicKey)))))
+}
 /**
  * Signs a transaction with a private key
  * @param {string} data - Serialised transaction data.
