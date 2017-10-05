@@ -1,6 +1,9 @@
 import { num2VarInt, num2hexstring, StringStream } from '../utils.js'
-import * as c from './components.js'
+import { signatureData, createSignatureScript, getAccountFromPrivateKey } from '../wallet.js'
+import * as comp from './components.js'
 import * as e from './exclusive.js'
+import * as _c from './create.js'
+
 /**
  * NEO's default Endianness from RPC calls is Little Endian.
  * However, we will store our data in Big Endian unless stated.
@@ -18,28 +21,35 @@ import * as e from './exclusive.js'
  * @property {Witness[]} scripts
  */
 
+export const create = {
+  claim: _c.claimTx,
+  contract: _c.ContractTx,
+  invocation: _c.invocationTx
+}
+
 export const serialize = {
-  attribute: c.serializeTransactionAttribute,
-  input: c.serializeTransactionInput,
-  output: c.serializeTransactionOutput,
-  script: c.serializeWitness,
+  attribute: comp.serializeTransactionAttribute,
+  input: comp.serializeTransactionInput,
+  output: comp.serializeTransactionOutput,
+  script: comp.serializeWitness,
   exclusiveData: e.serialize
 }
 
 export const deserialize = {
-  attribute: c.deserializeTransactionAttribute,
-  input: c.deserializeTransactionInput,
-  output: c.deserializeTransactionOutput,
-  script: c.deserializeWitness,
+  attribute: comp.deserializeTransactionAttribute,
+  input: comp.deserializeTransactionInput,
+  output: comp.deserializeTransactionOutput,
+  script: comp.deserializeWitness,
   exclusiveData: e.deserialize
 }
 
 /**
  * Serializes a given transaction object
  * @param {Transaction} tx
+ * @param {boolean} signed - If the signatures should be serialized
  * @returns {string} Hexstring of transaction
  */
-export const serializeTransaction = (tx) => {
+export const serializeTransaction = (tx, signed = true) => {
   let out = ''
   out += num2hexstring(tx.type)
   out += num2hexstring(tx.version)
@@ -56,7 +66,7 @@ export const serializeTransaction = (tx) => {
   for (const output of tx.outputs) {
     out += serialize.output(output)
   }
-  if (tx.scripts && tx.scripts.length > 0) {
+  if (signed && tx.scripts && tx.scripts.length > 0) {
     out += num2VarInt(tx.scripts.length)
     for (const script of tx.scripts) {
       out += serialize.script(script)
@@ -99,4 +109,18 @@ export const deserializeTransaction = (data) => {
     }
   }
   return Object.assign(tx, exclusiveData)
+}
+
+/**
+ * Signs a transaction with the corresponding privateKey. We are dealing with it as an Transaction object as multi-sig transactions require us to sign the transaction without signatures.
+ * @param {Object} transaction - Transaction as an object
+ * @param {string} privateKey - The private key. This method does not check if the private key is valid (aka that the inputs come from the corresponding address)
+ * @return {Object} Signed transaction as an object.
+ */
+export const signTransaction = (transaction, privateKey) => {
+  const invocationScript = '40' + signatureData(serializeTransaction(transaction, false), privateKey)
+  const verificationScript = createSignatureScript(getAccountFromPrivateKey(privateKey).publicKeyEncoded)
+  const witness = { invocationScript, verificationScript }
+  transaction.scripts ? transaction.scripts.push(witness) : transaction.scripts = [witness]
+  return transaction
 }

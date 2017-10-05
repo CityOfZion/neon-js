@@ -81,7 +81,7 @@ const encrypt = (wifKey, keyphrase) => {
  * @param {string} keyphrase - The password. Will be encoded as UTF-8.
  * @returns {string} The decrypted WIF key.
  */
-const decrypt = (encryptedKey, keyphrase, progressCallback) => {
+const decrypt = (encryptedKey, keyphrase) => {
   const assembled = ab2hexstring(bs58check.decode(encryptedKey))
   const addressHash = assembled.substr(6, 8)
   const encrypted = assembled.substr(-64)

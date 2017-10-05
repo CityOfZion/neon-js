@@ -39,7 +39,7 @@ const serializeContractExclusive = (tx) => {
 }
 
 /**
- * @param {StringStream} ss 
+ * @param {StringStream} ss
  * @return {object} {script: string, gas: number}
  */
 const deserializeInvocationExclusive = (ss) => {
@@ -56,7 +56,6 @@ const serializeInvocationExclusive = (tx) => {
   if (tx.version >= 1) out += num2fixed8(tx.gas)
   return out
 }
-
 
 export const serialize = {
   2: serializeClaimExclusive,
