@@ -31,7 +31,7 @@ export const claimTx = (publicKey, claimData, override = {}) => {
   })
   const outputs = [{
     assetId: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
-    value: totalClaim,
+    value: totalClaim / 100000000,
     scriptHash: getScriptHashFromPublicKey(publicKey)
   }]
   return Object.assign(tx, { inputs, attributes, claims, outputs }, override)

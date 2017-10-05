@@ -1,7 +1,8 @@
 import * as Neon from '../src/index.js'
 import { reverseHex } from '../src/utils.js'
 import axios from 'axios'
-describe.only('RPX', function () {
+
+describe.skip('RPX', function () {
   this.timeout(10000)
   const privateKey = '3edee7036b8fd9cef91de47386b191dd76db2888a553e7736bb02808932a915b'
   const pkey = '02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa'

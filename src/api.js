@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { getAccountFromWIFKey, signatureData, addContract } from './wallet'
 import { claimTransaction, transferTransaction } from './transactions'
+import * as tx from './transactions/index.js'
 
 // hard-code asset ids for NEO and GAS
 export const neoId = 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b'
@@ -56,12 +57,10 @@ export const doClaimAllGas = (net, fromWif) => {
   const account = getAccountFromWIFKey(fromWif)
   // TODO: when fully working replace this with mainnet/testnet switch
   return axios.get(apiEndpoint + '/v2/address/claims/' + account.address).then((response) => {
-    const claims = response.data['claims']
-    const totalClaim = response.data['total_claim']
-    const txData = claimTransaction(claims, account.publicKeyEncoded, account.address, totalClaim)
-    const sign = signatureData(txData, account.privateKey)
-    const txRawData = addContract(txData, sign, account.publicKeyEncoded)
-    return queryRPC(net, 'sendrawtransaction', [txRawData], 2)
+    const unsignedTx = tx.create.claim(account.publicKeyEncoded, response.data)
+    const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
+    const hexTx = tx.serializeTransaction(signedTx)
+    return queryRPC(net, 'sendrawtransaction', [hexTx], 2)
   })
 }
 
@@ -94,6 +93,17 @@ export const doSendAsset = (net, toAddress, fromWif, assetType, amount) => {
     const txRawData = addContract(txData, sign, fromAccount.publicKeyEncoded)
     return queryRPC(net, 'sendrawtransaction', [txRawData], 4)
   })
+}
+
+/**
+ * Sends a Transaction.
+ * @param {string} net - 'MainNet' or 'TestNet'
+ * @param {string|Object} transaction - Serialized hexstring or Transaction Object.
+ * @param {Promise<Response>}
+ */
+export const doSendTx = (net, transaction, id = 42) => {
+  let txString = typeof (transaction) === 'object' ? tx.serializeTransaction(transaction) : transaction
+  return queryRPC(net, 'sendrawtransaction', [txString], id)
 }
 
 /**

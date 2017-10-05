@@ -118,10 +118,9 @@ export const deserializeTransaction = (data) => {
  * @return {Object} Signed transaction as an object.
  */
 export const signTransaction = (transaction, privateKey) => {
-  const tx = typeof (transaction) === 'object' ? transaction : deserializeTransaction(transaction)
-  const invocationScript = signatureData(serializeTransaction(tx, false), privateKey)
+  const invocationScript = '40' + signatureData(serializeTransaction(transaction, false), privateKey)
   const verificationScript = createSignatureScript(getAccountFromPrivateKey(privateKey).publicKeyEncoded)
   const witness = { invocationScript, verificationScript }
-  tx.scripts ? tx.scripts.push(witness) : tx.scripts = [witness]
-  return tx
+  transaction.scripts ? transaction.scripts.push(witness) : transaction.scripts = [witness]
+  return transaction
 }
