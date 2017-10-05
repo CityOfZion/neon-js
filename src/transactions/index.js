@@ -4,6 +4,8 @@ import * as comp from './components.js'
 import * as e from './exclusive.js'
 import * as _c from './create.js'
 
+export const ASSETS = _c.ASSETS
+
 /**
  * NEO's default Endianness from RPC calls is Little Endian.
  * However, we will store our data in Big Endian unless stated.

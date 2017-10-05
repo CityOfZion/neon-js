@@ -31,8 +31,8 @@ describe('Wallet', function () {
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
   it.skip('should claim GAS', (done) => {
-    Neon.doClaimAllGas('TestNet', testKeys.c.wif).then((response) => {
-      console.log(response)
+    Neon.doClaimAllGas('TestNet', testKeys.b.wif).then((response) => {
+      console.log("claim", response)
       done()
     }).catch((e) => console.log(e))
   })
@@ -113,25 +113,25 @@ describe('Wallet', function () {
 
   it('should get balance from address', (done) => {
     Neon.getBalance(Neon.TESTNET, testKeys.a.address).then((response) => {
-      response.Neo.should.be.a('number')
-      response.Gas.should.be.a('number')
+      response.NEO.balance.should.be.a('number')
+      response.GAS.balance.should.be.a('number')
       done()
     }).catch((e) => console.log(e))
   })
 
   it('should get unspent transactions', (done) => {
     Neon.getBalance(Neon.TESTNET, testKeys.a.address, Neon.ansId).then((response) => {
-      response.unspent.Neo.should.be.an('array')
-      response.unspent.Gas.should.be.an('array')
+      response.NEO.unspent.should.be.an('array')
+      response.GAS.unspent.should.be.an('array')
       done()
     }).catch((e) => console.log(e))
   })
 
   it('should send NEO', (done) => {
-    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, 'Neo', 1).then((response) => {
+    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, {"NEO": 1}).then((response) => {
       response.result.should.equal(true)
       // send back so we can re-run
-      return Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, 'Neo', 1)
+      return Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, {"NEO": 1})
     }).then((response) => {
       response.result.should.equal(true)
       done()
@@ -139,10 +139,22 @@ describe('Wallet', function () {
   })
 
   it('should send GAS', (done) => {
-    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, 'Gas', 1).then((response) => {
+    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, {"GAS": 1}).then((response) => {
       response.result.should.equal(true)
       // send back so we can re-run
-      Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, 'Gas', 1).then((response) => {
+      Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, {"GAS": 1}).then((response) => {
+        response.result.should.equal(true)
+        done()
+      }).catch((e) => console.log(e))
+    })
+  })
+
+  // this test passes, but cannot be run immediately following previous tests given state changes
+  it.skip('should send NEO and GAS', (done) => {
+    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, {"GAS": 1, "NEO": 1}).then((response) => {
+      response.result.should.equal(true)
+      // send back so we can re-run
+      Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, {"GAS": 1, "NEO": 1}).then((response) => {
         response.result.should.equal(true)
         done()
       }).catch((e) => console.log(e))

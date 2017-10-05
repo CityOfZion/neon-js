@@ -2,7 +2,7 @@ import { StringStream, num2fixed8, fixed82num, num2VarInt } from '../utils.js'
 import { serializeTransactionInput, deserializeTransactionInput } from './components.js'
 
 /**
- * @param {StringStream} ss 
+ * @param {StringStream} ss
  * @return {object} {claims: TransactionInput[]}
  */
 const deserializeClaimExclusive = (ss) => {

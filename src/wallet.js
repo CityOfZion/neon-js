@@ -22,6 +22,10 @@ let base58 = require('base-x')(BASE58)
  * @property {string} address Public address of the private key
  */
 
+export const addressToScriptHash = (address) => {
+  return ab2hexstring(base58.decode(address).slice(1, 21))
+}
+
 /**
  * Constructs a signed transaction.
  * @param {string} txData - Unsigned serialized transaction.

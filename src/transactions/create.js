@@ -2,7 +2,7 @@ import { getScriptHashFromPublicKey } from '../wallet.js'
 import { buildScript } from '../sc/scriptBuilder.js'
 
 export const CURRENT_VERSION = 0
-const ASSETS = {
+export const ASSETS = {
   'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b': 'NEO',
   '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7': 'GAS',
   'GAS': '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
@@ -25,10 +25,15 @@ export const claimTx = (publicKey, claimData, override = {}) => {
   const inputs = []
   const attributes = []
   let totalClaim = 0
-  const claims = claimData.claims.map((c) => {
+  // TODO: There is some limit in the number of claims we are allowed to attach.
+  // Adding slice 100 here for now -- what limit does the protocol define?
+  let maxClaim = 100
+  const claims = claimData.claims.slice(0, maxClaim).map((c) => {
     totalClaim += c.claim
     return { prevHash: c.txid, prevIndex: c.index }
   })
+  // TODO: probably have neon-wallet-db return human-readable numbers, if we are
+  // going to end up dividing out here
   const outputs = [{
     assetId: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
     value: totalClaim / 100000000,

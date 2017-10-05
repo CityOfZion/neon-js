@@ -22,7 +22,6 @@
   "version": "1.0.0",
   "main": "lib/index.js",
   "dependencies": {
-    "Buffer": "^0.0.0",
     "axios": "^0.16.2",
     "base-x": "^3.0.2",
     "bigi": "^1.4.2",

@@ -1,7 +1,9 @@
 import axios from 'axios'
-import { getAccountFromWIFKey, signatureData, addContract } from './wallet'
+import { getAccountFromWIFKey, signatureData, addContract, addressToScriptHash } from './wallet'
 import { claimTransaction, transferTransaction } from './transactions'
 import * as tx from './transactions/index.js'
+import { ASSETS } from './transactions/index.js'
+import _ from 'lodash'
 
 // hard-code asset ids for NEO and GAS
 export const neoId = 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b'
@@ -69,29 +71,21 @@ export const doClaimAllGas = (net, fromWif) => {
  * @param {string} net - 'MainNet' or 'TestNet'.
  * @param {string} toAddress - The destination address.
  * @param {string} fromWif - The WIF key of the originating address.
- * @param {string} assetType - The Asset. 'Neo' or 'Gas'.
- * @param {number} amount - The amount of asset to send.
+ * @param {{NEO: number, GAS: number}} amount - The amount of each asset (NEO and GAS) to send, leave empty for 0.
  * @return {Promise<Response>} RPC Response
  */
-export const doSendAsset = (net, toAddress, fromWif, assetType, amount) => {
-  let assetId
-  if (assetType === 'Neo') {
-    assetId = neoId
-  } else {
-    assetId = gasId
-  }
-  const fromAccount = getAccountFromWIFKey(fromWif)
-  return getBalance(net, fromAccount.address).then((response) => {
-    const coinsData = {
-      'assetid': assetId,
-      'list': response.unspent[assetType],
-      'balance': response[assetType],
-      'name': assetType
-    }
-    const txData = transferTransaction(coinsData, fromAccount.publicKeyEncoded, toAddress, amount)
-    const sign = signatureData(txData, fromAccount.privateKey)
-    const txRawData = addContract(txData, sign, fromAccount.publicKeyEncoded)
-    return queryRPC(net, 'sendrawtransaction', [txRawData], 4)
+export const doSendAsset = (net, toAddress, fromWif, assetAmounts) => {
+  const account = getAccountFromWIFKey(fromWif)
+  const toScriptHash = addressToScriptHash(toAddress)
+  return getBalance(net, account.address).then((balances) => {
+    // TODO: maybe have transactions handle this construction?
+    const intents = _.map(assetAmounts, (v,k) => {
+      return {assetId: ASSETS[k], value: v, scriptHash: toScriptHash}
+    })
+    const unsignedTx = tx.create.contract(account.publicKeyEncoded, balances, intents)
+    const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
+    const hexTx = tx.serializeTransaction(signedTx)
+    return queryRPC(net, 'sendrawtransaction', [hexTx], 4)
   })
 }
 
@@ -129,9 +123,10 @@ export const getBalance = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/balance/' + address)
     .then((res) => {
-      const neo = res.data.NEO.balance
-      const gas = res.data.GAS.balance
-      return { Neo: neo, Gas: gas, unspent: { Neo: res.data.NEO.unspent, Gas: res.data.GAS.unspent } }
+      return res.data
+      // const neo = res.data.NEO.balance
+      // const gas = res.data.GAS.balance
+      // return { Neo: neo, Gas: gas, unspent: { Neo: res.data.NEO.unspent, Gas: res.data.GAS.unspent } }
     })
 }
 
