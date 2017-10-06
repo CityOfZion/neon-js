@@ -18,7 +18,7 @@ describe('Transactions', function () {
     })
   })
 
-  it.only('getTransactionHash', () => {
+  it('getTransactionHash', () => {
     Object.keys(data).map((key) => {
       let tx = data[key]
       const hash = getTransactionHash(tx.deserialized)
