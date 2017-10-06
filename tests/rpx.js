@@ -8,7 +8,10 @@ import axios from 'axios'
  * minting:34636afb1fa30d3991b2ae148d01475ca0284921ca030b02b7809cb3aed65c6c
  * balance: 1000
  */
-describe.skip('RPX', function () {
+
+// use .only to run one test at a time
+
+describe('RPX', function () {
   this.timeout(10000)
   // Change this to your upgraded node address.
   const upgradedTestNode = 'http://localhost:20332'
@@ -37,7 +40,7 @@ describe.skip('RPX', function () {
     }
   }
 
-  it('Load account', () => {
+  it.skip('Load account', () => {
     return Neon.doSendAsset('TestNet', acct.address, 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g', { NEO: NeoAmt, GAS: gasCost })
       .then((res) => {
         res.should.have.property('result', true)
@@ -48,7 +51,7 @@ describe.skip('RPX', function () {
       })
   })
 
-  it('mintRPX', () => {
+  it.skip('mintRPX', () => {
     const endPoint = Neon.getAPIEndpoint('TestNet')
     const address = Neon.getAccountFromPublicKey(pkey).address
     return axios.get(endPoint + '/v2/address/balance/' + address)
@@ -68,7 +71,7 @@ describe.skip('RPX', function () {
       })
   })
 
-  it.only('checkBalance', () => {
+  it.skip('checkBalance', () => {
     return Neon.getTokenBalance(upgradedTestNode, RPX, acct.address)
       .then((balance) => {
         console.log(`Balance: ${balance}`)

@@ -147,7 +147,7 @@ describe('Wallet', function () {
       .then((response) => {
         response.result.should.equal(true)
         // send back so we can re-run
-        return Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, { 'NEO': 1 })
+        return Neon.doSendAsset("TestNet", testKeys.a.address, testKeys.b.wif, { 'NEO': 1 })
       })
       .then((response) => {
         response.result.should.equal(true)
