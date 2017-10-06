@@ -95,7 +95,7 @@ const calculateInputs = (publicKey, balances, intents, gasCost = 0) => {
   // We will work in integers here to be more accurate.
   // As assets are stored as Fixed8, we just multiple everything by 10e8 and round off to get integers.
   const requiredAssets = intents.reduce((assets, intent) => {
-    const fixed8Value = Math.floor(intent.value * 100000000)
+    const fixed8Value = Math.round(intent.value * 100000000)
     assets[intent.assetId] ? assets[intent.assetId] += fixed8Value : assets[intent.assetId] = fixed8Value
     return assets
   }, {})
@@ -108,7 +108,7 @@ const calculateInputs = (publicKey, balances, intents, gasCost = 0) => {
   const inputs = Object.keys(requiredAssets).map((assetId) => {
     const requiredAmt = requiredAssets[assetId]
     const assetBalance = balances[ASSETS[assetId]]
-    if (assetBalance.balance * 100000000 < requiredAmt) throw new Error(`Insufficient ${ASSETS[assetId]}! Need ${requiredAmt} but only found ${assetBalance.balance}`)
+    if (assetBalance.balance * 100000000 < requiredAmt) throw new Error(`Insufficient ${ASSETS[assetId]}! Need ${requiredAmt / 100000000} but only found ${assetBalance.balance}`)
     // Ascending order sort
     assetBalance.unspent.sort((a, b) => a.value - b.value)
     let selectedInputs = 0
@@ -116,7 +116,7 @@ const calculateInputs = (publicKey, balances, intents, gasCost = 0) => {
     // Selected min inputs to satisfy outputs
     while (selectedAmt < requiredAmt) {
       selectedInputs += 1
-      selectedAmt += Math.floor(assetBalance.unspent[selectedInputs - 1].value * 100000000)
+      selectedAmt += Math.round(assetBalance.unspent[selectedInputs - 1].value * 100000000)
     }
     // Construct change output
     if (selectedAmt > requiredAmt) {

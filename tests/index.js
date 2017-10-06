@@ -30,11 +30,14 @@ describe('Wallet', function () {
   const testNet = Neon.getAPIEndpoint('TestNet')
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
-  it.skip('should claim GAS', (done) => {
-    Neon.doClaimAllGas('TestNet', testKeys.b.wif).then((response) => {
-      console.log("claim", response)
-      done()
-    }).catch((e) => console.log(e))
+  it.skip('should claim GAS', () => {
+    return Neon.doClaimAllGas('TestNet', testKeys.b.wif)
+      .then((response) => {
+        console.log('claim', response)
+      }).catch((e) => {
+        console.log(e)
+        throw e
+      })
   })
 
   it('should generate a new private key', (done) => {
@@ -50,11 +53,14 @@ describe('Wallet', function () {
     account.privateKey.should.equal(ab2hexstring(privateKey))
   })
 
-  it('should encrypt a WIF using nep2', (done) => {
-    Neon.encryptWIF(testKeys.a.wif, testKeys.a.passphrase).then((result) => {
-      result.should.equal(testKeys.a.encryptedWif)
-      done()
-    }).catch((e) => console.log(e))
+  it('should encrypt a WIF using nep2', () => {
+    return Neon.encryptWIF(testKeys.a.wif, testKeys.a.passphrase)
+      .then((result) => {
+        result.should.equal(testKeys.a.encryptedWif)
+      }).catch((e) => {
+        console.log(e)
+        throw e
+      })
   })
 
   it('should verify that script has produces the same address', (done) => {
@@ -79,11 +85,14 @@ describe('Wallet', function () {
     done()
   })
 
-  it('should decrypt a WIF using nep2', (done) => {
-    Neon.decryptWIF(testKeys.a.encryptedWif, testKeys.a.passphrase).then((result) => {
-      result.should.equal(testKeys.a.wif)
-      done()
-    })
+  it('should decrypt a WIF using nep2', () => {
+    return Neon.decryptWIF(testKeys.a.encryptedWif, testKeys.a.passphrase)
+      .then((result) => {
+        result.should.equal(testKeys.a.wif)
+      }).catch((e) => {
+        console.log(e)
+        throw e
+      })
   })
 
   it('should get keys from a WIF', (done) => {
@@ -111,53 +120,74 @@ describe('Wallet', function () {
     done()
   })
 
-  it('should get balance from address', (done) => {
-    Neon.getBalance(Neon.TESTNET, testKeys.a.address).then((response) => {
-      response.NEO.balance.should.be.a('number')
-      response.GAS.balance.should.be.a('number')
-      done()
-    }).catch((e) => console.log(e))
+  it('should get balance from address', () => {
+    return Neon.getBalance('TestNet', testKeys.a.address)
+      .then((response) => {
+        response.NEO.balance.should.be.a('number')
+        response.GAS.balance.should.be.a('number')
+      }).catch((e) => {
+        console.log(e)
+        throw e
+      })
   })
 
-  it('should get unspent transactions', (done) => {
-    Neon.getBalance(Neon.TESTNET, testKeys.a.address, Neon.ansId).then((response) => {
-      response.NEO.unspent.should.be.an('array')
-      response.GAS.unspent.should.be.an('array')
-      done()
-    }).catch((e) => console.log(e))
+  it('should get unspent transactions', () => {
+    return Neon.getBalance('TestNet', testKeys.a.address, Neon.ansId)
+      .then((response) => {
+        response.NEO.unspent.should.be.an('array')
+        response.GAS.unspent.should.be.an('array')
+      }).catch((e) => {
+        console.log(e)
+        throw e
+      })
   })
 
-  it('should send NEO', (done) => {
-    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, {"NEO": 1}).then((response) => {
-      response.result.should.equal(true)
-      // send back so we can re-run
-      return Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, {"NEO": 1})
-    }).then((response) => {
-      response.result.should.equal(true)
-      done()
-    }).catch((e) => console.log(e))
-  })
-
-  it('should send GAS', (done) => {
-    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, {"GAS": 1}).then((response) => {
-      response.result.should.equal(true)
-      // send back so we can re-run
-      Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, {"GAS": 1}).then((response) => {
+  it('should send NEO', () => {
+    return Neon.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'NEO': 1 })
+      .then((response) => {
         response.result.should.equal(true)
-        done()
-      }).catch((e) => console.log(e))
-    })
+        // send back so we can re-run
+        return Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, { 'NEO': 1 })
+      })
+      .then((response) => {
+        response.result.should.equal(true)
+      })
+      .catch((e) => {
+        console.log(e)
+        throw e
+      })
   })
 
+  it('should send GAS', () => {
+    return Neon.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'GAS': 1 })
+      .then((response) => {
+        response.should.have.property('result', true)
+        // send back so we can re-run
+        return Neon.doSendAsset('TestNet', testKeys.a.address, testKeys.b.wif, { 'GAS': 1 })
+      })
+      .then((response) => {
+        response.should.have.property('result', true)
+      })
+      .catch((e) => {
+        console.log(e)
+        throw e
+      })
+  })
   // this test passes, but cannot be run immediately following previous tests given state changes
   it.skip('should send NEO and GAS', (done) => {
-    Neon.doSendAsset(testNet, testKeys.b.address, testKeys.a.wif, {"GAS": 1, "NEO": 1}).then((response) => {
-      response.result.should.equal(true)
-      // send back so we can re-run
-      Neon.doSendAsset(testNet, testKeys.a.address, testKeys.b.wif, {"GAS": 1, "NEO": 1}).then((response) => {
-        response.result.should.equal(true)
+    return Neon.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'GAS': 1, 'NEO': 1 })
+      .then((response) => {
+        response.should.have.property('result', true)
+        // send back so we can re-run
+        return Neon.doSendAsset('TestNet', testKeys.a.address, testKeys.b.wif, { 'GAS': 1, 'NEO': 1 })
+      })
+      .then((response) => {
+        response.should.have.property('result', true)
         done()
-      }).catch((e) => console.log(e))
-    })
+      })
+      .catch((e) => {
+        console.log(e)
+        throw e
+      })
   })
 })

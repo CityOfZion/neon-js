@@ -1,8 +1,7 @@
 import axios from 'axios'
-import { getAccountFromWIFKey, signatureData, addContract, addressToScriptHash } from './wallet'
-import { claimTransaction, transferTransaction } from './transactions'
+import { getAccountFromWIFKey, getScriptHashFromAddress } from './wallet'
 import * as tx from './transactions/index.js'
-import { ASSETS } from './transactions/index.js'
+
 import _ from 'lodash'
 
 // hard-code asset ids for NEO and GAS
@@ -19,9 +18,10 @@ export const allAssetIds = [neoId, gasId]
 
 /**
  * @typedef {Object} Balance
- * @property {number} Neo Amount of NEO in address
- * @property {number} Gas Amount of GAS in address
- * @property {{Neo: Coin[], Gas: Coin[]}} unspent Unspent Assets
+ * @property {{balance: number, unspent: Coin[]}} NEO Amount of NEO in address
+ * @property {{balance: number, unspent: Coin[]}} GAS Amount of GAS in address
+ * @property {string} address - The Address that was queried
+ * @property {string} net - 'MainNet' or 'TestNet'
  */
 
 /**
@@ -73,7 +73,7 @@ export const doClaimAllGas = (net, fromWif) => {
  * @return {Promise<Response>} RPC response looking up key from storage
  */
 export const getStorage = (net, scriptHash, key) => {
-  return queryRPC(net, "getstorage", [scriptHash, key])
+  return queryRPC(net, 'getstorage', [scriptHash, key])
 }
 
 /**
@@ -86,11 +86,11 @@ export const getStorage = (net, scriptHash, key) => {
  */
 export const doSendAsset = (net, toAddress, fromWif, assetAmounts) => {
   const account = getAccountFromWIFKey(fromWif)
-  const toScriptHash = addressToScriptHash(toAddress)
+  const toScriptHash = getScriptHashFromAddress(toAddress)
   return getBalance(net, account.address).then((balances) => {
     // TODO: maybe have transactions handle this construction?
-    const intents = _.map(assetAmounts, (v,k) => {
-      return {assetId: ASSETS[k], value: v, scriptHash: toScriptHash}
+    const intents = _.map(assetAmounts, (v, k) => {
+      return { assetId: tx.ASSETS[k], value: v, scriptHash: toScriptHash }
     })
     const unsignedTx = tx.create.contract(account.publicKeyEncoded, balances, intents)
     const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
@@ -108,16 +108,15 @@ export const doSendAsset = (net, toAddress, fromWif, assetAmounts) => {
  * @return {Promise<Response>} RPC Response
  */
 export const doMintTokens = (net, fromWif, neo, gasCost) => {
-  const RPX = "5b7074e873973a6ed3708862f219a6fbf4d1c411"
+  const RPX = '5b7074e873973a6ed3708862f219a6fbf4d1c411'
   const account = getAccountFromWIFKey(fromWif)
-  const myScriptHash = addressToScriptHash(account.address)
   return getBalance(net, account.address).then((balances) => {
     // TODO: maybe have transactions handle this construction?
     const intents = [
-      {assetId: ASSETS["NEO"], value: neo, scriptHash: RPX}
+      { assetId: tx.ASSETS['NEO'], value: neo, scriptHash: RPX }
     ]
-    const invoke = {operation: "mintTokens", scriptHash: RPX}
-    const unsignedTx = tx.create.invocation(account.publicKeyEncoded, balances, intents, invoke, gasCost, {version: 1})
+    const invoke = { operation: 'mintTokens', scriptHash: RPX }
+    const unsignedTx = tx.create.invocation(account.publicKeyEncoded, balances, intents, invoke, gasCost, { version: 1 })
     const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
     const hexTx = tx.serializeTransaction(signedTx)
     return queryRPC(net, 'sendrawtransaction', [hexTx], 4)
@@ -180,10 +179,11 @@ export const getClaimAmounts = (net, address) => {
 
 /**
  * Returns the best performing (highest block + fastest) node RPC
- * @param {string} net - 'MainNet' or 'TestNet'
- * @return {Promise<string>} The URL of the best performing node
+ * @param {string} net - 'MainNet' or 'TestNet' or a custom URL.
+ * @return {Promise<string>} The URL of the best performing node or the custom URL provided.
  */
 export const getRPCEndpoint = (net) => {
+  if (net !== 'TestNet' && net !== 'MainNet') return net
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/network/best_node').then((response) => {
     return response.data.node
@@ -235,8 +235,8 @@ export const queryRPC = (net, method, params, id = 1) => {
 
 export const testInvokeRPC = (script) => {
   const jsonRequest = axios.create({ headers: { 'Content-Type': 'application/json' } })
-  const jsonRpcData = { method: "invokescript", params: [script], id: 1, jsonrpc: '2.0' }
-  return jsonRequest.post("http://test1.cityofzion.io:8880/", jsonRpcData).then((response) => {
+  const jsonRpcData = { method: 'invokescript', params: [script], id: 1, jsonrpc: '2.0' }
+  return jsonRequest.post('http://test1.cityofzion.io:8880/', jsonRpcData).then((response) => {
     return response.data
   })
 }
