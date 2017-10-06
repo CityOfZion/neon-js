@@ -46,7 +46,7 @@ export const num2hexstring = (num, size = 2) => {
  * @return {string} number in Fixed8 representation.
  */
 export const num2fixed8 = (num) => {
-  const hexValue = (num * 100000000).toString(16)
+  const hexValue = Math.round(num * 100000000).toString(16)
   return reverseHex(('0000000000000000' + hexValue).substring(hexValue.length))
 }
 
@@ -146,9 +146,9 @@ export class StringStream {
   }
   readVarInt () {
     let len = parseInt(this.read(1), 16)
-    if (len === 0xfd) { len = parseInt(reverseHex(this.read(2)), 16) }
-    else if (len === 0xfe) { len = parseInt(reverseHex(this.read(4)), 16) }
-    else if (len === 0xff) { len = parseInt(reverseHex(this.read(8)), 16) }
+    if (len === 0xfd) len = parseInt(reverseHex(this.read(2)), 16)
+    else if (len === 0xfe) len = parseInt(reverseHex(this.read(4)), 16)
+    else if (len === 0xff) len = parseInt(reverseHex(this.read(8)), 16)
     return len
   }
 }

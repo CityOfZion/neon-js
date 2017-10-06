@@ -1,11 +1,26 @@
 import * as Neon from '../src/index.js'
-import { reverseHex } from '../src/utils.js'
 import axios from 'axios'
 
+/**
+ * 1 NEO 0 GAS   **SUCCESSFUL**
+ * privateKey: fdc4deb9fa7364336d0ee3c4c7e0ecacc782993e098c6fd0cd7f334365c9cb62
+ * loading: 76fc48890e182fe2b10ca1fb244e8509c78c8646ee287a6d95410bdbc7e62eca
+ * minting:34636afb1fa30d3991b2ae148d01475ca0284921ca030b02b7809cb3aed65c6c
+ * balance: 1000
+ */
 describe.skip('RPX', function () {
   this.timeout(10000)
-  const privateKey = '3edee7036b8fd9cef91de47386b191dd76db2888a553e7736bb02808932a915b'
-  const pkey = '02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa'
+  // Change this to your upgraded node address.
+  const upgradedTestNode = 'http://localhost:20332'
+  // Change this to your new address that you will be minting from.
+  const privateKey = 'fdc4deb9fa7364336d0ee3c4c7e0ecacc782993e098c6fd0cd7f334365c9cb62'
+  // Set amt of NEO to use to mint
+  const NeoAmt = 1
+  // Set systemfee to attach
+  const gasCost = 0
+
+  const acct = Neon.getAccountFromPrivateKey(privateKey)
+  const pkey = acct.publicKeyEncoded
   const RPX = '5b7074e873973a6ed3708862f219a6fbf4d1c411'
   const invo = {
     'outputs': [
@@ -21,35 +36,47 @@ describe.skip('RPX', function () {
       operation: 'mintTokens'
     }
   }
-  it('reversedScriptHash', () => {
-    console.log(reverseHex(Neon.getScriptHashFromPublicKey(pkey)))
+
+  it('Load account', () => {
+    return Neon.doSendAsset('TestNet', acct.address, 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g', { NEO: NeoAmt, GAS: gasCost })
+      .then((res) => {
+        res.should.have.property('result', true)
+      })
+      .catch((e) => {
+        console.log(e)
+        throw e
+      })
   })
 
-  it('createRealInvo', () => {
+  it('mintRPX', () => {
     const endPoint = Neon.getAPIEndpoint('TestNet')
     const address = Neon.getAccountFromPublicKey(pkey).address
-    return axios.get(endPoint + '/v2/address/balance/' + address).then((res) => {
-      const tx = Neon.create.invocation(pkey, res.data, invo.outputs, invo.invoke, 1, { version: 1 })
-      console.log(tx)
-      const s = Neon.serializeTransaction(tx)
-      const sig = Neon.signatureData(s, privateKey)
-      const signedTx = Neon.addContract(s, sig, pkey)
-      console.log(signedTx)
-      console.log(Neon.deserializeTransaction(signedTx))
-    })
+    return axios.get(endPoint + '/v2/address/balance/' + address)
+      .then((res) => {
+        let tx = Neon.create.invocation(pkey, res.data, invo.outputs, invo.invoke, gasCost, { version: 1 })
+        const signedTx = Neon.signTransaction(tx, privateKey)
+        const hash = Neon.getTransactionHash(signedTx)
+        console.log(`Hash: ${hash}`)
+        return Neon.doSendTx('TestNet', signedTx)
+      })
+      .then((res) => {
+        res.should.have.property('result', true)
+      })
+      .catch((e) => {
+        console.log(e)
+        throw e
+      })
   })
 
-  it.skip('createRealContract', () => {
-    const endPoint = Neon.getAPIEndpoint('TestNet')
-    const address = Neon.getAccountFromPublicKey(pkey).address
-    return axios.get(endPoint + '/v2/address/balance/' + address).then((res) => {
-      const tx = Neon.create.contract(pkey, res.data, invo.outputs)
-      console.log(tx)
-      const s = Neon.serializeTransaction(tx)
-      const sig = Neon.signatureData(s, privateKey)
-      const signedTx = Neon.addContract(s, sig, pkey)
-      console.log(signedTx)
-      console.log(Neon.deserializeTransaction(signedTx))
-    })
+  it.only('checkBalance', () => {
+    return Neon.getTokenBalance(upgradedTestNode, RPX, acct.address)
+      .then((balance) => {
+        console.log(`Balance: ${balance}`)
+        balance.should.be.above(0)
+      })
+      .catch((e) => {
+        console.log(e)
+        throw e
+      })
   })
 })
