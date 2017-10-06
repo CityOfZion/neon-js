@@ -18,9 +18,10 @@ export const allAssetIds = [neoId, gasId]
 
 /**
  * @typedef {Object} Balance
- * @property {number} Neo Amount of NEO in address
- * @property {number} Gas Amount of GAS in address
- * @property {{Neo: Coin[], Gas: Coin[]}} unspent Unspent Assets
+ * @property {{balance: number, unspent: Coin[]}} NEO Amount of NEO in address
+ * @property {{balance: number, unspent: Coin[]}} GAS Amount of GAS in address
+ * @property {string} address - The Address that was queried
+ * @property {string} net - 'MainNet' or 'TestNet'
  */
 
 /**
