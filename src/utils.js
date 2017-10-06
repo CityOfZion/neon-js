@@ -146,9 +146,9 @@ export class StringStream {
   }
   readVarInt () {
     let len = parseInt(this.read(1), 16)
-    if (len === 0xfd) { len = parseInt(reverseHex(this.read(2)), 16) }
-    else if (len === 0xfe) { len = parseInt(reverseHex(this.read(4)), 16) }
-    else if (len === 0xff) { len = parseInt(reverseHex(this.read(8)), 16) }
+    if (len === 0xfd) len = parseInt(reverseHex(this.read(2)), 16)
+    else if (len === 0xfe) len = parseInt(reverseHex(this.read(4)), 16)
+    else if (len === 0xff) len = parseInt(reverseHex(this.read(8)), 16)
     return len
   }
 }
