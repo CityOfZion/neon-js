@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { getAccountFromWIFKey, getScriptHashFromAddress } from './wallet'
 import * as tx from './transactions/index.js'
+import { hexstring2ab, ab2str } from './utils'
 
 import _ from 'lodash'
 
@@ -63,6 +64,44 @@ export const doClaimAllGas = (net, fromWif) => {
     const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
     const hexTx = tx.serializeTransaction(signedTx)
     return queryRPC(net, 'sendrawtransaction', [hexTx], 2)
+  })
+}
+
+/**
+ * Sends an invokescript RPC request and returns a parsed result.
+ * @param {string} net - 'MainNet' or 'TestNet' or custom URL
+ * @param {string} script - script to run on VM.
+ * @param {boolean} parse - If method should parse response
+ * @return {{state: string, gas_consumed: string|number, stack: []}} VM Response.
+ */
+export const doInvokeScript = (net, script, parse = true) => {
+  return queryRPC(net, 'invokescript', [script])
+    .then((response) => {
+      if (parse && response.result.state === 'HALT, BREAK') {
+        const parsed = parseVMStack(response.result.stack)
+        const gasConsumed = parseInt(response.result.gas_consumed, 10)
+        return Object.assign(response.result, { stack: parsed, gas_consumed: gasConsumed })
+      } else {
+        return response.result
+      }
+    })
+}
+
+/**
+ * Parses the VM Stack and returns human readable strings
+ * @param {{type:string, value: string}[]} stack - VM Output
+ * @return {any[]} Array of results
+ */
+export const parseVMStack = (stack) => {
+  return stack.map((item) => {
+    switch (item.type) {
+      case 'ByteArray':
+        return ab2str(hexstring2ab(item.value))
+      case 'Integer':
+        return parseInt(item.value, 10)
+      default:
+        throw Error(`Unknown type: ${item.type}`)
+    }
   })
 }
 
@@ -183,7 +222,7 @@ export const getClaimAmounts = (net, address) => {
  * @return {Promise<string>} The URL of the best performing node or the custom URL provided.
  */
 export const getRPCEndpoint = (net) => {
-  if (net !== 'TestNet' && net !== 'MainNet') return net
+  if (net !== 'TestNet' && net !== 'MainNet') return Promise.resolve(net)
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/network/best_node').then((response) => {
     return response.data.node
