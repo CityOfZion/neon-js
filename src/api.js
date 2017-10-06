@@ -179,10 +179,11 @@ export const getClaimAmounts = (net, address) => {
 
 /**
  * Returns the best performing (highest block + fastest) node RPC
- * @param {string} net - 'MainNet' or 'TestNet'
- * @return {Promise<string>} The URL of the best performing node
+ * @param {string} net - 'MainNet' or 'TestNet' or a custom URL.
+ * @return {Promise<string>} The URL of the best performing node or the custom URL provided.
  */
 export const getRPCEndpoint = (net) => {
+  if (net !== 'TestNet' && net !== 'MainNet') return net
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/network/best_node').then((response) => {
     return response.data.node
