@@ -1,6 +1,9 @@
 import axios from 'axios'
-import { getAccountFromWIFKey, signatureData, addContract } from './wallet'
-import { claimTransaction, transferTransaction } from './transactions'
+import { getAccountFromWIFKey, getScriptHashFromAddress } from './wallet'
+import * as tx from './transactions/index.js'
+import { hexstring2ab, ab2str } from './utils'
+
+import _ from 'lodash'
 
 // hard-code asset ids for NEO and GAS
 export const neoId = 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b'
@@ -16,9 +19,10 @@ export const allAssetIds = [neoId, gasId]
 
 /**
  * @typedef {Object} Balance
- * @property {number} Neo Amount of NEO in address
- * @property {number} Gas Amount of GAS in address
- * @property {{Neo: Coin[], Gas: Coin[]}} unspent Unspent Assets
+ * @property {{balance: number, unspent: Coin[]}} NEO Amount of NEO in address
+ * @property {{balance: number, unspent: Coin[]}} GAS Amount of GAS in address
+ * @property {string} address - The Address that was queried
+ * @property {string} net - 'MainNet' or 'TestNet'
  */
 
 /**
@@ -56,13 +60,59 @@ export const doClaimAllGas = (net, fromWif) => {
   const account = getAccountFromWIFKey(fromWif)
   // TODO: when fully working replace this with mainnet/testnet switch
   return axios.get(apiEndpoint + '/v2/address/claims/' + account.address).then((response) => {
-    const claims = response.data['claims']
-    const totalClaim = response.data['total_claim']
-    const txData = claimTransaction(claims, account.publicKeyEncoded, account.address, totalClaim)
-    const sign = signatureData(txData, account.privateKey)
-    const txRawData = addContract(txData, sign, account.publicKeyEncoded)
-    return queryRPC(net, 'sendrawtransaction', [txRawData], 2)
+    const unsignedTx = tx.create.claim(account.publicKeyEncoded, response.data)
+    const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
+    const hexTx = tx.serializeTransaction(signedTx)
+    return queryRPC(net, 'sendrawtransaction', [hexTx], 2)
   })
+}
+
+/**
+ * Sends an invokescript RPC request and returns a parsed result.
+ * @param {string} net - 'MainNet' or 'TestNet' or custom URL
+ * @param {string} script - script to run on VM.
+ * @param {boolean} parse - If method should parse response
+ * @return {{state: string, gas_consumed: string|number, stack: []}} VM Response.
+ */
+export const doInvokeScript = (net, script, parse = true) => {
+  return queryRPC(net, 'invokescript', [script])
+    .then((response) => {
+      if (parse && response.result.state === 'HALT, BREAK') {
+        const parsed = parseVMStack(response.result.stack)
+        const gasConsumed = parseInt(response.result.gas_consumed, 10)
+        return Object.assign(response.result, { stack: parsed, gas_consumed: gasConsumed })
+      } else {
+        return response.result
+      }
+    })
+}
+
+/**
+ * Parses the VM Stack and returns human readable strings
+ * @param {{type:string, value: string}[]} stack - VM Output
+ * @return {any[]} Array of results
+ */
+export const parseVMStack = (stack) => {
+  return stack.map((item) => {
+    switch (item.type) {
+      case 'ByteArray':
+        return ab2str(hexstring2ab(item.value))
+      case 'Integer':
+        return parseInt(item.value, 10)
+      default:
+        throw Error(`Unknown type: ${item.type}`)
+    }
+  })
+}
+
+/**
+ * Lookup key in SC storage
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} scriptHash of SC
+ * @return {Promise<Response>} RPC response looking up key from storage
+ */
+export const getStorage = (net, scriptHash, key) => {
+  return queryRPC(net, 'getstorage', [scriptHash, key])
 }
 
 /**
@@ -70,30 +120,57 @@ export const doClaimAllGas = (net, fromWif) => {
  * @param {string} net - 'MainNet' or 'TestNet'.
  * @param {string} toAddress - The destination address.
  * @param {string} fromWif - The WIF key of the originating address.
- * @param {string} assetType - The Asset. 'Neo' or 'Gas'.
- * @param {number} amount - The amount of asset to send.
+ * @param {{NEO: number, GAS: number}} amount - The amount of each asset (NEO and GAS) to send, leave empty for 0.
  * @return {Promise<Response>} RPC Response
  */
-export const doSendAsset = (net, toAddress, fromWif, assetType, amount) => {
-  let assetId
-  if (assetType === 'Neo') {
-    assetId = neoId
-  } else {
-    assetId = gasId
-  }
-  const fromAccount = getAccountFromWIFKey(fromWif)
-  return getBalance(net, fromAccount.address).then((response) => {
-    const coinsData = {
-      'assetid': assetId,
-      'list': response.unspent[assetType],
-      'balance': response[assetType],
-      'name': assetType
-    }
-    const txData = transferTransaction(coinsData, fromAccount.publicKeyEncoded, toAddress, amount)
-    const sign = signatureData(txData, fromAccount.privateKey)
-    const txRawData = addContract(txData, sign, fromAccount.publicKeyEncoded)
-    return queryRPC(net, 'sendrawtransaction', [txRawData], 4)
+export const doSendAsset = (net, toAddress, fromWif, assetAmounts) => {
+  const account = getAccountFromWIFKey(fromWif)
+  const toScriptHash = getScriptHashFromAddress(toAddress)
+  return getBalance(net, account.address).then((balances) => {
+    // TODO: maybe have transactions handle this construction?
+    const intents = _.map(assetAmounts, (v, k) => {
+      return { assetId: tx.ASSETS[k], value: v, scriptHash: toScriptHash }
+    })
+    const unsignedTx = tx.create.contract(account.publicKeyEncoded, balances, intents)
+    const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
+    const hexTx = tx.serializeTransaction(signedTx)
+    return queryRPC(net, 'sendrawtransaction', [hexTx], 4)
   })
+}
+
+/**
+ * Call mintTokens for RPX
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} fromWif - The WIF key of the originating address.
+ * @param {neo} amount - The amount of neo to send to RPX.
+ * @param {gasCost} amount - The Gas to send as SC fee.
+ * @return {Promise<Response>} RPC Response
+ */
+export const doMintTokens = (net, fromWif, neo, gasCost) => {
+  const RPX = '5b7074e873973a6ed3708862f219a6fbf4d1c411'
+  const account = getAccountFromWIFKey(fromWif)
+  return getBalance(net, account.address).then((balances) => {
+    // TODO: maybe have transactions handle this construction?
+    const intents = [
+      { assetId: tx.ASSETS['NEO'], value: neo, scriptHash: RPX }
+    ]
+    const invoke = { operation: 'mintTokens', scriptHash: RPX }
+    const unsignedTx = tx.create.invocation(account.publicKeyEncoded, balances, intents, invoke, gasCost, { version: 1 })
+    const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
+    const hexTx = tx.serializeTransaction(signedTx)
+    return queryRPC(net, 'sendrawtransaction', [hexTx], 4)
+  })
+}
+
+/**
+ * Sends a Transaction.
+ * @param {string} net - 'MainNet' or 'TestNet'
+ * @param {string|Object} transaction - Serialized hexstring or Transaction Object.
+ * @param {Promise<Response>}
+ */
+export const doSendTx = (net, transaction, id = 42) => {
+  let txString = typeof (transaction) === 'object' ? tx.serializeTransaction(transaction) : transaction
+  return queryRPC(net, 'sendrawtransaction', [txString], id)
 }
 
 /**
@@ -119,9 +196,10 @@ export const getBalance = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/balance/' + address)
     .then((res) => {
-      const neo = res.data.NEO.balance
-      const gas = res.data.GAS.balance
-      return { Neo: neo, Gas: gas, unspent: { Neo: res.data.NEO.unspent, Gas: res.data.GAS.unspent } }
+      return res.data
+      // const neo = res.data.NEO.balance
+      // const gas = res.data.GAS.balance
+      // return { Neo: neo, Gas: gas, unspent: { Neo: res.data.NEO.unspent, Gas: res.data.GAS.unspent } }
     })
 }
 
@@ -140,10 +218,11 @@ export const getClaimAmounts = (net, address) => {
 
 /**
  * Returns the best performing (highest block + fastest) node RPC
- * @param {string} net - 'MainNet' or 'TestNet'
- * @return {Promise<string>} The URL of the best performing node
+ * @param {string} net - 'MainNet' or 'TestNet' or a custom URL.
+ * @return {Promise<string>} The URL of the best performing node or the custom URL provided.
  */
 export const getRPCEndpoint = (net) => {
+  if (net !== 'TestNet' && net !== 'MainNet') return Promise.resolve(net)
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/network/best_node').then((response) => {
     return response.data.node
@@ -190,5 +269,13 @@ export const queryRPC = (net, method, params, id = 1) => {
     return jsonRequest.post(rpcEndpoint, jsonRpcData).then((response) => {
       return response.data
     })
+  })
+}
+
+export const testInvokeRPC = (script) => {
+  const jsonRequest = axios.create({ headers: { 'Content-Type': 'application/json' } })
+  const jsonRpcData = { method: 'invokescript', params: [script], id: 1, jsonrpc: '2.0' }
+  return jsonRequest.post('http://test1.cityofzion.io:8880/', jsonRpcData).then((response) => {
+    return response.data
   })
 }
