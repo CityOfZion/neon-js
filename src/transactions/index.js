@@ -1,5 +1,6 @@
-import { num2VarInt, num2hexstring, StringStream } from '../utils.js'
+import { num2VarInt, num2hexstring, StringStream, reverseHex } from '../utils.js'
 import { signatureData, createSignatureScript, getAccountFromPrivateKey } from '../wallet.js'
+import CryptoJS from 'crypto-js'
 import * as comp from './components.js'
 import * as e from './exclusive.js'
 import * as _c from './create.js'
@@ -125,4 +126,14 @@ export const signTransaction = (transaction, privateKey) => {
   const witness = { invocationScript, verificationScript }
   transaction.scripts ? transaction.scripts.push(witness) : transaction.scripts = [witness]
   return transaction
+}
+
+/**
+ * @param {Object} transaction
+ * @return {string}
+ */
+export const getTransactionHash = (transaction) => {
+  const txString = CryptoJS.enc.Hex.parse(serializeTransaction(transaction, false))
+  const hash = CryptoJS.SHA256(CryptoJS.SHA256(txString)).toString()
+  return reverseHex(hash)
 }

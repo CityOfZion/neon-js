@@ -1,6 +1,6 @@
 import * as NEP5 from '../src/nep5.js'
 
-describe.only('NEP5', function () {
+describe('NEP5', function () {
   this.timeout(10000)
   it('get basic info', () => {
     return NEP5.getTokenInfo('http://localhost:20332', '5b7074e873973a6ed3708862f219a6fbf4d1c411')
