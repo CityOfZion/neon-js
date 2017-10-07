@@ -40,7 +40,7 @@ describe('RPX', function () {
     }
   }
 
-  it.skip('Load account', () => {
+  it('Load account', () => {
     return Neon.doSendAsset('TestNet', acct.address, 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g', { NEO: NeoAmt, GAS: gasCost })
       .then((res) => {
         res.should.have.property('result', true)
@@ -51,7 +51,7 @@ describe('RPX', function () {
       })
   })
 
-  it.skip('mintRPX', () => {
+  it('mintRPX', () => {
     const endPoint = Neon.getAPIEndpoint('TestNet')
     const address = Neon.getAccountFromPublicKey(pkey).address
     return axios.get(endPoint + '/v2/address/balance/' + address)
@@ -71,8 +71,9 @@ describe('RPX', function () {
       })
   })
 
-  it.skip('checkBalance', () => {
-    return Neon.getTokenBalance(upgradedTestNode, RPX, acct.address)
+  it.only('checkBalance', () => {
+    console.log(acct.address)
+    return Neon.getTokenBalance("TestNet", RPX, acct.address)
       .then((balance) => {
         console.log(`Balance: ${balance}`)
         balance.should.be.above(0)

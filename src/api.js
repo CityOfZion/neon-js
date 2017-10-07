@@ -77,6 +77,7 @@ export const doClaimAllGas = (net, fromWif) => {
 export const doInvokeScript = (net, script, parse = true) => {
   return queryRPC(net, 'invokescript', [script])
     .then((response) => {
+      console.log(response)
       if (parse && response.result.state === 'HALT, BREAK') {
         const parsed = parseVMStack(response.result.stack)
         const gasConsumed = parseInt(response.result.gas_consumed, 10)
@@ -146,13 +147,12 @@ export const doSendAsset = (net, toAddress, fromWif, assetAmounts) => {
  * @param {gasCost} amount - The Gas to send as SC fee.
  * @return {Promise<Response>} RPC Response
  */
-export const doMintTokens = (net, fromWif, neo, gasCost) => {
-  const RPX = '5b7074e873973a6ed3708862f219a6fbf4d1c411'
+export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost) => {
   const account = getAccountFromWIFKey(fromWif)
   return getBalance(net, account.address).then((balances) => {
     // TODO: maybe have transactions handle this construction?
     const intents = [
-      { assetId: tx.ASSETS['NEO'], value: neo, scriptHash: RPX }
+      { assetId: tx.ASSETS['NEO'], value: neo, scriptHash: scriptHash }
     ]
     const invoke = { operation: 'mintTokens', scriptHash: RPX }
     const unsignedTx = tx.create.invocation(account.publicKeyEncoded, balances, intents, invoke, gasCost, { version: 1 })
