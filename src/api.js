@@ -154,7 +154,7 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost) => {
     const intents = [
       { assetId: tx.ASSETS['NEO'], value: neo, scriptHash: scriptHash }
     ]
-    const invoke = { operation: 'mintTokens', scriptHash: RPX }
+    const invoke = { operation: 'mintTokens', scriptHash: scriptHash }
     const unsignedTx = tx.create.invocation(account.publicKeyEncoded, balances, intents, invoke, gasCost, { version: 1 })
     const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
     const hexTx = tx.serializeTransaction(signedTx)
