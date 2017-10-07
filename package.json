@@ -19,7 +19,7 @@
   },
   "name": "neon-js",
   "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "dependencies": {
     "axios": "^0.16.2",
