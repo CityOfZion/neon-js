@@ -1,6 +1,6 @@
 import * as C from '../../src/wallet/core'
 
-describe.only('Core Wallet Methods', function () {
+describe('Core Wallet Methods', function () {
   const keys = [
     {
       address: 'Adc4jT59RjDLdXbBni6xzg6SEcLVhHZ5Z9',

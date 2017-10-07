@@ -8,8 +8,8 @@
  * <This> is lower on the chain (on the right)
  * <That> is higher on the chain (on the left)
  *
- * NEP2 Methods are found within NEP2 standard.
- * All Methods take in Big-Endian strings and return Big-Endian strings.
+ * NEP2 methods are found within NEP2 standard.
+ * All methods take in Big-Endian strings and return Big-Endian strings.
  */
 import WIF from 'wif'
 import ecurve from 'ecurve'
