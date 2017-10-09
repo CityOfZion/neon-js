@@ -135,9 +135,6 @@ export class StringStream {
   }
 }
 
-const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-export const base58 = require('base-x')(BASE58)
-
 export const hash160 = (hex) => {
   let hexEncoded = CryptoJS.enc.Hex.parse(hex)
   let ProgramSha256 = CryptoJS.SHA256(hexEncoded)

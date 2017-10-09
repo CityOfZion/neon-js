@@ -1,8 +1,8 @@
 import {
   hexstring2ab,
-  ab2hexstring,
-  base58
+  ab2hexstring
 } from '../src/utils'
+import base58 from 'bs58'
 import * as Neon from '../src/index'
 import testKeys from './testKeys.json'
 
