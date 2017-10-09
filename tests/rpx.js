@@ -11,7 +11,7 @@ import axios from 'axios'
 
 // use .only to run one test at a time
 
-describe('RPX', function () {
+describe.skip('RPX', function () {
   this.timeout(10000)
   // Change this to your upgraded node address.
   const upgradedTestNode = 'http://localhost:20332'
