@@ -13,8 +13,9 @@
  */
 import WIF from 'wif'
 import ecurve from 'ecurve'
+import { ec as EC } from 'elliptic'
 import BigInteger from 'bigi'
-import { hexstring2ab, ab2hexstring, reverseHex, base58, hash160, hash256 } from '../utils'
+import { hexstring2ab, ab2hexstring, reverseHex, base58, sha256, hash160, hash256 } from '../utils'
 
 const ADDR_VERSION = '17'
 
@@ -82,4 +83,24 @@ export const getAddressFromScriptHash = (scriptHash) => {
 export const getScriptHashFromAddress = (address) => {
   let hash = ab2hexstring(base58.decode(address))
   return reverseHex(hash.substr(2, 40))
+}
+
+/**
+ * Generates a signature of the transaction based on given private key.
+ * @param {string} tx - Serialized unsigned transaction.
+ * @param {string} privateKey - Private Key.
+ * @return {string} Signature. Does not include tx.
+ */
+export const generateSignature = (tx, privateKey) => {
+  const msgHash = sha256(tx)
+  const msgHashHex = Buffer.from(msgHash, 'hex')
+
+  let elliptic = new EC('p256')
+  const sig = elliptic.sign(msgHashHex, privateKey, null)
+  const signature = Buffer.concat([
+    sig.r.toArrayLike(Buffer, 'be', 32),
+    sig.s.toArrayLike(Buffer, 'be', 32)
+  ])
+
+  return signature.toString('hex')
 }

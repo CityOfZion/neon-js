@@ -149,3 +149,8 @@ export const hash256 = (hex) => {
   let ProgramSha256 = CryptoJS.SHA256(hexEncoded)
   return CryptoJS.SHA256(ProgramSha256).toString()
 }
+
+export const sha256 = (hex) => {
+  let hexEncoded = CryptoJS.enc.Hex.parse(hex)
+  return CryptoJS.SHA256(hexEncoded).toString()
+}

@@ -7,6 +7,9 @@ describe('Key Verification', function () {
       'KysNqEuLb3wmZJ6PsxbA9Bh6ewTybEda4dEiN9X7X48dJPkLWZ5a',
       'L1HKLWratxFhX94XSn98JEULQYKGhRycf4nREe3Cs8EPQStF5u9E'
     ],
+    nep2s: [
+      '6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF'
+    ],
     privateKeys: [
       'a7b9775c6b9136bf89f63def7eab0c5f2d3d0c9e85492717f54386420cce5aa1',
       '4f0d41eda93941d106d4a26cc90b4b4fddc0e03b396ac94eb439c5d9e0cd6548',
@@ -29,6 +32,12 @@ describe('Key Verification', function () {
       '5HueCGU8rMjxEXxiPuD5BDku4MkFqeZyd4dZ1jvhTVqvbTLvyTJ',
       'KysNqEuLb3wmZJ6PsxbA9Bh6ehTybEda4dEiN9X7X48dJPkLWZ5a'
     ],
+    nep2s: [
+      '6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRf',
+      '6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRf@',
+      '7PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF',
+      '6PRRWQToT7GCPe21SYwLUBC9LSWsuzFoP63PNZCdvm3wWUKtpkJTW9Uwpa'
+    ],
     privateKeys: [
       'a7b9775c6b9136bf89f63def7eab0c5f2d3d0c9e85492717f54386420cce',
       '4f0d41eda93941d106d4a26cc90b4b4fddc0e03b396ac94eb439c5d9e0cd654g',
@@ -50,6 +59,10 @@ describe('Key Verification', function () {
     valid.wifs.map((wif) => V.isWIF(wif).should.be.true)
   })
 
+  it('returns true for valid NEP2', () => {
+    valid.nep2s.map((nep) => V.isNEP2(nep).should.be.true)
+  })
+
   it('returns true for valid privateKey', () => {
     valid.privateKeys.map((key) => V.isPrivateKey(key).should.be.true)
   })
@@ -64,6 +77,10 @@ describe('Key Verification', function () {
 
   it('returns false for invalid WIF', () => {
     invalid.wifs.map((wif) => V.isWIF(wif).should.be.false)
+  })
+
+  it('returns false for invalid NEP2', () => {
+    invalid.nep2s.map((nep) => V.isNEP2(nep).should.be.false)
   })
 
   it('returns false for invalid privateKey', () => {
