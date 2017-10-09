@@ -71,9 +71,9 @@ describe('RPX', function () {
       })
   })
 
-  it.only('checkBalance', () => {
+  it('checkBalance', () => {
     console.log(acct.address)
-    return Neon.getTokenBalance("TestNet", RPX, acct.address)
+    return Neon.getTokenBalance('TestNet', RPX, acct.address)
       .then((balance) => {
         console.log(`Balance: ${balance}`)
         balance.should.be.above(0)

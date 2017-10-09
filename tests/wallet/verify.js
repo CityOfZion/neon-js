@@ -51,7 +51,8 @@ describe('Key Verification', function () {
     addresses: [
       '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2',
       '3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy',
-      'AYYrr4GauveRr45WwAJyw6izvEMvasBBXh'
+      'AYYrr4GauveRr45WwAJyw6izvEMvasBBXh',
+      '1BoatSLRHtKNngkdXEeobR76b53LETtpyT' // BTC Address
     ]
   }
 

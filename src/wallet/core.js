@@ -16,6 +16,7 @@ import ecurve from 'ecurve'
 import { ec as EC } from 'elliptic'
 import BigInteger from 'bigi'
 import { hexstring2ab, ab2hexstring, reverseHex, base58, sha256, hash160, hash256 } from '../utils'
+import secureRandom from 'secure-random'
 
 const ADDR_VERSION = '17'
 
@@ -103,4 +104,16 @@ export const generateSignature = (tx, privateKey) => {
   ])
 
   return signature.toString('hex')
+}
+
+/**
+ * Generates a random private key
+ * @returns {string}
+ */
+export const generatePrivateKey = () => {
+  return ab2hexstring(secureRandom(32))
+}
+
+export const generateRandomArray = ($arrayLen) => {
+  return secureRandom($arrayLen)
 }

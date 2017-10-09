@@ -66,4 +66,10 @@ describe('Core Wallet Methods', function () {
       scriptHash.should.equal(acct.scriptHash)
     })
   })
+
+  it('generate a private key', (done) => {
+    const privateKey = C.generatePrivateKey()
+    privateKey.should.have.length(64)
+    done()
+  })
 })
