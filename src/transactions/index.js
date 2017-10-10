@@ -1,6 +1,5 @@
-import { num2VarInt, num2hexstring, StringStream, reverseHex } from '../utils.js'
-import { signatureData, createSignatureScript, getAccountFromPrivateKey } from '../wallet.js'
-import CryptoJS from 'crypto-js'
+import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256 } from '../utils.js'
+import { generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey } from '../wallet/index'
 import * as comp from './components.js'
 import * as e from './exclusive.js'
 import * as _c from './create.js'
@@ -121,8 +120,8 @@ export const deserializeTransaction = (data) => {
  * @return {Object} Signed transaction as an object.
  */
 export const signTransaction = (transaction, privateKey) => {
-  const invocationScript = '40' + signatureData(serializeTransaction(transaction, false), privateKey)
-  const verificationScript = createSignatureScript(getAccountFromPrivateKey(privateKey).publicKeyEncoded)
+  const invocationScript = '40' + generateSignature(serializeTransaction(transaction, false), privateKey)
+  const verificationScript = getVerificationScriptFromPublicKey(getPublicKeyFromPrivateKey(privateKey))
   const witness = { invocationScript, verificationScript }
   transaction.scripts ? transaction.scripts.push(witness) : transaction.scripts = [witness]
   return transaction
@@ -133,7 +132,5 @@ export const signTransaction = (transaction, privateKey) => {
  * @return {string}
  */
 export const getTransactionHash = (transaction) => {
-  const txString = CryptoJS.enc.Hex.parse(serializeTransaction(transaction, false))
-  const hash = CryptoJS.SHA256(CryptoJS.SHA256(txString)).toString()
-  return reverseHex(hash)
+  return reverseHex(hash256(serializeTransaction(transaction, false)))
 }

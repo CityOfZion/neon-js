@@ -1,3 +1,5 @@
+import CryptoJS from 'crypto-js'
+
 export const ab2str = buf => { return String.fromCharCode.apply(null, new Uint8Array(buf)) }
 
 export const str2ab = str => {
@@ -104,26 +106,6 @@ export const reverseHex = hex => {
   return out
 }
 
-export const numStoreInMemory = (num, length) => {
-  for (let i = num.length; i < length; i++) {
-    num = '0' + num
-  }
-  let data = reverseArray(Buffer.from(num, 'HEX'))
-
-  return ab2hexstring(data)
-}
-
-export const stringToBytes = str => {
-  let utf8 = unescape(encodeURIComponent(str))
-
-  let arr = []
-  for (let i = 0; i < utf8.length; i++) {
-    arr.push(utf8.charCodeAt(i))
-  }
-
-  return arr
-}
-
 export class StringStream {
   constructor (str = '') {
     this.str = str
@@ -151,4 +133,21 @@ export class StringStream {
     else if (len === 0xff) len = parseInt(reverseHex(this.read(8)), 16)
     return len
   }
+}
+
+export const hash160 = (hex) => {
+  let hexEncoded = CryptoJS.enc.Hex.parse(hex)
+  let ProgramSha256 = CryptoJS.SHA256(hexEncoded)
+  return CryptoJS.RIPEMD160(ProgramSha256).toString()
+}
+
+export const hash256 = (hex) => {
+  let hexEncoded = CryptoJS.enc.Hex.parse(hex)
+  let ProgramSha256 = CryptoJS.SHA256(hexEncoded)
+  return CryptoJS.SHA256(ProgramSha256).toString()
+}
+
+export const sha256 = (hex) => {
+  let hexEncoded = CryptoJS.enc.Hex.parse(hex)
+  return CryptoJS.SHA256(hexEncoded).toString()
 }
