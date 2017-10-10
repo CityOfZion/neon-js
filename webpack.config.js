@@ -1,14 +1,8 @@
 const webpack = require('webpack')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
-module.exports = {
+const common = {
   entry: './src/index.js',
-  target: 'node',
-  output: {
-    path: __dirname,
-    filename: './lib/index.js',
-    libraryTarget: 'umd'
-  },
   devtool: 'source-map',
   module: {
     loaders: [
@@ -38,3 +32,23 @@ module.exports = {
     })
   ]
 }
+
+module.exports = [
+  Object.assign({}, common, {
+    target: 'node',
+    output: {
+      path: __dirname,
+      filename: './lib/index.js',
+      libraryTarget: 'umd'
+    }
+  }),
+  Object.assign({}, common, {
+    target: 'web',
+    output: {
+      path: __dirname,
+      filename: './lib/browser.js',
+      libraryTarget: 'umd',
+      library: 'Neon' // This is the var name in browser
+    }
+  })
+]
