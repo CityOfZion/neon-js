@@ -1,3 +1,6 @@
+const webpack = require('webpack')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+
 module.exports = {
   entry: './src/index.js',
   target: 'node',
@@ -6,6 +9,7 @@ module.exports = {
     filename: './lib/index.js',
     libraryTarget: 'umd'
   },
+  devtool: 'source-map',
   module: {
     loaders: [
       {
@@ -22,6 +26,15 @@ module.exports = {
     ]
   },
   node: {
-    fs: 'empty'
-  }
+    fs: 'empty',
+    'child_process': 'empty'
+  },
+  plugins: [
+    new UglifyJSPlugin({ sourceMap: true }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    })
+  ]
 }
