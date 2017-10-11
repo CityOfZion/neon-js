@@ -1,8 +1,8 @@
 import Query from './query'
-import { isAddress, serializeTransaction } from '../wallet'
+import { isAddress } from '../wallet'
 import semver from 'semver'
 
-const LATEST_VERSION = '2.3.3'
+const LATEST_VERSION = '2.3.2'
 
 export class RPCClient {
   constructor (net, version = LATEST_VERSION) {
@@ -43,8 +43,7 @@ export class RPCClient {
    */
   getAccountState (addr) {
     if (!isAddress(addr)) throw new Error(`Invalid address given: ${addr}`)
-    const req = { method: 'getaccountstate', params: [addr] }
-    return this.query(req)
+    return this.execute(Query.getAccountState(addr))
       .then((res) => {
         return res.result
       })
@@ -55,8 +54,7 @@ export class RPCClient {
    * @return {Promise<Object>}
    */
   getAssetState (assetId) {
-    const req = { method: 'getassetstate', params: [assetId] }
-    return this.query(req)
+    return this.execute(Query.getAssetState(assetId))
       .then((res) => {
         return res.result
       })
@@ -64,19 +62,20 @@ export class RPCClient {
 
   /**
    * @param {string|number} indexOrHash
-   * @return {Promise<Block>}
+   * @return {Promise<Object|string>}
    */
   getBlock (indexOrHash, verbose = 1) {
-    const req = { method: 'getblock', params: [indexOrHash, verbose] }
-    return this.query(req)
+    return this.execute(Query.getblock(indexOrHash, verbose))
       .then((res) => {
         return res.result
       })
   }
 
+  /**
+   * @return {Promise<string>}
+   */
   getBestBlockHash () {
-    const req = { method: 'getbestblockhash' }
-    return this.query(req)
+    return this.execute(Query.getBestBlockHash())
       .then((res) => {
         return res.result
       })
@@ -86,8 +85,7 @@ export class RPCClient {
    * @return {Promise<number>}
    */
   getBlockCount () {
-    const req = { method: 'getblockcount' }
-    return this.query(req)
+    return this.execute(Query.getBlockCount())
       .then((res) => {
         return res.result
       })
@@ -97,8 +95,7 @@ export class RPCClient {
    * @param {number} index
    */
   getBlockSysFee (index) {
-    const req = { method: 'getblocksysfee', params: [index] }
-    return this.query(req)
+    return this.execute(Query.getBlockSysFee(index))
       .then((res) => {
         return res.result
       })
@@ -108,8 +105,7 @@ export class RPCClient {
    * @return {number}
    */
   getConnectionCount () {
-    const req = { method: 'getconnectioncount' }
-    return this.query(req)
+    return this.execute(Query.getConnectionCount())
       .then((res) => {
         return res.result
       })
@@ -120,8 +116,7 @@ export class RPCClient {
    * @return {Promise<Object>}
    */
   getContractState (scriptHash) {
-    const req = { method: 'getcontractstate', params: [scriptHash] }
-    return this.query(req)
+    return this.execute(Query.getContractState(scriptHash))
       .then((res) => {
         return res.result
       })
@@ -131,8 +126,7 @@ export class RPCClient {
    * @return {Promise<Object>}
    */
   getPeers () {
-    const req = { method: 'getpeers' }
-    return this.query(req)
+    return this.execute(Query.getPeers())
       .then((res) => {
         return res.result
       })
@@ -142,8 +136,7 @@ export class RPCClient {
    * @return {Promise<string[]>}
    */
   getRawMemPool () {
-    const req = { method: 'getrawmempool' }
-    return this.query(req)
+    return this.execute(Query.getRawMemPool())
       .then((res) => {
         return res.result
       })
@@ -155,8 +148,7 @@ export class RPCClient {
    * @param {Promise<string|object>}
    */
   getRawTransaction (txid, verbose = 1) {
-    const req = { method: 'getrawtransaction', params: [txid, verbose] }
-    return this.query(req)
+    return this.execute(Query.getRawTransaction(txid, verbose))
       .then((res) => {
         return res.result
       })
@@ -168,8 +160,7 @@ export class RPCClient {
    * @return {string} value
    */
   getStorage (scriptHash, key) {
-    const req = { method: 'getstorage', params: [scriptHash, key] }
-    return this.query(req)
+    return this.execute(Query.getStorage(scriptHash, key))
       .then((res) => {
         return res.result
       })
@@ -181,7 +172,10 @@ export class RPCClient {
    * @param {}
    */
   getTxOut (txid, index) {
-
+    return this.execute(Query.getTxOut(txid, index))
+      .then((res) => {
+        return res.result
+      })
   }
 
   /**
@@ -190,8 +184,7 @@ export class RPCClient {
    */
   invoke (scriptHash, params) {
     if (semver.lt(this.version, '2.3.3')) throw new Error(`This method is not implemented for this version`)
-    const req = { method: 'invoke', params }
-    return this.query(req)
+    return this.execute(Query.invoke(scriptHash, params))
       .then((res) => {
         return res.result
       })
@@ -204,8 +197,7 @@ export class RPCClient {
    */
   invokeFunction (scriptHash, operation, params) {
     if (semver.lt(this.version, '2.3.3')) throw new Error(`This method is not implemented for this version`)
-    const req = { method: 'invokefunction', params: [operation, ...params] }
-    return this.query(req)
+    return this.execute(Query.invokeFunction(scriptHash, operation, params))
       .then((res) => {
         return res.result
       })
@@ -216,8 +208,7 @@ export class RPCClient {
    */
   invokeScript (script) {
     if (semver.lt(this.version, '2.3.3')) throw new Error(`This method is not implemented for this version`)
-    const req = { method: 'invokescript', params: [script] }
-    return this.query(req)
+    return this.execute(Query.invokeScript(script))
       .then((res) => {
         return res.result
       })
@@ -228,9 +219,7 @@ export class RPCClient {
    * @return {boolean}
    */
   sendRawTransaction (transaction) {
-    const tx = typeof (transaction) === 'object' ? serializeTransaction(transaction) : transaction
-    const req = { method: 'sendrawtransaction', params: [tx] }
-    return this.query(req)
+    return this.execute(Query.sendRawTransaction(transaction))
       .then((res) => {
         return res.result
       })
@@ -240,8 +229,7 @@ export class RPCClient {
    * @param {string} block
    */
   submitBlock (block) {
-    const req = { method: 'submitblock', params: [block] }
-    return this.query(req)
+    return this.execute(Query.submitBlock(block))
       .then((res) => {
         return res.result
       })
@@ -252,8 +240,7 @@ export class RPCClient {
    * @return {boolean}
    */
   validateAddress (addr) {
-    const req = { method: 'validateAddress', params: [addr] }
-    return this.query(req)
+    return this.execute(Query.validateAddress(addr))
       .then((res) => {
         return res.result.isvalid
       })
