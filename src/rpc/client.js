@@ -4,7 +4,7 @@ import semver from 'semver'
 
 const LATEST_VERSION = '2.3.2'
 
-export class RPCClient {
+export default class RPCClient {
   constructor (net, version = LATEST_VERSION) {
     if (net === 'MainNet') {
       this.net = 'http://seed1.neo.org:10332'

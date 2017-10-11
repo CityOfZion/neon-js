@@ -5,7 +5,7 @@ const DEFAULT_REQ = { jsonrpc: '2.0', method: 'getblockcount', params: [], id: 1
 /**
  * A Query object helps us to construct and record requests
  */
-export class Query {
+export default class Query {
   constructor (req) {
     this.req = Object.assign({}, DEFAULT_REQ, req)
     this.completed = false

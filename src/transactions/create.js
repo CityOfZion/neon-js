@@ -1,5 +1,5 @@
-import { getScriptHashFromPublicKey } from '../wallet.js'
-import { buildScript } from '../sc/scriptBuilder.js'
+import { getScriptHashFromPublicKey } from '../wallet'
+import { createScript } from '../sc'
 
 export const CURRENT_VERSION = 0
 export const ASSETS = {
@@ -16,7 +16,7 @@ export const ASSETS = {
  * @param {Object} [override={}] - Optional overrides (eg. custom version)
  * @return {Transaction} Unsigned Transaction
  */
-export const claimTx = (publicKey, claimData, override = {}) => {
+export const createClaimTx = (publicKey, claimData, override = {}) => {
   const tx = Object.assign({
     type: 2,
     version: CURRENT_VERSION,
@@ -50,7 +50,7 @@ export const claimTx = (publicKey, claimData, override = {}) => {
  * @param {Object} [override={}] - Optional overrides (eg.custom versions)
  * @return {Transaction} Unsigned Transaction
  */
-export const ContractTx = (publicKey, balances, intents, override = {}) => {
+export const createContractTx = (publicKey, balances, intents, override = {}) => {
   const tx = Object.assign({
     type: 128,
     version: CURRENT_VERSION,
@@ -71,7 +71,7 @@ export const ContractTx = (publicKey, balances, intents, override = {}) => {
  * @param {Object} [override={}] - Optional overrides (eg.custom versions)
  * @return {string} Unsigned Transaction
  */
-export const invocationTx = (publicKey, balances, intents, invoke, gasCost, override = {}) => {
+export const createInvocationTx = (publicKey, balances, intents, invoke, gasCost, override = {}) => {
   const tx = Object.assign({
     type: 209,
     version: CURRENT_VERSION,
@@ -79,7 +79,7 @@ export const invocationTx = (publicKey, balances, intents, invoke, gasCost, over
   }, override)
   const attributes = []
   const { inputs, change } = calculateInputs(publicKey, balances, intents, gasCost)
-  const script = typeof (invoke) === 'string' ? invoke : buildScript(invoke)
+  const script = typeof (invoke) === 'string' ? invoke : createScript(invoke)
   return Object.assign(tx, { inputs, attributes, outputs: intents.concat(change), script, gas: gasCost }, override)
 }
 
