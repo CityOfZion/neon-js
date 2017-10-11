@@ -74,14 +74,14 @@ describe('Components', function () {
     })
   })
 
-  describe.skip('Attribute', function () {
-    it('serialize', () => {
-
-    })
-    it('deserialize', () => {
-
-    })
-  })
+  // describe.skip('Attribute', function () {
+  //   it('serialize', () => {
+  //
+  //   })
+  //   it('deserialize', () => {
+  //
+  //   })
+  // })
 
   describe('Witness', function () {
     it('serialize', () => {

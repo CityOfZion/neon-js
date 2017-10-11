@@ -30,15 +30,15 @@ describe('Wallet', function () {
   const testNet = Neon.getAPIEndpoint('TestNet')
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
-  it.skip('should claim GAS', () => {
-    return Neon.doClaimAllGas('TestNet', testKeys.b.wif)
-      .then((response) => {
-        console.log('claim', response)
-      }).catch((e) => {
-        console.log(e)
-        throw e
-      })
-  })
+  // it.skip('should claim GAS', () => {
+  //   return Neon.doClaimAllGas('TestNet', testKeys.b.wif)
+  //     .then((response) => {
+  //       console.log('claim', response)
+  //     }).catch((e) => {
+  //       console.log(e)
+  //       throw e
+  //     })
+  // })
 
   it('should generate a new private key', (done) => {
     const privateKey = ab2hexstring(Neon.generatePrivateKey())
@@ -174,20 +174,20 @@ describe('Wallet', function () {
       })
   })
   // this test passes, but cannot be run immediately following previous tests given state changes
-  it.skip('should send NEO and GAS', (done) => {
-    return Neon.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'GAS': 1, 'NEO': 1 })
-      .then((response) => {
-        response.should.have.property('result', true)
-        // send back so we can re-run
-        return Neon.doSendAsset('TestNet', testKeys.a.address, testKeys.b.wif, { 'GAS': 1, 'NEO': 1 })
-      })
-      .then((response) => {
-        response.should.have.property('result', true)
-        done()
-      })
-      .catch((e) => {
-        console.log(e)
-        throw e
-      })
-  })
+  // it.skip('should send NEO and GAS', (done) => {
+  //   return Neon.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'GAS': 1, 'NEO': 1 })
+  //     .then((response) => {
+  //       response.should.have.property('result', true)
+  //       // send back so we can re-run
+  //       return Neon.doSendAsset('TestNet', testKeys.a.address, testKeys.b.wif, { 'GAS': 1, 'NEO': 1 })
+  //     })
+  //     .then((response) => {
+  //       response.should.have.property('result', true)
+  //       done()
+  //     })
+  //     .catch((e) => {
+  //       console.log(e)
+  //       throw e
+  //     })
+  // })
 })
