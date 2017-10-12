@@ -14,7 +14,7 @@ const Neon = mods.reduce((neon, mod) => {
     else neon[key] = mod[key]
   })
   return neon
-}, { api, CONST })
+}, { api, CONST, u })
 
 export default Neon
 export {
