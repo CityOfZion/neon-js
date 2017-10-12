@@ -1,7 +1,7 @@
 import axios from 'axios'
 import _ from 'lodash'
 import { Account } from '../wallet'
-import { createClaimTx, createContractTx, signTransaction } from '../transactions'
+import { createClaimTx, createContractTx, createInvocationTx, signTransaction } from '../transactions'
 import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
 
@@ -141,6 +141,28 @@ export const doClaimAllGas = (net, privateKey) => {
     })
 }
 
+/**
+ * Call mintTokens for RPX
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} fromWif - The WIF key of the originating address.
+ * @param {neo} amount - The amount of neo to send to RPX.
+ * @param {gasCost} amount - The Gas to send as SC fee.
+ * @return {Promise<Response>} RPC Response
+ */
+export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost) => {
+  const account = new Account(fromWif)
+  const intents = [{ assetId: ASSET_ID.NEO, value: neo, scriptHash: scriptHash }]
+  const invoke = { operation: 'mintTokens', scriptHash }
+  const rpcEndpointPromise = getRPCEndpoint(net)
+  const balancePromise = getBalance(net, account.address)
+  return Promise.all([rpcEndpointPromise, balancePromise])
+    .then((values) => {
+      const [endpt, balances] = values
+      const unsignedTx = createInvocationTx(account.publicKey, balances, intents, invoke, gasCost, { version: 1 })
+      const signedTx = signTransaction(unsignedTx, account.privateKey)
+      return Query.sendRawTransaction(signedTx).execute(endpt)
+    })
+}
 /**
  * Send an asset to an address
  * @param {string} net - 'MainNet' or 'TestNet'.
