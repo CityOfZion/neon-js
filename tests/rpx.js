@@ -1,4 +1,4 @@
-import Neon from '../src/index.js'
+import Neon from '../src'
 import axios from 'axios'
 
 /**
@@ -24,7 +24,7 @@ describe.skip('RPX', function () {
 
   const acct = Neon.create.account(privateKey)
   const pkey = acct.publicKey
-  const RPX = '5b7074e873973a6ed3708862f219a6fbf4d1c411'
+  const RPX = Neon.CONST.CONTRACTS.TEST_RPX
   const invo = {
     'outputs': [
       {
@@ -73,7 +73,7 @@ describe.skip('RPX', function () {
 
   it('checkBalance', () => {
     console.log(acct.address)
-    return Neon.getTokenBalance('TestNet', RPX, acct.address)
+    return Neon.getTokenBalance(upgradedTestNode, RPX, acct.address)
       .then((balance) => {
         console.log(`Balance: ${balance}`)
         balance.should.be.above(0)

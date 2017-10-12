@@ -1,12 +1,7 @@
-import {
-  hexstring2ab,
-  ab2hexstring
-} from '../src/utils'
-import base58 from 'bs58'
 import Neon from '../src'
 import testKeys from './testKeys.json'
 
-describe('Wallet', function () {
+describe('NeonDB', function () {
   this.timeout(15000)
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
@@ -18,18 +13,6 @@ describe('Wallet', function () {
         console.log(e)
         throw e
       })
-  })
-
-  it('should verify that script has produces the same address', (done) => {
-    for (let i = 0; i < 100; i++) {
-      const privateKey = ab2hexstring(Neon.create.privateKey())
-      const account = Neon.create.account(privateKey)
-      const addressFromScript1 = Neon.toAddress(base58.decode(account.address).slice(1, 21))
-      const addressFromScript2 = Neon.toAddress(hexstring2ab(Neon.getHash(Neon.createSignatureScript(account.publicKeyEncoded)).toString()))
-      addressFromScript1.should.equal(account.address)
-      addressFromScript2.should.equal(account.address)
-    }
-    done()
   })
 
   it('should get balance from address', () => {
@@ -101,5 +84,23 @@ describe('Wallet', function () {
         console.log(e)
         throw e
       })
+  })
+})
+
+describe.only('coinmarketcap', function () {
+  it('get price of GAS in usd', () => {
+    return Neon.api.getPrice('GAS').should.eventually.be.a('number')
+  })
+
+  it('get price of NEO in sgd', () => {
+    return Neon.api.getPrice('NEO', 'SGD').should.eventually.be.a('number')
+  })
+
+  it('rejects Promise when given unknown currency', () => {
+    return Neon.api.getPrice('NEO', 'wtf').should.eventually.be.rejected
+  })
+
+  it('rejects Promise when given unknown coin', () => {
+    return Neon.api.getPrice('NEON').should.eventually.be.rejected
   })
 })
