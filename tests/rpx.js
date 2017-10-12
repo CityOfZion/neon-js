@@ -14,7 +14,7 @@ import axios from 'axios'
 describe.skip('RPX', function () {
   this.timeout(10000)
   // Change this to your upgraded node address.
-  const upgradedTestNode = 'http://localhost:20332'
+  const upgradedTestNode = 'http://test1.cityofzion.io:8880'
   // Change this to your new address that you will be minting from.
   const privateKey = 'fdc4deb9fa7364336d0ee3c4c7e0ecacc782993e098c6fd0cd7f334365c9cb62'
   // Set amt of NEO to use to mint

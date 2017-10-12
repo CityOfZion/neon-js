@@ -87,7 +87,7 @@ describe('NeonDB', function () {
   })
 })
 
-describe.only('coinmarketcap', function () {
+describe('coinmarketcap', function () {
   it('get price of GAS in usd', () => {
     return Neon.api.getPrice('GAS').should.eventually.be.a('number')
   })
