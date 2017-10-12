@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { serializeTransaction } from '../wallet'
-const DEFAULT_REQ = { jsonrpc: '2.0', method: 'getblockcount', params: [], id: 1234 }
+import { serializeTransaction } from '../transactions'
+import { DEFAULT_REQ } from '../consts'
 
 /**
  * A Query object helps us to construct and record requests

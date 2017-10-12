@@ -25,5 +25,5 @@ export const VMParser = (res) => {
  */
 export const VMExtractor = (res) => {
   const stack = res.result.stack
-  return stack.map((item) => item)
+  return stack.map((item) => item.value)
 }
