@@ -1,4 +1,4 @@
-import { StringStream, num2fixed8, fixed82num, num2VarInt } from '../utils'
+import { num2fixed8, fixed82num, num2VarInt } from '../utils'
 import { serializeTransactionInput, deserializeTransactionInput } from './components'
 
 /**

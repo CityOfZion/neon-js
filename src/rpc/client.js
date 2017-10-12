@@ -1,15 +1,14 @@
 import Query from './query'
 import { isAddress } from '../wallet'
 import semver from 'semver'
-
-const LATEST_VERSION = '2.3.2'
+import { RPC_VERSION, DEFAULT_RPC } from '../consts'
 
 export default class RPCClient {
-  constructor (net, version = LATEST_VERSION) {
+  constructor (net, version = RPC_VERSION) {
     if (net === 'MainNet') {
-      this.net = 'http://seed1.neo.org:10332'
+      this.net = DEFAULT_RPC.MAIN
     } else if (this.net === 'TestNet') {
-      this.net = 'http://seed1.neo.org:20332'
+      this.net = DEFAULT_RPC.TEST
     } else {
       this.net = net
     }

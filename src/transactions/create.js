@@ -1,13 +1,6 @@
 import { getScriptHashFromPublicKey } from '../wallet'
 import { createScript } from '../sc'
-
-export const CURRENT_VERSION = 0
-export const ASSETS = {
-  'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b': 'NEO',
-  '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7': 'GAS',
-  'GAS': '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
-  'NEO': 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b'
-}
+import { TX_VERSION, ASSETS, ASSET_ID } from '../consts'
 
 /**
  * Constructs a ClaimTransaction based on the inputs
@@ -19,7 +12,7 @@ export const ASSETS = {
 export const createClaimTx = (publicKey, claimData, override = {}) => {
   const tx = Object.assign({
     type: 2,
-    version: CURRENT_VERSION,
+    version: TX_VERSION,
     scripts: []
   }, override)
   const inputs = []
@@ -35,7 +28,7 @@ export const createClaimTx = (publicKey, claimData, override = {}) => {
   // TODO: probably have neon-wallet-db return human-readable numbers, if we are
   // going to end up dividing out here
   const outputs = [{
-    assetId: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
+    assetId: ASSET_ID.GAS,
     value: totalClaim / 100000000,
     scriptHash: getScriptHashFromPublicKey(publicKey)
   }]
@@ -53,7 +46,7 @@ export const createClaimTx = (publicKey, claimData, override = {}) => {
 export const createContractTx = (publicKey, balances, intents, override = {}) => {
   const tx = Object.assign({
     type: 128,
-    version: CURRENT_VERSION,
+    version: TX_VERSION,
     scripts: []
   }, override)
   const attributes = []
@@ -74,7 +67,7 @@ export const createContractTx = (publicKey, balances, intents, override = {}) =>
 export const createInvocationTx = (publicKey, balances, intents, invoke, gasCost, override = {}) => {
   const tx = Object.assign({
     type: 209,
-    version: CURRENT_VERSION,
+    version: TX_VERSION,
     scripts: []
   }, override)
   const attributes = []
@@ -102,7 +95,7 @@ const calculateInputs = (publicKey, balances, intents, gasCost = 0) => {
   // Add GAS cost in
   if (gasCost > 0) {
     const fixed8GasCost = gasCost * 100000000
-    requiredAssets[ASSETS.GAS] ? requiredAssets[ASSETS.GAS] += fixed8GasCost : requiredAssets[ASSETS.GAS] = fixed8GasCost
+    requiredAssets[ASSET_ID.GAS] ? requiredAssets[ASSET_ID.GAS] += fixed8GasCost : requiredAssets[ASSET_ID.GAS] = fixed8GasCost
   }
   let change = []
   const inputs = Object.keys(requiredAssets).map((assetId) => {

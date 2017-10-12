@@ -1,7 +1,9 @@
 import axios from 'axios'
 import _ from 'lodash'
-import { ASSETS, Account, claimTx, contractTx, signTransaction } from '../wallet'
+import { Account } from '../wallet'
+import { createClaimTx, createContractTx, signTransaction } from '../transactions'
 import { Query } from '../rpc'
+import { ASSET_ID } from '../consts'
 
 /**
  * @typedef {Object} Coin
@@ -133,7 +135,7 @@ export const doClaimAllGas = (net, privateKey) => {
   return Promise.all([rpcEndpointPromise, claimsPromise])
     .then((values) => {
       const [endpt, claims] = values
-      const unsignedTx = claimTx(account.publicKey, claims)
+      const unsignedTx = createClaimTx(account.publicKey, claims)
       const signedTx = signTransaction(unsignedTx, account.privateKey)
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
@@ -144,7 +146,7 @@ export const doClaimAllGas = (net, privateKey) => {
  * @param {string} net - 'MainNet' or 'TestNet'.
  * @param {string} toAddress - The destination address.
  * @param {string} from - Private Key or WIF of the sending address.
- * @param {{NEO: number, GAS: number}} amount - The amount of each asset (NEO and GAS) to send, leave empty for 0.
+ * @param {{NEO: number, GAS: number}} assetAmounts - The amount of each asset (NEO and GAS) to send, leave empty for 0.
  * @return {Promise<Response>} RPC Response
  */
 export const doSendAsset = (net, toAddress, from, assetAmounts) => {
@@ -153,12 +155,12 @@ export const doSendAsset = (net, toAddress, from, assetAmounts) => {
   const rpcEndpointPromise = getRPCEndpoint(net)
   const balancePromise = getBalance(net, fromAcct.address)
   const intents = _.map(assetAmounts, (v, k) => {
-    return { assetId: ASSETS[k], value: v, scriptHash: toAcct.scriptHash }
+    return { assetId: ASSET_ID[k], value: v, scriptHash: toAcct.scriptHash }
   })
   return Promise.all([rpcEndpointPromise, balancePromise])
     .then((values) => {
       const [endpt, balance] = values
-      const unsignedTx = contractTx(fromAcct.publicKey, balance, intents)
+      const unsignedTx = createContractTx(fromAcct.publicKey, balance, intents)
       const signedTx = signTransaction(unsignedTx, fromAcct.privateKey)
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
