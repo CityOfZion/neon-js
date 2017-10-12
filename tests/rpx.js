@@ -1,4 +1,4 @@
-import * as Neon from '../src/index.js'
+import Neon from '../src/index.js'
 import axios from 'axios'
 
 /**
@@ -22,8 +22,8 @@ describe.skip('RPX', function () {
   // Set systemfee to attach
   const gasCost = 0
 
-  const acct = Neon.getAccountFromPrivateKey(privateKey)
-  const pkey = acct.publicKeyEncoded
+  const acct = Neon.create.account(privateKey)
+  const pkey = acct.publicKey
   const RPX = '5b7074e873973a6ed3708862f219a6fbf4d1c411'
   const invo = {
     'outputs': [
@@ -41,7 +41,7 @@ describe.skip('RPX', function () {
   }
 
   it('Load account', () => {
-    return Neon.doSendAsset('TestNet', acct.address, 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g', { NEO: NeoAmt, GAS: gasCost })
+    return Neon.api.doSendAsset('TestNet', acct.address, 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g', { NEO: NeoAmt, GAS: gasCost })
       .then((res) => {
         res.should.have.property('result', true)
       })
@@ -52,15 +52,15 @@ describe.skip('RPX', function () {
   })
 
   it('mintRPX', () => {
-    const endPoint = Neon.getAPIEndpoint('TestNet')
-    const address = Neon.getAccountFromPublicKey(pkey).address
+    const endPoint = Neon.api.getAPIEndpoint('TestNet')
+    const address = Neon.create.account(pkey).address
     return axios.get(endPoint + '/v2/address/balance/' + address)
       .then((res) => {
         let tx = Neon.create.invocation(pkey, res.data, invo.outputs, invo.invoke, gasCost, { version: 1 })
-        const signedTx = Neon.signTransaction(tx, privateKey)
-        const hash = Neon.getTransactionHash(signedTx)
+        const signedTx = Neon.create.signature(tx, privateKey)
+        const hash = Neon.get.transactionHash(signedTx)
         console.log(`Hash: ${hash}`)
-        return Neon.doSendTx('TestNet', signedTx)
+        return Neon.api.doSendTx('TestNet', signedTx)
       })
       .then((res) => {
         res.should.have.property('result', true)
