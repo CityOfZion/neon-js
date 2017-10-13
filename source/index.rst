@@ -3,18 +3,24 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to neon-js's documentation!
-===================================
+*******
+neon-js
+*******
+
+This is neon-js
+
+Quickstart
+==========
+
+This is a code sample
+
+    x + y
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   light_wallet_api/index.rst
+   rpc/index.rst
+   transactions/index.rst
+   smart_contracts/index.rst
