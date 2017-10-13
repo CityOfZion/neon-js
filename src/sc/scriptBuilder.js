@@ -1,4 +1,4 @@
-import { StringStream, num2hexstring, reverseHex } from '../utils.js'
+import { StringStream, num2hexstring, reverseHex, int2hex, hex2bytes } from '../utils.js'
 import OpCode from './opCode.js'
 
 export default class ScriptBuilder extends StringStream {
@@ -60,7 +60,7 @@ export default class ScriptBuilder extends StringStream {
     if (num === -1) return this.emit(OpCode.PUSHM1)
     if (num === 0) return this.emit(OpCode.PUSH0)
     if (num > 0 && num <= 16) return this.emit(OpCode.PUSH1 - 1 + num)
-    return this.emitPush(num.toString(16))
+    return this.emitPush(hex2bytes(int2hex(num), true).join(""))
   }
 
   /**
