@@ -12,9 +12,14 @@ This is neon-js
 Quickstart
 ==========
 
-This is a code sample
+This is a placeholder::
 
-    x + y
+
+    import * as Neon from 'neon-js'
+
+    Neon.getBalance("TestNet", "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW").then((response) => {
+      console.log(response)
+    })
 
 .. toctree::
    :maxdepth: 2
