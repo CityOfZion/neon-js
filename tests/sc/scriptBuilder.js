@@ -33,6 +33,30 @@ describe('ScriptBuilder', function () {
       'args': 7
     }
   }
+
+  const integers = [
+    {
+      int: -1,
+      result: '4f'  // opCodes.PUSHM1 (0x4F)
+    },
+    {
+      int: 0,
+      result: '00'
+    },
+    {
+      int: 13,
+      result: (0x50 + 13).toString(16)
+    },
+    {
+      int: 500,
+      result: '02f401'  // prefixed with number of bytes following (02)
+    },
+    {
+      int: 65536,
+      result: '03000001'
+    }
+  ]
+
   it('emitAppCall', () => {
     Object.keys(data).map((key) => {
       let testcase = data[key]
@@ -40,5 +64,13 @@ describe('ScriptBuilder', function () {
       const script = sb.emitAppCall(testcase.scriptHash, testcase.operation, testcase.args).str
       script.should.equal(testcase.script)
     })
+  })
+
+  it('_emitNum', () => {
+    for (let i = 0; i < integers.length; i++) {
+      let sb = new ScriptBuilder()
+      const result = sb._emitNum(integers[i].int)
+      result.str.should.equal(integers[i].result)
+    }
   })
 })

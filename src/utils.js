@@ -31,6 +31,33 @@ export const ab2hexstring = arr => {
 }
 
 /**
+ * convert a hex string to a 'byte' array
+ * @param {string} mString
+ * @param {boolean} reverse=false reverse order of bits
+ * @returns {*}
+ */
+export const hex2bytes = (mString, reverse = false) => {
+  let ret = []
+  for (let i = 0; i < mString.length; i += 2) {
+    let char = mString[i] + '' + mString[i + 1]
+    ret.push(char)
+  }
+
+  return reverse ? ret.reverse() : ret
+}
+
+/**
+ * convert an integer to hex and add leading zeros
+ * @param {number} mNumber
+ * @returns {string}
+ */
+export const int2hex = mNumber => {
+  let h = mNumber.toString(16);
+  let val = h.length % 2 ? '0' + h : h;
+  return val;
+}
+
+/**
  * Converts a number to a hexstring of a suitable size
  * @param {number} num
  * @param {number} size - The required size in chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.
