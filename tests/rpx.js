@@ -14,17 +14,28 @@ import axios from 'axios'
 // describe.skip('RPX', function () {
 //   this.timeout(10000)
 //   // Change this to your upgraded node address.
+<<<<<<< HEAD
+//   const upgradedTestNode = 'http://localhost:20332'
+=======
 //   const upgradedTestNode = 'http://test1.cityofzion.io:8880'
+>>>>>>> origin/dev
 //   // Change this to your new address that you will be minting from.
 //   const privateKey = 'fdc4deb9fa7364336d0ee3c4c7e0ecacc782993e098c6fd0cd7f334365c9cb62'
 //   // Set amt of NEO to use to mint
 //   const NeoAmt = 1
 //   // Set systemfee to attach
 //   const gasCost = 0
+<<<<<<< HEAD
+//
+//   const acct = Neon.getAccountFromPrivateKey(privateKey)
+//   const pkey = acct.publicKeyEncoded
+//   const RPX = '5b7074e873973a6ed3708862f219a6fbf4d1c411'
+=======
 
 //   const acct = Neon.create.account(privateKey)
 //   const pkey = acct.publicKey
 //   const RPX = Neon.CONST.CONTRACTS.TEST_RPX
+>>>>>>> origin/dev
 //   const invo = {
 //     'outputs': [
 //       {
@@ -39,9 +50,15 @@ import axios from 'axios'
 //       operation: 'mintTokens'
 //     }
 //   }
+<<<<<<< HEAD
+//
+//   it.skip('Load account', () => {
+//     return Neon.doSendAsset('TestNet', acct.address, 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g', { NEO: NeoAmt, GAS: gasCost })
+=======
 
 //   it('Load account', () => {
 //     return Neon.api.doSendAsset('TestNet', acct.address, 'L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g', { NEO: NeoAmt, GAS: gasCost })
+>>>>>>> origin/dev
 //       .then((res) => {
 //         res.should.have.property('result', true)
 //       })
@@ -50,6 +67,19 @@ import axios from 'axios'
 //         throw e
 //       })
 //   })
+<<<<<<< HEAD
+//
+//   it.skip('mintRPX', () => {
+//     const endPoint = Neon.getAPIEndpoint('TestNet')
+//     const address = Neon.getAccountFromPublicKey(pkey).address
+//     return axios.get(endPoint + '/v2/address/balance/' + address)
+//       .then((res) => {
+//         let tx = Neon.create.invocation(pkey, res.data, invo.outputs, invo.invoke, gasCost, { version: 1 })
+//         const signedTx = Neon.signTransaction(tx, privateKey)
+//         const hash = Neon.getTransactionHash(signedTx)
+//         console.log(`Hash: ${hash}`)
+//         return Neon.doSendTx('TestNet', signedTx)
+=======
 
 //   it('mintRPX', () => {
 //     const endPoint = Neon.api.getAPIEndpoint('TestNet')
@@ -61,6 +91,7 @@ import axios from 'axios'
 //         const hash = Neon.get.transactionHash(signedTx)
 //         console.log(`Hash: ${hash}`)
 //         return Neon.api.doSendTx('TestNet', signedTx)
+>>>>>>> origin/dev
 //       })
 //       .then((res) => {
 //         res.should.have.property('result', true)
@@ -70,9 +101,14 @@ import axios from 'axios'
 //         throw e
 //       })
 //   })
+<<<<<<< HEAD
+//
+//   it.skip('checkBalance', () => {
+=======
 
 //   it('checkBalance', () => {
 //     console.log(acct.address)
+>>>>>>> origin/dev
 //     return Neon.getTokenBalance(upgradedTestNode, RPX, acct.address)
 //       .then((balance) => {
 //         console.log(`Balance: ${balance}`)
