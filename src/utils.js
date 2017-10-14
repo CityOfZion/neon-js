@@ -33,6 +33,16 @@ export const ab2hexstring = arr => {
 }
 
 /**
+ * convert an integer to hex and add leading zeros
+ * @param {number} mNumber
+ * @returns {string}
+ */
+export const int2hex = mNumber => {
+  let h = mNumber.toString(16)
+  return h.length % 2 ? '0' + h : h
+}
+
+/**
  * Converts a number to a hexstring of a suitable size
  * @param {number} num
  * @param {number} size - The required size in chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.
