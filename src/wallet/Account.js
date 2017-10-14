@@ -6,6 +6,7 @@ import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
  * This allows for simple utilisation and manipulating of keys without need the long access methods.
  * Key formats are derived from each other lazily and stored for future access.
  * If the previous key (one level higher) is not found, it will attempt to generate it or throw an Error if insufficient information was provided (eg. trying to generate private key when only address was given.)
+ * NEP2 <=> WIF <=> Private => Public => ScriptHash <=> Address
  */
 export default class Account {
   /**
@@ -21,6 +22,7 @@ export default class Account {
       this._address = str
     } else if (isWIF(str)) {
       this._privateKey = core.getPrivateKeyFromWIF(str)
+      this._WIF = str
     } else if (isNEP2(str)) {
       throw new ReferenceError(`Account does not support NEP2. Please decode first.`)
     } else {
@@ -62,8 +64,13 @@ export default class Account {
     if (this._scriptHash) {
       return this._scriptHash
     } else {
-      this._scriptHash = core.getScriptHashFromPublicKey(this.publicKey)
-      return this._scriptHash
+      if (this._address) {
+        this._scriptHash = core.getScriptHashFromAddress(this.address)
+        return this._scriptHash
+      } else {
+        this._scriptHash = core.getScriptHashFromPublicKey(this.publicKey)
+        return this._scriptHash
+      }
     }
   }
 

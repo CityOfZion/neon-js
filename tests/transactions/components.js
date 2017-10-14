@@ -1,4 +1,4 @@
-import { serialize, deserialize } from '../../src/transactions/index.js'
+import * as c from '../../src/transactions/components'
 import { StringStream } from '../../src/utils.js'
 
 describe('Components', function () {
@@ -48,12 +48,12 @@ describe('Components', function () {
   }
   describe('TransactionInput', function () {
     it('serialize', () => {
-      let s = serialize.input(deserializedTx.inputs[0])
+      let s = c.serializeTransactionInput(deserializedTx.inputs[0])
       s.should.equal(serializedTx.inputs[0])
     })
     it('deserialize', () => {
       let ss = new StringStream(serializedTx.inputs[0])
-      let s = deserialize.input(ss)
+      let s = c.deserializeTransactionInput(ss)
       s.should.eql(deserializedTx.inputs[0])
     })
   })
@@ -61,39 +61,39 @@ describe('Components', function () {
   describe('TransactionOutput', function () {
     it('serialize', () => {
       for (let i = 0; i < deserializedTx.outputs.length; i++) {
-        let s = serialize.output(deserializedTx.outputs[i])
+        let s = c.serializeTransactionOutput(deserializedTx.outputs[i])
         s.should.equal(serializedTx.outputs[i])
       }
     })
     it('deserialize', () => {
       for (let i = 0; i < serializedTx.outputs.length; i++) {
         let ss = new StringStream(serializedTx.outputs[i])
-        let s = deserialize.output(ss)
+        let s = c.deserializeTransactionOutput(ss)
         s.should.eql(deserializedTx.outputs[i])
       }
     })
   })
 
-  describe.skip('Attribute', function () {
-    it('serialize', () => {
-
-    })
-    it('deserialize', () => {
-
-    })
-  })
+  // describe.skip('Attribute', function () {
+  //   it('serialize', () => {
+  //
+  //   })
+  //   it('deserialize', () => {
+  //
+  //   })
+  // })
 
   describe('Witness', function () {
     it('serialize', () => {
       for (let i = 0; i < deserializedTx.scripts.length; i++) {
-        let s = serialize.script(deserializedTx.scripts[i])
+        let s = c.serializeWitness(deserializedTx.scripts[i])
         s.should.equal(serializedTx.scripts[i])
       }
     })
     it('deserialize', () => {
       for (let i = 0; i < serializedTx.scripts.length; i++) {
         let ss = new StringStream(serializedTx.scripts[i])
-        let s = deserialize.script(ss)
+        let s = c.deserializeWitness(ss)
         s.should.eql(deserializedTx.scripts[i])
       }
     })

@@ -1,10 +1,8 @@
-import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256 } from '../utils.js'
-import { generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey } from '../wallet/index'
-import * as comp from './components.js'
-import * as e from './exclusive.js'
-import * as _c from './create.js'
-
-export const ASSETS = _c.ASSETS
+import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256 } from '../utils'
+import { generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey } from '../wallet'
+import * as comp from './components'
+import * as e from './exclusive'
+import * as _c from './create'
 
 /**
  * NEO's default Endianness from RPC calls is Little Endian.
@@ -22,28 +20,6 @@ export const ASSETS = _c.ASSETS
  * @property {TransactionOutput[]} outputs
  * @property {Witness[]} scripts
  */
-
-export const create = {
-  claim: _c.claimTx,
-  contract: _c.ContractTx,
-  invocation: _c.invocationTx
-}
-
-export const serialize = {
-  attribute: comp.serializeTransactionAttribute,
-  input: comp.serializeTransactionInput,
-  output: comp.serializeTransactionOutput,
-  script: comp.serializeWitness,
-  exclusiveData: e.serialize
-}
-
-export const deserialize = {
-  attribute: comp.deserializeTransactionAttribute,
-  input: comp.deserializeTransactionInput,
-  output: comp.deserializeTransactionOutput,
-  script: comp.deserializeWitness,
-  exclusiveData: e.deserialize
-}
 
 /**
  * Serializes a given transaction object
@@ -134,3 +110,40 @@ export const signTransaction = (transaction, privateKey) => {
 export const getTransactionHash = (transaction) => {
   return reverseHex(hash256(serializeTransaction(transaction, false)))
 }
+
+const create = {
+  claim: _c.createClaimTx,
+  contract: _c.createContractTx,
+  invocation: _c.createInvocationTx
+}
+
+const serialize = {
+  attribute: comp.serializeTransactionAttribute,
+  input: comp.serializeTransactionInput,
+  output: comp.serializeTransactionOutput,
+  script: comp.serializeWitness,
+  exclusiveData: e.serialize,
+  tx: serializeTransaction
+}
+
+const deserialize = {
+  attribute: comp.deserializeTransactionAttribute,
+  input: comp.deserializeTransactionInput,
+  output: comp.deserializeTransactionOutput,
+  script: comp.deserializeWitness,
+  exclusiveData: e.deserialize,
+  tx: deserializeTransaction
+}
+
+export default {
+  create,
+  serialize,
+  deserialize,
+  get: {
+    transactionHash: getTransactionHash
+  }
+}
+
+export * from './components'
+export * from './create'
+export * from './exclusive'

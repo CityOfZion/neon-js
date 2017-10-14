@@ -37,10 +37,12 @@ export const isNEP2 = (nep2) => {
  * @return {boolean}
  */
 export const isWIF = (wif) => {
-  if (wif.length !== 52) return false
-  const hexStr = ab2hexstring(base58.decode(wif))
-  const shaChecksum = hash256(hexStr.substr(0, hexStr.length - 8)).substr(0, 8)
-  return shaChecksum === hexStr.substr(hexStr.length - 8, 8)
+  try {
+    if (wif.length !== 52) return false
+    const hexStr = ab2hexstring(base58.decode(wif))
+    const shaChecksum = hash256(hexStr.substr(0, hexStr.length - 8)).substr(0, 8)
+    return shaChecksum === hexStr.substr(hexStr.length - 8, 8)
+  } catch (e) { return false }
 }
 /**
  * Checks if hexstring is a valid Private Key. Any hexstring of 64 chars is a valid private key.
@@ -77,15 +79,17 @@ export const isPublicKey = (key) => {
  * @return {boolean}
  */
 export const isAddress = (address) => {
-  let programHash = ab2hexstring(base58.decode(address))
-  let shaChecksum = hash256(programHash.slice(0, 42)).substr(0, 8)
-  // We use the checksum to verify the address
-  if (shaChecksum !== programHash.substr(42, 8)) return false
-  // As other chains use similar checksum methods, we need to attempt to transform the programHash back into the address
-  const scriptHash = reverseHex(programHash.slice(2, 42))
-  if (getAddressFromScriptHash(scriptHash) !== address) {
-    // address is not valid Neo address, could be btc, ltc etc.
-    return false
-  }
-  return true
+  try {
+    let programHash = ab2hexstring(base58.decode(address))
+    let shaChecksum = hash256(programHash.slice(0, 42)).substr(0, 8)
+    // We use the checksum to verify the address
+    if (shaChecksum !== programHash.substr(42, 8)) return false
+    // As other chains use similar checksum methods, we need to attempt to transform the programHash back into the address
+    const scriptHash = reverseHex(programHash.slice(2, 42))
+    if (getAddressFromScriptHash(scriptHash) !== address) {
+      // address is not valid Neo address, could be btc, ltc etc.
+      return false
+    }
+    return true
+  } catch (e) { return false }
 }
