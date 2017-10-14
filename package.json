@@ -6,7 +6,6 @@
     "babel-preset-env": "^1.5.2",
     "chai": "^4.0.2",
     "chai-as-promised": "^7.1.0",
-    "elliptic": "^6.4.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-config-standard": "^10.2.1",
@@ -32,6 +31,7 @@
     "fs": "^0.0.1-security",
     "js-scrypt": "^0.2.0",
     "secure-random": "^1.1.1",
+    "semver": "^5.4.1",
     "wif": "^2.0.6"
   },
   "scripts": {

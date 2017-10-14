@@ -119,7 +119,7 @@ export default class ScriptBuilder extends StringStream {
   }
 }
 
-export const buildScript = ({ scriptHash, operation = null, args = undefined, useTailCall = false }) => {
+export const createScript = ({ scriptHash, operation = null, args = undefined, useTailCall = false }) => {
   const sb = new ScriptBuilder()
   return sb.emitAppCall(scriptHash, operation, args, useTailCall).str
 }

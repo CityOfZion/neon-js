@@ -1,4 +1,4 @@
-import { num2hexstring, num2VarInt, reverseHex, fixed82num, num2fixed8 } from '../utils.js'
+import { num2hexstring, num2VarInt, reverseHex, fixed82num, num2fixed8 } from '../utils'
 
 /**
  * @typedef TransactionInput
