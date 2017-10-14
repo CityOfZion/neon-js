@@ -1,4 +1,4 @@
-import { StringStream, num2hexstring, reverseHex, int2hex, hex2bytes } from '../utils.js'
+import { StringStream, num2hexstring, reverseHex, int2hex } from '../utils.js'
 import OpCode from './opCode.js'
 
 export default class ScriptBuilder extends StringStream {
