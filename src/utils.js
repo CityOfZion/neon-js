@@ -31,22 +31,6 @@ export const ab2hexstring = arr => {
 }
 
 /**
- * convert a hex string to a 'byte' array
- * @param {string} mString
- * @param {boolean} reverse=false reverse order of bits
- * @returns {*}
- */
-export const hex2bytes = (mString, reverse = false) => {
-  let ret = []
-  for (let i = 0; i < mString.length; i += 2) {
-    let char = mString[i] + '' + mString[i + 1]
-    ret.push(char)
-  }
-
-  return reverse ? ret.reverse() : ret
-}
-
-/**
  * convert an integer to hex and add leading zeros
  * @param {number} mNumber
  * @returns {string}
