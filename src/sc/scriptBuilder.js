@@ -60,7 +60,7 @@ export default class ScriptBuilder extends StringStream {
     if (num === -1) return this.emit(OpCode.PUSHM1)
     if (num === 0) return this.emit(OpCode.PUSH0)
     if (num > 0 && num <= 16) return this.emit(OpCode.PUSH1 - 1 + num)
-    return this.emitPush(hex2bytes(int2hex(num), true).join(""))
+    return this.emitPush(hex2bytes(int2hex(num), true).join(''))
   }
 
   /**
