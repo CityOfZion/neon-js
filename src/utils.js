@@ -36,9 +36,8 @@ export const ab2hexstring = arr => {
  * @returns {string}
  */
 export const int2hex = mNumber => {
-  let h = mNumber.toString(16);
-  let val = h.length % 2 ? '0' + h : h;
-  return val;
+  let h = mNumber.toString(16)
+  return h.length % 2 ? '0' + h : h
 }
 
 /**
