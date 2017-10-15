@@ -8,4 +8,20 @@ export default {
   }
 }
 
-export { OpCode, ScriptBuilder, createScript }
+const generateDeployScript = (script, name, version, author, email, description, needsStorage = false, returnType = "ff", paramaterList= []) => {
+  const sb = new ScriptBuilder()
+  sb
+    .emitPush(description)
+    .emitPush(email)
+    .emitPush(author)
+    .emitPush(version)
+    .emitPush(name)
+    .emitPush(needsStorage)
+    .emitPush(returnType)
+    .emitPush(paramaterList)
+    .emitPush(script)
+    .emitSysCall("Neo.Contract.Create")
+  return sb
+}
+
+export { OpCode, ScriptBuilder, createScript, generateDeployScript }

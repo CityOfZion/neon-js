@@ -97,6 +97,20 @@ export default class ScriptBuilder extends StringStream {
   }
 
   /**
+   * Appends a SysCall
+   * @param {string} api - api of SysCall
+   * @return {ScriptBuilder} this
+   */
+  emitSysCall (api) {
+    if (api === undefined || api === "") throw new Error("Invalid SysCall API")
+    const api_bytes = api.toString(16)
+    const length = int2hex(api_bytes.length / 2)
+    if (length.length != 2) throw new Error("Invalid length for SysCall API")
+    const out = length + api_bytes
+    return this.emit(OpCode.SYSCALL, out)
+  }
+
+  /**
    * Appends data depending on type. Used to append params/array lengths.
    * @param {Array|string|number|boolean} data
    * @return {ScriptBuilder} this
