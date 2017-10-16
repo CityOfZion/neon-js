@@ -1,5 +1,5 @@
-import { num2fixed8, fixed82num, num2VarInt } from '../utils'
-import { serializeTransactionInput, deserializeTransactionInput } from './components'
+import { StringStream, num2fixed8, fixed82num, num2VarInt } from '../utils.js'
+import { serializeTransactionInput, deserializeTransactionInput } from './components.js'
 
 /**
  * @param {StringStream} ss

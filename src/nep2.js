@@ -1,14 +1,10 @@
-/**
- * NEP2 - Private Key Encryption based on AES.
- * This encrypts your private key with a passphrase, protecting your private key from being stolen and used.
- * It is useful for storing private keys in a JSON file securely or to mask the key before printing it.
- */
-import bs58check from 'bs58check' // This is importable because WIF specifies it as a dependency.
+// this code draws heavily from functions written originally by snowypowers
+
+import bs58check from 'bs58check'
 import C, { SHA256, AES, enc } from 'crypto-js'
 import scrypt from 'js-scrypt'
-import { generatePrivateKey } from './core'
-import Account from './Account'
-import { ab2hexstring, hexXor } from '../utils'
+import { getAccountFromWIFKey, getAccountFromPrivateKey, generatePrivateKey, getWIFFromPrivateKey } from './wallet'
+import { ab2hexstring, hexXor } from './utils'
 
 // specified by nep2, same as bip38
 const NEP_HEADER = '0142'
@@ -28,10 +24,13 @@ const SCRYPT_OPTS = {
  */
 export const encryptWifAccount = (wif, passphrase) => {
   return encryptWIF(wif, passphrase).then((encWif) => {
-    const loadAccount = new Account(wif)
-    loadAccount.encryptedWif = encWif
-    loadAccount.passphrase = passphrase
-    return loadAccount
+    const loadAccount = getAccountFromWIFKey(wif)
+    return {
+      wif,
+      address: loadAccount.address,
+      encryptedWif: encWif,
+      passphrase
+    }
   })
 }
 
@@ -42,7 +41,16 @@ export const encryptWifAccount = (wif, passphrase) => {
  */
 export const generateEncryptedWif = (passphrase) => {
   const newPrivateKey = generatePrivateKey()
-  return encryptWifAccount(newPrivateKey, passphrase)
+  const newWif = getWIFFromPrivateKey(newPrivateKey)
+  return encryptWIF(newWif, passphrase).then((encWif) => {
+    const loadAccount = getAccountFromWIFKey(newWif)
+    return {
+      wif: newWif,
+      address: loadAccount.address,
+      encryptedWif: encWif,
+      passphrase
+    }
+  })
 }
 
 /**
@@ -51,18 +59,18 @@ export const generateEncryptedWif = (passphrase) => {
  * @param {string} keyphrase - The password. Will be encoded as UTF-8.
  * @returns {string} The encrypted key in Base58 (Case sensitive).
  */
-export const encrypt = (wifKey, keyphrase) => {
-  const account = new Account(wifKey)
-  // SHA Salt (use the first 4 bytes)
+const encrypt = (wifKey, keyphrase) => {
+  const account = getAccountFromWIFKey(wifKey)
+    // SHA Salt (use the first 4 bytes)
   const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
-  // Scrypt
+    // Scrypt
   const derived = scrypt.hashSync(Buffer.from(keyphrase, 'utf8'), Buffer.from(addressHash, 'hex'), SCRYPT_OPTS).toString('hex')
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
-  // AES Encrypt
+    // AES Encrypt
   const xor = hexXor(account.privateKey, derived1)
   const encrypted = AES.encrypt(enc.Hex.parse(xor), enc.Hex.parse(derived2), { mode: C.mode.ECB, padding: C.pad.NoPadding })
-  // Construct
+    // Construct
   const assembled = NEP_HEADER + NEP_FLAG + addressHash + encrypted.ciphertext.toString()
   return bs58check.encode(Buffer.from(assembled, 'hex'))
 }
@@ -73,7 +81,7 @@ export const encrypt = (wifKey, keyphrase) => {
  * @param {string} keyphrase - The password. Will be encoded as UTF-8.
  * @returns {string} The decrypted WIF key.
  */
-export const decrypt = (encryptedKey, keyphrase) => {
+const decrypt = (encryptedKey, keyphrase) => {
   const assembled = ab2hexstring(bs58check.decode(encryptedKey))
   const addressHash = assembled.substr(6, 8)
   const encrypted = assembled.substr(-64)
@@ -83,10 +91,10 @@ export const decrypt = (encryptedKey, keyphrase) => {
   const ciphertext = { ciphertext: enc.Hex.parse(encrypted), salt: '' }
   const decrypted = AES.decrypt(ciphertext, enc.Hex.parse(derived2), { mode: C.mode.ECB, padding: C.pad.NoPadding })
   const privateKey = hexXor(decrypted.toString(), derived1)
-  const account = new Account(privateKey)
-  const newAddressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
+  const address = getAccountFromPrivateKey(privateKey).address
+  const newAddressHash = SHA256(SHA256(enc.Latin1.parse(address))).toString().slice(0, 8)
   if (addressHash !== newAddressHash) throw new Error('Wrong Password!')
-  return account.WIF
+  return getWIFFromPrivateKey(Buffer.from(privateKey, 'hex'))
 }
 
 // helpers to wrap synchronous functions in promises

@@ -1,8 +1,11 @@
-import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256 } from '../utils'
-import { generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey } from '../wallet'
-import * as comp from './components'
-import * as e from './exclusive'
-import * as _c from './create'
+import { num2VarInt, num2hexstring, StringStream, reverseHex } from '../utils.js'
+import { signatureData, createSignatureScript, getAccountFromPrivateKey } from '../wallet.js'
+import CryptoJS from 'crypto-js'
+import * as comp from './components.js'
+import * as e from './exclusive.js'
+import * as _c from './create.js'
+
+export const ASSETS = _c.ASSETS
 
 /**
  * NEO's default Endianness from RPC calls is Little Endian.
@@ -20,6 +23,28 @@ import * as _c from './create'
  * @property {TransactionOutput[]} outputs
  * @property {Witness[]} scripts
  */
+
+export const create = {
+  claim: _c.claimTx,
+  contract: _c.ContractTx,
+  invocation: _c.invocationTx
+}
+
+export const serialize = {
+  attribute: comp.serializeTransactionAttribute,
+  input: comp.serializeTransactionInput,
+  output: comp.serializeTransactionOutput,
+  script: comp.serializeWitness,
+  exclusiveData: e.serialize
+}
+
+export const deserialize = {
+  attribute: comp.deserializeTransactionAttribute,
+  input: comp.deserializeTransactionInput,
+  output: comp.deserializeTransactionOutput,
+  script: comp.deserializeWitness,
+  exclusiveData: e.deserialize
+}
 
 /**
  * Serializes a given transaction object
@@ -96,8 +121,8 @@ export const deserializeTransaction = (data) => {
  * @return {Object} Signed transaction as an object.
  */
 export const signTransaction = (transaction, privateKey) => {
-  const invocationScript = '40' + generateSignature(serializeTransaction(transaction, false), privateKey)
-  const verificationScript = getVerificationScriptFromPublicKey(getPublicKeyFromPrivateKey(privateKey))
+  const invocationScript = '40' + signatureData(serializeTransaction(transaction, false), privateKey)
+  const verificationScript = createSignatureScript(getAccountFromPrivateKey(privateKey).publicKeyEncoded)
   const witness = { invocationScript, verificationScript }
   transaction.scripts ? transaction.scripts.push(witness) : transaction.scripts = [witness]
   return transaction
@@ -108,42 +133,7 @@ export const signTransaction = (transaction, privateKey) => {
  * @return {string}
  */
 export const getTransactionHash = (transaction) => {
-  return reverseHex(hash256(serializeTransaction(transaction, false)))
+  const txString = CryptoJS.enc.Hex.parse(serializeTransaction(transaction, false))
+  const hash = CryptoJS.SHA256(CryptoJS.SHA256(txString)).toString()
+  return reverseHex(hash)
 }
-
-const create = {
-  claim: _c.createClaimTx,
-  contract: _c.createContractTx,
-  invocation: _c.createInvocationTx
-}
-
-const serialize = {
-  attribute: comp.serializeTransactionAttribute,
-  input: comp.serializeTransactionInput,
-  output: comp.serializeTransactionOutput,
-  script: comp.serializeWitness,
-  exclusiveData: e.serialize,
-  tx: serializeTransaction
-}
-
-const deserialize = {
-  attribute: comp.deserializeTransactionAttribute,
-  input: comp.deserializeTransactionInput,
-  output: comp.deserializeTransactionOutput,
-  script: comp.deserializeWitness,
-  exclusiveData: e.deserialize,
-  tx: deserializeTransaction
-}
-
-export default {
-  create,
-  serialize,
-  deserialize,
-  get: {
-    transactionHash: getTransactionHash
-  }
-}
-
-export * from './components'
-export * from './create'
-export * from './exclusive'
