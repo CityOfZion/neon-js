@@ -20,6 +20,10 @@ export const hexstring2ab = str => {
   return result
 }
 
+export const str2hexstring = str => {
+  return ab2hexstring(str2ab(str))
+}
+
 export const ab2hexstring = arr => {
   let result = ''
   for (let i = 0; i < arr.length; i++) {

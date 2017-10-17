@@ -1,5 +1,6 @@
 import OpCode from './opCode'
 import ScriptBuilder, { createScript } from './scriptBuilder'
+import { str2hexstring } from '../utils.js'
 
 export default {
   create: {
@@ -8,14 +9,14 @@ export default {
   }
 }
 
-const generateDeployScript = (script, name, version, author, email, description, needsStorage = false, returnType = "ff", paramaterList= []) => {
+const generateDeployScript = ({script, name, version, author, email, description, needsStorage = false, returnType = "ff", paramaterList= []}) => {
   const sb = new ScriptBuilder()
   sb
-    .emitPush(description)
-    .emitPush(email)
-    .emitPush(author)
+    .emitPush(str2hexstring(description))
+    .emitPush(str2hexstring(email))
+    .emitPush(str2hexstring(author))
     .emitPush(version)
-    .emitPush(name)
+    .emitPush(str2hexstring(name))
     .emitPush(needsStorage)
     .emitPush(returnType)
     .emitPush(paramaterList)
