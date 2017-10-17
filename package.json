@@ -51,7 +51,7 @@
     "libraries"
   ],
   "author": "Ethan Fast <ejhfast@gmail.com> (https://github.com/Ejhfast)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/CityOfZion/neon-js/issues"
   },
