@@ -1,12 +1,8 @@
 /**
- * Core methods for manipulating keys
+ * @file Core methods for manipulating keys
  * NEP2 <=> WIF <=> Private => Public => ScriptHash <=> Address
  * Keys are arranged in order of derivation.
  * Arrows determine the direction.
- *
- * Methods are named as get<This>From<That> where:
- * <This> is lower on the chain (on the right)
- * <That> is higher on the chain (on the left)
  *
  * NEP2 methods are found within NEP2 standard.
  * All methods take in Big-Endian strings and return Big-Endian strings.
@@ -115,6 +111,11 @@ export const generatePrivateKey = () => {
   return ab2hexstring(secureRandom(32))
 }
 
-export const generateRandomArray = ($arrayLen) => {
-  return secureRandom($arrayLen)
+/**
+ * Generates a arrayBuffer filled with random bits.
+ * @param {number} length - Length of buffer.
+ * @returns {ArrayBuffer}
+ */
+export const generateRandomArray = (length) => {
+  return secureRandom(length)
 }

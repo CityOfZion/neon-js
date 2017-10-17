@@ -3,8 +3,19 @@ import { isAddress } from '../wallet'
 import semver from 'semver'
 import { RPC_VERSION, DEFAULT_RPC } from '../consts'
 
-export default class RPCClient {
+/**
+ * @class RPCClient
+ * @classdesc
+ * RPC Client model to query a NEO node. Contains built-in methods to query using RPC calls.
+ * @param {string} net - 'MainNet' or 'TestNet' will query the default RPC address found in consts. You may provide a custom URL.
+ * @param {string} version - Version of NEO node. Used to check if RPC methods have been implemented.
+ */
+class RPCClient {
   constructor (net, version = RPC_VERSION) {
+    /**
+     * @type {string}
+     * The URL of the node that this client queries.
+     */
     if (net === 'MainNet') {
       this.net = DEFAULT_RPC.MAIN
     } else if (this.net === 'TestNet') {
@@ -12,12 +23,20 @@ export default class RPCClient {
     } else {
       this.net = net
     }
+    /**
+     * @type {Query[]}
+     * History of queries made with this client.
+     */
     this.history = []
+    /**
+     * @type {string}
+     * Version of this client. Used to check if RPC call is implemented.
+      */
     this.version = semver.clean(version)
   }
 
   /**
-   * Takes an Query object and executes it.
+   * Takes an Query object and executes it. Adds the Query object to history.
    * @param {Query} query
    * @return {Promise<any>}
    */
@@ -37,6 +56,7 @@ export default class RPCClient {
   }
 
   /**
+   * Gets the state of an account given an address.
    * @param {string} addr
    * @return {Promise<Object>}
    */
@@ -60,6 +80,7 @@ export default class RPCClient {
   }
 
   /**
+   * Gets the block at a given height or hash.
    * @param {string|number} indexOrHash
    * @return {Promise<Object|string>}
    */
@@ -71,6 +92,7 @@ export default class RPCClient {
   }
 
   /**
+   * Get the latest block hash.
    * @return {Promise<string>}
    */
   getBestBlockHash () {
@@ -81,6 +103,7 @@ export default class RPCClient {
   }
 
   /**
+   * Get the current block height.
    * @return {Promise<number>}
    */
   getBlockCount () {
@@ -91,6 +114,7 @@ export default class RPCClient {
   }
 
   /**
+   * Get the system fees of a block.
    * @param {number} index
    */
   getBlockSysFee (index) {
@@ -101,6 +125,7 @@ export default class RPCClient {
   }
 
   /**
+   * Gets the number of peers this node is connected to.
    * @return {number}
    */
   getConnectionCount () {
@@ -111,6 +136,7 @@ export default class RPCClient {
   }
 
   /**
+   * Gets the state of the contract at the given scriptHash.
    * @param {string} scriptHash
    * @return {Promise<Object>}
    */
@@ -122,6 +148,7 @@ export default class RPCClient {
   }
 
   /**
+   * Gets a list of all peers that this node has discovered.
    * @return {Promise<Object>}
    */
   getPeers () {
@@ -132,6 +159,7 @@ export default class RPCClient {
   }
 
   /**
+   * Gets a list of all transaction hashes waiting to be processed.
    * @return {Promise<string[]>}
    */
   getRawMemPool () {
@@ -142,6 +170,7 @@ export default class RPCClient {
   }
 
   /**
+   * Gets a transaction based on its hash.
    * @param {string} txid
    * @param {number} verbose
    * @param {Promise<string|object>}
@@ -154,6 +183,7 @@ export default class RPCClient {
   }
 
   /**
+   * Gets the corresponding value of a key in the storage of a contract address.
    * @param {string} scriptHash
    * @param {string} key
    * @return {string} value
@@ -178,6 +208,7 @@ export default class RPCClient {
   }
 
   /**
+   * Calls a smart contract with the given parameters. This method is a local invoke, results are not reflected on the blockchain.
    * @param {string} scriptHash
    * @param {Array} params
    */
@@ -190,6 +221,7 @@ export default class RPCClient {
   }
 
   /**
+   * Submits a contract method call with parameters for the node to run. This method is a local invoke, results are not reflected on the blockchain.
    * @param {string} scriptHash
    * @param {string} operation
    * @param {Array} params
@@ -203,6 +235,7 @@ export default class RPCClient {
   }
 
   /**
+   * Submits a script for the node to run. This method is a local invoke, results are not reflected on the blockchain.
    * @param {string} script
    */
   invokeScript (script) {
@@ -214,6 +247,7 @@ export default class RPCClient {
   }
 
   /**
+   * Sends a serialized transaction to the network.
    * @param {Transaction|string} transaction
    * @return {boolean}
    */
@@ -225,6 +259,7 @@ export default class RPCClient {
   }
 
   /**
+   * Submits a serialized block to the network.
    * @param {string} block
    */
   submitBlock (block) {
@@ -235,6 +270,7 @@ export default class RPCClient {
   }
 
   /**
+   * Checks if the provided address is a valid NEO address.
    * @param {string} addr
    * @return {boolean}
    */
@@ -245,3 +281,5 @@ export default class RPCClient {
       })
   }
 }
+
+export default RPCClient

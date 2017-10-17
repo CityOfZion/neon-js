@@ -3,19 +3,43 @@ import { serializeTransaction } from '../transactions'
 import { DEFAULT_REQ } from '../consts'
 
 /**
+ * @class Query
+ * @classdesc
  * A Query object helps us to construct and record requests
+ * @param {Object} req
  */
-export default class Query {
+class Query {
   constructor (req) {
+    /**
+     * @type {Object}
+     * The request object.
+     */
     this.req = Object.assign({}, DEFAULT_REQ, req)
+    /**
+     * @type {boolean}
+     * If this request has been completed.
+     */
     this.completed = false
+    /**
+     * @type {function}
+     * Optional parsing function for the response.
+     */
+    this.parse = null
   }
 
+  /**
+   * Attaches a parser method to the Query. This method will be used to parse the response.
+   * @param {function} parser
+   */
   parseWith (parser) {
     this.parse = parser
     return this
   }
 
+  /**
+   * Executes the Query by sending the RPC request to the provided net.
+   * @param {string} net - The URL of the node.
+   */
   execute (net) {
     if (this.completed) throw new Error(`This request has been sent`)
     return queryRPC(net, this.req)
@@ -237,6 +261,8 @@ export default class Query {
     })
   }
 }
+
+export default Query
 
 /**
  * Wrapper for querying node RPC

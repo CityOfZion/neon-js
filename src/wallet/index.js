@@ -1,3 +1,5 @@
+/** @module wallet */
+
 import * as core from './core'
 import * as verify from './verify'
 import * as nep2 from './nep2'

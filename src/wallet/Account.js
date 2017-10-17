@@ -2,17 +2,16 @@ import * as core from './core'
 import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
 
 /**
- * Account class for simple management of keys.
+ * @class Account
+ * @memberof module:wallet
+ * @classdesc
  * This allows for simple utilisation and manipulating of keys without need the long access methods.
  * Key formats are derived from each other lazily and stored for future access.
  * If the previous key (one level higher) is not found, it will attempt to generate it or throw an Error if insufficient information was provided (eg. trying to generate private key when only address was given.)
  * NEP2 <=> WIF <=> Private => Public => ScriptHash <=> Address
+ * @param {string} str - WIF/ Private Key / Public Key / Address.
  */
-export default class Account {
-  /**
-   * Creates an Account. Accepts private key, WIF, public key or address.
-   * @param {string} str - A key in any format.
-   */
+class Account {
   constructor (str) {
     if (isPrivateKey(str)) {
       this._privateKey = str
@@ -30,7 +29,7 @@ export default class Account {
     }
   }
 
-  /** @return {string} */
+  /** @type {string} */
   get WIF () {
     if (this._WIF) {
       return this._WIF
@@ -41,7 +40,7 @@ export default class Account {
   }
 
   /** @return {string} */
-  get privateKey () {
+  static get privateKey () {
     if (this._privateKey) {
       return this._privateKey
     } else {
@@ -50,7 +49,7 @@ export default class Account {
   }
 
   /** @return {string} */
-  get publicKey () {
+  static get publicKey () {
     if (this._publicKey) {
       return this._publicKey
     } else {
@@ -60,7 +59,7 @@ export default class Account {
   }
 
   /** @return {string} */
-  get scriptHash () {
+  static get scriptHash () {
     if (this._scriptHash) {
       return this._scriptHash
     } else {
@@ -75,7 +74,7 @@ export default class Account {
   }
 
   /** @return {string} */
-  get address () {
+  static get address () {
     if (this._address) {
       return this._address
     } else {
@@ -84,3 +83,5 @@ export default class Account {
     }
   }
 }
+
+export default Account
