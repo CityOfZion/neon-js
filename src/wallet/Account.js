@@ -40,7 +40,7 @@ class Account {
   }
 
   /** @return {string} */
-  static get privateKey () {
+  get privateKey () {
     if (this._privateKey) {
       return this._privateKey
     } else {
@@ -49,7 +49,7 @@ class Account {
   }
 
   /** @return {string} */
-  static get publicKey () {
+  get publicKey () {
     if (this._publicKey) {
       return this._publicKey
     } else {
@@ -59,7 +59,7 @@ class Account {
   }
 
   /** @return {string} */
-  static get scriptHash () {
+  get scriptHash () {
     if (this._scriptHash) {
       return this._scriptHash
     } else {
@@ -74,7 +74,7 @@ class Account {
   }
 
   /** @return {string} */
-  static get address () {
+  get address () {
     if (this._address) {
       return this._address
     } else {
