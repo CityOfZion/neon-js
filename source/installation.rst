@@ -1,6 +1,6 @@
-********
+************
 Installation
-********
+************
 
 neon-js does not currently live on the NPM system.
 

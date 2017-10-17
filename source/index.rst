@@ -33,3 +33,4 @@ This is a placeholder::
     rpc/index.rst
     light_wallet_api/index.rst
     smart_contracts/index.rst
+    reference/index.rst
