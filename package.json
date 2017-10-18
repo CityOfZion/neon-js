@@ -35,10 +35,10 @@
     "wif": "^2.0.6"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
-    "build": "webpack",
+    "test": "node_modules/mocha/bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
+    "build": "node_modules/webpack/bin/webpack.js",
     "prepublish": "npm run build",
-    "lint": "eslint src/**.js"
+    "lint": "node_modules/eslint/bin/eslint.js src/**.js"
   },
   "repository": {
     "type": "git",
