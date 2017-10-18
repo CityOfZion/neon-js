@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Invoke Transaction &mdash; neon-js 1.1.0 documentation</title>
+  <title>Invocation Transaction &mdash; neon-js 1.1.0 documentation</title>
   
 
   
@@ -37,7 +37,8 @@
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="neon-js 1.1.0 documentation" href="../index.html"/>
         <link rel="up" title="Transactions" href="index.html"/>
-        <link rel="prev" title="Contract Transaction" href="contract.html"/> 
+        <link rel="next" title="Node RPC" href="../rpc/index.html"/>
+        <link rel="prev" title="Claim Transaction" href="claim.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -92,11 +93,19 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Transactions</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="contract.html">Contract Transaction</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Invoke Transaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="claim.html">Claim Transaction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Invocation Transaction</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../light_wallet_api/index.html">Light Wallet API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
 </ul>
 
             
@@ -143,7 +152,7 @@
         
           <li><a href="index.html">Transactions</a> &raquo;</li>
         
-      <li>Invoke Transaction</li>
+      <li>Invocation Transaction</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,9 +171,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="invoke-transaction">
-<h1>Invoke Transaction<a class="headerlink" href="#invoke-transaction" title="Permalink to this headline">¶</a></h1>
-<p>This is a Invoke Transaction</p>
+  <div class="section" id="invocation-transaction">
+<h1>Invocation Transaction<a class="headerlink" href="#invocation-transaction" title="Permalink to this headline">¶</a></h1>
+<p>Sends a smart contract invocation script to the blockchain. Use this to call a smart contract and effect changes on the blockchain.</p>
+<p>This is a real invocation as compared to the RPC methods invoke/invokefunction/invokescript. The RPC methods will only invoke the contract on the RPC node and returns the result as if a real InvocationTransaction was sent. However, the results are not effected on the blockchain. The use of those RPC methods is to verify the validity of the script as well as find out the actual gas cost of the invocation.</p>
 </div>
 
 
@@ -177,8 +187,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../rpc/index.html" class="btn btn-neutral float-right" title="Node RPC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="contract.html" class="btn btn-neutral" title="Contract Transaction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="claim.html" class="btn btn-neutral" title="Claim Transaction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

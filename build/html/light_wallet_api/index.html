@@ -36,8 +36,8 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="neon-js 1.1.0 documentation" href="../index.html"/>
-        <link rel="next" title="Node RPC" href="../rpc/index.html"/>
-        <link rel="prev" title="neon-js" href="../index.html"/> 
+        <link rel="next" title="Smart Contract" href="../smart_contracts/index.html"/>
+        <link rel="prev" title="Node RPC" href="../rpc/index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -92,12 +92,16 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Light Wallet API</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
 </ul>
 
             
@@ -163,7 +167,17 @@
             
   <div class="section" id="light-wallet-api">
 <h1>Light Wallet API<a class="headerlink" href="#light-wallet-api" title="Permalink to this headline">¶</a></h1>
-<p>Functionality for interacting with Neon light wallet API (e.g., getting claims and balance)</p>
+<p>The light wallet API is exposed as:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">api</span><span class="p">.</span><span class="nx">getBalance</span><span class="p">(</span><span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">api</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">getBalance</span><span class="p">(</span><span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The Light Wallet API describes the API set exposed by <a class="reference external" href="https://github.com/CityOfZion/neon-wallet-db">neon-wallet-db</a> as well as other convenient methods. The node is hosted by CityOfZion.</p>
+<p>The API returns useful information that is not built into standard NEO nodes such as claimable transactions or spendable coins. These information are used to construct transactions.</p>
+<p>For example, the <code class="docutils literal"><span class="pre">getBalance</span></code> method returns a list of spendable assets of a specific address. This is then used to construct a ContractTransaction.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -178,10 +192,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../rpc/index.html" class="btn btn-neutral float-right" title="Node RPC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../smart_contracts/index.html" class="btn btn-neutral float-right" title="Smart Contract" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../index.html" class="btn btn-neutral" title="neon-js" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../rpc/index.html" class="btn btn-neutral" title="Node RPC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

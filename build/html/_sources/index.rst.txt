@@ -7,7 +7,8 @@
 neon-js
 *******
 
-This is neon-js
+neon-js is a Javascript library to interface with NEO blockchain.
+
 
 Quickstart
 ==========
@@ -22,10 +23,14 @@ This is a placeholder::
     })
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: Contents:
 
-   light_wallet_api/index.rst
-   rpc/index.rst
-   transactions/index.rst
-   smart_contracts/index.rst
+    overview
+    installation
+    wallet
+    transactions/index.rst
+    rpc/index.rst
+    light_wallet_api/index.rst
+    smart_contracts/index.rst
+    reference/index.rst
