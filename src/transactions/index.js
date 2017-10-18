@@ -141,6 +141,9 @@ export default {
   deserialize,
   get: {
     transactionHash: getTransactionHash
+  },
+  sign: {
+    transaction: signTransaction
   }
 }
 

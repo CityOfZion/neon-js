@@ -55,7 +55,7 @@ export const isPrivateKey = (key) => {
 
 /**
  * Checks if hexstring is a valid Public Key.
- * @param {string} key - Public Key
+ * @param {string} key
  * @return {boolean}
  */
 export const isPublicKey = (key) => {
@@ -74,7 +74,7 @@ export const isPublicKey = (key) => {
 }
 
 /**
- * Verifies an address using its checksum
+ * Verifies an address using its checksum.
  * @param {string} address
  * @return {boolean}
  */

@@ -30,7 +30,12 @@
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
+extensions = ['sphinx_js']
+primary_domain = 'js'
+js_source_path='../src'
+jsdoc_config_path='./conf.json'
+
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -72,7 +77,7 @@ exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
-
+highlight_language='javascript'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
@@ -152,6 +157,3 @@ texinfo_documents = [
      author, 'neon-js', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
