@@ -22,11 +22,6 @@ const generateDeployScript = ({script, name, version, author, email, description
     .emitPush(paramaterList)
     .emitPush(script)
     .emitSysCall("Neo.Contract.Create")
-    console.log(str2hexstring(description))
-    console.log(str2hexstring(email))
-    console.log(str2hexstring(author))
-    console.log(str2hexstring(version))
-    console.log(str2hexstring(name))
   return sb
 }
 
