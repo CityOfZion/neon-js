@@ -9,13 +9,13 @@ export default {
   }
 }
 
-const generateDeployScript = ({script, name, version, author, email, description, needsStorage = false, returnType = "ff", paramaterList= []}) => {
+const generateDeployScript = ({script, name, version, author, email, description, needsStorage = false, returnType = "ff", paramaterList= undefined}) => {
   const sb = new ScriptBuilder()
   sb
     .emitPush(str2hexstring(description))
     .emitPush(str2hexstring(email))
     .emitPush(str2hexstring(author))
-    .emitPush(version)
+    .emitPush(str2hexstring(version))
     .emitPush(str2hexstring(name))
     .emitPush(needsStorage)
     .emitPush(returnType)

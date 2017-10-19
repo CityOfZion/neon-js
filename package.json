@@ -20,6 +20,7 @@
   "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
   "version": "1.1.0",
   "main": "lib/index.js",
+  "browser": "lib/browser.js",
   "dependencies": {
     "axios": "^0.16.2",
     "base-x": "^3.0.2",
@@ -51,7 +52,7 @@
     "libraries"
   ],
   "author": "Ethan Fast <ejhfast@gmail.com> (https://github.com/Ejhfast)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/CityOfZion/neon-js/issues"
   },

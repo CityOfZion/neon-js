@@ -9,12 +9,23 @@ describe('Smart Contracts', function () {
     const script = generateDeployScript({
       script: "54c56b6c766b00527ac46c766b51527ac46c766b00c36c766b51c3936c766b52527ac46203006c766b52c3616c7566",
       name: "Add",
-      version: 1,
+      version: "1",
       author: "Ethan Fast",
       email: "test@test.com",
-      description: "Add"
+      description: "Add",
+      returnType: 5,
+      paramaterList: "05"
+
     })
     console.log(script)
     script.str.should.equal("034164640d7465737440746573742e636f6d0a457468616e2046617374013103416464005501052f54c56b6c766b00527ac46c766b51527ac46c766b00c36c766b51c3936c766b52527ac46203006c766b52c3616c756668134e656f2e436f6e74726163742e437265617465")
   })
 })
+
+// CORRECT: 03 416464   0d 7465737440746573742e636f6d  0a 457468616e2046617374
+// MINE:    03 416464   0d 7465737440746573742e636f6d  0a 457468616e2046617374
+//          descrip.    email                          author
+// ...(continue)...
+// CORRECT: 01 31    03 416464  00       55     01 05   ...
+// MINE:    01 31    03 416464  00       01 05  01 05   ...
+//          version  name       storage  ???            rest is correct...
