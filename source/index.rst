@@ -59,4 +59,5 @@ This documentation is meant to serve as a high level explaination of the library
     rpc/index.rst
     light_wallet_api/index.rst
     smart_contracts/index.rst
+    utilities
     reference/index.rst
