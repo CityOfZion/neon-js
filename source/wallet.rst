@@ -59,3 +59,66 @@ You cannot derive a private key from a Account created using a Public Key. (Acco
   const account2 = Neon.create.account(publicKey)
   account.privateKey // Throws error
 
+Core
+====
+
+The core methods available are methods to convert key formats and generate new private keys.
+
+Do note that the methods available is not the full set but only the minimum required. Generally, there is a method to retrieve the lower key from the higher key. For example, ``getPublicKeyFromPrivateKey`` exists but not ``getAddressFromPrivatKey`` or ``getPrivateKeyFromPublicKey``. For conversions across all formats, you are encouraged to use the ``Account`` class.
+
+::
+
+  import Neon from 'neon-js'
+  const privateKey = Neon.create.privateKey()
+  const publicKey = Neon.get.publicKeyFromPrivateKey(publicKey)
+  const scriptHash = Neon.get.scriptHashFromPublicKey(publicKey)
+  const address = Neon.get.addressFromScriptHash(scriptHash)
+
+
+
+  import { wallet } from 'neon-js'
+  const privateKey = wallet.generatePrivateKey()
+  const publicKey = wallet.getPublicKeyFromPrivateKey(privateKey)
+  const scriptHash = wallet.getScriptHashFromPublicKey(publicKey)
+  const address = wallet.getAddressFromScriptHash(scriptHash)
+
+
+NEP2
+====
+
+The NEP2 standard describes the procedure to encrypt or decrypt a private key. The encryption method accepts either a WIF or HEX private key. However, the decryption method will always return a WIF for consistency.
+
+Do note that the encryption/decryption takes a long time and might not work very nicely in browsers.
+
+::
+
+  import Neon from 'neon-js'
+  const privateKey = Neon.create.privateKey()
+  const WIF = Neon.get.WIFFromPrivateKey(privateKey)
+  const nep2Key = Neon.encrypt(privateKey, 'myPassword')
+  const decryptedKey = Neon.decrypt(nep2Key, 'myPassword')
+  WIF === decryptedKey // true
+
+  import { wallet }
+  const privateKey = wallet.generatePrivateKey()
+  const WIF = new wallet.Account(privateKey).WIF
+  const nep2Key = wallet.encrypt(WIF, 'myPassword')
+  const decryptedKey = wallet.decrypt(nep2Key, 'myPassword')
+  WIF === decryptedKey // true
+
+Verify
+======
+
+Verification methods for the various key formats are available::
+
+  import Neon from 'neon-js'
+  Neon.is.address(addrStr)
+  Neon.is.privateKey(keyStr)
+  Neon.is.NEP2(encryptedStr)
+
+  import {wallet} from 'neon-js'
+  wallet.isAddress(addrStr)
+  wallet.isPrivateKey(keyStr)
+  wallet.isNEP2(keyStr)
+
+These methods will return a boolean regarding the key format. No errors will be thrown.
