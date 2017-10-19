@@ -1,13 +1,12 @@
 
-import * as api from './api'
+import semanticApi, * as api from './api'
 import * as CONST from './consts'
 import semanticSc, * as sc from './sc'
 import semanticTx, * as tx from './transactions'
 import semanticWallet, * as wallet from './wallet'
-import * as nep5 from './nep5'
 import * as u from './utils'
 
-const mods = [semanticSc, semanticTx, semanticWallet]
+const mods = [semanticSc, semanticTx, semanticWallet, semanticApi]
 
 const Neon = mods.reduce((neon, mod) => {
   Object.keys(mod).map((key) => {
@@ -15,7 +14,7 @@ const Neon = mods.reduce((neon, mod) => {
     else neon[key] = mod[key]
   })
   return neon
-}, { api, CONST, u })
+}, { CONST, u })
 
 export default Neon
 export {
@@ -23,7 +22,6 @@ export {
   sc,
   tx,
   wallet,
-  nep5,
   u,
   CONST
 }
