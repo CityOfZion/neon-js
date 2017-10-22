@@ -57,7 +57,8 @@ This documentation is meant to serve as a high level explaination of the library
     wallet
     transactions/index.rst
     rpc/index.rst
-    light_wallet_api/index.rst
+    api/index.rst
     smart_contracts/index.rst
-    utilities
+    utility
+    constants
     reference/index.rst

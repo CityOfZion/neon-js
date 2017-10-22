@@ -120,6 +120,11 @@ export const reverseHex = hex => {
   return out
 }
 
+/**
+ * @class StringStream
+ * @classdesc A simple string stream that allows user to read a string byte by byte using read().
+ * @param {string} str - The string to read as a stream.
+ */
 export class StringStream {
   constructor (str = '') {
     this.str = str

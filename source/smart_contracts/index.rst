@@ -40,7 +40,7 @@ The Script Builder is an object that converts a smart contract method call into 
   rpc.Query.invokeScript(sb.str).execute(nodeURL)
 
   // Create InvocationTransaction for real execution
-  const tx = Neon.create.invocationTx(publicKey, {}, {},sb.str, 0)
+  const tx = Neon.create.invocationTx(publicKey, {}, {}, sb.str, 0)
 
 You may chain multiple calls together. The results will be return in order.
 
