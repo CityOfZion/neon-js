@@ -193,6 +193,15 @@ class Query {
   }
 
   /**
+   * @return {Query}
+   */
+  static getVersion () {
+    return new Query({
+      method: 'getversion'
+    })
+  }
+
+  /**
    * @param {string} scriptHash
    * @param {Array} params
    * @return {Query}

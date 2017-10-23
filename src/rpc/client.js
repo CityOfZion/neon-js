@@ -1,14 +1,15 @@
 import Query from './query'
 import { isAddress } from '../wallet'
 import semver from 'semver'
-import { RPC_VERSION, DEFAULT_RPC } from '../consts'
+import { RPC_VERSION, DEFAULT_RPC, NEO_NETWORK } from '../consts'
 
+const versionRegex = /NEO:(\d+\.\d+\.\d+)/
 /**
  * @class RPCClient
  * @classdesc
  * RPC Client model to query a NEO node. Contains built-in methods to query using RPC calls.
  * @param {string} net - 'MainNet' or 'TestNet' will query the default RPC address found in consts. You may provide a custom URL.
- * @param {string} version - Version of NEO node. Used to check if RPC methods have been implemented.
+ * @param {string} version - Version of NEO node. Used to check if RPC methods have been implemented. it will default to DEFAULT_RPC found in CONST
  */
 class RPCClient {
   constructor (net, version = RPC_VERSION) {
@@ -16,9 +17,9 @@ class RPCClient {
      * @type {string}
      * The URL of the node that this client queries.
      */
-    if (net === 'MainNet') {
+    if (net === NEO_NETWORK.MAIN) {
       this.net = DEFAULT_RPC.MAIN
-    } else if (this.net === 'TestNet') {
+    } else if (net === NEO_NETWORK.TEST) {
       this.net = DEFAULT_RPC.TEST
     } else {
       this.net = net
@@ -28,11 +29,16 @@ class RPCClient {
      * History of queries made with this client.
      */
     this.history = []
-    /**
-     * @type {string}
-     * Version of this client. Used to check if RPC call is implemented.
+
+    if (semver.valid(version)) {
+      /**
+      * @type {string}
+      * Version of this client. Used to check if RPC call is implemented.
       */
-    this.version = semver.clean(version)
+      this.version = semver.clean(version)
+    } else {
+      throw new Error(`Invalid Version: ${version}`)
+    }
   }
 
   /**
@@ -51,7 +57,7 @@ class RPCClient {
    * @return {Promise<any>}
    */
   query (req) {
-    const query = new Query(this.net, req)
+    const query = new Query(req)
     return this.execute(query)
   }
 
@@ -208,12 +214,30 @@ class RPCClient {
   }
 
   /**
+   * Gets the version of the NEO node. This method will never be blocked by version. This method will also update the current Client's version to the one received.
+   */
+  getVersion () {
+    return this.execute(Query.getVersion())
+      .then((res) => {
+        const version = res.result.useragent.match(versionRegex)[1]
+        this.version = semver.clean(version)
+        return this.version
+      })
+      .catch((err) => {
+        if (err.message.includes('Method not found')) {
+          this.version = RPC_VERSION
+        } else {
+          throw err
+        }
+      })
+  }
+  /**
    * Calls a smart contract with the given parameters. This method is a local invoke, results are not reflected on the blockchain.
    * @param {string} scriptHash
    * @param {Array} params
    */
   invoke (scriptHash, params) {
-    if (semver.lt(this.version, '2.3.3')) throw new Error(`This method is not implemented for this version`)
+    if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error(`This method is not implemented for this version`))
     return this.execute(Query.invoke(scriptHash, params))
       .then((res) => {
         return res.result
@@ -227,7 +251,7 @@ class RPCClient {
    * @param {Array} params
    */
   invokeFunction (scriptHash, operation, params) {
-    if (semver.lt(this.version, '2.3.3')) throw new Error(`This method is not implemented for this version`)
+    if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error(`This method is not implemented for this version`))
     return this.execute(Query.invokeFunction(scriptHash, operation, params))
       .then((res) => {
         return res.result
@@ -239,7 +263,7 @@ class RPCClient {
    * @param {string} script
    */
   invokeScript (script) {
-    if (semver.lt(this.version, '2.3.3')) throw new Error(`This method is not implemented for this version`)
+    if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error(`This method is not implemented for this version`))
     return this.execute(Query.invokeScript(script))
       .then((res) => {
         return res.result
