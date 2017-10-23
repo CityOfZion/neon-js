@@ -4,7 +4,7 @@
  * It is useful for storing private keys in a JSON file securely or to mask the key before printing it.
  */
 import bs58check from 'bs58check' // This is importable because WIF specifies it as a dependency.
-import C, { SHA256, AES, enc } from 'crypto-js'
+import { SHA256, AES, enc, mode, pad } from 'crypto-js'
 import scrypt from 'js-scrypt'
 import { generatePrivateKey } from './core'
 import Account from './Account'
@@ -61,7 +61,7 @@ export const encrypt = (wifKey, keyphrase) => {
   const derived2 = derived.slice(64)
   // AES Encrypt
   const xor = hexXor(account.privateKey, derived1)
-  const encrypted = AES.encrypt(enc.Hex.parse(xor), enc.Hex.parse(derived2), { mode: C.mode.ECB, padding: C.pad.NoPadding })
+  const encrypted = AES.encrypt(enc.Hex.parse(xor), enc.Hex.parse(derived2), { mode: mode.ECB, padding: pad.NoPadding })
   // Construct
   const assembled = NEP_HEADER + NEP_FLAG + addressHash + encrypted.ciphertext.toString()
   return bs58check.encode(Buffer.from(assembled, 'hex'))
@@ -81,7 +81,7 @@ export const decrypt = (encryptedKey, keyphrase) => {
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   const ciphertext = { ciphertext: enc.Hex.parse(encrypted), salt: '' }
-  const decrypted = AES.decrypt(ciphertext, enc.Hex.parse(derived2), { mode: C.mode.ECB, padding: C.pad.NoPadding })
+  const decrypted = AES.decrypt(ciphertext, enc.Hex.parse(derived2), { mode: mode.ECB, padding: pad.NoPadding })
   const privateKey = hexXor(decrypted.toString(), derived1)
   const account = new Account(privateKey)
   const newAddressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
