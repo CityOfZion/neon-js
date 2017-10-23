@@ -50,3 +50,21 @@ A straightforward call to CoinMarketCap API to retrieve the latest price informa
 
 
 .. _neon-wallet-db: https://github.com/CityOfZion/neon-wallet-db
+
+NEP5
+-----
+
+The NEP5 Standard describes a set of methods to implement as a token in a smart contract. This is the NEO equivalent of the ERC-20 token standard in Ethereum.
+
+This set of methods rely on the NEO node having version >= 2.3.3. The method uses ``DEFAULT_RPC`` found in constants as the default node.
+
+::
+
+  import Neon from 'neon-js'
+  const rpxScriptHash = Neon.CONST.CONTRACTS.TEST_RPX
+  Neon.get.tokenInfo(rpxScriptHash)
+  Neon.get.tokenBalance(rpxScriptHash, address)
+
+  import { api } from 'neon-js'
+  api.getTokenInfo(rpxScriptHash)
+  api.getTokenBalance(rpxScriptHash)
