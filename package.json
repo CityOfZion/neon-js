@@ -15,7 +15,9 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "mocha": "^3.4.2",
-    "webpack": "^3.0.0"
+    "webpack": "^3.0.0",
+    "webpack-bundle-analyzer": "^2.9.0",
+    "zopfli-webpack-plugin": "^0.1.0"
   },
   "name": "neon-js",
   "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
