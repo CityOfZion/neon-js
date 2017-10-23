@@ -42,7 +42,7 @@ The Script Builder is an object that converts a smart contract method call into 
   // Create InvocationTransaction for real execution
   const tx = Neon.create.invocationTx(publicKey, {}, {}, sb.str, 0)
 
-You may chain multiple calls together. The results will be return in order.
+You may chain multiple calls together in a single VM script. The results will be return in order.
 
 ::
   import Neon, {rpc} from 'neon-js'
@@ -52,3 +52,20 @@ You may chain multiple calls together. The results will be return in order.
 
   // Returns name, symbol
   rpc.Query.invokeScript(sb.str)
+    .execute(Neon.CONST.DEFAULT_RPC.MAIN)
+    .then((res) => {
+      console.log(res)
+    })
+
+A simple wrapper method is provided for convenience.
+
+::
+
+  import Neon from 'neon-js'
+  const props = {
+    scriptHash: Neon.CONST.CONTRACTS.TEST_RPX,
+    operation: 'name'
+    args: []
+  }
+  // Returns a hexstring
+  const vmScript = Neon.create.script(props)
