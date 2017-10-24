@@ -1,4 +1,4 @@
-import * as NEP5 from '../src/nep5.js'
+import * as NEP5 from '../../src/api/nep5'
 
 // describe('NEP5', function () {
 //   this.timeout(10000)

@@ -187,3 +187,19 @@ export const doSendAsset = (net, toAddress, from, assetAmounts) => {
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
 }
+
+export default {
+  get: {
+    APIEndPoint: getAPIEndpoint,
+    RPCEndPoint: getRPCEndpoint,
+    claimAmounts: getClaimAmounts,
+    balance: getBalance,
+    walletDBHeight: getWalletDBHeight,
+    transactionHistory: getTransactionHistory
+  },
+  do: {
+    sendAsset: doSendAsset,
+    claimAllGas: doClaimAllGas,
+    mintTokens: doMintTokens
+  }
+}

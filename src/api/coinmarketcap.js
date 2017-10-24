@@ -23,3 +23,9 @@ export const getPrice = (coin = 'NEO', currency = 'usd') => {
     return Promise.reject(new ReferenceError(`${currency} is not one of the accepted currencies!`))
   }
 }
+
+export default {
+  get: {
+    price: getPrice
+  }
+}
