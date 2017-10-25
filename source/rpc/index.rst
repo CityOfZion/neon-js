@@ -2,7 +2,7 @@
 Node RPC
 ********
 
-The RPC module is exposed as::
+The ``rpc`` module is exposed as::
 
   import Neon from 'neon-js'
   const client = Neon.create.rpcClient(URL)

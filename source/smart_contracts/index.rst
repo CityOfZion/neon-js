@@ -2,7 +2,7 @@
 Smart Contract
 **************
 
-The Smart Contract module is exposed as::
+The ``sc`` module is exposed as::
 
   import Neon from 'neon-js'
   const sb = Neon.create.scriptBuilder()
@@ -20,7 +20,7 @@ To test out smart contracts, you are better off using RPC calls:
 
 These are implemented in v2.3.3. These RPC calls execute the provided script and returns the result based on the current blockchain state. However, it is not actually recorded on the chain. Thus, their purpose is to test out the script to ensure validity and find out the gas cost required.
 
-For example, in the NEP5 token standard, we do not require an actual transaction to retrieve the name or symbol of the token.
+For example, in the NEP5 token standard, we do not require an actual transaction to retrieve the name or symbol of the token. Thus, it is better to use a ``invoke`` RPC call instead of a real invocationTransaction.
 
 We will use a transaction when we want to effect a state change. For example, we want to transfer tokens from address A to B. We will use invoke to ensure the script is valid before sending the actual transaction.
 
@@ -42,9 +42,10 @@ The Script Builder is an object that converts a smart contract method call into 
   // Create InvocationTransaction for real execution
   const tx = Neon.create.invocationTx(publicKey, {}, {}, sb.str, 0)
 
-You may chain multiple calls together in a single VM script. The results will be return in order.
+You may chain multiple calls together in a single VM script. The results will be returned in order.
 
 ::
+
   import Neon, {rpc} from 'neon-js'
   const sb = Neon.create.scriptBuilder()
   sb.emitAppCall(scriptHash, 'name')

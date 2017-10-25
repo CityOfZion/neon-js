@@ -5,7 +5,7 @@ Utilities
 The utilities module is exposed as::
 
   import Neon from 'neon-js'
-  Neon.n.reverseHex(hexstring)
+  Neon.u.reverseHex(hexstring)
 
   import { u } from 'neon-js'
   u.reverseHex(hexstring)
