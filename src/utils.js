@@ -131,7 +131,7 @@ export const hexXor = (str1, str2) => {
 /**
  * Reverses an array. Accepts arrayBuffer.
  * @param {Array} arr
- * @param {Uint8Array}
+ * @returns {Uint8Array}
  */
 export const reverseArray = arr => {
   let result = new Uint8Array(arr.length)
