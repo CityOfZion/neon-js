@@ -9,6 +9,8 @@ neon-js
 
 neon-js is a Javascript library to interface with NEO blockchain.
 
+**This documentation is meant for the upcoming version (2.0.0) and does not reflect the current state**
+
 
 Quickstart
 ==========
@@ -62,3 +64,4 @@ This documentation is meant to serve as a high level explaination of the library
     utility
     constants
     reference/index.rst
+    changelog
