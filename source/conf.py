@@ -32,8 +32,8 @@
 # ones.
 extensions = ['sphinx_js']
 primary_domain = 'js'
-js_source_path='./src'
-jsdoc_config_path='./source/conf.json'
+js_source_path='../src'
+jsdoc_config_path='./conf.json'
 
 
 
