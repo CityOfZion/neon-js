@@ -41,11 +41,13 @@ describe('NeonDB', function () {
     return Neon.do.sendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'NEO': 1 })
       .then((response) => {
         response.result.should.equal(true)
+        response.txid.should.be.a('string')
         // send back so we can re-run
         return Neon.do.sendAsset('TestNet', testKeys.a.address, testKeys.b.wif, { 'NEO': 1 })
       })
       .then((response) => {
         response.result.should.equal(true)
+        response.txid.should.be.a('string')
       })
       .catch((e) => {
         console.log(e)
@@ -57,11 +59,13 @@ describe('NeonDB', function () {
     return Neon.do.sendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'GAS': 1 })
       .then((response) => {
         response.should.have.property('result', true)
+        response.txid.should.be.a('string')
         // send back so we can re-run
         return Neon.do.sendAsset('TestNet', testKeys.a.address, testKeys.b.wif, { 'GAS': 1 })
       })
       .then((response) => {
         response.should.have.property('result', true)
+        response.txid.should.be.a('string')
       })
       .catch((e) => {
         console.log(e)
@@ -73,11 +77,13 @@ describe('NeonDB', function () {
     return Neon.do.soSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'GAS': 1, 'NEO': 1 })
       .then((response) => {
         response.should.have.property('result', true)
+        response.txid.should.be.a('string')
         // send back so we can re-run
         return Neon.do.soSendAsset('TestNet', testKeys.a.address, testKeys.b.wif, { 'GAS': 1, 'NEO': 1 })
       })
       .then((response) => {
         response.should.have.property('result', true)
+        response.txid.should.be.a('string')
         done()
       })
       .catch((e) => {
