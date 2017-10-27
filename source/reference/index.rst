@@ -9,5 +9,5 @@ Reference
     rpc
     sc
     tx
+    utility
     wallet
-

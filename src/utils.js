@@ -1,7 +1,15 @@
 import CryptoJS from 'crypto-js'
 
+/**
+ * @param {arrayBuffer} buf
+ * @returns {string} ASCII string
+ */
 export const ab2str = buf => { return String.fromCharCode.apply(null, new Uint8Array(buf)) }
 
+/**
+ * @param {string} str - ASCII string
+ * @returns {arrayBuffer}
+ */
 export const str2ab = str => {
   let bufView = new Uint8Array(str.length)
   for (let i = 0, strLen = str.length; i < strLen; i++) {
@@ -10,6 +18,10 @@ export const str2ab = str => {
   return bufView
 }
 
+/**
+ * @param {string} str - HEX string
+ * @returns {arrayBuffer}
+ */
 export const hexstring2ab = str => {
   let result = []
   while (str.length >= 2) {
@@ -20,10 +32,10 @@ export const hexstring2ab = str => {
   return result
 }
 
-export const str2hexstring = str => {
-  return ab2hexstring(str2ab(str))
-}
-
+/**
+ * @param {arrayBuffer} arr
+ * @returns {string} HEX string
+ */
 export const ab2hexstring = arr => {
   let result = ''
   for (let i = 0; i < arr.length; i++) {
@@ -34,6 +46,14 @@ export const ab2hexstring = arr => {
     result += str
   }
   return result
+}
+
+/**
+ * @param {string} str - ASCII string
+ * @returns {string} HEX string
+ */
+export const str2hexstring = str => {
+  return ab2hexstring(str2ab(str))
 }
 
 /**
@@ -68,7 +88,7 @@ export const num2fixed8 = (num) => {
 
 /**
  * Converts a Fixed8 string to number
- * @param {string} fixed8
+ * @param {string} fixed8 - number in Fixed8 representation
  * @return {number}
  */
 export const fixed82num = (fixed8) => {
@@ -92,6 +112,12 @@ export const num2VarInt = (num) => {
   }
 }
 
+/**
+ * XORs two hexstrings
+ * @param {string} str1 - HEX string
+ * @param {string} str2 - HEX string
+ * @returns {string} XOR output as a HEX string
+ */
 export const hexXor = (str1, str2) => {
   if (str1.length !== str2.length) throw new Error()
   if (str1.length % 2 !== 0) throw new Error()
@@ -102,6 +128,11 @@ export const hexXor = (str1, str2) => {
   return ab2hexstring(result)
 }
 
+/**
+ * Reverses an array. Accepts arrayBuffer.
+ * @param {Array} arr
+ * @returns {Uint8Array}
+ */
 export const reverseArray = arr => {
   let result = new Uint8Array(arr.length)
   for (let i = 0; i < arr.length; i++) {
@@ -111,6 +142,13 @@ export const reverseArray = arr => {
   return result
 }
 
+/**
+ * Reverses a HEX string, treating 2 chars as a byte.
+ * @example
+ * reverseHex('abcdef') = 'efcdab'
+ * @param {string} hex - HEX string
+ * @return {string} HEX string reversed in 2s.
+ */
 export const reverseHex = hex => {
   if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
   let out = ''
@@ -131,10 +169,19 @@ export class StringStream {
     this.pter = 0
   }
 
+  /**
+   * Checks if reached the end of the stream. Does not mean stream is actually empty (this.str is not empty)
+   * @returns {boolean}
+   */
   isEmpty () {
     return this.pter >= this.str.length
   }
 
+  /**
+   * Reads some bytes off the stream.
+   * @param {number} bytes - Number of bytes to read
+   * @returns {string}
+   */
   read (bytes) {
     if (this.isEmpty()) throw new Error()
     const out = this.str.substr(this.pter, bytes * 2)
@@ -142,9 +189,18 @@ export class StringStream {
     return out
   }
 
+  /**
+   * Reads some bytes off the stream using the first byte as the length indicator.
+   * @return {string}
+   */
   readVarBytes () {
     return this.read(this.readVarInt())
   }
+
+  /**
+   * Reads a variable Int.
+   * @returns {number}
+   */
   readVarInt () {
     let len = parseInt(this.read(1), 16)
     if (len === 0xfd) len = parseInt(reverseHex(this.read(2)), 16)
@@ -154,18 +210,33 @@ export class StringStream {
   }
 }
 
+/**
+ * Performs a SHA256 followed by a RIPEMD160.
+ * @param {string} hex - String to hash
+ * @returns {string} hash output
+ */
 export const hash160 = (hex) => {
   let hexEncoded = CryptoJS.enc.Hex.parse(hex)
   let ProgramSha256 = CryptoJS.SHA256(hexEncoded)
   return CryptoJS.RIPEMD160(ProgramSha256).toString()
 }
 
+/**
+ * Performs 2 SHA256.
+ * @param {string} hex - String to hash
+ * @returns {string} hash output
+ */
 export const hash256 = (hex) => {
   let hexEncoded = CryptoJS.enc.Hex.parse(hex)
   let ProgramSha256 = CryptoJS.SHA256(hexEncoded)
   return CryptoJS.SHA256(ProgramSha256).toString()
 }
 
+/**
+ * Performs a single SHA256.
+ * @param {string} hex - String to hash
+ * @returns {string} hash output
+ */
 export const sha256 = (hex) => {
   let hexEncoded = CryptoJS.enc.Hex.parse(hex)
   return CryptoJS.SHA256(hexEncoded).toString()
