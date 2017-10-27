@@ -37,10 +37,11 @@
     "wif": "^2.0.6"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
-    "build": "webpack",
-    "prepublish": "npm run build",
-    "lint": "eslint src/**.js"
+    "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
+    "lint": "./node_modules/.bin/eslint ./src/**/*.js",
+    "build": "./node_modules/.bin/webpack",
+    "rebuild": "rm -rf ./node_modules && npm install && ./node_modules/.bin/webpack",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",

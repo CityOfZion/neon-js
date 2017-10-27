@@ -1,7 +1,12 @@
 import { StringStream, num2hexstring, reverseHex, int2hex, str2ab, ab2hexstring } from '../utils.js'
 import OpCode from './opCode.js'
 
-export default class ScriptBuilder extends StringStream {
+/**
+ * @class ScriptBuilder
+ * @extends StringStream
+ * @classdesc Builds a VM script in hexstring. Used for constructing smart contract method calls.
+ */
+class ScriptBuilder extends StringStream {
   /**
    * Appends a AppCall and scriptHash. Used to end off a script.
    * @param {string} scriptHash - Hexstring(BE)
@@ -102,11 +107,11 @@ export default class ScriptBuilder extends StringStream {
    * @return {ScriptBuilder} this
    */
   emitSysCall (api) {
-    if (api === undefined || api === "") throw new Error("Invalid SysCall API")
-    const api_bytes = ab2hexstring(str2ab(api))
-    const length = int2hex(api_bytes.length / 2)
-    if (length.length != 2) throw new Error("Invalid length for SysCall API")
-    const out = length + api_bytes
+    if (api === undefined || api === '') throw new Error('Invalid SysCall API')
+    const apiBytes = ab2hexstring(str2ab(api))
+    const length = int2hex(apiBytes.length / 2)
+    if (length.length !== 2) throw new Error('Invalid length for SysCall API')
+    const out = length + apiBytes
     return this.emit(OpCode.SYSCALL, out)
   }
 
@@ -133,7 +138,17 @@ export default class ScriptBuilder extends StringStream {
   }
 }
 
+/**
+ * A wrapper method around ScripBuilder for creating a VM script.
+ * @param {Object} props - Properties passed in as an object.
+ * @param {string} props.scriptHash - The contract scriptHash.
+ * @param {string} [props.operation=null] - The method name to call.
+ * @param {Array} [props.args=undefined] - The arguments of the method to pass in.
+ * @param {boolean} [props.useTailCall=false] - To use Tail Call.
+ */
 export const createScript = ({ scriptHash, operation = null, args = undefined, useTailCall = false }) => {
   const sb = new ScriptBuilder()
   return sb.emitAppCall(scriptHash, operation, args, useTailCall).str
 }
+
+export default ScriptBuilder

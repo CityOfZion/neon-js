@@ -1,7 +1,7 @@
 import axios from 'axios'
 import _ from 'lodash'
 import { Account } from '../wallet'
-import { createClaimTx, createContractTx, createInvocationTx, signTransaction } from '../transactions'
+import { createClaimTx, createContractTx, createInvocationTx, getTransactionHash, signTransaction } from '../transactions'
 import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
 
@@ -42,6 +42,7 @@ import { ASSET_ID } from '../consts'
  * @property {string} jsonrpc - JSON-RPC Version
  * @property {number} id - Unique ID.
  * @property {any} result - Result
+ * @property {string} [txid] - Transaction hash of the successful transaction. Only available when result is true.
 */
 
 /**
@@ -131,13 +132,19 @@ export const doClaimAllGas = (net, privateKey) => {
   const account = new Account(privateKey)
   const rpcEndpointPromise = getRPCEndpoint(net)
   const claimsPromise = getClaimAmounts(net, account.address)
-
+  let signedTx // Scope this outside so that all promises have this
   return Promise.all([rpcEndpointPromise, claimsPromise])
     .then((values) => {
       const [endpt, claims] = values
       const unsignedTx = createClaimTx(account.publicKey, claims)
-      const signedTx = signTransaction(unsignedTx, account.privateKey)
+      signedTx = signTransaction(unsignedTx, account.privateKey)
       return Query.sendRawTransaction(signedTx).execute(endpt)
+    })
+    .then((res) => {
+      if (res.result === true) {
+        res.txid = getTransactionHash(signedTx)
+      }
+      return res
     })
 }
 
@@ -155,12 +162,19 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost) => {
   const invoke = { operation: 'mintTokens', scriptHash }
   const rpcEndpointPromise = getRPCEndpoint(net)
   const balancePromise = getBalance(net, account.address)
+  let signedTx
   return Promise.all([rpcEndpointPromise, balancePromise])
     .then((values) => {
       const [endpt, balances] = values
       const unsignedTx = createInvocationTx(account.publicKey, balances, intents, invoke, gasCost, { version: 1 })
-      const signedTx = signTransaction(unsignedTx, account.privateKey)
+      signedTx = signTransaction(unsignedTx, account.privateKey)
       return Query.sendRawTransaction(signedTx).execute(endpt)
+    })
+    .then((res) => {
+      if (res.result === true) {
+        res.txid = getTransactionHash(signedTx)
+      }
+      return res
     })
 }
 /**
@@ -179,11 +193,34 @@ export const doSendAsset = (net, toAddress, from, assetAmounts) => {
   const intents = _.map(assetAmounts, (v, k) => {
     return { assetId: ASSET_ID[k], value: v, scriptHash: toAcct.scriptHash }
   })
+  let signedTx
   return Promise.all([rpcEndpointPromise, balancePromise])
     .then((values) => {
       const [endpt, balance] = values
       const unsignedTx = createContractTx(fromAcct.publicKey, balance, intents)
-      const signedTx = signTransaction(unsignedTx, fromAcct.privateKey)
+      signedTx = signTransaction(unsignedTx, fromAcct.privateKey)
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
+    .then((res) => {
+      if (res.result === true) {
+        res.txid = getTransactionHash(signedTx)
+      }
+      return res
+    })
+}
+
+export default {
+  get: {
+    APIEndPoint: getAPIEndpoint,
+    RPCEndPoint: getRPCEndpoint,
+    claimAmounts: getClaimAmounts,
+    balance: getBalance,
+    walletDBHeight: getWalletDBHeight,
+    transactionHistory: getTransactionHistory
+  },
+  do: {
+    sendAsset: doSendAsset,
+    claimAllGas: doClaimAllGas,
+    mintTokens: doMintTokens
+  }
 }

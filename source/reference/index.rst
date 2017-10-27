@@ -5,5 +5,9 @@ Reference
 .. toctree::
     :maxdepth: 1
 
-    wallet
+    api
     rpc
+    sc
+    tx
+    wallet
+

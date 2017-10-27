@@ -1,7 +1,7 @@
-import { ScriptBuilder } from './sc'
-import { getScriptHashFromAddress } from './wallet'
-import { Query, VMExtractor } from './rpc'
-import { ab2str, hexstring2ab, reverseHex, fixed82num } from './utils'
+import { ScriptBuilder } from '../sc'
+import { getScriptHashFromAddress } from '../wallet'
+import { Query, VMExtractor } from '../rpc'
+import { ab2str, hexstring2ab, reverseHex, fixed82num } from '../utils'
 
 /**
  * Queries for NEP5 Token information.
@@ -43,4 +43,11 @@ export const getTokenBalance = (net, scriptHash, address) => {
     .then((res) => {
       return fixed82num(res.result.stack[0].value)
     })
+}
+
+export default {
+  get: {
+    tokenInfo: getTokenInfo,
+    tokenBalance: getTokenBalance
+  }
 }
