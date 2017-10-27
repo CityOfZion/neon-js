@@ -1,4 +1,5 @@
 import axios from 'axios'
+import CryptoJS from 'crypto-js'
 import { getAccountFromWIFKey, getScriptHashFromAddress } from './wallet'
 import * as tx from './transactions/index.js'
 import { hexstring2ab, ab2str } from './utils'
@@ -109,11 +110,13 @@ export const parseVMStack = (stack) => {
 /**
  * Lookup key in SC storage
  * @param {string} net - 'MainNet' or 'TestNet'.
- * @param {string} scriptHash of SC
+ * @param {string} scriptHash - Smart contract hash identifier.
+ * @param {string} key - Storage key used to store a value within the smart contract.
  * @return {Promise<Response>} RPC response looking up key from storage
  */
 export const getStorage = (net, scriptHash, key) => {
-  return queryRPC(net, 'getstorage', [scriptHash, key])
+  const encodedKey = CryptoJS.enc.Hex.parse(key)
+  return queryRPC(net, 'getstorage', [scriptHash, encodedKey])
 }
 
 /**
