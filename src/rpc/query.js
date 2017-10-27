@@ -38,11 +38,11 @@ class Query {
 
   /**
    * Executes the Query by sending the RPC request to the provided net.
-   * @param {string} net - The URL of the node.
+   * @param {string} url - The URL of the node.
    */
-  execute (net) {
+  execute (url) {
     if (this.completed) throw new Error(`This request has been sent`)
-    return queryRPC(net, this.req)
+    return queryRPC(url, this.req)
       .then((res) => {
         this.res = res
         this.completed = true
@@ -189,6 +189,15 @@ class Query {
     return new Query({
       method: 'gettxout',
       params: [txid, index]
+    })
+  }
+
+  /**
+   * @return {Query}
+   */
+  static getVersion () {
+    return new Query({
+      method: 'getversion'
     })
   }
 
