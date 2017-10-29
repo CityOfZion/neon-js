@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { serializeTransaction } from '../transactions'
 import { DEFAULT_REQ } from '../consts'
+import { str2hexstring } from '../utils'
 
 /**
  * @class Query
@@ -174,9 +175,10 @@ class Query {
    * @return {Query}
    */
   static getStorage (scriptHash, key) {
+    const encodedKey = str2hexstring(key)
     return new Query({
       method: 'getstorage',
-      params: [scriptHash, key]
+      params: [scriptHash, encodedKey]
     })
   }
 
