@@ -53,6 +53,14 @@ describe('Core Wallet Methods', function () {
     })
   })
 
+  it('publicKey => scriptHash => address', () => {
+    keys.map((acct) => {
+      const scriptHash = C.getScriptHashFromPublicKey(acct.publicKey)
+      const address = C.getAddressFromScriptHash(scriptHash)
+      address.should.equal(acct.address)
+    })
+  })
+
   it('scriptHash => address', () => {
     keys.map((acct) => {
       const address = C.getAddressFromScriptHash(acct.scriptHash)
