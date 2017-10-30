@@ -11,7 +11,7 @@
 import ecurve from 'ecurve'
 import base58 from 'bs58'
 import { hexstring2ab, ab2hexstring, reverseHex, hash256 } from '../utils'
-import { getAddressFromScriptHash } from './core'
+import { getAddressFromScriptHash, getPublicKeyEncoded } from './core'
 
 /**
  * Verifies a NEP2. This merely verifies the format. It is unable to verify if it is has been tampered with.
@@ -61,7 +61,14 @@ export const isPrivateKey = (key) => {
 export const isPublicKey = (key) => {
   try {
     let publicKeyArray = hexstring2ab(key)
-    if (publicKeyArray[0] !== 0x02 && publicKeyArray[0] !== 0x03) return false
+    if (publicKeyArray[0] !== 0x02 && publicKeyArray[0] !== 0x03) {
+      if (publicKeyArray[0] !== 0x04) return false
+      else {
+        // encode the key, if valid but not encoded
+        key = getPublicKeyEncoded(key)
+        publicKeyArray = hexstring2ab(key)
+      }
+    }
 
     let ecparams = ecurve.getCurveByName('secp256r1')
     let curvePt = ecurve.Point.decodeFrom(ecparams, Buffer.from(key, 'hex'))

@@ -2,7 +2,7 @@ import Neon from '../../src/index.js'
 
 const client = Neon.create.rpcClient('TestNet')
 
-describe.only('RPC methods', function () {
+describe('RPC methods', function () {
   this.timeout(15000)
 
   it('test block height', (done) => {

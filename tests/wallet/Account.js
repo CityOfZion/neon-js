@@ -8,6 +8,10 @@ describe('Account', function () {
     scriptHash: '5df31f6f59e6a4fbdd75103786bf73db1000b235',
     address: 'ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s'
   }
+  const unencodedTest = {
+        address: "AeqoGrirm7khpRVTJvisi8EugfYYmbB6xD",
+        publicKey: "0447705328908193ed38ebaeb992ec921fcfb4d4538cbeaf970d270d1cd1be2b3350e91d851ff0d0aed059ab835e70df2e889da598e406d220991889d893549ad4"
+  }
   it('can be created with different formats', () => {
     Object.keys(acct).map((key) => {
       // Skip scriptHash as it cannot be used.
@@ -25,6 +29,11 @@ describe('Account', function () {
     a.publicKey.should.equal(acct.publicKey)
     a.scriptHash.should.equal(acct.scriptHash)
     a.address.should.equal(acct.address)
+  })
+
+  it('test', () => {
+    const a = new Account(unencodedTest.publicKey)
+    a.address.should.equal(unencodedTest.address)
   })
 
   it('throws error when insufficient information given', () => {

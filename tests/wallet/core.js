@@ -22,8 +22,12 @@ describe('Core Wallet Methods', function () {
       privateKey: '793466a3dfe3935a475d02290e37000a3e835f6740f9733e72e979d6e1166e13',
       scriptHash: 'e485d31067646f5d43f0b8328edf31e8fa0f04b8',
       WIF: 'L1HKLWratxFhX94XSn98JEULQYKGhRycf4nREe3Cs8EPQStF5u9E'
-    }
+    },
   ]
+  const unencodedTest = {
+        address: "AeqoGrirm7khpRVTJvisi8EugfYYmbB6xD",
+        publicKey: "0447705328908193ed38ebaeb992ec921fcfb4d4538cbeaf970d270d1cd1be2b3350e91d851ff0d0aed059ab835e70df2e889da598e406d220991889d893549ad4"
+  }
 
   it('WIF => privateKey', () => {
     keys.map((acct) => {
@@ -58,6 +62,14 @@ describe('Core Wallet Methods', function () {
       const scriptHash = C.getScriptHashFromPublicKey(acct.publicKey)
       const address = C.getAddressFromScriptHash(scriptHash)
       address.should.equal(acct.address)
+    })
+  })
+
+  it('unencoded publicKey => address', () => {
+    keys.map((acct) => {
+      const scriptHash = C.getScriptHashFromPublicKey(unencodedTest.publicKey)
+      const address = C.getAddressFromScriptHash(scriptHash)
+      address.should.equal(unencodedTest.address)
     })
   })
 

@@ -15,7 +15,22 @@ import base58 from 'bs58'
 import { hexstring2ab, ab2hexstring, reverseHex, sha256, hash160, hash256 } from '../utils'
 import secureRandom from 'secure-random'
 
+
+
 const ADDR_VERSION = '17'
+
+/**
+ * @param {string} unencoded public key
+ * @return {string} encoded public key
+ */
+export const getPublicKeyEncoded = (publicKey) => {
+  let publicKeyArray = hexstring2ab(publicKey)
+  if (publicKeyArray[64] % 2 === 1) {
+    return '03' + ab2hexstring(publicKeyArray.slice(1, 33))
+  } else {
+    return '02' + ab2hexstring(publicKeyArray.slice(1, 33))
+  }
+}
 
 /**
  * @param {string} wif
@@ -60,6 +75,10 @@ export const getVerificationScriptFromPublicKey = (publicKey) => {
  * @return {string}
  */
 export const getScriptHashFromPublicKey = (publicKey) => {
+  // if unencoded
+  if (publicKey.substring(0,2) == "04"){
+    publicKey = getPublicKeyEncoded(publicKey)
+  }
   const verificationScript = getVerificationScriptFromPublicKey(publicKey)
   return reverseHex(hash160(verificationScript))
 }
