@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getAccountFromWIFKey, getScriptHashFromAddress } from './wallet'
+import { getAccountFromWIFKey, getScriptHashFromAddress, getAccountFromPublicKey, getPublicKeyEncoded } from './wallet'
 import * as tx from './transactions/index.js'
 import { hexstring2ab, ab2str } from './utils'
 
@@ -64,6 +64,27 @@ export const doClaimAllGas = (net, fromWif) => {
     const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
     const hexTx = tx.serializeTransaction(signedTx)
     return queryRPC(net, 'sendrawtransaction', [hexTx], 2)
+  })
+}
+
+/**
+ * Perform a ClaimTransaction for all available GAS
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} fromPublicKey - public key of address you are claiming from.
+ * @param {function} signingFunction - async signing function.
+ * @return {Promise<Response>} RPC response from sending transaction
+ */
+export const hardwareDoClaimAllGas = (net, fromPublicKey, signingFunction) => {
+  return new Promise((resolve, reject) => {
+    const apiEndpoint = getAPIEndpoint(net)
+    const account = getAccountFromPublicKey(getPublicKeyEncoded(fromPublicKey))
+    // TODO: when fully working replace this with mainnet/testnet switch
+    return axios.get(apiEndpoint + '/v2/address/claims/' + account.address).then((response) => {
+      const unsignedTx = tx.create.claim(account.publicKeyEncoded, response.data)
+      signingFunction(unsignedTx, account.publicKeyEncoded).then(asyncHexTx => {
+        resolve(queryRPC(net, 'sendrawtransaction', [asyncHexTx], 2))
+      })
+    })
   })
 }
 
@@ -136,6 +157,32 @@ export const doSendAsset = (net, toAddress, fromWif, assetAmounts) => {
     const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
     const hexTx = tx.serializeTransaction(signedTx)
     return queryRPC(net, 'sendrawtransaction', [hexTx], 4)
+  })
+}
+
+/**
+ * Send an asset to an address
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} toAddress - The destination address.
+ * @param {string} from - The public key of the originating address.
+ * @param {function} signingFunction - async signing function.
+ * @param {{NEO: number, GAS: number}} amount - The amount of each asset (NEO and GAS) to send, leave empty for 0.
+ * @return {Promise<Response>} RPC Response
+ */
+export const hardwareDoSendAsset = (net, toAddress, from, assetAmounts, signingFunction = null) => {
+  return new Promise((resolve, reject) => {
+    const account = getAccountFromPublicKey(getPublicKeyEncoded(from))
+    const toScriptHash = getScriptHashFromAddress(toAddress)
+    return getBalance(net, account.address).then((balances) => {
+      // TODO: maybe have transactions handle this construction?
+      const intents = _.map(assetAmounts, (v, k) => {
+        return { assetId: tx.ASSETS[k], value: v, scriptHash: toScriptHash }
+      })
+      const unsignedTx = tx.create.contract(account.publicKeyEncoded, balances, intents)
+      signingFunction(unsignedTx, account.publicKeyEncoded).then(asyncHexTx => {
+        resolve(queryRPC(net, 'sendrawtransaction', [asyncHexTx], 4))
+      })
+    })
   })
 }
 
