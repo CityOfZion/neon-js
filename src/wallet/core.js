@@ -13,9 +13,8 @@ import { ec as EC } from 'elliptic'
 import BigInteger from 'bigi'
 import base58 from 'bs58'
 import { hexstring2ab, ab2hexstring, reverseHex, sha256, hash160, hash256 } from '../utils'
+import {ADDR_VERSION} from '../consts'
 import secureRandom from 'secure-random'
-
-const ADDR_VERSION = '17'
 
 /**
  * @param {string} unencoded public key

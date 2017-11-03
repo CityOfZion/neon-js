@@ -1,3 +1,5 @@
+export const ADDR_VERSION = '17'
+
 export const ASSETS = {
   NEO: 'NEO',
   'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b': 'NEO',
