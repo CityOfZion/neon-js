@@ -29,7 +29,7 @@ describe('Account', function () {
     a.address.should.equal(acct.address)
   })
 
-  it.only('Accepts both public key forms', () => {
+  it('Accepts both public key forms', () => {
     const a = new Account(acct.publicKeyUnencoded)
     a.address.should.equal(acct.address)
     a.publicKey.should.equal(acct.publicKey)

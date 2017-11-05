@@ -129,16 +129,18 @@ export const getWalletDBHeight = (net) => {
  * @param {function} [signingFunction] - Optional async signing function. Used for external signing.
  * @return {Promise<Response>} RPC response from sending transaction
  */
-export const doClaimAllGas = (net, privateKey) => {
+export const doClaimAllGas = (net, privateKey, signingFunction) => {
   const account = new Account(privateKey)
   const rpcEndpointPromise = getRPCEndpoint(net)
   const claimsPromise = getClaimAmounts(net, account.address)
   let signedTx // Scope this outside so that all promises have this
+  let endpt
   return Promise.all([rpcEndpointPromise, claimsPromise])
     .then((values) => {
-      const [endpt, claims] = values
+      endpt = values[0]
+      const claims = values[1]
       const unsignedTx = createClaimTx(account.publicKey, claims)
-      if (!signingFunction) {
+      if (signingFunction) {
         return signingFunction(unsignedTx, account.publicKey)
       } else {
         return signTransaction(unsignedTx, account.privateKey)
@@ -147,7 +149,6 @@ export const doClaimAllGas = (net, privateKey) => {
     .then((signedResult) => {
       signedTx = signedResult
       return Query.sendRawTransaction(signedTx).execute(endpt)
-
     })
     .then((res) => {
       if (res.result === true) {
@@ -204,14 +205,16 @@ export const doSendAsset = (net, toAddress, from, assetAmounts, signingFunction)
     return { assetId: ASSET_ID[k], value: v, scriptHash: toAcct.scriptHash }
   })
   let signedTx
+  let endpt
   return Promise.all([rpcEndpointPromise, balancePromise])
     .then((values) => {
-      const [endpt, balance] = values
+      endpt = values[0]
+      const balance = values[1]
       const unsignedTx = createContractTx(fromAcct.publicKey, balance, intents)
-      if (!signingFunction) {
+      if (signingFunction) {
         return signingFunction(unsignedTx, fromAcct.publicKey)
       } else {
-        return signingFunction(unsignedTx, fromAcct.privateKey)
+        return signTransaction(unsignedTx, fromAcct.privateKey)
       }
     })
     .then((signedResult) => {
