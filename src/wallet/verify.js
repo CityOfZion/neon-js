@@ -54,28 +54,35 @@ export const isPrivateKey = (key) => {
 }
 
 /**
- * Checks if hexstring is a valid Public Key.
+ * Checks if hexstring is a valid Public Key. Accepts both encoded and unencoded forms.
  * @param {string} key
+ * @param {boolean} [encoded] - Optional parameter to specify for a specific form. If this is omitted, this function will return true for both forms. If this parameter is provided, this function will only return true for the specific form.
  * @return {boolean}
  */
-export const isPublicKey = (key) => {
+export const isPublicKey = (key, encoded) => {
   try {
-    let publicKeyArray = hexstring2ab(key)
-    if (publicKeyArray[0] !== 0x02 && publicKeyArray[0] !== 0x03) {
-      if (publicKeyArray[0] !== 0x04) return false
-      else {
-        // encode the key, if valid but not encoded
-        key = getPublicKeyEncoded(key)
-        publicKeyArray = hexstring2ab(key)
-      }
+    let encodedKey
+    switch (key.substr(0, 2)) {
+      case '04':
+        if (encoded === true) return false
+        // Encode key
+        encodedKey = getPublicKeyEncoded(key)
+        break
+      case '02':
+      case '03':
+        if (encoded === false) return false
+        encodedKey = key
+        break
+      default:
+        return false
     }
 
     let ecparams = ecurve.getCurveByName('secp256r1')
-    let curvePt = ecurve.Point.decodeFrom(ecparams, Buffer.from(key, 'hex'))
+    let curvePt = ecurve.Point.decodeFrom(ecparams, Buffer.from(encodedKey, 'hex'))
     let curvePtY = curvePt.affineY.toBuffer(32)
 
-    if (publicKeyArray[0] === 0x02 && curvePtY[31] % 2 === 0) return true
-    if (publicKeyArray[0] === 0x03 && curvePtY[31] % 2 === 1) return true
+    if (encodedKey.substr(0, 2) === '02' && curvePtY[31] % 2 === 0) return true
+    if (encodedKey.substr(0, 2) === '03' && curvePtY[31] % 2 === 1) return true
   } catch (e) { }
   return false
 }
