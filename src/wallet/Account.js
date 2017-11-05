@@ -15,8 +15,10 @@ class Account {
   constructor(str) {
     if (isPrivateKey(str)) {
       this._privateKey = str
-    } else if (isPublicKey(str)) {
+    } else if (isPublicKey(str, false)) {
       this._publicKey = core.getPublicKeyEncoded(str)
+    } else if (isPublicKey(str, true)) {
+      this._publicKey = str
     } else if (isAddress(str)) {
       this._address = str
     } else if (isWIF(str)) {

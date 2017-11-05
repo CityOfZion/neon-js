@@ -16,6 +16,10 @@ describe('Account', function () {
       if (key === 'scriptHash') return
       const a = new Account(acct[key])
       a.should.not.equal(undefined)
+      if (key === 'publicKeyUnencoded') {
+        a.publicKey.should.equal(acct.publicKey)
+        return
+      }
       a[key].should.equal(acct[key])
     })
   })
