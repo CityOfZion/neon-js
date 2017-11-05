@@ -12,11 +12,11 @@ import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
  * @param {string} str - WIF/ Private Key / Public Key / Address.
  */
 class Account {
-  constructor (str) {
+  constructor(str) {
     if (isPrivateKey(str)) {
       this._privateKey = str
     } else if (isPublicKey(str)) {
-      this._publicKey = str
+      this._publicKey = core.getPublicKeyEncoded(str)
     } else if (isAddress(str)) {
       this._address = str
     } else if (isWIF(str)) {
@@ -48,13 +48,28 @@ class Account {
     }
   }
 
-  /** @return {string} */
+  /**
+   * Returns the public key in encoded form. This is the form that is the short version (starts with 02 or 03). If you require the unencoded form, do use the publicKey method instead of this getter.
+   * @return {string}
+   *  */
   get publicKey () {
     if (this._publicKey) {
       return this._publicKey
     } else {
       this._publicKey = core.getPublicKeyFromPrivateKey(this.privateKey)
       return this._publicKey
+    }
+  }
+
+  /** Retrieves the Public Key in encoded / unencoded form.
+   * @param {boolean} encoded - Encoded or unencoded.
+   * @return {string}
+   */
+  getPublicKey (encoded = true) {
+    if (encoded) return this.publicKey
+    else {
+      let encoded = this.publicKey
+      return core.getPublicKeyUnencoded(encoded)
     }
   }
 
