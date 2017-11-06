@@ -1,0 +1,550 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API &mdash; neon-js 2.0.0alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="neon-js 2.0.0alpha documentation" href="../index.html"/>
+        <link rel="up" title="Reference" href="index.html"/>
+        <link rel="next" title="RPC" href="rpc.html"/>
+        <link rel="prev" title="Reference" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> neon-js
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neondb">NeonDB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinmarketcap">CoinMarketCap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nep5">NEP5</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rpc.html">RPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sc.html">Smart Contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tx.html">Transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utility.html">Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wallet.html">Wallet</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">neon-js</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Reference</a> &raquo;</li>
+        
+      <li>API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+    
+    
+
+
+
+    <p class="scv-banner scv-sphinx_rtd_theme"><b>Warning:</b> This document is for the development version of neon-js.</p>
+<div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<p>Module <code class="docutils literal"><span class="pre">api</span></code></p>
+<div class="section" id="neondb">
+<h2>NeonDB<a class="headerlink" href="#neondb" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="doClaimAllGas">
+<code class="descname">doClaimAllGas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#doClaimAllGas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a ClaimTransaction for all available GAS based on API</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>privateKey</strong> (<em>string</em>) &#8211; Private Key or WIF.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Response&gt;</strong> &#8211; RPC response from sending transaction</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="doMintTokens">
+<code class="descname">doMintTokens</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#doMintTokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call mintTokens for RPX</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>fromWif</strong> (<em>string</em>) &#8211; The WIF key of the originating address.</li>
+<li><strong>amount</strong> (<em>gasCost</em>) &#8211; The amount of neo to send to RPX.</li>
+<li><strong>amount</strong> &#8211; The Gas to send as SC fee.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Response&gt;</strong> &#8211; RPC Response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="doSendAsset">
+<code class="descname">doSendAsset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#doSendAsset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an asset to an address</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>toAddress</strong> (<em>string</em>) &#8211; The destination address.</li>
+<li><strong>from</strong> (<em>string</em>) &#8211; Private Key or WIF of the sending address.</li>
+<li><strong>assetAmounts</strong> (<em>Object</em>) &#8211; The amount of each asset (NEO and GAS) to send, leave empty for 0.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Response&gt;</strong> &#8211; RPC Response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="getAPIEndpoint">
+<code class="descname">getAPIEndpoint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getAPIEndpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Switch for MainNet and TestNet</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211; URL of API endpoint.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="getBalance">
+<code class="descname">getBalance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getBalance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get balances of NEO and GAS for an address</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>address</strong> (<em>string</em>) &#8211; Address to check.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Balance&gt;</strong> &#8211; Balance of address</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="getClaimAmounts">
+<code class="descname">getClaimAmounts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getClaimAmounts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get amounts of available (spent) and unavailable claims</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>address</strong> (<em>string</em>) &#8211; Address to check.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Claim&gt;</strong> &#8211; An Object with available and unavailable GAS amounts.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="getRPCEndpoint">
+<code class="descname">getRPCEndpoint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getRPCEndpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the best performing (highest block + fastest) node RPC</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217; or a custom URL.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;string&gt;</strong> &#8211; The URL of the best performing node or the custom URL provided.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="getTransactionHistory">
+<code class="descname">getTransactionHistory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getTransactionHistory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get transaction history for an account</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>address</strong> (<em>string</em>) &#8211; Address to check.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;History&gt;</strong> &#8211; History</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="getWalletDBHeight">
+<code class="descname">getWalletDBHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getWalletDBHeight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current height of the light wallet DB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;number&gt;</strong> &#8211; Current height.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="coinmarketcap">
+<h2>CoinMarketCap<a class="headerlink" href="#coinmarketcap" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="getPrice">
+<code class="descname">getPrice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getPrice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the price of coin in the symbol given</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>coin</strong> (<em>string</em>) &#8211; Coin name. NEO or GAS.</li>
+<li><strong>currency</strong> (<em>string</em>) &#8211; Three letter currency symbol.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;number&gt;</strong> &#8211; price</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="nep5">
+<h2>NEP5<a class="headerlink" href="#nep5" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="getTokenInfo">
+<code class="descname">getTokenInfo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getTokenInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries for NEP5 Token information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<em>string</em>) &#8211; </li>
+<li><strong>scriptHash</strong> (<em>string</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;{name: string, symbol: string, decimals: number, totalSupply: number}&gt;</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="getTokenBalance">
+<code class="descname">getTokenBalance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getTokenBalance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the token balance of Address from Contract</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<em>string</em>) &#8211; </li>
+<li><strong>scriptHash</strong> (<em>string</em>) &#8211; </li>
+<li><strong>address</strong> (<em>string</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>number</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rpc.html" class="btn btn-neutral float-right" title="RPC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: dev
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="api.html">dev</a></dd>
+            <dd><a href="../../master/index.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.0.0alpha',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
