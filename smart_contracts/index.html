@@ -38,7 +38,7 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="neon-js 1.1.0 documentation" href="../index.html"/>
-        <link rel="prev" title="Invoke Transaction" href="../transactions/invoke.html"/> 
+        <link rel="prev" title="Invocation Transaction" href="../transactions/invocation.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -93,8 +93,8 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../light_wallet_api/index.html">Light Wallet API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Smart Contract</a><ul class="simple">
 </ul>
@@ -170,7 +170,17 @@
 
 <div class="section" id="smart-contract">
 <h1>Smart Contract<a class="headerlink" href="#smart-contract" title="Permalink to this headline">¶</a></h1>
-<p>Functionality for smart contracts (e.g., script builder)</p>
+<p>We can call smart contracts through the RPC endpoint using an InvocationTransaction. The transaction carries the script which is read and executed by the VM contained within the NEO node.</p>
+<p>As of 2.3.3, NEO nodes have implemented several RPC functions for testing out smart contract calls. These functions can be used to execute a VM script, returning the results as if it was executed on the blockchain itself. This is useful for developers to test and find out actual gas costs and find bugs.</p>
+<p>The NEP-5 standard describes the token standard within the NEO ecosystem. To those coming from Ethereum, this is akin to the ERC20 token standard.</p>
+<p>The Neon API exposes 2 methods for NEP-5:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="c1">// Returns name, symbol and total supply</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">getTokenInfo</span><span class="p">(</span><span class="nx">net</span><span class="p">,</span> <span class="nx">scriptHash</span><span class="p">)</span>
+<span class="c1">// Returns amount of specific token owned by address.</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">getTokenBalance</span><span class="p">(</span><span class="nx">net</span><span class="p">,</span> <span class="nx">scriptHash</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -186,7 +196,7 @@
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="../transactions/invoke.html" class="btn btn-neutral" title="Invoke Transaction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../transactions/invocation.html" class="btn btn-neutral" title="Invocation Transaction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -213,10 +223,14 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: master
+        v: 1.1.1
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../1.1.1/smart_contracts/index.html">1.1.1</a></dd>
+        </dl>
         <dl>
             <dt>Branches</dt>
             <dd><a href="../dev/smart_contracts/index.html">dev</a></dd>

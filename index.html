@@ -38,7 +38,7 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="neon-js 1.1.0 documentation" href="#"/>
-        <link rel="next" title="Light Wallet API" href="light_wallet_api/index.html"/> 
+        <link rel="next" title="Wallet" href="wallet.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -93,8 +93,8 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="wallet.html">Wallet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="light_wallet_api/index.html">Light Wallet API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rpc/index.html">Node RPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transactions/index.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts/index.html">Smart Contract</a></li>
 </ul>
@@ -168,29 +168,39 @@
 
 <div class="section" id="neon-js">
 <h1>neon-js<a class="headerlink" href="#neon-js" title="Permalink to this headline">¶</a></h1>
-<p>This is neon-js</p>
+<p>neon-js is a JS library to interact with the NEO blockchain. It supports:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="nx">Wallet</span> <span class="nx">methods</span> <span class="nx">such</span> <span class="nx">as</span> <span class="nx">key</span> <span class="nx">generation</span><span class="p">,</span> <span class="nx">manipulation</span> <span class="nx">and</span> <span class="nx">encryption</span><span class="p">.</span>
+<span class="o">-</span> <span class="nx">Transaction</span> <span class="nx">creation</span><span class="p">,</span> <span class="nx">serialization</span> <span class="nx">and</span> <span class="nx">deserialization</span><span class="p">.</span>
+<span class="o">-</span> <span class="nx">Smart</span> <span class="nx">contract</span> <span class="nx">calling</span> <span class="k">for</span> <span class="nx">NEP</span><span class="o">-</span><span class="mf">5.</span>
+<span class="o">-</span> <span class="nx">Various</span> <span class="nx">APIs</span> <span class="nx">needed</span> <span class="nx">to</span> <span class="nx">support</span> <span class="nx">a</span> <span class="nx">light</span> <span class="nx">wallet</span><span class="p">.</span>
+</pre></div>
+</div>
 <div class="section" id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
-<p>This is a placeholder:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="o">*</span> <span class="k">as</span> <span class="n">Neon</span> <span class="kn">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<p>Import all as Neon:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
 
-<span class="n">Neon</span><span class="o">.</span><span class="n">getBalance</span><span class="p">(</span><span class="s2">&quot;TestNet&quot;</span><span class="p">,</span> <span class="s2">&quot;ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">((</span><span class="n">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">getBalance</span><span class="p">(</span><span class="s2">&quot;TestNet&quot;</span><span class="p">,</span> <span class="s2">&quot;ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
 <span class="p">})</span>
 </pre></div>
 </div>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="wallet.html">Wallet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wallet.html#account">Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wallet.html#generation">Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wallet.html#manipulation">Manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wallet.html#verification">Verification</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="light_wallet_api/index.html">Light Wallet API</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="rpc/index.html">Node RPC</a><ul class="simple">
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="transactions/index.html">Transactions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="transactions/contract.html">Contract Transaction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transactions/invoke.html">Invoke Transaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transactions/index.html#components">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transactions/index.html#types">Types</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts/index.html">Smart Contract</a><ul class="simple">
@@ -211,7 +221,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="light_wallet_api/index.html" class="btn btn-neutral float-right" title="Light Wallet API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="wallet.html" class="btn btn-neutral float-right" title="Wallet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -239,10 +249,14 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: master
+        v: 1.1.1
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="1.1.1/index.html">1.1.1</a></dd>
+        </dl>
         <dl>
             <dt>Branches</dt>
             <dd><a href="dev/index.html">dev</a></dd>

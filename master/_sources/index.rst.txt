@@ -7,13 +7,17 @@
 neon-js
 *******
 
-This is neon-js
+neon-js is a JS library to interact with the NEO blockchain. It supports::
+
+- Wallet methods such as key generation, manipulation and encryption.
+- Transaction creation, serialization and deserialization.
+- Smart contract calling for NEP-5.
+- Various APIs needed to support a light wallet.
 
 Quickstart
 ==========
 
-This is a placeholder::
-
+Import all as Neon::
 
     import * as Neon from 'neon-js'
 
@@ -25,7 +29,7 @@ This is a placeholder::
    :maxdepth: 2
    :caption: Contents:
 
+   wallet
    light_wallet_api/index.rst
-   rpc/index.rst
    transactions/index.rst
    smart_contracts/index.rst
