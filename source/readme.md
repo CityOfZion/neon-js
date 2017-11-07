@@ -23,7 +23,7 @@ This command builds the documentation locally and places it in `docs` folder.
 
 ```sh
 $ cd source
-$ sphinx-versioning -g ../ -l ./conf.py build -r master source ../docs
+$ sphinx-versioning -g ../ -l ./conf.py build source ../docs
 ```
 
 ## Deploy
@@ -32,7 +32,7 @@ This command immediately deploys to `gh-pages`.
 
 ```sh
 $ cd source
-$ sphinx-versioning -g ../ -l ./conf.py push -r master source gh-pages .
+$ sphinx-versioning -g ../ -l ./conf.py push source gh-pages .
 ```
 ## References
 

@@ -1,4 +1,4 @@
-import Neon, {api, tx, wallet} from '../src/index'
+import Neon from '../src/index'
 import Query from '../src/rpc/query'
 import axios from 'axios'
 

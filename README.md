@@ -20,6 +20,8 @@
 
 This the Neon Wallet's JS SDK for the NEO blockchain platform. It is currently in use by [Neon](https://github.com/CityOfZion/neon-wallet/).
 
+Visit the [docs](https://cityofzion.io/neon-js) to learn how to use this library!
+
 ## Getting started
 
 ### Installation
