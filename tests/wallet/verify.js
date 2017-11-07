@@ -1,5 +1,4 @@
 import * as V from '../../src/wallet/verify'
-import { getPublicKeyFromPrivateKey } from '../../src/wallet'
 
 describe('Key Verification', function () {
   const valid = {

@@ -12,7 +12,7 @@ import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
  * @param {string} str - WIF/ Private Key / Public Key / Address.
  */
 class Account {
-  constructor(str) {
+  constructor (str) {
     if (isPrivateKey(str)) {
       this._privateKey = str
     } else if (isPublicKey(str, false)) {

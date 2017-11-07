@@ -10,7 +10,7 @@
 
 import ecurve from 'ecurve'
 import base58 from 'bs58'
-import { hexstring2ab, ab2hexstring, reverseHex, hash256 } from '../utils'
+import { ab2hexstring, reverseHex, hash256 } from '../utils'
 import { getAddressFromScriptHash, getPublicKeyEncoded } from './core'
 
 /**
