@@ -20,6 +20,11 @@ describe('Key Verification', function () {
       '03c663ba46afa8349f020eb9e8f9e1dc1c8e877b9d239e139af699049126e0f321',
       '02c1a9b2d0580902a6c2d09a8febd0a7a13518a9a61d08183f09ff929b66ac7c26'
     ],
+    publicKeysUnencoded: [
+      '04963fc761eb7135c4593bfc6a0af96d8588b70d8f6ef3af8549181e57772181f5ab872395851e9b1b0dbee1f46c11cc7928912ddb452964099931e05f7f9efd5c',
+      '04c663ba46afa8349f020eb9e8f9e1dc1c8e877b9d239e139af699049126e0f321869971106d82de8ffd0d424eea84a0d67294eecab7b89e861b3bb1fc37f8d905',
+      '04c1a9b2d0580902a6c2d09a8febd0a7a13518a9a61d08183f09ff929b66ac7c26a4ddc2ceb4ddc55ae7b2920f79fdbfe5b91e6184d7d487e71030007a56a302f2'
+    ],
     addresses: [
       'Adc4jT59RjDLdXbBni6xzg6SEcLVhHZ5Z9',
       'ARCvt1d5qAGzcHqJCWA2MxvhTLQDb9dvjQ',
@@ -68,8 +73,14 @@ describe('Key Verification', function () {
     valid.privateKeys.map((key) => V.isPrivateKey(key).should.be.true)
   })
 
-  it('returns true for valid publicKey', () => {
+  it('returns true for valid publicKey(Encoded)', () => {
     valid.publicKeys.map((key) => V.isPublicKey(key).should.be.true)
+    valid.publicKeys.map((key) => V.isPublicKey(key, true).should.be.true)
+  })
+
+  it('returns true for valid publicKey(Unencoded)', () => {
+    valid.publicKeysUnencoded.map((key) => V.isPublicKey(key).should.be.true)
+    valid.publicKeysUnencoded.map((key) => V.isPublicKey(key, false).should.be.true)
   })
 
   it('returns true for valid address', () => {
@@ -90,6 +101,8 @@ describe('Key Verification', function () {
 
   it('returns false for invalid publicKey', () => {
     invalid.publicKeys.map((key) => V.isPublicKey(key).should.be.false)
+    valid.publicKeys.map((key) => V.isPublicKey(key, false).should.be.false)
+    valid.publicKeysUnencoded.map((key) => V.isPublicKey(key, true).should.be.false)
   })
 
   it('returns false for invalid address', () => {

@@ -126,18 +126,28 @@ export const getWalletDBHeight = (net) => {
  * Perform a ClaimTransaction for all available GAS based on API
  * @param {string} net - 'MainNet' or 'TestNet'.
  * @param {string} privateKey - Private Key or WIF.
+ * @param {function} [signingFunction] - Optional async signing function. Used for external signing.
  * @return {Promise<Response>} RPC response from sending transaction
  */
-export const doClaimAllGas = (net, privateKey) => {
+export const doClaimAllGas = (net, privateKey, signingFunction) => {
   const account = new Account(privateKey)
   const rpcEndpointPromise = getRPCEndpoint(net)
   const claimsPromise = getClaimAmounts(net, account.address)
   let signedTx // Scope this outside so that all promises have this
+  let endpt
   return Promise.all([rpcEndpointPromise, claimsPromise])
     .then((values) => {
-      const [endpt, claims] = values
+      endpt = values[0]
+      const claims = values[1]
       const unsignedTx = createClaimTx(account.publicKey, claims)
-      signedTx = signTransaction(unsignedTx, account.privateKey)
+      if (signingFunction) {
+        return signingFunction(unsignedTx, account.publicKey)
+      } else {
+        return signTransaction(unsignedTx, account.privateKey)
+      }
+    })
+    .then((signedResult) => {
+      signedTx = signedResult
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
     .then((res) => {
@@ -183,9 +193,10 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost) => {
  * @param {string} toAddress - The destination address.
  * @param {string} from - Private Key or WIF of the sending address.
  * @param {{NEO: number, GAS: number}} assetAmounts - The amount of each asset (NEO and GAS) to send, leave empty for 0.
+ * @param {function} [signingFunction] - Optional signing function. Used for external signing.
  * @return {Promise<Response>} RPC Response
  */
-export const doSendAsset = (net, toAddress, from, assetAmounts) => {
+export const doSendAsset = (net, toAddress, from, assetAmounts, signingFunction) => {
   const fromAcct = new Account(from)
   const toAcct = new Account(toAddress)
   const rpcEndpointPromise = getRPCEndpoint(net)
@@ -194,11 +205,20 @@ export const doSendAsset = (net, toAddress, from, assetAmounts) => {
     return { assetId: ASSET_ID[k], value: v, scriptHash: toAcct.scriptHash }
   })
   let signedTx
+  let endpt
   return Promise.all([rpcEndpointPromise, balancePromise])
     .then((values) => {
-      const [endpt, balance] = values
+      endpt = values[0]
+      const balance = values[1]
       const unsignedTx = createContractTx(fromAcct.publicKey, balance, intents)
-      signedTx = signTransaction(unsignedTx, fromAcct.privateKey)
+      if (signingFunction) {
+        return signingFunction(unsignedTx, fromAcct.publicKey)
+      } else {
+        return signTransaction(unsignedTx, fromAcct.privateKey)
+      }
+    })
+    .then((signedResult) => {
+      signedTx = signedResult
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
     .then((res) => {

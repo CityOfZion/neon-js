@@ -13,12 +13,13 @@ import { ec as EC } from 'elliptic'
 import BigInteger from 'bigi'
 import base58 from 'bs58'
 import { hexstring2ab, ab2hexstring, reverseHex, sha256, hash160, hash256 } from '../utils'
+import {ADDR_VERSION} from '../consts'
 import secureRandom from 'secure-random'
 
-const ADDR_VERSION = '17'
+const curve = new EC('p256')
 
 /**
- * @param {string} unencoded public key
+ * @param {string} publickey - unencoded public key
  * @return {string} encoded public key
  */
 export const getPublicKeyEncoded = (publicKey) => {
@@ -28,6 +29,15 @@ export const getPublicKeyEncoded = (publicKey) => {
   } else {
     return '02' + ab2hexstring(publicKeyArray.slice(1, 33))
   }
+}
+
+/**
+ * @param {string} publicKey - Encoded public key
+ * @return {string} decoded public key
+ */
+export const getPublicKeyUnencoded = (publicKey) => {
+  let keyPair = curve.keyFromPublic(publicKey, 'hex')
+  return keyPair.getPublic().encode('hex')
 }
 
 /**
@@ -47,8 +57,9 @@ export const getWIFFromPrivateKey = (privateKey) => {
 }
 
 /**
+ * Calculates the public key from a given private key.
  * @param {string} privateKey
- * @param {boolean} encode
+ * @param {boolean} encode - Returns the encoded form if true.
  * @return {string}
  */
 export const getPublicKeyFromPrivateKey = (privateKey, encode = true) => {
