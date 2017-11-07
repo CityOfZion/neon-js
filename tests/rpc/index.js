@@ -13,7 +13,7 @@ describe('RPC methods', function () {
   })
 
   it('test storage', (done) => {
-    client.getStorage(Neon.CONST.CONTRACTS.TEST_RPX, "totalSupply").then((response) => {
+    client.getStorage(Neon.CONST.CONTRACTS.TEST_RPX, 'totalSupply').then((response) => {
       response.should.be.a('string')
       done()
     })

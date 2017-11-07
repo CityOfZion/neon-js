@@ -38,7 +38,7 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
-    "lint": "./node_modules/.bin/eslint ./src/**/*.js",
+    "lint": "./node_modules/.bin/eslint ./src/**/*.js ./tests/**/*.js",
     "build:lib": "./node_modules/.bin/webpack",
     "build:docs":"cd source && sphinx-versioning -g ../ -l ./conf.py build source ../docs",
     "deploy:docs":"cd source && sphinx-versioning -g ../ -l ./conf.py push source gh-pages .",

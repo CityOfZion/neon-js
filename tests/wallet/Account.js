@@ -9,8 +9,8 @@ describe('Account', function () {
     address: 'ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s'
   }
   const unencodedTest = {
-        address: "AeqoGrirm7khpRVTJvisi8EugfYYmbB6xD",
-        publicKey: "0447705328908193ed38ebaeb992ec921fcfb4d4538cbeaf970d270d1cd1be2b3350e91d851ff0d0aed059ab835e70df2e889da598e406d220991889d893549ad4"
+    address: 'AeqoGrirm7khpRVTJvisi8EugfYYmbB6xD',
+    publicKey: '0447705328908193ed38ebaeb992ec921fcfb4d4538cbeaf970d270d1cd1be2b3350e91d851ff0d0aed059ab835e70df2e889da598e406d220991889d893549ad4'
   }
   it('can be created with different formats', () => {
     Object.keys(acct).map((key) => {

@@ -15,8 +15,6 @@ import base58 from 'bs58'
 import { hexstring2ab, ab2hexstring, reverseHex, sha256, hash160, hash256 } from '../utils'
 import secureRandom from 'secure-random'
 
-
-
 const ADDR_VERSION = '17'
 
 /**
@@ -76,7 +74,7 @@ export const getVerificationScriptFromPublicKey = (publicKey) => {
  */
 export const getScriptHashFromPublicKey = (publicKey) => {
   // if unencoded
-  if (publicKey.substring(0,2) == "04"){
+  if (publicKey.substring(0, 2) === '04') {
     publicKey = getPublicKeyEncoded(publicKey)
   }
   const verificationScript = getVerificationScriptFromPublicKey(publicKey)

@@ -9,7 +9,7 @@ export default {
   }
 }
 
-const generateDeployScript = ({script, name, version, author, email, description, needsStorage = false, returnType = "ff", paramaterList= undefined}) => {
+const generateDeployScript = ({script, name, version, author, email, description, needsStorage = false, returnType = 'ff', paramaterList = undefined}) => {
   const sb = new ScriptBuilder()
   sb
     .emitPush(str2hexstring(description))
@@ -21,7 +21,7 @@ const generateDeployScript = ({script, name, version, author, email, description
     .emitPush(returnType)
     .emitPush(paramaterList)
     .emitPush(script)
-    .emitSysCall("Neo.Contract.Create")
+    .emitSysCall('Neo.Contract.Create')
   return sb
 }
 
