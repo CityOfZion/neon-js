@@ -222,14 +222,17 @@ export const doSendTx = (net, transaction, id = 42) => {
 
 /**
  * API Switch for MainNet and TestNet
- * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} net - 'MainNet', 'TestNet', or custom neon-wallet-db URL.
  * @return {string} URL of API endpoint.
  */
 export const getAPIEndpoint = (net) => {
-  if (net === 'MainNet') {
-    return 'http://api.wallet.cityofzion.io'
-  } else {
-    return 'http://testnet-api.wallet.cityofzion.io'
+  switch (net) {
+    case 'MainNet':
+      return 'http://api.wallet.cityofzion.io'
+    case 'TestNet':
+      return 'http://testnet-api.wallet.cityofzion.io'
+    default:
+      return net
   }
 }
 

@@ -173,6 +173,14 @@ describe('Wallet', function () {
         throw e
       })
   })
+
+  it('should allow custom API endpoint, i.e. for private net', done => {
+    const customEndpoint = 'http://localhost:5000'
+    const privNet = Neon.getAPIEndpoint(customEndpoint)
+    privNet.should.equal(customEndpoint)
+    done()
+  })
+  
   // this test passes, but cannot be run immediately following previous tests given state changes
   // it.skip('should send NEO and GAS', (done) => {
   //   return Neon.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'GAS': 1, 'NEO': 1 })
