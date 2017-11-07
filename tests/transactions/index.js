@@ -1,4 +1,4 @@
-import { serializeTransaction, deserializeTransaction, getTransactionHash } from '../../src/transactions/index.js'
+import { serializeTransaction, deserializeTransaction, getTransactionHash } from '../../src/transactions'
 import data from './data.json'
 
 describe('Transactions', function () {
