@@ -84,7 +84,7 @@ export const createInvocationTx = (publicKey, balances, intents, invoke, gasCost
  * @param {number} gasCost - gasCost required for the transaction.
  * @return {Object} {inputs: TransactionInput[], change: TransactionOutput[] }
  */
-const calculateInputs = (publicKey, balances, intents, gasCost = 0) => {
+export const calculateInputs = (publicKey, balances, intents, gasCost = 0) => {
   // We will work in integers here to be more accurate.
   // As assets are stored as Fixed8, we just multiple everything by 10e8 and round off to get integers.
   const requiredAssets = intents.reduce((assets, intent) => {
