@@ -1,6 +1,7 @@
 import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256 } from '../utils'
 import { generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey } from '../wallet'
-import { serialize, deserialize } from './exclusive'
+import { serialize as serialiseExclusive, deserialize as deserializeExclusive } from './exclusive'
+import * as comp from './components'
 
 /**
  * Serializes a given transaction object
@@ -12,23 +13,23 @@ export const serializeTransaction = (tx, signed = true) => {
   let out = ''
   out += num2hexstring(tx.type)
   out += num2hexstring(tx.version)
-  out += serialize.exclusiveData[tx.type](tx)
+  out += serialiseExclusive[tx.type](tx)
   out += num2VarInt(tx.attributes.length)
   for (const attribute of tx.attributes) {
-    out += serialize.attribute(attribute)
+    out += comp.serializeTransactionAttribute(attribute)
   }
   out += num2VarInt(tx.inputs.length)
   for (const input of tx.inputs) {
-    out += serialize.input(input)
+    out += comp.serializeTransactionInput(input)
   }
   out += num2VarInt(tx.outputs.length)
   for (const output of tx.outputs) {
-    out += serialize.output(output)
+    out += comp.serializeTransactionOutput(output)
   }
   if (signed && tx.scripts && tx.scripts.length > 0) {
     out += num2VarInt(tx.scripts.length)
     for (const script of tx.scripts) {
-      out += serialize.script(script)
+      out += comp.serializeWitness(script)
     }
   }
   return out
@@ -44,27 +45,27 @@ export const deserializeTransaction = (data) => {
   let tx = {}
   tx.type = parseInt(ss.read(1), 16)
   tx.version = parseInt(ss.read(1), 16)
-  const exclusiveData = deserialize.exclusiveData[tx.type](ss)
+  const exclusiveData = deserializeExclusive[tx.type](ss)
   tx.attributes = []
   tx.inputs = []
   tx.outputs = []
   tx.scripts = []
   const attrLength = ss.readVarInt()
   for (let i = 0; i < attrLength; i++) {
-    tx.inputs.push(deserialize.attribute(ss))
+    tx.inputs.push(comp.deserializeTransactionAttribute(ss))
   }
   const inputLength = ss.readVarInt()
   for (let i = 0; i < inputLength; i++) {
-    tx.inputs.push(deserialize.input(ss))
+    tx.inputs.push(comp.deserializeTransactionInput(ss))
   }
   const outputLength = ss.readVarInt()
   for (let i = 0; i < outputLength; i++) {
-    tx.outputs.push(deserialize.output(ss))
+    tx.outputs.push(comp.deserializeTransactionOutput(ss))
   }
   if (!ss.isEmpty()) {
     const scriptLength = ss.readVarInt()
     for (let i = 0; i < scriptLength; i++) {
-      tx.scripts.push(deserialize.script(ss))
+      tx.scripts.push(comp.deserializeWitness(ss))
     }
   }
   return Object.assign(tx, exclusiveData)

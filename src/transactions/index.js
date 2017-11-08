@@ -1,5 +1,4 @@
-import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256 } from '../utils'
-import { generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey } from '../wallet'
+import * as core from './core'
 import * as comp from './components'
 import * as e from './exclusive'
 import * as _c from './create'
@@ -33,7 +32,7 @@ const serialize = {
   output: comp.serializeTransactionOutput,
   script: comp.serializeWitness,
   exclusiveData: e.serialize,
-  tx: serializeTransaction
+  tx: core.serializeTransaction
 }
 
 const deserialize = {
@@ -42,7 +41,7 @@ const deserialize = {
   output: comp.deserializeTransactionOutput,
   script: comp.deserializeWitness,
   exclusiveData: e.deserialize,
-  tx: deserializeTransaction
+  tx: core.deserializeTransaction
 }
 
 export default {
@@ -50,13 +49,14 @@ export default {
   serialize,
   deserialize,
   get: {
-    transactionHash: getTransactionHash
+    transactionHash: core.getTransactionHash
   },
   sign: {
-    transaction: signTransaction
+    transaction: core.signTransaction
   }
 }
 
+export * from './core'
 export * from './components'
 export * from './create'
 export * from './exclusive'
