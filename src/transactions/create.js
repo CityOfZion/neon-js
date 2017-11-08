@@ -108,6 +108,7 @@ export const calculateInputs = (balances, intents, gasCost = 0) => {
     // Selected min inputs to satisfy outputs
     while (selectedAmt < requiredAmt) {
       selectedInputs += 1
+      if (selectedInputs > assetBalance.unspent.length) throw new Error(`Insufficient ${ASSETS[assetId]}! Reached end of unspent coins!`)
       selectedAmt += Math.round(assetBalance.unspent[selectedInputs - 1].value * 100000000)
     }
     // Construct change output
