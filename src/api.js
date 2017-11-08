@@ -51,7 +51,7 @@ export const allAssetIds = [neoId, gasId]
 
 /**
  * Perform a ClaimTransaction for all available GAS
- * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} net - 'MainNet', 'TestNet'.
  * @param {string} fromWif - WIF key of address you are claiming from.
  * @return {Promise<Response>} RPC response from sending transaction
  */
@@ -272,7 +272,7 @@ export const getClaimAmounts = (net, address) => {
  * @return {Promise<string>} The URL of the best performing node or the custom URL provided.
  */
 export const getRPCEndpoint = (net) => {
-  if (net !== 'TestNet' && net !== 'MainNet') return Promise.resolve(net)
+  // if (net !== 'TestNet' && net !== 'MainNet') return Promise.resolve(net)
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/network/best_node').then((response) => {
     return response.data.node
