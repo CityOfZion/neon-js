@@ -11,7 +11,7 @@ import WIF from 'wif'
 import { ec as EC } from 'elliptic'
 import base58 from 'bs58'
 import { hexstring2ab, ab2hexstring, reverseHex, sha256, hash160, hash256 } from '../utils'
-import {ADDR_VERSION} from '../consts'
+import { ADDR_VERSION } from '../consts'
 import secureRandom from 'secure-random'
 
 const curve = new EC('p256')

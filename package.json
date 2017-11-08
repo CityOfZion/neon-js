@@ -16,7 +16,6 @@
     "eslint-plugin-standard": "^3.0.1",
     "mocha": "^3.4.2",
     "webpack": "^3.0.0",
-    "webpack-bundle-analyzer": "^2.9.0",
     "zopfli-webpack-plugin": "^0.1.0"
   },
   "name": "neon-js",
