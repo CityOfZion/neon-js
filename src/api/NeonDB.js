@@ -47,14 +47,17 @@ import { ASSET_ID } from '../consts'
 
 /**
  * API Switch for MainNet and TestNet
- * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} net - 'MainNet', 'TestNet', or custom neon-wallet-db URL.
  * @return {string} URL of API endpoint.
  */
 export const getAPIEndpoint = (net) => {
-  if (net === 'MainNet') {
-    return 'http://api.wallet.cityofzion.io'
-  } else {
-    return 'http://testnet-api.wallet.cityofzion.io'
+  switch (net) {
+    case 'MainNet':
+      return 'http://api.wallet.cityofzion.io'
+    case 'TestNet':
+      return 'http://testnet-api.wallet.cityofzion.io'
+    default:
+      return net
   }
 }
 /**
@@ -86,11 +89,10 @@ export const getClaimAmounts = (net, address) => {
 
 /**
  * Returns the best performing (highest block + fastest) node RPC
- * @param {string} net - 'MainNet' or 'TestNet' or a custom URL.
+ * @param {string} net - 'MainNet' or 'TestNet'.
  * @return {Promise<string>} The URL of the best performing node or the custom URL provided.
  */
 export const getRPCEndpoint = (net) => {
-  if (net !== 'TestNet' && net !== 'MainNet') return Promise.resolve(net)
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/network/best_node').then((response) => {
     return response.data.node

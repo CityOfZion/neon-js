@@ -91,4 +91,11 @@ describe('NeonDB', function () {
         throw e
       })
   })
+
+  it('should allow custom API endpoint, i.e. for private net', done => {
+    const customEndpoint = 'http://localhost:5000'
+    const privNet = Neon.get.APIEndPoint(customEndpoint)
+    privNet.should.equal(customEndpoint)
+    done()
+  })
 })
