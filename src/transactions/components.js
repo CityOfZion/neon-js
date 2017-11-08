@@ -85,8 +85,8 @@ export const deserializeTransactionAttribute = (stream) => {
  */
 
 export const serializeWitness = (witness) => {
-  const invoLength = (witness.invocationScript.length / 2).toString(16)
-  const veriLength = (witness.verificationScript.length / 2).toString(16)
+  const invoLength = num2VarInt(witness.invocationScript.length / 2)
+  const veriLength = num2VarInt(witness.verificationScript.length / 2)
   return invoLength + witness.invocationScript + veriLength + witness.verificationScript
 }
 
