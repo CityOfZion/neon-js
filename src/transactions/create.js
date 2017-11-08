@@ -1,15 +1,15 @@
-import { getScriptHashFromPublicKey } from '../wallet'
+import { getScriptHashFromPublicKey, getScriptHashFromAddress, isAddress } from '../wallet'
 import { createScript } from '../sc'
 import { TX_VERSION, ASSETS, ASSET_ID } from '../consts'
 
 /**
  * Constructs a ClaimTransaction based on the inputs
- * @param {string} publicKey - Public key (Encoded form)
+ * @param {string} publicKeyOrAddress - Public key (Encoded form) or address
  * @param {Object} claimData - Claim Data provided by API
  * @param {Object} [override={}] - Optional overrides (eg. custom version)
  * @return {Transaction} Unsigned Transaction
  */
-export const createClaimTx = (publicKey, claimData, override = {}) => {
+export const createClaimTx = (publicKeyOrAddress, claimData, override = {}) => {
   const tx = Object.assign({
     type: 2,
     version: TX_VERSION,
@@ -30,7 +30,7 @@ export const createClaimTx = (publicKey, claimData, override = {}) => {
   const outputs = [{
     assetId: ASSET_ID.GAS,
     value: totalClaim / 100000000,
-    scriptHash: getScriptHashFromPublicKey(publicKey)
+    scriptHash: isAddress(publicKeyOrAddress) ? getScriptHashFromAddress(publicKeyOrAddress) : getScriptHashFromPublicKey(publicKeyOrAddress)
   }]
   return Object.assign(tx, { inputs, attributes, claims, outputs }, override)
 }
@@ -50,7 +50,7 @@ export const createContractTx = (publicKey, balances, intents, override = {}) =>
     scripts: []
   }, override)
   const attributes = []
-  let { inputs, change } = calculateInputs(publicKey, balances, intents)
+  let { inputs, change } = calculateInputs(balances, intents)
   return Object.assign(tx, { inputs, attributes, outputs: intents.concat(change) }, override)
 }
 
@@ -71,20 +71,19 @@ export const createInvocationTx = (publicKey, balances, intents, invoke, gasCost
     scripts: []
   }, override)
   const attributes = []
-  const { inputs, change } = calculateInputs(publicKey, balances, intents, gasCost)
+  const { inputs, change } = calculateInputs(balances, intents, gasCost)
   const script = typeof (invoke) === 'string' ? invoke : createScript(invoke)
   return Object.assign(tx, { inputs, attributes, outputs: intents.concat(change), script, gas: gasCost }, override)
 }
 
 /**
  * Calculate the inputs required given the intents and gasCost. gasCost has to be seperate because it will not be reflected as an TransactionOutput.
- * @param {string} publicKey
  * @param {Balance} balances - Balance of all assets available.
  * @param {TransactionOutput[]} intents - All sending intents
  * @param {number} gasCost - gasCost required for the transaction.
  * @return {Object} {inputs: TransactionInput[], change: TransactionOutput[] }
  */
-export const calculateInputs = (publicKey, balances, intents, gasCost = 0) => {
+export const calculateInputs = (balances, intents, gasCost = 0) => {
   // We will work in integers here to be more accurate.
   // As assets are stored as Fixed8, we just multiple everything by 10e8 and round off to get integers.
   const requiredAssets = intents.reduce((assets, intent) => {
@@ -116,7 +115,7 @@ export const calculateInputs = (publicKey, balances, intents, gasCost = 0) => {
       change.push({
         assetId,
         value: (selectedAmt - requiredAmt) / 100000000,
-        scriptHash: getScriptHashFromPublicKey(publicKey)
+        scriptHash: getScriptHashFromAddress(balances.address)
       })
     }
     // Format inputs
