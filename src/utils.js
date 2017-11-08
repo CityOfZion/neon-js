@@ -1,4 +1,4 @@
-import CryptoJS from 'crypto-js'
+import { SHA256, RIPEMD160, enc } from 'crypto-js'
 
 /**
  * @param {arrayBuffer} buf
@@ -216,9 +216,9 @@ export class StringStream {
  * @returns {string} hash output
  */
 export const hash160 = (hex) => {
-  let hexEncoded = CryptoJS.enc.Hex.parse(hex)
-  let ProgramSha256 = CryptoJS.SHA256(hexEncoded)
-  return CryptoJS.RIPEMD160(ProgramSha256).toString()
+  let hexEncoded = enc.Hex.parse(hex)
+  let ProgramSha256 = SHA256(hexEncoded)
+  return RIPEMD160(ProgramSha256).toString()
 }
 
 /**
@@ -227,9 +227,9 @@ export const hash160 = (hex) => {
  * @returns {string} hash output
  */
 export const hash256 = (hex) => {
-  let hexEncoded = CryptoJS.enc.Hex.parse(hex)
-  let ProgramSha256 = CryptoJS.SHA256(hexEncoded)
-  return CryptoJS.SHA256(ProgramSha256).toString()
+  let hexEncoded = enc.Hex.parse(hex)
+  let ProgramSha256 = SHA256(hexEncoded)
+  return SHA256(ProgramSha256).toString()
 }
 
 /**
@@ -238,6 +238,6 @@ export const hash256 = (hex) => {
  * @returns {string} hash output
  */
 export const sha256 = (hex) => {
-  let hexEncoded = CryptoJS.enc.Hex.parse(hex)
-  return CryptoJS.SHA256(hexEncoded).toString()
+  let hexEncoded = enc.Hex.parse(hex)
+  return SHA256(hexEncoded).toString()
 }

@@ -8,10 +8,9 @@
  * All methods take in Big-Endian strings and return boolean.
  */
 
-import ecurve from 'ecurve'
 import base58 from 'bs58'
 import { ab2hexstring, reverseHex, hash256 } from '../utils'
-import { getAddressFromScriptHash, getPublicKeyEncoded } from './core'
+import { getAddressFromScriptHash, getPublicKeyEncoded, getPublicKeyUnencoded } from './core'
 
 /**
  * Verifies a NEP2. This merely verifies the format. It is unable to verify if it is has been tampered with.
@@ -44,6 +43,7 @@ export const isWIF = (wif) => {
     return shaChecksum === hexStr.substr(hexStr.length - 8, 8)
   } catch (e) { return false }
 }
+
 /**
  * Checks if hexstring is a valid Private Key. Any hexstring of 64 chars is a valid private key.
  * @param {string} key
@@ -76,13 +76,10 @@ export const isPublicKey = (key, encoded) => {
       default:
         return false
     }
-
-    let ecparams = ecurve.getCurveByName('secp256r1')
-    let curvePt = ecurve.Point.decodeFrom(ecparams, Buffer.from(encodedKey, 'hex'))
-    let curvePtY = curvePt.affineY.toBuffer(32)
-
-    if (encodedKey.substr(0, 2) === '02' && curvePtY[31] % 2 === 0) return true
-    if (encodedKey.substr(0, 2) === '03' && curvePtY[31] % 2 === 1) return true
+    const unencoded = getPublicKeyUnencoded(encodedKey)
+    const tail = parseInt(unencoded.substr(unencoded.length - 2, 2), 16)
+    if (encodedKey.substr(0, 2) === '02' && tail % 2 === 0) return true
+    if (encodedKey.substr(0, 2) === '03' && tail % 2 === 1) return true
   } catch (e) { }
   return false
 }

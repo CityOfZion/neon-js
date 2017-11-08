@@ -1,5 +1,4 @@
 import axios from 'axios'
-import _ from 'lodash'
 import { Account } from '../wallet'
 import { createClaimTx, createContractTx, createInvocationTx, getTransactionHash, signTransaction } from '../transactions'
 import { Query } from '../rpc'
@@ -203,8 +202,8 @@ export const doSendAsset = (net, toAddress, from, assetAmounts, signingFunction)
   const toAcct = new Account(toAddress)
   const rpcEndpointPromise = getRPCEndpoint(net)
   const balancePromise = getBalance(net, fromAcct.address)
-  const intents = _.map(assetAmounts, (v, k) => {
-    return { assetId: ASSET_ID[k], value: v, scriptHash: toAcct.scriptHash }
+  const intents = Object.keys(assetAmounts).map((key) => {
+    return { assetId: ASSET_ID[key], value: assetAmounts[key], scriptHash: toAcct.scriptHash }
   })
   let signedTx
   let endpt

@@ -8,7 +8,6 @@ import * as u from './utils'
 
 const mods = [semanticSc, semanticTx, semanticWallet, semanticApi, semanticRpc]
 
-
 const Neon = mods.reduce((neon, mod) => {
   Object.keys(mod).map((key) => {
     if (neon[key]) Object.assign(neon[key], mod[key])
@@ -20,6 +19,7 @@ const Neon = mods.reduce((neon, mod) => {
 export default Neon
 export {
   api,
+  rpc,
   sc,
   tx,
   wallet,

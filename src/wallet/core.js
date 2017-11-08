@@ -8,12 +8,10 @@
  * All methods take in Big-Endian strings and return Big-Endian strings.
  */
 import WIF from 'wif'
-import ecurve from 'ecurve'
 import { ec as EC } from 'elliptic'
-import BigInteger from 'bigi'
 import base58 from 'bs58'
 import { hexstring2ab, ab2hexstring, reverseHex, sha256, hash160, hash256 } from '../utils'
-import {ADDR_VERSION} from '../consts'
+import { ADDR_VERSION } from '../consts'
 import secureRandom from 'secure-random'
 
 const curve = new EC('p256')
@@ -63,9 +61,17 @@ export const getWIFFromPrivateKey = (privateKey) => {
  * @return {string}
  */
 export const getPublicKeyFromPrivateKey = (privateKey, encode = true) => {
-  let ecparams = ecurve.getCurveByName('secp256r1')
-  let curvePt = ecparams.G.multiply(BigInteger.fromBuffer(hexstring2ab(privateKey)))
-  return ab2hexstring(curvePt.getEncoded(encode))
+  const curve = new EC('p256')
+  const keypair = curve.keyFromPrivate(privateKey, 'hex')
+  const unencodedPubKey = keypair.getPublic().encode('hex')
+  if (encode) {
+    let tail = parseInt(unencodedPubKey.substr(64 * 2, 2), 16)
+    if (tail % 2 === 1) {
+      return '03' + unencodedPubKey.substr(2, 64)
+    } else {
+      return '02' + unencodedPubKey.substr(2, 64)
+    }
+  } else return unencodedPubKey
 }
 
 /**
