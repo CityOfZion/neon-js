@@ -30,7 +30,7 @@ let common = {
 }
 
 module.exports = function (env) {
-  if (env.prod) {
+  if (env && env.prod) {
     common.plugins = common.plugins.concat([
       new UglifyJSPlugin({
         parallel: true,
