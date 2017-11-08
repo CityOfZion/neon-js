@@ -1,4 +1,6 @@
 import { num2hexstring, num2VarInt, reverseHex, fixed82num, num2fixed8 } from '../utils'
+import { getScriptHashFromAddress } from '../wallet'
+import { ASSET_ID } from '../consts'
 
 /**
  * @typedef TransactionInput
@@ -32,6 +34,18 @@ export const deserializeTransactionOutput = (stream) => {
   const assetId = reverseHex(stream.read(32))
   const value = fixed82num(stream.read(8))
   const scriptHash = reverseHex(stream.read(20))
+  return { assetId, value, scriptHash }
+}
+
+/**
+ * A helper method to create a TransactionOutput using human-friendly inputs.
+ * @param {string} assetSym - The Symbol of the asset to send. Typically NEO or GAS.
+ * @param {number} value - The value to send.
+ * @param {string} address - The address to send the asset to.
+ */
+export const createTransactionOutput = (assetSym, value, address) => {
+  const assetId = ASSET_ID[assetSym]
+  const scriptHash = getScriptHashFromAddress(address)
   return { assetId, value, scriptHash }
 }
 
