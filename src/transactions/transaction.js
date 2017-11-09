@@ -1,4 +1,6 @@
-import { TX_VERSION } from '../consts'
+import { getScriptHashFromPublicKey, getScriptHashFromAddress, isAddress } from '../wallet'
+import { TX_VERSION, ASSET_ID } from '../consts'
+import { createScript } from '../sc'
 import * as comp from './components'
 import * as core from './core'
 import * as exc from './exclusive'
@@ -47,6 +49,67 @@ class Transaction {
    */
   get hash () {
     return core.getTransactionHash(this)
+  }
+
+  /**
+   * Creates a ClaimTransaction with the given parameters.
+   * @param {string} publicKeyOrAddress - Public key (Encoded form) or address
+   * @param {Object} claimData - Claim Data provided by API
+   * @param {Object} [override={}] - Optional overrides (eg. custom version)
+   * @return {Transaction} Unsigned Transaction
+   */
+  static createClaimTx (publicKeyOrAddress, claimData, override = {}) {
+    const txConfig = Object.assign({
+      type: 2,
+      version: TX_VERSION.CLAIM
+    }, override)
+    let totalClaim = 0
+    let maxClaim = 255
+    const claims = claimData.claims.slice(0, maxClaim).map((c) => {
+      totalClaim += c.claim
+      return { prevHash: c.txid, prevIndex: c.index }
+    })
+    txConfig.outputs = [{
+      assetId: ASSET_ID.GAS,
+      value: totalClaim / 100000000,
+      scriptHash: isAddress(publicKeyOrAddress) ? getScriptHashFromAddress(publicKeyOrAddress) : getScriptHashFromPublicKey(publicKeyOrAddress)
+    }]
+    return new Transaction(Object.assign(txConfig, { exclusive: claims }, override))
+  }
+
+  /**
+   * Creates a ContractTransaction with the given parameters.
+   * @param {Balance} balances - Current assets available.
+   * @param {TransactionOutput[]} intents - All sending intents as TransactionOutputs
+   * @param {Object} [override={}] - Optional overrides (eg.custom versions)
+   * @return {Transaction} Unsigned Transaction
+   */
+  static createContractTx (balances, intents, override = {}) {
+    const txConfig = Object.assign({
+      type: 128,
+      version: TX_VERSION.CONTRACT
+    }, override)
+    let { inputs, change } = core.calculateInputs(balances, intents)
+    return new Transaction(Object.assign(txConfig, { inputs, outputs: intents.concat(change) }, override))
+  }
+
+  /**
+   * Creates an InvocationTransaction with the given parameters.
+   * @param {Balance} balances - Balance of address
+   * @param {TransactionOutput[]} intents - Sending intents as transactionOutputs
+   * @param {Object|string} invoke - Invoke Script as an object or hexstring
+   * @param {number} gasCost - Gas to attach for invoking script
+   * @param {Object} [override={}] - Optional overrides (eg.custom versions)
+   * @return {string} Unsigned Transaction
+   */
+  static createInvocationTx (balances, intents, invoke, gasCost, override = {}) {
+    const txConfig = Object.assign({
+      type: 209,
+      version: TX_VERSION.INVOCATION
+    }, override)
+    const { inputs, change } = core.calculateInputs(balances, intents, gasCost)
+    const script = typeof (invoke) === 'string' ? invoke : createScript(invoke)
+    return new Transaction(Object.assign(txConfig, { inputs, outputs: intents.concat(change), script, gas: gasCost }, override))
   }
 
   /**

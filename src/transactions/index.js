@@ -1,7 +1,7 @@
+import Tx from './transaction'
 import * as core from './core'
 import * as comp from './components'
 import * as e from './exclusive'
-import * as _c from './create'
 
 /**
  * NEO's default Endianness from RPC calls is Little Endian.
@@ -21,9 +21,9 @@ import * as _c from './create'
  */
 
 const create = {
-  claim: _c.createClaimTx,
-  contract: _c.createContractTx,
-  invocation: _c.createInvocationTx
+  claim: Tx.createClaimTx,
+  contract: Tx.createContractTx,
+  invocation: Tx.createInvocationTx
 }
 
 const serialize = {
@@ -56,6 +56,7 @@ export default {
   }
 }
 
+export { Tx as Transaction }
 export * from './core'
 export * from './components'
 export * from './create'
