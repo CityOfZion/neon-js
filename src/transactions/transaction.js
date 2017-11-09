@@ -12,7 +12,7 @@ import * as exc from './exclusive'
  * This class is a wrapper around the various transaction building methods found in this folder.
  */
 class Transaction {
-  constructor ({ type = 128, version = TX_VERSION, attributes = [], inputs = [], outputs = [], scripts = [], exclusive = {} }) {
+  constructor ({ type = 128, version = TX_VERSION.CONTRACT, attributes = [], inputs = [], outputs = [], scripts = [], exclusive = {} }) {
     /** @type {number} */
     this.type = type
 

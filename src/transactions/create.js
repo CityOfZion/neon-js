@@ -12,7 +12,7 @@ import { TX_VERSION, ASSETS, ASSET_ID } from '../consts'
 export const createClaimTx = (publicKeyOrAddress, claimData, override = {}) => {
   const tx = Object.assign({
     type: 2,
-    version: TX_VERSION,
+    version: TX_VERSION.CLAIM,
     scripts: []
   }, override)
   const inputs = []
@@ -46,7 +46,7 @@ export const createClaimTx = (publicKeyOrAddress, claimData, override = {}) => {
 export const createContractTx = (publicKey, balances, intents, override = {}) => {
   const tx = Object.assign({
     type: 128,
-    version: TX_VERSION,
+    version: TX_VERSION.CONTRACT,
     scripts: []
   }, override)
   const attributes = []
@@ -67,7 +67,7 @@ export const createContractTx = (publicKey, balances, intents, override = {}) =>
 export const createInvocationTx = (publicKey, balances, intents, invoke, gasCost, override = {}) => {
   const tx = Object.assign({
     type: 209,
-    version: TX_VERSION,
+    version: TX_VERSION.INVOCATION,
     scripts: []
   }, override)
   const attributes = []

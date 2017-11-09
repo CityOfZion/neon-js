@@ -30,4 +30,8 @@ export const NEO_NETWORK = {
 
 export const RPC_VERSION = '2.3.2'
 
-export const TX_VERSION = 0
+export const TX_VERSION = {
+  'CLAIM': 0,
+  'CONTRACT': 0,
+  'INVOCATION': 1
+}
