@@ -30,7 +30,7 @@ const serializeClaimExclusive = (tx) => {
 }
 
 const getClaimExclusive = (tx) => {
-  return { claims: tx.claims }
+  return Object.assign({ claims: [] }, { claims: tx.claims })
 }
 
 const deserializeContractExclusive = (ss) => {
@@ -66,7 +66,7 @@ const serializeInvocationExclusive = (tx) => {
 }
 
 const getInvocationExclusive = (tx) => {
-  return { script: tx.script, gas: tx.gas }
+  return Object.assign({ script: '', gas: 0 }, { script: tx.script, gas: tx.gas })
 }
 
 export const serialize = {
