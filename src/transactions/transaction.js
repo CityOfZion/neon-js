@@ -17,7 +17,7 @@ import * as exc from './exclusive'
  * @param {number} config.type - Transaction type. Default is 128 (ContractTransaction).
  * @param {number} config.version - Transaction version. Default is latest version for ContractTransaction.
  * @param {TransactionAttribute[]} config.attributes - Transaction Attributes.
- * @param {TransactionInput[]} config.inputs - Transcation Inputs.
+ * @param {TransactionInput[]} config.inputs - Transaction Inputs.
  * @param {TransactionOutput[]} config.outputs - Transaction Outputs.
  * @param {Witness[]} config.scripts - Witnesses.
  */
