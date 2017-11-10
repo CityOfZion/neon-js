@@ -60,9 +60,9 @@ export const serializeTransactionAttribute = (attr) => {
   if (attr.data.length > maxTransactionAttributeSize) throw new Error()
   let out = num2hexstring(attr.usage)
   if (attr.usage === 0x81) {
-    out += num2hexstring(attr.data.length)
+    out += num2hexstring(attr.data.length / 2)
   } else if (attr.usage === 0x90 || attr.usage >= 0xf0) {
-    out += num2VarInt(attr.data.length)
+    out += num2VarInt(attr.data.length / 2)
   }
   if (attr.usage === 0x02 || attr.usage === 0x03) {
     out += attr.data.substr(2, 64)
