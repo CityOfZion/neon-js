@@ -178,6 +178,18 @@ class Transaction {
   }
 
   /**
+   * Calculate the inputs required based on existing outputs provided. Also takes into account the fees required through the gas property.
+   * @param {Balance} balance - Balance to retrieve inputs from.
+   * @return {Transaction} this
+   */
+  calculate (balance) {
+    const {inputs, change} = core.calculateInputs(balance, this.outputs, this.gas)
+    this.inputs = inputs
+    this.outputs = this.outputs.concat(change)
+    return this
+  }
+
+  /**
    * Serialize the transaction and return it as a hexstring.
    * @param {boolean} signed  - Whether to serialize the signatures. Signing requires it to be serialized without the signatures.
    * @return {string} Hexstring.
