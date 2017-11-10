@@ -72,6 +72,15 @@ describe('Components', function () {
         s.should.eql(deserializedTx.outputs[i])
       }
     })
+
+    it('create', () => {
+      const txOut = c.createTransactionOutput('NEO', 1, 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW')
+      txOut.should.eql({
+        assetId: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
+        value: 1,
+        scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
+      })
+    })
   })
 
   // describe.skip('Attribute', function () {
