@@ -122,7 +122,8 @@ class Transaction {
    * @param {Object} [override={}] - Optional overrides (eg.custom versions)
    * @return {string} Unsigned Transaction
    */
-  static createInvocationTx (balances, intents, invoke, gasCost, override = {}) {
+  static createInvocationTx (balances, intents, invoke, gasCost = 0, override = {}) {
+    if (intents === null) intents = []
     const txConfig = Object.assign({
       type: 209,
       version: TX_VERSION.INVOCATION

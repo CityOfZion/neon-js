@@ -14,6 +14,7 @@ import * as comp from './components'
 export const calculateInputs = (balances, intents, gasCost = 0) => {
   // We will work in integers here to be more accurate.
   // As assets are stored as Fixed8, we just multiple everything by 10e8 and round off to get integers.
+  if (intents === null) intents = []
   const requiredAssets = intents.reduce((assets, intent) => {
     const fixed8Value = Math.round(intent.value * 100000000)
     assets[intent.assetId] ? assets[intent.assetId] += fixed8Value : assets[intent.assetId] = fixed8Value
