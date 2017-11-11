@@ -12,9 +12,9 @@ import * as e from './exclusive'
 
 const create = {
   tx: (...args) => new Tx(...args),
-  claim: Tx.createClaimTx,
-  contract: Tx.createContractTx,
-  invocation: Tx.createInvocationTx
+  claimTx: Tx.createClaimTx,
+  contractTx: Tx.createContractTx,
+  invocationTx: Tx.createInvocationTx
 }
 
 const serialize = {
