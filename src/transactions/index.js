@@ -10,17 +10,8 @@ import * as e from './exclusive'
  * and makes it easy to interact with other tools (eg pasting into block explorer)
  */
 
-/**
- * @typedef Transaction
- * @property {number} type
- * @property {number} version
- * @property {TransactionAttribute[]} attributes
- * @property {TransactionInput[]} inputs
- * @property {TransactionOutput[]} outputs
- * @property {Witness[]} scripts
- */
-
 const create = {
+  tx: (...args) => new Tx(...args),
   claim: Tx.createClaimTx,
   contract: Tx.createContractTx,
   invocation: Tx.createInvocationTx

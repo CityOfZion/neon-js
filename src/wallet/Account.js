@@ -41,7 +41,7 @@ class Account {
     }
   }
 
-  /** @return {string} */
+  /** @type {string} */
   get privateKey () {
     if (this._privateKey) {
       return this._privateKey
@@ -52,7 +52,7 @@ class Account {
 
   /**
    * Returns the public key in encoded form. This is the form that is the short version (starts with 02 or 03). If you require the unencoded form, do use the publicKey method instead of this getter.
-   * @return {string}
+   * @type {string}
    *  */
   get publicKey () {
     if (this._publicKey) {
@@ -75,7 +75,7 @@ class Account {
     }
   }
 
-  /** @return {string} */
+  /** @type {string} */
   get scriptHash () {
     if (this._scriptHash) {
       return this._scriptHash
@@ -90,7 +90,7 @@ class Account {
     }
   }
 
-  /** @return {string} */
+  /** @type {string} */
   get address () {
     if (this._address) {
       return this._address

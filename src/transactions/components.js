@@ -8,10 +8,20 @@ import { ASSET_ID } from '../consts'
  * @property {number} prevIndex - Index of the coin in the previous transaction, Uint16
  */
 
+/**
+ * Serializes a TransactionInput.
+ * @param {TransactionInput} input
+ * @return {string}
+ */
 export const serializeTransactionInput = (input) => {
   return reverseHex(input.prevHash) + reverseHex(num2hexstring(input.prevIndex, 4))
 }
 
+/**
+ * Deserializes a stream of hexstring into a TransactionInput.
+ * @param {StringStream} stream
+ * @return {TransactionInput}
+ */
 export const deserializeTransactionInput = (stream) => {
   const prevHash = reverseHex(stream.read(32))
   const prevIndex = parseInt(reverseHex(stream.read(2)), 16)
@@ -25,11 +35,21 @@ export const deserializeTransactionInput = (stream) => {
  * @property {string} scriptHash - Uint160
  */
 
+/**
+ * Serializes a TransactionOutput.
+ * @param {TransactionOutput} output
+ * @return {string}
+ */
 export const serializeTransactionOutput = (output) => {
   const value = num2fixed8(output.value)
   return reverseHex(output.assetId) + value + reverseHex(output.scriptHash)
 }
 
+/**
+ * Deserializes a stream into a TransactionOutput.
+ * @param {StringStream} stream
+ * @return {TransactionOutput}
+ */
 export const deserializeTransactionOutput = (stream) => {
   const assetId = reverseHex(stream.read(32))
   const value = fixed82num(stream.read(8))
@@ -56,6 +76,11 @@ export const createTransactionOutput = (assetSym, value, address) => {
  */
 const maxTransactionAttributeSize = 65535
 
+/**
+ * Serializes a TransactionAttribute.
+ * @param {TransactionAttribute} attr
+ * @return {string}
+ */
 export const serializeTransactionAttribute = (attr) => {
   if (attr.data.length > maxTransactionAttributeSize) throw new Error()
   let out = num2hexstring(attr.usage)
@@ -72,6 +97,11 @@ export const serializeTransactionAttribute = (attr) => {
   return out
 }
 
+/**
+ * Deserializes a stream into a TransactionAttribute
+ * @param {StringStream} stream
+ * @return {TransactionAttribute}
+ */
 export const deserializeTransactionAttribute = (stream) => {
   const attr = {
     usage: parseInt(stream.read(1), 16)
@@ -98,12 +128,22 @@ export const deserializeTransactionAttribute = (stream) => {
  * @property {string} verificationScript - This data is stored as is (Little Endian)
  */
 
+/**
+ * Serializes a Witness.
+ * @param {Witness} witness
+ * @return {string}
+ */
 export const serializeWitness = (witness) => {
   const invoLength = num2VarInt(witness.invocationScript.length / 2)
   const veriLength = num2VarInt(witness.verificationScript.length / 2)
   return invoLength + witness.invocationScript + veriLength + witness.verificationScript
 }
 
+/**
+ * Deserializes a stream into a Witness
+ * @param {StringStream} stream
+ * @return {Witness}
+ */
 export const deserializeWitness = (stream) => {
   const invocationScript = stream.readVarBytes()
   const verificationScript = stream.readVarBytes()
