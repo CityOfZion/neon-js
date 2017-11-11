@@ -126,7 +126,7 @@ export const deserializeTransaction = (data) => {
 
 /**
  * Signs a transaction with the corresponding privateKey. We are dealing with it as an Transaction object as multi-sig transactions require us to sign the transaction without signatures.
- * @param {Object} transaction - Transaction as an object
+ * @param {Transaction} transaction - Transaction as an object
  * @param {string} privateKey - The private key. This method does not check if the private key is valid (aka that the inputs come from the corresponding address)
  * @return {Object} Signed transaction as an object.
  */
