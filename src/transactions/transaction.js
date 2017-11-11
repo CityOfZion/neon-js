@@ -205,6 +205,15 @@ class Transaction {
   serializeExclusiveData () {
     return exc.serialize[this.type](this)
   }
+
+  /**
+   * Signs a transaction.
+   * @param {string} privateKey
+   * @return {Transaction} this
+   */
+  sign (privateKey) {
+    return core.signTransaction(this, privateKey)
+  }
 }
 
 export default Transaction
