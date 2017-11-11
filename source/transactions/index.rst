@@ -33,6 +33,9 @@ The Transaction class is a wrapper class that contains all the tools required to
   .addOutput('NEO',1,someAddress)
   .addRemark('I am sending 1 NEO to someAddress') // Add an remark
   .calculate(balance) // Now we add in the balance we retrieve from an external API and calculate the required inputs.
+  .sign(privateKey) // Sign with the private key of the balance
+
+  const hash = tx.hash // Store the hash so we can use it to query a block explorer.
 
   // Now we can use this serializedTx string and send it through sendrawtransaction RPC call.
   const serializedTx = tx.serialize()
