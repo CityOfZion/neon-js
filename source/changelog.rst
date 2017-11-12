@@ -30,6 +30,14 @@ This details the changes made from the previous recorded version.
     - Key manipulation methods streamlined to the minimum. No more ``getAddressFromPrivateKey``.  Methods now only transform the key one level.
     - Key verification methods fully implemented for every possible key format. Follows convention of ``isKeyFormat``.
 
+- Transaction Refactor
+
+    - Transaction is now an ES6 class instead of a JS object. Transaction is now the recommended way to construct and manipulate transactions.
+    - Refactor methods to utilise the new Transaction class.
+    - Removed ``publicKey`` argument from create Transaction methods as address is sufficient for generating scriptHash.
+    - Add human-friendly method for creating TransactionOutput.
+    - Ability to add a remark to Transaction through ``addRemark``
+
 - RPC package
 
     - RPCClient class models a NEO Node. Instantiate with ``Neon.create.rpcClient(url)``. Comes with built-in methods for RPC calls.
@@ -45,8 +53,20 @@ This details the changes made from the previous recorded version.
 
     - ``generateDeployScript`` in ``sc`` is a wrapper for generating a deploy script.
 
-1.1.0
+
+1.1.x
 =====
+
+1.1.1
+-----
+
+- Ledger support
+
+    - Add ability to sign using external function for neonDB API.
+    - Bugfix for _emitNum
+
+1.1.0
+-----
 
 - Transaction Overhaul
 
