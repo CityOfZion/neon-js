@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Account } from '../wallet'
-import { createClaimTx, createContractTx, createInvocationTx, getTransactionHash, signTransaction } from '../transactions'
+import { Transaction } from '../transactions'
 import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
 
@@ -74,7 +74,7 @@ export const getBalance = (net, address) => {
 }
 
 /**
- * Get amounts of available (spent) and unavailable claims
+ * Get amounts of available (spent) and unavailable claims.
  * @param {string} net - 'MainNet' or 'TestNet'.
  * @param {string} address - Address to check.
  * @return {Promise<Claim>} An Object with available and unavailable GAS amounts.
@@ -87,9 +87,9 @@ export const getClaimAmounts = (net, address) => {
 }
 
 /**
- * Returns the best performing (highest block + fastest) node RPC
+ * Returns the best performing (highest block + fastest) node RPC.
  * @param {string} net - 'MainNet' or 'TestNet'.
- * @return {Promise<string>} The URL of the best performing node or the custom URL provided.
+ * @return {Promise<string>} The URL of the best performing node.
  */
 export const getRPCEndpoint = (net) => {
   const apiEndpoint = getAPIEndpoint(net)
@@ -140,11 +140,12 @@ export const doClaimAllGas = (net, privateKey, signingFunction) => {
     .then((values) => {
       endpt = values[0]
       const claims = values[1]
-      const unsignedTx = createClaimTx(account.publicKey, claims)
+      if (claims.length === 0) throw new Error('No claimable gas!')
+      const unsignedTx = Transaction.createClaimTx(account.publicKey, claims)
       if (signingFunction) {
         return signingFunction(unsignedTx, account.publicKey)
       } else {
-        return signTransaction(unsignedTx, account.privateKey)
+        return unsignedTx.sign(account.privateKey)
       }
     })
     .then((signedResult) => {
@@ -153,7 +154,7 @@ export const doClaimAllGas = (net, privateKey, signingFunction) => {
     })
     .then((res) => {
       if (res.result === true) {
-        res.txid = getTransactionHash(signedTx)
+        res.txid = signedTx
       }
       return res
     })
@@ -167,23 +168,32 @@ export const doClaimAllGas = (net, privateKey, signingFunction) => {
  * @param {gasCost} amount - The Gas to send as SC fee.
  * @return {Promise<Response>} RPC Response
  */
-export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost) => {
+export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunction) => {
   const account = new Account(fromWif)
   const intents = [{ assetId: ASSET_ID.NEO, value: neo, scriptHash: scriptHash }]
   const invoke = { operation: 'mintTokens', scriptHash }
   const rpcEndpointPromise = getRPCEndpoint(net)
   const balancePromise = getBalance(net, account.address)
   let signedTx
+  let endpt
   return Promise.all([rpcEndpointPromise, balancePromise])
     .then((values) => {
-      const [endpt, balances] = values
-      const unsignedTx = createInvocationTx(account.publicKey, balances, intents, invoke, gasCost, { version: 1 })
-      signedTx = signTransaction(unsignedTx, account.privateKey)
+      endpt = values[0]
+      let balances = values[1]
+      const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { version: 1 })
+      if (signingFunction) {
+        return signingFunction(unsignedTx, account.publicKey)
+      } else {
+        unsignedTx.sign(account.privateKey)
+      }
+    })
+    .then((signedResult) => {
+      signedTx = signedResult
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
     .then((res) => {
       if (res.result === true) {
-        res.txid = getTransactionHash(signedTx)
+        res.txid = signedTx.hash
       }
       return res
     })
@@ -211,11 +221,11 @@ export const doSendAsset = (net, toAddress, from, assetAmounts, signingFunction)
     .then((values) => {
       endpt = values[0]
       const balance = values[1]
-      const unsignedTx = createContractTx(fromAcct.publicKey, balance, intents)
+      const unsignedTx = Transaction.createContractTx(balance, intents)
       if (signingFunction) {
         return signingFunction(unsignedTx, fromAcct.publicKey)
       } else {
-        return signTransaction(unsignedTx, fromAcct.privateKey)
+        return unsignedTx.sign(fromAcct.privateKey)
       }
     })
     .then((signedResult) => {
@@ -224,7 +234,7 @@ export const doSendAsset = (net, toAddress, from, assetAmounts, signingFunction)
     })
     .then((res) => {
       if (res.result === true) {
-        res.txid = getTransactionHash(signedTx)
+        res.txid = signedTx.hash
       }
       return res
     })

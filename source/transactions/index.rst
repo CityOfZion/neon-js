@@ -18,6 +18,28 @@ The Transactions module is exposed as::
 
 Transactions form the core of the interaction with the blockchain. In order to effect any state changes on the chain, a transaction is required to be sent and processed into a block by the consensus nodes.
 
+Transaction
+-----------
+
+The Transaction class is a wrapper class that contains all the tools required to manipulate and build transactions. This allows us to dynamically add intents, remarks at will instead of cramming everything into a single method.
+
+::
+
+  import Neon from 'neon-js'
+  // Let us create a ContractTransaction with a custom version
+  let tx = Neon.create.tx({type: 128, version:2})
+  // Now let us add an intention to send 1 NEO to someone
+  tx
+  .addOutput('NEO',1,someAddress)
+  .addRemark('I am sending 1 NEO to someAddress') // Add an remark
+  .calculate(balance) // Now we add in the balance we retrieve from an external API and calculate the required inputs.
+  .sign(privateKey) // Sign with the private key of the balance
+
+  const hash = tx.hash // Store the hash so we can use it to query a block explorer.
+
+  // Now we can use this serializedTx string and send it through sendrawtransaction RPC call.
+  const serializedTx = tx.serialize()
+
 Components
 -----------
 

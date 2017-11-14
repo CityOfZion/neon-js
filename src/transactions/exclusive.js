@@ -29,6 +29,10 @@ const serializeClaimExclusive = (tx) => {
   return out
 }
 
+const getClaimExclusive = (tx) => {
+  return Object.assign({ claims: [] }, { claims: tx.claims })
+}
+
 const deserializeContractExclusive = (ss) => {
   return {}
 }
@@ -36,6 +40,10 @@ const deserializeContractExclusive = (ss) => {
 const serializeContractExclusive = (tx) => {
   if (tx.type !== 0x80) throw new Error()
   return ''
+}
+
+const getContractExclusive = (tx) => {
+  return {}
 }
 
 /**
@@ -57,6 +65,10 @@ const serializeInvocationExclusive = (tx) => {
   return out
 }
 
+const getInvocationExclusive = (tx) => {
+  return Object.assign({ script: '', gas: 0 }, { script: tx.script, gas: tx.gas })
+}
+
 export const serialize = {
   2: serializeClaimExclusive,
   128: serializeContractExclusive,
@@ -67,4 +79,10 @@ export const deserialize = {
   2: deserializeClaimExclusive,
   128: deserializeContractExclusive,
   209: deserializeInvocationExclusive
+}
+
+export const get = {
+  2: getClaimExclusive,
+  128: getContractExclusive,
+  209: getInvocationExclusive
 }
