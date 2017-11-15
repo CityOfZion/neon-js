@@ -210,6 +210,46 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost) => {
 }
 
 /**
+ * Test invoke contract operation - this will resolve return values and verify gas cost
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} operation - i.e., 'mintTokens'
+ * @param {array} args - i.e., array of arguments to operation
+ * @param {string} scriptHash - i.e., hash of the target SC
+ * @return {Promise<Response>} RPC Response
+ */
+export const testInvokeContract = (net, operation, args, scriptHash) => {
+  return queryRPC(net, 'invokefunction', [scriptHash, operation, args], 4)
+}
+
+/**
+ * Send invoke contract operation - this sends an asset to an SC using 'sendrawtransaction'
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} operation - i.e., 'mintTokens'
+ * @param {array} args - i.e., array of arguments to operation
+ * @param {string} scriptHash - i.e., hash of the target SC
+ * @param {string} fromWif - The WIF key of the originating address.
+ * @param {string} assetType - 'Neo' or 'Gas'
+ * @param {string} assetAmount - The amount of neo or gas to send to SC.
+ * @param {gasCost} amount - The Gas to send as SC fee.
+ * @return {Promise<Response>} RPC Response
+ */
+export const sendInvokeContract = (net, operation, args, scriptHash, fromWif, assetType, assetAmount, gasCost) => {
+  const account = getAccountFromWIFKey(fromWif)
+  return getBalance(net, account.address).then((balances) => {
+    // TODO: maybe have transactions handle this construction?
+    const intents = [
+      // { assetId: tx.ASSETS['NEO'], value: neo, scriptHash: scriptHash }
+      { assetId: tx.ASSETS[assetType], value: assetAmount, scriptHash: scriptHash }
+    ]
+    const invoke = { operation: operation, scriptHash: scriptHash, args: args }
+    const unsignedTx = tx.create.invocation(account.publicKeyEncoded, balances, intents, invoke, gasCost, { version: 1 })
+    const signedTx = tx.signTransaction(unsignedTx, account.privateKey)
+    const hexTx = tx.serializeTransaction(signedTx)
+    return queryRPC(net, 'sendrawtransaction', [hexTx], 4)
+  })
+}
+
+/**
  * Sends a Transaction.
  * @param {string} net - 'MainNet' or 'TestNet'
  * @param {string|Object} transaction - Serialized hexstring or Transaction Object.
