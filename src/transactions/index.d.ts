@@ -1,18 +1,9 @@
 declare module 'neon-js' {
   type Balance = {
-    GAS: BalanceToken
-    NEO: BalanceToken
+    GAS: TokenBalance
+    NEO: TokenBalance
     address: string
     net: Net
-  }
-  type BalanceToken = {
-    balance: number
-    unspent: BalanceTokenCoin[]
-  }
-  type BalanceTokenCoin = {
-    index: number
-    txid: string
-    value: number
   }
 
   type Claim = {
@@ -24,6 +15,12 @@ declare module 'neon-js' {
     claims: Claim[]
   }
 
+  type Coin = {
+    index: number
+    txid: string
+    value: number
+  }
+
   type Invoke = {
     args?: Array | string | number| boolean
     operation?: string | null
@@ -31,11 +28,16 @@ declare module 'neon-js' {
     useTailCall?: boolean
   }
 
+  type TokenBalance = {
+    balance: number
+    unspent: Coin[]
+  }
+
   interface Transaction {
     attributes: TransactionAttribute[]
     inputs: TransactionInput[]
     outputs: TransactionOutput[]
-    scripts: TransactionWitness[]
+    scripts: Witness[]
     type: number
     version: number
   }
@@ -52,13 +54,14 @@ declare module 'neon-js' {
     scriptHash: string
     value: number
   }
-  type TransactionWitness = {
-    invocationScript: string
-    verificationScript: string
-  }
 
   type TransactionPartial = {
     [P in keyof Transaction]?: Transaction[P]
+  }
+
+  type Witness = {
+    invocationScript: string
+    verificationScript: string
   }
 
   class StringStream {
@@ -118,7 +121,7 @@ declare module 'neon-js' {
 
     output: (output: TransactionOutput) => string
 
-    script: (witness: TransactionWitness) => string
+    script: (witness: Witness) => string
   }
 
   const deserialize: {
@@ -141,7 +144,7 @@ declare module 'neon-js' {
 
     output: (stream: StringStream) => TransactionOutput
 
-    script: (stream: StringStream) => TransactionWitness
+    script: (stream: StringStream) => Witness
   }
 
   function serializeTransaction(
