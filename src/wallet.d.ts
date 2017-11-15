@@ -7,11 +7,7 @@ declare module 'neon-js' {
     publicKeyHash: string
   }
 
-  function addressToScriptHash(
-    txData: string,
-    sign: string,
-    publicKeyEncoded: string
-  ): string
+  function addressToScriptHash(address: string): string
 
   function addContract(
     txData: string,
