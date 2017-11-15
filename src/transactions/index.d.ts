@@ -22,7 +22,7 @@ declare module 'neon-js' {
   }
 
   type Invoke = {
-    args?: Array | string | number| boolean
+    args?: Array<any> | string | number| boolean
     operation?: string | null
     scriptHash: string
     useTailCall?: boolean
@@ -66,10 +66,9 @@ declare module 'neon-js' {
 
   class StringStream {
     public pter: 0
+    public str: string
 
-    constructor(
-      public str: string = ''
-    ): void
+    constructor(str?: string)
 
     public isEmpty(): boolean
     public read(bytes: number): string
@@ -78,8 +77,7 @@ declare module 'neon-js' {
   }
 
   const ASSETS: {
-    [key: string]: 'GAS'
-    [key: string]: 'NEO'
+    [key: string]: 'GAS' | 'NEO' | string
     GAS: string
     NEO: string
   }
@@ -125,7 +123,7 @@ declare module 'neon-js' {
   }
 
   const deserialize: {
-    attribute: comp.deserializeTransactionAttribute
+    attribute: (stream: StringStream) => TransactionAttribute
 
     exclusiveData: {
       2: (stream: StringStream) => {
