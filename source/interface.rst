@@ -60,4 +60,4 @@ The ``Claim`` object is used specifically for constructing ClaimTransaction::
 
 NEO generates GAS when held. When NEO is spent, the gas that it generates is unlocked and made claimable through ClaimTransaction. The ``Claim`` object makes it possible for us to calculate the amount of gas claimable for that coin. The formula is::
 
-  claim = (start - end) * 8 + sysfee
+  claim = ((start - end) * 8 + sysfee) * value
