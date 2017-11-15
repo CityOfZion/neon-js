@@ -2,13 +2,6 @@ import OpCode from './opCode'
 import ScriptBuilder, { createScript } from './scriptBuilder'
 import { str2hexstring } from '../utils.js'
 
-export default {
-  create: {
-    script: createScript,
-    scriptBuilder: () => new ScriptBuilder()
-  }
-}
-
 const generateDeployScript = ({script, name, version, author, email, description, needsStorage = false, returnType = 'ff', paramaterList = undefined}) => {
   const sb = new ScriptBuilder()
   sb
@@ -23,6 +16,14 @@ const generateDeployScript = ({script, name, version, author, email, description
     .emitPush(script)
     .emitSysCall('Neo.Contract.Create')
   return sb
+}
+
+export default {
+  create: {
+    script: createScript,
+    scriptBuilder: (...args) => new ScriptBuilder(...args),
+    deployScript: (...args) => generateDeployScript(...args)
+  }
 }
 
 export { OpCode, ScriptBuilder, createScript, generateDeployScript }

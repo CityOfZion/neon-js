@@ -278,9 +278,10 @@ export default Query
 /**
  * Wrapper for querying node RPC
  * @param {string} url - Node URL.
- * @param {string} method - RPC Method name.
- * @param {Array} params - Array of parameters to send.
- * @param {number} id - Unique id to identity yourself. RPC should reply with same id.
+ * @param {Object} req - The request object.
+ * @param {string} req.method - RPC Method name.
+ * @param {Array} req.params - Array of parameters to send.
+ * @param {number} req.id - Unique id to identity yourself. RPC should reply with same id.
  * @returns {Promise<Response>} RPC Response
  */
 export const queryRPC = (url, req) => {

@@ -89,8 +89,6 @@ Transactions are composed of the following parts:
   Various data required for each transaction. For example, a ClaimTransaction will have the ``claims`` field which contains all claimable transactions. An InvocationTransaction will have the ``script`` field instead for smart contract invocation.
 
 
-
-
 Types
 -----
 
