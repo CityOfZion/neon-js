@@ -25,3 +25,7 @@ npm run build
 ```
 npm install --save git+https://github.com/CityOfZion/neon-js.git
 ```
+
+### Typescript
+
+The typescript declaration files are included _(no need of any @types/...)_.
