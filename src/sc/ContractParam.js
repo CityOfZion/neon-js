@@ -20,13 +20,18 @@ class ContractParam {
   }
 
   static ByteArray (value, from) {
-    if (from === 'Address') {
+    from = from.toLowerCase()
+    if (from === 'address') {
       return new ContractParam('ByteArray', reverseHex(getScriptHashFromAddress(value)))
-    } else if (from === 'Fixed8') {
+    } else if (from === 'fixed8') {
       return new ContractParam('ByteArray', num2fixed8(value))
     } else {
       return new ContractParam('ByteArray', value)
     }
+  }
+
+  static Array (...params) {
+    return new ContractParam('Array', params)
   }
 }
 

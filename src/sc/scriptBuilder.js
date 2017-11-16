@@ -85,6 +85,8 @@ class ScriptBuilder extends StringStream {
         return this._emitNum(param.value)
       case 'ByteArray':
         return this._emitString(param.value)
+      case 'Array':
+        return this._emitArray(param.value)
     }
   }
 
