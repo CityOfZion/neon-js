@@ -1,6 +1,6 @@
 import ContractParam from '../../src/sc/ContractParam'
 
-describe.only('ContractParam', function () {
+describe('ContractParam', function () {
   it('Constructor', () => {
     const cp = new ContractParam('this', 'that')
     cp.should.eql({ type: 'this', value: 'that' })

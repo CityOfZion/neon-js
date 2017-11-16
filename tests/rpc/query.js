@@ -1,4 +1,5 @@
 import Query from '../../src/rpc/query'
+import ContractParam from '../../src/sc/ContractParam'
 import { DEFAULT_REQ, DEFAULT_RPC, ASSET_ID, CONTRACTS } from '../../src/consts'
 import testKeys from '../testKeys.json'
 import axios from 'axios'
@@ -309,15 +310,25 @@ describe('Query', function () {
       //   })
     })
 
-    it('invoke', () => {
-      return Query.invoke(CONTRACTS.TEST_RPX,
-        { type: 'String', value: 'name' }, { type: 'Boolean', value: false })
+    describe('invoke', () => {
+      it('simple', () => {
+        return Query.invoke(CONTRACTS.TEST_RPX, ContractParam.string('name'), ContractParam.boolean(false))
+          .execute(DEFAULT_RPC.TEST)
+          .then((res) => {
+            res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
+            res.result.state.should.equal('HALT, BREAK')
+            res.result.stack[0].value.should.equal('5265642050756c736520546f6b656e20332e312e34')
+          })
+      })
+
+      it('complex', () => {
+        return Query.invoke(CONTRACTS.TEST_RPX, ContractParam.string('balanceOf'), ContractParam.array(ContractParam.byteArray('AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx', 'address')))
         .execute(DEFAULT_RPC.TEST)
         .then((res) => {
           res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
           res.result.state.should.equal('HALT, BREAK')
-          res.result.stack[0].value.should.equal('5265642050756c736520546f6b656e20332e312e34')
         })
+      })
     })
 
     it('invokeFunction', () => {
