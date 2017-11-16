@@ -207,10 +207,10 @@ class Query {
    * @param {Array} params
    * @return {Query}
    */
-  static invoke (scriptHash, params) {
+  static invoke (scriptHash, ...params) {
     return new Query({
       method: 'invoke',
-      params: [scriptHash, ...params]
+      params: [scriptHash, params]
     })
   }
 
@@ -220,10 +220,10 @@ class Query {
    * @param {Array} params
    * @return {Query}
    */
-  static invokeFunction (scriptHash, operation, params) {
+  static invokeFunction (scriptHash, operation, ...params) {
     return new Query({
       method: 'invokefunction',
-      params: [scriptHash, operation, ...params]
+      params: [scriptHash, operation, params]
     })
   }
 
