@@ -70,3 +70,27 @@ A simple wrapper method is provided for convenience.
   }
   // Returns a hexstring
   const vmScript = Neon.create.script(props)
+
+ContractParam
+=============
+
+ContractParam objects provide a convenient way to construct calls for ``invoke`` and ``invokefunction``. These RPC calls utilise a JSON struct for arguments and can be messy to create by hand::
+
+  {
+    type: String,
+    value: 'this is a string'
+  }
+
+ContractParam currently supports creating string, boolean, integer, bytearray and array::
+
+  import Neon, {sc, rpc, CONST} from 'neon-js'
+  const param1 = Neon.create.contractParam('String', 'balanceOf')
+  // This is a convenient way to convert an address to a reversed scriptHash that smart contracts use.
+  const param2 = sc.ContractParam.byteArray('AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx', 'address')
+
+  rpc.Query.invoke(CONST.CONTRACTS.TEST_RPX, param1, sc.ContractParam.array(param2))
+    .then((res) => {
+      console.log(res)
+    })
+
+ContractParams are compatible with ScriptBuilder so it is fine to pass them in as arguments directly.
