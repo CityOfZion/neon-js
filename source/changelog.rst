@@ -49,9 +49,10 @@ This details the changes made from the previous recorded version.
     - Added coinmarketcap query support for easy price queries.
     - Token query (NEP5) is shifted here.
 
-- Deploy Script Support
+- Smart Contract Support
 
     - ``generateDeployScript`` in ``sc`` is a wrapper for generating a deploy script.
+    - ContractParam added to support ``invoke`` and ``invokefunction`` RPC calls.
 
 
 1.1.x

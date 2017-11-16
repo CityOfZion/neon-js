@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { serializeTransaction } from '../transactions'
 import { DEFAULT_REQ } from '../consts'
-import { str2hexstring } from '../utils'
 
 /**
  * @class Query
@@ -175,10 +174,9 @@ class Query {
    * @return {Query}
    */
   static getStorage (scriptHash, key) {
-    const encodedKey = str2hexstring(key)
     return new Query({
       method: 'getstorage',
-      params: [scriptHash, encodedKey]
+      params: [scriptHash, key]
     })
   }
 
@@ -208,10 +206,10 @@ class Query {
    * @param {Array} params
    * @return {Query}
    */
-  static invoke (scriptHash, params) {
+  static invoke (scriptHash, ...params) {
     return new Query({
       method: 'invoke',
-      params: [scriptHash, ...params]
+      params: [scriptHash, params]
     })
   }
 
@@ -221,10 +219,10 @@ class Query {
    * @param {Array} params
    * @return {Query}
    */
-  static invokeFunction (scriptHash, operation, params) {
+  static invokeFunction (scriptHash, operation, ...params) {
     return new Query({
       method: 'invokefunction',
-      params: [scriptHash, operation, ...params]
+      params: [scriptHash, operation, params]
     })
   }
 
@@ -267,7 +265,7 @@ class Query {
    */
   static validateAddress (addr) {
     return new Query({
-      method: 'validateAddress',
+      method: 'validateaddress',
       params: [addr]
     })
   }

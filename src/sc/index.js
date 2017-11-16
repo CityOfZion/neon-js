@@ -1,5 +1,6 @@
 import OpCode from './opCode'
-import ScriptBuilder, { createScript } from './scriptBuilder'
+import ScriptBuilder, { createScript } from './ScriptBuilder'
+import ContractParam from './ContractParam'
 import { str2hexstring } from '../utils.js'
 
 const generateDeployScript = ({script, name, version, author, email, description, needsStorage = false, returnType = 'ff', paramaterList = undefined}) => {
@@ -20,10 +21,11 @@ const generateDeployScript = ({script, name, version, author, email, description
 
 export default {
   create: {
+    contractParam: (...args) => new ContractParam(...args),
     script: createScript,
     scriptBuilder: (...args) => new ScriptBuilder(...args),
     deployScript: (...args) => generateDeployScript(...args)
   }
 }
 
-export { OpCode, ScriptBuilder, createScript, generateDeployScript }
+export { ContractParam, OpCode, ScriptBuilder, createScript, generateDeployScript }

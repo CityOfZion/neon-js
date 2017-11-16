@@ -1,4 +1,4 @@
-import { StringStream, num2hexstring, reverseHex, int2hex, str2ab, ab2hexstring } from '../utils.js'
+import { StringStream, num2hexstring, reverseHex, int2hex, str2ab, ab2hexstring, str2hexstring } from '../utils.js'
 import OpCode from './opCode.js'
 
 /**
@@ -69,6 +69,28 @@ class ScriptBuilder extends StringStream {
   }
 
   /**
+   * Private method to append a ContractParam
+   * @param {ContractParam} param
+   * @return {ScriptBuilder} this
+   */
+  _emitParam (param) {
+    if (!param.type) throw new Error(`No type available!`)
+    if (!param.value) throw new Error(`No value available!`)
+    switch (param.type) {
+      case 'String':
+        return this._emitString(str2hexstring(param.value))
+      case 'Boolean':
+        return this.emit(param.value ? OpCode.PUSHT : OpCode.PUSHF)
+      case 'Integer':
+        return this._emitNum(param.value)
+      case 'ByteArray':
+        return this._emitString(param.value)
+      case 'Array':
+        return this._emitArray(param.value)
+    }
+  }
+
+  /**
    * Appends an Opcode, followed by args
    * @param {OpCode} op
    * @param {string} args
@@ -129,7 +151,11 @@ class ScriptBuilder extends StringStream {
       case 'number':
         return this._emitNum(data)
       case 'object':
-        return this._emitArray(data)
+        if (Array.isArray(data)) {
+          return this._emitArray(data)
+        } else {
+          return this._emitParam(data)
+        }
       case 'undefined':
         return this.emitPush(false)
       default:
