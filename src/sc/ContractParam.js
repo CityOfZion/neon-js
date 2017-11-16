@@ -7,20 +7,20 @@ class ContractParam {
     this.value = value
   }
 
-  static String (value) {
+  static string (value) {
     return new ContractParam('String', value)
   }
 
-  static Boolean (value) {
+  static boolean (value) {
     return new ContractParam('Boolean', !!value)
   }
 
-  static Integer (value) {
+  static integer (value) {
     return new ContractParam('Integer', Math.round(parseInt(value, 10)))
   }
 
-  static ByteArray (value, from) {
-    from = from.toLowerCase()
+  static byteArray (value, from) {
+    if (from) from = from.toLowerCase()
     if (from === 'address') {
       return new ContractParam('ByteArray', reverseHex(getScriptHashFromAddress(value)))
     } else if (from === 'fixed8') {
@@ -30,7 +30,7 @@ class ContractParam {
     }
   }
 
-  static Array (...params) {
+  static array (...params) {
     return new ContractParam('Array', params)
   }
 }
