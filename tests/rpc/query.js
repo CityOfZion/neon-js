@@ -15,8 +15,16 @@ describe('Query', function () {
   })
 
   describe('Methods', function () {
-    beforeEach(() => {
+    before(() => {
       mock = new MockAdapter(axios)
+    })
+
+    afterEach(() => {
+      mock.reset()
+    })
+
+    after(() => {
+      mock.restore()
     })
 
     it('executes correctly', () => {
@@ -79,9 +87,9 @@ describe('Query', function () {
     })
   })
 
-  describe.only('RPC Queries', function () {
+  describe('RPC Queries', function () {
     // No Mocks, use live test RPC
-
+    this.timeout(5000)
     it('getAccountState', () => {
       return Query.getAccountState(testKeys.a.address)
         .execute(DEFAULT_RPC.TEST)
@@ -215,7 +223,8 @@ describe('Query', function () {
         })
     })
 
-    it('getPeers', () => {
+    it.skip('getPeers', () => {
+      // Skip due to unstable response from seed1
       return Query.getPeers()
         .execute(DEFAULT_RPC.TEST)
         .then((res) => {
