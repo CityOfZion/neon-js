@@ -266,7 +266,7 @@ class Query {
    */
   static validateAddress (addr) {
     return new Query({
-      method: 'validateAddress',
+      method: 'validateaddress',
       params: [addr]
     })
   }
