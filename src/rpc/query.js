@@ -175,10 +175,9 @@ class Query {
    * @return {Query}
    */
   static getStorage (scriptHash, key) {
-    const encodedKey = str2hexstring(key)
     return new Query({
       method: 'getstorage',
-      params: [scriptHash, encodedKey]
+      params: [scriptHash, key]
     })
   }
 
