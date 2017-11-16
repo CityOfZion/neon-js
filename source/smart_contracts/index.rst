@@ -65,7 +65,7 @@ A simple wrapper method is provided for convenience.
   import Neon from 'neon-js'
   const props = {
     scriptHash: Neon.CONST.CONTRACTS.TEST_RPX,
-    operation: 'name'
+    operation: 'name',
     args: []
   }
   // Returns a hexstring
