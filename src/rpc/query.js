@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { serializeTransaction } from '../transactions'
 import { DEFAULT_REQ } from '../consts'
-import { str2hexstring } from '../utils'
 
 /**
  * @class Query
