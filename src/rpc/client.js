@@ -91,7 +91,7 @@ class RPCClient {
    * @return {Promise<Object|string>}
    */
   getBlock (indexOrHash, verbose = 1) {
-    return this.execute(Query.getblock(indexOrHash, verbose))
+    return this.execute(Query.getBlock(indexOrHash, verbose))
       .then((res) => {
         return res.result
       })
