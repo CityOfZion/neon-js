@@ -2,6 +2,15 @@ import { num2VarInt, reverseHex } from '../src/utils'
 
 describe('Utils', () => {
   describe('num2VarInt', () => {
+    it('throws if negative', () => {
+      (() => num2VarInt(-1)).should.throw()
+    })
+    it('throws if not a number', () => {
+      (() => num2VarInt('1')).should.throw()
+    })
+    it('throws if unsafe', () => {
+      (() => num2VarInt(Number.MAX_SAFE_INTEGER + 1)).should.throw()
+    })
     it('converts a byte size int', () => {
       const actual = num2VarInt(1)
       const expected = '01'

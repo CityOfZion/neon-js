@@ -104,6 +104,9 @@ export const fixed82num = (fixed8) => {
  * @returns {string} hexstring of the variable Int.
  */
 export const num2VarInt = (num) => {
+  if (typeof num !== 'number') throw new Error('VarInt must be numeric')
+  if (num < 0) throw new RangeError('VarInts are unsigned (> 0)')
+  if (!Number.isSafeInteger(num)) throw new RangeError('VarInt must be a safe integer')
   if (num < 0xfd) {
     return num2hexstring(num)
   } else if (num <= 0xffff) {
