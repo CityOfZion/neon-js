@@ -13,6 +13,7 @@ export const ASSET_ID = {
 }
 
 export const CONTRACTS = {
+  RPX: 'ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9',
   TEST_RPX: '5b7074e873973a6ed3708862f219a6fbf4d1c411'
 }
 
