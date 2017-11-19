@@ -67,13 +67,16 @@ export const int2hex = mNumber => {
 }
 
 /**
- * Converts a number to a hexstring of a suitable size
+ * Converts a number to a big endian hexstring of a suitable size, optionally little endian
  * @param {number} num
- * @param {number} size - The required size in chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.
+ * @param {number} size - The required size in hex chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.
+ * @param {boolean} littleEndian - Encode the hex in little endian form
  */
-export const num2hexstring = (num, size = 2) => {
+export const num2hexstring = (num, size = 2, littleEndian = false) => {
   let hexstring = num.toString(16)
-  return hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length)
+  hexstring = hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length)
+  if (littleEndian) hexstring = reverseHex(hexstring)
+  return hexstring
 }
 
 /**
@@ -104,11 +107,14 @@ export const num2VarInt = (num) => {
   if (num < 0xfd) {
     return num2hexstring(num)
   } else if (num <= 0xffff) {
-    return 'fd' + num2hexstring(num, 4)
+    // uint16
+    return 'fd' + num2hexstring(num, 4, true)
   } else if (num <= 0xffffffff) {
-    return 'fe' + num2hexstring(num, 8)
+    // uint32
+    return 'fe' + num2hexstring(num, 8, true)
   } else {
-    return 'ff' + num2hexstring(num, 8) + num2hexstring(num / Math.pow(2, 32), 8)
+    // uint64
+    return 'ff' + num2hexstring(num, 16, true)
   }
 }
 
