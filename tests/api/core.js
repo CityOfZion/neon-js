@@ -108,18 +108,16 @@ describe('Core API', function () {
     this.timeout(15000)
     it('neonDB', () => {
       const config = {
-        url: 'http://seed1.neo.org:20332',
         net: 'TestNet',
         address: 'AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx',
         privateKey: '3edee7036b8fd9cef91de47386b191dd76db2888a553e7736bb02808932a915b',
+        intents: core.makeIntent({ GAS: 0.1 }, 'AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx'),
         script: '00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc',
         gas: 0
       }
       return core.doInvoke(config)
         .then((c) => {
-          console.log(c)
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
         })
     })
   })
