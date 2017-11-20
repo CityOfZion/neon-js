@@ -239,19 +239,3 @@ export const doSendAsset = (net, toAddress, from, assetAmounts, signingFunction)
       return res
     })
 }
-
-export default {
-  get: {
-    APIEndPoint: getAPIEndpoint,
-    RPCEndPoint: getRPCEndpoint,
-    claimAmounts: getClaimAmounts,
-    balance: getBalance,
-    walletDBHeight: getWalletDBHeight,
-    transactionHistory: getTransactionHistory
-  },
-  do: {
-    sendAsset: doSendAsset,
-    claimAllGas: doClaimAllGas,
-    mintTokens: doMintTokens
-  }
-}
