@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Interface &mdash; neon-js dev documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/banner.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="neon-js dev documentation" href="index.html"/>
+        <link rel="next" title="Wallet" href="wallet.html"/>
+        <link rel="prev" title="Installation" href="installation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> neon-js
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                dev
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#balance">Balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coin">Coin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#claim">Claim</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wallet.html">Wallet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">neon-js</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Interface</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/interface.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+    
+    
+
+
+
+    <p class="scv-banner scv-sphinx_rtd_theme"><b>Warning:</b> This document is for the development version of neon-js.</p>
+<div class="section" id="interface">
+<h1>Interface<a class="headerlink" href="#interface" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal"><span class="pre">neon-js</span></code> is merely a library to build interactions with the blockchain. It relies on external data sources for the data it needs for building transactions. However, this information is not available easily from the official NEO nodes. Thus, there have been efforts to build 3rd-party nodes in order to fill this gap.</p>
+<p>Here, we will describe the information required from external data sources.</p>
+<div class="section" id="balance">
+<h2>Balance<a class="headerlink" href="#balance" title="Permalink to this headline">¶</a></h2>
+<p>A balance describes the assets that an address owns, as well as list the unspent coins. The unspent coins are used in most of the transactions that require transfer of assets. <code class="docutils literal"><span class="pre">neon-js</span></code> currently requires this format:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="p">{</span><span class="c1">// Balance</span>
+  <span class="nx">address</span><span class="o">:</span> <span class="nx">string</span><span class="p">,</span> <span class="c1">// The address</span>
+  <span class="nx">NEO</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">balance</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span>
+    <span class="nx">unspent</span><span class="o">:</span> <span class="nx">Coin</span><span class="p">[]</span>
+    <span class="p">},</span>
+  <span class="nx">GAS</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">balance</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span>
+    <span class="nx">unspent</span><span class="o">:</span> <span class="nx">Coin</span><span class="p">[]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The address property acts as an ID for this object and is used to derive the scriptHash when calculating the change to give back to the account.</p>
+<p>All the other properties are named using asset symbols. Currently, there are only 2 assets available (NEO/GAS) and they both have similar names to symbols. Symbols should be in capital letters and be of 3-4 letters long.</p>
+<p>Each symbol will be contain the <code class="docutils literal"><span class="pre">balance</span></code> and <code class="docutils literal"><span class="pre">unspent</span></code> property. <code class="docutils literal"><span class="pre">balance</span></code> tells us the total amount of this asset available and serves as a simple check if there is enough assets available to fulfil the sending intents. <code class="docutils literal"><span class="pre">unspent</span></code> contains a list of <code class="docutils literal"><span class="pre">Coin</span></code> that are used as Transaction Inputs.</p>
+</div>
+<div class="section" id="coin">
+<h2>Coin<a class="headerlink" href="#coin" title="Permalink to this headline">¶</a></h2>
+<p>The coin is essentially a spendable Transaction Output:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="p">{</span><span class="c1">// Coin</span>
+  <span class="nx">index</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span>
+  <span class="nx">txid</span><span class="o">:</span> <span class="nx">string</span><span class="p">,</span>
+  <span class="nx">value</span><span class="o">:</span> <span class="nx">number</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The coin describes an existing unspent TransactionOutput that can be used as an TransactionInput in a new transaction.</p>
+</div>
+<div class="section" id="claim">
+<h2>Claim<a class="headerlink" href="#claim" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">Claim</span></code> object is used specifically for constructing ClaimTransaction:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nx">claim</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span> <span class="c1">// Amount claimable, multipled by 10^8</span>
+  <span class="nx">end</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span> <span class="c1">// Block which this coin was spent</span>
+  <span class="nx">index</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span> <span class="c1">// array index of transaction in outputs</span>
+  <span class="nx">start</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span> <span class="c1">// Block which this coin was created</span>
+  <span class="nx">sysfee</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span> <span class="c1">// System fees involved</span>
+  <span class="nx">txid</span><span class="o">:</span> <span class="nx">string</span><span class="p">,</span> <span class="c1">// Transaction ID of the coin</span>
+  <span class="nx">value</span><span class="o">:</span> <span class="nx">number</span> <span class="c1">// Amount of NEO held in this coin</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>NEO generates GAS when held. When NEO is spent, the gas that it generates is unlocked and made claimable through ClaimTransaction. The <code class="docutils literal"><span class="pre">Claim</span></code> object makes it possible for us to calculate the amount of gas claimable for that coin. The formula is:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">claim</span> <span class="o">=</span> <span class="p">((</span><span class="nx">start</span> <span class="o">-</span> <span class="nx">end</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="nx">sysfee</span><span class="p">)</span> <span class="o">*</span> <span class="nx">value</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="wallet.html" class="btn btn-neutral float-right" title="Wallet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: dev
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../1.1.1/index.html">1.1.1</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="interface.html">dev</a></dd>
+            <dd><a href="../master/index.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

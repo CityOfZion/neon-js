@@ -97,6 +97,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interface.html">Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
@@ -225,7 +226,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>str</strong> (<em>string</em>) &#8211; ASCII string</li>
+<li><strong>str</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; ASCII string</li>
 </ul>
 </td>
 </tr>
@@ -244,7 +245,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>str</strong> (<em>string</em>) &#8211; HEX string</li>
+<li><strong>str</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; HEX string</li>
 </ul>
 </td>
 </tr>
@@ -282,7 +283,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>str</strong> (<em>string</em>) &#8211; ASCII string</li>
+<li><strong>str</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; ASCII string</li>
 </ul>
 </td>
 </tr>
@@ -316,14 +317,15 @@
 <dl class="function">
 <dt id="num2hexstring">
 <code class="descname">num2hexstring</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#num2hexstring" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a number to a hexstring of a suitable size</p>
+<dd><p>Converts a number to a big endian hexstring of a suitable size, optionally little endian</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>num</strong> (<em>number</em>) &#8211; </li>
-<li><strong>size</strong> (<em>number</em>) &#8211; The required size in chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.</li>
+<li><strong>size</strong> (<em>number</em>) &#8211; The required size in hex chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.</li>
+<li><strong>littleEndian</strong> (<a class="reference internal" href="sc.html#boolean" title="boolean"><em>boolean</em></a>) &#8211; Encode the hex in little endian form</li>
 </ul>
 </td>
 </tr>
@@ -360,7 +362,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>fixed8</strong> (<em>string</em>) &#8211; number in Fixed8 representation</li>
+<li><strong>fixed8</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; number in Fixed8 representation</li>
 </ul>
 </td>
 </tr>
@@ -400,8 +402,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>str1</strong> (<em>string</em>) &#8211; HEX string</li>
-<li><strong>str2</strong> (<em>string</em>) &#8211; HEX string</li>
+<li><strong>str1</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; HEX string</li>
+<li><strong>str2</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; HEX string</li>
 </ul>
 </td>
 </tr>
@@ -441,7 +443,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>hex</strong> (<em>string</em>) &#8211; HEX string</li>
+<li><strong>hex</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; HEX string</li>
 </ul>
 </td>
 </tr>
@@ -464,7 +466,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>hex</strong> (<em>string</em>) &#8211; String to hash</li>
+<li><strong>hex</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; String to hash</li>
 </ul>
 </td>
 </tr>
@@ -484,7 +486,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>hex</strong> (<em>string</em>) &#8211; String to hash</li>
+<li><strong>hex</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; String to hash</li>
 </ul>
 </td>
 </tr>
@@ -504,7 +506,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>hex</strong> (<em>string</em>) &#8211; String to hash</li>
+<li><strong>hex</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; String to hash</li>
 </ul>
 </td>
 </tr>
@@ -527,7 +529,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>str</strong> (<em>string</em>) &#8211; The string to read as a stream.</li>
+<li><strong>str</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The string to read as a stream.</li>
 </ul>
 </td>
 </tr>

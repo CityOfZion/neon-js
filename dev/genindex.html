@@ -95,6 +95,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="wallet.html">Wallet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transactions/index.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rpc/index.html">Node RPC</a></li>
@@ -171,6 +172,7 @@
 <div class="genindex-jumpbox">
  <a href="#_"><strong>_</strong></a>
  | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
@@ -179,6 +181,7 @@
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
@@ -199,6 +202,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/sc.html#_emitNum">_emitNum() (built-in function)</a>
 </li>
+      <li><a href="reference/sc.html#_emitParam">_emitParam() (built-in function)</a>
+</li>
       <li><a href="reference/sc.html#_emitString">_emitString() (built-in function)</a>
 </li>
   </ul></td>
@@ -209,11 +214,31 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/utility.html#ab2hexstring">ab2hexstring() (built-in function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/utility.html#ab2str">ab2str() (built-in function)</a>
 </li>
       <li><a href="reference/wallet.html#Account">Account() (class)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/tx.html#addOutput">addOutput() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#addRemark">addRemark() (built-in function)</a>
+</li>
+      <li><a href="reference/sc.html#array">array() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#attributes">attributes (None attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/sc.html#boolean">boolean() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/sc.html#byteArray">byteArray() (built-in function)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -221,11 +246,25 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/tx.html#calculate">calculate() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#calculateInputs">calculateInputs() (built-in function)</a>
+</li>
       <li><a href="reference/rpc.html#completed">completed (None attribute)</a>
+</li>
+      <li><a href="reference/sc.html#ContractParam">ContractParam() (class)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/tx.html#createClaimTx">createClaimTx() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#createContractTx">createContractTx() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#createInvocationTx">createInvocationTx() (built-in function)</a>
+</li>
       <li><a href="reference/sc.html#createScript">createScript() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#createTransactionOutput">createTransactionOutput() (built-in function)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -235,10 +274,22 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/wallet.html#decrypt">decrypt() (built-in function)</a>
 </li>
-      <li><a href="reference/api.html#doClaimAllGas">doClaimAllGas() (built-in function)</a>
+      <li><a href="reference/tx.html#deserialize">deserialize() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#deserializeTransaction">deserializeTransaction() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#deserializeTransactionAttribute">deserializeTransactionAttribute() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#deserializeTransactionInput">deserializeTransactionInput() (built-in function)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/tx.html#deserializeTransactionOutput">deserializeTransactionOutput() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#deserializeWitness">deserializeWitness() (built-in function)</a>
+</li>
+      <li><a href="reference/api.html#doClaimAllGas">doClaimAllGas() (built-in function)</a>
+</li>
       <li><a href="reference/api.html#doMintTokens">doMintTokens() (built-in function)</a>
 </li>
       <li><a href="reference/api.html#doSendAsset">doSendAsset() (built-in function)</a>
@@ -260,6 +311,8 @@
       <li><a href="reference/sc.html#emitSysCall">emitSysCall() (built-in function)</a>
 </li>
       <li><a href="reference/wallet.html#encrypt">encrypt() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#exclusiveData">exclusiveData (None attribute)</a>
 </li>
       <li><a href="reference/rpc.html#execute">execute() (built-in function)</a>, <a href="reference/rpc.html#execute">[1]</a>
 </li>
@@ -309,10 +362,10 @@
 </li>
       <li><a href="reference/rpc.html#getPeers">getPeers() (built-in function)</a>, <a href="reference/rpc.html#getPeers">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/api.html#getPrice">getPrice() (built-in function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/wallet.html#getPrivateKeyFromWIF">getPrivateKeyFromWIF() (built-in function)</a>
 </li>
       <li><a href="reference/wallet.html#getPublicKeyFromPrivateKey">getPublicKeyFromPrivateKey() (built-in function)</a>
@@ -333,6 +386,8 @@
 </li>
       <li><a href="reference/api.html#getTokenInfo">getTokenInfo() (built-in function)</a>
 </li>
+      <li><a href="reference/tx.html#getTransactionHash">getTransactionHash() (built-in function)</a>
+</li>
       <li><a href="reference/api.html#getTransactionHistory">getTransactionHistory() (built-in function)</a>
 </li>
       <li><a href="reference/rpc.html#getTxOut">getTxOut() (built-in function)</a>, <a href="reference/rpc.html#getTxOut">[1]</a>
@@ -351,6 +406,8 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/tx.html#hash">hash (None attribute)</a>
+</li>
       <li><a href="reference/utility.html#hash160">hash160() (built-in function)</a>
 </li>
       <li><a href="reference/utility.html#hash256">hash256() (built-in function)</a>
@@ -369,7 +426,11 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/tx.html#inputs">inputs (None attribute)</a>
+</li>
       <li><a href="reference/utility.html#int2hex">int2hex() (built-in function)</a>
+</li>
+      <li><a href="reference/sc.html#integer">integer() (built-in function)</a>
 </li>
       <li><a href="reference/rpc.html#invoke">invoke() (built-in function)</a>, <a href="reference/rpc.html#invoke">[1]</a>
 </li>
@@ -377,10 +438,10 @@
 </li>
       <li><a href="reference/rpc.html#invokeScript">invokeScript() (built-in function)</a>, <a href="reference/rpc.html#invokeScript">[1]</a>
 </li>
-      <li><a href="reference/wallet.html#isAddress">isAddress() (built-in function)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/wallet.html#isAddress">isAddress() (built-in function)</a>
+</li>
       <li><a href="reference/utility.html#isEmpty">isEmpty() (built-in function)</a>
 </li>
       <li><a href="reference/wallet.html#isNEP2">isNEP2() (built-in function)</a>
@@ -404,6 +465,14 @@
       <li><a href="reference/utility.html#num2hexstring">num2hexstring() (built-in function)</a>
 </li>
       <li><a href="reference/utility.html#num2VarInt">num2VarInt() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/tx.html#outputs">outputs (None attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -461,15 +530,37 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/sc.html#ScriptBuilder">ScriptBuilder() (class)</a>
 </li>
+      <li><a href="reference/tx.html#scripts">scripts (None attribute)</a>
+</li>
       <li><a href="reference/rpc.html#sendRawTransaction">sendRawTransaction() (built-in function)</a>, <a href="reference/rpc.html#sendRawTransaction">[1]</a>
 </li>
-      <li><a href="reference/utility.html#sha256">sha256() (built-in function)</a>
+      <li><a href="reference/tx.html#serialize">serialize() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#serializeExclusiveData">serializeExclusiveData() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#serializeTransaction">serializeTransaction() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#serializeTransactionAttribute">serializeTransactionAttribute() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#serializeTransactionInput">serializeTransactionInput() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#serializeTransactionOutput">serializeTransactionOutput() (built-in function)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/tx.html#serializeWitness">serializeWitness() (built-in function)</a>
+</li>
+      <li><a href="reference/utility.html#sha256">sha256() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#sign">sign() (built-in function)</a>
+</li>
+      <li><a href="reference/tx.html#signTransaction">signTransaction() (built-in function)</a>
+</li>
       <li><a href="reference/utility.html#str2ab">str2ab() (built-in function)</a>
 </li>
       <li><a href="reference/utility.html#str2hexstring">str2hexstring() (built-in function)</a>
+</li>
+      <li><a href="reference/sc.html#string">string() (built-in function)</a>
 </li>
       <li><a href="reference/utility.html#StringStream">StringStream() (class)</a>
 </li>
@@ -481,13 +572,17 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="transactions/index.html#TransactionAttribute">TransactionAttribute() (built-in function)</a>
+      <li><a href="reference/tx.html#Transaction">Transaction() (class)</a>
+</li>
+      <li><a href="reference/tx.html#TransactionAttribute">TransactionAttribute() (built-in function)</a>, <a href="transactions/index.html#TransactionAttribute">[1]</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="transactions/index.html#TransactionInput">TransactionInput() (built-in function)</a>
+      <li><a href="reference/tx.html#TransactionInput">TransactionInput() (built-in function)</a>, <a href="transactions/index.html#TransactionInput">[1]</a>
 </li>
-      <li><a href="transactions/index.html#TransactionOutput">TransactionOutput() (built-in function)</a>
+      <li><a href="reference/tx.html#TransactionOutput">TransactionOutput() (built-in function)</a>, <a href="transactions/index.html#TransactionOutput">[1]</a>
+</li>
+      <li><a href="reference/sc.html#type">type (None attribute)</a>, <a href="reference/tx.html#type">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -499,7 +594,9 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/rpc.html#version">version (None attribute)</a>
+      <li><a href="reference/sc.html#value">value (None attribute)</a>
+</li>
+      <li><a href="reference/rpc.html#version">version (None attribute)</a>, <a href="reference/tx.html#version">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -507,7 +604,7 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="transactions/index.html#Witness">Witness() (built-in function)</a>
+      <li><a href="reference/tx.html#Witness">Witness() (built-in function)</a>, <a href="transactions/index.html#Witness">[1]</a>
 </li>
   </ul></td>
 </tr></table>

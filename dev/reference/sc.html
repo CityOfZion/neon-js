@@ -97,6 +97,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interface.html">Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
@@ -192,6 +193,124 @@
 <h1>Smart Contract<a class="headerlink" href="#smart-contract" title="Permalink to this headline">¶</a></h1>
 <p>Module <code class="docutils literal"><span class="pre">sc</span></code></p>
 <dl class="class">
+<dt id="ContractParam">
+<em class="property">class </em><code class="descname">ContractParam</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ContractParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>ContractParam models after the ContractParameter class in C#. It is useful to craft arguments that are used in invoke and invokefunction RPC calls.
+ContractParams come with convenient static methods to create arguments. For example, the byteArray method helps convert an address into reversed ScriptHash form used in smart contracts.</p>
+<dl class="function">
+<dt id="array">
+<code class="descname">array</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an Array ContractParam.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>params</strong> (<em>any</em>) &#8211; params to be encapsulated in an array.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="boolean">
+<code class="descname">boolean</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#boolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a Boolean ContractParam. Does basic checks to convert value into a boolean.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>any</em>) &#8211; A value that can be converted to a boolean</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="byteArray">
+<code class="descname">byteArray</code><span class="sig-paren">(</span><em>value</em>, <em>format</em><span class="sig-paren">)</span><a class="headerlink" href="#byteArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a ByteArray ContractParam.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>any</em>) &#8211; </li>
+<li><strong>format</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; The format that this value represents. Different formats are parsed differently.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="integer">
+<code class="descname">integer</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#integer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an Integer ContractParam. Does basic parsing and rounding to convert value into an Integer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>any</em>) &#8211; A value that can be parsed to an Integer using parseInt.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="string">
+<code class="descname">string</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a String ContractParam.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; A string.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="type">
+<code class="descname">type</code><a class="headerlink" href="#type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="value">
+<code class="descname">value</code><a class="headerlink" href="#value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="ScriptBuilder">
 <em class="property">class </em><code class="descname">ScriptBuilder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ScriptBuilder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a VM script in hexstring. Used for constructing smart contract method calls.</p>
@@ -204,8 +323,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>scriptHash</strong> (<em>string</em>) &#8211; Hexstring(BE)</li>
-<li><strong>useTailCall</strong> (<em>boolean</em>) &#8211; Defaults to false</li>
+<li><strong>scriptHash</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; Hexstring(BE)</li>
+<li><strong>useTailCall</strong> (<a class="reference internal" href="#boolean" title="boolean"><em>boolean</em></a>) &#8211; Defaults to false</li>
 </ul>
 </td>
 </tr>
@@ -257,6 +376,26 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="_emitParam">
+<code class="descname">_emitParam</code><span class="sig-paren">(</span><em>param</em><span class="sig-paren">)</span><a class="headerlink" href="#_emitParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Private method to append a ContractParam</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>param</strong> (<a class="reference internal" href="#ContractParam" title="ContractParam"><em>ContractParam</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ScriptBuilder</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="_emitString">
 <code class="descname">_emitString</code><span class="sig-paren">(</span><em>hexstring</em><span class="sig-paren">)</span><a class="headerlink" href="#_emitString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Private method to append a hexstring.</p>
@@ -265,7 +404,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>hexstring</strong> (<em>string</em>) &#8211; Hexstring(BE)</li>
+<li><strong>hexstring</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; Hexstring(BE)</li>
 </ul>
 </td>
 </tr>
@@ -286,7 +425,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>op</strong> (<em>OpCode</em>) &#8211; </li>
-<li><strong>args</strong> (<em>string</em>) &#8211; </li>
+<li><strong>args</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -306,10 +445,10 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>scriptHash</strong> (<em>string</em>) &#8211; Hexstring(BE)</li>
+<li><strong>scriptHash</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; Hexstring(BE)</li>
 <li><strong>operation</strong> (<em>string|null</em>) &#8211; ASCII, defaults to null</li>
 <li><strong>args</strong> (<em>Array|string|number|boolean</em>) &#8211; any</li>
-<li><strong>useTailCall</strong> (<em>boolean</em>) &#8211; Use TailCall instead of AppCall</li>
+<li><strong>useTailCall</strong> (<a class="reference internal" href="#boolean" title="boolean"><em>boolean</em></a>) &#8211; Use TailCall instead of AppCall</li>
 </ul>
 </td>
 </tr>
@@ -349,7 +488,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>api</strong> (<em>string</em>) &#8211; api of SysCall</li>
+<li><strong>api</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; api of SysCall</li>
 </ul>
 </td>
 </tr>
@@ -372,10 +511,10 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>props</strong> (<em>Object</em>) &#8211; Properties passed in as an object.</li>
-<li><strong>props.scriptHash</strong> (<em>string</em>) &#8211; The contract scriptHash.</li>
-<li><strong>props.operation</strong> (<em>string</em>) &#8211; The method name to call.</li>
+<li><strong>props.scriptHash</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; The contract scriptHash.</li>
+<li><strong>props.operation</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; The method name to call.</li>
 <li><strong>props.args</strong> (<em>Array</em>) &#8211; The arguments of the method to pass in.</li>
-<li><strong>props.useTailCall</strong> (<em>boolean</em>) &#8211; To use Tail Call.</li>
+<li><strong>props.useTailCall</strong> (<a class="reference internal" href="#boolean" title="boolean"><em>boolean</em></a>) &#8211; To use Tail Call.</li>
 </ul>
 </td>
 </tr>

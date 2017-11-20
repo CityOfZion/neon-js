@@ -47,3 +47,29 @@ Modules are exposed through named imports. This allows more fine grained control
 
   Neon.tx.createClaimTx(...args)
   const query = new rpc.Query()
+
+Require
+-------
+
+As neon-js package uses ES6 module conventions, ``require`` will need to specify which module do they want exactly::
+
+  var neon-js = require('neon-js')
+
+  // Semantic Style by using default import
+  var Neon = neon-js.default
+  const query = Neon.create.query()
+
+  // Named imports are available too
+  var wallet = neon-js.wallet
+  var tx = neon-js.tx
+
+  const account = new wallet.Account(privateKey)
+
+Web
+---
+
+neon-js is also packaged for the web. You can add it through a script tag::
+
+  <script src="./lib/browser.js"></script>
+
+The library will be available as a global variable ``Neon``. Similar to ``require`` style, you will have the semantic style under ``default`` and the rest of the named modules exposed at the same level.

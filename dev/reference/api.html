@@ -97,6 +97,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interface.html">Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
@@ -207,8 +208,9 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
-<li><strong>privateKey</strong> (<em>string</em>) &#8211; Private Key or WIF.</li>
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Private Key or WIF.</li>
+<li><strong>signingFunction</strong> (<em>function</em>) &#8211; Optional async signing function. Used for external signing.</li>
 </ul>
 </td>
 </tr>
@@ -228,8 +230,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
-<li><strong>fromWif</strong> (<em>string</em>) &#8211; The WIF key of the originating address.</li>
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>fromWif</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The WIF key of the originating address.</li>
 <li><strong>amount</strong> (<em>gasCost</em>) &#8211; The amount of neo to send to RPX.</li>
 <li><strong>amount</strong> &#8211; The Gas to send as SC fee.</li>
 </ul>
@@ -251,10 +253,11 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
-<li><strong>toAddress</strong> (<em>string</em>) &#8211; The destination address.</li>
-<li><strong>from</strong> (<em>string</em>) &#8211; Private Key or WIF of the sending address.</li>
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>toAddress</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The destination address.</li>
+<li><strong>from</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Private Key or WIF of the sending address.</li>
 <li><strong>assetAmounts</strong> (<em>Object</em>) &#8211; The amount of each asset (NEO and GAS) to send, leave empty for 0.</li>
+<li><strong>signingFunction</strong> (<em>function</em>) &#8211; Optional signing function. Used for external signing.</li>
 </ul>
 </td>
 </tr>
@@ -274,7 +277,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217;, &#8216;TestNet&#8217;, or custom neon-wallet-db URL.</li>
 </ul>
 </td>
 </tr>
@@ -294,8 +297,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
-<li><strong>address</strong> (<em>string</em>) &#8211; Address to check.</li>
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Address to check.</li>
 </ul>
 </td>
 </tr>
@@ -309,14 +312,14 @@
 <dl class="function">
 <dt id="getClaimAmounts">
 <code class="descname">getClaimAmounts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getClaimAmounts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get amounts of available (spent) and unavailable claims</p>
+<dd><p>Get amounts of available (spent) and unavailable claims.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
-<li><strong>address</strong> (<em>string</em>) &#8211; Address to check.</li>
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Address to check.</li>
 </ul>
 </td>
 </tr>
@@ -330,17 +333,17 @@
 <dl class="function">
 <dt id="getRPCEndpoint">
 <code class="descname">getRPCEndpoint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getRPCEndpoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the best performing (highest block + fastest) node RPC</p>
+<dd><p>Returns the best performing (highest block + fastest) node RPC.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217; or a custom URL.</li>
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;string&gt;</strong> &#8211; The URL of the best performing node or the custom URL provided.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;string&gt;</strong> &#8211; The URL of the best performing node.</p>
 </td>
 </tr>
 </tbody>
@@ -356,8 +359,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
-<li><strong>address</strong> (<em>string</em>) &#8211; Address to check.</li>
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Address to check.</li>
 </ul>
 </td>
 </tr>
@@ -377,7 +380,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<em>string</em>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
 </ul>
 </td>
 </tr>
@@ -400,8 +403,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>coin</strong> (<em>string</em>) &#8211; Coin name. NEO or GAS.</li>
-<li><strong>currency</strong> (<em>string</em>) &#8211; Three letter currency symbol.</li>
+<li><strong>coin</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Coin name. NEO or GAS.</li>
+<li><strong>currency</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Three letter currency symbol.</li>
 </ul>
 </td>
 </tr>
@@ -424,8 +427,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<em>string</em>) &#8211; </li>
-<li><strong>scriptHash</strong> (<em>string</em>) &#8211; </li>
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+<li><strong>scriptHash</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -445,9 +448,9 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<em>string</em>) &#8211; </li>
-<li><strong>scriptHash</strong> (<em>string</em>) &#8211; </li>
-<li><strong>address</strong> (<em>string</em>) &#8211; </li>
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+<li><strong>scriptHash</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>

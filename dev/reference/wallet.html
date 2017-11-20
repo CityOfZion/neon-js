@@ -97,6 +97,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interface.html">Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
@@ -203,7 +204,7 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>str</strong> (<em>string</em>) &#8211; WIF/ Private Key / Public Key / Address.</li>
+<li><strong>str</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; WIF/ Private Key / Public Key / Address.</li>
 </ul>
 </td>
 </tr>
@@ -220,8 +221,8 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>wifKey</strong> (<em>string</em>) &#8211; WIF key to encrypt (52 chars long).</li>
-<li><strong>keyphrase</strong> (<em>string</em>) &#8211; The password. Will be encoded as UTF-8.</li>
+<li><strong>wifKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; WIF key to encrypt (52 chars long).</li>
+<li><strong>keyphrase</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).</li>
 </ul>
 </td>
 </tr>
@@ -241,8 +242,8 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>encryptedKey</strong> (<em>string</em>) &#8211; The encrypted key (58 chars long).</li>
-<li><strong>keyphrase</strong> (<em>string</em>) &#8211; The password. Will be encoded as UTF-8.</li>
+<li><strong>encryptedKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The encrypted key (58 chars long).</li>
+<li><strong>keyphrase</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).</li>
 </ul>
 </td>
 </tr>
@@ -296,8 +297,8 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>tx</strong> (<em>string</em>) &#8211; Serialized unsigned transaction.</li>
-<li><strong>privateKey</strong> (<em>string</em>) &#8211; Private Key.</li>
+<li><strong>tx</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Serialized unsigned transaction.</li>
+<li><strong>privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Private Key.</li>
 </ul>
 </td>
 </tr>
@@ -316,7 +317,7 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>scriptHash</strong> (<em>string</em>) &#8211; </li>
+<li><strong>scriptHash</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -335,7 +336,7 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>wif</strong> (<em>string</em>) &#8211; </li>
+<li><strong>wif</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -349,13 +350,14 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <dl class="function">
 <dt id="getPublicKeyFromPrivateKey">
 <code class="descname">getPublicKeyFromPrivateKey</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getPublicKeyFromPrivateKey" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>Calculates the public key from a given private key.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>privateKey</strong> (<em>string</em>) &#8211; </li>
-<li><strong>encode</strong> (<em>boolean</em>) &#8211; </li>
+<li><strong>privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+<li><strong>encode</strong> (<a class="reference internal" href="sc.html#boolean" title="boolean"><em>boolean</em></a>) &#8211; Returns the encoded form if true.</li>
 </ul>
 </td>
 </tr>
@@ -374,7 +376,7 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>address</strong> (<em>string</em>) &#8211; </li>
+<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -393,7 +395,7 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>publicKey</strong> (<em>string</em>) &#8211; </li>
+<li><strong>publicKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -415,7 +417,7 @@ Thus, the name &#8216;scriptHash&#8217; instead of &#8216;keyHash&#8217; is beca
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>publicKey</strong> (<em>string</em>) &#8211; </li>
+<li><strong>publicKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -434,7 +436,7 @@ Thus, the name &#8216;scriptHash&#8217; instead of &#8216;keyHash&#8217; is beca
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>privateKey</strong> (<em>string</em>) &#8211; </li>
+<li><strong>privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -454,7 +456,7 @@ Thus, the name &#8216;scriptHash&#8217; instead of &#8216;keyHash&#8217; is beca
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>address</strong> (<em>string</em>) &#8211; </li>
+<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -474,7 +476,7 @@ Thus, the name &#8216;scriptHash&#8217; instead of &#8216;keyHash&#8217; is beca
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>key</strong> (<em>string</em>) &#8211; </li>
+<li><strong>key</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -488,13 +490,14 @@ Thus, the name &#8216;scriptHash&#8217; instead of &#8216;keyHash&#8217; is beca
 <dl class="function">
 <dt id="isPublicKey">
 <code class="descname">isPublicKey</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#isPublicKey" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if hexstring is a valid Public Key.</p>
+<dd><p>Checks if hexstring is a valid Public Key. Accepts both encoded and unencoded forms.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>key</strong> (<em>string</em>) &#8211; </li>
+<li><strong>key</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+<li><strong>encoded</strong> (<a class="reference internal" href="sc.html#boolean" title="boolean"><em>boolean</em></a>) &#8211; Optional parameter to specify for a specific form. If this is omitted, this function will return true for both forms. If this parameter is provided, this function will only return true for the specific form.</li>
 </ul>
 </td>
 </tr>
@@ -514,7 +517,7 @@ Thus, the name &#8216;scriptHash&#8217; instead of &#8216;keyHash&#8217; is beca
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>nep2</strong> (<em>string</em>) &#8211; </li>
+<li><strong>nep2</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -534,7 +537,7 @@ Thus, the name &#8216;scriptHash&#8217; instead of &#8216;keyHash&#8217; is beca
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>wif</strong> (<em>string</em>) &#8211; </li>
+<li><strong>wif</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>

@@ -95,6 +95,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="wallet.html">Wallet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transactions/index.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rpc/index.html">Node RPC</a></li>
@@ -105,11 +106,15 @@
 <li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id1">2.0.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">1.1.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#x">1.0.x</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">1.0.4</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">1.0.2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id5">1.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#x">1.1.x</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">1.1.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">1.1.0</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">1.0.x</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">1.0.4</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">1.0.2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">1.0.1</a></li>
 </ul>
 </li>
 </ul>
@@ -222,6 +227,17 @@
 </ul>
 </div></blockquote>
 </li>
+<li><p class="first">Transaction Refactor</p>
+<blockquote>
+<div><ul class="simple">
+<li>Transaction is now an ES6 class instead of a JS object. Transaction is now the recommended way to construct and manipulate transactions.</li>
+<li>Refactor methods to utilise the new Transaction class.</li>
+<li>Removed <code class="docutils literal"><span class="pre">publicKey</span></code> argument from create Transaction methods as address is sufficient for generating scriptHash.</li>
+<li>Add human-friendly method for creating TransactionOutput.</li>
+<li>Ability to add a remark to Transaction through <code class="docutils literal"><span class="pre">addRemark</span></code></li>
+</ul>
+</div></blockquote>
+</li>
 <li><p class="first">RPC package</p>
 <blockquote>
 <div><ul class="simple">
@@ -239,17 +255,33 @@
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">Deploy Script Support</p>
+<li><p class="first">Smart Contract Support</p>
 <blockquote>
 <div><ul class="simple">
 <li><code class="docutils literal"><span class="pre">generateDeployScript</span></code> in <code class="docutils literal"><span class="pre">sc</span></code> is a wrapper for generating a deploy script.</li>
+<li>ContractParam added to support <code class="docutils literal"><span class="pre">invoke</span></code> and <code class="docutils literal"><span class="pre">invokefunction</span></code> RPC calls.</li>
 </ul>
 </div></blockquote>
 </li>
 </ul>
 </div>
+<div class="section" id="x">
+<h2>1.1.x<a class="headerlink" href="#x" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id2">
-<h2>1.1.0<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<h3>1.1.1<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">Ledger support</p>
+<blockquote>
+<div><ul class="simple">
+<li>Add ability to sign using external function for neonDB API.</li>
+<li>Bugfix for _emitNum</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h3>1.1.0<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Transaction Overhaul</p>
 <blockquote>
@@ -280,23 +312,24 @@
 </li>
 </ul>
 </div>
-<div class="section" id="x">
-<h2>1.0.x<a class="headerlink" href="#x" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id3">
-<h3>1.0.4<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id4">
+<h2>1.0.x<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h3>1.0.4<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Additional NEP2 wrapper methods (Simple encrypted WIF creation)</li>
 <li>Address validation to guard against sending to non-NEO addresses.</li>
 </ul>
 </div>
-<div class="section" id="id4">
-<h3>1.0.2<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>1.0.2<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Introduce NEP2 Support (encrypt / decrypt WIF)</li>
 </ul>
 </div>
-<div class="section" id="id5">
-<h3>1.0.1<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>1.0.1<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Upgrade API support to v2 for neon-wallet-db</li>
 </ul>

@@ -38,7 +38,7 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="neon-js dev documentation" href="index.html"/>
-        <link rel="next" title="Wallet" href="wallet.html"/>
+        <link rel="next" title="Interface" href="interface.html"/>
         <link rel="prev" title="Overview" href="overview.html"/> 
 
   
@@ -98,8 +98,11 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#import">Import</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#require">Require</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#web">Web</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="wallet.html">Wallet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transactions/index.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rpc/index.html">Node RPC</a></li>
@@ -221,6 +224,31 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="require">
+<h2>Require<a class="headerlink" href="#require" title="Permalink to this headline">¶</a></h2>
+<p>As neon-js package uses ES6 module conventions, <code class="docutils literal"><span class="pre">require</span></code> will need to specify which module do they want exactly:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">neon</span><span class="o">-</span><span class="nx">js</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;neon-js&#39;</span><span class="p">)</span>
+
+<span class="c1">// Semantic Style by using default import</span>
+<span class="kd">var</span> <span class="nx">Neon</span> <span class="o">=</span> <span class="nx">neon</span><span class="o">-</span><span class="nx">js</span><span class="p">.</span><span class="k">default</span>
+<span class="kr">const</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">query</span><span class="p">()</span>
+
+<span class="c1">// Named imports are available too</span>
+<span class="kd">var</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="nx">neon</span><span class="o">-</span><span class="nx">js</span><span class="p">.</span><span class="nx">wallet</span>
+<span class="kd">var</span> <span class="nx">tx</span> <span class="o">=</span> <span class="nx">neon</span><span class="o">-</span><span class="nx">js</span><span class="p">.</span><span class="nx">tx</span>
+
+<span class="kr">const</span> <span class="nx">account</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="web">
+<h2>Web<a class="headerlink" href="#web" title="Permalink to this headline">¶</a></h2>
+<p>neon-js is also packaged for the web. You can add it through a script tag:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span>&lt;script src=&quot;./lib/browser.js&quot;&gt;&lt;/script&gt;
+</pre></div>
+</div>
+<p>The library will be available as a global variable <code class="docutils literal"><span class="pre">Neon</span></code>. Similar to <code class="docutils literal"><span class="pre">require</span></code> style, you will have the semantic style under <code class="docutils literal"><span class="pre">default</span></code> and the rest of the named modules exposed at the same level.</p>
+</div>
 </div>
 
 
@@ -233,7 +261,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="wallet.html" class="btn btn-neutral float-right" title="Wallet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="interface.html" class="btn btn-neutral float-right" title="Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="overview.html" class="btn btn-neutral" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
