@@ -1,5 +1,10 @@
 import axios from 'axios'
 
+/**
+ * Returns the appropriate NeoScan endpoint.
+ * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
+ * @return {string} - URL
+ */
 export const getAPIEndpoint = (net) => {
   switch (net) {
     case 'MainNet':
@@ -11,6 +16,11 @@ export const getAPIEndpoint = (net) => {
   }
 }
 
+/**
+ * Returns an appropriate RPC endpoint retrieved from a NeoScan endpoint.
+ * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
+ * @return {string} - URL
+ */
 export const getRPCEndpoint = (net) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_all_nodes')
@@ -28,10 +38,12 @@ export const getRPCEndpoint = (net) => {
       return nodes[Math.floor(Math.random() * nodes.length)].url
     })
 }
+
 /**
  * Gat balances for an address.
- * @param {string} net - 'MainNet' or 'TestNet'
+ * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
  * @param {string} address - Address to check.
+ * @return {Balance}
   */
 export const getBalance = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
@@ -48,7 +60,13 @@ export const getBalance = (net, address) => {
     })
 }
 
-export const getClaimAmounts = (net, address) => {
+/**
+ * Get claimable amounts for an address.
+ * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
+ * @param {string} address - Address to check.
+ * @return {Claim}
+ */
+export const getClaims = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_claimable/' + address)
     .then((res) => {
