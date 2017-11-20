@@ -1,3 +1,5 @@
+import * as neonDB from './neonDB'
+import * as neoscan from './neoscan'
 import { Account } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Query } from '../rpc'
@@ -17,7 +19,7 @@ const checkProperty = (obj, ...props) => {
 }
 
 /**
- * Helper method to retrieve balance and URL from a certain endpoint.
+ * Helper method to retrieve balance and URL from an endpoint. If URL is provided, it is not overriden.
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
@@ -28,13 +30,104 @@ export const getBalanceFrom = (config, type) => {
   checkProperty(config, 'net', 'address')
   if (!type.getBalance || !type.getRPCEndpoint) throw new Error(`Invalid type. Is this an API object?`)
   const balanceP = type.getBalance(config.net, config.address)
+  const urlP = type.getRPCEndpoint(config.net)
+
+  return Promise.all([balanceP, urlP])
+    .then((values) => {
+      const override = { balance: values[0] }
+      if (!config.url) override.url = values[1]
+      return Object.assign(config, override)
+    })
+}
+
+/**
+ * Helper method to retrieve claims and URL from an endpoint.
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
+ * @param {string} config.address - Wallet address
+ * @param {object} type - The endpoint APi object. eg, neonDB or Neoscan.
+ * @return {object} The config object + url + balance
+ */
+export const getClaimsFrom = (config, type) => {
+  checkProperty(config, 'net', 'address')
+  if (!type.getBalance || !type.getRPCEndpoint) throw new Error(`Invalid type. Is this an API object?`)
+  const claimsP = type.getClaims(config.net, config.address)
   // Get URL
   const urlP = type.getRPCEndpoint(config.net)
   // Return {url, balance, ...props}
 
-  return Promise.all([balanceP, urlP])
+  return Promise.all([claimsP, urlP])
     .then((values) => {
-      return Object.assign(config, { balance: values[0], url: values[1] })
+      return Object.assign(config, { claims: values[0], url: values[1] })
+    })
+}
+
+export const createTx = (config, txType) => {
+  txType = txType.toLowerCase()
+  let tx
+  switch (txType) {
+    case 'claim':
+      checkProperty(config, 'claims')
+      tx = Transaction.createClaimTx(config.address, config.claims)
+      break
+    case 'contract':
+      checkProperty(config, 'balance', 'intents')
+      tx = Transaction.createContractTx(config.balance, config.intents)
+      break
+    case 'invocation':
+      checkProperty(config, 'balance', 'gas', 'script')
+      if (!config.intents) config.intents = []
+      tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas)
+      break
+    default:
+      throw new Error(`Tx Type not found: ${txType}`)
+  }
+  return Promise.resolve(Object.assign(config, { tx }))
+}
+
+/**
+ * Signs a transaction within the config object.
+ * @param {object} config - Configuration object.
+ * @param {Transaction} config.tx - Transaction.
+ * @param {string} [config.privateKey] - private key to sign with.
+ * @param {function} [config.signingFunction] - External signing function.
+ * @return {object} Configuration object.
+ */
+export const signTx = (config) => {
+  checkProperty(config, 'tx')
+  let promise
+  if (config.signingFunction) {
+    let acct = new Account(config.balance.address)
+    promise = config.signingFunction(config.tx, acct.publicKey)
+  } else if (config.privateKey) {
+    let acct = new Account(config.privateKey)
+    if (config.address !== acct.address) throw new Error(`Private Key and Balance address does not match!`)
+    promise = Promise.resolve(config.tx.sign(config.privateKey))
+  } else {
+    throw new Error(`Needs privateKey or signingFunction to sign!`)
+  }
+  return promise.then((signedTx) => {
+    return Object.assign(config, { tx: signedTx })
+  })
+}
+
+/**
+ * Sends a transaction off within the config object.
+ * @param {object} config - Configuration object.
+ * @param {Transaction} config.tx - Signed transaction.
+ * @param {string} config.url - NEO Node URL.
+ * @return {object} Configuration object.
+ */
+export const sendTx = (config) => {
+  checkProperty(config, 'url')
+  return Query.sendRawTransaction(config.tx)
+    .execute(config.url)
+    .then((res) => {
+      // Parse result
+      if (res.result === true) {
+        res.txid = config.tx.hash
+      }
+      return Object.assign(config, { response: res })
     })
 }
 
@@ -56,38 +149,63 @@ export const makeIntent = (assetAmts, address) => {
 /**
  * Function to construct and execute a ContractTransaction.
  * @param {object} config - Configuration object.
- * @param {string} config.url - RPC URL.
- * @param {Balance} config.balance - The balance of an address from which funds are moving out from.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
+ * @param {string} config.address - Wallet address
  * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
  * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
  * @param {TransactionOutput[]} intents - Intents.
  * @return {Response} The RPC response.
  */
 export const sendAsset = (config) => {
-  if (!config.privateKey && !config.signingFunction) throw new Error(`Needs privateKey or signingFunction to sign!`)
-  checkProperty(config, 'balance', 'url', 'intents')
-  // Form Tx
-  const unsignedTx = Transaction.createContractTx(config.balance, config.intents)
-  // Sign Tx
-  let signedTx
-  let signedTxPromise
-  if (config.signingFunction) {
-    let acct = new Account(config.balance.address)
-    signedTxPromise = config.signingFunction(unsignedTx, acct.publicKey)
-  } else if (config.privateKey) {
-    signedTxPromise = Promise.resolve(unsignedTx.sign(config.privateKey))
-  }
-  // Send Tx
-  return signedTxPromise
-    .then((signedResult) => {
-      signedTx = signedResult
-      return Query.sendRawTransaction(signedTx).execute(config.url)
-    })
-    .then((res) => {
-      // Parse result
-      if (res.result === true) {
-        res.txid = signedTx.hash
-      }
-      return res
-    })
+  return getBalanceFrom(config, neonDB)
+    .then(
+    (c) => c,
+    () => getBalanceFrom(config, neoscan)
+    )
+    .then((c) => createTx(c, 'contract'))
+    .then((c) => signTx(c))
+    .then((c) => sendTx(c))
+}
+
+/**
+ * Perform a ClaimTransaction for all available GAS based on API
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
+ * @param {string} config.address - Wallet address
+ * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @return {object} Configuration object.
+ */
+export const claimGas = (config) => {
+  return getClaimsFrom(config, neonDB)
+    .then(
+    (c) => c,
+    () => getClaimsFrom(config, neoscan)
+    )
+    .then((c) => createTx(c, 'claim'))
+    .then((c) => signTx(c))
+    .then((c) => sendTx(c))
+}
+
+/**
+ * Perform a InvocationTransaction based on config given.
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
+ * @param {string} config.address - Wallet address
+ * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {object} [intents] - Intents
+ * @param {string} config.script - VM script.
+ * @param {number} config.gas - gasCost of VM script.
+ * @return {object} Configuration object.
+ */
+export const doInvoke = (config) => {
+  return getBalanceFrom(config, neonDB)
+    .then(
+    (c) => c,
+    () => getBalanceFrom(config, neoscan)
+    )
+    .then((c) => createTx(c, 'invocation'))
+    .then((c) => signTx(c))
+    .then((c) => sendTx(c))
 }
