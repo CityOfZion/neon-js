@@ -37,7 +37,7 @@ describe('NeonDB', function () {
       })
   })
 
-  it('should send NEO', () => {
+  it.skip('should send NEO', () => {
     return neonDB.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'NEO': 1 })
       .then((response) => {
         response.result.should.equal(true)
@@ -55,7 +55,7 @@ describe('NeonDB', function () {
       })
   })
 
-  it('should send GAS', () => {
+  it.skip('should send GAS', () => {
     return neonDB.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'GAS': 1 })
       .then((response) => {
         response.should.have.property('result', true)
