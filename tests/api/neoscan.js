@@ -23,7 +23,7 @@ describe('Neoscan', function () {
   })
 
   it('should get claimable gas', () => {
-    return neoscan.getClaimAmounts('MainNet', mainAddr)
+    return neoscan.getClaims('MainNet', mainAddr)
       .then((response) => {
         response.claims.should.be.an('array')
         response.address.should.equal(mainAddr)
