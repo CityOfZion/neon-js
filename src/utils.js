@@ -1,5 +1,15 @@
+import { SHA256, RIPEMD160, enc } from 'crypto-js'
+
+/**
+ * @param {arrayBuffer} buf
+ * @returns {string} ASCII string
+ */
 export const ab2str = buf => { return String.fromCharCode.apply(null, new Uint8Array(buf)) }
 
+/**
+ * @param {string} str - ASCII string
+ * @returns {arrayBuffer}
+ */
 export const str2ab = str => {
   let bufView = new Uint8Array(str.length)
   for (let i = 0, strLen = str.length; i < strLen; i++) {
@@ -8,6 +18,10 @@ export const str2ab = str => {
   return bufView
 }
 
+/**
+ * @param {string} str - HEX string
+ * @returns {arrayBuffer}
+ */
 export const hexstring2ab = str => {
   let result = []
   while (str.length >= 2) {
@@ -18,6 +32,10 @@ export const hexstring2ab = str => {
   return result
 }
 
+/**
+ * @param {arrayBuffer} arr
+ * @returns {string} HEX string
+ */
 export const ab2hexstring = arr => {
   let result = ''
   for (let i = 0; i < arr.length; i++) {
@@ -31,6 +49,14 @@ export const ab2hexstring = arr => {
 }
 
 /**
+ * @param {string} str - ASCII string
+ * @returns {string} HEX string
+ */
+export const str2hexstring = str => {
+  return ab2hexstring(str2ab(str))
+}
+
+/**
  * convert an integer to hex and add leading zeros
  * @param {number} mNumber
  * @returns {string}
@@ -41,13 +67,16 @@ export const int2hex = mNumber => {
 }
 
 /**
- * Converts a number to a hexstring of a suitable size
+ * Converts a number to a big endian hexstring of a suitable size, optionally little endian
  * @param {number} num
- * @param {number} size - The required size in chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.
+ * @param {number} size - The required size in hex chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.
+ * @param {boolean} littleEndian - Encode the hex in little endian form
  */
-export const num2hexstring = (num, size = 2) => {
+export const num2hexstring = (num, size = 2, littleEndian = false) => {
   let hexstring = num.toString(16)
-  return hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length)
+  hexstring = hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length)
+  if (littleEndian) hexstring = reverseHex(hexstring)
+  return hexstring
 }
 
 /**
@@ -62,7 +91,7 @@ export const num2fixed8 = (num) => {
 
 /**
  * Converts a Fixed8 string to number
- * @param {string} fixed8
+ * @param {string} fixed8 - number in Fixed8 representation
  * @return {number}
  */
 export const fixed82num = (fixed8) => {
@@ -75,17 +104,29 @@ export const fixed82num = (fixed8) => {
  * @returns {string} hexstring of the variable Int.
  */
 export const num2VarInt = (num) => {
+  if (typeof num !== 'number') throw new Error('VarInt must be numeric')
+  if (num < 0) throw new RangeError('VarInts are unsigned (> 0)')
+  if (!Number.isSafeInteger(num)) throw new RangeError('VarInt must be a safe integer')
   if (num < 0xfd) {
     return num2hexstring(num)
   } else if (num <= 0xffff) {
-    return 'fd' + num2hexstring(num, 4)
+    // uint16
+    return 'fd' + num2hexstring(num, 4, true)
   } else if (num <= 0xffffffff) {
-    return 'fe' + num2hexstring(num, 8)
+    // uint32
+    return 'fe' + num2hexstring(num, 8, true)
   } else {
-    return 'ff' + num2hexstring(num, 8) + num2hexstring(num / Math.pow(2, 32), 8)
+    // uint64
+    return 'ff' + num2hexstring(num, 16, true)
   }
 }
 
+/**
+ * XORs two hexstrings
+ * @param {string} str1 - HEX string
+ * @param {string} str2 - HEX string
+ * @returns {string} XOR output as a HEX string
+ */
 export const hexXor = (str1, str2) => {
   if (str1.length !== str2.length) throw new Error()
   if (str1.length % 2 !== 0) throw new Error()
@@ -96,6 +137,11 @@ export const hexXor = (str1, str2) => {
   return ab2hexstring(result)
 }
 
+/**
+ * Reverses an array. Accepts arrayBuffer.
+ * @param {Array} arr
+ * @returns {Uint8Array}
+ */
 export const reverseArray = arr => {
   let result = new Uint8Array(arr.length)
   for (let i = 0; i < arr.length; i++) {
@@ -105,6 +151,13 @@ export const reverseArray = arr => {
   return result
 }
 
+/**
+ * Reverses a HEX string, treating 2 chars as a byte.
+ * @example
+ * reverseHex('abcdef') = 'efcdab'
+ * @param {string} hex - HEX string
+ * @return {string} HEX string reversed in 2s.
+ */
 export const reverseHex = hex => {
   if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
   let out = ''
@@ -114,36 +167,30 @@ export const reverseHex = hex => {
   return out
 }
 
-export const numStoreInMemory = (num, length) => {
-  for (let i = num.length; i < length; i++) {
-    num = '0' + num
-  }
-  let data = reverseArray(Buffer.from(num, 'HEX'))
-
-  return ab2hexstring(data)
-}
-
-export const stringToBytes = str => {
-  let utf8 = unescape(encodeURIComponent(str))
-
-  let arr = []
-  for (let i = 0; i < utf8.length; i++) {
-    arr.push(utf8.charCodeAt(i))
-  }
-
-  return arr
-}
-
+/**
+ * @class StringStream
+ * @classdesc A simple string stream that allows user to read a string byte by byte using read().
+ * @param {string} str - The string to read as a stream.
+ */
 export class StringStream {
   constructor (str = '') {
     this.str = str
     this.pter = 0
   }
 
+  /**
+   * Checks if reached the end of the stream. Does not mean stream is actually empty (this.str is not empty)
+   * @returns {boolean}
+   */
   isEmpty () {
     return this.pter >= this.str.length
   }
 
+  /**
+   * Reads some bytes off the stream.
+   * @param {number} bytes - Number of bytes to read
+   * @returns {string}
+   */
   read (bytes) {
     if (this.isEmpty()) throw new Error()
     const out = this.str.substr(this.pter, bytes * 2)
@@ -151,9 +198,18 @@ export class StringStream {
     return out
   }
 
+  /**
+   * Reads some bytes off the stream using the first byte as the length indicator.
+   * @return {string}
+   */
   readVarBytes () {
     return this.read(this.readVarInt())
   }
+
+  /**
+   * Reads a variable Int.
+   * @returns {number}
+   */
   readVarInt () {
     let len = parseInt(this.read(1), 16)
     if (len === 0xfd) len = parseInt(reverseHex(this.read(2)), 16)
@@ -161,4 +217,36 @@ export class StringStream {
     else if (len === 0xff) len = parseInt(reverseHex(this.read(8)), 16)
     return len
   }
+}
+
+/**
+ * Performs a SHA256 followed by a RIPEMD160.
+ * @param {string} hex - String to hash
+ * @returns {string} hash output
+ */
+export const hash160 = (hex) => {
+  let hexEncoded = enc.Hex.parse(hex)
+  let ProgramSha256 = SHA256(hexEncoded)
+  return RIPEMD160(ProgramSha256).toString()
+}
+
+/**
+ * Performs 2 SHA256.
+ * @param {string} hex - String to hash
+ * @returns {string} hash output
+ */
+export const hash256 = (hex) => {
+  let hexEncoded = enc.Hex.parse(hex)
+  let ProgramSha256 = SHA256(hexEncoded)
+  return SHA256(ProgramSha256).toString()
+}
+
+/**
+ * Performs a single SHA256.
+ * @param {string} hex - String to hash
+ * @returns {string} hash output
+ */
+export const sha256 = (hex) => {
+  let hexEncoded = enc.Hex.parse(hex)
+  return SHA256(hexEncoded).toString()
 }

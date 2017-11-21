@@ -1,12 +1,13 @@
 {
   "devDependencies": {
+    "axios-mock-adapter": "^1.9.0",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.5.2",
     "chai": "^4.0.2",
     "chai-as-promised": "^7.1.0",
-    "elliptic": "^6.4.0",
+    "clean-webpack-plugin": "^0.1.17",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-config-standard": "^10.2.1",
@@ -15,12 +16,14 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "mocha": "^3.4.2",
-    "webpack": "^3.0.0"
+    "webpack": "^3.0.0",
+    "zopfli-webpack-plugin": "^0.1.0"
   },
   "name": "neon-js",
   "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
   "version": "1.1.1",
   "main": "lib/index.js",
+  "browser": "lib/browser.js",
   "types": "src/index.d.ts",
   "dependencies": {
     "axios": "^0.16.2",
@@ -36,10 +39,14 @@
     "wif": "^2.0.6"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
-    "build": "webpack",
-    "prepublish": "npm run build",
-    "lint": "eslint src/**.js"
+    "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
+    "lint": "./node_modules/.bin/eslint ./src/**/*.js ./tests/**/*.js",
+    "build:dev": "./node_modules/.bin/webpack --env.dev",
+    "build:prod": "./node_modules/.bin/webpack --env.prod",
+    "build:docs": "cd source && sphinx-versioning -g ../ -l ./conf.py build source ../docs",
+    "deploy:docs": "cd source && sphinx-versioning -g ../ -l ./conf.py push source gh-pages .",
+    "rebuild": "rm -rf ./node_modules && npm install && ./node_modules/.bin/webpack",
+    "prepublish": "npm run lint && npm run build:prod"
   },
   "repository": {
     "type": "git",
@@ -52,7 +59,7 @@
     "libraries"
   ],
   "author": "Ethan Fast <ejhfast@gmail.com> (https://github.com/Ejhfast)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/CityOfZion/neon-js/issues"
   },

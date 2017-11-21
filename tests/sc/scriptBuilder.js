@@ -1,4 +1,4 @@
-import ScriptBuilder from '../../src/sc/scriptBuilder.js'
+import ScriptBuilder from '../../src/sc/ScriptBuilder'
 
 describe('ScriptBuilder', function () {
   const data = {
