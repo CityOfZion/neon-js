@@ -23,14 +23,14 @@ const checkProperty = (obj, ...props) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {object} type - The endpoint APi object. eg, neonDB or Neoscan.
+ * @param {object} api - The endpoint API object. eg, neonDB or Neoscan.
  * @return {object} The config object + url + balance
  */
-export const getBalanceFrom = (config, type) => {
+export const getBalanceFrom = (config, api) => {
   checkProperty(config, 'net', 'address')
-  if (!type.getBalance || !type.getRPCEndpoint) throw new Error(`Invalid type. Is this an API object?`)
-  const balanceP = type.getBalance(config.net, config.address)
-  const urlP = type.getRPCEndpoint(config.net)
+  if (!api.getBalance || !api.getRPCEndpoint) throw new Error(`Invalid type. Is this an API object?`)
+  const balanceP = api.getBalance(config.net, config.address)
+  const urlP = api.getRPCEndpoint(config.net)
 
   return Promise.all([balanceP, urlP])
     .then((values) => {

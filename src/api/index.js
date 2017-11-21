@@ -1,4 +1,4 @@
-import * as neonDB from './NeonDB'
+import * as neonDB from './neonDB'
 import * as cmc from './coinmarketcap'
 import * as nep5 from './nep5'
 import * as neoscan from './neoscan'
