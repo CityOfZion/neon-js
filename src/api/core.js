@@ -24,7 +24,7 @@ const checkProperty = (obj, ...props) => {
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
  * @param {object} api - The endpoint API object. eg, neonDB or Neoscan.
- * @return {object} The config object + url + balance
+ * @return {object} Configuration object + url + balance
  */
 export const getBalanceFrom = (config, api) => {
   checkProperty(config, 'net', 'address')
@@ -46,7 +46,7 @@ export const getBalanceFrom = (config, api) => {
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
  * @param {object} type - The endpoint APi object. eg, neonDB or Neoscan.
- * @return {object} The config object + url + balance
+ * @return {object} Configuration object + url + balance
  */
 export const getClaimsFrom = (config, type) => {
   checkProperty(config, 'net', 'address')
@@ -62,19 +62,28 @@ export const getClaimsFrom = (config, type) => {
     })
 }
 
+/**
+ * Creates a transaction with the given config and txType.
+ * @param {object} config - Configuration object.
+ * @param {string|number} txType - Transaction Type. Name of transaction or the transaction type number. eg, 'claim' or 2.
+ * @return {object} Configuration object + tx
+ */
 export const createTx = (config, txType) => {
-  txType = txType.toLowerCase()
+  if (typeof txType === 'string') txType = txType.toLowerCase()
   let tx
   switch (txType) {
     case 'claim':
+    case 2:
       checkProperty(config, 'claims')
       tx = Transaction.createClaimTx(config.address, config.claims)
       break
     case 'contract':
+    case 128:
       checkProperty(config, 'balance', 'intents')
       tx = Transaction.createContractTx(config.balance, config.intents)
       break
     case 'invocation':
+    case 209:
       checkProperty(config, 'balance', 'gas', 'script')
       if (!config.intents) config.intents = []
       tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas)
@@ -117,7 +126,7 @@ export const signTx = (config) => {
  * @param {object} config - Configuration object.
  * @param {Transaction} config.tx - Signed transaction.
  * @param {string} config.url - NEO Node URL.
- * @return {object} Configuration object.
+ * @return {object} Configuration object + response
  */
 export const sendTx = (config) => {
   checkProperty(config, 'tx', 'url')
@@ -138,7 +147,7 @@ export const sendTx = (config) => {
  * @param {number} assetAmts.NEO - Amt of NEO to send.
  * @param {number} assetAmts.GAS - Amt of GAS to send.
  * @param {string} address - The address to send to.
- * @return {}
+ * @return {TransactionOutput[]} TransactionOutput
  */
 export const makeIntent = (assetAmts, address) => {
   const acct = new Account(address)
