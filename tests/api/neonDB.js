@@ -1,4 +1,4 @@
-import * as neonDB from '../../src/api/NeonDB'
+import * as neonDB from '../../src/api/neonDB'
 import testKeys from '../testKeys.json'
 
 describe('NeonDB', function () {
