@@ -90,14 +90,15 @@ export const createTx = (config, txType) => {
  * @param {object} config - Configuration object.
  * @param {Transaction} config.tx - Transaction.
  * @param {string} [config.privateKey] - private key to sign with.
- * @param {function} [config.signingFunction] - External signing function.
+ * @param {string} [config.publicKey] - public key. Required if using signingFunction.
+ * @param {function} [config.signingFunction] - External signing function. Requires publicKey.
  * @return {object} Configuration object.
  */
 export const signTx = (config) => {
   checkProperty(config, 'tx')
   let promise
   if (config.signingFunction) {
-    let acct = new Account(config.balance.address)
+    let acct = new Account(config.publicKey)
     promise = config.signingFunction(config.tx, acct.publicKey)
   } else if (config.privateKey) {
     let acct = new Account(config.privateKey)
@@ -119,7 +120,7 @@ export const signTx = (config) => {
  * @return {object} Configuration object.
  */
 export const sendTx = (config) => {
-  checkProperty(config, 'url')
+  checkProperty(config, 'tx', 'url')
   return Query.sendRawTransaction(config.tx)
     .execute(config.url)
     .then((res) => {
