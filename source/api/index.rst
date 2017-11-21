@@ -15,6 +15,50 @@ The ``api`` module contains all 3rd party API that is useful together with Neon.
 
 However, do note that these APIs rely on hosted nodes by 3rd party and thus use them at your own risk.
 
+Core
+-----
+
+These are core methods that help to tie up the different 3rd party APIs in order to simplify transaction creation and sending.
+
+``core`` methods are exposed at the top level of ``api``. The 3 high level methods are:
+
+1. claimGas
+2. sendAsset
+3. doInvoke
+
+::
+
+  import Neon from 'neon-js'
+  const config = {
+    net: 'TestNet'
+    address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW',
+    privateKey: '7d128a6d096f0c14c3a25a2b0c41cf79661bfcb4a8cc95aaaea28bde4d732344'
+  }
+  Neon.api.claimGas(config)
+  .then((conf) => {
+    console.log(conf.response)
+  })
+
+  import {api} from 'neon-js'
+  api.claimGas(config)
+  .then((conf) => {
+    console.log(conf.response)
+  })
+
+
+These methods primarily rely on NeonDB for information with Neoscan as a fall back. Thus, they are generally more reliable.
+
+The methods revolve around passing an configuration object containing all information down the chain. Each method digests the necessary information within the configuration object to perform its task and pass down the configuration object with new information added to it.
+
+::
+
+  import {api} from 'neon-js'
+  // This chain is basically api.claimGas
+  api.getClaimsFrom(config, api.neonDB)
+  .then((c) => api.createTx(c, 'claim'))
+  .then((c) => api.signTx(c))
+  .then((c) => api.sendTx(c))
+
 NeonDB
 -------
 
@@ -25,8 +69,8 @@ The NeonDB API is exposed as::
   Neon.do.claimAllGas('TestNet', privateKey)
 
   import {api} from 'neon-js'
-  api.getBalance('TestNet', address)
-  api.doClaimAllGas('TestNet', privateKey)
+  api.neonDB.getBalance('TestNet', address)
+  api.neonDB.doClaimAllGas('TestNet', privateKey)
 
 The NeonDB API describes the API set exposed by neon-wallet-db_ as well as other convenient methods. The node is hosted by CityOfZion.
 
@@ -34,10 +78,21 @@ The API returns useful information that is not built into standard NEO nodes suc
 
 For example, the ``getBalance`` method returns a list of spendable assets of a specific address. This is then used to construct a ContractTransaction.
 
+Neoscan
+-------
+
+The Neoscan API serves as a backup in case NeonDB fails. It is not exposed in semantic exports. Instead, use named exports::
+
+  import {api} from 'neon-js
+  api.neoscan.getBalance('TestNet', address)
+  api.neoscan.getClaims('MainNet', address)
+
+The methods found here are similar to NeonDB but does not cover everything. Methods will return similar data structures to what is expected from NeonDB.
+
 CoinMarketCap
 -------------
 
-A straightforward call to CoinMarketCap API to retrieve the latest price information.
+A straightforward call to CoinMarketCap API to retrieve the latest price information. This is exposed as ``cmc`` within ``api``.
 
 ::
 
@@ -46,10 +101,7 @@ A straightforward call to CoinMarketCap API to retrieve the latest price informa
   Neon.get.price('GAS') // defaults to USD
 
   import { api } from 'neon-js'
-  api.getPrice('NEO', 'SGD')
-
-
-.. _neon-wallet-db: https://github.com/CityOfZion/neon-wallet-db
+  api.cmc.getPrice('NEO', 'SGD')
 
 NEP5
 -----
@@ -66,5 +118,7 @@ This set of methods rely on the NEO node having version >= 2.3.3. The method use
   Neon.get.tokenBalance(rpxScriptHash, address)
 
   import { api } from 'neon-js'
-  api.getTokenInfo(rpxScriptHash)
-  api.getTokenBalance(rpxScriptHash)
+  api.nep5.getTokenInfo(rpxScriptHash)
+  api.nep5.getTokenBalance(rpxScriptHash)
+
+.. _neon-wallet-db: https://github.com/CityOfZion/neon-wallet-db

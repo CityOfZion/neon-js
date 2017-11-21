@@ -44,10 +44,3 @@ export const getTokenBalance = (net, scriptHash, address) => {
       return fixed82num(res.result.stack[0].value)
     })
 }
-
-export default {
-  get: {
-    tokenInfo: getTokenInfo,
-    tokenBalance: getTokenBalance
-  }
-}

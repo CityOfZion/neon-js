@@ -1,19 +1,24 @@
-import NeonDB from './NeonDB'
-import cmc from './coinmarketcap'
-import nep5 from './nep5'
+import * as neonDB from './neonDB'
+import * as cmc from './coinmarketcap'
+import * as nep5 from './nep5'
+import * as neoscan from './neoscan'
 
-const mods = [NeonDB, cmc, nep5]
+export default {
+  get: {
+    price: cmc.getPrice,
+    balance: neonDB.getBalance,
+    claims: neonDB.getClaims,
+    transactionHistory: neonDB.getTransactionHistory,
+    tokenBalance: nep5.getTokenBalance,
+    tokenInfo: nep5.getTokenInfo
+  },
+  do: {
+    sendAsset: neonDB.doSendAsset,
+    claimAllGas: neonDB.doClaimAllGas,
+    mintTokens: neonDB.doMintTokens
+  }
 
-const api = mods.reduce((grp, mod) => {
-  Object.keys(mod).map((key) => {
-    if (grp[key]) Object.assign(grp[key], mod[key])
-    else grp[key] = mod[key]
-  })
-  return grp
-}, {})
+}
 
-export * from './NeonDB'
-export * from './coinmarketcap'
-export * from './nep5'
-
-export default api
+export * from './core'
+export { neonDB, cmc, nep5, neoscan }

@@ -79,7 +79,7 @@ export const getBalance = (net, address) => {
  * @param {string} address - Address to check.
  * @return {Promise<Claim>} An Object with available and unavailable GAS amounts.
  */
-export const getClaimAmounts = (net, address) => {
+export const getClaims = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/claims/' + address).then((res) => {
     return res.data
@@ -133,7 +133,7 @@ export const getWalletDBHeight = (net) => {
 export const doClaimAllGas = (net, privateKey, signingFunction) => {
   const account = new Account(privateKey)
   const rpcEndpointPromise = getRPCEndpoint(net)
-  const claimsPromise = getClaimAmounts(net, account.address)
+  const claimsPromise = getClaims(net, account.address)
   let signedTx // Scope this outside so that all promises have this
   let endpt
   return Promise.all([rpcEndpointPromise, claimsPromise])
@@ -238,20 +238,4 @@ export const doSendAsset = (net, toAddress, from, assetAmounts, signingFunction)
       }
       return res
     })
-}
-
-export default {
-  get: {
-    APIEndPoint: getAPIEndpoint,
-    RPCEndPoint: getRPCEndpoint,
-    claimAmounts: getClaimAmounts,
-    balance: getBalance,
-    walletDBHeight: getWalletDBHeight,
-    transactionHistory: getTransactionHistory
-  },
-  do: {
-    sendAsset: doSendAsset,
-    claimAllGas: doClaimAllGas,
-    mintTokens: doMintTokens
-  }
 }

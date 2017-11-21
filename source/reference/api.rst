@@ -4,6 +4,27 @@ API
 
 Module ``api``
 
+Core
+----
+
+.. autofunction:: claimGas
+
+.. autofunction:: createTx
+
+.. autofunction:: doInvoke
+
+.. autofunction:: getBalanceFrom
+
+.. autofunction:: getClaimsFrom
+
+.. autofunction:: makeIntent
+
+.. autofunction:: sendAsset
+
+.. autofunction:: sendTx
+
+.. autofunction:: signTx
+
 NeonDB
 -------
 
@@ -13,17 +34,28 @@ NeonDB
 
 .. autofunction:: doSendAsset
 
-.. autofunction:: getAPIEndpoint
+.. autofunction:: neonDB.getAPIEndpoint
 
-.. autofunction:: getBalance
+.. autofunction:: neonDB.getBalance
 
-.. autofunction:: getClaimAmounts
+.. autofunction:: neonDB.getClaims
 
-.. autofunction:: getRPCEndpoint
+.. autofunction:: neonDB.getRPCEndpoint
 
 .. autofunction:: getTransactionHistory
 
 .. autofunction:: getWalletDBHeight
+
+Neoscan
+-------
+
+.. autofunction:: neoscan.getAPIEndpoint
+
+.. autofunction:: neoscan.getBalance
+
+.. autofunction:: neoscan.getClaims
+
+.. autofunction:: neoscan.getRPCEndpoint
 
 CoinMarketCap
 ---------------
