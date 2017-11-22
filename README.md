@@ -1,6 +1,6 @@
 <p align="center">
-  <img 
-    src="http://res.cloudinary.com/vidsy/image/upload/v1503160820/CoZ_Icon_DARKBLUE_200x178px_oq0gxm.png" 
+  <img
+    src="http://res.cloudinary.com/vidsy/image/upload/v1503160820/CoZ_Icon_DARKBLUE_200x178px_oq0gxm.png"
     width="125px;">
 </p>
 
@@ -29,13 +29,13 @@ Visit the [docs](https://cityofzion.io/neon-js) to learn how to use this library
 Install the package using:
 
 ```js
-npm install --save git+https://github.com/CityOfZion/neon-js.git
+npm i @cityofzion/neon-js
 ```
 
 ### Build
 
 ```js
-npm run build
+npm run build:dev
 ```
 
 ### Tests
@@ -52,3 +52,4 @@ The typescript declaration files are included _(no need of any @types/...)_.
 
 - Open-source [MIT](https://github.com/CityOfZion/neon-js/blob/master/LICENSE.md).
 - Main author is [Ethan Fast](https://github.com/Ejhfast).
+- Maintainer is [Yak Jun Xiang](https://github.com/snowypowers)

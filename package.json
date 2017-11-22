@@ -19,7 +19,7 @@
     "webpack": "^3.0.0",
     "zopfli-webpack-plugin": "^0.1.0"
   },
-  "name": "neon-js",
+  "name": "@cityofzion/neon-js",
   "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
   "version": "2.0.0",
   "main": "lib/index.js",
