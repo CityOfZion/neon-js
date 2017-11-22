@@ -62,6 +62,7 @@ export const deserializeTransactionOutput = (stream) => {
  * @param {string} assetSym - The Symbol of the asset to send. Typically NEO or GAS.
  * @param {number} value - The value to send.
  * @param {string} address - The address to send the asset to.
+ * @return {TransactionOutput}
  */
 export const createTransactionOutput = (assetSym, value, address) => {
   const assetId = ASSET_ID[assetSym]

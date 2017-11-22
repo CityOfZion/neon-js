@@ -20,7 +20,7 @@ export const str2ab = str => {
 
 /**
  * @param {string} str - HEX string
- * @returns {arrayBuffer}
+ * @returns {number[]}
  */
 export const hexstring2ab = str => {
   let result = []
@@ -71,6 +71,7 @@ export const int2hex = mNumber => {
  * @param {number} num
  * @param {number} size - The required size in hex chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.
  * @param {boolean} littleEndian - Encode the hex in little endian form
+ * @return {string}
  */
 export const num2hexstring = (num, size = 2, littleEndian = false) => {
   let hexstring = num.toString(16)
@@ -100,7 +101,7 @@ export const fixed82num = (fixed8) => {
 
 /**
  * Converts a number to a variable length Int. Used for array length header
- * @param num - The number
+ * @param {number} num - The number
  * @returns {string} hexstring of the variable Int.
  */
 export const num2VarInt = (num) => {

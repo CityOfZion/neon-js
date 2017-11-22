@@ -22,7 +22,7 @@ const serialize = {
   input: comp.serializeTransactionInput,
   output: comp.serializeTransactionOutput,
   script: comp.serializeWitness,
-  exclusiveData: e.serialize,
+  exclusiveData: e.serializeExclusive,
   tx: core.serializeTransaction
 }
 
@@ -31,7 +31,7 @@ const deserialize = {
   input: comp.deserializeTransactionInput,
   output: comp.deserializeTransactionOutput,
   script: comp.deserializeWitness,
-  exclusiveData: e.deserialize,
+  exclusiveData: e.deserializeExclusive,
   tx: core.deserializeTransaction
 }
 

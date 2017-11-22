@@ -17,8 +17,8 @@ const deserializeClaimExclusive = (ss) => {
 }
 
 /**
- * @param {Transaction}
- * @return {string}
+ * @param {Transaction} tx - Transaction.
+ * @return {string} hexstring
  */
 const serializeClaimExclusive = (tx) => {
   if (tx.type !== 0x02) throw new Error()
@@ -29,19 +29,35 @@ const serializeClaimExclusive = (tx) => {
   return out
 }
 
+/**
+ * @param {Transaction} tx
+ * @return {object} {claims: TransactionInput[]}
+ */
 const getClaimExclusive = (tx) => {
   return Object.assign({ claims: [] }, { claims: tx.claims })
 }
 
+/**
+ * @param {StringStream} ss
+ * @return {object} {}
+ */
 const deserializeContractExclusive = (ss) => {
   return {}
 }
 
+/**
+ * @param {Transaction} tx - Transaction.
+ * @return {string} ''
+ */
 const serializeContractExclusive = (tx) => {
   if (tx.type !== 0x80) throw new Error()
   return ''
 }
 
+/**
+ * @param {Transaction} tx
+ * @return {object} {}
+ */
 const getContractExclusive = (tx) => {
   return {}
 }
@@ -57,6 +73,10 @@ const deserializeInvocationExclusive = (ss) => {
   return { script, gas }
 }
 
+/**
+ * @param {Transaction} tx
+ * @return {string}
+ */
 const serializeInvocationExclusive = (tx) => {
   if (tx.type !== 0xd1) throw new Error()
   let out = num2VarInt(tx.script.length / 2)
@@ -69,19 +89,19 @@ const getInvocationExclusive = (tx) => {
   return Object.assign({ script: '', gas: 0 }, { script: tx.script, gas: tx.gas })
 }
 
-export const serialize = {
+export const serializeExclusive = {
   2: serializeClaimExclusive,
   128: serializeContractExclusive,
   209: serializeInvocationExclusive
 }
 
-export const deserialize = {
+export const deserializeExclusive = {
   2: deserializeClaimExclusive,
   128: deserializeContractExclusive,
   209: deserializeInvocationExclusive
 }
 
-export const get = {
+export const getExclusive = {
   2: getClaimExclusive,
   128: getContractExclusive,
   209: getInvocationExclusive

@@ -1,161 +1,118 @@
-declare module 'neon-js' {
-  type Balance = {
-    GAS: TokenBalance
-    NEO: TokenBalance
-    address: string
-    net: Net
-  }
+import { NEO_NETWORK } from '../consts'
+import { StringStream } from '../utils'
+import { scriptParams } from '../sc'
 
-  type Claim = {
-    claim: number
-    index: number
-    txid: string
-  }
-  type ClaimData = {
-    claims: Claim[]
-  }
+interface TransactionAttribute {
+  data: string
+  usage: number
+}
 
-  type Coin = {
-    index: number
-    txid: string
-    value: number
-  }
+interface TransactionInput {
+  prevHash: string
+  prevIndex: number
+}
 
-  type Invoke = {
-    args?: Array<any> | string | number| boolean
-    operation?: string | null
-    scriptHash: string
-    useTailCall?: boolean
-  }
+interface TransactionOutput {
+  assetId: string
+  scriptHash: string
+  value: number
+}
 
-  type TokenBalance = {
-    balance: number
-    unspent: Coin[]
-  }
+interface Witness {
+  invocationScript: string
+  verificationScript: string
+}
 
-  interface Transaction {
-    attributes: TransactionAttribute[]
-    inputs: TransactionInput[]
-    outputs: TransactionOutput[]
-    scripts: Witness[]
-    type: number
-    version: number
-  }
-  type TransactionAttribute = {
-    data: string
-    usage: number
-  }
-  type TransactionInput = {
-    prevHash: string
-    prevIndex: number
-  }
-  type TransactionOutput = {
-    assetId: string
-    scriptHash: string
-    value: number
-  }
+interface Balance {
+  GAS: TokenBalance
+  NEO: TokenBalance
+  address: string
+  net: Net
+}
 
-  type TransactionPartial = {
-    [P in keyof Transaction]?: Transaction[P]
-  }
+interface Claim {
+  claim: number
+  index: number
+  txid: string
+}
 
-  type Witness = {
-    invocationScript: string
-    verificationScript: string
-  }
+interface ClaimData {
+  claims: Claim[]
+}
 
-  class StringStream {
-    public pter: 0
-    public str: string
+interface Coin {
+  index: number
+  txid: string
+  value: number
+}
 
-    constructor(str?: string)
+interface TokenBalance {
+  balance: number
+  unspent: Coin[]
+}
 
-    public isEmpty(): boolean
-    public read(bytes: number): string
-    public readVarBytes(): string
-    public readVarInt(): number
-  }
+//components
+export function serializeTransactionInput(input: TransactionInput): string
+export function deserializeTransactionInput(stream: StringStream): TransactionInput
+export function serializeTransactionOutput(output: TransactionOutput): string
+export function deserializeTransactionOutput(stream: StringStream): TransactionOutput
+export function createTransactionOutput(assetSym: string, value: number, address: string): TransactionOutput
+export function serializeTransactionAttribute(attr: TransactionAttribute): string
+export function deserializeTransactionAttribute(stream: StringStream): TransactionAttribute
+export function serializeWitness(witness: Witness): string
+export function deserializeWitness(stream: StringStream): Witness
 
-  const ASSETS: {
-    [key: string]: 'GAS' | 'NEO' | string
-    GAS: string
-    NEO: string
-  }
+//core
+export function calculateInputs(balances: Balance, intents: TransactionOutput[], gasCost?: number): { inputs: TransactionInput[], change: TransactionOutput[] }
+export function serializeTransaction(tx: Transaction, signed?: boolean): string
+export function deserializeTransaction(data: string): Transaction
+export function signTransaction(transaction: Transaction, privateKey: string): Transaction
+export function getTransactionHash(transaction: Transaction): string
 
-  const create: {
-    claim: (
-      publicKey: string,
-      claimData: ClaimData,
-      override?: TransactionPartial
-    ) => Transaction
+//exclusive
+export const serializeExclusive: {
+  2: (tx: Transaction) => string
+  128: (tx: Transaction) => ''
+  209: (tx: Transaction) => string
+}
 
-    contract: (
-      publicKey: string,
-      balances: Balance,
-      intents: TransactionOutput[],
-      override?: TransactionPartial
-    ) => Transaction
+export const deserializeExclusive: {
+  2: (stream: StringStream) => { claims: TransactionInput[] }
+  128: (stream: StringStream) => {}
+  209: (stream: StringStream) => { gas: number, script: string }
+}
 
-    invocation: (
-      publicKey: string,
-      balances: Balance,
-      intents: TransactionOutput[],
-      invoke: Invoke | string,
-      gasCost: number,
-      override?: TransactionPartial
-    ) => Transaction
-  }
+export const getExclusive: {
+  2: (tx: Transaction) => { claims: TransactionInput[] }
+  128: (tx: Transaction) => {}
+  209: (tx: Transaction) => { gas: number, script: string }
+}
 
-  const serialize: {
-    attribute: (attr: TransactionAttribute) => string
+//transaction
+interface txConfig {
+  type: number,
+  version: number,
+  attributes: TransactionAttribute[]
+  inputs: TransactionInput[]
+  outputs: TransactionOutput[]
+  scripts: Witness[]
+}
 
-    exclusiveData: {
-      2: (transaction: Transaction) => string
-      128: (transaction: Transaction) => ''
-      209: (transaction: Transaction) => string
-    }
 
-    input: (input: TransactionInput) => string
+export class Transaction {
+  public type: number
+  public version: number
+  public attributes: TransactionAttribute[]
+  public inputs: TransactionInput[]
+  public outputs: TransactionOutput[]
+  public scripts: Witness[]
 
-    output: (output: TransactionOutput) => string
+  constructor(TxConfig)
 
-    script: (witness: Witness) => string
-  }
+  get exclusiveData(): object
+  get hash(): string
 
-  const deserialize: {
-    attribute: (stream: StringStream) => TransactionAttribute
-
-    exclusiveData: {
-      2: (stream: StringStream) => {
-        claims: TransactionInput[]
-      }
-
-      128: (stream: StringStream) => {}
-
-      209: (stream: StringStream) => {
-        gas: number
-        script: string
-      }
-    }
-
-    input: (stream: StringStream) => TransactionInput
-
-    output: (stream: StringStream) => TransactionOutput
-
-    script: (stream: StringStream) => Witness
-  }
-
-  function serializeTransaction(
-    transaction: Transaction,
-    signed?: boolean
-  ): string
-
-  function deserializeTransaction(data: string): Transaction
-
-  function signTransaction(
-    transaction: Transaction,
-    privateKey: string
-  ): Transaction
-
-  function getTransactionHash(transaction: Transaction): string
+  static createClaimTx(publicKeyOrAddress: string, claimData: Claim, override: object): Transaction
+  static createContractTx(balances: Balance, intents: TransactionOutput[], override: object): Transaction
+  static createInvocationTx(balance: Balance, intents: TransactionOutput[], invoke: object | string, gasCost: number, override: object): Transaction
 }

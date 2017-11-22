@@ -53,7 +53,7 @@ class RPCClient {
 
   /**
    * Creates a query with the given req and immediately executes it.
-   * @param {Object} req
+   * @param {object} req
    * @return {Promise<any>}
    */
   query (req) {
@@ -64,7 +64,7 @@ class RPCClient {
   /**
    * Gets the state of an account given an address.
    * @param {string} addr
-   * @return {Promise<Object>}
+   * @return {Promise<object>}
    */
   getAccountState (addr) {
     if (!isAddress(addr)) throw new Error(`Invalid address given: ${addr}`)
@@ -76,7 +76,7 @@ class RPCClient {
 
   /**
    * @param {string} assetId
-   * @return {Promise<Object>}
+   * @return {Promise<object>}
    */
   getAssetState (assetId) {
     return this.execute(Query.getAssetState(assetId))
@@ -88,7 +88,7 @@ class RPCClient {
   /**
    * Gets the block at a given height or hash.
    * @param {string|number} indexOrHash
-   * @return {Promise<Object|string>}
+   * @return {Promise<object|string>}
    */
   getBlock (indexOrHash, verbose = 1) {
     return this.execute(Query.getBlock(indexOrHash, verbose))
@@ -122,6 +122,7 @@ class RPCClient {
   /**
    * Get the system fees of a block.
    * @param {number} index
+   * @return {Promise<string>} - System fees as a string.
    */
   getBlockSysFee (index) {
     return this.execute(Query.getBlockSysFee(index))
@@ -132,7 +133,7 @@ class RPCClient {
 
   /**
    * Gets the number of peers this node is connected to.
-   * @return {number}
+   * @return {Promise<number>}
    */
   getConnectionCount () {
     return this.execute(Query.getConnectionCount())
@@ -144,7 +145,7 @@ class RPCClient {
   /**
    * Gets the state of the contract at the given scriptHash.
    * @param {string} scriptHash
-   * @return {Promise<Object>}
+   * @return {Promise<object>}
    */
   getContractState (scriptHash) {
     return this.execute(Query.getContractState(scriptHash))
@@ -155,7 +156,7 @@ class RPCClient {
 
   /**
    * Gets a list of all peers that this node has discovered.
-   * @return {Promise<Object>}
+   * @return {Promise<object>}
    */
   getPeers () {
     return this.execute(Query.getPeers())
@@ -192,7 +193,7 @@ class RPCClient {
    * Gets the corresponding value of a key in the storage of a contract address.
    * @param {string} scriptHash
    * @param {string} key
-   * @return {string} value
+   * @return {Promise<string>} value
    */
   getStorage (scriptHash, key) {
     return this.execute(Query.getStorage(scriptHash, key))
@@ -204,7 +205,7 @@ class RPCClient {
   /**
    * @param {string} txid
    * @param {number} index
-   * @param {}
+   * @return {Promise<object>}
    */
   getTxOut (txid, index) {
     return this.execute(Query.getTxOut(txid, index))
@@ -215,6 +216,7 @@ class RPCClient {
 
   /**
    * Gets the version of the NEO node. This method will never be blocked by version. This method will also update the current Client's version to the one received.
+   * @return {Promise<string>}
    */
   getVersion () {
     return this.execute(Query.getVersion())
@@ -235,6 +237,7 @@ class RPCClient {
    * Calls a smart contract with the given parameters. This method is a local invoke, results are not reflected on the blockchain.
    * @param {string} scriptHash
    * @param {Array} params
+   * @return {Promise<object>}
    */
   invoke (scriptHash, params) {
     if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error(`This method is not implemented for this version`))
@@ -249,6 +252,7 @@ class RPCClient {
    * @param {string} scriptHash
    * @param {string} operation
    * @param {Array} params
+   * @return {Promise<object>}
    */
   invokeFunction (scriptHash, operation, params) {
     if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error(`This method is not implemented for this version`))
@@ -261,6 +265,7 @@ class RPCClient {
   /**
    * Submits a script for the node to run. This method is a local invoke, results are not reflected on the blockchain.
    * @param {string} script
+   * @return {Promise<object>}
    */
   invokeScript (script) {
     if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error(`This method is not implemented for this version`))
@@ -273,7 +278,7 @@ class RPCClient {
   /**
    * Sends a serialized transaction to the network.
    * @param {Transaction|string} transaction
-   * @return {boolean}
+   * @return {Promise<boolean>}
    */
   sendRawTransaction (transaction) {
     return this.execute(Query.sendRawTransaction(transaction))
@@ -285,6 +290,7 @@ class RPCClient {
   /**
    * Submits a serialized block to the network.
    * @param {string} block
+   * @return {Promise<any>}
    */
   submitBlock (block) {
     return this.execute(Query.submitBlock(block))
@@ -296,7 +302,7 @@ class RPCClient {
   /**
    * Checks if the provided address is a valid NEO address.
    * @param {string} addr
-   * @return {boolean}
+   * @return {Promise<boolean>}
    */
   validateAddress (addr) {
     return this.execute(Query.validateAddress(addr))

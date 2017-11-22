@@ -6,12 +6,12 @@ import { DEFAULT_REQ } from '../consts'
  * @class Query
  * @classdesc
  * A Query object helps us to construct and record requests
- * @param {Object} req
+ * @param {object} req
  */
 class Query {
   constructor (req) {
     /**
-     * @type {Object}
+     * @type {object}
      * The request object.
      */
     this.req = Object.assign({}, DEFAULT_REQ, req)
@@ -30,6 +30,7 @@ class Query {
   /**
    * Attaches a parser method to the Query. This method will be used to parse the response.
    * @param {function} parser
+   * @return {this}
    */
   parseWith (parser) {
     this.parse = parser
@@ -39,6 +40,7 @@ class Query {
   /**
    * Executes the Query by sending the RPC request to the provided net.
    * @param {string} url - The URL of the node.
+   * @return {Response|any}
    */
   execute (url) {
     if (this.completed) throw new Error(`This request has been sent`)
@@ -276,7 +278,7 @@ export default Query
 /**
  * Wrapper for querying node RPC
  * @param {string} url - Node URL.
- * @param {Object} req - The request object.
+ * @param {object} req - The request object.
  * @param {string} req.method - RPC Method name.
  * @param {Array} req.params - Array of parameters to send.
  * @param {number} req.id - Unique id to identity yourself. RPC should reply with same id.

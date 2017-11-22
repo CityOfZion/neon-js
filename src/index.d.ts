@@ -1,9 +1,37 @@
-/// <reference path="./api.d.ts" />
-/// <reference path="./nep2.d.ts" />
-/// <reference path="./nep5.d.ts" />
-/// <reference path="./wallet.d.ts" />
-/// <reference path="./transactions/index.d.ts" />
+import u from './utils'
+import CONST from './consts'
+import tx from './transactions'
+import api from './api'
+import sc from './sc'
+import rpc from './rpc'
+import wallet from './wallet'
 
-declare module 'neon-js' {
-  type Net = 'MainNet' | 'TestNet'
+export as namespace Neon;
+
+declare module 'api' {
+  export = api
+}
+
+declare module 'CONST' {
+  export = CONST
+}
+
+declare module 'rpc' {
+  export = rpc
+}
+
+declare module 'sc' {
+  export = sc
+}
+
+declare module 'tx' {
+  export = tx
+}
+
+declare module 'u' {
+  export = u
+}
+
+declare module 'wallet' {
+  export = wallet
 }

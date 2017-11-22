@@ -17,7 +17,6 @@ export default {
     claimAllGas: neonDB.doClaimAllGas,
     mintTokens: neonDB.doMintTokens
   }
-
 }
 
 export * from './core'

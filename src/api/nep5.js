@@ -33,7 +33,7 @@ export const getTokenInfo = (net, scriptHash) => {
  * @param {string} net
  * @param {string} scriptHash
  * @param {string} address
- * @return {number}
+ * @return {Promise<number>}
  */
 export const getTokenBalance = (net, scriptHash, address) => {
   const addrScriptHash = reverseHex(getScriptHashFromAddress(address))

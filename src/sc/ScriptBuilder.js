@@ -166,11 +166,12 @@ class ScriptBuilder extends StringStream {
 
 /**
  * A wrapper method around ScripBuilder for creating a VM script.
- * @param {Object} props - Properties passed in as an object.
+ * @param {object} props - Properties passed in as an object.
  * @param {string} props.scriptHash - The contract scriptHash.
  * @param {string} [props.operation=null] - The method name to call.
  * @param {Array} [props.args=undefined] - The arguments of the method to pass in.
  * @param {boolean} [props.useTailCall=false] - To use Tail Call.
+ * @return {string} The VM Script.
  */
 export const createScript = ({ scriptHash, operation = null, args = undefined, useTailCall = false }) => {
   const sb = new ScriptBuilder()

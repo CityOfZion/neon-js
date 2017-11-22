@@ -19,7 +19,7 @@ export const getAPIEndpoint = (net) => {
 /**
  * Returns an appropriate RPC endpoint retrieved from a NeoScan endpoint.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
- * @return {string} - URL
+ * @return {Promise<string>} - URL
  */
 export const getRPCEndpoint = (net) => {
   const apiEndpoint = getAPIEndpoint(net)
@@ -64,7 +64,7 @@ export const getBalance = (net, address) => {
  * Get claimable amounts for an address.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
  * @param {string} address - Address to check.
- * @return {Claim}
+ * @return {Promise<Claim>}
  */
 export const getClaims = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)

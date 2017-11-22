@@ -48,7 +48,7 @@ class Transaction {
 
     /** @type {Witness[]} */
     this.scripts = tx.scripts
-    const exclusive = exc.get[this.type](tx)
+    const exclusive = exc.getExclusive[this.type](tx)
     Object.keys(exclusive).map((k) => {
       this[k] = exclusive[k]
     })
@@ -59,7 +59,7 @@ class Transaction {
    * @type {Object}
    */
   get exclusiveData () {
-    return exc.get[this.type](this)
+    return exc.getExclusive[this.type](this)
   }
 
   /**
@@ -117,10 +117,10 @@ class Transaction {
    * Creates an InvocationTransaction with the given parameters.
    * @param {Balance} balances - Balance of address
    * @param {TransactionOutput[]} intents - Sending intents as transactionOutputs
-   * @param {Object|string} invoke - Invoke Script as an object or hexstring
+   * @param {object|string} invoke - Invoke Script as an object or hexstring
    * @param {number} gasCost - Gas to attach for invoking script
-   * @param {Object} [override={}] - Optional overrides (eg.custom versions)
-   * @return {string} Unsigned Transaction
+   * @param {object} [override={}] - Optional overrides (eg.custom versions)
+   * @return {Transaction} Unsigned Transaction
    */
   static createInvocationTx (balances, intents, invoke, gasCost = 0, override = {}) {
     if (intents === null) intents = []
@@ -144,7 +144,7 @@ class Transaction {
    */
   static deserialize (hexstring) {
     const txObj = core.deserializeTransaction(hexstring)
-    const exclusiveData = exc.get[txObj.type](txObj)
+    const exclusiveData = exc.getExclusive[txObj.type](txObj)
     return new Transaction(Object.assign(txObj, exclusiveData))
   }
 
@@ -183,7 +183,7 @@ class Transaction {
    * @return {Transaction} this
    */
   calculate (balance) {
-    const {inputs, change} = core.calculateInputs(balance, this.outputs, this.gas)
+    const { inputs, change } = core.calculateInputs(balance, this.outputs, this.gas)
     this.inputs = inputs
     this.outputs = this.outputs.concat(change)
     return this
@@ -203,7 +203,7 @@ class Transaction {
    * @return {string} hexstring of the exclusive data
    */
   serializeExclusiveData () {
-    return exc.serialize[this.type](this)
+    return exc.serializeExclusive[this.type](this)
   }
 
   /**

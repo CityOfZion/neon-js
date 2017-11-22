@@ -45,15 +45,15 @@ export const getBalanceFrom = (config, api) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {object} type - The endpoint APi object. eg, neonDB or Neoscan.
+ * @param {object} api - The endpoint APi object. eg, neonDB or Neoscan.
  * @return {object} Configuration object + url + balance
  */
-export const getClaimsFrom = (config, type) => {
+export const getClaimsFrom = (config, api) => {
   checkProperty(config, 'net', 'address')
-  if (!type.getBalance || !type.getRPCEndpoint) throw new Error(`Invalid type. Is this an API object?`)
-  const claimsP = type.getClaims(config.net, config.address)
+  if (!api.getBalance || !api.getRPCEndpoint) throw new Error(`Invalid type. Is this an API object?`)
+  const claimsP = api.getClaims(config.net, config.address)
   // Get URL
-  const urlP = type.getRPCEndpoint(config.net)
+  const urlP = api.getRPCEndpoint(config.net)
   // Return {url, balance, ...props}
 
   return Promise.all([claimsP, urlP])
@@ -164,7 +164,7 @@ export const makeIntent = (assetAmts, address) => {
  * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
  * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
  * @param {TransactionOutput[]} intents - Intents.
- * @return {Response} The RPC response.
+ * @return {object} Configuration object.
  */
 export const sendAsset = (config) => {
   return getBalanceFrom(config, neonDB)

@@ -1,6 +1,6 @@
 import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256 } from '../utils'
 import { generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey, getScriptHashFromAddress } from '../wallet'
-import { serialize as serialiseExclusive, deserialize as deserializeExclusive } from './exclusive'
+import { serializeExclusive, deserializeExclusive } from './exclusive'
 import { ASSETS, ASSET_ID } from '../consts'
 import * as comp from './components'
 
@@ -9,7 +9,7 @@ import * as comp from './components'
  * @param {Balance} balances - Balance of all assets available.
  * @param {TransactionOutput[]} intents - All sending intents
  * @param {number} gasCost - gasCost required for the transaction.
- * @return {Object} {inputs: TransactionInput[], change: TransactionOutput[] }
+ * @return {object} {inputs: TransactionInput[], change: TransactionOutput[] }
  */
 export const calculateInputs = (balances, intents, gasCost = 0) => {
   // We will work in integers here to be more accurate.
@@ -66,7 +66,7 @@ export const serializeTransaction = (tx, signed = true) => {
   let out = ''
   out += num2hexstring(tx.type)
   out += num2hexstring(tx.version)
-  out += serialiseExclusive[tx.type](tx)
+  out += serializeExclusive[tx.type](tx)
   out += num2VarInt(tx.attributes.length)
   for (const attribute of tx.attributes) {
     out += comp.serializeTransactionAttribute(attribute)
@@ -91,7 +91,7 @@ export const serializeTransaction = (tx, signed = true) => {
 /**
  * Deserializes a given string into a Transaction object
  * @param {string} data - Serialized string
- * @returns {Transaction} Transaction Object
+ * @returns {Transaction} Transaction object
  */
 export const deserializeTransaction = (data) => {
   const ss = new StringStream(data)
@@ -128,7 +128,7 @@ export const deserializeTransaction = (data) => {
  * Signs a transaction with the corresponding privateKey. We are dealing with it as an Transaction object as multi-sig transactions require us to sign the transaction without signatures.
  * @param {Transaction} transaction - Transaction as an object
  * @param {string} privateKey - The private key. This method does not check if the private key is valid (aka that the inputs come from the corresponding address)
- * @return {Object} Signed transaction as an object.
+ * @return {Transaction} Signed transaction as an object.
  */
 export const signTransaction = (transaction, privateKey) => {
   const invocationScript = '40' + generateSignature(serializeTransaction(transaction, false), privateKey)
@@ -139,7 +139,7 @@ export const signTransaction = (transaction, privateKey) => {
 }
 
 /**
- * @param {Object} transaction
+ * @param {Transaction} transaction
  * @return {string}
  */
 export const getTransactionHash = (transaction) => {

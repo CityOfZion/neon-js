@@ -5,14 +5,14 @@ import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
 
 /**
- * @typedef {Object} Coin
+ * @typedef {object} Coin
  * @property {number} index - Index in list.
  * @property {string} txid - Transaction ID which produced this coin.
  * @property {number} value - Value of this coin.
  */
 
 /**
- * @typedef {Object} Balance
+ * @typedef {object} Balance
  * @property {{balance: number, unspent: Coin[]}} NEO Amount of NEO in address
  * @property {{balance: number, unspent: Coin[]}} GAS Amount of GAS in address
  * @property {string} address - The Address that was queried
@@ -20,7 +20,7 @@ import { ASSET_ID } from '../consts'
  */
 
 /**
- * @typedef {Object} History
+ * @typedef {object} History
  * @property {string} address - Address.
  * @property {string} name - API name.
  * @property {string} net - 'MainNet' or 'TestNet'
@@ -28,7 +28,7 @@ import { ASSET_ID } from '../consts'
  */
 
 /**
- * @typedef {Object} PastTx
+ * @typedef {object} PastTx
  * @property {number} GAS - Gas involved.
  * @property {number} NEO - NEO involved.
  * @property {number} block_index - Block index.
@@ -37,7 +37,7 @@ import { ASSET_ID } from '../consts'
  * @property {string} txid - Transaction ID.
  */
 /**
- * @typedef {Object} Response
+ * @typedef {object} Response
  * @property {string} jsonrpc - JSON-RPC Version
  * @property {number} id - Unique ID.
  * @property {any} result - Result
@@ -77,7 +77,7 @@ export const getBalance = (net, address) => {
  * Get amounts of available (spent) and unavailable claims.
  * @param {string} net - 'MainNet' or 'TestNet'.
  * @param {string} address - Address to check.
- * @return {Promise<Claim>} An Object with available and unavailable GAS amounts.
+ * @return {Promise<Claim>} An object with available and unavailable GAS amounts.
  */
 export const getClaims = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
@@ -163,9 +163,10 @@ export const doClaimAllGas = (net, privateKey, signingFunction) => {
 /**
  * Call mintTokens for RPX
  * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} scriptHash - Contract scriptHash.
  * @param {string} fromWif - The WIF key of the originating address.
- * @param {neo} amount - The amount of neo to send to RPX.
- * @param {gasCost} amount - The Gas to send as SC fee.
+ * @param {number} neo - The amount of neo to send to RPX.
+ * @param {number} gasCost - The Gas to send as SC fee.
  * @return {Promise<Response>} RPC Response
  */
 export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunction) => {
