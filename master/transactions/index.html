@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Transactions &mdash; neon-js 1.1.1 documentation</title>
+  <title>Transactions &mdash; neon-js 2.0.0 documentation</title>
   
 
   
@@ -37,9 +37,9 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 1.1.1 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 2.0.0 documentation" href="../index.html"/>
         <link rel="next" title="Contract Transaction" href="contract.html"/>
-        <link rel="prev" title="Light Wallet API" href="../light_wallet_api/index.html"/> 
+        <link rel="prev" title="Wallet" href="../wallet.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                1.1.1
+                2.0.0
               </div>
             
           
@@ -94,9 +94,12 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interface.html">Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../light_wallet_api/index.html">Light Wallet API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Transactions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#transaction">Transaction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#components">Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#types">Types</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="contract.html">Contract Transaction</a></li>
@@ -106,7 +109,13 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
 </ul>
 
             
@@ -178,18 +187,44 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../1.1.1/transactions/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 1.1.1.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.0.0/transactions/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.0.0.</a></p>
 <div class="section" id="transactions">
 <h1>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h1>
 <p>The Transactions module is exposed as:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
-<span class="kd">let</span> <span class="nx">transaction1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">claim</span><span class="p">(...</span><span class="nx">args</span><span class="p">)</span>
-<span class="nx">transaction1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">signTransaction</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">)</span>
-<span class="kd">let</span> <span class="nx">serialized1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">serializeTransaction</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">)</span>
-<span class="kd">let</span> <span class="nx">txid1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">getTransactionHash</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">)</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kd">let</span> <span class="nx">transaction1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">claimTx</span><span class="p">(...</span><span class="nx">args</span><span class="p">)</span>
+<span class="nx">transaction1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">sign</span><span class="p">.</span><span class="nx">transaction</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">serialized1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">serialize</span><span class="p">.</span><span class="nx">tx</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">txid1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">transactionHash</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">tx</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kd">let</span> <span class="nx">transaction2</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">createClaimTx</span><span class="p">(...</span><span class="nx">args</span><span class="p">)</span>
+<span class="nx">transaction2</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">signTransaction</span><span class="p">(</span><span class="nx">transaction2</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">serialized2</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">serializeTransaction</span><span class="p">(</span><span class="nx">transaction2</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">txid2</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">getTransactionHash</span><span class="p">(</span><span class="nx">transaction2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Transactions form the core of the interaction with the blockchain. In order to effect any state changes on the chain, a transaction is required to be sent and processed into a block by the consensus nodes.</p>
+<div class="section" id="transaction">
+<h2>Transaction<a class="headerlink" href="#transaction" title="Permalink to this headline">¶</a></h2>
+<p>The Transaction class is a wrapper class that contains all the tools required to manipulate and build transactions. This allows us to dynamically add intents, remarks at will instead of cramming everything into a single method.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="c1">// Let us create a ContractTransaction with a custom version</span>
+<span class="kd">let</span> <span class="nx">tx</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">tx</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="mi">128</span><span class="p">,</span> <span class="nx">version</span><span class="o">:</span><span class="mi">2</span><span class="p">})</span>
+<span class="c1">// Now let us add an intention to send 1 NEO to someone</span>
+<span class="nx">tx</span>
+<span class="p">.</span><span class="nx">addOutput</span><span class="p">(</span><span class="s1">&#39;NEO&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nx">someAddress</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">addRemark</span><span class="p">(</span><span class="s1">&#39;I am sending 1 NEO to someAddress&#39;</span><span class="p">)</span> <span class="c1">// Add an remark</span>
+<span class="p">.</span><span class="nx">calculate</span><span class="p">(</span><span class="nx">balance</span><span class="p">)</span> <span class="c1">// Now we add in the balance we retrieve from an external API and calculate the required inputs.</span>
+<span class="p">.</span><span class="nx">sign</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span> <span class="c1">// Sign with the private key of the balance</span>
+
+<span class="kr">const</span> <span class="nx">hash</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">hash</span> <span class="c1">// Store the hash so we can use it to query a block explorer.</span>
+
+<span class="c1">// Now we can use this serializedTx string and send it through sendrawtransaction RPC call.</span>
+<span class="kr">const</span> <span class="nx">serializedTx</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">serialize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="components">
 <h2>Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h2>
 <p>Transactions are composed of the following parts:</p>
@@ -221,7 +256,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>usage</strong> (<em>number</em>) &#8211; Identifying byte</li>
-<li><strong>data</strong> (<em>string</em>) &#8211; Data</li>
+<li><strong>data</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; Data</li>
 </ul>
 </td>
 </tr>
@@ -241,7 +276,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>prevHash</strong> (<em>string</em>) &#8211; Transaction hash, Uint256</li>
+<li><strong>prevHash</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; Transaction hash, Uint256</li>
 <li><strong>prevIndex</strong> (<em>number</em>) &#8211; Index of the coin in the previous transaction, Uint16</li>
 </ul>
 </td>
@@ -262,9 +297,9 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>assetId</strong> (<em>string</em>) &#8211; assetId, Uint256</li>
+<li><strong>assetId</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; assetId, Uint256</li>
 <li><strong>value</strong> (<em>number</em>) &#8211; value of output, Fixed8</li>
-<li><strong>scriptHash</strong> (<em>string</em>) &#8211; Uint160</li>
+<li><strong>scriptHash</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; Uint160</li>
 </ul>
 </td>
 </tr>
@@ -284,8 +319,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>invocationScript</strong> (<em>string</em>) &#8211; This data is stored as is (Little Endian)</li>
-<li><strong>verificationScript</strong> (<em>string</em>) &#8211; This data is stored as is (Little Endian)</li>
+<li><strong>invocationScript</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; This data is stored as is (Little Endian)</li>
+<li><strong>verificationScript</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; This data is stored as is (Little Endian)</li>
 </ul>
 </td>
 </tr>
@@ -326,7 +361,7 @@
         <a href="contract.html" class="btn btn-neutral float-right" title="Contract Transaction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../light_wallet_api/index.html" class="btn btn-neutral" title="Light Wallet API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../wallet.html" class="btn btn-neutral" title="Wallet" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -360,6 +395,7 @@
         <dl>
             <dt>Tags</dt>
             <dd><a href="../../1.1.1/transactions/index.html">1.1.1</a></dd>
+            <dd><a href="../../2.0.0/transactions/index.html">2.0.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -375,7 +411,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.1.1',
+            VERSION:'2.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

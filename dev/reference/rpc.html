@@ -188,7 +188,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><b>Warning:</b> This document is for the development version of neon-js.</p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.0.0/reference/rpc.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.0.0.</a></p>
 <div class="section" id="rpc">
 <h1>RPC<a class="headerlink" href="#rpc" title="Permalink to this headline">¶</a></h1>
 <p>Module <code class="docutils literal"><span class="pre">rpc</span></code></p>
@@ -241,7 +241,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Object&gt;</strong> &#8211;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -260,7 +260,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Object&gt;</strong> &#8211;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -294,7 +294,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;(Object|string)&gt;</strong> &#8211;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;(object|string)&gt;</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -323,9 +323,12 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>index</strong> (<em>number</em>) &#8211; </li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;string&gt;</strong> &#8211; - System fees as a string.</p>
 </td>
 </tr>
 </tbody>
@@ -340,7 +343,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>number</strong> &#8211;</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Promise.&lt;number&gt;</strong> &#8211;</td>
 </tr>
 </tbody>
 </table>
@@ -359,7 +362,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Object&gt;</strong> &#8211;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -374,7 +377,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Promise.&lt;Object&gt;</strong> &#8211;</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Promise.&lt;object&gt;</strong> &#8211;</td>
 </tr>
 </tbody>
 </table>
@@ -427,7 +430,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211; value</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;string&gt;</strong> &#8211; value</p>
 </td>
 </tr>
 </tbody>
@@ -441,21 +444,31 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>txid</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 <li><strong>index</strong> (<em>number</em>) &#8211; </li>
 </ul>
 </td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211;</p>
+</td>
+</tr>
 </tbody>
 </table>
-<p>:param :</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="getVersion">
 <code class="descname">getVersion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getVersion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the version of the NEO node. This method will never be blocked by version. This method will also update the current Client&#8217;s version to the one received.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Promise.&lt;string&gt;</strong> &#8211;</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
@@ -472,10 +485,13 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>scriptHash</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 <li><strong>params</strong> (<em>Array</em>) &#8211; </li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -490,11 +506,14 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>scriptHash</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 <li><strong>operation</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 <li><strong>params</strong> (<em>Array</em>) &#8211; </li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -509,9 +528,12 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>script</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -527,7 +549,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>req</strong> (<em>Object</em>) &#8211; </li>
+<li><strong>req</strong> (<em>object</em>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -551,7 +573,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>boolean</strong> &#8211;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;boolean&gt;</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -566,9 +588,12 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>block</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;any&gt;</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -588,7 +613,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>boolean</strong> &#8211;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;boolean&gt;</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -612,7 +637,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>req</strong> (<em>Object</em>) &#8211; </li>
+<li><strong>req</strong> (<em>object</em>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -632,9 +657,12 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>url</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The URL of the node.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Response|any</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -946,9 +974,12 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>parser</strong> (<em>function</em>) &#8211; </li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>this</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -1030,7 +1061,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>url</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Node URL.</li>
-<li><strong>req</strong> (<em>Object</em>) &#8211; The request object.</li>
+<li><strong>req</strong> (<em>object</em>) &#8211; The request object.</li>
 <li><strong>req.method</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; RPC Method name.</li>
 <li><strong>req.params</strong> (<em>Array</em>) &#8211; Array of parameters to send.</li>
 <li><strong>req.id</strong> (<em>number</em>) &#8211; Unique id to identity yourself. RPC should reply with same id.</li>
@@ -1093,11 +1124,12 @@
         <dl>
             <dt>Tags</dt>
             <dd><a href="../../1.1.1/index.html">1.1.1</a></dd>
+            <dd><a href="../../2.0.0/reference/rpc.html">2.0.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
             <dd><a href="rpc.html">dev</a></dd>
-            <dd><a href="../../master/index.html">master</a></dd>
+            <dd><a href="../../master/reference/rpc.html">master</a></dd>
         </dl>
     </div>
 </div>

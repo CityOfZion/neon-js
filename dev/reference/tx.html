@@ -193,7 +193,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><b>Warning:</b> This document is for the development version of neon-js.</p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.0.0/reference/tx.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.0.0.</a></p>
 <div class="section" id="transactions">
 <h1>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h1>
 <p>Module <code class="docutils literal"><span class="pre">tx</span></code></p>
@@ -214,7 +214,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Object</strong> &#8211; {inputs: TransactionInput[], change: TransactionOutput[] }</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; {inputs: TransactionInput[], change: TransactionOutput[] }</p>
 </td>
 </tr>
 </tbody>
@@ -255,7 +255,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; Transaction Object</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; Transaction object</p>
 </td>
 </tr>
 </tbody>
@@ -276,7 +276,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Object</strong> &#8211; Signed transaction as an object.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; Signed transaction as an object.</p>
 </td>
 </tr>
 </tbody>
@@ -291,7 +291,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>transaction</strong> (<em>Object</em>) &#8211; </li>
+<li><strong>transaction</strong> (<a class="reference internal" href="#Transaction" title="Transaction"><em>Transaction</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -428,11 +428,14 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>assetSym</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The Symbol of the asset to send. Typically NEO or GAS.</li>
 <li><strong>value</strong> (<em>number</em>) &#8211; The value to send.</li>
 <li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The address to send the asset to.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>TransactionOutput</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>
@@ -702,13 +705,13 @@ This class is a wrapper around the various transaction building methods found in
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>balances</strong> (<em>Balance</em>) &#8211; Balance of address</li>
 <li><strong>intents</strong> (<em>Array.&lt;TransactionOutput&gt;</em>) &#8211; Sending intents as transactionOutputs</li>
-<li><strong>invoke</strong> (<em>Object|string</em>) &#8211; Invoke Script as an object or hexstring</li>
+<li><strong>invoke</strong> (<em>object|string</em>) &#8211; Invoke Script as an object or hexstring</li>
 <li><strong>gasCost</strong> (<em>number</em>) &#8211; Gas to attach for invoking script</li>
-<li><strong>override</strong> (<em>Object</em>) &#8211; Optional overrides (eg.custom versions)</li>
+<li><strong>override</strong> (<em>object</em>) &#8211; Optional overrides (eg.custom versions)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211; Unsigned Transaction</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; Unsigned Transaction</p>
 </td>
 </tr>
 </tbody>
@@ -878,11 +881,12 @@ This class is a wrapper around the various transaction building methods found in
         <dl>
             <dt>Tags</dt>
             <dd><a href="../../1.1.1/index.html">1.1.1</a></dd>
+            <dd><a href="../../2.0.0/reference/tx.html">2.0.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
             <dd><a href="tx.html">dev</a></dd>
-            <dd><a href="../../master/index.html">master</a></dd>
+            <dd><a href="../../master/reference/tx.html">master</a></dd>
         </dl>
     </div>
 </div>

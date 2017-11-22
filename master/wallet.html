@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Wallet &mdash; neon-js 1.1.1 documentation</title>
+  <title>Wallet &mdash; neon-js 2.0.0 documentation</title>
   
 
   
@@ -37,9 +37,9 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="neon-js 1.1.1 documentation" href="index.html"/>
-        <link rel="next" title="Light Wallet API" href="light_wallet_api/index.html"/>
-        <link rel="prev" title="neon-js" href="index.html"/> 
+    <link rel="top" title="neon-js 2.0.0 documentation" href="index.html"/>
+        <link rel="next" title="Transactions" href="transactions/index.html"/>
+        <link rel="prev" title="Interface" href="interface.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                1.1.1
+                2.0.0
               </div>
             
           
@@ -94,16 +94,24 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Wallet</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#account">Account</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#generation">Generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#manipulation">Manipulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#verification">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core">Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nep2">NEP2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#verify">Verify</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="light_wallet_api/index.html">Light Wallet API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 
             
@@ -175,64 +183,115 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../1.1.1/wallet.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 1.1.1.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../2.0.0/wallet.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.0.0.</a></p>
 <div class="section" id="wallet">
 <h1>Wallet<a class="headerlink" href="#wallet" title="Permalink to this headline">¶</a></h1>
+<p>The Wallet module is exposed as:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">account</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">account</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">is</span><span class="p">.</span><span class="nx">address</span><span class="p">(</span><span class="nx">string</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">wallet</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">account</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+<span class="nx">wallet</span><span class="p">.</span><span class="nx">isAddress</span><span class="p">(</span><span class="nx">string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The Wallet module contains the core methods for manipulating keys, creating signatures and verifying keys.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="c1">// Key generation and conversion</span>
+<span class="kr">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">()</span>
+<span class="kr">const</span> <span class="nx">wif</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">WIFFromPrivateKey</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+
+<span class="c1">// Encryption / Decryption</span>
+<span class="kr">const</span> <span class="nx">encrypted</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">,</span> <span class="s1">&#39;myPassword&#39;</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">decrypted</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">(</span><span class="nx">encrypted</span><span class="p">,</span> <span class="s1">&#39;myPassword&#39;</span><span class="p">)</span>
+
+<span class="c1">// Verify keys</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">is</span><span class="p">.</span><span class="nx">wif</span><span class="p">(</span><span class="nx">wif</span><span class="p">)</span> <span class="c1">// true</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">is</span><span class="p">.</span><span class="nx">publicKey</span><span class="p">(</span><span class="s1">&#39;randomphrase&#39;</span><span class="p">)</span> <span class="c1">// false</span>
+
+<span class="c1">// Transaction signing</span>
+<span class="kr">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">signature</span><span class="p">(</span><span class="nx">tx</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="section" id="account">
 <h2>Account<a class="headerlink" href="#account" title="Permalink to this headline">¶</a></h2>
-<p>The Account is an object that contains all keys generated from the key provided.</p>
-<dl class="function">
-<dt id="Account">
-<code class="descname">Account</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Account" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>str</strong> (<em>string</em>) &#8211; WIF/ Private Key / Public Key / Address.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<p>The Account class is constructed from a given key and provides methods to derive all other key formats from the given key. Do note that you are unable to derive a lower level key from a higher level.</p>
+<p>The keys are arranged as:</p>
+<ol class="arabic simple">
+<li>Encrypted Key (NEP2)</li>
+<li>Private Key (HEX or WIF)</li>
+<li>Public Key</li>
+<li>ScriptHash</li>
+<li>Address</li>
+</ol>
+<p>The Account class can only be created from a private key, public key, or address. ScriptHash and NEP2 are not accepted.</p>
+<p>You cannot derive a private key from a Account created using a Public Key. (Account will throw an error)</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">account</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">account</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">publicKey</span> <span class="o">=</span> <span class="nx">account</span><span class="p">.</span><span class="nx">publicKey</span>
+<span class="kd">let</span> <span class="nx">address</span> <span class="o">=</span> <span class="nx">account</span><span class="p">.</span><span class="nx">address</span>
 
-<p>This object is generated through the following methods:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
-
-<span class="nx">Neon</span><span class="p">.</span><span class="nx">getAccountFromWIFKey</span><span class="p">(</span><span class="nx">WIFKey</span><span class="p">)</span>
-<span class="nx">Neon</span><span class="p">.</span><span class="nx">getAccountFromPrivateKey</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
-<span class="nx">Neon</span><span class="p">.</span><span class="nx">getAccountFromPublicKey</span><span class="p">(</span><span class="nx">publicKey</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Do note that the account generated from <code class="docutils literal"><span class="pre">getAccountFromPublicKey</span></code> will not contain <code class="docutils literal"><span class="pre">privateKey</span></code> as it is impossible to find that out from a public key.</p>
-</div>
-<div class="section" id="generation">
-<h2>Generation<a class="headerlink" href="#generation" title="Permalink to this headline">¶</a></h2>
-<p>You can generate new keys using:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
-<span class="kd">let</span> <span class="nx">newKey</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">generatePrivateKey</span><span class="p">()</span>
-<span class="kd">let</span> <span class="nx">newAccount</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">getAccountFromPrivateKey</span><span class="p">(</span><span class="nx">newKey</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">account2</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">account</span><span class="p">(</span><span class="nx">publicKey</span><span class="p">)</span>
+<span class="nx">account</span><span class="p">.</span><span class="nx">privateKey</span> <span class="c1">// Throws error</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="manipulation">
-<h2>Manipulation<a class="headerlink" href="#manipulation" title="Permalink to this headline">¶</a></h2>
-<p>There are various key manipulation methods available. You are encouraged to use the Account methods for ease of access. However, if you want more specific transformations, do refer to the source code.</p>
-<blockquote>
-<div><p>import * as Neon from &#8216;neon-js&#8217;</p>
-<p>let publicKey = Neon.getPublicKey(privateKey, false)
-let publicKeyEncoded = neon.getPublicKeyEncoded(publicKey)
-let scriptHash = Neon.getScriptHashFromPublicKey(publicKeyEncoded)</p>
-</div></blockquote>
+<div class="section" id="core">
+<h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
+<p>The core methods available are methods to convert key formats and generate new private keys.</p>
+<p>Do note that the methods available is not the full set but only the minimum required. Generally, there is a method to retrieve the lower key from the higher key. For example, <code class="docutils literal"><span class="pre">getPublicKeyFromPrivateKey</span></code> exists but not <code class="docutils literal"><span class="pre">getAddressFromPrivatKey</span></code> or <code class="docutils literal"><span class="pre">getPrivateKeyFromPublicKey</span></code>. For conversions across all formats, you are encouraged to use the <code class="docutils literal"><span class="pre">Account</span></code> class.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">()</span>
+<span class="kr">const</span> <span class="nx">publicKey</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">publicKeyFromPrivateKey</span><span class="p">(</span><span class="nx">publicKey</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">scriptHash</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">scriptHashFromPublicKey</span><span class="p">(</span><span class="nx">publicKey</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">address</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">addressFromScriptHash</span><span class="p">(</span><span class="nx">scriptHash</span><span class="p">)</span>
+
+
+
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">wallet</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">generatePrivateKey</span><span class="p">()</span>
+<span class="kr">const</span> <span class="nx">publicKey</span> <span class="o">=</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">getPublicKeyFromPrivateKey</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">scriptHash</span> <span class="o">=</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">getScriptHashFromPublicKey</span><span class="p">(</span><span class="nx">publicKey</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">address</span> <span class="o">=</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">getAddressFromScriptHash</span><span class="p">(</span><span class="nx">scriptHash</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="verification">
-<h2>Verification<a class="headerlink" href="#verification" title="Permalink to this headline">¶</a></h2>
-<p>There are 2 methods for verifying address and encoded public key.</p>
-<blockquote>
-<div>import * as Neon from &#8216;neon-js&#8217;
-Neon.verifyAddress(address)
-Neon.verifyPublicKeyEncoded(publicKeyEncoded)</div></blockquote>
+</div>
+<div class="section" id="nep2">
+<h2>NEP2<a class="headerlink" href="#nep2" title="Permalink to this headline">¶</a></h2>
+<p>The NEP2 standard describes the procedure to encrypt or decrypt a private key. The encryption method accepts either a WIF or HEX private key. However, the decryption method will always return a WIF for consistency.</p>
+<p>Do note that the encryption/decryption takes a long time and might not work very nicely in browsers.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">()</span>
+<span class="kr">const</span> <span class="nx">WIF</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">WIFFromPrivateKey</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">nep2Key</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">,</span> <span class="s1">&#39;myPassword&#39;</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">decryptedKey</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">nep2Key</span><span class="p">,</span> <span class="s1">&#39;myPassword&#39;</span><span class="p">)</span>
+<span class="nx">WIF</span> <span class="o">===</span> <span class="nx">decryptedKey</span> <span class="c1">// true</span>
+
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">wallet</span> <span class="p">}</span>
+<span class="kr">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">generatePrivateKey</span><span class="p">()</span>
+<span class="kr">const</span> <span class="nx">WIF</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">).</span><span class="nx">WIF</span>
+<span class="kr">const</span> <span class="nx">nep2Key</span> <span class="o">=</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">(</span><span class="nx">WIF</span><span class="p">,</span> <span class="s1">&#39;myPassword&#39;</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">decryptedKey</span> <span class="o">=</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">nep2Key</span><span class="p">,</span> <span class="s1">&#39;myPassword&#39;</span><span class="p">)</span>
+<span class="nx">WIF</span> <span class="o">===</span> <span class="nx">decryptedKey</span> <span class="c1">// true</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="verify">
+<h2>Verify<a class="headerlink" href="#verify" title="Permalink to this headline">¶</a></h2>
+<p>Verification methods for the various key formats are available:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">is</span><span class="p">.</span><span class="nx">address</span><span class="p">(</span><span class="nx">addrStr</span><span class="p">)</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">is</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">(</span><span class="nx">keyStr</span><span class="p">)</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">is</span><span class="p">.</span><span class="nx">NEP2</span><span class="p">(</span><span class="nx">encryptedStr</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">wallet</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="nx">wallet</span><span class="p">.</span><span class="nx">isAddress</span><span class="p">(</span><span class="nx">addrStr</span><span class="p">)</span>
+<span class="nx">wallet</span><span class="p">.</span><span class="nx">isPrivateKey</span><span class="p">(</span><span class="nx">keyStr</span><span class="p">)</span>
+<span class="nx">wallet</span><span class="p">.</span><span class="nx">isNEP2</span><span class="p">(</span><span class="nx">keyStr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>These methods will return a boolean regarding the key format. No errors will be thrown.</p>
 </div>
 </div>
 
@@ -246,10 +305,10 @@ Neon.verifyPublicKeyEncoded(publicKeyEncoded)</div></blockquote>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="light_wallet_api/index.html" class="btn btn-neutral float-right" title="Light Wallet API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="transactions/index.html" class="btn btn-neutral float-right" title="Transactions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="neon-js" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="interface.html" class="btn btn-neutral" title="Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -283,6 +342,7 @@ Neon.verifyPublicKeyEncoded(publicKeyEncoded)</div></blockquote>
         <dl>
             <dt>Tags</dt>
             <dd><a href="../1.1.1/wallet.html">1.1.1</a></dd>
+            <dd><a href="../2.0.0/wallet.html">2.0.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -298,7 +358,7 @@ Neon.verifyPublicKeyEncoded(publicKeyEncoded)</div></blockquote>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.1.1',
+            VERSION:'2.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

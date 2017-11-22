@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Node RPC &mdash; neon-js 1.1.1 documentation</title>
+  <title>Node RPC &mdash; neon-js 2.0.0 documentation</title>
   
 
   
@@ -37,7 +37,9 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 1.1.1 documentation" href="../index.html"/> 
+    <link rel="top" title="neon-js 2.0.0 documentation" href="../index.html"/>
+        <link rel="next" title="API" href="../api/index.html"/>
+        <link rel="prev" title="Invocation Transaction" href="../transactions/invocation.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -66,7 +68,7 @@
             
             
               <div class="version">
-                1.1.1
+                2.0.0
               </div>
             
           
@@ -91,11 +93,23 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interface.html">Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../light_wallet_api/index.html">Light Wallet API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Node RPC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rpc-client">RPC Client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#query">Query</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
 </ul>
 
             
@@ -167,11 +181,55 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../1.1.1/rpc/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 1.1.1.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.0.0/rpc/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.0.0.</a></p>
 <div class="section" id="node-rpc">
 <h1>Node RPC<a class="headerlink" href="#node-rpc" title="Permalink to this headline">¶</a></h1>
-<p>Functionality for interacting with NEO node RPC</p>
-<div class="toctree-wrapper compound">
+<p>The <code class="docutils literal"><span class="pre">rpc</span></code> module is exposed as:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">rpcClient</span><span class="p">(</span><span class="nx">URL</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">rpc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">rpc</span><span class="p">.</span><span class="nx">rpcClient</span><span class="p">(</span><span class="nx">URL</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="rpc-client">
+<h2>RPC Client<a class="headerlink" href="#rpc-client" title="Permalink to this headline">¶</a></h2>
+<p>The RPC Client acts as a model for a specific NEO Node. RPC Calls are methods which external applications can interact with the NEO network easily without sending a transaction.</p>
+<p>It provides built-in RPC methods for easy calling. Previous queries can be retrieved from the <code class="docutils literal"><span class="pre">history</span></code> property.</p>
+<p>RPC methods mirror the API reference found in the official NEO documentation. All RPC methods return a Promise.</p>
+<p>Do note that method names follow the JS convention of camelCase instead of all lowercase.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="c1">// Creates a RPCClient with URL of version 2.3.2</span>
+<span class="kr">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">rpcClient</span><span class="p">(</span><span class="s1">&#39;http://seed1.neo.org:10332&#39;</span><span class="p">,</span> <span class="s1">&#39;2.3.2&#39;</span><span class="p">)</span>
+<span class="c1">// Returns block number</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">getBlockCount</span><span class="p">()</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">getRawTransaction</span><span class="p">(</span><span class="s1">&#39;f5412dba662ec8023e6fc93dba23e7b62679e0a7bebed52a0c3f70795cbb51d2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">// This will throw an error as invokefunction is not supported @ 2.3.2</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">invokeFunction</span><span class="p">(</span><span class="nx">contractAddr</span><span class="p">,</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+
+<span class="c1">// Custom query</span>
+<span class="kd">let</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span><span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;custommethod&#39;</span><span class="p">}</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="query">
+<h2>Query<a class="headerlink" href="#query" title="Permalink to this headline">¶</a></h2>
+<p>A Query object is a simple wrapper around a request/response pair. It allows us to generate queries quickly without being dependent on a client.</p>
+<p>Custom queries can be created by passing in the necessary parameters.</p>
+<p>There are also static methods to support generating supported RPC methods.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+
+<span class="c1">// Custom query</span>
+<span class="kr">const</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span><span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;newmethod&#39;</span><span class="p">,</span> <span class="nx">params</span><span class="o">:</span> <span class="p">[</span><span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">]})</span>
+<span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;http://mycustomneonode.com:10332&#39;</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">rpc</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="c1">// Simple query creation and execution</span>
+<span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">rpc</span><span class="p">.</span><span class="nx">Query</span><span class="p">.</span><span class="nx">getBlock</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;http://seed1.neo.org:10332&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -182,6 +240,15 @@
            </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../api/index.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../transactions/invocation.html" class="btn btn-neutral" title="Invocation Transaction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -213,6 +280,7 @@
         <dl>
             <dt>Tags</dt>
             <dd><a href="../../1.1.1/rpc/index.html">1.1.1</a></dd>
+            <dd><a href="../../2.0.0/rpc/index.html">2.0.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -228,7 +296,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.1.1',
+            VERSION:'2.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

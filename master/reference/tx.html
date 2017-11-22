@@ -1,0 +1,928 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Transactions &mdash; neon-js 2.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="neon-js 2.0.0 documentation" href="../index.html"/>
+        <link rel="up" title="Reference" href="index.html"/>
+        <link rel="next" title="Utility" href="utility.html"/>
+        <link rel="prev" title="Smart Contract" href="sc.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> neon-js
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpc.html">RPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sc.html">Smart Contract</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Transactions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#core">Core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#components">Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transaction">Transaction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utility.html">Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wallet.html">Wallet</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">neon-js</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Reference</a> &raquo;</li>
+        
+      <li>Transactions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/tx.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+    
+    
+
+
+
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.0.0/reference/tx.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.0.0.</a></p>
+<div class="section" id="transactions">
+<h1>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h1>
+<p>Module <code class="docutils literal"><span class="pre">tx</span></code></p>
+<div class="section" id="core">
+<h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="calculateInputs">
+<code class="descname">calculateInputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calculateInputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the inputs required given the intents and gasCost. gasCost has to be seperate because it will not be reflected as an TransactionOutput.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>balances</strong> (<em>Balance</em>) &#8211; Balance of all assets available.</li>
+<li><strong>intents</strong> (<em>Array.&lt;TransactionOutput&gt;</em>) &#8211; All sending intents</li>
+<li><strong>gasCost</strong> (<em>number</em>) &#8211; gasCost required for the transaction.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; {inputs: TransactionInput[], change: TransactionOutput[] }</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="serializeTransaction">
+<code class="descname">serializeTransaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#serializeTransaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes a given transaction object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>tx</strong> (<a class="reference internal" href="#Transaction" title="Transaction"><em>Transaction</em></a>) &#8211; </li>
+<li><strong>signed</strong> (<a class="reference internal" href="sc.html#boolean" title="boolean"><em>boolean</em></a>) &#8211; If the signatures should be serialized</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211; Hexstring of transaction</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="deserializeTransaction">
+<code class="descname">deserializeTransaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deserializeTransaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserializes a given string into a Transaction object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Serialized string</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; Transaction object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="signTransaction">
+<code class="descname">signTransaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#signTransaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signs a transaction with the corresponding privateKey. We are dealing with it as an Transaction object as multi-sig transactions require us to sign the transaction without signatures.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>transaction</strong> (<a class="reference internal" href="#Transaction" title="Transaction"><em>Transaction</em></a>) &#8211; Transaction as an object</li>
+<li><strong>privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The private key. This method does not check if the private key is valid (aka that the inputs come from the corresponding address)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; Signed transaction as an object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="getTransactionHash">
+<code class="descname">getTransactionHash</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getTransactionHash" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>transaction</strong> (<a class="reference internal" href="#Transaction" title="Transaction"><em>Transaction</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="components">
+<h2>Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="TransactionInput">
+<code class="descname">TransactionInput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TransactionInput" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>prevHash</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Transaction hash, Uint256</li>
+<li><strong>prevIndex</strong> (<em>number</em>) &#8211; Index of the coin in the previous transaction, Uint16</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="serializeTransactionInput">
+<code class="descname">serializeTransactionInput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#serializeTransactionInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes a TransactionInput.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>input</strong> (<a class="reference internal" href="#TransactionInput" title="TransactionInput"><em>TransactionInput</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="deserializeTransactionInput">
+<code class="descname">deserializeTransactionInput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deserializeTransactionInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserializes a stream of hexstring into a TransactionInput.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>stream</strong> (<a class="reference internal" href="utility.html#StringStream" title="StringStream"><em>StringStream</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>TransactionInput</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="TransactionOutput">
+<code class="descname">TransactionOutput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TransactionOutput" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>assetId</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; assetId, Uint256</li>
+<li><strong>value</strong> (<em>number</em>) &#8211; value of output, Fixed8</li>
+<li><strong>scriptHash</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Uint160</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="serializeTransactionOutput">
+<code class="descname">serializeTransactionOutput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#serializeTransactionOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes a TransactionOutput.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>output</strong> (<a class="reference internal" href="#TransactionOutput" title="TransactionOutput"><em>TransactionOutput</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="deserializeTransactionOutput">
+<code class="descname">deserializeTransactionOutput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deserializeTransactionOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserializes a stream into a TransactionOutput.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>stream</strong> (<a class="reference internal" href="utility.html#StringStream" title="StringStream"><em>StringStream</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>TransactionOutput</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="createTransactionOutput">
+<code class="descname">createTransactionOutput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#createTransactionOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper method to create a TransactionOutput using human-friendly inputs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>assetSym</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The Symbol of the asset to send. Typically NEO or GAS.</li>
+<li><strong>value</strong> (<em>number</em>) &#8211; The value to send.</li>
+<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The address to send the asset to.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>TransactionOutput</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="TransactionAttribute">
+<code class="descname">TransactionAttribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TransactionAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>usage</strong> (<em>number</em>) &#8211; Identifying byte</li>
+<li><strong>data</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="serializeTransactionAttribute">
+<code class="descname">serializeTransactionAttribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#serializeTransactionAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes a TransactionAttribute.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>attr</strong> (<a class="reference internal" href="#TransactionAttribute" title="TransactionAttribute"><em>TransactionAttribute</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="deserializeTransactionAttribute">
+<code class="descname">deserializeTransactionAttribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deserializeTransactionAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserializes a stream into a TransactionAttribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>stream</strong> (<a class="reference internal" href="utility.html#StringStream" title="StringStream"><em>StringStream</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>TransactionAttribute</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Witness">
+<code class="descname">Witness</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Witness" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>invocationScript</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; This data is stored as is (Little Endian)</li>
+<li><strong>verificationScript</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; This data is stored as is (Little Endian)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="serializeWitness">
+<code class="descname">serializeWitness</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#serializeWitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes a Witness.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>witness</strong> (<a class="reference internal" href="#Witness" title="Witness"><em>Witness</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="deserializeWitness">
+<code class="descname">deserializeWitness</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deserializeWitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserializes a stream into a Witness</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>stream</strong> (<a class="reference internal" href="utility.html#StringStream" title="StringStream"><em>StringStream</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Witness</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="transaction">
+<h2>Transaction<a class="headerlink" href="#transaction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Transaction">
+<em class="property">class </em><code class="descname">Transaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transactions are what you use to interact with the blockchain.
+A transaction is made up of components found in the component file.
+Besides those components which are found in every transaction, there are also special data that is unique to each transaction type. These &#8216;exclusive&#8217; data can be found in the exclusive file.
+This class is a wrapper around the various transaction building methods found in this folder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>config</strong> (<em>object</em>) &#8211; A config object that contains all the properties of a Transaction</li>
+<li><strong>config.type</strong> (<em>number</em>) &#8211; Transaction type. Default is 128 (ContractTransaction).</li>
+<li><strong>config.version</strong> (<em>number</em>) &#8211; Transaction version. Default is latest version for ContractTransaction.</li>
+<li><strong>config.attributes</strong> (<em>Array.&lt;TransactionAttribute&gt;</em>) &#8211; Transaction Attributes.</li>
+<li><strong>config.inputs</strong> (<em>Array.&lt;TransactionInput&gt;</em>) &#8211; Transaction Inputs.</li>
+<li><strong>config.outputs</strong> (<em>Array.&lt;TransactionOutput&gt;</em>) &#8211; Transaction Outputs.</li>
+<li><strong>config.scripts</strong> (<em>Array.&lt;Witness&gt;</em>) &#8211; Witnesses.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="addOutput">
+<code class="descname">addOutput</code><span class="sig-paren">(</span><em>assetSymOrTxOut</em>, <em>value</em>, <em>address</em><span class="sig-paren">)</span><a class="headerlink" href="#addOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a TransactionOutput. TransactionOutput can be given as a TransactionOutput object or as human-friendly values. This is detected by the number of arguments provided.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>assetSymOrTxOut</strong> (<em>string|Object</em>) &#8211; The symbol of the asset (eg NEO or GAS) or the TransactionOutput object.</li>
+<li><strong>value</strong> (<em>number</em>) &#8211; The value to send. Required if providing human-friendly values.</li>
+<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The address to send to. Required if providing human-friendly values.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="addRemark">
+<code class="descname">addRemark</code><span class="sig-paren">(</span><em>remark</em><span class="sig-paren">)</span><a class="headerlink" href="#addRemark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a remark.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>remark</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; A remark in ASCII.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attributes">
+<code class="descname">attributes</code><a class="headerlink" href="#attributes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="calculate">
+<code class="descname">calculate</code><span class="sig-paren">(</span><em>balance</em><span class="sig-paren">)</span><a class="headerlink" href="#calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the inputs required based on existing outputs provided. Also takes into account the fees required through the gas property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>balance</strong> (<em>Balance</em>) &#8211; Balance to retrieve inputs from.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="createClaimTx">
+<code class="descname">createClaimTx</code><span class="sig-paren">(</span><em>publicKeyOrAddress</em>, <em>claimData</em>, <em>override</em><span class="sig-paren">)</span><a class="headerlink" href="#createClaimTx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a ClaimTransaction with the given parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>publicKeyOrAddress</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Public key (Encoded form) or address</li>
+<li><strong>claimData</strong> (<em>Object</em>) &#8211; Claim Data provided by API</li>
+<li><strong>override</strong> (<em>Object</em>) &#8211; Optional overrides (eg. custom version)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; Unsigned Transaction</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="createContractTx">
+<code class="descname">createContractTx</code><span class="sig-paren">(</span><em>balances</em>, <em>intents</em>, <em>override</em><span class="sig-paren">)</span><a class="headerlink" href="#createContractTx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a ContractTransaction with the given parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>balances</strong> (<em>Balance</em>) &#8211; Current assets available.</li>
+<li><strong>intents</strong> (<em>Array.&lt;TransactionOutput&gt;</em>) &#8211; All sending intents as TransactionOutputs</li>
+<li><strong>override</strong> (<em>Object</em>) &#8211; Optional overrides (eg.custom versions)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; Unsigned Transaction</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="createInvocationTx">
+<code class="descname">createInvocationTx</code><span class="sig-paren">(</span><em>balances</em>, <em>intents</em>, <em>invoke</em>, <em>gasCost</em>, <em>override</em><span class="sig-paren">)</span><a class="headerlink" href="#createInvocationTx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an InvocationTransaction with the given parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>balances</strong> (<em>Balance</em>) &#8211; Balance of address</li>
+<li><strong>intents</strong> (<em>Array.&lt;TransactionOutput&gt;</em>) &#8211; Sending intents as transactionOutputs</li>
+<li><strong>invoke</strong> (<em>object|string</em>) &#8211; Invoke Script as an object or hexstring</li>
+<li><strong>gasCost</strong> (<em>number</em>) &#8211; Gas to attach for invoking script</li>
+<li><strong>override</strong> (<em>object</em>) &#8211; Optional overrides (eg.custom versions)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; Unsigned Transaction</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="deserialize">
+<code class="descname">deserialize</code><span class="sig-paren">(</span><em>hexstring</em><span class="sig-paren">)</span><a class="headerlink" href="#deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserializes a hexstring into a Transaction object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>hexstring</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Hexstring of the transaction.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="exclusiveData">
+<code class="descname">exclusiveData</code><a class="headerlink" href="#exclusiveData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exclusive Data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hash">
+<code class="descname">hash</code><a class="headerlink" href="#hash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transaction hash.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="inputs">
+<code class="descname">inputs</code><a class="headerlink" href="#inputs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="outputs">
+<code class="descname">outputs</code><a class="headerlink" href="#outputs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scripts">
+<code class="descname">scripts</code><a class="headerlink" href="#scripts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="serialize">
+<code class="descname">serialize</code><span class="sig-paren">(</span><em>signed</em><span class="sig-paren">)</span><a class="headerlink" href="#serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize the transaction and return it as a hexstring.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>signed</strong> (<a class="reference internal" href="sc.html#boolean" title="boolean"><em>boolean</em></a>) &#8211; Whether to serialize the signatures. Signing requires it to be serialized without the signatures.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211; Hexstring.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="serializeExclusiveData">
+<code class="descname">serializeExclusiveData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#serializeExclusiveData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the exclusive data in this transaction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>string</strong> &#8211; hexstring of the exclusive data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sign">
+<code class="descname">sign</code><span class="sig-paren">(</span><em>privateKey</em><span class="sig-paren">)</span><a class="headerlink" href="#sign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signs a transaction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Transaction</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="type">
+<code class="descname">type</code><a class="headerlink" href="#type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="version">
+<code class="descname">version</code><a class="headerlink" href="#version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="utility.html" class="btn btn-neutral float-right" title="Utility" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sc.html" class="btn btn-neutral" title="Smart Contract" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: master
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../../1.1.1/index.html">1.1.1</a></dd>
+            <dd><a href="../../2.0.0/reference/tx.html">2.0.0</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../dev/reference/tx.html">dev</a></dd>
+            <dd><a href="tx.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

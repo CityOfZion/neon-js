@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Smart Contract &mdash; neon-js 1.1.1 documentation</title>
+  <title>Smart Contract &mdash; neon-js 2.0.0 documentation</title>
   
 
   
@@ -37,8 +37,9 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 1.1.1 documentation" href="../index.html"/>
-        <link rel="prev" title="Invocation Transaction" href="../transactions/invocation.html"/> 
+    <link rel="top" title="neon-js 2.0.0 documentation" href="../index.html"/>
+        <link rel="next" title="Utilities" href="../utility.html"/>
+        <link rel="prev" title="API" href="../api/index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -67,7 +68,7 @@
             
             
               <div class="version">
-                1.1.1
+                2.0.0
               </div>
             
           
@@ -93,12 +94,22 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interface.html">Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../light_wallet_api/index.html">Light Wallet API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Smart Contract</a><ul class="simple">
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Smart Contract</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#script-builder">Script Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contractparam">ContractParam</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
 </ul>
 
             
@@ -170,21 +181,90 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../1.1.1/smart_contracts/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 1.1.1.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.0.0/smart_contracts/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.0.0.</a></p>
 <div class="section" id="smart-contract">
 <h1>Smart Contract<a class="headerlink" href="#smart-contract" title="Permalink to this headline">¶</a></h1>
-<p>We can call smart contracts through the RPC endpoint using an InvocationTransaction. The transaction carries the script which is read and executed by the VM contained within the NEO node.</p>
-<p>As of 2.3.3, NEO nodes have implemented several RPC functions for testing out smart contract calls. These functions can be used to execute a VM script, returning the results as if it was executed on the blockchain itself. This is useful for developers to test and find out actual gas costs and find bugs.</p>
-<p>The NEP-5 standard describes the token standard within the NEO ecosystem. To those coming from Ethereum, this is akin to the ERC20 token standard.</p>
-<p>The Neon API exposes 2 methods for NEP-5:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
-<span class="c1">// Returns name, symbol and total supply</span>
-<span class="nx">Neon</span><span class="p">.</span><span class="nx">getTokenInfo</span><span class="p">(</span><span class="nx">net</span><span class="p">,</span> <span class="nx">scriptHash</span><span class="p">)</span>
-<span class="c1">// Returns amount of specific token owned by address.</span>
-<span class="nx">Neon</span><span class="p">.</span><span class="nx">getTokenBalance</span><span class="p">(</span><span class="nx">net</span><span class="p">,</span> <span class="nx">scriptHash</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+<p>The <code class="docutils literal"><span class="pre">sc</span></code> module is exposed as:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">sb</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">scriptBuilder</span><span class="p">()</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">sc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">sc</span><span class="p">.</span><span class="nx">scriptBuilder</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="toctree-wrapper compound">
+<p>In NEO, users interact with smart contracts through InvocationTransactions. These transactions carry the hex output from scriptBuilder and assets involved to the network for processing.</p>
+<p>To test out smart contracts, you are better off using RPC calls:</p>
+<ul class="simple">
+<li>invoke</li>
+<li>invokefunction</li>
+<li>invokescript</li>
+</ul>
+<p>These are implemented in v2.3.3. These RPC calls execute the provided script and returns the result based on the current blockchain state. However, it is not actually recorded on the chain. Thus, their purpose is to test out the script to ensure validity and find out the gas cost required.</p>
+<p>For example, in the NEP5 token standard, we do not require an actual transaction to retrieve the name or symbol of the token. Thus, it is better to use a <code class="docutils literal"><span class="pre">invoke</span></code> RPC call instead of a real invocationTransaction.</p>
+<p>We will use a transaction when we want to effect a state change. For example, we want to transfer tokens from address A to B. We will use invoke to ensure the script is valid before sending the actual transaction.</p>
+<div class="section" id="script-builder">
+<h2>Script Builder<a class="headerlink" href="#script-builder" title="Permalink to this headline">¶</a></h2>
+<p>The Script Builder is an object that converts a smart contract method call into a hexstring that can be sent to the network with a InvocationTransaction.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">rpc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">sb</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">scriptBuilder</span><span class="p">()</span>
+<span class="c1">// Build script to call &#39;name&#39; from contract at 5b7074e873973a6ed3708862f219a6fbf4d1c411</span>
+<span class="nx">sb</span><span class="p">.</span><span class="nx">emitAppCall</span><span class="p">(</span><span class="s1">&#39;5b7074e873973a6ed3708862f219a6fbf4d1c411&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
+
+<span class="c1">// Test the script with invokescript</span>
+<span class="nx">rpc</span><span class="p">.</span><span class="nx">Query</span><span class="p">.</span><span class="nx">invokeScript</span><span class="p">(</span><span class="nx">sb</span><span class="p">.</span><span class="nx">str</span><span class="p">).</span><span class="nx">execute</span><span class="p">(</span><span class="nx">nodeURL</span><span class="p">)</span>
+
+<span class="c1">// Create InvocationTransaction for real execution</span>
+<span class="kr">const</span> <span class="nx">tx</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">invocationTx</span><span class="p">(</span><span class="nx">publicKey</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{},</span> <span class="nx">sb</span><span class="p">.</span><span class="nx">str</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You may chain multiple calls together in a single VM script. The results will be returned in order.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">rpc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">sb</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">scriptBuilder</span><span class="p">()</span>
+<span class="nx">sb</span><span class="p">.</span><span class="nx">emitAppCall</span><span class="p">(</span><span class="nx">scriptHash</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">emitAppCall</span><span class="p">(</span><span class="nx">scriptHash</span><span class="p">,</span> <span class="s1">&#39;symbol&#39;</span><span class="p">)</span>
+
+<span class="c1">// Returns name, symbol</span>
+<span class="nx">rpc</span><span class="p">.</span><span class="nx">Query</span><span class="p">.</span><span class="nx">invokeScript</span><span class="p">(</span><span class="nx">sb</span><span class="p">.</span><span class="nx">str</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">Neon</span><span class="p">.</span><span class="nx">CONST</span><span class="p">.</span><span class="nx">DEFAULT_RPC</span><span class="p">.</span><span class="nx">MAIN</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+  <span class="p">})</span>
+</pre></div>
+</div>
+<p>A simple wrapper method is provided for convenience.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">props</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">scriptHash</span><span class="o">:</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">CONST</span><span class="p">.</span><span class="nx">CONTRACTS</span><span class="p">.</span><span class="nx">TEST_RPX</span><span class="p">,</span>
+  <span class="nx">operation</span><span class="o">:</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span>
+  <span class="nx">args</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">}</span>
+<span class="c1">// Returns a hexstring</span>
+<span class="kr">const</span> <span class="nx">vmScript</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">script</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="contractparam">
+<h2>ContractParam<a class="headerlink" href="#contractparam" title="Permalink to this headline">¶</a></h2>
+<p>ContractParam objects provide a convenient way to construct calls for <code class="docutils literal"><span class="pre">invoke</span></code> and <code class="docutils literal"><span class="pre">invokefunction</span></code>. These RPC calls utilise a JSON struct for arguments and can be messy to create by hand:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="nb">String</span><span class="p">,</span>
+  <span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;this is a string&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>ContractParam currently supports creating string, boolean, integer, bytearray and array:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">sc</span><span class="p">,</span> <span class="nx">rpc</span><span class="p">,</span> <span class="nx">CONST</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">param1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">contractParam</span><span class="p">(</span><span class="s1">&#39;String&#39;</span><span class="p">,</span> <span class="s1">&#39;balanceOf&#39;</span><span class="p">)</span>
+<span class="c1">// This is a convenient way to convert an address to a reversed scriptHash that smart contracts use.</span>
+<span class="kr">const</span> <span class="nx">param2</span> <span class="o">=</span> <span class="nx">sc</span><span class="p">.</span><span class="nx">ContractParam</span><span class="p">.</span><span class="nx">byteArray</span><span class="p">(</span><span class="s1">&#39;AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx&#39;</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">)</span>
+
+<span class="nx">rpc</span><span class="p">.</span><span class="nx">Query</span><span class="p">.</span><span class="nx">invoke</span><span class="p">(</span><span class="nx">CONST</span><span class="p">.</span><span class="nx">CONTRACTS</span><span class="p">.</span><span class="nx">TEST_RPX</span><span class="p">,</span> <span class="nx">param1</span><span class="p">,</span> <span class="nx">sc</span><span class="p">.</span><span class="nx">ContractParam</span><span class="p">.</span><span class="nx">array</span><span class="p">(</span><span class="nx">param2</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+  <span class="p">})</span>
+</pre></div>
+</div>
+<p>ContractParams are compatible with ScriptBuilder so it is fine to pass them in as arguments directly.</p>
 </div>
 </div>
 
@@ -198,8 +278,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../utility.html" class="btn btn-neutral float-right" title="Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="../transactions/invocation.html" class="btn btn-neutral" title="Invocation Transaction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="../api/index.html" class="btn btn-neutral" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -233,6 +315,7 @@
         <dl>
             <dt>Tags</dt>
             <dd><a href="../../1.1.1/smart_contracts/index.html">1.1.1</a></dd>
+            <dd><a href="../../2.0.0/smart_contracts/index.html">2.0.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -248,7 +331,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.1.1',
+            VERSION:'2.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
