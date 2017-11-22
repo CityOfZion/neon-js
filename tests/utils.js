@@ -95,7 +95,7 @@ describe('Utils', () => {
     })
   })
 
-  describe('int2hex', () => {
+  describe('int2hex (BE)', () => {
     it('throws if non-number', () => {
       (() => int2hex('01')).should.throw()
     })
@@ -103,9 +103,9 @@ describe('Utils', () => {
       const actual = int2hex(0x00)
       actual.should.eql('00')
     })
-    it('converts a number to its hex form (max)', () => {
-      const actual = int2hex(0xFF)
-      actual.should.eql('ff')
+    it('converts a number to its hex form (big)', () => {
+      const actual = int2hex(0xFFF000F)
+      actual.should.eql('0fff000f')
     })
   })
 

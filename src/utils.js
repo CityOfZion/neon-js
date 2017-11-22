@@ -66,7 +66,7 @@ export const ab2hexstring = arr => {
 export const str2hexstring = str => ab2hexstring(str2ab(str))
 
 /**
- * convert an integer to hex and add leading zeros
+ * convert an integer to big endian hex and add leading zeros
  * @param {number} num
  * @returns {string}
  */
