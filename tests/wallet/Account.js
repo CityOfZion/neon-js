@@ -2,6 +2,7 @@ import Account from '../../src/wallet/Account'
 
 describe('Account', function () {
   const acct = {
+    encrypted: '6PYWVp3xfPxVAcZPFyQkpYefXpk73Ub3w5SX7jmcgKmj2DfXnKvYS5xhMx',
     WIF: 'L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG',
     privateKey: '9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69',
     publicKey: '031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9',
@@ -9,6 +10,8 @@ describe('Account', function () {
     scriptHash: '5df31f6f59e6a4fbdd75103786bf73db1000b235',
     address: 'ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s'
   }
+
+  const keyphrase = 'thisisakeyphrase'
 
   it('can be created with different formats', () => {
     Object.keys(acct).map((key) => {
@@ -39,6 +42,19 @@ describe('Account', function () {
     a.publicKey.should.equal(acct.publicKey)
     a.getPublicKey(false).should.equal(acct.publicKeyUnencoded)
     a.getPublicKey(true).should.equal(acct.publicKey)
+  })
+
+  this.timeout(15000)
+  it('encrypts the key', () => {
+    const a = new Account(acct.WIF)
+    a.encrypt(keyphrase)
+    a.encrypted.should.equal(acct.encrypted)
+  })
+
+  it('decrypts the key', () => {
+    const a = new Account(acct.encrypted)
+    a.decrypt(keyphrase)
+    a.WIF.should.equal(acct.WIF)
   })
 
   it('throws error when insufficient information given', () => {

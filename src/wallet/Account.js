@@ -1,5 +1,6 @@
 import * as core from './core'
 import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
+import { encrypt, decrypt } from './nep2'
 
 /**
  * @class Account
@@ -25,9 +26,18 @@ class Account {
       this._privateKey = core.getPrivateKeyFromWIF(str)
       this._WIF = str
     } else if (isNEP2(str)) {
-      throw new ReferenceError(`Account does not support NEP2. Please decode first.`)
+      this._encrypted = str
     } else {
       throw new ReferenceError(`Invalid input: ${str}`)
+    }
+  }
+
+  /** @type {string} */
+  get encrypted () {
+    if (this._encrypted) {
+      return this._encrypted
+    } else {
+      throw new Error(`No encrypted key found`)
     }
   }
 
@@ -45,6 +55,8 @@ class Account {
   get privateKey () {
     if (this._privateKey) {
       return this._privateKey
+    } else if (this._encrypted) {
+      throw new ReferenceError('Private Key encrypted!')
     } else {
       throw new ReferenceError('No Private Key provided!')
     }
@@ -98,6 +110,28 @@ class Account {
       this._address = core.getAddressFromScriptHash(this.scriptHash)
       return this._address
     }
+  }
+
+  /**
+   * Encrypts the current privateKey and return the Account object.
+   * @param {string} keyphrase
+   * @param {object} [scryptParams]
+   * @return {Account} this
+   */
+  encrypt (keyphrase, scryptParams = undefined) {
+    this._encrypted = encrypt(this._privateKey, keyphrase, scryptParams)
+    return this
+  }
+
+  /**
+   * Decrypts the encrypted key and return the Account object.
+   * @param {string} keyphrase
+   * @param {object} [scryptParams]
+   * @return {Account} this
+   */
+  decrypt (keyphrase, scryptParams = undefined) {
+    this._WIF = decrypt(this._encrypted, keyphrase, scryptParams)
+    return this
   }
 }
 
