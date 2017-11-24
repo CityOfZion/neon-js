@@ -44,6 +44,7 @@ export const generateEncryptedWif = (passphrase) => {
  * @returns {string} The encrypted key in Base58 (Case sensitive).
  */
 export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
+  scryptParams = parseScryptParams(scryptParams)
   const account = new Account(wifKey)
   // SHA Salt (use the first 4 bytes)
   const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
@@ -66,6 +67,7 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
  * @returns {string} The decrypted WIF key.
  */
 export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
+  scryptParams = parseScryptParams(scryptParams)
   const assembled = ab2hexstring(bs58check.decode(encryptedKey))
   const addressHash = assembled.substr(6, 8)
   const encrypted = assembled.substr(-64)
@@ -89,4 +91,17 @@ export const encryptWIF = (wif, passphrase) => {
 
 export const decryptWIF = (encrypted, passphrase) => {
   return Promise.resolve(decrypt(encrypted, passphrase))
+}
+
+/**
+ * Helper method to read and parse scryptParams. Helps converts shortforms declarations to longforms.
+ * @param {object} scryptParams - Scrypt parameters object
+ * @return {object}
+ */
+const parseScryptParams = (scryptParams) => {
+  const parsed = {}
+  if (scryptParams.n) parsed.cost = scryptParams.n
+  if (scryptParams.r) parsed.blockSize = scryptParams.r
+  if (scryptParams.p) parsed.parallel = scryptParams.p
+  return Object.assign({}, DEFAULT_SCRYPT, parsed, scryptParams)
 }
