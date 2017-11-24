@@ -9,16 +9,7 @@ import scrypt from 'js-scrypt'
 import { generatePrivateKey } from './core'
 import Account from './Account'
 import { ab2hexstring, hexXor } from '../utils'
-
-// specified by nep2, same as bip38
-const NEP_HEADER = '0142'
-const NEP_FLAG = 'e0'
-const SCRYPT_OPTS = {
-  cost: 16384,
-  blockSize: 8,
-  parallel: 8,
-  size: 64
-}
+import { DEFAULT_SCRYPT, NEP_HEADER, NEP_FLAG } from '../consts'
 
 /**
  * Encrypts an WIF key with a given passphrase, returning a Promise<Account>.
@@ -56,7 +47,7 @@ export const encrypt = (wifKey, keyphrase) => {
   // SHA Salt (use the first 4 bytes)
   const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
   // Scrypt
-  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), SCRYPT_OPTS).toString('hex')
+  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), DEFAULT_SCRYPT).toString('hex')
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   // AES Encrypt
@@ -77,7 +68,7 @@ export const decrypt = (encryptedKey, keyphrase) => {
   const assembled = ab2hexstring(bs58check.decode(encryptedKey))
   const addressHash = assembled.substr(6, 8)
   const encrypted = assembled.substr(-64)
-  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), SCRYPT_OPTS).toString('hex')
+  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), DEFAULT_SCRYPT).toString('hex')
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   const ciphertext = { ciphertext: enc.Hex.parse(encrypted), salt: '' }
