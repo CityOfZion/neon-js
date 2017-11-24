@@ -10,11 +10,17 @@ import { encrypt, decrypt } from './nep2'
  * Key formats are derived from each other lazily and stored for future access.
  * If the previous key (one level higher) is not found, it will attempt to generate it or throw an Error if insufficient information was provided (eg. trying to generate private key when only address was given.)
  * NEP2 <=> WIF <=> Private => Public => ScriptHash <=> Address
- * @param {string} str - WIF/ Private Key / Public Key / Address.
+ * @param {string|object} str - WIF/ Private Key / Public Key / Address or a Wallet Account object.
  */
 class Account {
   constructor (str) {
-    if (isPrivateKey(str)) {
+    this.label = ''
+    this.extra = null
+    if (typeof str === 'object') {
+      this._encrypted = str.key
+      this.label = str.label
+      this.extra = str.extra
+    } else if (isPrivateKey(str)) {
       this._privateKey = str
     } else if (isPublicKey(str, false)) {
       this._publicKey = core.getPublicKeyEncoded(str)
