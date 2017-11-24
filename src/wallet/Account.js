@@ -16,7 +16,9 @@ class Account {
   constructor (str) {
     this.label = ''
     this.extra = null
-    if (typeof str === 'object') {
+    if (!str) {
+      this._privateKey = core.generatePrivateKey()
+    } else if (typeof str === 'object') {
       this._encrypted = str.key
       this.label = str.label
       this.extra = str.extra
@@ -138,6 +140,22 @@ class Account {
   decrypt (keyphrase, scryptParams = undefined) {
     this._WIF = decrypt(this._encrypted, keyphrase, scryptParams)
     return this
+  }
+
+  /**
+   * Export Account as a Wallet Account object.
+   * @return {WalletAccount}
+   */
+  export () {
+    return {
+      address: this.address,
+      label: this.label,
+      isDefault: false,
+      lock: false,
+      key: this.encrypted,
+      contract: {},
+      extra: this.extra
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 import Account from '../../src/wallet/Account'
+import testWallet from './testWallet.json'
 
 describe('Account', function () {
   const acct = {
@@ -25,6 +26,14 @@ describe('Account', function () {
       }
       a[key].should.equal(acct[key])
     })
+  })
+
+  it('can be created from Wallet Account object', () => {
+    const walletAcct = testWallet.accounts[0]
+    const a = new Account(walletAcct)
+    a.should.not.equal(undefined)
+    a.encrypted.should.equal(walletAcct.key)
+    a.address.should.equal(walletAcct.address)
   })
 
   it('can query different key formats', () => {
