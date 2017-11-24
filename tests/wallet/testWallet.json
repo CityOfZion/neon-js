@@ -1,0 +1,20 @@
+{
+  "name": "MyWallet",
+  "scrypt": {
+    "n": 16384,
+    "r": 8,
+    "p": 8
+  },
+  "accounts": [
+    {
+      "address": "AQLASLtT6pWbThcSCYU1biVqhMnzhTgLFq",
+      "label": "MyAddress",
+      "isDefault": true,
+      "lock": false,
+      "key": "6PYWB8m1bCnu5bQkRUKAwbZp2BHNvQ3BQRLbpLdTuizpyLkQPSZbtZfoxx",
+      "contract": {},
+      "extra": null
+    }
+  ],
+  "extra": null
+}

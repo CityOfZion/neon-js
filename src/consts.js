@@ -31,6 +31,13 @@ export const DEFAULT_SCRYPT = {
   size: 64
 }
 
+export const DEFAULT_WALLET = {
+  name: 'myWallet',
+  scrypt: DEFAULT_SCRYPT,
+  accounts: [],
+  extra: null
+}
+
 export const NEO_NETWORK = {
   MAIN: 'MainNet',
   TEST: 'TestNet'
