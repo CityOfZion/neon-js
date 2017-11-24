@@ -16,12 +16,17 @@ class Account {
   constructor (str) {
     this.label = ''
     this.extra = null
+    this.isDefault = false
+    this.lock = false
     if (!str) {
       this._privateKey = core.generatePrivateKey()
     } else if (typeof str === 'object') {
       this._encrypted = str.key
+      this._address = str.address
       this.label = str.label
       this.extra = str.extra
+      this.isDefault = str.isDefault
+      this.lock = str.lock
     } else if (isPrivateKey(str)) {
       this._privateKey = str
     } else if (isPublicKey(str, false)) {
@@ -150,8 +155,8 @@ class Account {
     return {
       address: this.address,
       label: this.label,
-      isDefault: false,
-      lock: false,
+      isDefault: this.isDefault,
+      lock: this.lock,
       key: this.encrypted,
       contract: {},
       extra: this.extra
