@@ -1,7 +1,7 @@
 import * as NEP5 from '../../src/api/nep5'
 import testKeys from '../testKeys.json'
 
-describe.only('NEP5', function () {
+describe('NEP5', function () {
   this.timeout(10000)
   const net = 'http://seed3.neo.org:20332'
   const scriptHash = 'd7678dd97c000be3f33e9362e673101bac4ca654'
@@ -22,7 +22,6 @@ describe.only('NEP5', function () {
   it('get balance', () => {
     return NEP5.getTokenBalance(net, scriptHash, testKeys.c.address)
       .then(result => {
-        console.log('token balance', result);
         result.should.be.above(0)
       })
       .catch((e) => {
