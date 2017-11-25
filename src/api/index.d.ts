@@ -110,6 +110,15 @@ export namespace neoscan {
 export namespace nep5 {
   export function getTokenInfo(net: string, scriptHash: string): Promise<{ name: string, symbol: string, decimals: number, totalSupply: number }>
   export function getTokenBalance(net: string, scriptHash: string, address: string): Promise<number>
+  export function doTransferToken(
+    net: string,
+    scriptHash: string,
+    fromWif: string,
+    toAddress: string,
+    transferAmount: number,
+    gasCost?: number,
+    signingFunction?: (unsigned: Transaction, publicKey: string) => Transaction
+  ): Promise<RPCResponse>
 }
 
 //index

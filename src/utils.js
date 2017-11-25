@@ -88,7 +88,7 @@ export const int2hex = num => {
 export const num2hexstring = (num, size = 2, littleEndian = false) => {
   if (typeof num !== 'number') throw new Error('num must be numeric')
   if (num < 0) throw new RangeError('num is unsigned (>= 0)')
-  if (!Number.isSafeInteger(num)) throw new RangeError('num must be a safe integer')
+  if (!Number.isSafeInteger(num)) throw new RangeError(`num (${num}) must be a safe integer`)
   let hexstring = num.toString(16)
   hexstring = hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length)
   if (littleEndian) hexstring = reverseHex(hexstring)
@@ -101,15 +101,9 @@ export const num2hexstring = (num, size = 2, littleEndian = false) => {
  * @param {number} size output size in hex chars
  * @return {string} number in Fixed8 representation.
  */
-export const num2fixed8hex = (num, size = 16) => {
+export const num2fixed8 = (num, size = 16) => {
   if (typeof num !== 'number') throw new Error('num must be numeric')
-  return num2hexstring(num * Math.pow(10, 8), size, true)
-}
-
-// TODO: phase out use of this export
-export const num2fixed8 = (num, size) => {
-  console.warn('the name num2fixed8 is deprecated, use num2fixed8hex instead')
-  return num2fixed8hex(num, size)
+  return num2hexstring(Math.round(num * Math.pow(10, 8)), size, true)
 }
 
 /**
@@ -117,18 +111,11 @@ export const num2fixed8 = (num, size) => {
  * @param {string} fixed8hex - number in Fixed8 representation
  * @return {number}
  */
-export const fixed8hex2num = (fixed8hex) => {
+export const fixed82num = (fixed8hex) => {
   if (typeof fixed8hex !== 'string') throw new Error('fixed8hex must be a string')
   if (!fixed8hex.length || fixed8hex.length % 2 !== 0) throw new Error('fixed8hex must be hex')
   return parseInt(reverseHex(fixed8hex), 16) / Math.pow(10, 8)
 }
-
-// TODO: phase out use of this export
-export const fixed82num = (fixed8hex) => {
-  console.warn('the name fixed82num is deprecated, use fixed8hex2num instead')
-  return fixed8hex2num(fixed8hex)
-}
-// TODO: use this export going forward
 
 /**
  * Converts a number to a variable length Int. Used for array length header

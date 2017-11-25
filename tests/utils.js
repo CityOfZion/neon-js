@@ -1,13 +1,13 @@
 import {
   ab2hexstring,
   ab2str,
-  fixed8hex2num,
+  fixed82num,
   hash160,
   hash256,
   hexstring2ab,
   hexXor,
   int2hex,
-  num2fixed8hex,
+  num2fixed8,
   num2hexstring,
   num2VarInt,
   reverseArray,
@@ -180,30 +180,40 @@ describe('Utils', () => {
     })
   })
 
-  describe('num2fixed8hex', () => {
+  describe('num2fixed8', () => {
     it('throws if not a number', () => {
-      (() => num2fixed8hex('1')).should.throw()
+      (() => num2fixed8('1')).should.throw()
     })
     it('converts a number to fixed8 hex', () => {
-      const actual = num2fixed8hex(1)
+      const actual = num2fixed8(1)
       const expected = '00e1f50500000000'
+      actual.should.eql(expected)
+    })
+    it('converts a big number with decimal places', () => {
+      const actual = num2fixed8(123456.12345678)
+      const expected = '4ea1d66f3a0b0000'
       actual.should.eql(expected)
     })
   })
 
-  describe('fixed8hex2num', () => {
+  describe('fixed82num', () => {
     it('throws if not a string', () => {
-      (() => fixed8hex2num(1)).should.throw()
+      (() => fixed82num(1)).should.throw()
     })
     it('throws if empty string', () => {
-      (() => fixed8hex2num('')).should.throw()
+      (() => fixed82num('')).should.throw()
     })
     it('throws if non-hex string', () => {
-      (() => fixed8hex2num('xxx')).should.throw()
+      (() => fixed82num('xxx')).should.throw()
     })
     it('converts a number to fixed8 hex', () => {
-      const actual = fixed8hex2num('00e1f50500000000')
+      const actual = fixed82num('00e1f50500000000')
       const expected = 1
+      actual.should.eql(expected)
+    })
+    it('converts a big number with decimal places', () => {
+      const actual = fixed82num('4ea1d66f3a0b0000')
+      const expected = 123456.12345678
       actual.should.eql(expected)
     })
   })
