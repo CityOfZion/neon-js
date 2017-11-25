@@ -219,3 +219,70 @@ export const doInvoke = (config) => {
     .then((c) => signTx(c))
     .then((c) => sendTx(c))
 }
+
+/**
+ * Verifies that the coins in the balance provided are unspent. This is not meant to be used regularly.
+ * @param {string} url - NEO Node to check against.
+ * @param {Balance} balance - The Balance to verify.
+ * @return {Promise<Balance>} Balance with spent coins shifted to spent array.
+ */
+export const verifyBalance = (url, balance) => {
+  const skip = ['address', 'net']
+  const promises = []
+  const symbols = []
+  Object.keys(balance).map((key) => {
+    if (skip.indexOf(key) >= 0) return
+    const assetBalance = balance[key]
+    promises.push(verifyAssetBalance(url, assetBalance))
+    symbols.push(key)
+  })
+  return Promise.all(promises)
+    .then((newBalances) => {
+      const output = { address: balance.address, net: balance.net }
+      symbols.map((sym, i) => {
+        output[sym] = newBalances[i]
+      })
+      return output
+    })
+}
+
+/**
+ * Verifies an AssetBalance
+ * @param {string} url
+ * @param {AssetBalance}
+ * @return {Promise<AssetBalance>}
+ */
+const verifyAssetBalance = (url, assetBalance) => {
+  let newAssetBalance = { balance: 0, spent: [], unspent: [] }
+  return verifyCoins(url, assetBalance.unspent)
+    .then((values) => {
+      values.map((v, i) => {
+        let coin = assetBalance.unspent[i]
+        if (v) {
+          if (v.value !== coin.value) coin.value = v.value
+          newAssetBalance.unspent.push(coin)
+          newAssetBalance.balance += coin.value
+        } else {
+          newAssetBalance.spent.push(coin)
+        }
+      })
+      return newAssetBalance
+    })
+}
+
+/**
+ * Verifies a list of Coins
+ * @param {string} url
+ * @param {Coin[]} coinArr
+ * @return {Promise<Coin[]>}
+ */
+const verifyCoins = (url, coinArr) => {
+  const promises = []
+  for (const coin of coinArr) {
+    const promise = Query.getTxOut(coin.txid, coin.index)
+      .execute(url)
+      .then(({ result }) => result)
+    promises.push(promise)
+  }
+  return Promise.all(promises)
+}

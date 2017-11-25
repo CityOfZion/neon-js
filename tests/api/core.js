@@ -288,4 +288,11 @@ describe('Core API', function () {
         })
     })
   })
+
+  it.only('verifyBalance', () => {
+    return core.verifyBalance('http://seed1.neo.org:20332', testData.a.balance)
+      .then((bal) => {
+        console.log(bal)
+      })
+  })
 })
