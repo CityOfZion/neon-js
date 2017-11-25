@@ -4,18 +4,22 @@ import { SHA256, RIPEMD160, enc } from 'crypto-js'
  * @param {arrayBuffer} buf
  * @returns {string} ASCII string
  */
-export const ab2str = buf => { return String.fromCharCode.apply(null, new Uint8Array(buf)) }
+export const ab2str = buf =>
+  String.fromCharCode.apply(null, new Uint8Array(buf))
 
 /**
  * @param {string} str - ASCII string
  * @returns {arrayBuffer}
  */
 export const str2ab = str => {
-  let bufView = new Uint8Array(str.length)
-  for (let i = 0, strLen = str.length; i < strLen; i++) {
-    bufView[i] = str.charCodeAt(i)
+  if (typeof str !== 'string') {
+    throw new Error('str2ab expects a string')
   }
-  return bufView
+  const result = new Uint8Array(str.length)
+  for (let i = 0, strLen = str.length; i < strLen; i++) {
+    result[i] = str.charCodeAt(i)
+  }
+  return result
 }
 
 /**
@@ -23,12 +27,16 @@ export const str2ab = str => {
  * @returns {number[]}
  */
 export const hexstring2ab = str => {
-  let result = []
-  while (str.length >= 2) {
-    result.push(parseInt(str.substring(0, 2), 16))
-    str = str.substring(2, str.length)
+  if (typeof str !== 'string') {
+    throw new Error('hexstring2ab expects a string')
   }
-
+  if (!str.length) return new Uint8Array()
+  const iters = str.length / 2
+  const result = new Uint8Array(iters)
+  for (let i = 0; i < iters; i++) {
+    result[i] = parseInt(str.substring(0, 2), 16)
+    str = str.substring(2)
+  }
   return result
 }
 
@@ -37,6 +45,9 @@ export const hexstring2ab = str => {
  * @returns {string} HEX string
  */
 export const ab2hexstring = arr => {
+  if (typeof arr !== 'object') {
+    throw new Error('ab2hexstring expects an array')
+  }
   let result = ''
   for (let i = 0; i < arr.length; i++) {
     let str = arr[i].toString(16)
@@ -52,17 +63,18 @@ export const ab2hexstring = arr => {
  * @param {string} str - ASCII string
  * @returns {string} HEX string
  */
-export const str2hexstring = str => {
-  return ab2hexstring(str2ab(str))
-}
+export const str2hexstring = str => ab2hexstring(str2ab(str))
 
 /**
- * convert an integer to hex and add leading zeros
- * @param {number} mNumber
+ * convert an integer to big endian hex and add leading zeros
+ * @param {number} num
  * @returns {string}
  */
-export const int2hex = mNumber => {
-  let h = mNumber.toString(16)
+export const int2hex = num => {
+  if (typeof num !== 'number') {
+    throw new Error('int2hex expects a number')
+  }
+  let h = num.toString(16)
   return h.length % 2 ? '0' + h : h
 }
 
@@ -74,6 +86,9 @@ export const int2hex = mNumber => {
  * @return {string}
  */
 export const num2hexstring = (num, size = 2, littleEndian = false) => {
+  if (typeof num !== 'number') throw new Error('num must be numeric')
+  if (num < 0) throw new RangeError('num is unsigned (>= 0)')
+  if (!Number.isSafeInteger(num)) throw new RangeError('num must be a safe integer')
   let hexstring = num.toString(16)
   hexstring = hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length)
   if (littleEndian) hexstring = reverseHex(hexstring)
@@ -81,23 +96,39 @@ export const num2hexstring = (num, size = 2, littleEndian = false) => {
 }
 
 /**
- * Converts a number to a Fixed8 format string
+ * Converts a number to a Fixed8 format hex string
  * @param {number} num
+ * @param {number} size output size in hex chars
  * @return {string} number in Fixed8 representation.
  */
-export const num2fixed8 = (num) => {
-  const hexValue = Math.round(num * 100000000).toString(16)
-  return reverseHex(('0000000000000000' + hexValue).substring(hexValue.length))
+export const num2fixed8hex = (num, size = 16) => {
+  if (typeof num !== 'number') throw new Error('num must be numeric')
+  return num2hexstring(num * Math.pow(10, 8), size, true)
+}
+
+// TODO: phase out use of this export
+export const num2fixed8 = (num, size) => {
+  console.warn('the name num2fixed8 is deprecated, use num2fixed8hex instead')
+  return num2fixed8hex(num, size)
 }
 
 /**
- * Converts a Fixed8 string to number
- * @param {string} fixed8 - number in Fixed8 representation
+ * Converts a Fixed8 hex string to its original number
+ * @param {string} fixed8hex - number in Fixed8 representation
  * @return {number}
  */
-export const fixed82num = (fixed8) => {
-  return parseInt(reverseHex(fixed8), 16) / 100000000
+export const fixed8hex2num = (fixed8hex) => {
+  if (typeof fixed8hex !== 'string') throw new Error('fixed8hex must be a string')
+  if (!fixed8hex.length || fixed8hex.length % 2 !== 0) throw new Error('fixed8hex must be hex')
+  return parseInt(reverseHex(fixed8hex), 16) / Math.pow(10, 8)
 }
+
+// TODO: phase out use of this export
+export const fixed82num = (fixed8hex) => {
+  console.warn('the name fixed82num is deprecated, use fixed8hex2num instead')
+  return fixed8hex2num(fixed8hex)
+}
+// TODO: use this export going forward
 
 /**
  * Converts a number to a variable length Int. Used for array length header
@@ -105,9 +136,6 @@ export const fixed82num = (fixed8) => {
  * @returns {string} hexstring of the variable Int.
  */
 export const num2VarInt = (num) => {
-  if (typeof num !== 'number') throw new Error('VarInt must be numeric')
-  if (num < 0) throw new RangeError('VarInts are unsigned (> 0)')
-  if (!Number.isSafeInteger(num)) throw new RangeError('VarInt must be a safe integer')
   if (num < 0xfd) {
     return num2hexstring(num)
   } else if (num <= 0xffff) {
@@ -129,8 +157,9 @@ export const num2VarInt = (num) => {
  * @returns {string} XOR output as a HEX string
  */
 export const hexXor = (str1, str2) => {
-  if (str1.length !== str2.length) throw new Error()
-  if (str1.length % 2 !== 0) throw new Error()
+  if (typeof str1 !== 'string' || typeof str2 !== 'string') throw new Error('hexXor expects hex strings')
+  if (str1.length !== str2.length) throw new Error('strings are disparate lengths')
+  if (str1.length % 2 !== 0) throw new Error('strings must be hex')
   const result = []
   for (let i = 0; i < str1.length; i += 2) {
     result.push(parseInt(str1.substr(i, 2), 16) ^ parseInt(str2.substr(i, 2), 16))
@@ -144,6 +173,7 @@ export const hexXor = (str1, str2) => {
  * @returns {Uint8Array}
  */
 export const reverseArray = arr => {
+  if (typeof arr !== 'object' || !arr.length) throw new Error('reverseArray expects an array')
   let result = new Uint8Array(arr.length)
   for (let i = 0; i < arr.length; i++) {
     result[i] = arr[arr.length - 1 - i]
@@ -160,6 +190,7 @@ export const reverseArray = arr => {
  * @return {string} HEX string reversed in 2s.
  */
 export const reverseHex = hex => {
+  if (typeof hex !== 'string') throw new Error('reverseHex expects a string')
   if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
   let out = ''
   for (let i = hex.length - 2; i >= 0; i -= 2) {
@@ -226,6 +257,8 @@ export class StringStream {
  * @returns {string} hash output
  */
 export const hash160 = (hex) => {
+  if (typeof hex !== 'string') throw new Error('reverseHex expects a string')
+  if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
   let hexEncoded = enc.Hex.parse(hex)
   let ProgramSha256 = SHA256(hexEncoded)
   return RIPEMD160(ProgramSha256).toString()
@@ -237,6 +270,8 @@ export const hash160 = (hex) => {
  * @returns {string} hash output
  */
 export const hash256 = (hex) => {
+  if (typeof hex !== 'string') throw new Error('reverseHex expects a string')
+  if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
   let hexEncoded = enc.Hex.parse(hex)
   let ProgramSha256 = SHA256(hexEncoded)
   return SHA256(ProgramSha256).toString()
@@ -248,6 +283,8 @@ export const hash256 = (hex) => {
  * @returns {string} hash output
  */
 export const sha256 = (hex) => {
+  if (typeof hex !== 'string') throw new Error('reverseHex expects a string')
+  if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
   let hexEncoded = enc.Hex.parse(hex)
   return SHA256(hexEncoded).toString()
 }
