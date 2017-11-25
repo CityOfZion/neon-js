@@ -71,7 +71,7 @@ export const doTransferToken = (net, scriptHash, fromWif, toAddress, transferAmo
       const balances = values[1]
       const fromAddrScriptHash = reverseHex(getScriptHashFromAddress(account.address))
       const intents = [
-        { assetId: ASSET_ID.GAS, value: 0.1, scriptHash: fromAddrScriptHash }
+        { assetId: ASSET_ID.GAS, value: 0.00000001, scriptHash: fromAddrScriptHash }
       ]
       const toAddrScriptHash = reverseHex(getScriptHashFromAddress(toAddress))
       const invoke = { scriptHash, operation: 'transfer', args: [fromAddrScriptHash, toAddrScriptHash, transferAmount] }
