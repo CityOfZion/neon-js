@@ -249,7 +249,7 @@ export const verifyBalance = (url, balance) => {
 /**
  * Verifies an AssetBalance
  * @param {string} url
- * @param {AssetBalance}
+ * @param {AssetBalance} assetBalance
  * @return {Promise<AssetBalance>}
  */
 const verifyAssetBalance = (url, assetBalance) => {
@@ -281,7 +281,15 @@ const verifyCoins = (url, coinArr) => {
   for (const coin of coinArr) {
     const promise = Query.getTxOut(coin.txid, coin.index)
       .execute(url)
-      .then(({ result }) => result)
+      .then(({ result }) => {
+        if (!result) return null
+        return {
+          txid: coin.txid,
+          index: result.n,
+          assetId: result.asset,
+          value: parseInt(result.value, 10)
+        }
+      })
     promises.push(promise)
   }
   return Promise.all(promises)
