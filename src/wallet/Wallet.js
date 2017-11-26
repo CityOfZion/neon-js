@@ -1,3 +1,4 @@
+import fs from 'fs'
 import Account from './Account'
 import { encrypt } from './nep2'
 import { isNEP2 } from './verify'
@@ -105,12 +106,24 @@ class Wallet {
   }
 
   /**
+   * Reads a Wallet file sync.
+   * @param {string} filepath - Relative path from cwd
+   * @return {Wallet}
+   */
+  static readFile (filepath) {
+    return this.import(fs.readFileSync(filepath, 'utf8'))
+  }
+
+  /**
    * Writes the Wallet file to a file.
    * @param {string} filepath
    * @return {boolean} write success / failure
    */
   writeFile (filepath) {
-    throw new Error(`Not Implemented`)
+    fs.writeFile(filepath, this.export(), (err) => {
+      if (err) throw err
+      console.log(`Wallet file written!`)
+    })
   }
 }
 
