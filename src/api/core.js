@@ -1,7 +1,7 @@
 import * as neonDB from './neonDB'
 import * as neoscan from './neoscan'
 import { Account } from '../wallet'
-import { ASSET_ID } from '../consts'
+import { ASSETS, ASSET_ID } from '../consts'
 import { Query } from '../rpc'
 import { Transaction } from '../transactions'
 
@@ -139,6 +139,51 @@ export const sendTx = (config) => {
       }
       return Object.assign(config, { response: res })
     })
+}
+
+/**
+ * Applies a Transaction to a Balance, removing spent coins and adding new coins.
+ * @param {Transaction|string} tx - Transaction that has been sent and accepted by Node.
+ * @param {Balance} balance - Balance to update.
+ * @param {boolean} confirmed - If confirmed, new coins will be added to unspent. Else, new coins will be added to unconfirmed property first.
+ * @return {Balance} Updated balance object. Do note that the original object is edited in place.
+ */
+export const applyTx = (tx, balance, confirmed = false) => {
+  tx = tx instanceof Transaction ? tx : Transaction.deserialize(tx)
+  const symbols = Object.keys(balance).filter((key) => !!balance[key].unspent)
+  // Spend coins
+  for (const input of tx.inputs) {
+    const findFunc = (el) => el.txid === input.prevHash && el.index === input.prevIndex
+    for (const sym of symbols) {
+      let ind = balance[sym].unspent.findIndex(findFunc)
+      if (ind >= 0) {
+        let spentCoin = balance[sym].unspent.splice(ind, 1)
+        balance[sym].spent = balance[sym].spent ? balance[sym].spent.concat(spentCoin) : spentCoin
+        break
+      }
+    }
+  }
+
+  // Add new coins
+  const hash = tx.hash
+  for (let i = 0; i < tx.outputs.length; i++) {
+    const output = tx.outputs[i]
+    const sym = ASSETS[output.assetId]
+    let assetBalance = balance[sym]
+    if (!assetBalance) assetBalance = { balance: 0, spent: [], unspent: [], unconfirmed: [] }
+    const coin = { index: i, txid: hash, value: output.value }
+    if (confirmed) {
+      assetBalance.balance += output.value
+      if (!assetBalance.unspent) assetBalance.unspent = []
+      assetBalance.unspent.push(coin)
+    } else {
+      if (!assetBalance.unconfirmed) assetBalance.unconfirmed = []
+      assetBalance.unconfirmed.push(coin)
+    }
+    balance[sym] = assetBalance
+  }
+
+  return balance
 }
 
 /**
