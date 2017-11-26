@@ -49,6 +49,15 @@ class Wallet {
   }
 
   /**
+  * Reads a Wallet file sync.
+  * @param {string} filepath - Relative path from cwd
+  * @return {Wallet}
+  */
+  static readFile (filepath) {
+    return this.import(fs.readFileSync(filepath, 'utf8'))
+  }
+
+  /**
    * Adds an account.
    * @param {Account|object} acct - Account or WalletAccount object.
    * @return {number} Index position of Account in array.
@@ -106,23 +115,15 @@ class Wallet {
   }
 
   /**
-   * Reads a Wallet file sync.
-   * @param {string} filepath - Relative path from cwd
-   * @return {Wallet}
-   */
-  static readFile (filepath) {
-    return this.import(fs.readFileSync(filepath, 'utf8'))
-  }
-
-  /**
    * Writes the Wallet file to a file.
    * @param {string} filepath
-   * @return {boolean} write success / failure
+   * @return {Promise<boolean>} write success / failure
    */
   writeFile (filepath) {
-    fs.writeFile(filepath, this.export(), (err) => {
+    return fs.writeFile(filepath, this.export(), (err) => {
       if (err) throw err
       console.log(`Wallet file written!`)
+      return true
     })
   }
 }
