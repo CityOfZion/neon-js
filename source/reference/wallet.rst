@@ -7,6 +7,9 @@ Module ``wallet``
 .. autoclass:: Account
     :members:
 
+.. autoclass:: Balance
+    :members:
+
 .. autofunction:: encrypt
 
 .. autofunction:: decrypt
