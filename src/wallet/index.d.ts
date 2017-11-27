@@ -13,6 +13,23 @@ declare module '@cityofzion/neon-js' {
       getPublicKey(encoded: boolean): string
     }
 
+    //Balance
+    export class Balance {
+      constructor(bal: object)
+
+      address: string
+      net: NEO_NETWORK
+      assetSymbols: string[]
+      assets: { [index: string]: AssetBalance }
+      tokenSymbols: string[]
+      tokens: { [index: string]: number }
+
+      addAsset(sym: string, assetBalance?: AssetBalance): this
+      addToken(sym: string, tokenBalance?: number): this
+      applyTx(tx: Transaction, confirmed?: boolean): this
+      verifyAssets(url: string): Promise<Balance>
+    }
+
     //core
     export function getPublicKeyEncoded(publicKey: string): string
     export function getPublicKeyUnencoded(publicKey: string): string

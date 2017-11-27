@@ -336,12 +336,4 @@ describe('Core API', function () {
         })
     })
   })
-
-  it('verifyBalance', () => {
-    return core.verifyBalance('http://seed1.neo.org:20332', testData.a.balance)
-      .then((bal) => {
-        bal.GAS.spent.length.should.least(1)
-        bal.NEO.spent.length.should.least(1)
-      })
-  })
 })
