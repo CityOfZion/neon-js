@@ -1,4 +1,25 @@
 declare module '@cityofzion/neon-js' {
+  export interface Account {
+    WIF: string
+    privateKey: string
+    publicKey: string
+    scriptHash: string
+    address: string
+  }
+
+  export interface AssetBalance {
+    balance: string
+    unspent: Coin[]
+    spent: Coin[]
+    uncofirmed: Coin[]
+  }
+
+  export interface Coin {
+    index: number
+    txid: string
+    value: number
+  }
+
   export module wallet {
     //Account
     export class Account {

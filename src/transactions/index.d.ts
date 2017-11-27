@@ -46,17 +46,6 @@ declare module '@cityofzion/neon-js' {
     claims: Claim[]
   }
 
-  interface Coin {
-    index: number
-    txid: string
-    value: number
-  }
-
-  interface TokenBalance {
-    balance: number
-    unspent: Coin[]
-  }
-
   interface txConfig {
     type: number,
     version: number,
