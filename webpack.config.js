@@ -66,7 +66,7 @@ module.exports = function (env) {
       output: {
         path: __dirname,
         filename: './lib/browser.js',
-        libraryTarget: 'amd',
+        libraryTarget: 'umd',
         library: 'Neon' // This is the var name in browser
       }
     })
