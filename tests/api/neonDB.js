@@ -18,8 +18,8 @@ describe('NeonDB', function () {
   it('should get balance from address', () => {
     return neonDB.getBalance('TestNet', testKeys.a.address)
       .then((response) => {
-        response.NEO.balance.should.be.a('number')
-        response.GAS.balance.should.be.a('number')
+        response.assets.NEO.balance.should.be.a('number')
+        response.assets.GAS.balance.should.be.a('number')
       }).catch((e) => {
         console.log(e)
         throw e

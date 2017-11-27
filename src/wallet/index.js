@@ -4,6 +4,7 @@ import * as core from './core'
 import * as verify from './verify'
 import * as nep2 from './nep2'
 import Account from './Account'
+import Balance from './Balance'
 
 export default {
   create: {
@@ -37,4 +38,4 @@ export default {
 export * from './core'
 export * from './verify'
 export * from './nep2'
-export { Account }
+export { Account, Balance }

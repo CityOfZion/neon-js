@@ -1,4 +1,25 @@
 declare module '@cityofzion/neon-js' {
+  export interface Account {
+    WIF: string
+    privateKey: string
+    publicKey: string
+    scriptHash: string
+    address: string
+  }
+
+  export interface AssetBalance {
+    balance: string
+    unspent: Coin[]
+    spent: Coin[]
+    uncofirmed: Coin[]
+  }
+
+  export interface Coin {
+    index: number
+    txid: string
+    value: number
+  }
+
   export module wallet {
     //Account
     export class Account {
@@ -11,6 +32,23 @@ declare module '@cityofzion/neon-js' {
       address: string
 
       getPublicKey(encoded: boolean): string
+    }
+
+    //Balance
+    export class Balance {
+      constructor(bal: object)
+
+      address: string
+      net: NEO_NETWORK
+      assetSymbols: string[]
+      assets: { [index: string]: AssetBalance }
+      tokenSymbols: string[]
+      tokens: { [index: string]: number }
+
+      addAsset(sym: string, assetBalance?: AssetBalance): this
+      addToken(sym: string, tokenBalance?: number): this
+      applyTx(tx: Transaction, confirmed?: boolean): this
+      verifyAssets(url: string): Promise<Balance>
     }
 
     //core

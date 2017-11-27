@@ -1,48 +1,8 @@
 import axios from 'axios'
-import { Account } from '../wallet'
+import { Account, Balance } from '../wallet'
 import { Transaction } from '../transactions'
 import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
-
-/**
- * @typedef {object} Coin
- * @property {number} index - Index in list.
- * @property {string} txid - Transaction ID which produced this coin.
- * @property {number} value - Value of this coin.
- */
-
-/**
- * @typedef {object} Balance
- * @property {{balance: number, unspent: Coin[]}} NEO Amount of NEO in address
- * @property {{balance: number, unspent: Coin[]}} GAS Amount of GAS in address
- * @property {string} address - The Address that was queried
- * @property {string} net - 'MainNet' or 'TestNet'
- */
-
-/**
- * @typedef {object} History
- * @property {string} address - Address.
- * @property {string} name - API name.
- * @property {string} net - 'MainNet' or 'TestNet'
- * @property {PastTx[]} history - List of past transactions.
- */
-
-/**
- * @typedef {object} PastTx
- * @property {number} GAS - Gas involved.
- * @property {number} NEO - NEO involved.
- * @property {number} block_index - Block index.
- * @property {boolean} gas_sent - Was GAS sent.
- * @property {boolean} neo_sent - Was NEO sent.
- * @property {string} txid - Transaction ID.
- */
-/**
- * @typedef {object} Response
- * @property {string} jsonrpc - JSON-RPC Version
- * @property {number} id - Unique ID.
- * @property {any} result - Result
- * @property {string} [txid] - Transaction hash of the successful transaction. Only available when result is true.
-*/
 
 /**
  * API Switch for MainNet and TestNet
@@ -69,7 +29,14 @@ export const getBalance = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/balance/' + address)
     .then((res) => {
-      return res.data
+      const bal = new Balance({ net, address: res.data.address })
+      Object.keys(res.data).map((key) => {
+        if (key === 'net' || key === 'address') return
+        bal.addAsset(key, res.data[key])
+      })
+      // To be deprecated
+      Object.assign(bal, res.data)
+      return bal
     })
 }
 

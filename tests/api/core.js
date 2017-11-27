@@ -1,5 +1,5 @@
 import * as core from '../../src/api/core'
-import { neonDB } from '../../src/api'
+import { neonDB, neoscan } from '../../src/api'
 import { Transaction, signTransaction } from '../../src/transactions'
 import testKeys from '../testKeys.json'
 import testData from '../testData.json'
@@ -8,21 +8,20 @@ import MockAdapter from 'axios-mock-adapter'
 
 describe('Core API', function () {
   let mock
-  this.timeout(5000)
+  this.timeout(10000)
   const baseConfig = {
     net: 'TestNet',
     address: testKeys.a.address
   }
   describe('getBalanceFrom', function () {
-    const config = {
-      net: 'TestNet',
-      address: testKeys.a.address,
-      privateKey: testKeys.a.privateKey,
-      other: 'props',
-      intents: {}
-    }
-
     it('neonDB', () => {
+      const config = {
+        net: 'TestNet',
+        address: testKeys.a.address,
+        privateKey: testKeys.a.privateKey,
+        other: 'props',
+        intents: {}
+      }
       return core.getBalanceFrom(config, neonDB)
         .should.eventually.have.keys([
           'net',
@@ -35,19 +34,25 @@ describe('Core API', function () {
         ])
     })
 
-    it('neoscan')
-    // , () => {
-    //   return core.getBalanceFrom(config, neoscan)
-    //   .should.eventually.have.keys([
-    //     'net',
-    //     'address',
-    //     'privateKey',
-    //     'other',
-    //     'intents',
-    //     'balance',
-    //     'url'
-    //   ])
-    // })
+    it('neoscan', () => {
+      const config = {
+        net: 'TestNet',
+        address: testKeys.a.address,
+        privateKey: testKeys.a.privateKey,
+        other: 'props',
+        intents: {}
+      }
+      return core.getBalanceFrom(config, neoscan)
+        .should.eventually.have.keys([
+          'net',
+          'address',
+          'privateKey',
+          'other',
+          'intents',
+          'balance',
+          'url'
+        ])
+    })
   })
 
   it('makeIntent', () => {

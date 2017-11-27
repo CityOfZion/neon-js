@@ -28,7 +28,9 @@ export const calculateInputs = (balances, intents, gasCost = 0) => {
   let change = []
   const inputs = Object.keys(requiredAssets).map((assetId) => {
     const requiredAmt = requiredAssets[assetId]
-    const assetBalance = balances[ASSETS[assetId]]
+    const assetSymbol = ASSETS[assetId]
+    if (balances.assetSymbols.indexOf(assetSymbol) === -1) throw new Error(`This balance does not contain any ${assetSymbol}!`)
+    const assetBalance = balances.assets[assetSymbol]
     if (assetBalance.balance * 100000000 < requiredAmt) throw new Error(`Insufficient ${ASSETS[assetId]}! Need ${requiredAmt / 100000000} but only found ${assetBalance.balance}`)
     // Ascending order sort
     assetBalance.unspent.sort((a, b) => a.value - b.value)

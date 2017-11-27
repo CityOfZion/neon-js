@@ -1,14 +1,15 @@
 ///<reference path="../utils.d.ts" />
 
 declare module '@cityofzion/neon-js' {
-  export module sc {
-    export interface scriptParams {
-      scriptHash: string,
-      operation?: string,
-      args?: Array<any> | string | number | boolean,
-      useTailCall?: boolean
-    }
 
+  export interface scriptParams {
+    scriptHash: string,
+    operation?: string,
+    args?: Array<any> | string | number | boolean,
+    useTailCall?: boolean
+  }
+
+  export module sc {
     //ContractParam
     export class ContractParam {
       constructor(type: string, value: any)

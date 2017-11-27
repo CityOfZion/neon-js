@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Balance } from '../wallet'
 
 /**
  * Returns the appropriate NeoScan endpoint.
@@ -10,7 +11,7 @@ export const getAPIEndpoint = (net) => {
     case 'MainNet':
       return 'https://neoscan.io/api/main_net'
     case 'TestNet':
-      throw new Error(`Not Implemented`)
+      return 'https://neoscan-testnet.io/api/test_net'
     default:
       return net
   }
@@ -24,10 +25,10 @@ export const getAPIEndpoint = (net) => {
 export const getRPCEndpoint = (net) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_all_nodes')
-    .then((res) => {
+    .then(({ data }) => {
       let bestHeight = 0
       let nodes = []
-      for (const node in res.data) {
+      for (const node of data) {
         if (node.height > bestHeight) {
           bestHeight = node.height
           nodes = [node]
@@ -49,14 +50,19 @@ export const getBalance = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_balance/' + address)
     .then((res) => {
-      const balances = { address: res.data.address, net }
+      const bal = new Balance({ address: res.data.address, net })
       res.data.balance.map((b) => {
-        balances[b.asset] = {
+        bal.addAsset(b.asset, {
+          balance: b.amount,
+          unspent: parseUnspent(b.unspent)
+        })
+        // To be deprecated
+        bal[b.asset] = {
           balance: b.amount,
           unspent: parseUnspent(b.unspent)
         }
       })
-      return balances
+      return bal
     })
 }
 
