@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Interface &mdash; neon-js 2.0.0 documentation</title>
+  <title>Interface &mdash; neon-js 2.1.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="neon-js 2.0.0 documentation" href="index.html"/>
+    <link rel="top" title="neon-js 2.1.0 documentation" href="index.html"/>
         <link rel="next" title="Wallet" href="wallet.html"/>
         <link rel="prev" title="Installation" href="installation.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.0.0
+                2.1.0
               </div>
             
           
@@ -182,7 +182,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../2.0.0/interface.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.0.0.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../2.1.0/interface.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.1.0.</a></p>
 <div class="section" id="interface">
 <h1>Interface<a class="headerlink" href="#interface" title="Permalink to this headline">¶</a></h1>
 <p><code class="docutils literal"><span class="pre">neon-js</span></code> is merely a library to build interactions with the blockchain. It relies on external data sources for the data it needs for building transactions. However, this information is not available easily from the official NEO nodes. Thus, there have been efforts to build 3rd-party nodes in order to fill this gap.</p>
@@ -192,19 +192,21 @@
 <p>A balance describes the assets that an address owns, as well as list the unspent coins. The unspent coins are used in most of the transactions that require transfer of assets. <code class="docutils literal"><span class="pre">neon-js</span></code> currently requires this format:</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="p">{</span><span class="c1">// Balance</span>
   <span class="nx">address</span><span class="o">:</span> <span class="nx">string</span><span class="p">,</span> <span class="c1">// The address</span>
-  <span class="nx">NEO</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">balance</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span>
-    <span class="nx">unspent</span><span class="o">:</span> <span class="nx">Coin</span><span class="p">[]</span>
+  <span class="nx">assets</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">NEO</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">balance</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span>
+      <span class="nx">unspent</span><span class="o">:</span> <span class="nx">Coin</span><span class="p">[]</span>
     <span class="p">},</span>
-  <span class="nx">GAS</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">balance</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span>
-    <span class="nx">unspent</span><span class="o">:</span> <span class="nx">Coin</span><span class="p">[]</span>
+    <span class="nx">GAS</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">balance</span><span class="o">:</span> <span class="nx">number</span><span class="p">,</span>
+      <span class="nx">unspent</span><span class="o">:</span> <span class="nx">Coin</span><span class="p">[]</span>
     <span class="p">}</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>The address property acts as an ID for this object and is used to derive the scriptHash when calculating the change to give back to the account.</p>
-<p>All the other properties are named using asset symbols. Currently, there are only 2 assets available (NEO/GAS) and they both have similar names to symbols. Symbols should be in capital letters and be of 3-4 letters long.</p>
+<p>The assets are stored in an object and retrieved using their symbols. Currently, there are only 2 assets available (NEO/GAS) and they both have similar names to symbols. Symbols should be in capital letters and be of 3-4 letters long.</p>
 <p>Each symbol will be contain the <code class="docutils literal"><span class="pre">balance</span></code> and <code class="docutils literal"><span class="pre">unspent</span></code> property. <code class="docutils literal"><span class="pre">balance</span></code> tells us the total amount of this asset available and serves as a simple check if there is enough assets available to fulfil the sending intents. <code class="docutils literal"><span class="pre">unspent</span></code> contains a list of <code class="docutils literal"><span class="pre">Coin</span></code> that are used as Transaction Inputs.</p>
 </div>
 <div class="section" id="coin">
@@ -288,6 +290,7 @@
             <dt>Tags</dt>
             <dd><a href="../1.1.1/index.html">1.1.1</a></dd>
             <dd><a href="../2.0.0/interface.html">2.0.0</a></dd>
+            <dd><a href="../2.1.0/interface.html">2.1.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -303,7 +306,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.0.0',
+            VERSION:'2.1.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>neon-js &mdash; neon-js dev documentation</title>
+  <title>neon-js &mdash; neon-js 2.0.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="neon-js dev documentation" href="#"/>
+    <link rel="top" title="neon-js 2.0.0 documentation" href="#"/>
         <link rel="next" title="Overview" href="overview.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                dev
+                2.0.0
               </div>
             
           
@@ -176,15 +176,20 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../2.0.0/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.0.0.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../2.1.0/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.1.0.</a></p>
 <div class="section" id="neon-js">
 <h1>neon-js<a class="headerlink" href="#neon-js" title="Permalink to this headline">¶</a></h1>
-<p>neon-js is a Javascript library to interface with NEO blockchain.</p>
-<p><strong>This documentation is meant for the upcoming version (2.0.0) and does not reflect the current state</strong></p>
+<p>neon-js is a JS library to interact with the NEO blockchain. It supports:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="nx">Wallet</span> <span class="nx">methods</span> <span class="nx">such</span> <span class="nx">as</span> <span class="nx">key</span> <span class="nx">generation</span><span class="p">,</span> <span class="nx">manipulation</span> <span class="nx">and</span> <span class="nx">encryption</span><span class="p">.</span>
+<span class="o">-</span> <span class="nx">Transaction</span> <span class="nx">creation</span><span class="p">,</span> <span class="nx">serialization</span> <span class="nx">and</span> <span class="nx">deserialization</span><span class="p">.</span>
+<span class="o">-</span> <span class="nx">Smart</span> <span class="nx">contract</span> <span class="nx">calling</span> <span class="k">for</span> <span class="nx">NEP</span><span class="o">-</span><span class="mf">5.</span>
+<span class="o">-</span> <span class="nx">Various</span> <span class="nx">APIs</span> <span class="nx">needed</span> <span class="nx">to</span> <span class="nx">support</span> <span class="nx">a</span> <span class="nx">light</span> <span class="nx">wallet</span><span class="p">.</span>
+</pre></div>
+</div>
 <div class="section" id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
 <p>Import the default module for full functionality available in a semantic form:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
 
 <span class="kr">const</span> <span class="nx">account</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">account</span><span class="p">(</span><span class="s1">&#39;L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g&#39;</span><span class="p">)</span>
 <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span><span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;getrawtransaction&#39;</span><span class="p">,</span> <span class="nx">params</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;bfb3af8bc96ae3dd85305eddfe6e8b8eca447315729073f30da64f80c16f66ac&#39;</span><span class="p">]})</span>
@@ -238,6 +243,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="wallet.html">Wallet</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="wallet.html#account">Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wallet.html#balance">Balance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wallet.html#core">Core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wallet.html#nep2">NEP2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wallet.html#verify">Verify</a></li>
@@ -284,9 +290,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">2.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#x">1.1.x</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id4">1.0.x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id5">1.0.x</a></li>
 </ul>
 </li>
 </ul>
@@ -341,6 +348,7 @@
             <dt>Tags</dt>
             <dd><a href="../1.1.1/index.html">1.1.1</a></dd>
             <dd><a href="../2.0.0/index.html">2.0.0</a></dd>
+            <dd><a href="../2.1.0/index.html">2.1.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -356,7 +364,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'dev',
+            VERSION:'2.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

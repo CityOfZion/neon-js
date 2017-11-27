@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Utility &mdash; neon-js dev documentation</title>
+  <title>Utility &mdash; neon-js 2.0.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js dev documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 2.0.0 documentation" href="../index.html"/>
         <link rel="up" title="Reference" href="index.html"/>
         <link rel="next" title="Wallet" href="wallet.html"/>
         <link rel="prev" title="Transactions" href="tx.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                dev
+                2.0.0
               </div>
             
           
@@ -193,7 +193,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.0.0/reference/utility.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.0.0.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.1.0/reference/utility.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.1.0.</a></p>
 <div class="section" id="utility">
 <h1>Utility<a class="headerlink" href="#utility" title="Permalink to this headline">¶</a></h1>
 <p>Module <code class="docutils literal"><span class="pre">u</span></code></p>
@@ -297,13 +297,13 @@
 <dl class="function">
 <dt id="int2hex">
 <code class="descname">int2hex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#int2hex" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert an integer to hex and add leading zeros</p>
+<dd><p>convert an integer to big endian hex and add leading zeros</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>mNumber</strong> (<em>number</em>) &#8211; </li>
+<li><strong>num</strong> (<em>number</em>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -339,13 +339,14 @@
 <dl class="function">
 <dt id="num2fixed8">
 <code class="descname">num2fixed8</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#num2fixed8" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a number to a Fixed8 format string</p>
+<dd><p>Converts a number to a Fixed8 format hex string</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>num</strong> (<em>number</em>) &#8211; </li>
+<li><strong>size</strong> (<em>number</em>) &#8211; output size in hex chars</li>
 </ul>
 </td>
 </tr>
@@ -359,13 +360,13 @@
 <dl class="function">
 <dt id="fixed82num">
 <code class="descname">fixed82num</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fixed82num" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a Fixed8 string to number</p>
+<dd><p>Converts a Fixed8 hex string to its original number</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>fixed8</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; number in Fixed8 representation</li>
+<li><strong>fixed8hex</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; number in Fixed8 representation</li>
 </ul>
 </td>
 </tr>
@@ -653,6 +654,7 @@
             <dt>Tags</dt>
             <dd><a href="../../1.1.1/index.html">1.1.1</a></dd>
             <dd><a href="../../2.0.0/reference/utility.html">2.0.0</a></dd>
+            <dd><a href="../../2.1.0/reference/utility.html">2.1.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -668,7 +670,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'dev',
+            VERSION:'2.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

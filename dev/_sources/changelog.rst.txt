@@ -4,6 +4,29 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
+2.1.0
+=====
+
+- Balance as an ES6 class.
+
+    - ``verifyAssets`` to validate unspent coins against a given NEO node. Used to check if balance is fully synced and usable.
+    - ``applyTx`` to apply a spending of a Transaction to the Balance. Allows a Balance to be used to build another Transaction without waiting for sync.
+    - Data structure reworked. AssetBalances are now tucked under ``assets``. Use ``assetSymbols`` to discover the keys for lookup.
+
+    ::
+
+      // This array contains all the symbols of the assets available in this Balance
+      balance.assetSymbols = ['NEO', 'GAS']
+      // Lookup assets using their symbols
+      balance.assets = {
+        NEO: {balance: 1, unspent: [ Object ], spent: [], unconfirmed: []}
+        GAS: {balance: 25.1, unspent: [ Object ], spent: [], unconfirmed: []}
+      }
+
+- Added ``doTransferToken`` to ``api/nep5``
+- Unit tests for ``utils``
+- Typescript typings fixed
+
 2.0.0
 ======
 
@@ -48,6 +71,9 @@ This details the changes made from the previous recorded version.
     - neon-wallet-db API is shifted to ``api`` folder.
     - Added coinmarketcap query support for easy price queries.
     - Token query (NEP5) is shifted here.
+    - Neoscan support added.
+    - Hardware support integrated as external signingFunction provided as argument.
+    - New core api methods: sendAsset, claimGas and doInvoke.
 
 - Smart Contract Support
 

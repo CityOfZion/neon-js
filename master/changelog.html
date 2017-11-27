@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Changelog &mdash; neon-js 2.0.0 documentation</title>
+  <title>Changelog &mdash; neon-js 2.1.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="neon-js 2.0.0 documentation" href="index.html"/>
+    <link rel="top" title="neon-js 2.1.0 documentation" href="index.html"/>
         <link rel="prev" title="Wallet" href="reference/wallet.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0.0
+                2.1.0
               </div>
             
           
@@ -105,16 +105,17 @@
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">2.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#x">1.1.x</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id2">1.1.1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id3">1.1.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">1.1.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">1.1.0</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">1.0.x</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id5">1.0.4</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id6">1.0.2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">1.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">1.0.x</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">1.0.4</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">1.0.2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">1.0.1</a></li>
 </ul>
 </li>
 </ul>
@@ -190,12 +191,41 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../2.0.0/changelog.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.0.0.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../2.1.0/changelog.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.1.0.</a></p>
 <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
 <p>This details the changes made from the previous recorded version.</p>
 <div class="section" id="id1">
-<h2>2.0.0<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>2.1.0<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Balance as an ES6 class.</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">verifyAssets</span></code> to validate unspent coins against a given NEO node. Used to check if balance is fully synced and usable.</li>
+<li><code class="docutils literal"><span class="pre">applyTx</span></code> to apply a spending of a Transaction to the Balance. Allows a Balance to be used to build another Transaction without waiting for sync.</li>
+<li>Data structure reworked. AssetBalances are now tucked under <code class="docutils literal"><span class="pre">assets</span></code>. Use <code class="docutils literal"><span class="pre">assetSymbols</span></code> to discover the keys for lookup.</li>
+</ul>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="c1">// This array contains all the symbols of the assets available in this Balance</span>
+<span class="nx">balance</span><span class="p">.</span><span class="nx">assetSymbols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NEO&#39;</span><span class="p">,</span> <span class="s1">&#39;GAS&#39;</span><span class="p">]</span>
+<span class="c1">// Lookup assets using their symbols</span>
+<span class="nx">balance</span><span class="p">.</span><span class="nx">assets</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">NEO</span><span class="o">:</span> <span class="p">{</span><span class="nx">balance</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">unspent</span><span class="o">:</span> <span class="p">[</span> <span class="nb">Object</span> <span class="p">],</span> <span class="nx">spent</span><span class="o">:</span> <span class="p">[],</span> <span class="nx">unconfirmed</span><span class="o">:</span> <span class="p">[]}</span>
+  <span class="nx">GAS</span><span class="o">:</span> <span class="p">{</span><span class="nx">balance</span><span class="o">:</span> <span class="mf">25.1</span><span class="p">,</span> <span class="nx">unspent</span><span class="o">:</span> <span class="p">[</span> <span class="nb">Object</span> <span class="p">],</span> <span class="nx">spent</span><span class="o">:</span> <span class="p">[],</span> <span class="nx">unconfirmed</span><span class="o">:</span> <span class="p">[]}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Added <code class="docutils literal"><span class="pre">doTransferToken</span></code> to <code class="docutils literal"><span class="pre">api/nep5</span></code></p>
+</li>
+<li><p class="first">Unit tests for <code class="docutils literal"><span class="pre">utils</span></code></p>
+</li>
+<li><p class="first">Typescript typings fixed</p>
+</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>2.0.0<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first">Package exports semantic style</p>
 <blockquote>
@@ -270,8 +300,8 @@
 </div>
 <div class="section" id="x">
 <h2>1.1.x<a class="headerlink" href="#x" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id2">
-<h3>1.1.1<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>1.1.1<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Ledger support</p>
 <blockquote>
@@ -283,8 +313,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id3">
-<h3>1.1.0<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>1.1.0<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Transaction Overhaul</p>
 <blockquote>
@@ -316,23 +346,23 @@
 </ul>
 </div>
 </div>
-<div class="section" id="id4">
-<h2>1.0.x<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id5">
-<h3>1.0.4<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<h2>1.0.x<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h3>1.0.4<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Additional NEP2 wrapper methods (Simple encrypted WIF creation)</li>
 <li>Address validation to guard against sending to non-NEO addresses.</li>
 </ul>
 </div>
-<div class="section" id="id6">
-<h3>1.0.2<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>1.0.2<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Introduce NEP2 Support (encrypt / decrypt WIF)</li>
 </ul>
 </div>
-<div class="section" id="id7">
-<h3>1.0.1<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h3>1.0.1<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Upgrade API support to v2 for neon-wallet-db</li>
 </ul>
@@ -386,6 +416,7 @@
             <dt>Tags</dt>
             <dd><a href="../1.1.1/index.html">1.1.1</a></dd>
             <dd><a href="../2.0.0/changelog.html">2.0.0</a></dd>
+            <dd><a href="../2.1.0/changelog.html">2.1.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -401,7 +432,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.0.0',
+            VERSION:'2.1.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

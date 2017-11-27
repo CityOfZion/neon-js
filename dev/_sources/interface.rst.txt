@@ -13,19 +13,21 @@ A balance describes the assets that an address owns, as well as list the unspent
 
   {// Balance
     address: string, // The address
-    NEO: {
-      balance: number,
-      unspent: Coin[]
+    assets: {
+      NEO: {
+        balance: number,
+        unspent: Coin[]
       },
-    GAS: {
-      balance: number,
-      unspent: Coin[]
+      GAS: {
+        balance: number,
+        unspent: Coin[]
       }
+    }
   }
 
 The address property acts as an ID for this object and is used to derive the scriptHash when calculating the change to give back to the account.
 
-All the other properties are named using asset symbols. Currently, there are only 2 assets available (NEO/GAS) and they both have similar names to symbols. Symbols should be in capital letters and be of 3-4 letters long.
+The assets are stored in an object and retrieved using their symbols. Currently, there are only 2 assets available (NEO/GAS) and they both have similar names to symbols. Symbols should be in capital letters and be of 3-4 letters long.
 
 Each symbol will be contain the ``balance`` and ``unspent`` property. ``balance`` tells us the total amount of this asset available and serves as a simple check if there is enough assets available to fulfil the sending intents. ``unspent`` contains a list of ``Coin`` that are used as Transaction Inputs.
 

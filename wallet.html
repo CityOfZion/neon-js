@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Wallet &mdash; neon-js 2.0.0 documentation</title>
+  <title>Wallet &mdash; neon-js 2.1.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="neon-js 2.0.0 documentation" href="index.html"/>
+    <link rel="top" title="neon-js 2.1.0 documentation" href="index.html"/>
         <link rel="next" title="Transactions" href="transactions/index.html"/>
         <link rel="prev" title="Interface" href="interface.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.0.0
+                2.1.0
               </div>
             
           
@@ -99,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Wallet</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#account">Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#balance">Balance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#core">Core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nep2">NEP2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#verify">Verify</a></li>
@@ -234,6 +235,27 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="balance">
+<h2>Balance<a class="headerlink" href="#balance" title="Permalink to this headline">¶</a></h2>
+<p>The Balance class stores the balance of the account. It is usually retrieved using a 3rd party API as NEO nodes do not have a RPC call to easily retrieve this information with a single call.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">balance</span><span class="p">({</span><span class="nx">net</span><span class="o">:</span> <span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s1">&#39;ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW&#39;</span><span class="p">})</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">wallet</span><span class="p">,</span> <span class="nx">api</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="c1">// This form is useless as it is an empty balance.</span>
+<span class="kr">const</span> <span class="nx">balance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Balance</span><span class="p">({</span><span class="nx">net</span><span class="o">:</span> <span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s1">&#39;ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW&#39;</span><span class="p">})</span>
+<span class="c1">// We get a useful balance that can be used to fill a transaction through api</span>
+<span class="kr">const</span> <span class="nx">filledBalance</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">getBalanceFrom</span><span class="p">(</span><span class="s1">&#39;ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW&#39;</span><span class="p">,</span> <span class="nx">api</span><span class="p">.</span><span class="nx">neonDB</span><span class="p">)</span>
+<span class="c1">// This contains all symbols of assets available in this balance</span>
+<span class="kr">const</span> <span class="nx">symbols</span> <span class="o">=</span> <span class="nx">filledBalance</span><span class="p">.</span><span class="nx">assetSymbols</span>
+<span class="c1">// We retrieve the unspent coins from the assets object using the symbol</span>
+<span class="kr">const</span> <span class="nx">neoCoins</span> <span class="o">=</span> <span class="nx">filledBalance</span><span class="p">.</span><span class="nx">assets</span><span class="p">[</span><span class="s1">&#39;NEO&#39;</span><span class="p">].</span><span class="nx">unspent</span>
+<span class="c1">// We can verify the information retrieved using verifyAssets</span>
+<span class="nx">filledBalance</span><span class="p">.</span><span class="nx">verifyAssets</span><span class="p">(</span><span class="s1">&#39;https://seed1.neo.org:20332&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The Balance class is used to track the unspent coins available to construct transactions with. <code class="docutils literal"><span class="pre">verifyAssets</span></code> is a handy method to make sure the unspent coins provided by the 3rd party API is really unspent by verifying them against a NEO node. However, this is an expensive operation so use sparingly.</p>
+</div>
 <div class="section" id="core">
 <h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
 <p>The core methods available are methods to convert key formats and generate new private keys.</p>
@@ -332,7 +354,7 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: 2.0.0
+        v: 2.1.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
@@ -340,6 +362,7 @@
             <dt>Tags</dt>
             <dd><a href="1.1.1/wallet.html">1.1.1</a></dd>
             <dd><a href="2.0.0/wallet.html">2.0.0</a></dd>
+            <dd><a href="2.1.0/wallet.html">2.1.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -355,7 +378,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.0.0',
+            VERSION:'2.1.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
