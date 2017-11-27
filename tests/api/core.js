@@ -1,5 +1,5 @@
 import * as core from '../../src/api/core'
-import { neonDB } from '../../src/api'
+import { neonDB, neoscan } from '../../src/api'
 import { Transaction, signTransaction } from '../../src/transactions'
 import testKeys from '../testKeys.json'
 import testData from '../testData.json'
@@ -8,21 +8,20 @@ import MockAdapter from 'axios-mock-adapter'
 
 describe('Core API', function () {
   let mock
-  this.timeout(5000)
+  this.timeout(10000)
   const baseConfig = {
     net: 'TestNet',
     address: testKeys.a.address
   }
   describe('getBalanceFrom', function () {
-    const config = {
-      net: 'TestNet',
-      address: testKeys.a.address,
-      privateKey: testKeys.a.privateKey,
-      other: 'props',
-      intents: {}
-    }
-
     it('neonDB', () => {
+      const config = {
+        net: 'TestNet',
+        address: testKeys.a.address,
+        privateKey: testKeys.a.privateKey,
+        other: 'props',
+        intents: {}
+      }
       return core.getBalanceFrom(config, neonDB)
         .should.eventually.have.keys([
           'net',
@@ -35,19 +34,25 @@ describe('Core API', function () {
         ])
     })
 
-    it('neoscan')
-    // , () => {
-    //   return core.getBalanceFrom(config, neoscan)
-    //   .should.eventually.have.keys([
-    //     'net',
-    //     'address',
-    //     'privateKey',
-    //     'other',
-    //     'intents',
-    //     'balance',
-    //     'url'
-    //   ])
-    // })
+    it('neoscan', () => {
+      const config = {
+        net: 'TestNet',
+        address: testKeys.a.address,
+        privateKey: testKeys.a.privateKey,
+        other: 'props',
+        intents: {}
+      }
+      return core.getBalanceFrom(config, neoscan)
+        .should.eventually.have.keys([
+          'net',
+          'address',
+          'privateKey',
+          'other',
+          'intents',
+          'balance',
+          'url'
+        ])
+    })
   })
 
   it('makeIntent', () => {
@@ -220,54 +225,6 @@ describe('Core API', function () {
           conf.response.should.be.an('object')
           conf.response.result.should.equal(true)
         })
-    })
-  })
-
-  describe('applyTx', function () {
-    const intents = [
-      {
-        assetId: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
-        value: 200,
-        scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
-      },
-      {
-        assetId: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
-        value: 59,
-        scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
-      },
-      {
-        assetId: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
-        value: 400,
-        scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
-      },
-      {
-        assetId: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
-        value: 20.96175487,
-        scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
-      }
-    ]
-    const tx = Transaction.createContractTx(testData.a.balance, intents)
-
-    it('unconfirmed', () => {
-      const balance = JSON.parse(JSON.stringify(testData.a.balance))
-      core.applyTx(tx, balance, false)
-      balance.GAS.spent.length.should.equal(1)
-      balance.GAS.unspent.length.should.equal(1)
-      balance.GAS.unconfirmed.length.should.equal(2)
-      balance.NEO.spent.length.should.equal(1)
-      balance.NEO.unspent.length.should.equal(0)
-      balance.NEO.unconfirmed.length.should.equal(2)
-    })
-
-    it('confirmed', () => {
-      const balance = JSON.parse(JSON.stringify(testData.a.balance))
-      core.applyTx(tx, balance, true)
-      balance.GAS.spent.length.should.equal(1)
-      balance.GAS.unspent.length.should.equal(3)
-      if (balance.GAS.unconfirmed) balance.GAS.unconfirmed.length.should.equal(0)
-      balance.NEO.spent.length.should.equal(1)
-      balance.NEO.unspent.length.should.equal(2)
-      if (balance.NEO.unconfirmed) balance.NEO.unconfirmed.length.should.equal(0)
     })
   })
 

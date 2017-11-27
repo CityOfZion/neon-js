@@ -1,7 +1,7 @@
 import * as neonDB from './neonDB'
 import * as neoscan from './neoscan'
 import { Account } from '../wallet'
-import { ASSETS, ASSET_ID } from '../consts'
+import { ASSET_ID } from '../consts'
 import { Query } from '../rpc'
 import { Transaction } from '../transactions'
 

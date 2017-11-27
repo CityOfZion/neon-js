@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Balance } from '../wallet'
 
 /**
  * Returns the appropriate NeoScan endpoint.
@@ -24,10 +25,10 @@ export const getAPIEndpoint = (net) => {
 export const getRPCEndpoint = (net) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_all_nodes')
-    .then((res) => {
+    .then(({ data }) => {
       let bestHeight = 0
       let nodes = []
-      for (const node in res.data) {
+      for (const node of data) {
         if (node.height > bestHeight) {
           bestHeight = node.height
           nodes = [node]
