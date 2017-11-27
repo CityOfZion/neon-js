@@ -3,16 +3,6 @@ import { ASSETS } from '../consts'
 import { Query } from '../rpc'
 
 /**
- * @typedef Balance
- * @property {string[]} assetSymbols - The symbols available in this balance
- * @property {object} assets - Each asset can be found using its symbol from assetSymbols.
- * @property {string[]} tokenSymbols - The symbols available in this balance
- * @property {object} tokens - Each token can be found using its symbol from tokenSymbols.
- * @property {string} address - The Address that was queried
- * @property {string} net - 'MainNet' or 'TestNet'
- */
-
-/**
  * @typedef AssetBalance
  * @property {number} balance - The total balance in this AssetBalance
  * @property {Coin[]} unspent - Unspent coins
@@ -20,15 +10,16 @@ import { Query } from '../rpc'
  * @property {Coin[]} unconfirmed - Unconfirmed coins
  */
 
- /**
- * @typedef Coin
- * @property {number} index - Index in list.
- * @property {string} txid - Transaction ID which produced this coin.
- * @property {number} value - Value of this coin.
- */
+/**
+* @typedef Coin
+* @property {number} index - Index in list.
+* @property {string} txid - Transaction ID which produced this coin.
+* @property {number} value - Value of this coin.
+*/
 
 /**
- * Balance object describing the coins found within an Account. Look up various balances through its symbol. For example, NEO or GAS.
+ * @class Balance
+ * @classdesc object describing the coins found within an Account. Look up various balances through its symbol. For example, NEO or GAS.
  * @param {object} bal - Balance object as a JSON.
  * @param {string} bal.net - 'MainNet' or 'TestNet'
  * @param {string} bal.address - The address of the Account
