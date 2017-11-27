@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Account } from '../wallet'
+import { Account, Balance } from '../wallet'
 import { Transaction } from '../transactions'
 import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
@@ -69,7 +69,12 @@ export const getBalance = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/balance/' + address)
     .then((res) => {
-      return res.data
+      const bal = new Balance({ net: res.data.net, address: res.data.address })
+      Object.keys(res.data).map((key) => {
+        if (key === 'net' || key === 'address') return
+        bal.addAsset(key, res.data[key])
+      })
+      return bal
     })
 }
 

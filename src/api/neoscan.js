@@ -10,7 +10,7 @@ export const getAPIEndpoint = (net) => {
     case 'MainNet':
       return 'https://neoscan.io/api/main_net'
     case 'TestNet':
-      throw new Error(`Not Implemented`)
+      return 'https://neoscan-testnet.io/api/test_net'
     default:
       return net
   }
@@ -49,14 +49,14 @@ export const getBalance = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_balance/' + address)
     .then((res) => {
-      const balances = { address: res.data.address, net }
+      const bal = new Balance({ address: res.data.address, net })
       res.data.balance.map((b) => {
-        balances[b.asset] = {
+        bal.addAsset(b.asset, {
           balance: b.amount,
           unspent: parseUnspent(b.unspent)
-        }
+        })
       })
-      return balances
+      return bal
     })
 }
 
