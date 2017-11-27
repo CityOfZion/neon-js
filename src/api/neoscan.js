@@ -55,6 +55,11 @@ export const getBalance = (net, address) => {
           balance: b.amount,
           unspent: parseUnspent(b.unspent)
         })
+        // To be deprecated
+        bal[b.asset] = {
+          balance: b.amount,
+          unspent: parseUnspent(b.unspent)
+        }
       })
       return bal
     })

@@ -69,11 +69,13 @@ export const getBalance = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/balance/' + address)
     .then((res) => {
-      const bal = new Balance({ net: res.data.net, address: res.data.address })
+      const bal = new Balance({ net, address: res.data.address })
       Object.keys(res.data).map((key) => {
         if (key === 'net' || key === 'address') return
         bal.addAsset(key, res.data[key])
       })
+      // To be deprecated
+      Object.assign(bal, res.data)
       return bal
     })
 }
