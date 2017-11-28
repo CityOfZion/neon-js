@@ -12,7 +12,7 @@ describe('NEP5', function () {
         result.name.should.equal('LOCALTOKEN')
         result.symbol.should.equal('LWTF')
         result.decimals.should.equal(8)
-        result.totalSupply.should.least(1)
+        result.totalSupply.should.least(1969000)
       })
       .catch((e) => {
         console.log(e)
