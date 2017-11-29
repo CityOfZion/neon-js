@@ -65,6 +65,10 @@ CoinMarketCap
 NEP5
 -----
 
+.. autofunction:: doTransferToken
+
+.. autofunction:: getToken
+
 .. autofunction:: getTokenInfo
 
 .. autofunction:: getTokenBalance
