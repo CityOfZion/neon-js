@@ -14,7 +14,7 @@ The utility module contains:
 
 - Format manipulation methods
 - Hashing methods
-- utility classes
+- Utility classes
 
 Format
 -------
