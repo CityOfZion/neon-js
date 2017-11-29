@@ -71,6 +71,9 @@ class Wallet {
     } else {
       this.accounts.push(new Account(acct))
     }
+    if (index === 0) {
+      this.accounts[0].isDefault = true
+    }
     return index
   }
 
@@ -114,6 +117,17 @@ class Wallet {
       accounts: this.accounts.map((acct) => acct.export()),
       extra: this.extra
     })
+  }
+
+  /**
+   * Set Account at index in array to be default account.
+   * @param {number} index - The index of the Account in accounts array.
+   * @return this
+   */
+  setDefault (index) {
+    for (let i = 0; i < this.accounts.length; i++) {
+      this.accounts[i].isDefault = i === index
+    }
   }
 
   /**
