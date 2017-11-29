@@ -1,10 +1,14 @@
 import { ScriptBuilder } from '../sc'
 import { getScriptHashFromAddress, Account } from '../wallet'
-import { Query, VMExtractor } from '../rpc'
-import { ab2str, hexstring2ab, reverseHex, fixed82num } from '../utils'
+import { Query, VMZip } from '../rpc'
+import { reverseHex, fixed82num, hexstring2str } from '../utils'
 import { getRPCEndpoint, getBalance } from './neonDB'
 import { Transaction } from '../transactions'
 import { ASSET_ID } from '../consts'
+
+const parseTokenInfo = VMZip(hexstring2str, hexstring2str, parseInt, fixed82num)
+
+const parseTokenInfoAndBalance = VMZip(hexstring2str, hexstring2str, parseInt, fixed82num, fixed82num)
 
 /**
  * Queries for NEP5 Token information.
@@ -20,14 +24,14 @@ export const getTokenInfo = (net, scriptHash) => {
     .emitAppCall(scriptHash, 'decimals')
     .emitAppCall(scriptHash, 'totalSupply')
   const script = sb.str
-  return Query.invokeScript(script, false).parseWith(VMExtractor).execute(net)
+  return Query.invokeScript(script, false).parseWith(parseTokenInfo).execute(net)
     .then((res) => {
-      const [name, symbol] = res.slice(0, 2).map((v) => ab2str(hexstring2ab(v)))
-      // decimals is returned as a Int and just needs to be converted to a number
-      const decimals = parseInt(res[2], 10)
-      // totalSupply is parsed as Fixed8
-      const totalSupply = (fixed82num(res[3]))
-      return { name, symbol, decimals, totalSupply }
+      return {
+        name: res[0],
+        symbol: res[1],
+        decimals: res[2],
+        totalSupply: res[3]
+      }
     })
 }
 
@@ -48,6 +52,33 @@ export const getTokenBalance = (net, scriptHash, address) => {
     })
 }
 
+/**
+ * Get the token info and also balance if address is provided.
+ */
+export const getToken = (net, scriptHash, address) => {
+  let parser = address ? parseTokenInfoAndBalance : parseTokenInfo
+  const sb = new ScriptBuilder()
+  sb
+    .emitAppCall(scriptHash, 'name')
+    .emitAppCall(scriptHash, 'symbol')
+    .emitAppCall(scriptHash, 'decimals')
+    .emitAppCall(scriptHash, 'totalSupply')
+  if (address) {
+    const addrScriptHash = reverseHex(getScriptHashFromAddress(address))
+    sb.emitAppCall(scriptHash, 'balanceOf', [addrScriptHash])
+  }
+  const script = sb.str
+  return Query.invokeScript(script, false).parseWith(parser).execute(net)
+    .then((res) => {
+      return {
+        name: res[0],
+        symbol: res[1],
+        decimals: res[2],
+        totalSupply: res[3],
+        balance: res.length === 5 ? res[4] : null
+      }
+    })
+}
 /**
  * Transfers NEP5 Tokens.
  * @param {string} net
