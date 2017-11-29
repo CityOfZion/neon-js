@@ -1,7 +1,7 @@
 import * as NEP5 from '../../src/api/nep5'
 import testKeys from '../testKeys.json'
 
-describe('NEP5', function () {
+describe.only('NEP5', function () {
   this.timeout(10000)
   const net = 'http://seed3.neo.org:20332'
   const scriptHash = 'd7678dd97c000be3f33e9362e673101bac4ca654'
@@ -19,6 +19,7 @@ describe('NEP5', function () {
         throw e
       })
   })
+
   it('get balance', () => {
     return NEP5.getTokenBalance(net, scriptHash, testKeys.c.address)
       .then(result => {
@@ -29,6 +30,32 @@ describe('NEP5', function () {
         throw e
       })
   })
+
+  describe('getToken', function () {
+    it('get info only', () => {
+      return NEP5.getToken(net, scriptHash)
+        .then(result => {
+          result.should.have.keys(['name', 'symbol', 'decimals', 'totalSupply', 'balance'])
+          result.name.should.equal('LOCALTOKEN')
+          result.symbol.should.equal('LWTF')
+          result.decimals.should.equal(8)
+          result.totalSupply.should.least(1969000)
+        })
+    })
+
+    it('get info and balance', () => {
+      return NEP5.getToken(net, scriptHash, testKeys.c.address)
+        .then(result => {
+          result.should.have.keys(['name', 'symbol', 'decimals', 'totalSupply', 'balance'])
+          result.name.should.equal('LOCALTOKEN')
+          result.symbol.should.equal('LWTF')
+          result.decimals.should.equal(8)
+          result.totalSupply.should.least(1969000)
+          result.balance.should.be.above(0)
+        })
+    })
+  })
+
   it('transfers tokens', () => {
     const testNet = 'TestNet'
     const fromWif = 'L5FzBMGSG2d7HVJL5vWuXfxUKsrkX5irFhtw1L5zU4NAvNuXzd8a'

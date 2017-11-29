@@ -83,7 +83,7 @@ Neoscan
 
 The Neoscan API serves as a backup in case NeonDB fails. It is not exposed in semantic exports. Instead, use named exports::
 
-  import {api} from 'neon-js
+  import {api} from 'neon-js'
   api.neoscan.getBalance('TestNet', address)
   api.neoscan.getClaims('MainNet', address)
 
@@ -114,11 +114,13 @@ This set of methods rely on the NEO node having version >= 2.3.3. The method use
 
   import Neon from 'neon-js'
   const rpxScriptHash = Neon.CONST.CONTRACTS.TEST_RPX
-  Neon.get.tokenInfo(rpxScriptHash)
-  Neon.get.tokenBalance(rpxScriptHash, address)
+  Neon.get.tokenInfo('http://seed1.neo.org:20332', rpxScriptHash)
+  Neon.get.tokenBalance('http://seed1.neo.org:20332', rpxScriptHash, address)
 
   import { api } from 'neon-js'
-  api.nep5.getTokenInfo(rpxScriptHash)
-  api.nep5.getTokenBalance(rpxScriptHash)
+  api.nep5.getTokenInfo('http://seed1.neo.org:20332', rpxScriptHash)
+  api.nep5.getTokenBalance('http://seed1.neo.org:20332', rpxScriptHash)
+  // This is a combination of both info and balance within a single call
+  api.nep5.getToken('http://seed1.neo.org:20332', rpxScriptHash, address)
 
 .. _neon-wallet-db: https://github.com/CityOfZion/neon-wallet-db
