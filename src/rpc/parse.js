@@ -33,9 +33,10 @@ export const VMExtractor = (res) => {
  * @param {function[]} funcs - An array of parsing functions.
  * @return {(res) => any[]} A parser function
  */
-export const VMZip = (funcs) => {
+export const VMZip = (...args) => {
   return (res) => {
     const stack = res.result.stack
-    return stack.map((item, i) => funcs[i](item.value))
+    if (stack.length !== args.length) throw new RangeError(`Invalid results length! Expected ${args.length} but got ${stack.length}`)
+    return stack.map((item, i) => args[i](item.value))
   }
 }
