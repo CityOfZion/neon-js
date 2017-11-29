@@ -27,3 +27,15 @@ export const VMExtractor = (res) => {
   const stack = res.result.stack
   return stack.map((item) => item.value)
 }
+
+/**
+ * Extracts the VM stack into an array and zips it with the provided array of parsing functions.
+ * @param {function[]} funcs - An array of parsing functions.
+ * @return {(res) => any[]} A parser function
+ */
+export const VMZip = (funcs) => {
+  return (res) => {
+    const stack = res.result.stack
+    return stack.map((item, i) => funcs[i](item.value))
+  }
+}
