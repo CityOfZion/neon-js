@@ -1,7 +1,5 @@
 import fs from 'fs'
 import Account from './Account'
-import { encrypt } from './nep2'
-import { isNEP2 } from './verify'
 import { DEFAULT_SCRYPT, DEFAULT_WALLET } from '../consts'
 
 /**
@@ -11,7 +9,7 @@ import { DEFAULT_SCRYPT, DEFAULT_WALLET } from '../consts'
  * @param {boolean} isDefault - Is the default change account.
  * @param {boolean} lock - Is not allowed to spend funds.
  * @param {string} key - Encrypted WIF of account.
- * @param {object} contract - Contract details (applicable to contract address).
+ * @param {object|null} contract - Contract details (applicable to contract address).
  * @param {object} extra - Any extra information.
  */
 
@@ -71,21 +69,7 @@ class Wallet {
     } else {
       this.accounts.push(new Account(acct))
     }
-    if (index === 0) {
-      this.accounts[0].isDefault = true
-    }
     return index
-  }
-
-  /**
-   * Adds a private key / WIF / encrypted key
-   * @param {string} key - Private key / WIF / encrypted key. If unencrypted, a keyphrase is required.
-   * @param {string} [keyphrase] - Keyphrase to encrypt the unencrypted key.
-   * @return {number} Index position of Account in array.
-   */
-  addKey (key, keyphrase) {
-    if (!isNEP2(key)) key = encrypt(key, keyphrase, this.scrypt)
-    return this.addAccount(new Account())
   }
 
   /**
@@ -98,6 +82,24 @@ class Wallet {
     for (const acct of this.accounts) {
       try {
         acct.decrypt(keyphrase, this.scrypt)
+        results.push(true)
+      } catch (e) {
+        results.push(false)
+      }
+    }
+    return results
+  }
+
+  /**
+   * Attempts to encrypt all accounts with keyphrase.
+   * @param {string} keyphrase
+   * @return {boolean[]} Each boolean represents if that Account has been encrypted successfully.
+   */
+  encrypt (keyphrase) {
+    const results = []
+    for (const acct of this.accounts) {
+      try {
+        acct.encrypt(keyphrase, this.scrypt)
         results.push(true)
       } catch (e) {
         results.push(false)
