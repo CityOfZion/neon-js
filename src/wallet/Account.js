@@ -4,7 +4,6 @@ import { encrypt, decrypt } from './nep2'
 
 /**
  * @class Account
- * @memberof module:wallet
  * @classdesc
  * This allows for simple utilisation and manipulating of keys without need the long access methods.
  * Key formats are derived from each other lazily and stored for future access.
@@ -14,10 +13,10 @@ import { encrypt, decrypt } from './nep2'
  */
 class Account {
   constructor (str) {
-    this.label = ''
     this.extra = null
     this.isDefault = false
     this.lock = false
+    this.contract = null
     if (!str) {
       this._privateKey = core.generatePrivateKey()
     } else if (typeof str === 'object') {
@@ -27,6 +26,7 @@ class Account {
       this.extra = str.extra
       this.isDefault = str.isDefault
       this.lock = str.lock
+      this.contract = str.contract
     } else if (isPrivateKey(str)) {
       this._privateKey = str
     } else if (isPublicKey(str, false)) {
@@ -42,6 +42,11 @@ class Account {
       this._encrypted = str
     } else {
       throw new ReferenceError(`Invalid input: ${str}`)
+    }
+
+    // Attempts to make address the default label of the Account.
+    if (!this.label) {
+      try { this.label = this.address } catch (err) { this.label = '' }
     }
   }
 
