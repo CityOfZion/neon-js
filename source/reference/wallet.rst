@@ -43,3 +43,6 @@ Module ``wallet``
 .. autofunction:: isNEP2
 
 .. autofunction:: isWIF
+
+.. autoclass:: Wallet
+    :members:
