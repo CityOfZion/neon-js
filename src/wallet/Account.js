@@ -153,17 +153,20 @@ class Account {
   }
 
   /**
-   * Export Account as a Wallet Account object.
+   * Export Account as a WalletAccount object.
    * @return {WalletAccount}
    */
   export () {
+    let key = null
+    if (this._privateKey && !this._encrypted) throw new Error(`Encrypt private key first!`)
+    if (this._encrypted) key = this._encrypted
     return {
       address: this.address,
       label: this.label,
       isDefault: this.isDefault,
       lock: this.lock,
-      key: this.encrypted,
-      contract: {},
+      key,
+      contract: this.contract,
       extra: this.extra
     }
   }
