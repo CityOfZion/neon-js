@@ -104,6 +104,10 @@ class Balance {
       if (!assetBalance) this.addAsset(sym)
       const coin = { index: i, txid: hash, value: output.value }
       if (confirmed) {
+        let unconfirmedIndex = assetBalance.unconfirmed.findIndex((el) => el.txid === coin.txid && el.index === coin.index)
+        if (unconfirmedIndex >= 0) {
+          assetBalance.unconfirmed.splice(unconfirmedIndex, 1)
+        }
         assetBalance.balance += output.value
         if (!assetBalance.unspent) assetBalance.unspent = []
         assetBalance.unspent.push(coin)
