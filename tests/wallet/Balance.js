@@ -1,6 +1,8 @@
 import Balance from '../../src/wallet/Balance'
 import testData from '../testData.json'
 import { Transaction } from '../../src/transactions'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 
 describe('Balance', function () {
   let bal
@@ -77,11 +79,24 @@ describe('Balance', function () {
     })
   })
 
-  it('verifyAssets', () => {
-    return bal.verifyAssets('http://seed1.neo.org:20332')
-      .then((bal) => {
-        bal.assets.GAS.spent.length.should.least(1)
-        bal.assets.NEO.spent.length.should.least(1)
+  describe('verifyAssets', function () {
+    let mock
+    before(() => {
+      mock = new MockAdapter(axios)
+      mock.onPost().reply(200, {
+        'jsonrpc': '2.0',
+        'id': 1234,
+        'result': null
       })
+    })
+    after(() => mock.restore())
+
+    it('all spent', () => {
+      return bal.verifyAssets('http://seed1.neo.org:20332')
+        .then((bal) => {
+          bal.assets.GAS.spent.length.should.equal(2)
+          bal.assets.NEO.spent.length.should.equal(1)
+        })
+    })
   })
 })
