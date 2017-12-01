@@ -33,11 +33,11 @@ class Balance {
     this.address = bal.address
     this.net = bal.net
     this.assetSymbols = bal.assetSymbols ? bal.assetSymbols : []
-    this.assets = bal.assets ? bal.assets : {}
+    this.assets = {}
     if (bal.assets) {
-      Object.keys(bal).map((key) => {
-        if (typeof bal[key] === 'object') {
-          this.addAsset(key, bal[key])
+      Object.keys(bal.assets).map((key) => {
+        if (typeof bal.assets[key] === 'object') {
+          this.addAsset(key, bal.assets[key])
         }
       })
     }
@@ -54,7 +54,7 @@ class Balance {
   addAsset (sym, assetBalance = { balance: 0, spent: [], unspent: [], unconfirmed: [] }) {
     sym = sym.toUpperCase()
     this.assetSymbols.push(sym)
-    const newBalance = Object.assign({}, { balance: 0, spent: [], unspent: [], unconfirmed: [] }, assetBalance)
+    const newBalance = Object.assign({ balance: 0, spent: [], unspent: [], unconfirmed: [] }, assetBalance)
     this.assets[sym] = JSON.parse(JSON.stringify(newBalance))
     return this
   }
@@ -104,6 +104,10 @@ class Balance {
       if (!assetBalance) this.addAsset(sym)
       const coin = { index: i, txid: hash, value: output.value }
       if (confirmed) {
+        let unconfirmedIndex = assetBalance.unconfirmed.findIndex((el) => el.txid === coin.txid && el.index === coin.index)
+        if (unconfirmedIndex >= 0) {
+          assetBalance.unconfirmed.splice(unconfirmedIndex, 1)
+        }
         assetBalance.balance += output.value
         if (!assetBalance.unspent) assetBalance.unspent = []
         assetBalance.unspent.push(coin)

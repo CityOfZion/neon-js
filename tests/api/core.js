@@ -1,6 +1,7 @@
 import * as core from '../../src/api/core'
 import { neonDB, neoscan } from '../../src/api'
 import { Transaction, signTransaction } from '../../src/transactions'
+import { Balance } from '../../src/wallet'
 import testKeys from '../testKeys.json'
 import testData from '../testData.json'
 import axios from 'axios'
@@ -121,16 +122,19 @@ describe('Core API', function () {
   })
 
   describe('createTx', function () {
-    const config = Object.assign({}, baseConfig, {
-      balance: testData.a.balance,
-      claims: testData.a.claims,
-      intents: [{
-        assetId: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
-        value: 1.1,
-        scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
-      }],
-      script: '001234567890',
-      gas: 0.1
+    let config
+    beforeEach(() => {
+      config = Object.assign({}, baseConfig, {
+        balance: new Balance(JSON.parse(JSON.stringify(testData.a.balance))),
+        claims: testData.a.claims,
+        intents: [{
+          assetId: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
+          value: 1.1,
+          scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
+        }],
+        script: '001234567890',
+        gas: 0.1
+      })
     })
     it('claims', () => {
       return core.createTx(config, 'claim')

@@ -104,13 +104,13 @@ class Transaction {
    * @return {Transaction} Unsigned Transaction
    */
   static createContractTx (balances, intents, override = {}) {
+    if (intents === null) throw new Error(`Useless transaction!`)
     const txConfig = Object.assign({
       type: 128,
-      version: TX_VERSION.CONTRACT
+      version: TX_VERSION.CONTRACT,
+      outputs: intents
     }, override)
-    let { inputs, change } = core.calculateInputs(balances, intents)
-    const outputs = intents.concat(change)
-    return new Transaction(Object.assign(txConfig, { inputs, outputs }, override))
+    return new Transaction(txConfig).calculate(balances)
   }
 
   /**
@@ -126,15 +126,12 @@ class Transaction {
     if (intents === null) intents = []
     const txConfig = Object.assign({
       type: 209,
-      version: TX_VERSION.INVOCATION
-    }, override)
-    const { inputs, change } = core.calculateInputs(balances, intents, gasCost)
-    const outputs = intents.concat(change)
-    const exclusive = {
+      version: TX_VERSION.INVOCATION,
+      outputs: intents,
       script: typeof (invoke) === 'string' ? invoke : createScript(invoke),
       gas: gasCost
-    }
-    return new Transaction(Object.assign(txConfig, { inputs, outputs }, exclusive, override))
+    }, override)
+    return new Transaction(txConfig).calculate(balances)
   }
 
   /**
@@ -186,6 +183,7 @@ class Transaction {
     const { inputs, change } = core.calculateInputs(balance, this.outputs, this.gas)
     this.inputs = inputs
     this.outputs = this.outputs.concat(change)
+    balance.applyTx(this)
     return this
   }
 
