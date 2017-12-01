@@ -44,13 +44,33 @@ describe('Wallet file', function () {
   })
 
   describe('addAccount', function () {
+    const w = new Wallet()
     it('Account', () => {
-      const w = new Wallet()
-      w.addAccount(new Account())
+      const acct = new Account()
+      const i = w.addAccount(acct)
+      i.should.equal(0)
+      w.accounts.length.should.equal(1)
+      w.accounts[0].should.eql(acct)
+    })
+
+    it('Key', () => {
+      const i = w.addAccount('6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF')
+      i.should.equal(1)
+      w.accounts.length.should.equal(2)
+      w.accounts[1].should.be.an.instanceof(Account)
     })
   })
 
-  it('deletes an account')
+  it('setDefault', () => {
+    // Original default is index 1
+    const w = new Wallet(testWallet)
+    w.accounts[1].isDefault.should.equal(true)
+    const newDefault = 2
+    w.setDefault(newDefault)
+    for (let i = 0; i < w.accounts.length; i++) {
+      w.accounts[i].isDefault.should.equal(i === newDefault)
+    }
+  })
 
   it('')
 })
