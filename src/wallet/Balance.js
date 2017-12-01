@@ -33,11 +33,11 @@ class Balance {
     this.address = bal.address
     this.net = bal.net
     this.assetSymbols = bal.assetSymbols ? bal.assetSymbols : []
-    this.assets = bal.assets ? bal.assets : {}
+    this.assets = {}
     if (bal.assets) {
-      Object.keys(bal).map((key) => {
-        if (typeof bal[key] === 'object') {
-          this.addAsset(key, bal[key])
+      Object.keys(bal.assets).map((key) => {
+        if (typeof bal.assets[key] === 'object') {
+          this.addAsset(key, bal.assets[key])
         }
       })
     }
