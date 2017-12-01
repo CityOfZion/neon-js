@@ -39,6 +39,29 @@ class Wallet {
   }
 
   /**
+   * Returns the default Account according to the following rules:
+   * 1. First Account where isDefault is true.
+   * 2. First Account with a decrypted private key.
+   * 3. First Account with an encrypted private key.
+   * 4. First Account in the array.
+   * Throws error if no accounts available.
+   * @return {Account} Account
+   */
+  get defaultAccount () {
+    if (this.accounts.length === 0) throw new Error(`No accounts available in this Wallet!`)
+    for (const acct of this.accounts) {
+      if (acct.isDefault) return acct
+    }
+    for (const acct of this.accounts) {
+      if (acct._privateKey || acct._WIF) return acct
+    }
+    for (const acct of this.accounts) {
+      if (acct.encrypted) return acct
+    }
+    return this.accounts[0]
+  }
+
+  /**
    * Imports a Wallet through a JSON string
    * @param {string} - JSON string
    * @return {Wallet}
@@ -73,21 +96,46 @@ class Wallet {
   }
 
   /**
+   * Attempts to decrypt Account at index in array.
+   * @param {number} index - Index of Account in array.
+   * @param {string} keyphrase - keyphrase
+   * @return {boolean} Decryption success/failure
+   */
+  decrypt (index, keyphrase) {
+    if (index < 0) throw new Error(`Index cannot be negative!`)
+    if (index >= this.accounts.length) throw new Error(`Index cannot larger than Accounts array!`)
+    try {
+      this.accounts[index].decrypt(keyphrase, this.scrypt)
+      return true
+    } catch (err) { return false }
+  }
+
+  /**
    * Attempts to decrypt all accounts with keyphrase.
    * @param {string} keyphrase
    * @return {boolean[]} Each boolean represents if that Account has been decrypted successfully.
    */
-  decrypt (keyphrase) {
+  decryptAll (keyphrase) {
     const results = []
-    for (const acct of this.accounts) {
-      try {
-        acct.decrypt(keyphrase, this.scrypt)
-        results.push(true)
-      } catch (e) {
-        results.push(false)
-      }
-    }
+    this.accounts.map((acct, i) => {
+      results.push(this.decrypt(i, keyphrase))
+    })
     return results
+  }
+
+  /**
+   * Attempts to encrypt Account at index in array.
+   * @param {number} index - Index of Account in array.
+   * @param {string} keyphrase - keyphrase
+   * @return {boolean} Encryption success/failure
+   */
+  encrypt (index, keyphrase) {
+    if (index < 0) throw new Error(`Index cannot be negative!`)
+    if (index >= this.accounts.length) throw new Error(`Index cannot larger than Accounts array!`)
+    try {
+      this.accounts[index].encrypt(keyphrase, this.scrypt)
+      return true
+    } catch (err) { return false }
   }
 
   /**
@@ -95,16 +143,11 @@ class Wallet {
    * @param {string} keyphrase
    * @return {boolean[]} Each boolean represents if that Account has been encrypted successfully.
    */
-  encrypt (keyphrase) {
+  encryptAll (keyphrase) {
     const results = []
-    for (const acct of this.accounts) {
-      try {
-        acct.encrypt(keyphrase, this.scrypt)
-        results.push(true)
-      } catch (e) {
-        results.push(false)
-      }
-    }
+    this.accounts.map((acct, i) => {
+      results.push(this.encrypt(i, keyphrase))
+    })
     return results
   }
 

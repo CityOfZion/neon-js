@@ -1,8 +1,10 @@
 import Wallet from '../../src/wallet/Wallet'
 import Account from '../../src/wallet/Account'
+import simpleWallet from './simpleWallet.json'
 import testWallet from './testWallet.json'
+import testKeys from '../testKeys.json'
 
-describe('Wallet file', function () {
+describe.only('Wallet file', function () {
   describe('Constructor', function () {
     it('default', () => {
       const w = new Wallet()
@@ -23,6 +25,25 @@ describe('Wallet file', function () {
       w.name.should.equal(config.name)
       w.scrypt.should.eql(config.scrypt)
       w.accounts.should.eql([])
+    })
+  })
+
+  describe('get defaultAccount', function () {
+    const w = new Wallet(simpleWallet)
+    w.decrypt(1, w.accounts[1].label)
+    it('returns first default', () => {
+      w.defaultAccount.should.equal(w.accounts[2])
+    })
+
+    it('returns first decrypted account when no defaults', () => {
+      w.accounts[2].isDefault = false
+      w.defaultAccount.should.eql(w.accounts[1])
+    })
+
+    it('returns first encrypted account when no defaults and decrypted', () => {
+      w.accounts[1]._privateKey = undefined
+      w.accounts[1]._WIF = undefined
+      w.defaultAccount.should.eql(w.accounts[0])
     })
   })
 
@@ -72,5 +93,17 @@ describe('Wallet file', function () {
     }
   })
 
-  it('')
+  describe('decrypt/encrypt', function () {
+    const w = new Wallet(simpleWallet)
+    it('decryptAll', () => {
+      const decrypted = w.decryptAll(simpleWallet.accounts[1].label)
+      decrypted.should.eql([false, true, false, false, false])
+      w.accounts[1].privateKey.should.not.equal(undefined)
+    })
+
+    it('encryptAll', () => {
+      const encrypted = w.encryptAll(simpleWallet.accounts[1].label)
+      encrypted.should.eql([false, true, false, false, false])
+    })
+  })
 })
