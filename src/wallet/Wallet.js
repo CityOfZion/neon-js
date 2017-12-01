@@ -24,7 +24,7 @@ import { DEFAULT_SCRYPT, DEFAULT_WALLET } from '../consts'
  * @param {object} config.extra - Extra information of wallet.
  */
 class Wallet {
-  constructor ({ name = 'myWallet', version = '1.0', scrypt = DEFAULT_SCRYPT, accounts = [], extra = null } = DEFAULT_WALLET) {
+  constructor ({ name = 'myWallet', version = DEFAULT_WALLET.version, scrypt = DEFAULT_SCRYPT, accounts = [], extra = null } = DEFAULT_WALLET) {
     /** @type {string} */
     this.name = name
     /** @type {string} */
