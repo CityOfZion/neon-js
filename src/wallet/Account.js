@@ -73,6 +73,9 @@ class Account {
   get privateKey () {
     if (this._privateKey) {
       return this._privateKey
+    } else if (this._WIF) {
+      this._privateKey = core.getPrivateKeyFromWIF(this._WIF)
+      return this._privateKey
     } else if (this._encrypted) {
       throw new ReferenceError('Private Key encrypted!')
     } else {
@@ -137,7 +140,7 @@ class Account {
    * @return {Account} this
    */
   encrypt (keyphrase, scryptParams = undefined) {
-    this._encrypted = encrypt(this._privateKey, keyphrase, scryptParams)
+    this._encrypted = encrypt(this.privateKey, keyphrase, scryptParams)
     return this
   }
 
@@ -148,7 +151,7 @@ class Account {
    * @return {Account} this
    */
   decrypt (keyphrase, scryptParams = undefined) {
-    this._WIF = decrypt(this._encrypted, keyphrase, scryptParams)
+    this._WIF = decrypt(this.encrypted, keyphrase, scryptParams)
     return this
   }
 
