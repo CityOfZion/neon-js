@@ -183,6 +183,7 @@ class Transaction {
     const { inputs, change } = core.calculateInputs(balance, this.outputs, this.gas)
     this.inputs = inputs
     this.outputs = this.outputs.concat(change)
+    balance.applyTx(this)
     return this
   }
 
