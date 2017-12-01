@@ -2,7 +2,6 @@ import Wallet from '../../src/wallet/Wallet'
 import Account from '../../src/wallet/Account'
 import simpleWallet from './simpleWallet.json'
 import testWallet from './testWallet.json'
-import testKeys from '../testKeys.json'
 
 describe.only('Wallet file', function () {
   describe('Constructor', function () {
