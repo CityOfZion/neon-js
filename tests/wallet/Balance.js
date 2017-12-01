@@ -54,10 +54,9 @@ describe('Balance', function () {
         scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
       }
     ]
-    const tx = Transaction.createContractTx(testData.a.balance, intents)
 
     it('unconfirmed', () => {
-      bal.applyTx(tx, false)
+      Transaction.createContractTx(bal, intents)
       bal.assets.GAS.spent.length.should.equal(1)
       bal.assets.GAS.unspent.length.should.equal(1)
       bal.assets.GAS.unconfirmed.length.should.equal(2)
@@ -67,6 +66,7 @@ describe('Balance', function () {
     })
 
     it('confirmed', () => {
+      const tx = Transaction.createContractTx(bal, intents)
       bal.applyTx(tx, true)
       bal.assets.GAS.spent.length.should.equal(1)
       bal.assets.GAS.unspent.length.should.equal(3)

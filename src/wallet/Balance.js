@@ -54,7 +54,7 @@ class Balance {
   addAsset (sym, assetBalance = { balance: 0, spent: [], unspent: [], unconfirmed: [] }) {
     sym = sym.toUpperCase()
     this.assetSymbols.push(sym)
-    const newBalance = Object.assign({}, { balance: 0, spent: [], unspent: [], unconfirmed: [] }, assetBalance)
+    const newBalance = Object.assign({ balance: 0, spent: [], unspent: [], unconfirmed: [] }, assetBalance)
     this.assets[sym] = JSON.parse(JSON.stringify(newBalance))
     return this
   }
