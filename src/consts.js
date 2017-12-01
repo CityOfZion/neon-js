@@ -24,10 +24,30 @@ export const DEFAULT_RPC = {
 
 export const DEFAULT_REQ = { jsonrpc: '2.0', method: 'getblockcount', params: [], id: 1234 }
 
+export const DEFAULT_SCRYPT = {
+  cost: 16384,
+  blockSize: 8,
+  parallel: 8,
+  size: 64
+}
+
+export const DEFAULT_WALLET = {
+  name: 'myWallet',
+  version: '1.0',
+  scrypt: DEFAULT_SCRYPT,
+  accounts: [],
+  extra: null
+}
+
 export const NEO_NETWORK = {
   MAIN: 'MainNet',
   TEST: 'TestNet'
 }
+
+// specified by nep2, same as bip38
+export const NEP_HEADER = '0142'
+
+export const NEP_FLAG = 'e0'
 
 export const RPC_VERSION = '2.3.2'
 

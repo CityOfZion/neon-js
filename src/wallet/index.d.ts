@@ -79,6 +79,30 @@ declare module '@cityofzion/neon-js' {
     export function isPrivateKey(key: string): boolean
     export function isPublicKey(key: string, encoded?: boolean): boolean
     export function isAddress(address: string): boolean
+
+    //Wallet
+    export class Wallet {
+      name: string
+      scrypt: scryptParams
+      accounts: Account[]
+      extra: object
+
+      constructor({
+        name,
+        scrypt,
+        accounts,
+        extra
+       })
+
+       static import(jsonString: string): Wallet
+       static readFile(filepath: string): Wallet
+
+       addAccount(acct: Account|object): number
+       addKey(key: string, keyphrase? : string): number
+       decrypt(keyphrase: string):boolean[]
+       export(): string
+       writeFile(filepath): boolean
+    }
   }
 
   export interface semantic {
