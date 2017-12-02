@@ -46,6 +46,16 @@ class Balance {
   }
 
   /**
+   * Imports a string
+   * @param {string} jsonString
+   * @return {Balance}
+   */
+  static import (jsonString) {
+    const balanceJson = JSON.parse(jsonString)
+    return new Balance(balanceJson)
+  }
+
+  /**
    * Adds a new asset to this Balance.
    * @param {string} sym - The symbol to refer by. This function will force it to upper-case.
    * @param {AssetBalance} [assetBalance] - The assetBalance if initialized. Default is a zero balance object.
@@ -121,6 +131,20 @@ class Balance {
     return this
   }
 
+  /**
+   * Export this class as a string
+   * @return {string}
+   */
+  export () {
+    return JSON.stringify({
+      net: this.net,
+      address: this.address,
+      assetSymbols: this.assetSymbols,
+      assets: this.assets,
+      tokenSymbols: this.tokenSymbols,
+      tokens: this.tokens
+    })
+  }
   /**
    * Verifies the coins in balance are unspent. This is an expensive call.
    * @param {string} url - NEO Node to check against.

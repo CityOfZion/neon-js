@@ -74,9 +74,12 @@ declare module '@cityofzion/neon-js' {
       tokenSymbols: string[]
       tokens: { [index: string]: number }
 
+      static import(jsonString: string): Balance
+
       addAsset(sym: string, assetBalance?: AssetBalance): this
       addToken(sym: string, tokenBalance?: number): this
       applyTx(tx: Transaction, confirmed?: boolean): this
+      export(): string
       verifyAssets(url: string): Promise<Balance>
     }
 
