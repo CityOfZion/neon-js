@@ -34,7 +34,7 @@ export const DEFAULT_SCRYPT = {
 export const DEFAULT_WALLET = {
   name: 'myWallet',
   version: '1.0',
-  scrypt: DEFAULT_SCRYPT,
+  scrypt: {},
   accounts: [],
   extra: null
 }

@@ -20,6 +20,35 @@ declare module '@cityofzion/neon-js' {
     value: number
   }
 
+  export interface ScryptParams {
+    cost: number
+    blockSize: number
+    parallel: number
+  }
+
+  export interface WalletFile {
+    name: string
+    scrypt: WalletScryptParams
+    accounts: WalletAccount[]
+    extra: object
+  }
+
+  export interface WalletScryptParams {
+    n: number
+    r: number
+    p: number
+  }
+
+  export interface WalletAccount {
+    address: string
+    label: string
+    isDefault: boolean
+    lock: boolean
+    key: string
+    contract: object | null
+    extra: object
+  }
+
   export module wallet {
     //Account
     export class Account {
@@ -83,33 +112,32 @@ declare module '@cityofzion/neon-js' {
     //Wallet
     export class Wallet {
       name: string
-      scrypt: scryptParams
+      scrypt: WalletScryptParams
       accounts: Account[]
       extra: object
 
-      constructor({
-        name,
-        scrypt,
-        accounts,
-        extra
-       })
+      constructor(file: WalletFile)
 
-       static import(jsonString: string): Wallet
-       static readFile(filepath: string): Wallet
+      static import(jsonString: string): Wallet
+      static readFile(filepath: string): Wallet
 
-       addAccount(acct: Account|object): number
-       addKey(key: string, keyphrase? : string): number
-       decrypt(keyphrase: string):boolean[]
-       export(): string
-       writeFile(filepath): boolean
+      addAccount(acct: Account | object): number
+      decrypt(index: number, keyphrase: string): boolean
+      decryptAll(keyphrase: string): boolean[]
+      encrypt(index: number, keyphrase: string): boolean
+      encryptAll(keyphrase: string): boolean[]
+      export(): string
+      setDefault(index: number): this
+      writeFile(filepath): boolean
     }
   }
 
   export interface semantic {
     create: {
-      account: (k: string) => Account
+      account: (k: any) => Account
       privateKey: () => string
       signature: (tx: string, privateKey: string) => string
+      wallet: (k: any) => Wallet
     }
     is: {
       address: (address: string) => boolean

@@ -12,6 +12,13 @@ import { ab2hexstring, hexXor } from '../utils'
 import { DEFAULT_SCRYPT, NEP_HEADER, NEP_FLAG } from '../consts'
 
 /**
+ * @typedef ScryptParams
+ * @param {number} cost - (n) Must be power of 2. 2^8 - 2^64
+ * @param {number} blockSize - (r) 1 - 256
+ * @param {number} parallel - (p) 1 - 256
+ */
+
+/**
  * Encrypts an WIF key with a given passphrase, returning a Promise<Account>.
  * @param {string} wif - The WIF key to encrypt.
  * @param {string} passphrase - The password.
@@ -42,11 +49,10 @@ export const generateEncryptedWif = (passphrase) => {
  * Encrypts a WIF key using a given keyphrase under NEP-2 Standard.
  * @param {string} wifKey - WIF key to encrypt (52 chars long).
  * @param {string} keyphrase - The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
- * @param {object} scryptParams - Parameters for Scrypt. Defaults to NEP2 specified parameters.
+ * @param {scryptParams} scryptParams - Parameters for Scrypt. Defaults to NEP2 specified parameters.
  * @returns {string} The encrypted key in Base58 (Case sensitive).
  */
 export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
-  scryptParams = parseScryptParams(scryptParams)
   const account = new Account(wifKey)
   // SHA Salt (use the first 4 bytes)
   const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
@@ -69,7 +75,6 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
  * @returns {string} The decrypted WIF key.
  */
 export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
-  scryptParams = parseScryptParams(scryptParams)
   const assembled = ab2hexstring(bs58check.decode(encryptedKey))
   const addressHash = assembled.substr(6, 8)
   const encrypted = assembled.substr(-64)
@@ -95,17 +100,4 @@ export const encryptWIF = (wif, passphrase) => {
 export const decryptWIF = (encrypted, passphrase) => {
   console.log(`To be deprecated in v3. Please use Account.decrypt`)
   return Promise.resolve(decrypt(encrypted, passphrase))
-}
-
-/**
- * Helper method to read and parse scryptParams. Helps converts shortforms declarations to longforms.
- * @param {object} scryptParams - Scrypt parameters object
- * @return {object}
- */
-const parseScryptParams = (scryptParams) => {
-  const parsed = {}
-  if (scryptParams.n) parsed.cost = scryptParams.n
-  if (scryptParams.r) parsed.blockSize = scryptParams.r
-  if (scryptParams.p) parsed.parallel = scryptParams.p
-  return Object.assign({}, DEFAULT_SCRYPT, parsed, scryptParams)
 }
