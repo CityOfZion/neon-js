@@ -3,7 +3,7 @@ import Account from '../../src/wallet/Account'
 import simpleWallet from './simpleWallet.json'
 import testWallet from './testWallet.json'
 
-describe.only('Wallet file', function () {
+describe('Wallet file', function () {
   describe('Constructor', function () {
     it('default', () => {
       const w = new Wallet()
