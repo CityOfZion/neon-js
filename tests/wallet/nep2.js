@@ -2,7 +2,7 @@ import * as NEP2 from '../../src/wallet/nep2'
 import testKeys from '../testKeys.json'
 
 describe('NEP2', function () {
-  this.timeout(15000)
+  this.timeout(20000)
 
   it('should encrypt WIF', () => {
     const encryptedKey = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase)
