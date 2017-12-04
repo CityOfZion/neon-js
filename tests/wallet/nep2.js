@@ -3,7 +3,7 @@ import { isNEP2, isWIF } from '../../src/wallet/verify'
 import testKeys from '../testKeys.json'
 
 describe('NEP2', function () {
-  this.timeout(20000)
+  this.timeout(50000)
 
   const simpleScrypt = {
     cost: 256,
