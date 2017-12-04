@@ -205,7 +205,7 @@ class Wallet {
 
 export default Wallet
 
-const parseWalletScryptParams = (params) => {
+export const parseWalletScryptParams = (params) => {
   const parsed = {
     cost: params.n,
     blockSize: params.r,
@@ -214,10 +214,10 @@ const parseWalletScryptParams = (params) => {
   return Object.assign({}, DEFAULT_SCRYPT, parsed)
 }
 
-const exportScryptParamsToWallet = (scryptParams) => {
+export const exportScryptParamsToWallet = (scryptParams) => {
   return {
     n: scryptParams.cost,
     r: scryptParams.blockSize,
-    p: scryptParams.paralel
+    p: scryptParams.parallel
   }
 }
