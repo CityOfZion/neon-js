@@ -45,6 +45,7 @@ declare module '@cityofzion/neon-js' {
     //parse
     export function VMParser(res: RPCResponse): Array<any>
     export function VMExtractor(res: RPCResponse): Array<any>
+    export function VMZip(args: any[]): (res: RPCResponse) => any[]
 
     //query
     export class Query {
