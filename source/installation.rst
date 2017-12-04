@@ -33,7 +33,7 @@ A default import will import the semantic version of neon. Use this if you are n
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
 
   Neon.create.claimTx(...args)
   const query = Neon.create.query()
@@ -43,7 +43,7 @@ Modules are exposed through named imports. This allows more fine grained control
 
 ::
 
-  import {rpc, tx} from 'neon-js'
+  import {rpc, tx} from '@cityofzion/neon-js'
 
   Neon.tx.createClaimTx(...args)
   const query = new rpc.Query()
@@ -53,7 +53,7 @@ Require
 
 As neon-js package uses ES6 module conventions, ``require`` will need to specify which module do they want exactly::
 
-  var neon-js = require('neon-js')
+  var neon-js = require('@cityofzion/neon-js')
 
   // Semantic Style by using default import
   var Neon = neon-js.default

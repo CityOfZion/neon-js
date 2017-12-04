@@ -4,10 +4,10 @@ Node RPC
 
 The ``rpc`` module is exposed as::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   const client = Neon.create.rpcClient(URL)
 
-  import {rpc} from 'neon-js'
+  import {rpc} from '@cityofzion/neon-js'
   const client = new rpc.rpcClient(URL)
 
 
@@ -23,7 +23,7 @@ Do note that method names follow the JS convention of camelCase instead of all l
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   // Creates a RPCClient with URL of version 2.3.2
   const client = Neon.create.rpcClient('http://seed1.neo.org:10332', '2.3.2')
   // Returns block number
@@ -47,12 +47,12 @@ There are also static methods to support generating supported RPC methods.
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
 
   // Custom query
   const query = Neon.create.query({method: 'newmethod', params: [arg1, arg2]})
   const response = query.execute('http://mycustomneonode.com:10332')
 
-  import { rpc } from 'neon-js'
+  import { rpc } from '@cityofzion/neon-js'
   // Simple query creation and execution
   const response = rpc.Query.getBlock(1).execute('http://seed1.neo.org:10332')

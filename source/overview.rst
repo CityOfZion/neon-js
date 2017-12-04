@@ -26,7 +26,7 @@ Semantic
 
     ::
 
-      import Neon from 'neon-js'
+      import Neon from '@cityofzion/neon-js'
       Neon.create.privateKey()
       Neon.serialize.tx(transactionObj)
       Neon.get.publicKeyFromPrivateKey(privateKey)

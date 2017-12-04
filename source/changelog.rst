@@ -34,15 +34,15 @@ This details the changes made from the previous recorded version.
 
     - Default export is now a semantic object that follows the convention of Verb-Noun.
     - Verbs available are : ``get``, ``create``, ``serialize``, ``deserialize``, ``is``. Read the ``index.js`` file of each module to know what they export.
-    - Modules are individually available as named exports. If you just need account methods, ``import { wallet } from 'neon-js'``
+    - Modules are individually available as named exports. If you just need account methods, ``import { wallet } from '@cityofzion/neon-js'``
 
 - Constants and util methods are now exported as::
 
-    import Neon from 'neon-js'
+    import Neon from '@cityofzion/neon-js'
     Neon.CONST.DEFAULT_RPC
     Neon.u.reverseHex
 
-    import { CONST, u } from 'neon-js'
+    import { CONST, u } from '@cityofzion/neon-js'
     CONST.DEFAULT_RPC
     u.reverseHex
 
