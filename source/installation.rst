@@ -2,27 +2,19 @@
 Installation
 ************
 
-neon-js does not currently live on the NPM system.
+``neon-js`` lives in the NPM system under the organization ``cityofzion``.
 
 
 Install
 --------
 
-To install, add this into your ``package.json``::
+To install::
 
-  "dependencies": {
-    ...
-    "neon-js": "git+https://github.com/CityOfZion/neon-js.git",
-  }
-  // This will grab the latest copy from master.
+  $ npm install @cityofzion/neon-js
 
-For a specific commit or release, add the commit hash behind::
+For a specific commit or release, add the commit hash / tag / branch behind::
 
-  "dependencies": {
-    ...
-    "neon-js": "git+https://github.com/CityOfZion/neon-js.git#8a52d07a4eda09afd1b57485deb6973409d0c342",
-  }
-  // This grabs v1.1.0
+  $ npm install @cityofzion/neon-js#dev //dev branch
 
 Import
 ------

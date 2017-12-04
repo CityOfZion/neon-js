@@ -88,7 +88,8 @@ highlight_language='javascript'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
-
+# Suppress warnings for highlighting failure
+suppress_warnings = [ 'misc.highlighting_failure' ]
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
