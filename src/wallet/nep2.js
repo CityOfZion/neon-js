@@ -53,6 +53,7 @@ export const generateEncryptedWif = (passphrase) => {
  * @returns {string} The encrypted key in Base58 (Case sensitive).
  */
 export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
+  scryptParams = ensureScryptParams(scryptParams)
   const account = new Account(wifKey)
   // SHA Salt (use the first 4 bytes)
   const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
@@ -76,6 +77,7 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
  * @returns {string} The decrypted WIF key.
  */
 export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
+  scryptParams = ensureScryptParams(scryptParams)
   const assembled = ab2hexstring(bs58check.decode(encryptedKey))
   const addressHash = assembled.substr(6, 8)
   const encrypted = assembled.substr(-64)
@@ -102,3 +104,5 @@ export const decryptWIF = (encrypted, passphrase) => {
   console.log(`To be deprecated in v3. Please use Account.decrypt`)
   return Promise.resolve(decrypt(encrypted, passphrase))
 }
+
+const ensureScryptParams = (params) => Object.assign({}, DEFAULT_SCRYPT, params)
