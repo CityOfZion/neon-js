@@ -2,8 +2,7 @@ import * as NEP2 from '../../src/wallet/nep2'
 import { isNEP2, isWIF } from '../../src/wallet/verify'
 import testKeys from '../testKeys.json'
 
-describe('NEP2', function () {
-
+describe.only('NEP2', function () {
   const simpleScrypt = {
     cost: 256,
     blockSize: 1,
@@ -13,9 +12,8 @@ describe('NEP2', function () {
 
   describe('Basic (NEP2)', function () {
     this.timeout(10000)
-    let encrypted
     it('encrypt', () => {
-      encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase)
+      const encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase)
       isNEP2(encrypted).should.equal(true)
       encrypted.should.equal(testKeys.a.encryptedWif)
     })
