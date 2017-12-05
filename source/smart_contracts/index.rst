@@ -4,10 +4,10 @@ Smart Contract
 
 The ``sc`` module is exposed as::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   const sb = Neon.create.scriptBuilder()
 
-  import {sc} from 'neon-js'
+  import {sc} from '@cityofzion/neon-js'
   const sb = new sc.scriptBuilder()
 
 In NEO, users interact with smart contracts through InvocationTransactions. These transactions carry the hex output from scriptBuilder and assets involved to the network for processing.
@@ -31,7 +31,7 @@ The Script Builder is an object that converts a smart contract method call into 
 
 ::
 
-  import Neon, {rpc} from 'neon-js'
+  import Neon, {rpc} from '@cityofzion/neon-js'
   const sb = Neon.create.scriptBuilder()
   // Build script to call 'name' from contract at 5b7074e873973a6ed3708862f219a6fbf4d1c411
   sb.emitAppCall('5b7074e873973a6ed3708862f219a6fbf4d1c411', 'name')
@@ -46,7 +46,7 @@ You may chain multiple calls together in a single VM script. The results will be
 
 ::
 
-  import Neon, {rpc} from 'neon-js'
+  import Neon, {rpc} from '@cityofzion/neon-js'
   const sb = Neon.create.scriptBuilder()
   sb.emitAppCall(scriptHash, 'name')
   .emitAppCall(scriptHash, 'symbol')
@@ -62,7 +62,7 @@ A simple wrapper method is provided for convenience.
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   const props = {
     scriptHash: Neon.CONST.CONTRACTS.TEST_RPX,
     operation: 'name',
@@ -83,7 +83,7 @@ ContractParam objects provide a convenient way to construct calls for ``invoke``
 
 ContractParam currently supports creating string, boolean, integer, bytearray and array::
 
-  import Neon, {sc, rpc, CONST} from 'neon-js'
+  import Neon, {sc, rpc, CONST} from '@cityofzion/neon-js'
   const param1 = Neon.create.contractParam('String', 'balanceOf')
   // This is a convenient way to convert an address to a reversed scriptHash that smart contracts use.
   const param2 = sc.ContractParam.byteArray('AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx', 'address')

@@ -4,10 +4,10 @@ Utilities
 
 The utilities module is exposed as::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   Neon.u.reverseHex(hexstring)
 
-  import { u } from 'neon-js'
+  import { u } from '@cityofzion/neon-js'
   u.reverseHex(hexstring)
 
 The utility module contains:
@@ -23,7 +23,7 @@ While most of the methods in Neon takes in strings and outputs strings, the unde
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   Neon.u.reverseHex(hexstring)
   Neon.u.num2fixed8(1)
   Neon.u.ab2str(arrayBuffer)
@@ -39,7 +39,7 @@ These methods are convenient wrappers around the CryptoJS functions. They take i
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   // Performs a single SHA
   Neon.u.sha256(item)
   // Performs a SHA followed by a SHA
@@ -56,7 +56,7 @@ It is used in serializing and deserializing a transaction object. The ScriptBuil
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   const ss = new Neon.u.StringStream('abcdefgh')
   ss.read(1) // 'ab'
   ss.read(2) // 'cdef'

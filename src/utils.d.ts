@@ -5,6 +5,7 @@ declare module '@cityofzion/neon-js' {
     export function hexstring2ab(str: string): number[]
     export function ab2hexstring(arr: ArrayBuffer): string
     export function str2hexstring(str: string): string
+    export function hexstring2str(hexstring: string): string
     export function int2hex(mNumber: number): string
     export function num2hexstring(num: number, size: number, littleEndian?: boolean): string
     export function num2fixed8(num: number, size?: number): string

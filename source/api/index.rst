@@ -4,11 +4,11 @@ API
 
 The ``api`` module is exposed as::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   Neon.get.balance('TestNet', address)
   Neon.get.tokenBalance(contractScriptHash)
 
-  import {api} from 'neon-js'
+  import {api} from '@cityofzion/neon-js'
   api.getBalance('TestNet', address)
 
 The ``api`` module contains all 3rd party API that is useful together with Neon. The main highlight is the NeonDB API which provides the necessary information to construct a ClaimTransaction or ContractTransaction. A normal NEO node does not provide us with a convenient way of retrieving the balance or claimable transactions through RPC.
@@ -28,7 +28,7 @@ These are core methods that help to tie up the different 3rd party APIs in order
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   const config = {
     net: 'TestNet'
     address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW',
@@ -39,7 +39,7 @@ These are core methods that help to tie up the different 3rd party APIs in order
     console.log(conf.response)
   })
 
-  import {api} from 'neon-js'
+  import {api} from '@cityofzion/neon-js'
   api.claimGas(config)
   .then((conf) => {
     console.log(conf.response)
@@ -52,7 +52,7 @@ The methods revolve around passing an configuration object containing all inform
 
 ::
 
-  import {api} from 'neon-js'
+  import {api} from '@cityofzion/neon-js'
   // This chain is basically api.claimGas
   api.getClaimsFrom(config, api.neonDB)
   .then((c) => api.createTx(c, 'claim'))
@@ -64,11 +64,11 @@ NeonDB
 
 The NeonDB API is exposed as::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   Neon.get.balance('TestNet', address)
   Neon.do.claimAllGas('TestNet', privateKey)
 
-  import {api} from 'neon-js'
+  import {api} from '@cityofzion/neon-js'
   api.neonDB.getBalance('TestNet', address)
   api.neonDB.doClaimAllGas('TestNet', privateKey)
 
@@ -83,7 +83,7 @@ Neoscan
 
 The Neoscan API serves as a backup in case NeonDB fails. It is not exposed in semantic exports. Instead, use named exports::
 
-  import {api} from 'neon-js'
+  import {api} from '@cityofzion/neon-js'
   api.neoscan.getBalance('TestNet', address)
   api.neoscan.getClaims('MainNet', address)
 
@@ -96,11 +96,11 @@ A straightforward call to CoinMarketCap API to retrieve the latest price informa
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   Neon.get.price('NEO', 'EUR')
   Neon.get.price('GAS') // defaults to USD
 
-  import { api } from 'neon-js'
+  import { api } from '@cityofzion/neon-js'
   api.cmc.getPrice('NEO', 'SGD')
 
 NEP5
@@ -112,12 +112,12 @@ This set of methods rely on the NEO node having version >= 2.3.3. The method use
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   const rpxScriptHash = Neon.CONST.CONTRACTS.TEST_RPX
   Neon.get.tokenInfo('http://seed1.neo.org:20332', rpxScriptHash)
   Neon.get.tokenBalance('http://seed1.neo.org:20332', rpxScriptHash, address)
 
-  import { api } from 'neon-js'
+  import { api } from '@cityofzion/neon-js'
   api.nep5.getTokenInfo('http://seed1.neo.org:20332', rpxScriptHash)
   api.nep5.getTokenBalance('http://seed1.neo.org:20332', rpxScriptHash)
   // This is a combination of both info and balance within a single call

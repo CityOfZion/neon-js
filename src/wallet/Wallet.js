@@ -3,6 +3,20 @@ import Account from './Account'
 import { DEFAULT_SCRYPT, DEFAULT_WALLET } from '../consts'
 
 /**
+ * @typedef WalletFile
+ * @param {string} name
+ * @param {WalletScryptParams} scrypt
+ * @param {WalletAccount[]} accounts
+ * @param {object} extra
+ */
+/**
+ * @typedef WalletScryptParams
+ * @param {number} n - Must be power of 2. 2^8 - 2^64
+ * @param {number} r - 1 - 256
+ * @param {number} p - 1 - 256
+ */
+
+/**
  * @typedef WalletAccount
  * @param {string} address - Address of account.
  * @param {string} label - Label of account.
@@ -14,21 +28,21 @@ import { DEFAULT_SCRYPT, DEFAULT_WALLET } from '../consts'
  */
 
 /**
- * Wallet file
- * @param {WalletConfig} config - Wallet file
- * @param {string} config.name - Name of wallet
- * @param {scryptParams} config.scrypt - Scrypt parameters
- * @param {WalletAccount[]} config.accounts - Accounts in wallet
- * @param {object} config.extra - Extra information of wallet.
+ * Wallet class to read and integrate a Wallet file into the library. This class is responsible for ensuring that the Wallet File is read correctly and usable by the library.
+ * @param {WalletFile} file - Wallet file
+ * @param {string} file.name - Name of wallet
+ * @param {WalletScryptParams} file.scrypt - Scrypt parameters
+ * @param {WalletAccount[]} file.accounts - Accounts in wallet
+ * @param {object} file.extra - Extra information of wallet.
  */
 class Wallet {
-  constructor ({ name = 'myWallet', version = DEFAULT_WALLET.version, scrypt = DEFAULT_SCRYPT, accounts = [], extra = null } = DEFAULT_WALLET) {
+  constructor ({ name = 'myWallet', version = DEFAULT_WALLET.version, scrypt = {}, accounts = [], extra = null } = DEFAULT_WALLET) {
     /** @type {string} */
     this.name = name
     /** @type {string} */
     this.version = version
-    /** @type {object} */
-    this.scrypt = scrypt
+    /** @type {ScryptParams} */
+    this.scrypt = parseWalletScryptParams(scrypt)
     /** @type {Account[]} */
     this.accounts = []
     for (const acct of accounts) {
@@ -82,7 +96,7 @@ class Wallet {
 
   /**
    * Adds an account.
-   * @param {Account|object} acct - Account or WalletAccount object.
+   * @param {Account|WalletAccount} acct - Account or WalletAccount object.
    * @return {number} Index position of Account in array.
    */
   addAccount (acct) {
@@ -126,7 +140,7 @@ class Wallet {
   /**
    * Attempts to encrypt Account at index in array.
    * @param {number} index - Index of Account in array.
-   * @param {string} keyphrase - keyphrase
+   * @param {string} keyphrase
    * @return {boolean} Encryption success/failure
    */
   encrypt (index, keyphrase) {
@@ -158,7 +172,7 @@ class Wallet {
   export () {
     return JSON.stringify({
       name: this.name,
-      scrypt: this.scrypt,
+      scrypt: exportScryptParamsToWallet(this.scrypt),
       accounts: this.accounts.map((acct) => acct.export()),
       extra: this.extra
     })
@@ -190,3 +204,20 @@ class Wallet {
 }
 
 export default Wallet
+
+export const parseWalletScryptParams = (params) => {
+  const parsed = {
+    cost: params.n,
+    blockSize: params.r,
+    parallel: params.p
+  }
+  return Object.assign({}, DEFAULT_SCRYPT, parsed)
+}
+
+export const exportScryptParamsToWallet = (scryptParams) => {
+  return {
+    n: scryptParams.cost,
+    r: scryptParams.blockSize,
+    p: scryptParams.parallel
+  }
+}

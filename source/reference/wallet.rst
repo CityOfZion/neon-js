@@ -10,9 +10,9 @@ Module ``wallet``
 .. autoclass:: Balance
     :members:
 
-.. autofunction:: encrypt
+.. autofunction:: nep2.encrypt
 
-.. autofunction:: decrypt
+.. autofunction:: nep2.decrypt
 
 .. autofunction:: generatePrivateKey
 

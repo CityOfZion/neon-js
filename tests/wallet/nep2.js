@@ -1,41 +1,70 @@
 import * as NEP2 from '../../src/wallet/nep2'
+import { isNEP2, isWIF } from '../../src/wallet/verify'
 import testKeys from '../testKeys.json'
 
 describe('NEP2', function () {
-  this.timeout(15000)
+  const simpleScrypt = {
+    cost: 256,
+    blockSize: 1,
+    parallel: 1,
+    size: 64
+  }
 
-  it('should encrypt WIF', () => {
-    const encryptedKey = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase)
-    encryptedKey.should.equal(testKeys.a.encryptedWif)
+  describe('Basic (NEP2)', function () {
+    this.timeout(10000)
+    it('encrypt', () => {
+      const encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase)
+      isNEP2(encrypted).should.equal(true)
+      encrypted.should.equal(testKeys.a.encryptedWif)
+    })
+
+    it('decrypt', () => {
+      const wif = NEP2.decrypt(testKeys.a.encryptedWif, testKeys.a.passphrase)
+      isWIF(wif).should.equal(true)
+      wif.should.equal(testKeys.a.wif)
+    })
   })
 
-  it('should encrypt non-english passphrases', () => {
-    const encryptedKey = NEP2.encrypt(testKeys.b.wif, testKeys.b.passphrase)
-    encryptedKey.should.equal(testKeys.b.encryptedWif)
+  describe('Non-english', function () {
+    let encrypted
+    const passphrase = testKeys.b.passphrase
+
+    it('encrypt', () => {
+      encrypted = NEP2.encrypt(testKeys.a.wif, passphrase, simpleScrypt)
+      isNEP2(encrypted).should.equal(true)
+    })
+
+    it('decrypt', () => {
+      const wif = NEP2.decrypt(encrypted, passphrase, simpleScrypt)
+      isWIF(wif).should.equal(true)
+      wif.should.equal(testKeys.a.wif)
+    })
   })
 
-  it('should encrypt passphrase with symbols', () => {
-    const encryptedKey = NEP2.encrypt(testKeys.c.wif, testKeys.c.passphrase)
-    encryptedKey.should.equal(testKeys.c.encryptedWif)
+  describe('Symbols', function () {
+    let encrypted
+    const passphrase = testKeys.c.passphrase
+
+    it('encrypt', () => {
+      encrypted = NEP2.encrypt(testKeys.a.wif, passphrase, simpleScrypt)
+      isNEP2(encrypted).should.equal(true)
+    })
+
+    it('decrypt', () => {
+      const wif = NEP2.decrypt(encrypted, passphrase, simpleScrypt)
+      isWIF(wif).should.equal(true)
+      wif.should.equal(testKeys.a.wif)
+    })
   })
 
-  it('should decrypt WIF', () => {
-    const wif = NEP2.decrypt(testKeys.a.encryptedWif, testKeys.a.passphrase)
-    wif.should.equal(testKeys.a.wif)
+  it('Errors on wrong password', () => {
+    const encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase, simpleScrypt)
+    const thrower = () => NEP2.decrypt(encrypted, 'wrongpassword', simpleScrypt)
+    thrower.should.throw()
   })
 
-  it('should decrypt non-english passphrases', () => {
-    const wif = NEP2.decrypt(testKeys.b.encryptedWif, testKeys.b.passphrase)
-    wif.should.equal(testKeys.b.wif)
-  })
-
-  it('should decrypt passphrase with symbols', () => {
-    const wif = NEP2.decrypt(testKeys.c.encryptedWif, testKeys.c.passphrase)
-    wif.should.equal(testKeys.c.wif)
-  })
-
-  it('should throw error on wrong password', () => {
-    const thrower = () => NEP2.decrypt(testKeys.a.encryptedWif, 'wrongpassword')
+  it('Errors on wrong scrypt params', () => {
+    const thrower = () => NEP2.decrypt(testKeys.a.encryptedWif, testKeys.a.passphrase, simpleScrypt)
     thrower.should.throw()
   })
 })

@@ -19,7 +19,7 @@ Quickstart
 
 Import the default module for full functionality available in a semantic form::
 
-    import Neon from 'neon-js'
+    import Neon from '@cityofzion/neon-js'
 
     const account = Neon.create.account('L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g')
     Neon.create.query({method: 'getrawtransaction', params: ['bfb3af8bc96ae3dd85305eddfe6e8b8eca447315729073f30da64f80c16f66ac']})
@@ -33,7 +33,7 @@ Import the default module for full functionality available in a semantic form::
 
 Use named imports for fine-grained control and tree-shaking::
 
-    import { wallet, tx, rpc, api, CONST } from 'neon-js'
+    import { wallet, tx, rpc, api, CONST } from '@cityofzion/neon-js'
 
     const account = new wallet.Account('L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g')
     rpc.Query.getRawTransaction('bfb3af8bc96ae3dd85305eddfe6e8b8eca447315729073f30da64f80c16f66ac')
