@@ -1,53 +1,53 @@
 {
-  "name": "simpleWallet",
+  "name": "myWallet",
   "scrypt": {
-    "n": 8,
+    "n": 256,
     "r": 1,
     "p": 1
   },
   "accounts": [
     {
-      "address": "AZsbjZCzRPBoBmEAY4EqY7gBDFrruaSWpG",
+      "address": "AXgpSYaxyjYYr4Z19yxtG9zCoBFU8yFHnr",
       "label": "a",
       "isDefault": false,
       "lock": false,
-      "key": "6PYNVjdtSjn3Rqe6JhEj63vBXtqfoSQdxt2TJmpZkJ949eGHaQGQjZSx6b",
+      "key": "6PYVWPLqP5a5MWaYqeAQNcWs8f2BurFHFxUyHuATas5yfmjrbvLeSA1htm",
       "contract": null,
       "extra": null
     },
     {
-      "address": "APLUzgFKWUpTrzko5sviVJ78LmJ7E6PBks",
+      "address": "AUb92U8NogtL8EcYh1JNLxybNKvkRjRWXC",
       "label": "b",
       "isDefault": false,
       "lock": false,
-      "key": "6PYWpVDzdYY5xn5pjLrAbw4cj5RF6wuPgAbLhXn2McaTeTa1N4wNCP8VX4",
+      "key": "6PYURYtAnQdYLaZALVriKiLQfCLsiBM9Fq5u6iKecNeo82DCmzKBL9L4u2",
       "contract": null,
       "extra": null
     },
     {
-      "address": "AeudZ5UEdLWpd2wVc7eRguRPm431SSHYKu",
+      "address": "AW2Em4g3Sx7sUP9XpErJ6LxRhrnNxjGm2z",
       "label": "c",
       "isDefault": true,
       "lock": false,
-      "key": "6PYN8Q1PH1YCcq5Xprei6H9rhpFqmDf7f4tjgVt9CsRFfR7a8AKJ1K3s3F",
+      "key": "6PYSA6XrvvwarjiWtAq8dTcQw22fxTDTvzQScksXqZAp9FYYukEPDEvD9c",
       "contract": null,
       "extra": null
     },
     {
-      "address": "AbV9tcZVKN9rSX1bMWxvmQhgVgVPaWnufp",
-      "label": "d",
+      "address": "AaEiD1278VYRZZdA8XTzG8QRFPHowhaJ4t",
+      "label": "我的密码",
       "isDefault": false,
       "lock": false,
-      "key": "6PYSLLyk6xaH5NHemAHDXfovfpKUAZVLJdEc4PEiCdkwXBFK4rWyu9nchM",
+      "key": "6PYVuu8ZdWymQinsowHHbjPSvHihERohqxU8Y1VP3VGfXptjckRhHn9FX8",
       "contract": null,
       "extra": null
     },
     {
-      "address": "AVhgn8HyAyFggJrsiyV5GHY1rqVDf8kpi1",
-      "label": "e",
+      "address": "AYL4N1cJMSzD1fHR727JTG57R6JSW4RMxW",
+      "label": "MyL33tP@33w0rd",
       "isDefault": false,
       "lock": false,
-      "key": null,
+      "key": "6PYK6ieVJeGJVeqXRU5zs6zoLXBACzooSi4MB6Pd2XpwifbrgbCUkc9eEf",
       "contract": null,
       "extra": null
     }
