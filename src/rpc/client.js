@@ -3,7 +3,7 @@ import { isAddress } from '../wallet'
 import semver from 'semver'
 import { RPC_VERSION, DEFAULT_RPC, NEO_NETWORK } from '../consts'
 
-const versionRegex = /NEO:(\d+\.\d+\.\d+)/
+const versionRegex = /NEO: (\d+\.\d+\.\d+)/
 /**
  * @class RPCClient
  * @classdesc
@@ -228,6 +228,7 @@ class RPCClient {
       .catch((err) => {
         if (err.message.includes('Method not found')) {
           this.version = RPC_VERSION
+          return this.version
         } else {
           throw err
         }
