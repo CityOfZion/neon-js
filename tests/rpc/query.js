@@ -1,12 +1,19 @@
 import Query from '../../src/rpc/query'
 import ContractParam from '../../src/sc/ContractParam'
-import { DEFAULT_REQ, DEFAULT_RPC, ASSET_ID, CONTRACTS } from '../../src/consts'
+import { DEFAULT_RPC, ASSET_ID, CONTRACTS } from '../../src/consts'
 import testKeys from '../testKeys.json'
-import axios from 'axios'
-import MockAdapter from 'axios-mock-adapter'
+import mockData from './mockData.json'
 
 describe('Query', function () {
   let mock
+
+  before(() => {
+    mock = setupMock(mockData.query)
+  })
+
+  after(() => {
+    mock.restore()
+  })
 
   it('Constructor', () => {
     const q1 = new Query({ method: 'getThis' })
@@ -16,55 +23,7 @@ describe('Query', function () {
   })
 
   describe('Methods', function () {
-    before(() => {
-      mock = new MockAdapter(axios)
-    })
-
-    afterEach(() => {
-      mock.reset()
-    })
-
-    after(() => {
-      mock.restore()
-    })
-
-    it('executes correctly', () => {
-      const req = Object.assign({}, DEFAULT_REQ, { method: 'getbestblockhash' })
-      mock
-        .onPost(DEFAULT_RPC.TEST, req).reply(200, {
-          'jsonrpc': '2.0',
-          'id': 1234,
-          'result': '1'
-        })
-        .onPost(DEFAULT_RPC.MAIN, req).reply(200, {
-          'jsonrpc': '2.0',
-          'id': 1234,
-          'result': '2'
-        })
-        .onPost('http://localhost:10332', req).reply(200, {
-          'jsonrpc': '2.0',
-          'id': 1234,
-          'result': '3'
-        })
-      const q1 = new Query({ method: 'getbestblockhash' })
-      const p1 = q1.execute(DEFAULT_RPC.TEST)
-      const q2 = new Query({ method: 'getbestblockhash' })
-      const p2 = q2.execute(DEFAULT_RPC.MAIN)
-      const q3 = new Query({ method: 'getbestblockhash' })
-      const p3 = q3.execute('http://localhost:10332')
-
-      return Promise.all([p1, p2, p3])
-        .then((values) => {
-          values.map((i) => i.result).should.eql(['1', '2', '3'])
-        })
-    })
-
     it('error when executed twice', () => {
-      mock.onPost().reply(200, {
-        'jsonrpc': '2.0',
-        'id': 1234,
-        'result': '1'
-      })
       const q = new Query({ method: 'getbestblockhash' })
       return q.execute(DEFAULT_RPC.TEST)
         .then((res) => {
@@ -74,12 +33,7 @@ describe('Query', function () {
     })
 
     it('parseWith', () => {
-      mock.onPost().reply(200, {
-        'jsonrpc': '2.0',
-        'id': 1234,
-        'result': 'lowercase'
-      })
-      const q = new Query().parseWith((i) => i.result.toUpperCase())
+      const q = new Query({ method: 'parsertest' }).parseWith((i) => i.result.toUpperCase())
       return q.execute(DEFAULT_RPC.TEST)
         .then((res) => {
           q.parse.should.be.a('function')
@@ -89,8 +43,6 @@ describe('Query', function () {
   })
 
   describe('RPC Queries', function () {
-    // No Mocks, use live test RPC
-    this.timeout(5000)
     it('getAccountState', () => {
       return Query.getAccountState(testKeys.a.address)
         .execute(DEFAULT_RPC.TEST)
@@ -224,8 +176,7 @@ describe('Query', function () {
         })
     })
 
-    it.skip('getPeers', () => {
-      // Skip due to unstable response from seed1
+    it('getPeers', () => {
       return Query.getPeers()
         .execute(DEFAULT_RPC.TEST)
         .then((res) => {
@@ -323,11 +274,11 @@ describe('Query', function () {
 
       it('complex', () => {
         return Query.invoke(CONTRACTS.TEST_RPX, ContractParam.string('balanceOf'), ContractParam.array(ContractParam.byteArray('AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx', 'address')))
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
-          res.result.state.should.equal('HALT, BREAK')
-        })
+          .execute(DEFAULT_RPC.TEST)
+          .then((res) => {
+            res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
+            res.result.state.should.equal('HALT, BREAK')
+          })
       })
     })
 
@@ -355,7 +306,7 @@ describe('Query', function () {
     it('submitBlock')
     describe('validateAddress', function () {
       it('returns true for valid address', () => {
-        return Query.validateAddress(testKeys.b.address)
+        return Query.validateAddress(testKeys.a.address)
           .execute(DEFAULT_RPC.TEST)
           .then((res) => {
             res.result.isvalid.should.equal(true)

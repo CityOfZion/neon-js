@@ -1,20 +1,9 @@
 import RPCClient from '../../src/rpc/client'
 import Query from '../../src/rpc/query'
-import { DEFAULT_RPC, DEFAULT_REQ, NEO_NETWORK, RPC_VERSION } from '../../src/consts'
-import axios from 'axios'
-import MockAdapter from 'axios-mock-adapter'
+import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from '../../src/consts'
+import mockData from './mockData.json'
 
 describe('RPC Client', function () {
-  let mock
-
-  beforeEach(() => {
-    mock = new MockAdapter(axios)
-  })
-
-  afterEach(() => {
-    mock.restore()
-  })
-
   describe('Config', function () {
     it('net', () => {
       const client1 = new RPCClient(NEO_NETWORK.MAIN)
@@ -38,19 +27,27 @@ describe('RPC Client', function () {
 
   describe('Methods', function () {
     let client
+    let mock
+    before(() => {
+      mock = setupMock(mockData.query)
+      mock.onPost().reply(200, {
+        'jsonrpc': '2.0',
+        'id': 1234,
+        'error': {
+          'code': -32601,
+          'message': 'Method not found'
+        }
+      })
+    })
 
+    after(() => {
+      mock.restore()
+    })
     beforeEach(() => {
       client = new RPCClient(NEO_NETWORK.TEST)
     })
 
     it('execute correctly', () => {
-      const req = Object.assign({}, DEFAULT_REQ, { method: 'getblock', params: [1, 1] })
-      mock.onPost(DEFAULT_RPC.TEST, req).reply(200, {
-        'jsonrpc': '2.0',
-        'id': 1234,
-        'result': {}
-      })
-
       return client.execute(Query.getBlock(1))
         .should.eventually.be.fulfilled
         .then(() => {
@@ -59,13 +56,6 @@ describe('RPC Client', function () {
     })
 
     it('query correctly', () => {
-      const req = Object.assign({}, DEFAULT_REQ, { method: 'getblock', params: [1, 1] })
-      mock.onPost(DEFAULT_RPC.TEST, req).reply(200, {
-        'jsonrpc': '2.0',
-        'id': 1234,
-        'result': {}
-      })
-
       return client.query({ method: 'getblock', params: [1, 1] })
         .should.eventually.be.fulfilled
         .then(() => {
@@ -74,23 +64,26 @@ describe('RPC Client', function () {
     })
 
     it('getVersion updates version', () => {
-      const req = Object.assign({}, DEFAULT_REQ, { method: 'getversion' })
-      mock.onPost(DEFAULT_RPC.TEST, req).reply(200, {
-        'jsonrpc': '2.0',
-        'id': 1234,
-        'result': {
-          'port': 10333,
-          'nonce': 336841737,
-          'useragent': '/NEO:2.3.4/'
-        }
-      })
-
       return client.getVersion()
         .should.eventually.be.fulfilled
         .then((ver) => {
           ver.should.equal('2.3.4')
           client.version.should.equal('2.3.4')
         })
+    })
+  })
+
+  describe('Errors', function () {
+    let client
+    let mock
+
+    beforeEach(() => {
+      client = new RPCClient(NEO_NETWORK.TEST)
+      mock = setupMock()
+    })
+
+    afterEach(() => {
+      mock.restore()
     })
 
     it('error when timeout', () => {
@@ -106,13 +99,12 @@ describe('RPC Client', function () {
     it('error when invalid method', () => {
       mock.onPost().reply(200, {
         'jsonrpc': '2.0',
-        'id': 1234,
+        'id': 3,
         'error': {
           'code': -32601,
           'message': 'Method not found'
         }
       })
-
       return client.query({ method: 'getweird' })
         .should.eventually.be.rejected
         .then((err) => {
