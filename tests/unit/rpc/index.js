@@ -1,4 +1,4 @@
-import Neon from '../../src/index.js'
+import Neon from '../../../src/index.js'
 
 const client = Neon.create.rpcClient('TestNet')
 

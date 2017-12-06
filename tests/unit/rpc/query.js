@@ -1,6 +1,6 @@
-import Query from '../../src/rpc/query'
-import ContractParam from '../../src/sc/ContractParam'
-import { DEFAULT_RPC, ASSET_ID, CONTRACTS } from '../../src/consts'
+import Query from '../../../src/rpc/query'
+import ContractParam from '../../../src/sc/ContractParam'
+import { DEFAULT_RPC, ASSET_ID, CONTRACTS } from '../../../src/consts'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
 

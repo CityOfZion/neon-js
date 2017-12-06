@@ -1,5 +1,5 @@
-import Neon from '../src/index'
-import Query from '../src/rpc/query'
+import Neon from '../../src/index'
+import Query from '../../src/rpc/query'
 import axios from 'axios'
 
 /**

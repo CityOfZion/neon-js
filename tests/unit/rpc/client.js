@@ -1,6 +1,6 @@
-import RPCClient from '../../src/rpc/client'
-import Query from '../../src/rpc/query'
-import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from '../../src/consts'
+import RPCClient from '../../../src/rpc/client'
+import Query from '../../../src/rpc/query'
+import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from '../../../src/consts'
 import mockData from './mockData.json'
 
 describe('RPC Client', function () {

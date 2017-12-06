@@ -1,4 +1,4 @@
-import ContractParam from '../../src/sc/ContractParam'
+import ContractParam from '../../../src/sc/ContractParam'
 
 describe('ContractParam', function () {
   it('Constructor', () => {

@@ -1,4 +1,4 @@
-import { generateDeployScript } from '../../src/sc/index'
+import { generateDeployScript } from '../../../src/sc/index'
 
 describe('Smart Contracts', function () {
   it('generate deploy script', () => {

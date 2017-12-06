@@ -1,4 +1,4 @@
-import * as V from '../../src/wallet/verify'
+import * as V from '../../../src/wallet/verify'
 
 describe('Key Verification', function () {
   const valid = {

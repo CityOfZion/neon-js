@@ -1,5 +1,5 @@
-import * as NEP5 from '../../src/api/nep5'
-import { DEFAULT_RPC, CONTRACTS } from '../../src/consts'
+import * as NEP5 from '../../../src/api/nep5'
+import { DEFAULT_RPC, CONTRACTS } from '../../../src/consts'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
 

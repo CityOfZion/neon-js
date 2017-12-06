@@ -1,8 +1,8 @@
-import Tx from '../../src/transactions/transaction'
-import { Balance } from '../../src/wallet'
+import Tx from '../../../src/transactions/transaction'
+import { Balance } from '../../../src/wallet'
 import data from './data.json'
 import createData from './createData.json'
-import { ASSET_ID, CONTRACTS } from '../../src/consts'
+import { ASSET_ID, CONTRACTS } from '../../../src/consts'
 
 describe('Transaction', function () {
   it('Constructor', () => {

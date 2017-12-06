@@ -1,4 +1,4 @@
-import { calculateInputs, serializeTransaction, deserializeTransaction, signTransaction, getTransactionHash } from '../../src/transactions/core'
+import { calculateInputs, serializeTransaction, deserializeTransaction, signTransaction, getTransactionHash } from '../../../src/transactions/core'
 import createData from './createData.json'
 import data from './data.json'
 

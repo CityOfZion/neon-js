@@ -1,5 +1,5 @@
-import * as neonDB from '../../src/api/neonDB'
-import Balance from '../../src/wallet/Balance'
+import * as neonDB from '../../../src/api/neonDB'
+import Balance from '../../../src/wallet/Balance'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
 

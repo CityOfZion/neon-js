@@ -1,5 +1,5 @@
-import Wallet, { parseWalletScryptParams } from '../../src/wallet/Wallet'
-import Account from '../../src/wallet/Account'
+import Wallet, { parseWalletScryptParams } from '../../../src/wallet/Wallet'
+import Account from '../../../src/wallet/Account'
 import simpleWallet from './simpleWallet.json'
 import testWallet from './testWallet.json'
 

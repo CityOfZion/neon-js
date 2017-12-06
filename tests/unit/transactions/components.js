@@ -1,5 +1,5 @@
-import * as c from '../../src/transactions/components'
-import { StringStream } from '../../src/utils'
+import * as c from '../../../src/transactions/components'
+import { StringStream } from '../../../src/utils'
 
 describe('Components', function () {
   const deserializedTx = {

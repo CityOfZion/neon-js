@@ -1,5 +1,5 @@
-import * as neoscan from '../../src/api/neoscan'
-import Balance from '../../src/wallet/Balance'
+import * as neoscan from '../../../src/api/neoscan'
+import Balance from '../../../src/wallet/Balance'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
 

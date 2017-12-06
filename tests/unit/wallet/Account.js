@@ -1,4 +1,4 @@
-import Account from '../../src/wallet/Account'
+import Account from '../../../src/wallet/Account'
 import testWallet from './testWallet.json'
 
 describe('Account', function () {

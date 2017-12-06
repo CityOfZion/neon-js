@@ -15,7 +15,7 @@ import {
   sha256,
   str2ab,
   str2hexstring
-} from '../src/utils'
+} from '../../src/utils'
 
 describe('Utils', () => {
   describe('ab2str', () => {

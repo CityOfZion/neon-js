@@ -1,6 +1,6 @@
-import Balance from '../../src/wallet/Balance'
+import Balance from '../../../src/wallet/Balance'
 import testData from '../testData.json'
-import { Transaction } from '../../src/transactions'
+import { Transaction } from '../../../src/transactions'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 

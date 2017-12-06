@@ -1,4 +1,4 @@
-import * as CMC from '../../src/api/coinmarketcap'
+import * as CMC from '../../../src/api/coinmarketcap'
 import mockData from './mockData.json'
 
 describe('coinmarketcap', function () {

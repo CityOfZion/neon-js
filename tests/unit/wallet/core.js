@@ -1,4 +1,4 @@
-import * as C from '../../src/wallet/core'
+import * as C from '../../../src/wallet/core'
 
 describe('Core Wallet Methods', function () {
   const keys = [
