@@ -1,27 +1,33 @@
 import * as NEP5 from '../../src/api/nep5'
+import { DEFAULT_RPC, CONTRACTS } from '../../src/consts'
 import testKeys from '../testKeys.json'
+import mockData from './mockData.json'
 
 describe('NEP5', function () {
-  this.timeout(10000)
-  const net = 'http://seed3.neo.org:20332'
-  const scriptHash = 'd7678dd97c000be3f33e9362e673101bac4ca654'
+  const url = DEFAULT_RPC.TEST
+  const scriptHash = CONTRACTS.TEST_LWTF
+  let mock
+
+  before(() => {
+    mock = setupMock(mockData.nep5)
+  })
+
+  after(() => {
+    mock.restore()
+  })
 
   it('get basic info', () => {
-    return NEP5.getTokenInfo(net, scriptHash)
+    return NEP5.getTokenInfo(url, scriptHash)
       .then(result => {
         result.name.should.equal('LOCALTOKEN')
         result.symbol.should.equal('LWTF')
         result.decimals.should.equal(8)
         result.totalSupply.should.least(1969000)
       })
-      .catch((e) => {
-        console.log(e)
-        throw e
-      })
   })
 
   it('get balance', () => {
-    return NEP5.getTokenBalance(net, scriptHash, testKeys.c.address)
+    return NEP5.getTokenBalance(url, scriptHash, testKeys.c.address)
       .then(result => {
         result.should.be.above(0)
       })
@@ -33,7 +39,7 @@ describe('NEP5', function () {
 
   describe('getToken', function () {
     it('get info only', () => {
-      return NEP5.getToken(net, scriptHash)
+      return NEP5.getToken(url, scriptHash)
         .then(result => {
           result.should.have.keys(['name', 'symbol', 'decimals', 'totalSupply', 'balance'])
           result.name.should.equal('LOCALTOKEN')
@@ -44,7 +50,7 @@ describe('NEP5', function () {
     })
 
     it('get info and balance', () => {
-      return NEP5.getToken(net, scriptHash, testKeys.c.address)
+      return NEP5.getToken(url, scriptHash, testKeys.c.address)
         .then(result => {
           result.should.have.keys(['name', 'symbol', 'decimals', 'totalSupply', 'balance'])
           result.name.should.equal('LOCALTOKEN')
@@ -56,18 +62,13 @@ describe('NEP5', function () {
     })
   })
 
-  it('transfers tokens', () => {
+  it.skip('transfers tokens using neonDB', () => {
     const testNet = 'TestNet'
-    const fromWif = 'L5FzBMGSG2d7HVJL5vWuXfxUKsrkX5irFhtw1L5zU4NAvNuXzd8a'
     const transferAmount = 1
     const gasCost = 0
-    return NEP5.doTransferToken(testNet, scriptHash, fromWif, testKeys.c.address, transferAmount, gasCost)
+    return NEP5.doTransferToken(testNet, scriptHash, testKeys.c.address, testKeys.a.address, transferAmount, gasCost)
       .then(({ result }) => {
         result.should.equal(true)
-      })
-      .catch((e) => {
-        console.log(e)
-        throw e
       })
   })
 })

@@ -876,5 +876,110 @@
         "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
       }
     }
+  },
+  "nep5": {
+    "getTokenInfo": {
+      "url": "http://seed1.neo.org:20332",
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "invokescript",
+        "params": [
+          "00046e616d656754a64cac1b1073e662933ef3e30b007cd98d67d7000673796d626f6c6754a64cac1b1073e662933ef3e30b007cd98d67d70008646563696d616c736754a64cac1b1073e662933ef3e30b007cd98d67d7000b746f74616c537570706c796754a64cac1b1073e662933ef3e30b007cd98d67d7"
+        ],
+        "id": 1234
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 1234,
+        "result": {
+          "state": "HALT, BREAK",
+          "gas_consumed": "0.956",
+          "stack": [
+            {
+              "type": "ByteArray",
+              "value": "4c4f43414c544f4b454e"
+            },
+            {
+              "type": "ByteArray",
+              "value": "4c575446"
+            },
+            {
+              "type": "Integer",
+              "value": "8"
+            },
+            {
+              "type": "ByteArray",
+              "value": "00208a6015bc00"
+            }
+          ]
+        }
+      }
+    },
+    "getTokenBalance": {
+      "url": "http://seed1.neo.org:20332",
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "invokescript",
+        "params": [
+          "149847e26135152874355e324afd5cc99f002acb3351c10962616c616e63654f666754a64cac1b1073e662933ef3e30b007cd98d67d7"
+        ],
+        "id": 1234
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {
+          "state": "HALT, BREAK",
+          "gas_consumed": "0.384",
+          "stack": [
+            {
+              "type": "ByteArray",
+              "value": "53"
+            }
+          ]
+        }
+      }
+    },
+    "getToken": {
+      "url": "http://seed1.neo.org:20332",
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "invokescript",
+        "params": [
+          "00046e616d656754a64cac1b1073e662933ef3e30b007cd98d67d7000673796d626f6c6754a64cac1b1073e662933ef3e30b007cd98d67d70008646563696d616c736754a64cac1b1073e662933ef3e30b007cd98d67d7000b746f74616c537570706c796754a64cac1b1073e662933ef3e30b007cd98d67d7149847e26135152874355e324afd5cc99f002acb3351c10962616c616e63654f666754a64cac1b1073e662933ef3e30b007cd98d67d7"
+        ],
+        "id": 1234
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {
+          "state": "HALT, BREAK",
+          "gas_consumed": "1.34",
+          "stack": [
+            {
+              "type": "ByteArray",
+              "value": "4c4f43414c544f4b454e"
+            },
+            {
+              "type": "ByteArray",
+              "value": "4c575446"
+            },
+            {
+              "type": "Integer",
+              "value": "8"
+            },
+            {
+              "type": "ByteArray",
+              "value": "00208a6015bc00"
+            },
+            {
+              "type": "ByteArray",
+              "value": "53"
+            }
+          ]
+        }
+      }
+    }
   }
 }
