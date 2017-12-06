@@ -1,0 +1,54 @@
+{
+  "cmc": {
+    "gas2usd": {
+      "url": "https://api.coinmarketcap.com/v1/ticker/gas/?convert=usd",
+      "response": [
+        {
+          "id": "gas",
+          "name": "Gas",
+          "symbol": "GAS",
+          "rank": "59",
+          "price_usd": "20.1905",
+          "price_btc": "0.00165222",
+          "24h_volume_usd": "1703500.0",
+          "market_cap_usd": "173578443.0",
+          "available_supply": "8597035.0",
+          "total_supply": "11822072.0",
+          "max_supply": "100000000.0",
+          "percent_change_1h": "-2.34",
+          "percent_change_24h": "-6.82",
+          "percent_change_7d": "-3.11",
+          "last_updated": "1512531573"
+        }
+      ]
+    },
+    "neo2sgd": {
+      "url": "https://api.coinmarketcap.com/v1/ticker/neo/?convert=sgd",
+      "response": [
+        {
+          "id": "neo",
+          "name": "NEO",
+          "symbol": "NEO",
+          "rank": "13",
+          "price_usd": "37.5819",
+          "price_btc": "0.00307539",
+          "24h_volume_usd": "102804000.0",
+          "market_cap_usd": "2442823500.0",
+          "available_supply": "65000000.0",
+          "total_supply": "100000000.0",
+          "max_supply": null,
+          "percent_change_1h": "-1.34",
+          "percent_change_24h": "-7.21",
+          "percent_change_7d": "-0.98",
+          "last_updated": "1512531560",
+          "price_sgd": "50.6399190645",
+          "24h_volume_sgd": "138523763.82",
+          "market_cap_sgd": "3291594739.0"
+        }
+      ]
+    },
+    "error": {
+      "error": "id not found"
+    }
+  }
+}
