@@ -49,7 +49,7 @@ export const generateEncryptedWif = (passphrase) => {
  * Encrypts a WIF key using a given keyphrase under NEP-2 Standard.
  * @param {string} wifKey - WIF key to encrypt (52 chars long).
  * @param {string} keyphrase - The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
- * @param {scryptParams} scryptParams - Parameters for Scrypt. Defaults to NEP2 specified parameters.
+ * @param {scryptParams} [scryptParams] - Parameters for Scrypt. Defaults to NEP2 specified parameters.
  * @returns {string} The encrypted key in Base58 (Case sensitive).
  */
 export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
@@ -59,6 +59,7 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
   const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
   // Scrypt
   const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), scryptParams).toString('hex')
+  console.log(derived)
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   // AES Encrypt
@@ -73,7 +74,7 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
  * Decrypts an encrypted key using a given keyphrase under NEP-2 Standard.
  * @param {string} encryptedKey - The encrypted key (58 chars long).
  * @param {string} keyphrase - The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
- * @param {scryptParams} scryptParams - Parameters for Scrypt. Defaults to NEP2 specified parameters.
+ * @param {scryptParams} [scryptParams] - Parameters for Scrypt. Defaults to NEP2 specified parameters.
  * @returns {string} The decrypted WIF key.
  */
 export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
@@ -82,6 +83,7 @@ export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) 
   const addressHash = assembled.substr(6, 8)
   const encrypted = assembled.substr(-64)
   const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), scryptParams).toString('hex')
+  console.log(derived)
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   const ciphertext = { ciphertext: enc.Hex.parse(encrypted), salt: '' }

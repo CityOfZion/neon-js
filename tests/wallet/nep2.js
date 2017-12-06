@@ -14,12 +14,14 @@ describe('NEP2', function () {
     this.timeout(10000)
     it('encrypt', () => {
       const encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase)
+      console.log(encrypted)
       isNEP2(encrypted).should.equal(true)
       encrypted.should.equal(testKeys.a.encryptedWif)
     })
 
     it('decrypt', () => {
       const wif = NEP2.decrypt(testKeys.a.encryptedWif, testKeys.a.passphrase)
+      console.log(wif)
       isWIF(wif).should.equal(true)
       wif.should.equal(testKeys.a.wif)
     })
