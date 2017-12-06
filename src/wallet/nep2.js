@@ -59,7 +59,6 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
   const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
   // Scrypt
   const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), scryptParams).toString('hex')
-  console.log(derived)
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   // AES Encrypt
@@ -83,7 +82,6 @@ export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) 
   const addressHash = assembled.substr(6, 8)
   const encrypted = assembled.substr(-64)
   const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), scryptParams).toString('hex')
-  console.log(derived)
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   const ciphertext = { ciphertext: enc.Hex.parse(encrypted), salt: '' }

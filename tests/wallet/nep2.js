@@ -12,18 +12,20 @@ describe('NEP2', function () {
 
   describe('Basic (NEP2)', function () {
     this.timeout(10000)
-    it('encrypt', () => {
+    it('encrypt', (done) => {
       const encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase)
       console.log(encrypted)
       isNEP2(encrypted).should.equal(true)
       encrypted.should.equal(testKeys.a.encryptedWif)
+      done()
     })
 
-    it('decrypt', () => {
+    it('decrypt', (done) => {
       const wif = NEP2.decrypt(testKeys.a.encryptedWif, testKeys.a.passphrase)
       console.log(wif)
       isWIF(wif).should.equal(true)
       wif.should.equal(testKeys.a.wif)
+      done()
     })
   })
 
