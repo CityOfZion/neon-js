@@ -10,25 +10,19 @@ describe('NEP2', function () {
     size: 64
   }
 
-  const medScrypt = {
-    cost: 16384,
-    blockSize: 8,
-    parallel: 8
-  }
-
   describe('Basic (NEP2)', function () {
-    this.timeout(200000)
+    this.timeout(0)
     let encrypted
     it('encrypt', () => {
-      encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase, medScrypt)
-      console.log(encrypted)
+      encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase)
       isNEP2(encrypted).should.equal(true)
+      encrypted.should.equal(testKeys.a.encryptedWif)
     })
 
     it('decrypt', () => {
-      const wif = NEP2.decrypt(encrypted, testKeys.a.passphrase, medScrypt)
-      console.log(wif)
+      const wif = NEP2.decrypt(encrypted, testKeys.a.passphrase)
       isWIF(wif).should.equal(true)
+      wif.should.equal(testKeys.a.wif)
     })
   })
 
