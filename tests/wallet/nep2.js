@@ -11,9 +11,9 @@ describe('NEP2', function () {
   }
 
   const medScrypt = {
-    cost: 1024,
-    blockSize: 2,
-    parallel: 2
+    cost: 4096,
+    blockSize: 4,
+    parallel: 4
   }
 
   describe('Basic (NEP2)', function () {
