@@ -981,5 +981,23 @@
         }
       }
     }
+  },
+  "core": {
+    "sendTx": {
+      "url": "http://seed1.neo.org:20332",
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "sendrawtransaction",
+        "params": [
+          "80000005710bdf9790a992270cfefe73ad4a202bf47f28eef5e713a989d0ede836ac00ab000051afe71adaf0ae88941d06bd0cc47173c669becac7e8f1f88e0d8204442adaac0000563f7dcd7d56d03af170bff90b3521614c9e01ed5e2bf373669bbec6e3b080ec000064714ae620be7e3232d50e65d351cf468a6e09c9bffe21091c0ca155b084e68b0000f6de87f86f404e837f60848420d7a4801fdbb31e159dd29d849aa30b30388698010002e72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c6000e40b540200000038955f89ae1ea709be05580a6c5bd7efa567ef99e72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c607fa920cd090000003775292229eccdf904f16fff8e83e7cffdc0f0ce01414005cbce0575c08cb8ff56558b465e30aee106f6f4fea955932bb3b3071f5fd8de991ea2b979a108c5657d7f6b94faf6874cf1b48d20c12308ab79b5dd8453f0ec232102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699efac"
+        ],
+        "id": 1234
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 1234,
+        "result": true
+      }
+    }
   }
 }

@@ -1,19 +1,27 @@
 import * as core from '../../src/api/core'
 import { neonDB, neoscan } from '../../src/api'
-import { Transaction, signTransaction } from '../../src/transactions'
+import { Transaction, signTransaction, getTransactionHash } from '../../src/transactions'
 import { Balance } from '../../src/wallet'
+import { DEFAULT_RPC } from '../../src/consts'
 import testKeys from '../testKeys.json'
 import testData from '../testData.json'
-import axios from 'axios'
-import MockAdapter from 'axios-mock-adapter'
+import mockData from './mockData.json'
 
 describe('Core API', function () {
   let mock
-  this.timeout(10000)
   const baseConfig = {
     net: 'TestNet',
     address: testKeys.a.address
   }
+
+  before(() => {
+    mock = setupMock([mockData.neonDB, mockData.neoscan, mockData.core])
+  })
+
+  after(() => {
+    mock.restore()
+  })
+
   describe('getBalanceFrom', function () {
     it('neonDB', () => {
       const config = {
@@ -203,31 +211,14 @@ describe('Core API', function () {
   describe('sendTx', function () {
     const config = {
       tx: Transaction.deserialize(testData.a.tx),
-      url: 'http://localhost:20332'
+      url: DEFAULT_RPC.TEST
     }
-    before(() => {
-      mock = new MockAdapter(axios)
-    })
-
-    afterEach(() => {
-      mock.reset()
-      config.response = undefined
-    })
-
-    after(() => {
-      mock.restore()
-    })
-
     it('works', () => {
-      mock.onPost().reply(200, {
-        'jsonrpc': '2.0',
-        'id': 1234,
-        'result': true
-      })
       return core.sendTx(config)
         .then((conf) => {
           conf.response.should.be.an('object')
           conf.response.result.should.equal(true)
+          conf.response.txid.should.equal(getTransactionHash(config.tx))
         })
     })
   })
