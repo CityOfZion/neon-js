@@ -547,6 +547,334 @@
     }
   },
   "neoscan": {
-
+    "getAllNodes": {
+      "url": "https://neoscan-testnet.io/api/test_net/v1/get_all_nodes",
+      "response": [
+        {
+          "url": "http://test1.cityofzion.io:8880",
+          "height": 850301
+        },
+        {
+          "url": "http://test2.cityofzion.io:8880",
+          "height": 850301
+        },
+        {
+          "url": "http://test3.cityofzion.io:8880",
+          "height": 850301
+        },
+        {
+          "url": "http://test4.cityofzion.io:8880",
+          "height": 850301
+        },
+        {
+          "url": "http://test5.cityofzion.io:8880",
+          "height": 835459
+        },
+        {
+          "url": "http://api.otcgo.cn:20332",
+          "height": 850301
+        },
+        {
+          "url": "http://seed1.neo.org:20332",
+          "height": 850301
+        },
+        {
+          "url": "http://seed2.neo.org:20332",
+          "height": 850301
+        },
+        {
+          "url": "http://seed3.neo.org:20332",
+          "height": 850301
+        },
+        {
+          "url": "http://seed4.neo.org:20332",
+          "height": 850301
+        },
+        {
+          "url": "http://seed5.neo.org:20332",
+          "height": 850301
+        }
+      ]
+    },
+    "balanceA": {
+      "url": "https://neoscan-testnet.io/api/test_net/v1/get_balance/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+      "response": {
+        "unclaimed": 1.5806253499999998,
+        "balance": [
+          {
+            "unspent": [
+              {
+                "value": 698,
+                "txid": "8019d2e1aa49adcd0be7dd133f4d6d5687a176e40a5c4eeaebaa32484de6e04b",
+                "n": 1
+              },
+              {
+                "value": 418.93620487,
+                "txid": "e38df7d8cb09b48adc709f0ac02f46e95ec957b3a147214250460483df4c4cc3",
+                "n": 1000
+              },
+              {
+                "value": 1,
+                "txid": "cc9ecfd33f8522bc47ab9a8186661a07b32009c17d34223506df87719e0ad77f",
+                "n": 0
+              }
+            ],
+            "asset": "GAS",
+            "amount": 1117.93620487
+          },
+          {
+            "unspent": [
+              {
+                "value": 258,
+                "txid": "749d6cb25b00274848b5e30b00de88b8b858c78a7ccd53a7937b2ec4d6cb4581",
+                "n": 1
+              },
+              {
+                "value": 1,
+                "txid": "891f295a23485f3a9b01596990bd97ef3095c6997ce84ab786aff3585b59c3a2",
+                "n": 0
+              },
+              {
+                "value": 1,
+                "txid": "cf9dc45b0f352a04c81023c5f10a64f5ec87d9cc950ac8b8299b74d2f61120e8",
+                "n": 0
+              },
+              {
+                "value": 1,
+                "txid": "2aee5a5336e9c212b14c4744c458ed1c8aa6f926fa73ef678b804e1cd747cbe4",
+                "n": 0
+              }
+            ],
+            "asset": "NEO",
+            "amount": 261
+          }
+        ],
+        "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+      }
+    },
+    "claimsA": {
+      "url": "https://neoscan-testnet.io/api/test_net/v1/get_claimable/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+      "response": {
+        "claimable": [
+          {
+            "value": 1,
+            "unclaimed": 0.00196914,
+            "txid": "a98630f1d77bda71b84edf300af910f6382c0d5eca21a63e9e22c40c8455a05c",
+            "start_height": 821831,
+            "n": 0,
+            "end_height": 842709
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00000624,
+            "txid": "2bf3419fb70d71a1ce202a1af276c1eba3adb42b0626acc4f415e5270741096c",
+            "start_height": 821753,
+            "n": 0,
+            "end_height": 821831
+          },
+          {
+            "value": 330,
+            "unclaimed": 0.0526746,
+            "txid": "27341b5fffa9b0c74e454cb73481b9d50cc9fb5856b9a468a7bb7dc4d518628d",
+            "start_height": 786756,
+            "n": 1,
+            "end_height": 788380
+          },
+          {
+            "value": 350,
+            "unclaimed": 0.024556,
+            "txid": "0ba525af5817b01314ef4e4bc9823986ca7e30871178ce2aa7b86d23d7937768",
+            "start_height": 786191,
+            "n": 0,
+            "end_height": 786756
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.0014111,
+            "txid": "8a3364c66eeb211bd320a239f1b6405fc59f5229ed27e1c7ef67b0906469f40a",
+            "start_height": 804485,
+            "n": 0,
+            "end_height": 821753
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00009633,
+            "txid": "31a1e6f93cf0c6ef536fc22a1663351aa2376fe26cc8acd47da90b29ab3dc293",
+            "start_height": 803281,
+            "n": 0,
+            "end_height": 804485
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00010944,
+            "txid": "0e30351ece5cd8942bd0d8f518ad46f32438c7a41a0c4d0293707d276cdd66e1",
+            "start_height": 801913,
+            "n": 0,
+            "end_height": 803281
+          },
+          {
+            "value": 259,
+            "unclaimed": 0.05325817,
+            "txid": "f8aa4c8d29529a2424426a29e51f646398beba59c6b7bcd344b66ba72784b22c",
+            "start_height": 799967,
+            "n": 1,
+            "end_height": 801913
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00005667,
+            "txid": "4c7742fab410247ee6f4a84fbd17728cc46e54afd6a733ffce1646719dfbe61c",
+            "start_height": 799259,
+            "n": 0,
+            "end_height": 799967
+          },
+          {
+            "value": 1,
+            "unclaimed": 3.2e-7,
+            "txid": "e61f68f613fcbd0619d5ac2246d91a71ba4966cb2b0da340209746a1b976d9c3",
+            "start_height": 799255,
+            "n": 0,
+            "end_height": 799259
+          },
+          {
+            "value": 1,
+            "unclaimed": 4.8e-7,
+            "txid": "90b35b55fe88aedb5057089e03f43615c0e7f6977e91317ea0e0636145e6347d",
+            "start_height": 799249,
+            "n": 0,
+            "end_height": 799255
+          },
+          {
+            "value": 328,
+            "unclaimed": 0.01885016,
+            "txid": "86d3497fb22c290c0386c32c9db5e781a366a674116d189683e9afe9075fc1cf",
+            "start_height": 799249,
+            "n": 1,
+            "end_height": 799967
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00015112,
+            "txid": "69e9f69e7beadf8b31c0614d1a58f348a7dd8692c2f0af4f687b6d484392a56e",
+            "start_height": 797318,
+            "n": 0,
+            "end_height": 799207
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00007739,
+            "txid": "c06d5abdf4cca664a00f6a05b1946b7e52864a54e184b7d7244a94e215fa30b5",
+            "start_height": 796350,
+            "n": 0,
+            "end_height": 797317
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00012412,
+            "txid": "294224f8ecb51f9f3d5fcb8dc08d7af245a6c268a475f335af253ccd3c61b604",
+            "start_height": 794799,
+            "n": 0,
+            "end_height": 796350
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00000392,
+            "txid": "b57159d0c034a99ab755600f662173bc7bc88a1ddc8bb85f90ef6b7e359e1ba9",
+            "start_height": 794750,
+            "n": 0,
+            "end_height": 794799
+          },
+          {
+            "value": 1,
+            "unclaimed": 2.4e-7,
+            "txid": "1e86ea0530190cefff933dcb84acaec2dedd2d675a243521dc48f7dbf21d211c",
+            "start_height": 794747,
+            "n": 0,
+            "end_height": 794750
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.0000048,
+            "txid": "d3b65dd1732159e8e431d88bf1180b58078a56efec057c64fd0e6155ae79dee9",
+            "start_height": 794687,
+            "n": 0,
+            "end_height": 794747
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00000112,
+            "txid": "5ffe7f8643faa2541e772fbcf74fe16bbfe2dc64a4d4492d88da724dc3259de2",
+            "start_height": 794673,
+            "n": 0,
+            "end_height": 794687
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00001024,
+            "txid": "41d8e4892a3323621cf8ae3f4ce611a62cfdc9b185d11a9a2c9f2fdf057df67e",
+            "start_height": 794545,
+            "n": 0,
+            "end_height": 794673
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00007482,
+            "txid": "bcb1190513b3dfe832ed15bd2b6eac846893e6debf36b890486893bf4b50f007",
+            "start_height": 793610,
+            "n": 0,
+            "end_height": 794545
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00013953,
+            "txid": "e0430aedd09b97ba56ed44303dd308f8c07c5dadb55f621a2b1a85abd0e3a00c",
+            "start_height": 791869,
+            "n": 0,
+            "end_height": 793610
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00003121,
+            "txid": "2a4ee53c24cfb2bee24146a28f8b2e03e2424909b80b8345d5ae1c9e5fa9e344",
+            "start_height": 791479,
+            "n": 0,
+            "end_height": 791869
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00004624,
+            "txid": "f55c685bb554c346a77f9031ce53365f6aa6244e5539d7493b22cea7dbfb0d75",
+            "start_height": 790901,
+            "n": 0,
+            "end_height": 791479
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.00024217,
+            "txid": "55430b733edc8a7fc68288f41f07e1abb9c5dce663629bc269e1f53a5daa45a2",
+            "start_height": 788503,
+            "n": 0,
+            "end_height": 790900
+          },
+          {
+            "value": 1,
+            "unclaimed": 0.0000099,
+            "txid": "a29aedd594c4f00e5adc1bb3b814d7e59de5f449ccce2b0253e679335b50a02d",
+            "start_height": 788381,
+            "n": 0,
+            "end_height": 788503
+          },
+          {
+            "value": 329,
+            "unclaimed": 0.30281818,
+            "txid": "8897e0c8ea74cb02ef6f2cfc585619ddcfb0c494510449db04f85592661b5d51",
+            "start_height": 788380,
+            "n": 1,
+            "end_height": 799249
+          }
+        ],
+        "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+      }
+    }
   }
 }

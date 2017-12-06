@@ -1,31 +1,39 @@
 import * as neoscan from '../../src/api/neoscan'
+import Balance from '../../src/wallet/Balance'
 import testKeys from '../testKeys.json'
+import mockData from './mockData.json'
 
 describe('Neoscan', function () {
-  this.timeout(15000)
-  it('should get balance from address', () => {
-    return neoscan.getBalance('TestNet', testKeys.a.address)
-      .then((response) => {
-        response.assets.NEO.balance.should.be.a('number')
-        response.assets.GAS.balance.should.be.a('number')
-        response.address.should.equal(testKeys.a.address)
-      })
+  let mock
+
+  before(() => {
+    mock = setupMock(mockData.neoscan)
   })
 
-  it('should get unspent transactions', () => {
+  after(() => {
+    mock.restore()
+  })
+
+  it('getBalance returns Balance object', () => {
     return neoscan.getBalance('TestNet', testKeys.a.address)
       .then((response) => {
+        (response instanceof Balance).should.equal(true)
+        response.assetSymbols.should.have.members(['NEO', 'GAS'])
+        response.assets.NEO.balance.should.equal(261)
         response.assets.NEO.unspent.should.be.an('array')
+        response.assets.GAS.balance.should.equal(1117.93620487)
         response.assets.GAS.unspent.should.be.an('array')
+        response.net.should.equal('TestNet')
         response.address.should.equal(testKeys.a.address)
       })
   })
 
-  it('should get claimable gas', () => {
+  it('getClaims returns Claims object', () => {
     return neoscan.getClaims('TestNet', testKeys.a.address)
       .then((response) => {
-        response.claims.should.be.an('array')
+        response.net.should.equal('TestNet')
         response.address.should.equal(testKeys.a.address)
+        response.claims.should.be.an('array')
       })
   })
 })

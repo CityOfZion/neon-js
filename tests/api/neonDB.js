@@ -34,7 +34,6 @@ describe('NeonDB', function () {
         response.net.should.equal('TestNet')
         response.address.should.equal(testKeys.a.address)
         response.claims.should.be.an('array')
-        response.total_claim.should.be.a('number')
       })
   })
 
