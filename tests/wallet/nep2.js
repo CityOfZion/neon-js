@@ -17,7 +17,7 @@ describe('NEP2', function () {
   }
 
   describe('Basic (NEP2)', function () {
-    this.timeout(10000)
+    this.timeout(200000)
     let encrypted
     it('encrypt', () => {
       encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase, medScrypt)
