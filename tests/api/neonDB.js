@@ -1,36 +1,62 @@
 import * as neonDB from '../../src/api/neonDB'
+import Balance from '../../src/wallet/Balance'
 import testKeys from '../testKeys.json'
+import mockData from './mockData.json'
 
 describe('NeonDB', function () {
-  this.timeout(15000)
+  let mock
+
+  before(() => {
+    mock = setupMock(mockData.neonDB)
+  })
+
+  after(() => {
+    mock.restore()
+  })
+
+  it('getBalance returns Balance object', () => {
+    return neonDB.getBalance('TestNet', testKeys.a.address)
+      .then((response) => {
+        (response instanceof Balance).should.equal(true)
+        response.assetSymbols.should.have.members(['NEO', 'GAS'])
+        response.assets.NEO.balance.should.equal(261)
+        response.assets.NEO.unspent.should.be.an('array')
+        response.assets.GAS.balance.should.equal(1117.93620487)
+        response.assets.GAS.unspent.should.be.an('array')
+        response.net.should.equal('TestNet')
+        response.address.should.equal(testKeys.a.address)
+      })
+  })
+
+  it('getClaims returns Claims object', () => {
+    return neonDB.getClaims('TestNet', testKeys.a.address)
+      .then((response) => {
+        response.net.should.equal('TestNet')
+        response.address.should.equal(testKeys.a.address)
+        response.claims.should.be.an('array')
+        response.total_claim.should.be.a('number')
+      })
+  })
+
+  it('getWalletDBHeight returns height number', () => {
+    return neonDB.getWalletDBHeight('TestNet')
+      .then((response) => {
+        response.should.equal(850226)
+      })
+  })
+
+  it('getTransactionHistory returns history', () => {
+    return neonDB.getTransactionHistory('TestNet', testKeys.a.address)
+      .then((response) => {
+        response.should.be.an('array')
+      })
+  })
 
   // TODO: this works, but will not work repeatedly for obvious reasons :)
   it.skip('should claim GAS', () => {
     return neonDB.doClaimAllGas('TestNet', testKeys.b.wif)
       .then((response) => {
         console.log('claim', response)
-      }).catch((e) => {
-        console.log(e)
-        throw e
-      })
-  })
-
-  it('should get balance from address', () => {
-    return neonDB.getBalance('TestNet', testKeys.a.address)
-      .then((response) => {
-        response.assets.NEO.balance.should.be.a('number')
-        response.assets.GAS.balance.should.be.a('number')
-      }).catch((e) => {
-        console.log(e)
-        throw e
-      })
-  })
-
-  it('should get unspent transactions', () => {
-    return neonDB.getBalance('TestNet', testKeys.a.address)
-      .then((response) => {
-        response.NEO.unspent.should.be.an('array')
-        response.GAS.unspent.should.be.an('array')
       }).catch((e) => {
         console.log(e)
         throw e

@@ -1,17 +1,11 @@
 import * as CMC from '../../src/api/coinmarketcap'
-import axios from 'axios'
-import MockAdapter from 'axios-mock-adapter'
 import mockData from './mockData.json'
 
 describe('coinmarketcap', function () {
   let mock
 
   before(() => {
-    mock = new MockAdapter(axios)
-    mock
-    .onGet(mockData.cmc.gas2usd.url).reply(200, mockData.cmc.gas2usd.response)
-    .onGet(mockData.cmc.neo2sgd.url).reply(200, mockData.cmc.neo2sgd.response)
-    .onGet().reply(200, mockData.cmc.error)
+    mock = setupMock(mockData.cmc)
   })
 
   after(() => {
