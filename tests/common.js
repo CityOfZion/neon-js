@@ -27,7 +27,7 @@ global.setupMock = (data = null, passthrough = false) => {
         addCases(mock, dataset)
       }
     } else {
-      addCases(mock, dataset)
+      addCases(mock, data)
     }
   }
   if (passthrough) {
