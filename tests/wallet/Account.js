@@ -3,13 +3,19 @@ import testWallet from './testWallet.json'
 
 describe('Account', function () {
   const acct = {
-    encrypted: '6PYWVp3xfPxVAcZPFyQkpYefXpk73Ub3w5SX7jmcgKmj2DfXnKvYS5xhMx',
+    encrypted: '6PYWVp3xfXQfKY4S14738y8iDqm29gwnzZ86pQ8sMeUtkrzVe4zfzRuv31',
     WIF: 'L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG',
     privateKey: '9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69',
     publicKey: '031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9',
     publicKeyUnencoded: '041d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c94617303f7408d9abfedfb6fbb00dd07e3e7735d918bbea7a7e2c1895ea1bc9b9',
     scriptHash: '5df31f6f59e6a4fbdd75103786bf73db1000b235',
     address: 'ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s'
+  }
+
+  const scryptParams = {
+    cost: 256,
+    blockSize: 1,
+    parallel: 1
   }
 
   const keyphrase = 'thisisakeyphrase'
@@ -56,13 +62,13 @@ describe('Account', function () {
   this.timeout(15000)
   it('encrypts the key', () => {
     const a = new Account(acct.WIF)
-    a.encrypt(keyphrase)
+    a.encrypt(keyphrase, scryptParams)
     a.encrypted.should.equal(acct.encrypted)
   })
 
   it('decrypts the key', () => {
     const a = new Account(acct.encrypted)
-    a.decrypt(keyphrase)
+    a.decrypt(keyphrase, scryptParams)
     a.WIF.should.equal(acct.WIF)
   })
 
