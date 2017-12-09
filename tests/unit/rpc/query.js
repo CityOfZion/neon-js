@@ -238,7 +238,7 @@ describe('Query', function () {
         })
     })
 
-    it('getTxOut', () => {
+    it('getTxOut (Unspent)', () => {
       return Query.getTxOut('7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3', 0)
         .execute(DEFAULT_RPC.TEST)
         .then((res) => {
@@ -248,6 +248,14 @@ describe('Query', function () {
             'value',
             'address'
           ])
+        })
+    })
+
+    it('getTxOut (Spent)', () => {
+      return Query.getTxOut('7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3', 1)
+        .execute(DEFAULT_RPC.TEST)
+        .then((res) => {
+          res.result.should.equal(null)
         })
     })
 

@@ -2899,7 +2899,7 @@
         "result": "00e8764817"
       }
     },
-    "getTxOut": {
+    "getTxOutValid": {
       "url": "http://seed1.neo.org:20332",
       "body": {
         "jsonrpc": "2.0",
@@ -2919,6 +2919,23 @@
           "value": "1",
           "address": "ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s"
         }
+      }
+    },
+    "getTxOutNull": {
+      "url": "http://seed1.neo.org:20332",
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "gettxout",
+        "params": [
+          "7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3",
+          1
+        ],
+        "id": 1234
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 1234,
+        "result": null
       }
     },
     "getVersion": {
