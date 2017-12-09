@@ -44,7 +44,11 @@ export const getTokenBalance = (net, scriptHash, address) => {
   const script = sb.emitAppCall(scriptHash, 'balanceOf', [addrScriptHash]).str
   return Query.invokeScript(script, false).execute(net)
     .then((res) => {
-      return fixed82num(res.result.stack[0].value)
+      try {
+        return fixed82num(res.result.stack[0].value)
+      } catch (error) {
+        return 0
+      }
     })
 }
 
