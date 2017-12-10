@@ -14,7 +14,8 @@ export const ASSET_ID = {
 
 export const CONTRACTS = {
   RPX: 'ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9',
-  TEST_RPX: '5b7074e873973a6ed3708862f219a6fbf4d1c411'
+  TEST_RPX: '5b7074e873973a6ed3708862f219a6fbf4d1c411',
+  TEST_LWTF: 'd7678dd97c000be3f33e9362e673101bac4ca654'
 }
 
 export const DEFAULT_RPC = {

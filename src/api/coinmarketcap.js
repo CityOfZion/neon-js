@@ -10,6 +10,7 @@ const CURRENCY = ['aud', 'brl', 'cad', 'chf', 'clp', 'cny', 'czk', 'dkk', 'eur',
  */
 export const getPrice = (coin = 'NEO', currency = 'usd') => {
   currency = currency.toLowerCase()
+  coin = coin.toLowerCase()
   if (CURRENCY.includes(currency)) {
     return axios.get(`https://api.coinmarketcap.com/v1/ticker/${coin}/?convert=${currency}`)
       .then((res) => {
