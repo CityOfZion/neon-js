@@ -4,7 +4,7 @@ import { DEFAULT_RPC, ASSET_ID, CONTRACTS } from '../../../src/consts'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
 
-describe.only('Query', function () {
+describe('Query', function () {
   let mock
 
   before(() => {

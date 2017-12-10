@@ -109,7 +109,7 @@ export const doTransferToken = (net, scriptHash, fromWif, toAddress, transferAmo
     .then((values) => {
       endpt = values[0]
       const balances = values[1]
-      const fromAddrScriptHash = reverseHex(getScriptHashFromAddress(account.address))
+      const fromAddrScriptHash = getScriptHashFromAddress(account.address)
       const intents = [
         { assetId: ASSET_ID.GAS, value: 0.00000001, scriptHash: fromAddrScriptHash }
       ]
@@ -128,7 +128,7 @@ export const doTransferToken = (net, scriptHash, fromWif, toAddress, transferAmo
     })
     .then((res) => {
       if (res.result === true) {
-        res.txid = signedTx
+        res.txid = signedTx.hash
       }
       return res
     })
