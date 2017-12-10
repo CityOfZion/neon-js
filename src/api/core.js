@@ -136,6 +136,9 @@ export const sendTx = (config) => {
       // Parse result
       if (res.result === true) {
         res.txid = config.tx.hash
+        if (config.balance) {
+          config.balance.applyTx(config.tx, true)
+        }
       }
       return Object.assign(config, { response: res })
     })

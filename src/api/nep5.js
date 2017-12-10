@@ -1,18 +1,22 @@
 import { ScriptBuilder } from '../sc'
 import { getScriptHashFromAddress, Account } from '../wallet'
-import { Query, VMExtractor } from '../rpc'
-import { ab2str, hexstring2ab, reverseHex, fixed82num } from '../utils'
+import { Query, VMZip } from '../rpc'
+import { reverseHex, fixed82num, hexstring2str } from '../utils'
 import { getRPCEndpoint, getBalance } from './neonDB'
 import { Transaction } from '../transactions'
 import { ASSET_ID } from '../consts'
 
+const parseTokenInfo = VMZip(hexstring2str, hexstring2str, parseInt, fixed82num)
+
+const parseTokenInfoAndBalance = VMZip(hexstring2str, hexstring2str, parseInt, fixed82num, fixed82num)
+
 /**
  * Queries for NEP5 Token information.
- * @param {string} net
- * @param {string} scriptHash
+ * @param {string} url - URL of the NEO node to query.
+ * @param {string} scriptHash - Contract scriptHash.
  * @return {Promise<{name: string, symbol: string, decimals: number, totalSupply: number}>}
  */
-export const getTokenInfo = (net, scriptHash) => {
+export const getTokenInfo = (url, scriptHash) => {
   const sb = new ScriptBuilder()
   sb
     .emitAppCall(scriptHash, 'name')
@@ -20,29 +24,29 @@ export const getTokenInfo = (net, scriptHash) => {
     .emitAppCall(scriptHash, 'decimals')
     .emitAppCall(scriptHash, 'totalSupply')
   const script = sb.str
-  return Query.invokeScript(script, false).parseWith(VMExtractor).execute(net)
+  return Query.invokeScript(script, false).parseWith(parseTokenInfo).execute(url)
     .then((res) => {
-      const [name, symbol] = res.slice(0, 2).map((v) => ab2str(hexstring2ab(v)))
-      // decimals is returned as a Int and just needs to be converted to a number
-      const decimals = parseInt(res[2], 10)
-      // totalSupply is parsed as Fixed8
-      const totalSupply = (fixed82num(res[3]))
-      return { name, symbol, decimals, totalSupply }
+      return {
+        name: res[0],
+        symbol: res[1],
+        decimals: res[2],
+        totalSupply: res[3]
+      }
     })
 }
 
 /**
  * Get the token balance of Address from Contract
- * @param {string} net
- * @param {string} scriptHash
- * @param {string} address
+ * @param {string} url - URL of the NEO node to query.
+ * @param {string} scriptHash - Contract scriptHash.
+ * @param {string} address - Address to query for balance of tokens.
  * @return {Promise<number>}
  */
-export const getTokenBalance = (net, scriptHash, address) => {
+export const getTokenBalance = (url, scriptHash, address) => {
   const addrScriptHash = reverseHex(getScriptHashFromAddress(address))
   const sb = new ScriptBuilder()
   const script = sb.emitAppCall(scriptHash, 'balanceOf', [addrScriptHash]).str
-  return Query.invokeScript(script, false).execute(net)
+  return Query.invokeScript(script, false).execute(url)
     .then((res) => {
       try {
         return fixed82num(res.result.stack[0].value)
@@ -53,14 +57,46 @@ export const getTokenBalance = (net, scriptHash, address) => {
 }
 
 /**
+ * Get the token info and also balance if address is provided.
+ * @param {string} url - URL of the NEO node to query.
+ * @param {string} scriptHash - Contract scriptHash.
+ * @param {string} [address] - Address to query for balance of tokens.
+ * @return {Promise<object>} Object containing name, symbol, decimals, totalSupply. balance will be included if address is provided.
+ */
+export const getToken = (url, scriptHash, address) => {
+  let parser = address ? parseTokenInfoAndBalance : parseTokenInfo
+  const sb = new ScriptBuilder()
+  sb
+    .emitAppCall(scriptHash, 'name')
+    .emitAppCall(scriptHash, 'symbol')
+    .emitAppCall(scriptHash, 'decimals')
+    .emitAppCall(scriptHash, 'totalSupply')
+  if (address) {
+    const addrScriptHash = reverseHex(getScriptHashFromAddress(address))
+    sb.emitAppCall(scriptHash, 'balanceOf', [addrScriptHash])
+  }
+  const script = sb.str
+  return Query.invokeScript(script, false).parseWith(parser).execute(url)
+    .then((res) => {
+      return {
+        name: res[0],
+        symbol: res[1],
+        decimals: res[2],
+        totalSupply: res[3],
+        balance: res.length === 5 ? res[4] : null
+      }
+    })
+}
+
+/**
  * Transfers NEP5 Tokens.
- * @param {string} net
- * @param {string} scriptHash
- * @param {string} fromWif
- * @param {string} toAddress
- * @param {number} transferAmount
- * @param {number} gasCost
- * @param {function} signingFunction
+ * @param {string} net - 'MainNet', 'TestNet' or a custom NeonDB url.
+ * @param {string} scriptHash - Contract scriptHash
+ * @param {string} fromWif - WIF key of the address where the tokens are coming from.
+ * @param {string} toAddress - The address to send the tokens to.
+ * @param {number} transferAmount - Amount to transfer. This number will be divided by 100000000.
+ * @param {number} gasCost - Amount of gas to pay for transfer.
+ * @param {function} [signingFunction] - Optional external signing function.
  * @return {Promise<Response>} RPC response
  */
 export const doTransferToken = (net, scriptHash, fromWif, toAddress, transferAmount, gasCost = 0, signingFunction = null) => {

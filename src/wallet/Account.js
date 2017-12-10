@@ -1,19 +1,33 @@
 import * as core from './core'
 import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
+import { encrypt, decrypt } from './nep2'
 
 /**
  * @class Account
- * @memberof module:wallet
  * @classdesc
  * This allows for simple utilisation and manipulating of keys without need the long access methods.
  * Key formats are derived from each other lazily and stored for future access.
  * If the previous key (one level higher) is not found, it will attempt to generate it or throw an Error if insufficient information was provided (eg. trying to generate private key when only address was given.)
  * NEP2 <=> WIF <=> Private => Public => ScriptHash <=> Address
- * @param {string} str - WIF/ Private Key / Public Key / Address.
+ * @param {string|object} str - WIF/ Private Key / Public Key / Address or a Wallet Account object.
  */
 class Account {
   constructor (str) {
-    if (isPrivateKey(str)) {
+    this.extra = null
+    this.isDefault = false
+    this.lock = false
+    this.contract = null
+    if (!str) {
+      this._privateKey = core.generatePrivateKey()
+    } else if (typeof str === 'object') {
+      this._encrypted = str.key
+      this._address = str.address
+      this.label = str.label
+      this.extra = str.extra
+      this.isDefault = str.isDefault
+      this.lock = str.lock
+      this.contract = str.contract
+    } else if (isPrivateKey(str)) {
       this._privateKey = str
     } else if (isPublicKey(str, false)) {
       this._publicKey = core.getPublicKeyEncoded(str)
@@ -25,9 +39,23 @@ class Account {
       this._privateKey = core.getPrivateKeyFromWIF(str)
       this._WIF = str
     } else if (isNEP2(str)) {
-      throw new ReferenceError(`Account does not support NEP2. Please decode first.`)
+      this._encrypted = str
     } else {
       throw new ReferenceError(`Invalid input: ${str}`)
+    }
+
+    // Attempts to make address the default label of the Account.
+    if (!this.label) {
+      try { this.label = this.address } catch (err) { this.label = '' }
+    }
+  }
+
+  /** @type {string} */
+  get encrypted () {
+    if (this._encrypted) {
+      return this._encrypted
+    } else {
+      throw new Error(`No encrypted key found`)
     }
   }
 
@@ -45,6 +73,11 @@ class Account {
   get privateKey () {
     if (this._privateKey) {
       return this._privateKey
+    } else if (this._WIF) {
+      this._privateKey = core.getPrivateKeyFromWIF(this._WIF)
+      return this._privateKey
+    } else if (this._encrypted) {
+      throw new ReferenceError('Private Key encrypted!')
     } else {
       throw new ReferenceError('No Private Key provided!')
     }
@@ -97,6 +130,47 @@ class Account {
     } else {
       this._address = core.getAddressFromScriptHash(this.scriptHash)
       return this._address
+    }
+  }
+
+  /**
+   * Encrypts the current privateKey and return the Account object.
+   * @param {string} keyphrase
+   * @param {object} [scryptParams]
+   * @return {Account} this
+   */
+  encrypt (keyphrase, scryptParams = undefined) {
+    this._encrypted = encrypt(this.privateKey, keyphrase, scryptParams)
+    return this
+  }
+
+  /**
+   * Decrypts the encrypted key and return the Account object.
+   * @param {string} keyphrase
+   * @param {object} [scryptParams]
+   * @return {Account} this
+   */
+  decrypt (keyphrase, scryptParams = undefined) {
+    this._WIF = decrypt(this.encrypted, keyphrase, scryptParams)
+    return this
+  }
+
+  /**
+   * Export Account as a WalletAccount object.
+   * @return {WalletAccount}
+   */
+  export () {
+    let key = null
+    if (this._privateKey && !this._encrypted) throw new Error(`Encrypt private key first!`)
+    if (this._encrypted) key = this._encrypted
+    return {
+      address: this.address,
+      label: this.label,
+      isDefault: this.isDefault,
+      lock: this.lock,
+      key,
+      contract: this.contract,
+      extra: this.extra
     }
   }
 }

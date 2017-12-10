@@ -2,9 +2,7 @@
 Overview
 ********
 
-Neon-JS is a Javascript library to interface with NEO blockchain, providing quick and easy methods to send RPC calls, create transactions and simple contract invocations.
-
-
+``neon-js`` is a Javascript library to interface with NEO blockchain, providing quick and easy methods to send RPC calls, create transactions and simple contract invocations.
 
 Features
 ========
@@ -26,7 +24,7 @@ Semantic
 
     ::
 
-      import Neon from 'neon-js'
+      import Neon from '@cityofzion/neon-js'
       Neon.create.privateKey()
       Neon.serialize.tx(transactionObj)
       Neon.get.publicKeyFromPrivateKey(privateKey)
@@ -37,11 +35,12 @@ Named
 
     Named imports are the conventional JS imports. The modules in Neon are:
 
-      - ``wallet``
-      - ``tx``
-      - ``rpc``
-      - ``u``
       - ``api``
       - ``CONST``
+      - ``rpc``
+      - ``sc``
+      - ``tx``
+      - ``u``
+      - ``wallet``
 
     This style offers more control and flexibility. Do refer to the source code for each module's exports.

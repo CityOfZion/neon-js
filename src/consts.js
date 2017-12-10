@@ -14,7 +14,8 @@ export const ASSET_ID = {
 
 export const CONTRACTS = {
   RPX: 'ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9',
-  TEST_RPX: '5b7074e873973a6ed3708862f219a6fbf4d1c411'
+  TEST_RPX: '5b7074e873973a6ed3708862f219a6fbf4d1c411',
+  TEST_LWTF: 'd7678dd97c000be3f33e9362e673101bac4ca654'
 }
 
 export const DEFAULT_RPC = {
@@ -24,10 +25,30 @@ export const DEFAULT_RPC = {
 
 export const DEFAULT_REQ = { jsonrpc: '2.0', method: 'getblockcount', params: [], id: 1234 }
 
+export const DEFAULT_SCRYPT = {
+  cost: 16384,
+  blockSize: 8,
+  parallel: 8,
+  size: 64
+}
+
+export const DEFAULT_WALLET = {
+  name: 'myWallet',
+  version: '1.0',
+  scrypt: {},
+  accounts: [],
+  extra: null
+}
+
 export const NEO_NETWORK = {
   MAIN: 'MainNet',
   TEST: 'TestNet'
 }
+
+// specified by nep2, same as bip38
+export const NEP_HEADER = '0142'
+
+export const NEP_FLAG = 'e0'
 
 export const RPC_VERSION = '2.3.2'
 

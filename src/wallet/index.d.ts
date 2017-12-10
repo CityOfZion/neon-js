@@ -20,6 +20,35 @@ declare module '@cityofzion/neon-js' {
     value: number
   }
 
+  export interface ScryptParams {
+    cost: number
+    blockSize: number
+    parallel: number
+  }
+
+  export interface WalletFile {
+    name: string
+    scrypt: WalletScryptParams
+    accounts: WalletAccount[]
+    extra: object
+  }
+
+  export interface WalletScryptParams {
+    n: number
+    r: number
+    p: number
+  }
+
+  export interface WalletAccount {
+    address: string
+    label: string
+    isDefault: boolean
+    lock: boolean
+    key: string
+    contract: object | null
+    extra: object
+  }
+
   export module wallet {
     //Account
     export class Account {
@@ -45,9 +74,12 @@ declare module '@cityofzion/neon-js' {
       tokenSymbols: string[]
       tokens: { [index: string]: number }
 
+      static import(jsonString: string): Balance
+
       addAsset(sym: string, assetBalance?: AssetBalance): this
       addToken(sym: string, tokenBalance?: number): this
       applyTx(tx: Transaction, confirmed?: boolean): this
+      export(): string
       verifyAssets(url: string): Promise<Balance>
     }
 
@@ -79,13 +111,36 @@ declare module '@cityofzion/neon-js' {
     export function isPrivateKey(key: string): boolean
     export function isPublicKey(key: string, encoded?: boolean): boolean
     export function isAddress(address: string): boolean
+
+    //Wallet
+    export class Wallet {
+      name: string
+      scrypt: WalletScryptParams
+      accounts: Account[]
+      extra: object
+
+      constructor(file: WalletFile)
+
+      static import(jsonString: string): Wallet
+      static readFile(filepath: string): Wallet
+
+      addAccount(acct: Account | object): number
+      decrypt(index: number, keyphrase: string): boolean
+      decryptAll(keyphrase: string): boolean[]
+      encrypt(index: number, keyphrase: string): boolean
+      encryptAll(keyphrase: string): boolean[]
+      export(): string
+      setDefault(index: number): this
+      writeFile(filepath): boolean
+    }
   }
 
   export interface semantic {
     create: {
-      account: (k: string) => Account
+      account: (k: any) => Account
       privateKey: () => string
       signature: (tx: string, privateKey: string) => string
+      wallet: (k: any) => Wallet
     }
     is: {
       address: (address: string) => boolean

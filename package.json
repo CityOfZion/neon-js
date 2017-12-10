@@ -40,9 +40,13 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
+    "test:unit":"./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/unit",
+    "test:integration":"./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/integration",
     "lint": "./node_modules/.bin/eslint ./src/**/*.js ./tests/**/*.js",
     "build:dev": "./node_modules/.bin/webpack --env.dev",
     "build:prod": "./node_modules/.bin/webpack --env.prod",
+    "watch:test": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/unit --bail --watch",
+    "watch:docs": "cd source && sphinx-autobuild . _build/html",
     "build:docs": "cd source && sphinx-versioning -g ../ -l ./conf.py build source ../docs",
     "deploy:docs": "cd source && sphinx-versioning -g ../ -l ./conf.py push source gh-pages .",
     "rebuild": "rm -rf ./node_modules && npm install && ./node_modules/.bin/webpack",

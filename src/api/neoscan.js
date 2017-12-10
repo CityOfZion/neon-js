@@ -77,7 +77,7 @@ export const getClaims = (net, address) => {
   return axios.get(apiEndpoint + '/v1/get_claimable/' + address)
     .then((res) => {
       const claims = parseClaims(res.data.claimable)
-      return { address: res.data.address, claims }
+      return { net, address: res.data.address, claims }
     })
 }
 
