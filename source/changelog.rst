@@ -35,6 +35,8 @@ This details the changes made from the previous recorded version.
 
   - Add ``api.getToken`` which is a combination of ``api.getTokenInfo`` and ``api.getTokenBalance``, allowing for simple info retrieval within a single call. This is exposed semantically as ``Neon.get.token``.
   - Bugfix CoinMarketCap truncating prices to integers.
+  - Bugfix doTransferToken sending gas to wrong address and appending wrong item to txid when successful (was appending the full tx instead).
+  - Catch getTokenBalance error when using an address with no balance.
 
 - RPC
 
