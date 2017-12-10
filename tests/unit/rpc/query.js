@@ -4,7 +4,7 @@ import { DEFAULT_RPC, ASSET_ID, CONTRACTS } from '../../../src/consts'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
 
-describe('Query', function () {
+describe.only('Query', function () {
   let mock
 
   before(() => {
@@ -44,289 +44,238 @@ describe('Query', function () {
 
   describe('RPC Queries', function () {
     it('getAccountState', () => {
-      return Query.getAccountState(testKeys.a.address)
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.have.all.keys([
-            'version',
-            'script_hash',
-            'frozen',
-            'votes',
-            'balances'
-          ])
-        })
+      Query.getAccountState(testKeys.a.address).req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getaccountstate',
+        params: [testKeys.a.address]
+      })
     })
 
     it('getAssetState', () => {
-      return Query.getAssetState(ASSET_ID.NEO)
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.have.all.keys([
-            'version',
-            'id',
-            'type',
-            'name',
-            'amount',
-            'available',
-            'precision',
-            'owner',
-            'admin',
-            'issuer',
-            'expiration',
-            'frozen'
-          ])
-        })
+      Query.getAssetState(ASSET_ID.NEO).req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getassetstate',
+        params: [ASSET_ID.NEO]
+      })
     })
 
     describe('getBlock', function () {
       it('by index', () => {
-        return Query.getBlock(1)
-          .execute(DEFAULT_RPC.TEST)
-          .then((res) => {
-            res.result.should.have.all.keys([
-              'hash',
-              'size',
-              'version',
-              'previousblockhash',
-              'merkleroot',
-              'time',
-              'index',
-              'nonce',
-              'nextconsensus',
-              'script',
-              'tx',
-              'confirmations',
-              'nextblockhash'
-            ])
-          })
+        Query.getBlock(1).req.should.eql({
+          id: 1234,
+          jsonrpc: '2.0',
+          method: 'getblock',
+          params: [1, 1]
+        })
       })
 
       it('by hash', () => {
-        return Query.getBlock('0012f8566567a9d7ddf25acb5cf98286c9703297de675d01ba73fbfe6bcb841c')
-          .execute(DEFAULT_RPC.TEST)
-          .then((res) => {
-            res.result.should.have.all.keys([
-              'hash',
-              'size',
-              'version',
-              'previousblockhash',
-              'merkleroot',
-              'time',
-              'index',
-              'nonce',
-              'nextconsensus',
-              'script',
-              'tx',
-              'confirmations',
-              'nextblockhash'
-            ])
-          })
+        return Query.getBlock('0012f8566567a9d7ddf25acb5cf98286c9703297de675d01ba73fbfe6bcb841c').req.should.eql({
+          id: 1234,
+          jsonrpc: '2.0',
+          method: 'getblock',
+          params: ['0012f8566567a9d7ddf25acb5cf98286c9703297de675d01ba73fbfe6bcb841c', 1]
+        })
       })
 
       it('by index without verbose', () => {
-        return Query.getBlock(1, 0)
-          .execute(DEFAULT_RPC.TEST)
-          .then((res) => {
-            res.result.should.be.a('string')
-          })
+        Query.getBlock(1, 0).req.should.eql({
+          id: 1234,
+          jsonrpc: '2.0',
+          method: 'getblock',
+          params: [1, 0]
+        })
       })
     })
 
     it('getBestBlockHash', () => {
-      return Query.getBestBlockHash()
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.be.a('string')
-        })
+      Query.getBestBlockHash().req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getbestblockhash',
+        params: []
+      })
     })
 
     it('getBlockCount', () => {
-      return Query.getBlockCount()
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.be.a('number')
-        })
+      Query.getBlockCount().req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getblockcount',
+        params: []
+      })
     })
 
     it('getBlockSysFee', () => {
-      return Query.getBlockSysFee(1)
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.be.a('string')
-        })
+      Query.getBlockSysFee(1).req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getblocksysfee',
+        params: [1]
+      })
     })
 
     it('getConnectionCount', () => {
-      return Query.getConnectionCount()
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.be.a('number')
-        })
+      Query.getConnectionCount().req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getconnectioncount',
+        params: []
+      })
     })
 
     it('getContractState', () => {
-      return Query.getContractState(CONTRACTS.TEST_RPX)
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.have.any.keys([
-            'version',
-            'hash',
-            'script'
-          ])
-        })
+      Query.getContractState(CONTRACTS.TEST_RPX).req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getcontractstate',
+        params: [CONTRACTS.TEST_RPX]
+      })
     })
 
     it('getPeers', () => {
-      return Query.getPeers()
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.have.all.keys([
-            'unconnected',
-            'connected',
-            'bad'
-          ])
-        })
+      Query.getPeers().req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getpeers',
+        params: []
+      })
     })
 
     it('getRawMemPool', () => {
-      return Query.getRawMemPool()
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.be.a('array')
-        })
+      Query.getRawMemPool().req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getrawmempool',
+        params: []
+      })
     })
 
     describe('getRawTransaction', function () {
       it('verbose', () => {
-        return Query.getRawTransaction('7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3')
-          .execute(DEFAULT_RPC.TEST)
-          .then((res) => {
-            res.result.should.have.all.keys([
-              'txid',
-              'size',
-              'type',
-              'version',
-              'attributes',
-              'vin',
-              'vout',
-              'sys_fee',
-              'net_fee',
-              'scripts',
-              'blockhash',
-              'confirmations',
-              'blocktime'
-            ])
-          })
+        Query.getRawTransaction('7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3').req.should.eql({
+          id: 1234,
+          jsonrpc: '2.0',
+          method: 'getrawtransaction',
+          params: ['7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3', 1]
+        })
       })
 
       it('non-verbose', () => {
-        return Query.getRawTransaction('7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3', 0)
-          .execute(DEFAULT_RPC.TEST)
-          .then((res) => {
-            res.result.should.be.a('string')
-          })
+        Query.getRawTransaction('7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3', 0).req.should.eql({
+          id: 1234,
+          jsonrpc: '2.0',
+          method: 'getrawtransaction',
+          params: ['7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3', 0]
+        })
       })
     })
 
     it('getStorage', () => {
       // RPX Test contract stores data by reversed scripthash
-      return Query.getStorage(CONTRACTS.TEST_RPX, '9847e26135152874355e324afd5cc99f002acb33')
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          // Data format is a Fixed8 string
-          res.result.should.be.a('string')
-        })
+      Query.getStorage(CONTRACTS.TEST_RPX, '9847e26135152874355e324afd5cc99f002acb33').req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getstorage',
+        params: [CONTRACTS.TEST_RPX, '9847e26135152874355e324afd5cc99f002acb33']
+      })
     })
 
-    it('getTxOut (Unspent)', () => {
-      return Query.getTxOut('7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3', 0)
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.have.all.keys([
-            'n',
-            'asset',
-            'value',
-            'address'
-          ])
-        })
-    })
-
-    it('getTxOut (Spent)', () => {
-      return Query.getTxOut('7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3', 1)
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.equal(null)
-        })
+    it('getTxOut', () => {
+      Query.getTxOut('7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3', 0).req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'gettxout',
+        params: ['7772761db659270d8859a9d5084ec69d49669bba574881eb4c67d7035792d1d3', 0]
+      })
     })
 
     it('getVersion', () => {
-      return true
-      // Currently not implemented
-      // Query.getVersion()
-      //   .execute(DEFAULT_RPC.TEST)
-      //   .then((res) => {
-
-      //   })
+      Query.getVersion().req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getversion',
+        params: []
+      })
     })
 
     describe('invoke', () => {
       it('simple', () => {
-        return Query.invoke(CONTRACTS.TEST_RPX, ContractParam.string('name'), ContractParam.boolean(false))
-          .execute(DEFAULT_RPC.TEST)
-          .then((res) => {
-            res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
-            res.result.state.should.equal('HALT, BREAK')
-            res.result.stack[0].value.should.equal('5265642050756c736520546f6b656e20332e312e34')
-          })
+        return Query.invoke(CONTRACTS.TEST_RPX, ContractParam.string('name'), ContractParam.boolean(false)).req.should.eql({
+          id: 1234,
+          jsonrpc: '2.0',
+          method: 'invoke',
+          params: [
+            '5b7074e873973a6ed3708862f219a6fbf4d1c411',
+            [
+              {
+                type: 'String',
+                value: 'name'
+              },
+              {
+                type: 'Boolean',
+                value: false
+              }
+            ]
+          ]
+        })
       })
 
       it('complex', () => {
-        return Query.invoke(CONTRACTS.TEST_RPX, ContractParam.string('balanceOf'), ContractParam.array(ContractParam.byteArray('AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx', 'address')))
-          .execute(DEFAULT_RPC.TEST)
-          .then((res) => {
-            res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
-            res.result.state.should.equal('HALT, BREAK')
-          })
+        Query.invoke(CONTRACTS.TEST_RPX, ContractParam.string('balanceOf'), ContractParam.array(ContractParam.byteArray('AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx', 'address'))).req.should.eql({
+          id: 1234,
+          jsonrpc: '2.0',
+          method: 'invoke',
+          params: [
+            '5b7074e873973a6ed3708862f219a6fbf4d1c411',
+            [
+              {
+                type: 'String',
+                value: 'balanceOf'
+              },
+              {
+                type: 'Array',
+                value: [
+                  {
+                    type: 'ByteArray',
+                    value: '9847e26135152874355e324afd5cc99f002acb33'
+                  }
+                ]
+              }
+            ]
+          ]
+        })
       })
     })
 
     it('invokeFunction', () => {
-      return Query.invokeFunction(CONTRACTS.TEST_RPX, 'name')
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
-          res.result.state.should.equal('HALT, BREAK')
-          res.result.stack[0].value.should.equal('5265642050756c736520546f6b656e20332e312e34')
-        })
+      return Query.invokeFunction(CONTRACTS.TEST_RPX, 'name').req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'invokefunction',
+        params: [CONTRACTS.TEST_RPX, 'name', []]
+      })
     })
 
     it('invokeScript', () => {
-      return Query.invokeScript('00c1046e616d656711c4d1f4fba619f2628870d36e3a9773e874705b')
-        .execute(DEFAULT_RPC.TEST)
-        .then((res) => {
-          res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
-          res.result.state.should.equal('HALT, BREAK')
-          res.result.stack[0].value.should.equal('5265642050756c736520546f6b656e20332e312e34')
-        })
+      return Query.invokeScript('00c1046e616d656711c4d1f4fba619f2628870d36e3a9773e874705b').req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'invokescript',
+        params: ['00c1046e616d656711c4d1f4fba619f2628870d36e3a9773e874705b']
+      })
     })
 
     it('sendRawTransaction')
     it('submitBlock')
-    describe('validateAddress', function () {
-      it('returns true for valid address', () => {
-        return Query.validateAddress(testKeys.a.address)
-          .execute(DEFAULT_RPC.TEST)
-          .then((res) => {
-            res.result.isvalid.should.equal(true)
-          })
-      })
-
-      it('returns false for invalid address', () => {
-        return Query.validateAddress('abcdefg')
-          .execute(DEFAULT_RPC.TEST)
-          .then((res) => {
-            res.result.isvalid.should.equal(false)
-          })
+    it('validateAddress', () => {
+      Query.validateAddress(testKeys.a.address).req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'validateaddress',
+        params: [testKeys.a.address]
       })
     })
   })
