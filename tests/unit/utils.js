@@ -200,11 +200,13 @@ describe('Utils', () => {
     it('throws if not a string', () => {
       (() => fixed82num(1)).should.throw()
     })
-    it('throws if empty string', () => {
-      (() => fixed82num('')).should.throw()
-    })
     it('throws if non-hex string', () => {
       (() => fixed82num('xxx')).should.throw()
+    })
+    it('converts an empty string to zero', () => {
+      const actual = fixed82num('')
+      const expected = 0
+      actual.should.eql(expected)
     })
     it('converts a number to fixed8 hex', () => {
       const actual = fixed82num('00e1f50500000000')
