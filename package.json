@@ -46,7 +46,7 @@
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
     "test:unit": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/unit",
     "test:integration": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/integration",
-    "lint": "./node_modules/.bin/concurrently \"sh node_modules/.bin/eslint ./src/**/*.js ./tests/**/*.js\" \"sh node_modules/.bin/flow\"",
+    "lint": "./node_modules/.bin/concurrently \"node node_modules/.bin/eslint ./src/**/*.js ./tests/**/*.js\" \"node node_modules/.bin/flow\"",
     "build:dev": "./node_modules/.bin/webpack --env.dev",
     "build:prod": "./node_modules/.bin/webpack --env.prod",
     "watch:test": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/unit --bail --watch",
