@@ -1,4 +1,4 @@
-/* @flow weak */
+// @flow
 
 import { SHA256, RIPEMD160, enc } from 'crypto-js'
 
@@ -6,14 +6,19 @@ import { SHA256, RIPEMD160, enc } from 'crypto-js'
  * @param {arrayBuffer} buf
  * @returns {string} ASCII string
  */
-export const ab2str = buf =>
-  String.fromCharCode.apply(null, new Uint8Array(buf))
+export const ab2str = (buf: Array<number> | Uint8Array) => {
+  let arrBuf = buf
+  if (!(arrBuf instanceof Uint8Array)) {
+    arrBuf = new Uint8Array(buf)
+  }
+  return String.fromCharCode.apply(null, arrBuf)
+}
 
 /**
  * @param {string} str - ASCII string
  * @returns {arrayBuffer}
  */
-export const str2ab = str => {
+export const str2ab = (str: string): Uint8Array => {
   if (typeof str !== 'string') {
     throw new Error('str2ab expects a string')
   }
@@ -28,11 +33,11 @@ export const str2ab = str => {
  * @param {string} str - HEX string
  * @returns {number[]}
  */
-export const hexstring2ab = str => {
+export const hexstring2ab = (str: string) => {
   if (typeof str !== 'string') {
     throw new Error('hexstring2ab expects a string')
   }
-  if (!str.length) return new Uint8Array()
+  if (!str.length) return new Uint8Array(0)
   const iters = str.length / 2
   const result = new Uint8Array(iters)
   for (let i = 0; i < iters; i++) {
@@ -46,7 +51,7 @@ export const hexstring2ab = str => {
  * @param {arrayBuffer} arr
  * @returns {string} HEX string
  */
-export const ab2hexstring = arr => {
+export const ab2hexstring = (arr: Array<number> | Uint8Array) => {
   if (typeof arr !== 'object') {
     throw new Error('ab2hexstring expects an array')
   }
@@ -65,20 +70,20 @@ export const ab2hexstring = arr => {
  * @param {string} str - ASCII string
  * @returns {string} HEX string
  */
-export const str2hexstring = str => ab2hexstring(str2ab(str))
+export const str2hexstring = (str: string) => ab2hexstring(str2ab(str))
 
 /**
- * @param {string} hexstring - HEX string
+ * @param {string} hex - HEX string
  * @returns {string} ASCII string
  */
-export const hexstring2str = hexstring => ab2str(hexstring2ab(hexstring))
+export const hexstring2str = (hex: string) => ab2str(hexstring2ab(hex))
 
 /**
  * convert an integer to big endian hex and add leading zeros
  * @param {number} num
  * @returns {string}
  */
-export const int2hex = num => {
+export const int2hex = (num: number) => {
   if (typeof num !== 'number') {
     throw new Error('int2hex expects a number')
   }
@@ -93,7 +98,7 @@ export const int2hex = num => {
  * @param {boolean} littleEndian - Encode the hex in little endian form
  * @return {string}
  */
-export const num2hexstring = (num, size = 1, littleEndian = false) => {
+export const num2hexstring = (num: number, size: number = 1, littleEndian: boolean = false) => {
   if (typeof num !== 'number') throw new Error('num must be numeric')
   if (num < 0) throw new RangeError('num is unsigned (>= 0)')
   if (size % 1 !== 0) throw new Error('size must be a whole integer')
@@ -111,7 +116,7 @@ export const num2hexstring = (num, size = 1, littleEndian = false) => {
  * @param {number} size output size in bytes
  * @return {string} number in Fixed8 representation.
  */
-export const num2fixed8 = (num, size = 8) => {
+export const num2fixed8 = (num: number, size: number = 8) => {
   if (typeof num !== 'number') throw new Error('num must be numeric')
   if (size % 1 !== 0) throw new Error('size must be a whole integer')
   return num2hexstring(Math.round(num * Math.pow(10, 8)), size, true)
@@ -122,7 +127,7 @@ export const num2fixed8 = (num, size = 8) => {
  * @param {string} fixed8hex - number in Fixed8 representation
  * @return {number}
  */
-export const fixed82num = (fixed8hex) => {
+export const fixed82num = (fixed8hex: string) => {
   if (typeof fixed8hex !== 'string') throw new Error('fixed8hex must be a string')
   if (!fixed8hex.length || fixed8hex.length % 2 !== 0) throw new Error('fixed8hex must be hex')
   return parseInt(reverseHex(fixed8hex), 16) / Math.pow(10, 8)
@@ -133,7 +138,7 @@ export const fixed82num = (fixed8hex) => {
  * @param {number} num - The number
  * @returns {string} hexstring of the variable Int.
  */
-export const num2VarInt = (num) => {
+export const num2VarInt = (num: number) => {
   if (num < 0xfd) {
     return num2hexstring(num)
   } else if (num <= 0xffff) {
@@ -154,7 +159,7 @@ export const num2VarInt = (num) => {
  * @param {string} str2 - HEX string
  * @returns {string} XOR output as a HEX string
  */
-export const hexXor = (str1, str2) => {
+export const hexXor = (str1: string, str2: string) => {
   if (typeof str1 !== 'string' || typeof str2 !== 'string') throw new Error('hexXor expects hex strings')
   if (str1.length !== str2.length) throw new Error('strings are disparate lengths')
   if (str1.length % 2 !== 0) throw new Error('strings must be hex')
@@ -170,7 +175,7 @@ export const hexXor = (str1, str2) => {
  * @param {Array} arr
  * @returns {Uint8Array}
  */
-export const reverseArray = arr => {
+export const reverseArray = (arr: string) => {
   if (typeof arr !== 'object' || !arr.length) throw new Error('reverseArray expects an array')
   let result = new Uint8Array(arr.length)
   for (let i = 0; i < arr.length; i++) {
@@ -187,7 +192,7 @@ export const reverseArray = arr => {
  * @param {string} hex - HEX string
  * @return {string} HEX string reversed in 2s.
  */
-export const reverseHex = hex => {
+export const reverseHex = (hex: string) => {
   if (typeof hex !== 'string') throw new Error('reverseHex expects a string')
   if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
   let out = ''
@@ -203,7 +208,10 @@ export const reverseHex = hex => {
  * @param {string} str - The string to read as a stream.
  */
 export class StringStream {
-  constructor (str = '') {
+  str: string;
+  pter: number;
+
+  constructor (str: string = '') {
     this.str = str
     this.pter = 0
   }
@@ -221,7 +229,7 @@ export class StringStream {
    * @param {number} bytes - Number of bytes to read
    * @returns {string}
    */
-  read (bytes) {
+  read (bytes: number) {
     if (this.isEmpty()) throw new Error()
     const out = this.str.substr(this.pter, bytes * 2)
     this.pter += bytes * 2
@@ -254,7 +262,7 @@ export class StringStream {
  * @param {string} hex - String to hash
  * @returns {string} hash output
  */
-export const hash160 = (hex) => {
+export const hash160 = (hex: string) => {
   if (typeof hex !== 'string') throw new Error('reverseHex expects a string')
   if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
   let hexEncoded = enc.Hex.parse(hex)
@@ -267,7 +275,7 @@ export const hash160 = (hex) => {
  * @param {string} hex - String to hash
  * @returns {string} hash output
  */
-export const hash256 = (hex) => {
+export const hash256 = (hex: string) => {
   if (typeof hex !== 'string') throw new Error('reverseHex expects a string')
   if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
   let hexEncoded = enc.Hex.parse(hex)
@@ -280,7 +288,7 @@ export const hash256 = (hex) => {
  * @param {string} hex - String to hash
  * @returns {string} hash output
  */
-export const sha256 = (hex) => {
+export const sha256 = (hex: string) => {
   if (typeof hex !== 'string') throw new Error('reverseHex expects a string')
   if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
   let hexEncoded = enc.Hex.parse(hex)
