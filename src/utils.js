@@ -87,13 +87,15 @@ export const int2hex = num => {
 /**
  * Converts a number to a big endian hexstring of a suitable size, optionally little endian
  * @param {number} num
- * @param {number} size - The required size in hex chars, eg 2 for Uint8, 4 for Uint16. Defaults to 2.
+ * @param {number} size - The required size in bytes, eg 1 for Uint8, 2 for Uint16. Defaults to 1.
  * @param {boolean} littleEndian - Encode the hex in little endian form
  * @return {string}
  */
-export const num2hexstring = (num, size = 2, littleEndian = false) => {
+export const num2hexstring = (num, size = 1, littleEndian = false) => {
   if (typeof num !== 'number') throw new Error('num must be numeric')
   if (num < 0) throw new RangeError('num is unsigned (>= 0)')
+  size = size * 2
+  if (size % 2 !== 0) throw new RangeError('size must be a multiple of 2')
   if (!Number.isSafeInteger(num)) throw new RangeError(`num (${num}) must be a safe integer`)
   let hexstring = num.toString(16)
   hexstring = hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length)
@@ -104,11 +106,12 @@ export const num2hexstring = (num, size = 2, littleEndian = false) => {
 /**
  * Converts a number to a Fixed8 format hex string
  * @param {number} num
- * @param {number} size output size in hex chars
+ * @param {number} size output size in bytes
  * @return {string} number in Fixed8 representation.
  */
-export const num2fixed8 = (num, size = 16) => {
+export const num2fixed8 = (num, size = 8) => {
   if (typeof num !== 'number') throw new Error('num must be numeric')
+  if (size % 1 !== 0) throw new Error('size must be a whole integer')
   return num2hexstring(Math.round(num * Math.pow(10, 8)), size, true)
 }
 
@@ -133,13 +136,13 @@ export const num2VarInt = (num) => {
     return num2hexstring(num)
   } else if (num <= 0xffff) {
     // uint16
-    return 'fd' + num2hexstring(num, 4, true)
+    return 'fd' + num2hexstring(num, 2, true)
   } else if (num <= 0xffffffff) {
     // uint32
-    return 'fe' + num2hexstring(num, 8, true)
+    return 'fe' + num2hexstring(num, 4, true)
   } else {
     // uint64
-    return 'ff' + num2hexstring(num, 16, true)
+    return 'ff' + num2hexstring(num, 8, true)
   }
 }
 

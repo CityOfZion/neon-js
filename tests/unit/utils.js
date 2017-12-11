@@ -131,49 +131,49 @@ describe('Utils', () => {
     })
     it('converts a uint16', () => {
       const num = 0xff
-      const actual = num2hexstring(num, 4)
+      const actual = num2hexstring(num, 2)
       const expected = '00ff'
       Number.parseInt(expected, 16).should.eql(num)
       actual.should.eql(expected)
     })
     it('converts a uint16 (max)', () => {
       const num = 0xffff
-      const actual = num2hexstring(num, 4)
+      const actual = num2hexstring(num, 2)
       const expected = 'ffff'
       Number.parseInt(expected, 16).should.eql(num)
       actual.should.eql(expected)
     })
     it('converts a uint32', () => {
       const num = 0x010000
-      const actual = num2hexstring(num, 8)
+      const actual = num2hexstring(num, 4)
       const expected = '00010000'
       Number.parseInt(expected, 16).should.eql(num)
       actual.should.eql(expected)
     })
     it('converts a uint32 (max)', () => {
       const num = 0xffffffff
-      const actual = num2hexstring(num, 8)
+      const actual = num2hexstring(num, 4)
       const expected = 'ffffffff'
       Number.parseInt(expected, 16).should.eql(num)
       actual.should.eql(expected)
     })
     it('converts a uint64', () => {
       const num = 0x0100000000
-      const actual = num2hexstring(num, 16)
+      const actual = num2hexstring(num, 8)
       const expected = '0000000100000000'
       Number.parseInt(expected, 16).should.eql(num)
       actual.should.eql(expected)
     })
     it('converts a uint64 (max)', () => {
       const num = Number.MAX_SAFE_INTEGER
-      const actual = num2hexstring(num, 16) // 0x1fffffffffffff
+      const actual = num2hexstring(num, 8) // 0x1fffffffffffff
       const expected = '001fffffffffffff'
       Number.parseInt(expected, 16).should.eql(num)
       actual.should.eql(expected)
     })
     it('converts a uint64 (max) (little endian)', () => {
       const num = Number.MAX_SAFE_INTEGER
-      const actual = num2hexstring(num, 16, true) // 0x1fffffffffffff
+      const actual = num2hexstring(num, 8, true) // 0x1fffffffffffff
       const expected = 'ffffffffffff1f00'
       Number.parseInt(reverseHex(expected), 16).should.eql(num)
       actual.should.eql(expected)
