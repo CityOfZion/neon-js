@@ -94,9 +94,9 @@ export const int2hex = num => {
 export const num2hexstring = (num, size = 1, littleEndian = false) => {
   if (typeof num !== 'number') throw new Error('num must be numeric')
   if (num < 0) throw new RangeError('num is unsigned (>= 0)')
-  size = size * 2
-  if (size % 2 !== 0) throw new RangeError('size must be a multiple of 2')
+  if (size % 1 !== 0) throw new Error('size must be a whole integer')
   if (!Number.isSafeInteger(num)) throw new RangeError(`num (${num}) must be a safe integer`)
+  size = size * 2
   let hexstring = num.toString(16)
   hexstring = hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length)
   if (littleEndian) hexstring = reverseHex(hexstring)

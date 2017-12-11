@@ -113,6 +113,12 @@ describe('Utils', () => {
     it('throws if negative', () => {
       (() => num2hexstring(-1)).should.throw()
     })
+    it('throws if non-integer', () => {
+      (() => num2hexstring(0.1)).should.throw()
+    })
+    it('throws if non-integer size', () => {
+      (() => num2hexstring(1, 0.1)).should.throw()
+    })
     it('throws if not a number', () => {
       (() => num2hexstring('1')).should.throw()
     })
