@@ -16,7 +16,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           key: neon-{{ checksum "package.json" }}
-      - run: yarn install
+      - run: yarn install --no-lockfile
       - save_cache:
           key: neon-{{ checksum "package.json" }}
           paths:
