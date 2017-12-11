@@ -74,8 +74,8 @@ class ScriptBuilder extends StringStream {
    * @return {ScriptBuilder} this
    */
   _emitParam (param) {
-    if (!param.type) throw new Error(`No type available!`)
-    if (!param.value) throw new Error(`No value available!`)
+    if (!param.type) throw new Error('No type available!')
+    if (!param.value) throw new Error('No value available!')
     switch (param.type) {
       case 'String':
         return this._emitString(str2hexstring(param.value))

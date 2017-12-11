@@ -62,7 +62,7 @@ class Wallet {
    * @return {Account} Account
    */
   get defaultAccount () {
-    if (this.accounts.length === 0) throw new Error(`No accounts available in this Wallet!`)
+    if (this.accounts.length === 0) throw new Error('No accounts available in this Wallet!')
     for (const acct of this.accounts) {
       if (acct.isDefault) return acct
     }
@@ -116,8 +116,8 @@ class Wallet {
    * @return {boolean} Decryption success/failure
    */
   decrypt (index, keyphrase) {
-    if (index < 0) throw new Error(`Index cannot be negative!`)
-    if (index >= this.accounts.length) throw new Error(`Index cannot larger than Accounts array!`)
+    if (index < 0) throw new Error('Index cannot be negative!')
+    if (index >= this.accounts.length) throw new Error('Index cannot larger than Accounts array!')
     try {
       this.accounts[index].decrypt(keyphrase, this.scrypt)
       return true
@@ -144,8 +144,8 @@ class Wallet {
    * @return {boolean} Encryption success/failure
    */
   encrypt (index, keyphrase) {
-    if (index < 0) throw new Error(`Index cannot be negative!`)
-    if (index >= this.accounts.length) throw new Error(`Index cannot larger than Accounts array!`)
+    if (index < 0) throw new Error('Index cannot be negative!')
+    if (index >= this.accounts.length) throw new Error('Index cannot larger than Accounts array!')
     try {
       this.accounts[index].encrypt(keyphrase, this.scrypt)
       return true
@@ -197,7 +197,7 @@ class Wallet {
   writeFile (filepath) {
     return fs.writeFile(filepath, this.export(), (err) => {
       if (err) throw err
-      console.log(`Wallet file written!`)
+      console.log('Wallet file written!')
       return true
     })
   }

@@ -28,7 +28,7 @@ const checkProperty = (obj, ...props) => {
  */
 export const getBalanceFrom = (config, api) => {
   checkProperty(config, 'net', 'address')
-  if (!api.getBalance || !api.getRPCEndpoint) throw new Error(`Invalid type. Is this an API object?`)
+  if (!api.getBalance || !api.getRPCEndpoint) throw new Error('Invalid type. Is this an API object?')
   const balanceP = api.getBalance(config.net, config.address)
   const urlP = api.getRPCEndpoint(config.net)
 
@@ -50,7 +50,7 @@ export const getBalanceFrom = (config, api) => {
  */
 export const getClaimsFrom = (config, api) => {
   checkProperty(config, 'net', 'address')
-  if (!api.getBalance || !api.getRPCEndpoint) throw new Error(`Invalid type. Is this an API object?`)
+  if (!api.getBalance || !api.getRPCEndpoint) throw new Error('Invalid type. Is this an API object?')
   const claimsP = api.getClaims(config.net, config.address)
   // Get URL
   const urlP = api.getRPCEndpoint(config.net)
@@ -111,10 +111,10 @@ export const signTx = (config) => {
     promise = config.signingFunction(config.tx, acct.publicKey)
   } else if (config.privateKey) {
     let acct = new Account(config.privateKey)
-    if (config.address !== acct.address) throw new Error(`Private Key and Balance address does not match!`)
+    if (config.address !== acct.address) throw new Error('Private Key and Balance address does not match!')
     promise = Promise.resolve(config.tx.sign(config.privateKey))
   } else {
-    throw new Error(`Needs privateKey or signingFunction to sign!`)
+    throw new Error('Needs privateKey or signingFunction to sign!')
   }
   return promise.then((signedTx) => {
     return Object.assign(config, { tx: signedTx })

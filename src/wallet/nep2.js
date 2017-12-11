@@ -25,7 +25,7 @@ import { DEFAULT_SCRYPT, NEP_HEADER, NEP_FLAG } from '../consts'
  * @return {Promise<Account>} A Promise returning an Account object.
  */
 export const encryptWifAccount = (wif, passphrase) => {
-  console.log(`To be deprecated in v3. Please use Account.encrypt`)
+  console.log('To be deprecated in v3. Please use Account.encrypt')
   return encryptWIF(wif, passphrase).then((encWif) => {
     const loadAccount = new Account(wif)
     loadAccount.encryptedWif = encWif
@@ -40,7 +40,7 @@ export const encryptWifAccount = (wif, passphrase) => {
  * @return {Promise<Account>} A Promise returning an Account object.
  */
 export const generateEncryptedWif = (passphrase) => {
-  console.log(`To be deprecated in v3. Please use new Account() and encrypt with Account.encrypt`)
+  console.log('To be deprecated in v3. Please use new Account() and encrypt with Account.encrypt')
   const newPrivateKey = generatePrivateKey()
   return encryptWifAccount(newPrivateKey, passphrase)
 }
@@ -96,12 +96,12 @@ export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) 
 // helpers to wrap synchronous functions in promises
 
 export const encryptWIF = (wif, passphrase) => {
-  console.log(`To be deprecated in v3. Please use Account.encrypt`)
+  console.log('To be deprecated in v3. Please use Account.encrypt')
   return Promise.resolve(encrypt(wif, passphrase))
 }
 
 export const decryptWIF = (encrypted, passphrase) => {
-  console.log(`To be deprecated in v3. Please use Account.decrypt`)
+  console.log('To be deprecated in v3. Please use Account.decrypt')
   return Promise.resolve(decrypt(encrypted, passphrase))
 }
 
