@@ -13,7 +13,7 @@ let common = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env'],
+            presets: ['env', 'flow'],
             plugins: [require('babel-plugin-transform-object-rest-spread')]
           }
         }

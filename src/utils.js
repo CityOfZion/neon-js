@@ -1,3 +1,5 @@
+/* @flow weak */
+
 import { SHA256, RIPEMD160, enc } from 'crypto-js'
 
 /**

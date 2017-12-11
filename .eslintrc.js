@@ -1,6 +1,7 @@
 module.exports = {
-  "extends": "standard",
+  "extends": ["standard", "standard-flow"],
   "env": {
+    "es6": true,
     "mocha": true
   },
   "globals": {
