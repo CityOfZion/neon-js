@@ -40,8 +40,8 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
-    "test:unit":"./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/unit",
-    "test:integration":"./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/integration",
+    "test:unit": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/unit",
+    "test:integration": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/integration",
     "lint": "./node_modules/.bin/eslint ./src/**/*.js ./tests/**/*.js",
     "build:dev": "./node_modules/.bin/webpack --env.dev",
     "build:prod": "./node_modules/.bin/webpack --env.prod",

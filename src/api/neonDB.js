@@ -2,7 +2,8 @@ import axios from 'axios'
 import { Account, Balance } from '../wallet'
 import { Transaction } from '../transactions'
 import { Query } from '../rpc'
-import { ASSET_ID } from '../consts'
+import { ASSET_ID, TRANSACTION_ATTRIBUTE_USAGE_SCRIPT } from '../consts'
+import { reverseHex } from '../utils'
 
 /**
  * API Switch for MainNet and TestNet
@@ -148,15 +149,27 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
     .then((values) => {
       endpt = values[0]
       let balances = values[1]
-      const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { version: 1 })
+      const attributes = [{
+        data: reverseHex(scriptHash),
+        usage: Number.parseInt(TRANSACTION_ATTRIBUTE_USAGE_SCRIPT, 16)
+      }]
+      const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { attributes, version: 1 })
       if (signingFunction) {
         return signingFunction(unsignedTx, account.publicKey)
       } else {
-        unsignedTx.sign(account.privateKey)
+        return unsignedTx.sign(account.privateKey)
       }
     })
     .then((signedResult) => {
       signedTx = signedResult
+      return Query.getContractState(scriptHash).execute(endpt)
+    })
+    .then((contractState) => {
+      const attatchInvokedContract = {
+        invocationScript: '0000',
+        verificationScript: contractState.result.script
+      }
+      signedTx.scripts.push(attatchInvokedContract)
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
     .then((res) => {
