@@ -6,17 +6,23 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:7.10
+    - image: circleci/node:8.9.3
 version: 2
 jobs:
   build:
     <<: *defaults
     steps:
+      - run:
+          name: "Versions"
+          command: |
+            node --version
+            npm --version
+            yarn --version
       - checkout
       # Download and cache dependencies
       - restore_cache:
           key: neon-{{ checksum "package.json" }}
-      - run: yarn install
+      - run: npm install
       - save_cache:
           key: neon-{{ checksum "package.json" }}
           paths:
@@ -27,14 +33,14 @@ jobs:
       - checkout
       - restore_cache:
           key: neon-{{ checksum "package.json" }}
-      - run: yarn test
+      - run: npm run test:integration
   unit-test:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
           key: neon-{{ checksum "package.json" }}
-      - run: yarn test:unit
+      - run: npm run test:unit
 
 workflows:
   version: 2
