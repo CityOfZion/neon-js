@@ -6,12 +6,18 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:7.10
+    - image: circleci/node:8.9.3
 version: 2
 jobs:
   build:
     <<: *defaults
     steps:
+      - run:
+          name: "Versions"
+          command: |
+            node --version
+            npm --version
+            yarn --version
       - checkout
       # Download and cache dependencies
       - restore_cache:
