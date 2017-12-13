@@ -980,6 +980,47 @@
           ]
         }
       }
+    },
+    "getTokenZero": {
+      "url": "http://seed1.neo.org:20332",
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "invokescript",
+        "params": [
+          "00046e616d656754a64cac1b1073e662933ef3e30b007cd98d67d7000673796d626f6c6754a64cac1b1073e662933ef3e30b007cd98d67d70008646563696d616c736754a64cac1b1073e662933ef3e30b007cd98d67d7000b746f74616c537570706c796754a64cac1b1073e662933ef3e30b007cd98d67d71435b20010db73bf86371075ddfba4e6596f1ff35d51c10962616c616e63654f666754a64cac1b1073e662933ef3e30b007cd98d67d7"
+        ],
+        "id": 1234
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {
+          "state": "HALT, BREAK",
+          "gas_consumed": "1.34",
+          "stack": [
+            {
+              "type": "ByteArray",
+              "value": "4c4f43414c544f4b454e"
+            },
+            {
+              "type": "ByteArray",
+              "value": "4c575446"
+            },
+            {
+              "type": "Integer",
+              "value": "8"
+            },
+            {
+              "type": "ByteArray",
+              "value": "00305d8e74ce00"
+            },
+            {
+              "type": "ByteArray",
+              "value": ""
+            }
+          ]
+        }
+      }
     }
   },
   "core": {

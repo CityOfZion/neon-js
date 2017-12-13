@@ -122,7 +122,8 @@ export const num2fixed8 = (num, size = 8) => {
  */
 export const fixed82num = (fixed8hex) => {
   if (typeof fixed8hex !== 'string') throw new Error('fixed8hex must be a string')
-  if (!fixed8hex.length || fixed8hex.length % 2 !== 0) throw new Error('fixed8hex must be hex')
+  if (fixed8hex.length % 2 !== 0) throw new Error('fixed8hex must be hex')
+  if (fixed8hex === '') return 0
   return parseInt(reverseHex(fixed8hex), 16) / Math.pow(10, 8)
 }
 
