@@ -18,7 +18,7 @@ export const getPrice = (coin = 'NEO', currency = 'usd') => {
         if (data.error) throw new Error(data.error)
         const price = data[0][`price_${currency.toLowerCase()}`]
         if (price) return parseFloat(price)
-        else throw new Error(`Something went wrong with the CoinMarketCap API!`)
+        else throw new Error('Something went wrong with the CoinMarketCap API!')
       })
   } else {
     return Promise.reject(new ReferenceError(`${currency} is not one of the accepted currencies!`))

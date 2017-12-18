@@ -25,6 +25,6 @@ describe('coinmarketcap', function () {
   })
 
   it('rejects Promise when given unknown coin', () => {
-    return CMC.getPrice('NEON').should.eventually.be.rejectedWith(Error, `id not found`)
+    return CMC.getPrice('NEON').should.eventually.be.rejectedWith(Error, 'id not found')
   })
 })

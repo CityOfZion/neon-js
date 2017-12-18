@@ -55,7 +55,7 @@ class Account {
     if (this._encrypted) {
       return this._encrypted
     } else {
-      throw new Error(`No encrypted key found`)
+      throw new Error('No encrypted key found')
     }
   }
 
@@ -161,7 +161,7 @@ class Account {
    */
   export () {
     let key = null
-    if (this._privateKey && !this._encrypted) throw new Error(`Encrypt private key first!`)
+    if (this._privateKey && !this._encrypted) throw new Error('Encrypt private key first!')
     if (this._encrypted) key = this._encrypted
     return {
       address: this.address,
