@@ -2,8 +2,9 @@ import axios from 'axios'
 import { Account, Balance } from '../wallet'
 import { Transaction } from '../transactions'
 import { Query } from '../rpc'
-import { ASSET_ID, TRANSACTION_ATTRIBUTE_USAGE_SCRIPT } from '../consts'
+import { ASSET_ID } from '../consts'
 import { reverseHex } from '../utils'
+import { txAttrUsage } from '../transactions/txAttrUsage'
 
 /**
  * API Switch for MainNet and TestNet
@@ -151,7 +152,7 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
       let balances = values[1]
       const attributes = [{
         data: reverseHex(scriptHash),
-        usage: Number.parseInt(TRANSACTION_ATTRIBUTE_USAGE_SCRIPT, 16)
+        usage: txAttrUsage.Script
       }]
       const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { attributes, version: 1 })
       if (signingFunction) {
@@ -165,11 +166,11 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
       return Query.getContractState(scriptHash).execute(endpt)
     })
     .then((contractState) => {
-      const attatchInvokedContract = {
+      const attachInvokedContract = {
         invocationScript: '0000',
         verificationScript: contractState.result.script
       }
-      signedTx.scripts.push(attatchInvokedContract)
+      signedTx.scripts.push(attachInvokedContract)
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
     .then((res) => {

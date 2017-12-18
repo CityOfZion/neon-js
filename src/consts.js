@@ -57,5 +57,3 @@ export const TX_VERSION = {
   'CONTRACT': 0,
   'INVOCATION': 1
 }
-
-export const TRANSACTION_ATTRIBUTE_USAGE_SCRIPT = '0x20'

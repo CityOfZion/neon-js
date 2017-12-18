@@ -123,22 +123,4 @@ describe('NeonDB', function () {
     privNet.should.equal(customEndpoint)
     done()
   })
-
-  // add data to mock file for testing later. for now needs to turn off before and after test callbacks.
-  it.skip('should mint tokens', done => {
-    const net = 'TestNet'
-    const scriptHash = 'd7678dd97c000be3f33e9362e673101bac4ca654'
-    const neo = 1
-    const gasCost = 0
-    return neonDB.doMintTokens(net, scriptHash, testKeys.a.wif, neo, gasCost, null)
-      .then((response) => {
-        response.should.have.property('result', true)
-        done()
-      })
-      .catch((e) => {
-        console.log(e)
-        throw e
-      })
-  })
-
 })

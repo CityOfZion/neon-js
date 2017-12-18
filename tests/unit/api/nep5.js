@@ -73,14 +73,4 @@ describe('NEP5', function () {
         })
     })
   })
-
-  it.skip('transfers tokens using neonDB', () => {
-    const testNet = 'TestNet'
-    const transferAmount = 1
-    const gasCost = 0
-    return NEP5.doTransferToken(testNet, scriptHash, testKeys.c.address, testKeys.a.address, transferAmount, gasCost)
-      .then(({ result }) => {
-        result.should.equal(true)
-      })
-  })
 })
