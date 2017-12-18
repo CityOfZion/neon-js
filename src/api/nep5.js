@@ -110,11 +110,11 @@ export const doTransferToken = (net, scriptHash, fromWif, toAddress, transferAmo
       endpt = values[0]
       const balances = values[1]
       const fromAddrScriptHash = getScriptHashFromAddress(account.address)
+      const toAddrScriptHash = reverseHex(getScriptHashFromAddress(toAddress))
       const intents = [
         { assetId: ASSET_ID.GAS, value: 0.00000001, scriptHash: fromAddrScriptHash }
       ]
-      const toAddrScriptHash = reverseHex(getScriptHashFromAddress(toAddress))
-      const invoke = { scriptHash, operation: 'transfer', args: [fromAddrScriptHash, toAddrScriptHash, transferAmount] }
+      const invoke = { scriptHash, operation: 'transfer', args: [reverseHex(fromAddrScriptHash), toAddrScriptHash, transferAmount] }
       const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { version: 1 })
       if (signingFunction) {
         return signingFunction(unsignedTx, account.publicKey)
