@@ -60,6 +60,18 @@ describe('NEP5', function () {
           result.balance.should.be.above(0)
         })
     })
+
+    it('get info and balance of zero', () => {
+      return NEP5.getToken(url, scriptHash, testKeys.b.address)
+        .then(result => {
+          result.should.have.keys(['name', 'symbol', 'decimals', 'totalSupply', 'balance'])
+          result.name.should.equal('LOCALTOKEN')
+          result.symbol.should.equal('LWTF')
+          result.decimals.should.equal(8)
+          result.totalSupply.should.least(1969000)
+          result.balance.should.equal(0)
+        })
+    })
   })
 
   it.skip('transfers tokens using neonDB', () => {

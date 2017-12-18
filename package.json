@@ -25,7 +25,7 @@
   },
   "name": "@cityofzion/neon-js",
   "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "main": "lib/index.js",
   "browser": "lib/browser.js",
   "types": "src/index.d.ts",
@@ -54,7 +54,7 @@
     "build:docs": "cd source && sphinx-versioning -g ../ -l ./conf.py build source ../docs",
     "deploy:docs": "cd source && sphinx-versioning -g ../ -l ./conf.py push source gh-pages .",
     "rebuild": "rm -rf ./node_modules && npm install && ./node_modules/.bin/webpack",
-    "prepublish": "npm run lint && npm run build:prod"
+    "prepublishOnly": "npm run lint && npm run build:prod"
   },
   "repository": {
     "type": "git",
@@ -71,5 +71,9 @@
   "bugs": {
     "url": "https://github.com/CityOfZion/neon-js/issues"
   },
-  "homepage": "https://github.com/CityOfZion/neon-js#readme"
+  "homepage": "https://github.com/CityOfZion/neon-js#readme",
+  "files": [
+    "lib/",
+    "src/"
+  ]
 }
