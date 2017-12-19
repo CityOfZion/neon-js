@@ -4,6 +4,16 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
+2.2.2
+=====
+
+- Fix ``nep5/doTransferToken``
+
+2.2.1
+=====
+
+-Fix ``fixed82num`` not accepting empty string
+
 2.2.0
 =====
 
