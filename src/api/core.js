@@ -4,6 +4,8 @@ import { Account } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Query } from '../rpc'
 import { Transaction } from '../transactions'
+import { reverseHex } from '../utils'
+import { txAttrUsage } from '../transactions/txAttrUsage'
 
 /**
  * Check that properties are defined in obj.
@@ -86,7 +88,14 @@ export const createTx = (config, txType) => {
     case 209:
       checkProperty(config, 'balance', 'gas', 'script')
       if (!config.intents) config.intents = []
-      tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas)
+      const override = {}
+      if ((typeof config.script === 'object') && config.script.operation === 'mintTokens') {
+        override.attributes = [{
+          data: reverseHex(scriptHash),
+          usage: txAttrUsage.Script
+        }]
+      }
+      tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas, override)
       break
     default:
       throw new Error(`Tx Type not found: ${txType}`)
@@ -201,6 +210,26 @@ export const claimGas = (config) => {
 }
 
 /**
+ * Adds the contractState to mintTokens invocations.
+ * @param {object} config - Configuration object.
+ * @return {object} Configuration object.
+ */
+const attachInvokedContract = (config) => {
+  if ((typeof config.script === 'object') && config.script.operation === 'mintTokens') {
+    return Query.getContractState(scriptHash).execute(endpt)
+      .then((contractState) => {
+        const attachInvokedContract = {
+          invocationScript: '0000',
+          verificationScript: contractState.result.script
+        }
+        config.tx.scripts.push(attachInvokedContract)
+        return config
+      })
+  }
+  return config
+}
+
+/**
  * Perform a InvocationTransaction based on config given.
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
@@ -220,5 +249,6 @@ export const doInvoke = (config) => {
     )
     .then((c) => createTx(c, 'invocation'))
     .then((c) => signTx(c))
+    .then((c) => attachInvokedContract(c))
     .then((c) => sendTx(c))
 }

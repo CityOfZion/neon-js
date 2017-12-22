@@ -20,11 +20,10 @@ describe('Integration: API NEP5', function () {
     })
   })
 
-  it('doTransferToken', () => {
-    const testNet = 'TestNet'
+  it.skip('doTransferToken', () => {
     const transferAmount = 1
     const gasCost = 0
-    return NEP5.doTransferToken(testNet, scriptHash, testKeys.c.wif, testKeys.b.address, transferAmount, gasCost)
+    return NEP5.doTransferToken(NEO_NETWORK.TEST, scriptHash, testKeys.c.wif, testKeys.b.address, transferAmount, gasCost)
       .then(({ result, txid }) => {
         result.should.equal(true)
         console.log(txid)

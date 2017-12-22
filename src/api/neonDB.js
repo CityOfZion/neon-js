@@ -154,7 +154,7 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
         data: reverseHex(scriptHash),
         usage: txAttrUsage.Script
       }]
-      const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { attributes, version: 1 })
+      const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { attributes })
       if (signingFunction) {
         return signingFunction(unsignedTx, account.publicKey)
       } else {
