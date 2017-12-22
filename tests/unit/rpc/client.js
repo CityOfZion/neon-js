@@ -92,7 +92,7 @@ describe('RPC Client', function () {
       return client.getBestBlockHash()
         .should.eventually.be.rejected
         .then((err) => {
-          err.message.should.include(`timeout`)
+          err.message.should.include('timeout')
         })
     })
 
@@ -108,7 +108,7 @@ describe('RPC Client', function () {
       return client.query({ method: 'getweird' })
         .should.eventually.be.rejected
         .then((err) => {
-          err.message.should.equal(`Method not found`)
+          err.message.should.equal('Method not found')
         })
     })
 
@@ -117,7 +117,7 @@ describe('RPC Client', function () {
       return client.invokeScript('ababab')
         .should.eventually.be.rejected
         .then((err) => {
-          err.message.should.include(`implemented`)
+          err.message.should.include('implemented')
         })
     })
   })

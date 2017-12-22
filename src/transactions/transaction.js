@@ -104,7 +104,7 @@ class Transaction {
    * @return {Transaction} Unsigned Transaction
    */
   static createContractTx (balances, intents, override = {}) {
-    if (intents === null) throw new Error(`Useless transaction!`)
+    if (intents === null) throw new Error('Useless transaction!')
     const txConfig = Object.assign({
       type: 128,
       version: TX_VERSION.CONTRACT,
@@ -157,7 +157,7 @@ class Transaction {
       this.outputs.push(comp.createTransactionOutput(assetSymOrTxOut, value, address))
     } else if (typeof (arguments[0]) === 'object') {
       this.outputs.push(arguments[0])
-    } else throw new Error(`Invalid input given! Give either 1 or 3 arguments!`)
+    } else throw new Error('Invalid input given! Give either 1 or 3 arguments!')
   }
 
   /**

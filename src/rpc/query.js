@@ -43,7 +43,7 @@ class Query {
    * @return {Response|any}
    */
   execute (url) {
-    if (this.completed) throw new Error(`This request has been sent`)
+    if (this.completed) throw new Error('This request has been sent')
     return queryRPC(url, this.req)
       .then((res) => {
         this.res = res
