@@ -88,14 +88,7 @@ export const createTx = (config, txType) => {
     case 209:
       checkProperty(config, 'balance', 'gas', 'script')
       if (!config.intents) config.intents = []
-      const override = {}
-      if ((typeof config.script === 'object') && config.script.operation === 'mintTokens') {
-        override.attributes = [{
-          data: reverseHex(scriptHash),
-          usage: txAttrUsage.Script
-        }]
-      }
-      tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas, override)
+      tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas, config.override)
       break
     default:
       throw new Error(`Tx Type not found: ${txType}`)
@@ -210,13 +203,29 @@ export const claimGas = (config) => {
 }
 
 /**
+ * Adds attributes to the override object for mintTokens invocations.
+ * @param {object} config - Configuration object.
+ * @return {object} Configuration object.
+ */
+const addAttributes = (config) => {
+  if (!config.override) config.override = {}
+  if ((typeof config.script === 'object') && config.script.operation === 'mintTokens' && config.script.scriptHash) {
+    config.override.attributes = [{
+      data: reverseHex(config.script.scriptHash),
+      usage: txAttrUsage.Script
+    }]
+  }
+  return config
+}
+
+/**
  * Adds the contractState to mintTokens invocations.
  * @param {object} config - Configuration object.
  * @return {object} Configuration object.
  */
 const attachInvokedContract = (config) => {
-  if ((typeof config.script === 'object') && config.script.operation === 'mintTokens') {
-    return Query.getContractState(scriptHash).execute(endpt)
+  if ((typeof config.script === 'object') && config.script.operation === 'mintTokens' && config.script.scriptHash) {
+    return Query.getContractState(config.script.scriptHash).execute(config.url)
       .then((contractState) => {
         const attachInvokedContract = {
           invocationScript: '0000',
@@ -247,6 +256,7 @@ export const doInvoke = (config) => {
     (c) => c,
     () => getBalanceFrom(config, neoscan)
     )
+    .then((c) => addAttributes(c))
     .then((c) => createTx(c, 'invocation'))
     .then((c) => signTx(c))
     .then((c) => attachInvokedContract(c))
