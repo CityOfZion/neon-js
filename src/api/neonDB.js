@@ -141,7 +141,7 @@ export const doClaimAllGas = (net, privateKey, signingFunction) => {
 export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunction) => {
   const account = new Account(fromWif)
   const intents = [{ assetId: ASSET_ID.NEO, value: neo, scriptHash: scriptHash }]
-  const invoke = { operation: 'mintTokens', scriptHash }
+  const invoke = { operation: 'mintTokens', scriptHash, args: [] }
   const rpcEndpointPromise = getRPCEndpoint(net)
   const balancePromise = getBalance(net, account.address)
   let signedTx
@@ -170,7 +170,7 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
         invocationScript: '0000',
         verificationScript: contractState.result.script
       }
-      signedTx.scripts.push(attachInvokedContract)
+      signedTx.scripts.unshift(attachInvokedContract)
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
     .then((res) => {

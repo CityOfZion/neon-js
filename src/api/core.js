@@ -231,7 +231,7 @@ const attachInvokedContract = (config) => {
           invocationScript: '0000',
           verificationScript: contractState.result.script
         }
-        config.tx.scripts.push(attachInvokedContract)
+        config.tx.scripts.unshift(attachInvokedContract)
         return config
       })
   }
@@ -246,7 +246,7 @@ const attachInvokedContract = (config) => {
  * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
  * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
  * @param {object} [intents] - Intents
- * @param {string} config.script - VM script.
+ * @param {string} config.script - VM script. Must include empty args parameter even if no args are present
  * @param {number} config.gas - gasCost of VM script.
  * @return {object} Configuration object.
  */
