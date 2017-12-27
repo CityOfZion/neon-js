@@ -4,6 +4,24 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
+2.3.0
+=====
+
+- Add OpCodes APPEND and REVERSE
+- Add docs build information to readme
+- update parsing of ``api/getToken`` to include case of empty string for parsing the ``decimals`` field
+- Update ``doMintToken`` to include extra information required
+
+2.2.2
+=====
+
+- Fix ``nep5/doTransferToken``
+
+2.2.1
+=====
+
+-Fix ``fixed82num`` not accepting empty string
+
 2.2.0
 =====
 

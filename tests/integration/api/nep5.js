@@ -18,6 +18,14 @@ describe('Integration: API NEP5', function () {
           result.balance.should.be.above(0)
         })
     })
+
+    it('should parse 0 decimals correctly', () => {
+      return NEP5.getToken(DEFAULT_RPC.TEST, '400cbed5b41014788d939eaf6286e336e7140f8c')
+      .then(result => {
+        result.should.have.keys(['name', 'symbol', 'decimals', 'totalSupply', 'balance'])
+        result.decimals.should.equal(0)
+      })
+    })
   })
 
   it.skip('doTransferToken', () => {

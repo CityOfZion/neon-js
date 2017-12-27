@@ -2,6 +2,7 @@ import Tx from './transaction'
 import * as core from './core'
 import * as comp from './components'
 import * as e from './exclusive'
+import TxAttrUsage from './txAttrUsage'
 
 /**
  * NEO's default Endianness from RPC calls is Little Endian.
@@ -47,7 +48,7 @@ export default {
   }
 }
 
-export { Tx as Transaction }
+export { Tx as Transaction, TxAttrUsage }
 export * from './core'
 export * from './components'
 export * from './exclusive'

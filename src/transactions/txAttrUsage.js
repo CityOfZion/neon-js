@@ -3,7 +3,7 @@
  * @readonly
  * @enum {number}
  */
-export const txAttrUsage = {
+const txAttrUsage = {
   ContractHash: 0,
   ECDH02: 2,
   ECDH03: 3,
@@ -43,3 +43,5 @@ export const txAttrUsage = {
   Remark14: 254,
   Remark15: 255
 }
+
+export default txAttrUsage

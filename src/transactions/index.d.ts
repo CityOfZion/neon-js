@@ -111,6 +111,8 @@ declare module '@cityofzion/neon-js' {
       static createContractTx(balances: Balance, intents: TransactionOutput[], override: object): Transaction
       static createInvocationTx(balance: Balance, intents: TransactionOutput[], invoke: object | string, gasCost: number, override: object): Transaction
     }
+
+    export enum TxAttrUsage {}
   }
 
   export interface semantic {

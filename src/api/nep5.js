@@ -6,9 +6,17 @@ import { getRPCEndpoint, getBalance } from './neonDB'
 import { Transaction } from '../transactions'
 import { ASSET_ID } from '../consts'
 
-const parseTokenInfo = VMZip(hexstring2str, hexstring2str, parseInt, fixed82num)
+/**
+ * Parses the VM output for decimals. The VM returns an integer for most cases but it can be an empty string for zero.
+ */
+const parseDecimals = (VMOutput) => {
+  if (VMOutput === '') return 0
+  return parseInt(VMOutput, 10)
+}
 
-const parseTokenInfoAndBalance = VMZip(hexstring2str, hexstring2str, parseInt, fixed82num, fixed82num)
+const parseTokenInfo = VMZip(hexstring2str, hexstring2str, parseDecimals, fixed82num)
+
+const parseTokenInfoAndBalance = VMZip(hexstring2str, hexstring2str, parseDecimals, fixed82num, fixed82num)
 
 /**
  * Queries for NEP5 Token information.

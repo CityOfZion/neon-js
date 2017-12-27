@@ -1,3 +1,6 @@
+///<reference path="../rpc/index.d.ts" />
+///<reference path="../transactions/index.d.ts" />
+
 declare module '@cityofzion/neon-js' {
   interface apiConfig {
     net: string,
@@ -107,8 +110,9 @@ declare module '@cityofzion/neon-js' {
 
     //nep5
     export namespace nep5 {
-      export function getTokenInfo(net: string, scriptHash: string): Promise<{ name: string, symbol: string, decimals: number, totalSupply: number }>
-      export function getTokenBalance(net: string, scriptHash: string, address: string): Promise<number>
+      export function getTokenInfo(url: string, scriptHash: string): Promise<{ name: string, symbol: string, decimals: number, totalSupply: number }>
+      export function getTokenBalance(url: string, scriptHash: string, address: string): Promise<number>
+      export function getToken(url: string, scriptHash: string, address?: string): Promise<object>
       export function doTransferToken(
         net: string,
         scriptHash: string,
