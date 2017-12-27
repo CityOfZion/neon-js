@@ -99,9 +99,12 @@ A straightforward call to CoinMarketCap API to retrieve the latest price informa
   import Neon from '@cityofzion/neon-js'
   Neon.get.price('NEO', 'EUR')
   Neon.get.price('GAS') // defaults to USD
+  Neon.get.prices(['NEO', 'GAS'], 'EUR')
+  Neon.get.prices(['NEO', 'GAS']) // defaults to USD
 
   import { api } from '@cityofzion/neon-js'
   api.cmc.getPrice('NEO', 'SGD')
+  api.cmc.getPrices(['NEO', 'GAS'], 'SGD')
 
 NEP5
 -----
