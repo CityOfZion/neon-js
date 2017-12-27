@@ -44,6 +44,15 @@ npm run build:dev
 npm run test
 ```
 
+### Docs
+
+```bash
+# Make sure you have python and pip
+$ sudo -H pip install 'sphinx>=1.5,<1.6' sphinxcontrib-versioning sphinx_rtd_theme
+$ sudo -H npm i -g jsdoc
+$ npm run build:docs
+```
+
 ### Typescript
 
 The typescript declaration files are included _(no need of any @types/...)_.
