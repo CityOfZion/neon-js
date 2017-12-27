@@ -3,6 +3,8 @@ import { Account, Balance } from '../wallet'
 import { Transaction } from '../transactions'
 import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
+import { reverseHex } from '../utils'
+import { txAttrUsage } from '../transactions/txAttrUsage'
 
 /**
  * API Switch for MainNet and TestNet
@@ -139,7 +141,7 @@ export const doClaimAllGas = (net, privateKey, signingFunction) => {
 export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunction) => {
   const account = new Account(fromWif)
   const intents = [{ assetId: ASSET_ID.NEO, value: neo, scriptHash: scriptHash }]
-  const invoke = { operation: 'mintTokens', scriptHash }
+  const invoke = { operation: 'mintTokens', scriptHash, args: [] }
   const rpcEndpointPromise = getRPCEndpoint(net)
   const balancePromise = getBalance(net, account.address)
   let signedTx
@@ -148,15 +150,27 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
     .then((values) => {
       endpt = values[0]
       let balances = values[1]
-      const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { version: 1 })
+      const attributes = [{
+        data: reverseHex(scriptHash),
+        usage: txAttrUsage.Script
+      }]
+      const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { attributes })
       if (signingFunction) {
         return signingFunction(unsignedTx, account.publicKey)
       } else {
-        unsignedTx.sign(account.privateKey)
+        return unsignedTx.sign(account.privateKey)
       }
     })
     .then((signedResult) => {
       signedTx = signedResult
+      return Query.getContractState(scriptHash).execute(endpt)
+    })
+    .then((contractState) => {
+      const attachInvokedContract = {
+        invocationScript: '0000',
+        verificationScript: contractState.result.script
+      }
+      signedTx.scripts.unshift(attachInvokedContract)
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
     .then((res) => {

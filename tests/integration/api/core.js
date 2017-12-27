@@ -1,5 +1,5 @@
 import * as core from '../../../src/api/core'
-import { CONTRACTS } from '../../../src/consts'
+import { CONTRACTS, NEO_NETWORK, TEST_NXT_ADDRESS } from '../../../src/consts'
 import { ContractParam } from '../../../src/sc'
 import testKeys from '../../unit/testKeys.json'
 
@@ -14,7 +14,7 @@ describe('Integration: API Core', function () {
     it('NeonDB', () => {
       const intent1 = core.makeIntent({ NEO: 1 }, testKeys.a.address)
       const config1 = {
-        net: 'TestNet',
+        net: NEO_NETWORK.TEST,
         address: testKeys.b.address,
         privateKey: testKeys.b.privateKey,
         intents: intent1
@@ -34,7 +34,7 @@ describe('Integration: API Core', function () {
 
       const intent2 = core.makeIntent({ NEO: 1 }, testKeys.b.address)
       const config2 = {
-        net: 'TestNet',
+        net: NEO_NETWORK.TEST,
         address: testKeys.a.address,
         privateKey: testKeys.a.privateKey,
         intents: intent2
@@ -50,7 +50,7 @@ describe('Integration: API Core', function () {
   describe('claimGas', function () {
     it('neonDB', () => {
       const config = {
-        net: 'TestNet',
+        net: NEO_NETWORK.TEST,
         address: testKeys.a.address,
         privateKey: testKeys.a.privateKey
       }
@@ -67,7 +67,7 @@ describe('Integration: API Core', function () {
       mock.onAny().passThrough()
 
       const config2 = {
-        net: 'TestNet',
+        net: NEO_NETWORK.TEST,
         address: testKeys.b.address,
         privateKey: testKeys.b.privateKey
       }
@@ -82,7 +82,7 @@ describe('Integration: API Core', function () {
   describe('doInvoke', function () {
     it('neonDB', () => {
       const config = {
-        net: 'TestNet',
+        net: NEO_NETWORK.TEST,
         address: testKeys.a.address,
         privateKey: testKeys.a.privateKey,
         intents: core.makeIntent({ GAS: 0.1 }, testKeys.a.address),
@@ -96,7 +96,7 @@ describe('Integration: API Core', function () {
         })
     })
 
-    it('neoscan', () => {
+    it('transfers tokens', () => {
       // This does a transferToken
       mock = setupMock()
       mock.onGet(/testnet-api.wallet/).timeout()
@@ -110,10 +110,35 @@ describe('Integration: API Core', function () {
         args: ContractParam.array(fromAddrScriptHash, toAddrScriptHash, transferAmount)
       }
       const config2 = {
-        net: 'TestNet',
+        net: NEO_NETWORK.TEST,
         address: testKeys.b.address,
         privateKey: testKeys.b.privateKey,
         intents: core.makeIntent({ GAS: 0.1 }, testKeys.b.address),
+        script,
+        gas: 0
+      }
+      return core.doInvoke(config2)
+        .then((c) => {
+          c.response.result.should.equal(true)
+          console.log(c.response.txid)
+        })
+    })
+
+    it.skip('mints tokens', () => {
+      // This does a mint tokens call
+      mock = setupMock()
+      mock.onGet(/testnet-api.wallet/).timeout()
+      mock.onAny().passThrough()
+      const script = {
+        scriptHash: CONTRACTS.TEST_NXT,
+        operation: 'mintTokens',
+        args: []
+      }
+      const config2 = {
+        net: NEO_NETWORK.TEST,
+        address: testKeys.a.address,
+        privateKey: testKeys.a.privateKey,
+        intents: core.makeIntent({ NEO: 1 }, TEST_NXT_ADDRESS),
         script,
         gas: 0
       }
