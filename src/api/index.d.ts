@@ -123,6 +123,7 @@ declare module '@cityofzion/neon-js' {
   export interface semantic {
     get: {
       price: (coin?: string, currency?: string) => Promise<number>
+      prices: (coins?: Array<string>, currency?: string) => Promise<object>
       balance: (net: string, address: string) => Promise<Balance>
       claims: (net: string, address: string) => Promise<Claim>
       transactionHistory: (net: string, address: string) => Promise<History>
