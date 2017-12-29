@@ -180,6 +180,7 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
       return res
     })
 }
+
 /**
  * Send an asset to an address
  * @param {string} net - 'MainNet' or 'TestNet'.
@@ -190,13 +191,32 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
  * @return {Promise<Response>} RPC Response
  */
 export const doSendAsset = (net, toAddress, from, assetAmounts, signingFunction) => {
+  const addressAssetAmounts = { [toAddress]: assetAmounts }
+  return doSendAssets(net, from, addressAssetAmounts, signingFunction)
+}
+
+/**
+ * Send assets to addresses
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} from - Private Key or WIF of the sending address.
+ * @param {{address: {NEO: number, GAS: number}}} addressAssetAmounts - The amount of each asset (NEO and GAS) to send to an address, leave empty for 0.
+ * @param {function} [signingFunction] - Optional signing function. Used for external signing.
+ * @return {Promise<Response>} RPC Response
+ */
+export const doSendAssets = (net, from, addressAssetAmounts, signingFunction) => {
   const fromAcct = new Account(from)
-  const toAcct = new Account(toAddress)
   const rpcEndpointPromise = getRPCEndpoint(net)
   const balancePromise = getBalance(net, fromAcct.address)
-  const intents = Object.keys(assetAmounts).map((key) => {
-    return { assetId: ASSET_ID[key], value: assetAmounts[key], scriptHash: toAcct.scriptHash }
-  })
+  const intents = Object.keys(addressAssetAmounts).map((toAddress) => {
+    const toAcct = new Account(toAddress)
+    const assetAmounts = addressAssetAmounts[toAddress]
+
+    return Object.keys(assetAmounts).map((asset) => ({
+      assetId: ASSET_ID[asset],
+      value: assetAmounts[asset],
+      scriptHash: toAcct.scriptHash
+    }))
+  }).reduce((a, b) => a.concat(b))
   let signedTx
   let endpt
   return Promise.all([rpcEndpointPromise, balancePromise])
