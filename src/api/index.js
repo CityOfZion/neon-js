@@ -24,7 +24,6 @@ import * as neoscan from './neoscan'
 export default {
   get: {
     price: cmc.getPrice,
-    prices: cmc.getPrices,
     balance: neonDB.getBalance,
     claims: neonDB.getClaims,
     transactionHistory: neonDB.getTransactionHistory,
