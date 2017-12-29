@@ -1,7 +1,7 @@
 import { ScriptBuilder } from '../sc'
 import { getScriptHashFromAddress, Account } from '../wallet'
 import { Query, VMZip } from '../rpc'
-import { reverseHex, fixed82num, hexstring2str } from '../utils'
+import { reverseHex, hexstring2str } from '../utils'
 import { getRPCEndpoint, getBalance } from './neonDB'
 import { Transaction } from '../transactions'
 import { ASSET_ID } from '../consts'
