@@ -13,11 +13,11 @@ const parseDecimals = (VMOutput) => {
   if (VMOutput === '') return 0
   return parseInt(VMOutput, 10)
 }
+const parseHexNum = (hex) => hex ? parseInt(reverseHex(hex), 16) : 0
 
-const parseTokenInfo = VMZip(hexstring2str, hexstring2str, parseDecimals, fixed82num)
+const parseTokenInfo = VMZip(hexstring2str, hexstring2str, parseDecimals, parseHexNum)
 
-const parseTokenInfoAndBalance = VMZip(hexstring2str, hexstring2str, parseDecimals, fixed82num, fixed82num)
-
+const parseTokenInfoAndBalance = VMZip(hexstring2str, hexstring2str, parseDecimals, parseHexNum, parseHexNum)
 /**
  * Queries for NEP5 Token information.
  * @param {string} url - URL of the NEO node to query.
@@ -38,7 +38,7 @@ export const getTokenInfo = (url, scriptHash) => {
         name: res[0],
         symbol: res[1],
         decimals: res[2],
-        totalSupply: res[3]
+        totalSupply: res[3] / Math.pow(10, res[2])
       }
     })
 }
@@ -53,11 +53,16 @@ export const getTokenInfo = (url, scriptHash) => {
 export const getTokenBalance = (url, scriptHash, address) => {
   const addrScriptHash = reverseHex(getScriptHashFromAddress(address))
   const sb = new ScriptBuilder()
-  const script = sb.emitAppCall(scriptHash, 'balanceOf', [addrScriptHash]).str
+  const script =
+    sb
+      .emitAppCall(scriptHash, 'decimals')
+      .emitAppCall(scriptHash, 'balanceOf', [addrScriptHash])
+      .str
   return Query.invokeScript(script, false).execute(url)
     .then((res) => {
       try {
-        return fixed82num(res.result.stack[0].value)
+        const decimals = parseDecimals(res.result.stack[0].value)
+        return parseHexNum(res.result.stack[1].value) / Math.pow(10, decimals)
       } catch (error) {
         return 0
       }
@@ -90,8 +95,8 @@ export const getToken = (url, scriptHash, address) => {
         name: res[0],
         symbol: res[1],
         decimals: res[2],
-        totalSupply: res[3],
-        balance: res.length === 5 ? res[4] : null
+        totalSupply: res[3] / Math.pow(10, res[2]),
+        balance: res.length === 5 ? res[4] / Math.pow(10, res[2]) : null
       }
     })
 }
