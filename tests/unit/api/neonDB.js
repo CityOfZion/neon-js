@@ -97,6 +97,7 @@ describe('NeonDB', function () {
         throw e
       })
   })
+
   // this test passes, but cannot be run immediately following previous tests given state changes
   it.skip('should send NEO and GAS', (done) => {
     return neonDB.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'GAS': 1, 'NEO': 1 })
@@ -105,6 +106,34 @@ describe('NeonDB', function () {
         response.txid.should.be.a('string')
         // send back so we can re-run
         return neonDB.doSendAsset('TestNet', testKeys.a.address, testKeys.b.wif, { 'GAS': 1, 'NEO': 1 })
+      })
+      .then((response) => {
+        response.should.have.property('result', true)
+        response.txid.should.be.a('string')
+        done()
+      })
+      .catch((e) => {
+        console.log(e)
+        throw e
+      })
+  })
+
+  it.skip('should send NEO and GAS to multiple recipients', (done) => {
+    return neonDB.doSendAssets('TestNet', testKeys.a.wif, {
+      [testKeys.b.address]: { 'GAS': 1, 'NEO': 1 },
+      [testKeys.c.address]: { 'GAS': 2, 'NEO': 2 }
+    })
+      .then((response) => {
+        response.should.have.property('result', true)
+        response.txid.should.be.a('string')
+        // send back from address `b` so we can re-run
+        return neonDB.doSendAssets('TestNet', testKeys.b.wif, { [testKeys.a.address]: { 'GAS': 1, 'NEO': 1 } })
+      })
+      .then((response) => {
+        response.should.have.property('result', true)
+        response.txid.should.be.a('string')
+        // send back from address `c` so we can re-run
+        return neonDB.doSendAsset('TestNet', testKeys.c.wif, { [testKeys.a.address]: { 'GAS': 2, 'NEO': 2 } })
       })
       .then((response) => {
         response.should.have.property('result', true)
