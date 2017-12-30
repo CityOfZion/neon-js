@@ -7,6 +7,52 @@ import { Transaction } from '../transactions'
 import { reverseHex } from '../utils'
 import { txAttrUsage } from '../transactions/txAttrUsage'
 
+/** This determines which API we should dial.
+* 0 means 100% neoscan
+* 1 means 100% neonDB
+* This is ensure that we do not always hit the failing endpoint.
+*/
+var apiSwitch = 0
+var switchFrozen = false
+export const setApiSwitch = (newSetting) => {
+  if (newSetting >= 0 && newSetting <= 1) apiSwitch = newSetting
+}
+
+export const setSwitchFreeze = (newSetting) => {
+  switchFrozen = !!newSetting
+}
+
+const increaseNeoscanWeight = () => {
+  if (!switchFrozen && apiSwitch > 0) apiSwitch -= 0.2
+}
+
+const increaseNeonDBWeight = () => {
+  if (!switchFrozen && apiSwitch < 1) apiSwitch += 0.2
+}
+const loadBalance = (func, config) => {
+  if (Math.random() > apiSwitch) {
+    return func(config, neoscan)
+      .then((c) => {
+        increaseNeoscanWeight()
+        return c
+      })
+      .catch(() => {
+        increaseNeonDBWeight()
+        return func(config, neonDB)
+      })
+  } else {
+    return func(config, neonDB)
+      .then((c) => {
+        increaseNeonDBWeight()
+        return c
+      })
+      .catch(() => {
+        increaseNeoscanWeight()
+        return func(config, neoscan)
+      })
+  }
+}
+
 /**
  * Check that properties are defined in obj.
  * @param {object} obj - Object to check.
@@ -172,11 +218,7 @@ export const makeIntent = (assetAmts, address) => {
  * @return {object} Configuration object.
  */
 export const sendAsset = (config) => {
-  return getBalanceFrom(config, neonDB)
-    .then(
-    (c) => c,
-    () => getBalanceFrom(config, neoscan)
-    )
+  return loadBalance(getBalanceFrom, config)
     .then((c) => createTx(c, 'contract'))
     .then((c) => signTx(c))
     .then((c) => sendTx(c))
@@ -192,50 +234,10 @@ export const sendAsset = (config) => {
  * @return {object} Configuration object.
  */
 export const claimGas = (config) => {
-  return getClaimsFrom(config, neonDB)
-    .then(
-    (c) => c,
-    () => getClaimsFrom(config, neoscan)
-    )
+  return loadBalance(getClaimsFrom, config)
     .then((c) => createTx(c, 'claim'))
     .then((c) => signTx(c))
     .then((c) => sendTx(c))
-}
-
-/**
- * Adds attributes to the override object for mintTokens invocations.
- * @param {object} config - Configuration object.
- * @return {object} Configuration object.
- */
-const addAttributes = (config) => {
-  if (!config.override) config.override = {}
-  if ((typeof config.script === 'object') && config.script.operation === 'mintTokens' && config.script.scriptHash) {
-    config.override.attributes = [{
-      data: reverseHex(config.script.scriptHash),
-      usage: txAttrUsage.Script
-    }]
-  }
-  return config
-}
-
-/**
- * Adds the contractState to mintTokens invocations.
- * @param {object} config - Configuration object.
- * @return {object} Configuration object.
- */
-const attachInvokedContract = (config) => {
-  if ((typeof config.script === 'object') && config.script.operation === 'mintTokens' && config.script.scriptHash) {
-    return Query.getContractState(config.script.scriptHash).execute(config.url)
-      .then((contractState) => {
-        const attachInvokedContract = {
-          invocationScript: '0000',
-          verificationScript: contractState.result.script
-        }
-        config.tx.scripts.unshift(attachInvokedContract)
-        return config
-      })
-  }
-  return config
 }
 
 /**
@@ -251,14 +253,46 @@ const attachInvokedContract = (config) => {
  * @return {object} Configuration object.
  */
 export const doInvoke = (config) => {
-  return getBalanceFrom(config, neonDB)
-    .then(
-    (c) => c,
-    () => getBalanceFrom(config, neoscan)
-    )
-    .then((c) => addAttributes(c))
+  return loadBalance(getBalanceFrom, config)
+    .then((c) => addAttributesForMintToken(c))
     .then((c) => createTx(c, 'invocation'))
     .then((c) => signTx(c))
-    .then((c) => attachInvokedContract(c))
+    .then((c) => attachInvokedContractForMintToken(c))
     .then((c) => sendTx(c))
+}
+
+/**
+ * Adds attributes to the override object for mintTokens invocations.
+ * @param {object} config - Configuration object.
+ * @return {object} Configuration object.
+ */
+const addAttributesForMintToken = (config) => {
+  if (!config.override) config.override = {}
+  if ((typeof config.script === 'object') && config.script.operation === 'mintTokens' && config.script.scriptHash) {
+    config.override.attributes = [{
+      data: reverseHex(config.script.scriptHash),
+      usage: txAttrUsage.Script
+    }]
+  }
+  return config
+}
+
+/**
+ * Adds the contractState to mintTokens invocations.
+ * @param {object} config - Configuration object.
+ * @return {object} Configuration object.
+ */
+const attachInvokedContractForMintToken = (config) => {
+  if ((typeof config.script === 'object') && config.script.operation === 'mintTokens' && config.script.scriptHash) {
+    return Query.getContractState(config.script.scriptHash).execute(config.url)
+      .then((contractState) => {
+        const attachInvokedContract = {
+          invocationScript: '0000',
+          verificationScript: contractState.result.script
+        }
+        config.tx.scripts.unshift(attachInvokedContract)
+        return config
+      })
+  }
+  return config
 }
