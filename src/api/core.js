@@ -204,6 +204,21 @@ const createTransferScript = (transfers) => {
 }
 
 /**
+ * Create an invocation transaction for token transfers or a contract transaction for asset transfers.
+ * @param {object} config - Configuration object.
+ * @param {ScriptOutput[]} config.transfers - Transfers.
+ * @return {string} Configuration object.
+ */
+const createTransferTx = (config) => {
+  if (config.transfers) {
+    config.script = createTransferScript(config.transfers)
+    return createTx(config, 'invocation')
+  } else {
+    return createTx(config, 'contract')
+  }
+}
+
+/**
  * Function to construct and execute a ContractTransaction.
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
@@ -217,14 +232,7 @@ const createTransferScript = (transfers) => {
 export const sendAsset = (config) => {
   return getBalanceFrom(config, neonDB)
     .catch(() => getBalanceFrom(config, neoscan))
-    .then((c) => {
-      if (c.transfers) {
-        c.script = createTransferScript(c.transfers)
-        return createTx(c, 'invocation')
-      } else {
-        return createTx(c, 'contract')
-      }
-    })
+    .then((c) => createTransferTx(c))
     .then((c) => signTx(c))
     .then((c) => sendTx(c))
 }
