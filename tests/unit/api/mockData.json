@@ -1042,7 +1042,7 @@
         "jsonrpc": "2.0",
         "method": "invokescript",
         "params": [
-          "149847e26135152874355e324afd5cc99f002acb3351c10962616c616e63654f666754a64cac1b1073e662933ef3e30b007cd98d67d7"
+          "0008646563696d616c736754a64cac1b1073e662933ef3e30b007cd98d67d7149847e26135152874355e324afd5cc99f002acb3351c10962616c616e63654f666754a64cac1b1073e662933ef3e30b007cd98d67d7"
         ],
         "id": 1234
       },
@@ -1053,6 +1053,10 @@
           "state": "HALT, BREAK",
           "gas_consumed": "0.384",
           "stack": [
+            {
+              "type": "Integer",
+              "value": "8"
+            },
             {
               "type": "ByteArray",
               "value": "53"

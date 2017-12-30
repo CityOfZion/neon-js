@@ -24,6 +24,7 @@ describe('Integration: API NEP5', function () {
       .then(result => {
         result.should.have.keys(['name', 'symbol', 'decimals', 'totalSupply', 'balance'])
         result.decimals.should.equal(0)
+        result.totalSupply.should.equal(60000)
       })
     })
   })
