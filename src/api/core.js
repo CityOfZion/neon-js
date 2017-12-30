@@ -166,9 +166,9 @@ export const makeIntent = (assetAmts, address) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
- * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
- * @param {TransactionOutput[]} intents - Intents.
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {TransactionOutput[]} config.intents - Intents.
  * @return {object} Configuration object.
  */
 export const sendAsset = (config) => {
@@ -187,8 +187,8 @@ export const sendAsset = (config) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
- * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
  * @return {object} Configuration object.
  */
 export const claimGas = (config) => {
@@ -243,9 +243,9 @@ const attachInvokedContract = (config) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
- * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
- * @param {object} [intents] - Intents
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {object} [config.intents] - Intents
  * @param {string} config.script - VM script. Must include empty args parameter even if no args are present
  * @param {number} config.gas - gasCost of VM script.
  * @return {object} Configuration object.
