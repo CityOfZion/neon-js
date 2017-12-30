@@ -80,6 +80,25 @@ describe('Core API', function () {
       )
   })
 
+  it('makeTransfer', () => {
+    const RPX = 'ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9'
+    const DBC = 'b951ecbbc5fe37a9c280a76cb0ce0014827294cf'
+
+    core.makeTransfer({ [RPX]: 5100, [DBC]: 19250 }, 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW', 'AP4AswDCgRCRF7Z6oMQMrFBzTuRgbeiQNF')
+      .should.deep.include.members([
+        {
+          scriptHash: RPX,
+          operation: 'transfer',
+          args: ['4fddeb8f2560ab19f6b1cc484125b84a0e0ca021', 'cef0c0fdcfe7838eff6ff104f9cdec2922297537', 5100]
+        },
+        {
+          scriptHash: DBC,
+          operation: 'transfer',
+          args: ['4fddeb8f2560ab19f6b1cc484125b84a0e0ca021', 'cef0c0fdcfe7838eff6ff104f9cdec2922297537', 19250]
+        }
+      ])
+  })
+
   describe('getBalanceFrom', function () {
     it('Retrieves information properly', () => {
       const config = Object.assign({}, baseConfig)
