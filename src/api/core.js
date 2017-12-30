@@ -6,6 +6,7 @@ import { Query } from '../rpc'
 import { Transaction } from '../transactions'
 import { reverseHex } from '../utils'
 import { txAttrUsage } from '../transactions/txAttrUsage'
+import { ScriptBuilder } from '../sc'
 
 /**
  * Check that properties are defined in obj.
@@ -162,22 +163,76 @@ export const makeIntent = (assetAmts, address) => {
 }
 
 /**
+ * @typedef ScriptOutput
+ * @property {string} scriptHash - Uint160
+ * @property {number} operation - string
+ * @property {string} args - array
+ */
+
+/**
+ * Helper method to convert a TokenAmounts object to transfer invocation scripts (ScriptOutput[]).
+ * @param {object} tokenAmts - Token Amounts
+ * @param {number} tokenAmts.SCRIPT_HASH - Amt of [SCRIPT_HASH] token to send. (TODO: better way to write this for docs?)
+ * @param {string} toAddress - The address to send to.
+ * @param {string} fromAddress - The address to send from.
+ * @return {ScriptOutput[]} ScriptOutput
+ */
+export const makeTransfer = (tokenAmts, toAddress, fromAddress) => {
+  const fromAcct = new Account(fromAddress)
+  const toAcct = new Account(toAddress)
+
+  return Object.keys(tokenAmts).map((key) => ({
+    scriptHash: key,
+    operation: 'transfer',
+    args: [reverseHex(fromAcct.scriptHash), toAcct.scriptHash, tokenAmts[key]]
+  }))
+}
+
+/**
+ * Convert an array of transfer scripts (ScriptOutput[]) into an invocation script.
+ * @param {ScriptOutput[]} transfers - Array of transfer ScriptOutput.
+ * @return {string} invocation script
+ */
+const createTransferScript = (transfers) => {
+  const scriptBuilder = new ScriptBuilder()
+
+  transfers.forEach(({ scriptHash, operation, args }) => {
+    scriptBuilder.emitAppCall(scriptHash, operation, args)
+  })
+
+  return scriptBuilder.str
+}
+
+/**
+ * Create an invocation transaction for token transfers or a contract transaction for asset transfers.
+ * @param {object} config - Configuration object.
+ * @param {ScriptOutput[]} config.transfers - Transfers.
+ * @return {string} Configuration object.
+ */
+const createTransferTx = (config) => {
+  if (config.transfers) {
+    config.script = createTransferScript(config.transfers)
+    return createTx(config, 'invocation')
+  } else {
+    return createTx(config, 'contract')
+  }
+}
+
+/**
  * Function to construct and execute a ContractTransaction.
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
- * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
- * @param {TransactionOutput[]} intents - Intents.
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {TransactionOutput[]} config.intents - Intents.
+ * @param {ScriptOutput[]} config.transfers - Transfers.
  * @return {object} Configuration object.
  */
 export const sendAsset = (config) => {
   return getBalanceFrom(config, neonDB)
-    .then(
-    (c) => c,
-    () => getBalanceFrom(config, neoscan)
-    )
-    .then((c) => createTx(c, 'contract'))
+    .catch(() => getBalanceFrom(config, neoscan))
+    .then((c) => createTransferTx(c))
     .then((c) => signTx(c))
     .then((c) => sendTx(c))
 }
@@ -187,8 +242,8 @@ export const sendAsset = (config) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
- * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
  * @return {object} Configuration object.
  */
 export const claimGas = (config) => {
@@ -243,9 +298,9 @@ const attachInvokedContract = (config) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
- * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
- * @param {object} [intents] - Intents
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {object} [config.intents] - Intents
  * @param {string} config.script - VM script. Must include empty args parameter even if no args are present
  * @param {number} config.gas - gasCost of VM script.
  * @return {object} Configuration object.
