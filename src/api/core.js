@@ -7,6 +7,43 @@ import { Transaction } from '../transactions'
 import { reverseHex } from '../utils'
 import { txAttrUsage } from '../transactions/txAttrUsage'
 
+/** This determines which API we should dial.
+* 0 means 100% neoscan
+* 1 means 100% neonDB
+* This is ensure that we do not always hit the failing endpoint.
+*/
+var apiSwitch = 0
+
+export const setApiSwitch = (newSetting) => {
+  if (newSetting >= 0 && newSetting <= 1) apiSwitch = newSetting
+}
+const increaseNeoscanWeight = () => { apiSwitch > 0 ? apiSwitch -= 0.2 : null }
+
+const increaseNeonDBWeight = () => { apiSwitch < 1 ? apiSwitch += 0.2 : null }
+const loadBalance = (func, config) => {
+  if (Math.random() > apiSwitch) {
+    return func(config, neoscan)
+      .then((c) => {
+        increaseNeoscanWeight()
+        return c
+      })
+      .catch(() => {
+        increaseNeonDBWeight()
+        return func(config, neonDB)
+      })
+  } else {
+    return func(config, neonDB)
+      .then((c) => {
+        increaseNeonDBWeight()
+        return c
+      })
+      .catch(() => {
+        increaseNeoscanWeight()
+        return func(config, neoscan)
+      })
+  }
+}
+
 /**
  * Check that properties are defined in obj.
  * @param {object} obj - Object to check.
