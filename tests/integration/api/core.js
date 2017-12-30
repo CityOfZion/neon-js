@@ -7,11 +7,25 @@ describe('Integration: API Core', function () {
   this.timeout(20000)
   let mock
 
+  const useNeonDB = () => {
+    mock = setupMock()
+    mock.onGet(/neoscan/).timeout()
+    mock.onAny().passThrough()
+  }
+
+  const useNeoscan = () => {
+    mock = setupMock()
+    mock.onGet(/testnet-api.wallet/).timeout()
+    mock.onAny().passThrough()
+  }
   afterEach(() => {
+    core.setApiSwitch(0)
     if (mock) mock.restore()
   })
   describe('sendAsset', function () {
     it('NeonDB', () => {
+      useNeonDB()
+
       const intent1 = core.makeIntent({ NEO: 1 }, testKeys.a.address)
       const config1 = {
         net: NEO_NETWORK.TEST,
@@ -28,9 +42,7 @@ describe('Integration: API Core', function () {
     })
 
     it('Neoscan', () => {
-      mock = setupMock()
-      mock.onGet(/testnet-api.wallet/).timeout()
-      mock.onAny().passThrough()
+      useNeoscan()
 
       const intent2 = core.makeIntent({ NEO: 1 }, testKeys.b.address)
       const config2 = {
@@ -49,6 +61,8 @@ describe('Integration: API Core', function () {
 
   describe('claimGas', function () {
     it('neonDB', () => {
+      useNeonDB()
+
       const config = {
         net: NEO_NETWORK.TEST,
         address: testKeys.a.address,
@@ -62,9 +76,7 @@ describe('Integration: API Core', function () {
     })
 
     it('neoscan', () => {
-      mock = setupMock()
-      mock.onGet(/testnet-api.wallet/).timeout()
-      mock.onAny().passThrough()
+      useNeoscan()
 
       const config2 = {
         net: NEO_NETWORK.TEST,
@@ -81,6 +93,8 @@ describe('Integration: API Core', function () {
 
   describe('doInvoke', function () {
     it('neonDB', () => {
+      useNeonDB()
+
       const config = {
         net: NEO_NETWORK.TEST,
         address: testKeys.a.address,
@@ -96,11 +110,9 @@ describe('Integration: API Core', function () {
         })
     })
 
-    it('transfers tokens', () => {
+    it('neoscan: transfer tokens', () => {
       // This does a transferToken
-      mock = setupMock()
-      mock.onGet(/testnet-api.wallet/).timeout()
-      mock.onAny().passThrough()
+      useNeoscan()
       const fromAddrScriptHash = ContractParam.byteArray(testKeys.b.address, 'address')
       const toAddrScriptHash = ContractParam.byteArray(testKeys.c.address, 'address')
       const transferAmount = ContractParam.byteArray(0.00000001, 'fixed8')
@@ -126,9 +138,7 @@ describe('Integration: API Core', function () {
 
     it.skip('mints tokens', () => {
       // This does a mint tokens call
-      mock = setupMock()
-      mock.onGet(/testnet-api.wallet/).timeout()
-      mock.onAny().passThrough()
+      useNeoscan()
       const script = {
         scriptHash: CONTRACTS.TEST_NXT,
         operation: 'mintTokens',
