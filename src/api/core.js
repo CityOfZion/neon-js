@@ -13,13 +13,22 @@ import { txAttrUsage } from '../transactions/txAttrUsage'
 * This is ensure that we do not always hit the failing endpoint.
 */
 var apiSwitch = 0
-
+var switchFrozen = false
 export const setApiSwitch = (newSetting) => {
   if (newSetting >= 0 && newSetting <= 1) apiSwitch = newSetting
 }
-const increaseNeoscanWeight = () => { apiSwitch > 0 ? apiSwitch -= 0.2 : null }
 
-const increaseNeonDBWeight = () => { apiSwitch < 1 ? apiSwitch += 0.2 : null }
+export const setSwitchFreeze = (newSetting) => {
+  switchFrozen = !!newSetting
+}
+
+const increaseNeoscanWeight = () => {
+  if (!switchFrozen && apiSwitch > 0) apiSwitch -= 0.2
+}
+
+const increaseNeonDBWeight = () => {
+  if (!switchFrozen && apiSwitch < 1) apiSwitch += 0.2
+}
 const loadBalance = (func, config) => {
   if (Math.random() > apiSwitch) {
     return func(config, neoscan)
