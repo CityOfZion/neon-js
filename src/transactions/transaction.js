@@ -1,4 +1,4 @@
-import { getScriptHashFromPublicKey, getScriptHashFromAddress, isAddress } from '../wallet'
+import { Account, getScriptHashFromPublicKey, getScriptHashFromAddress, isAddress } from '../wallet'
 import { TX_VERSION, ASSET_ID } from '../consts'
 import { createScript } from '../sc'
 import { str2hexstring, num2VarInt } from '../utils'
@@ -218,11 +218,14 @@ class Transaction {
 
   /**
    * Signs a transaction.
-   * @param {string} privateKey
+   * @param {Account|string} signer - Account, privateKey or WIF
    * @return {Transaction} this
    */
-  sign (privateKey) {
-    return core.signTransaction(this, privateKey)
+  sign (signer) {
+    if (typeof signer === 'string') {
+      signer = new Account(signer)
+    }
+    return core.signTransaction(this, signer.privateKey)
   }
 }
 
