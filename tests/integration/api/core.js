@@ -4,7 +4,7 @@ import { ContractParam } from '../../../src/sc'
 import testKeys from '../../unit/testKeys.json'
 
 describe('Integration: API Core', function () {
-  this.timeout(20000)
+  this.timeout(30000)
   let mock
 
   const useNeonDB = () => {
