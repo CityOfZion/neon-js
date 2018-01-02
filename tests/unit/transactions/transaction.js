@@ -1,5 +1,5 @@
 import Tx from '../../../src/transactions/transaction'
-import { Balance } from '../../../src/wallet'
+import { Balance, Account } from '../../../src/wallet'
 import data from './data.json'
 import createData from './createData.json'
 import { ASSET_ID, CONTRACTS } from '../../../src/consts'
@@ -132,6 +132,31 @@ describe('Transaction', function () {
     Object.keys(data).map((k) => {
       const tx = new Tx(data[k].deserialized)
       tx.serialize().should.equal(data[k].serialized.stream)
+    })
+  })
+
+  describe('sign', function () {
+    it('with privateKey', () => {
+      const tx = new Tx(data[1].deserialized)
+      tx.scripts = []
+      tx.sign(data[1].privateKey)
+      tx.serialize().should.equal(data[1].serialized.stream)
+    })
+
+    it('with WIF', () => {
+      const tx = new Tx(data[1].deserialized)
+      tx.scripts = []
+      const acct = new Account(data[1].privateKey)
+      tx.sign(acct.WIF)
+      tx.serialize().should.equal(data[1].serialized.stream)
+    })
+
+    it('with Account', () => {
+      const tx = new Tx(data[1].deserialized)
+      tx.scripts = []
+      const acct = new Account(data[1].privateKey)
+      tx.sign(acct)
+      tx.serialize().should.equal(data[1].serialized.stream)
     })
   })
 })
