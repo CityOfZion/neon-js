@@ -86,7 +86,7 @@ const serializeInvocationExclusive = (tx) => {
 }
 
 const getInvocationExclusive = (tx) => {
-  return Object.assign({ script: '', gas: 0 }, { script: tx.script, gas: tx.gas })
+  return { script: tx.script || '', gas: tx.gas || 0 }
 }
 
 export const serializeExclusive = {
