@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Transactions &mdash; neon-js 2.1.1 documentation</title>
+  <title>Transactions &mdash; neon-js 2.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 2.1.1 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 2.3.0 documentation" href="../index.html"/>
         <link rel="next" title="Contract Transaction" href="contract.html"/>
         <link rel="prev" title="Wallet" href="../wallet.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.1.1
+                2.3.0
               </div>
             
           
@@ -187,17 +187,17 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.1.1/transactions/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.1.1.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.3.0/transactions/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.3.0.</a></p>
 <div class="section" id="transactions">
 <h1>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h1>
 <p>The Transactions module is exposed as:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="kd">let</span> <span class="nx">transaction1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">claimTx</span><span class="p">(...</span><span class="nx">args</span><span class="p">)</span>
 <span class="nx">transaction1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">sign</span><span class="p">.</span><span class="nx">transaction</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">)</span>
 <span class="kd">let</span> <span class="nx">serialized1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">serialize</span><span class="p">.</span><span class="nx">tx</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">)</span>
 <span class="kd">let</span> <span class="nx">txid1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">transactionHash</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">)</span>
 
-<span class="kr">import</span> <span class="p">{</span><span class="nx">tx</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">import</span> <span class="p">{</span><span class="nx">tx</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="kd">let</span> <span class="nx">transaction2</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">createClaimTx</span><span class="p">(...</span><span class="nx">args</span><span class="p">)</span>
 <span class="nx">transaction2</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">signTransaction</span><span class="p">(</span><span class="nx">transaction2</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">)</span>
 <span class="kd">let</span> <span class="nx">serialized2</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">serializeTransaction</span><span class="p">(</span><span class="nx">transaction2</span><span class="p">)</span>
@@ -208,7 +208,7 @@
 <div class="section" id="transaction">
 <h2>Transaction<a class="headerlink" href="#transaction" title="Permalink to this headline">¶</a></h2>
 <p>The Transaction class is a wrapper class that contains all the tools required to manipulate and build transactions. This allows us to dynamically add intents, remarks at will instead of cramming everything into a single method.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="c1">// Let us create a ContractTransaction with a custom version</span>
 <span class="kd">let</span> <span class="nx">tx</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">tx</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="mi">128</span><span class="p">,</span> <span class="nx">version</span><span class="o">:</span><span class="mi">2</span><span class="p">})</span>
 <span class="c1">// Now let us add an intention to send 1 NEO to someone</span>
@@ -395,9 +395,7 @@
         <dl>
             <dt>Tags</dt>
             <dd><a href="../../1.1.1/transactions/index.html">1.1.1</a></dd>
-            <dd><a href="../../2.0.0/transactions/index.html">2.0.0</a></dd>
-            <dd><a href="../../2.1.0/transactions/index.html">2.1.0</a></dd>
-            <dd><a href="../../2.1.1/transactions/index.html">2.1.1</a></dd>
+            <dd><a href="../../2.3.0/transactions/index.html">2.3.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -413,7 +411,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'2.1.1',
+            VERSION:'2.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -4,13 +4,13 @@ Transactions
 
 The Transactions module is exposed as::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   let transaction1 = Neon.create.claimTx(...args)
   transaction1 = Neon.sign.transaction(transaction1, privateKey)
   let serialized1 = Neon.serialize.tx(transaction1)
   let txid1 = Neon.get.transactionHash(transaction1)
 
-  import {tx} from 'neon-js'
+  import {tx} from '@cityofzion/neon-js'
   let transaction2 = tx.createClaimTx(...args)
   transaction2 = tx.signTransaction(transaction2, privateKey)
   let serialized2 = tx.serializeTransaction(transaction2)
@@ -25,7 +25,7 @@ The Transaction class is a wrapper class that contains all the tools required to
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
   // Let us create a ContractTransaction with a custom version
   let tx = Neon.create.tx({type: 128, version:2})
   // Now let us add an intention to send 1 NEO to someone

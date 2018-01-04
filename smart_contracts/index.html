@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Smart Contract &mdash; neon-js 2.1.1 documentation</title>
+  <title>Smart Contract &mdash; neon-js 2.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 2.1.1 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 2.3.0 documentation" href="../index.html"/>
         <link rel="next" title="Utilities" href="../utility.html"/>
         <link rel="prev" title="API" href="../api/index.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.1.1
+                2.3.0
               </div>
             
           
@@ -182,10 +182,10 @@
 <div class="section" id="smart-contract">
 <h1>Smart Contract<a class="headerlink" href="#smart-contract" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal"><span class="pre">sc</span></code> module is exposed as:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="kr">const</span> <span class="nx">sb</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">scriptBuilder</span><span class="p">()</span>
 
-<span class="kr">import</span> <span class="p">{</span><span class="nx">sc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">import</span> <span class="p">{</span><span class="nx">sc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="kr">const</span> <span class="nx">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">sc</span><span class="p">.</span><span class="nx">scriptBuilder</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -202,7 +202,7 @@
 <div class="section" id="script-builder">
 <h2>Script Builder<a class="headerlink" href="#script-builder" title="Permalink to this headline">¶</a></h2>
 <p>The Script Builder is an object that converts a smart contract method call into a hexstring that can be sent to the network with a InvocationTransaction.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">rpc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">rpc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="kr">const</span> <span class="nx">sb</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">scriptBuilder</span><span class="p">()</span>
 <span class="c1">// Build script to call &#39;name&#39; from contract at 5b7074e873973a6ed3708862f219a6fbf4d1c411</span>
 <span class="nx">sb</span><span class="p">.</span><span class="nx">emitAppCall</span><span class="p">(</span><span class="s1">&#39;5b7074e873973a6ed3708862f219a6fbf4d1c411&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
@@ -215,7 +215,7 @@
 </pre></div>
 </div>
 <p>You may chain multiple calls together in a single VM script. The results will be returned in order.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">rpc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">rpc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="kr">const</span> <span class="nx">sb</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">scriptBuilder</span><span class="p">()</span>
 <span class="nx">sb</span><span class="p">.</span><span class="nx">emitAppCall</span><span class="p">(</span><span class="nx">scriptHash</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">emitAppCall</span><span class="p">(</span><span class="nx">scriptHash</span><span class="p">,</span> <span class="s1">&#39;symbol&#39;</span><span class="p">)</span>
@@ -229,7 +229,7 @@
 </pre></div>
 </div>
 <p>A simple wrapper method is provided for convenience.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="kr">const</span> <span class="nx">props</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">scriptHash</span><span class="o">:</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">CONST</span><span class="p">.</span><span class="nx">CONTRACTS</span><span class="p">.</span><span class="nx">TEST_RPX</span><span class="p">,</span>
   <span class="nx">operation</span><span class="o">:</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span>
@@ -250,7 +250,7 @@
 </pre></div>
 </div>
 <p>ContractParam currently supports creating string, boolean, integer, bytearray and array:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">sc</span><span class="p">,</span> <span class="nx">rpc</span><span class="p">,</span> <span class="nx">CONST</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">sc</span><span class="p">,</span> <span class="nx">rpc</span><span class="p">,</span> <span class="nx">CONST</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="kr">const</span> <span class="nx">param1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">contractParam</span><span class="p">(</span><span class="s1">&#39;String&#39;</span><span class="p">,</span> <span class="s1">&#39;balanceOf&#39;</span><span class="p">)</span>
 <span class="c1">// This is a convenient way to convert an address to a reversed scriptHash that smart contracts use.</span>
 <span class="kr">const</span> <span class="nx">param2</span> <span class="o">=</span> <span class="nx">sc</span><span class="p">.</span><span class="nx">ContractParam</span><span class="p">.</span><span class="nx">byteArray</span><span class="p">(</span><span class="s1">&#39;AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx&#39;</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">)</span>
@@ -305,16 +305,14 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: 2.1.1
+        v: 2.3.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
             <dd><a href="../1.1.1/smart_contracts/index.html">1.1.1</a></dd>
-            <dd><a href="../2.0.0/smart_contracts/index.html">2.0.0</a></dd>
-            <dd><a href="../2.1.0/smart_contracts/index.html">2.1.0</a></dd>
-            <dd><a href="../2.1.1/smart_contracts/index.html">2.1.1</a></dd>
+            <dd><a href="../2.3.0/smart_contracts/index.html">2.3.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -330,7 +328,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'2.1.1',
+            VERSION:'2.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

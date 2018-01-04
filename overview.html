@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview &mdash; neon-js 2.1.1 documentation</title>
+  <title>Overview &mdash; neon-js 2.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="neon-js 2.1.1 documentation" href="index.html"/>
+    <link rel="top" title="neon-js 2.3.0 documentation" href="index.html"/>
         <link rel="next" title="Installation" href="installation.html"/>
         <link rel="prev" title="neon-js" href="index.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.1.1
+                2.3.0
               </div>
             
           
@@ -181,7 +181,7 @@
 
 <div class="section" id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<p>Neon-JS is a Javascript library to interface with NEO blockchain, providing quick and easy methods to send RPC calls, create transactions and simple contract invocations.</p>
+<p><code class="docutils literal"><span class="pre">neon-js</span></code> is a Javascript library to interface with NEO blockchain, providing quick and easy methods to send RPC calls, create transactions and simple contract invocations.</p>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -198,7 +198,7 @@
 <p>Semantic</p>
 <blockquote>
 <div><p>The default import for Neon is a Javascript object where functions are arranged in a semantic manner following the convention of Verb-Noun. If a method goes beyond 2 levels, the rest of the name is camelCased at the Noun level.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">()</span>
 <span class="nx">Neon</span><span class="p">.</span><span class="nx">serialize</span><span class="p">.</span><span class="nx">tx</span><span class="p">(</span><span class="nx">transactionObj</span><span class="p">)</span>
 <span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">publicKeyFromPrivateKey</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
@@ -211,12 +211,13 @@
 <div><p>Named imports are the conventional JS imports. The modules in Neon are:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">wallet</span></code></li>
-<li><code class="docutils literal"><span class="pre">tx</span></code></li>
-<li><code class="docutils literal"><span class="pre">rpc</span></code></li>
-<li><code class="docutils literal"><span class="pre">u</span></code></li>
 <li><code class="docutils literal"><span class="pre">api</span></code></li>
 <li><code class="docutils literal"><span class="pre">CONST</span></code></li>
+<li><code class="docutils literal"><span class="pre">rpc</span></code></li>
+<li><code class="docutils literal"><span class="pre">sc</span></code></li>
+<li><code class="docutils literal"><span class="pre">tx</span></code></li>
+<li><code class="docutils literal"><span class="pre">u</span></code></li>
+<li><code class="docutils literal"><span class="pre">wallet</span></code></li>
 </ul>
 </div></blockquote>
 <p>This style offers more control and flexibility. Do refer to the source code for each module&#8217;s exports.</p>
@@ -264,16 +265,14 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: 2.1.1
+        v: 2.3.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
             <dd><a href="1.1.1/index.html">1.1.1</a></dd>
-            <dd><a href="2.0.0/overview.html">2.0.0</a></dd>
-            <dd><a href="2.1.0/overview.html">2.1.0</a></dd>
-            <dd><a href="2.1.1/overview.html">2.1.1</a></dd>
+            <dd><a href="2.3.0/overview.html">2.3.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -289,7 +288,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.1.1',
+            VERSION:'2.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

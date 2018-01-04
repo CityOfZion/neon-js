@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Transactions &mdash; neon-js 2.1.1 documentation</title>
+  <title>Transactions &mdash; neon-js 2.2.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 2.1.1 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 2.2.2 documentation" href="../index.html"/>
         <link rel="up" title="Reference" href="index.html"/>
         <link rel="next" title="Utility" href="utility.html"/>
         <link rel="prev" title="Smart Contract" href="sc.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                2.1.1
+                2.2.2
               </div>
             
           
@@ -193,7 +193,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.1.1/reference/tx.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.1.1.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.3.0/reference/tx.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.3.0.</a></p>
 <div class="section" id="transactions">
 <h1>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h1>
 <p>Module <code class="docutils literal"><span class="pre">tx</span></code></p>
@@ -584,6 +584,24 @@ This class is a wrapper around the various transaction building methods found in
 </tbody>
 </table>
 <dl class="function">
+<dt id="addAttribute">
+<code class="descname">addAttribute</code><span class="sig-paren">(</span><em>usage</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#addAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an attribute.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>usage</strong> (<em>number</em>) &#8211; The usage type. Do refer to txAttrUsage enum values for all available options.</li>
+<li><strong>data</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The data as hexstring.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="addOutput">
 <code class="descname">addOutput</code><span class="sig-paren">(</span><em>assetSymOrTxOut</em>, <em>value</em>, <em>address</em><span class="sig-paren">)</span><a class="headerlink" href="#addOutput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a TransactionOutput. TransactionOutput can be given as a TransactionOutput object or as human-friendly values. This is detected by the number of arguments provided.</p>
@@ -801,14 +819,14 @@ This class is a wrapper around the various transaction building methods found in
 
 <dl class="function">
 <dt id="sign">
-<code class="descname">sign</code><span class="sig-paren">(</span><em>privateKey</em><span class="sig-paren">)</span><a class="headerlink" href="#sign" title="Permalink to this definition">¶</a></dt>
+<code class="descname">sign</code><span class="sig-paren">(</span><em>signer</em><span class="sig-paren">)</span><a class="headerlink" href="#sign" title="Permalink to this definition">¶</a></dt>
 <dd><p>Signs a transaction.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+<li><strong>signer</strong> (<em>Account|string</em>) &#8211; Account, privateKey or WIF</li>
 </ul>
 </td>
 </tr>
@@ -881,9 +899,7 @@ This class is a wrapper around the various transaction building methods found in
         <dl>
             <dt>Tags</dt>
             <dd><a href="../../1.1.1/index.html">1.1.1</a></dd>
-            <dd><a href="../../2.0.0/reference/tx.html">2.0.0</a></dd>
-            <dd><a href="../../2.1.0/reference/tx.html">2.1.0</a></dd>
-            <dd><a href="../../2.1.1/reference/tx.html">2.1.1</a></dd>
+            <dd><a href="../../2.3.0/reference/tx.html">2.3.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -899,7 +915,7 @@ This class is a wrapper around the various transaction building methods found in
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'2.1.1',
+            VERSION:'2.2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

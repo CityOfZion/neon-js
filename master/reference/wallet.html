@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Wallet &mdash; neon-js 2.1.1 documentation</title>
+  <title>Wallet &mdash; neon-js 2.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 2.1.1 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 2.3.0 documentation" href="../index.html"/>
         <link rel="up" title="Reference" href="index.html"/>
         <link rel="next" title="Changelog" href="../changelog.html"/>
         <link rel="prev" title="Utility" href="utility.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                2.1.1
+                2.3.0
               </div>
             
           
@@ -188,7 +188,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.1.1/reference/wallet.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.1.1.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.3.0/reference/wallet.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.3.0.</a></p>
 <div class="section" id="wallet">
 <h1>Wallet<a class="headerlink" href="#wallet" title="Permalink to this headline">¶</a></h1>
 <p>Module <code class="docutils literal"><span class="pre">wallet</span></code></p>
@@ -204,12 +204,119 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>str</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; WIF/ Private Key / Public Key / Address.</li>
+<li><strong>str</strong> (<em>string|object</em>) &#8211; WIF/ Private Key / Public Key / Address or a Wallet Account object.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<dl class="attribute">
+<dt id="WIF">
+<code class="descname">WIF</code><a class="headerlink" href="#WIF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="address">
+<code class="descname">address</code><a class="headerlink" href="#address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="decrypt">
+<code class="descname">decrypt</code><span class="sig-paren">(</span><em>keyphrase</em>, <em>scryptParams</em><span class="sig-paren">)</span><a class="headerlink" href="#decrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decrypts the encrypted key and return the Account object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>keyphrase</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+<li><strong>scryptParams</strong> (<em>object</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Account</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="encrypt">
+<code class="descname">encrypt</code><span class="sig-paren">(</span><em>keyphrase</em>, <em>scryptParams</em><span class="sig-paren">)</span><a class="headerlink" href="#encrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encrypts the current privateKey and return the Account object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>keyphrase</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+<li><strong>scryptParams</strong> (<em>object</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Account</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="encrypted">
+<code class="descname">encrypted</code><a class="headerlink" href="#encrypted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="export">
+<code class="descname">export</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export Account as a WalletAccount object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>WalletAccount</strong> &#8211;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="getPublicKey">
+<code class="descname">getPublicKey</code><span class="sig-paren">(</span><em>encoded</em><span class="sig-paren">)</span><a class="headerlink" href="#getPublicKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the Public Key in encoded / unencoded form.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>encoded</strong> (<a class="reference internal" href="sc.html#boolean" title="boolean"><em>boolean</em></a>) &#8211; Encoded or unencoded.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="privateKey">
+<code class="descname">privateKey</code><a class="headerlink" href="#privateKey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="publicKey">
+<code class="descname">publicKey</code><a class="headerlink" href="#publicKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the public key in encoded form. This is the form that is the short version (starts with 02 or 03). If you require the unencoded form, do use the publicKey method instead of this getter.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scriptHash">
+<code class="descname">scriptHash</code><a class="headerlink" href="#scriptHash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -297,6 +404,40 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 </dd></dl>
 
 <dl class="function">
+<dt id="export">
+<code class="descname">export</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export this class as a string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>string</strong> &#8211;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="import">
+<code class="descname">import</code><span class="sig-paren">(</span><em>jsonString</em><span class="sig-paren">)</span><a class="headerlink" href="#import" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>jsonString</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Balance</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="verifyAssets">
 <code class="descname">verifyAssets</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#verifyAssets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verifies the coins in balance are unspent. This is an expensive call.</p>
@@ -319,8 +460,8 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 </dd></dl>
 
 <dl class="function">
-<dt id="encrypt">
-<code class="descname">encrypt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#encrypt" title="Permalink to this definition">¶</a></dt>
+<dt id="nep2.encrypt">
+<code class="descclassname">nep2.</code><code class="descname">encrypt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nep2.encrypt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encrypts a WIF key using a given keyphrase under NEP-2 Standard.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -329,6 +470,7 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>wifKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; WIF key to encrypt (52 chars long).</li>
 <li><strong>keyphrase</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).</li>
+<li><strong>scryptParams</strong> (<em>scryptParams</em>) &#8211; Parameters for Scrypt. Defaults to NEP2 specified parameters.</li>
 </ul>
 </td>
 </tr>
@@ -340,8 +482,8 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 </dd></dl>
 
 <dl class="function">
-<dt id="decrypt">
-<code class="descname">decrypt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decrypt" title="Permalink to this definition">¶</a></dt>
+<dt id="nep2.decrypt">
+<code class="descclassname">nep2.</code><code class="descname">decrypt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nep2.decrypt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decrypts an encrypted key using a given keyphrase under NEP-2 Standard.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -350,6 +492,7 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>encryptedKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The encrypted key (58 chars long).</li>
 <li><strong>keyphrase</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).</li>
+<li><strong>scryptParams</strong> (<em>scryptParams</em>) &#8211; Parameters for Scrypt. Defaults to NEP2 specified parameters.</li>
 </ul>
 </td>
 </tr>
@@ -654,6 +797,259 @@ Thus, the name &#8216;scriptHash&#8217; instead of &#8216;keyHash&#8217; is beca
 </table>
 </dd></dl>
 
+<dl class="class">
+<dt id="Wallet">
+<em class="property">class </em><code class="descname">Wallet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Wallet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wallet class to read and integrate a Wallet file into the library. This class is responsible for ensuring that the Wallet File is read correctly and usable by the library.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file</strong> (<em>WalletFile</em>) &#8211; Wallet file</li>
+<li><strong>file.name</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Name of wallet</li>
+<li><strong>file.scrypt</strong> (<em>WalletScryptParams</em>) &#8211; Scrypt parameters</li>
+<li><strong>file.accounts</strong> (<em>Array.&lt;WalletAccount&gt;</em>) &#8211; Accounts in wallet</li>
+<li><strong>file.extra</strong> (<em>object</em>) &#8211; Extra information of wallet.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="accounts">
+<code class="descname">accounts</code><a class="headerlink" href="#accounts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="addAccount">
+<code class="descname">addAccount</code><span class="sig-paren">(</span><em>acct</em><span class="sig-paren">)</span><a class="headerlink" href="#addAccount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>acct</strong> (<em>Account|WalletAccount</em>) &#8211; Account or WalletAccount object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>number</strong> &#8211; Index position of Account in array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="decrypt">
+<code class="descname">decrypt</code><span class="sig-paren">(</span><em>index</em>, <em>keyphrase</em><span class="sig-paren">)</span><a class="headerlink" href="#decrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to decrypt Account at index in array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> (<em>number</em>) &#8211; Index of Account in array.</li>
+<li><strong>keyphrase</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; keyphrase</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>boolean</strong> &#8211; Decryption success/failure</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="decryptAll">
+<code class="descname">decryptAll</code><span class="sig-paren">(</span><em>keyphrase</em><span class="sig-paren">)</span><a class="headerlink" href="#decryptAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to decrypt all accounts with keyphrase.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>keyphrase</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Array.&lt;boolean&gt;</strong> &#8211; Each boolean represents if that Account has been decrypted successfully.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="defaultAccount">
+<code class="descname">defaultAccount</code><a class="headerlink" href="#defaultAccount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the default Account according to the following rules:
+1. First Account where isDefault is true.
+2. First Account with a decrypted private key.
+3. First Account with an encrypted private key.
+4. First Account in the array.
+Throws error if no accounts available.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="encrypt">
+<code class="descname">encrypt</code><span class="sig-paren">(</span><em>index</em>, <em>keyphrase</em><span class="sig-paren">)</span><a class="headerlink" href="#encrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to encrypt Account at index in array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> (<em>number</em>) &#8211; Index of Account in array.</li>
+<li><strong>keyphrase</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>boolean</strong> &#8211; Encryption success/failure</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="encryptAll">
+<code class="descname">encryptAll</code><span class="sig-paren">(</span><em>keyphrase</em><span class="sig-paren">)</span><a class="headerlink" href="#encryptAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to encrypt all accounts with keyphrase.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>keyphrase</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Array.&lt;boolean&gt;</strong> &#8211; Each boolean represents if that Account has been encrypted successfully.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="export">
+<code class="descname">export</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export this class as a string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>string</strong> &#8211;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="extra">
+<code class="descname">extra</code><a class="headerlink" href="#extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="import">
+<code class="descname">import</code><span class="sig-paren">(</span><em>jsonString</em><span class="sig-paren">)</span><a class="headerlink" href="#import" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a Wallet through a JSON string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>jsonString</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; JSON string</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Wallet</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="name">
+<code class="descname">name</code><a class="headerlink" href="#name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="readFile">
+<code class="descname">readFile</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#readFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a Wallet file sync.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>filepath</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Relative path from cwd</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Wallet</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scrypt">
+<code class="descname">scrypt</code><a class="headerlink" href="#scrypt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="setDefault">
+<code class="descname">setDefault</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#setDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set Account at index in array to be default account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> (<em>number</em>) &#8211; The index of the Account in accounts array.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="version">
+<code class="descname">version</code><a class="headerlink" href="#version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="writeFile">
+<code class="descname">writeFile</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#writeFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the Wallet file to a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>filepath</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;boolean&gt;</strong> &#8211; write success / failure</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -703,9 +1099,7 @@ Thus, the name &#8216;scriptHash&#8217; instead of &#8216;keyHash&#8217; is beca
         <dl>
             <dt>Tags</dt>
             <dd><a href="../../1.1.1/index.html">1.1.1</a></dd>
-            <dd><a href="../../2.0.0/reference/wallet.html">2.0.0</a></dd>
-            <dd><a href="../../2.1.0/reference/wallet.html">2.1.0</a></dd>
-            <dd><a href="../../2.1.1/reference/wallet.html">2.1.1</a></dd>
+            <dd><a href="../../2.3.0/reference/wallet.html">2.3.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -721,7 +1115,7 @@ Thus, the name &#8216;scriptHash&#8217; instead of &#8216;keyHash&#8217; is beca
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'2.1.1',
+            VERSION:'2.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

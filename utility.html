@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Utilities &mdash; neon-js 2.1.1 documentation</title>
+  <title>Utilities &mdash; neon-js 2.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="neon-js 2.1.1 documentation" href="index.html"/>
+    <link rel="top" title="neon-js 2.3.0 documentation" href="index.html"/>
         <link rel="next" title="Constants" href="constants.html"/>
         <link rel="prev" title="Smart Contract" href="smart_contracts/index.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.1.1
+                2.3.0
               </div>
             
           
@@ -183,10 +183,10 @@
 <div class="section" id="utilities">
 <h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h1>
 <p>The utilities module is exposed as:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="nx">Neon</span><span class="p">.</span><span class="nx">u</span><span class="p">.</span><span class="nx">reverseHex</span><span class="p">(</span><span class="nx">hexstring</span><span class="p">)</span>
 
-<span class="kr">import</span> <span class="p">{</span> <span class="nx">u</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">u</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="nx">u</span><span class="p">.</span><span class="nx">reverseHex</span><span class="p">(</span><span class="nx">hexstring</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -194,12 +194,12 @@
 <ul class="simple">
 <li>Format manipulation methods</li>
 <li>Hashing methods</li>
-<li>utility classes</li>
+<li>Utility classes</li>
 </ul>
 <div class="section" id="format">
 <h2>Format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h2>
 <p>While most of the methods in Neon takes in strings and outputs strings, the underlying logic requires a lot of format conversions.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="nx">Neon</span><span class="p">.</span><span class="nx">u</span><span class="p">.</span><span class="nx">reverseHex</span><span class="p">(</span><span class="nx">hexstring</span><span class="p">)</span>
 <span class="nx">Neon</span><span class="p">.</span><span class="nx">u</span><span class="p">.</span><span class="nx">num2fixed8</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="nx">Neon</span><span class="p">.</span><span class="nx">u</span><span class="p">.</span><span class="nx">ab2str</span><span class="p">(</span><span class="nx">arrayBuffer</span><span class="p">)</span>
@@ -211,7 +211,7 @@
 <div class="section" id="hashing">
 <h2>Hashing<a class="headerlink" href="#hashing" title="Permalink to this headline">¶</a></h2>
 <p>These methods are convenient wrappers around the CryptoJS functions. They take in strings and return strings.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="c1">// Performs a single SHA</span>
 <span class="nx">Neon</span><span class="p">.</span><span class="nx">u</span><span class="p">.</span><span class="nx">sha256</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span>
 <span class="c1">// Performs a SHA followed by a SHA</span>
@@ -225,7 +225,7 @@
 <h2>Utility Classes<a class="headerlink" href="#utility-classes" title="Permalink to this headline">¶</a></h2>
 <p>StringStream is a simple stream object that allows us to read a hexstring byte by byte. It is not an actual stream but fakes the stream interface for better manipulation. It stores the whole string and a pointer to keep track of the current position on the string.</p>
 <p>It is used in serializing and deserializing a transaction object. The ScriptBuilder class for smart contracts inherits from StringStream.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="kr">const</span> <span class="nx">ss</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">u</span><span class="p">.</span><span class="nx">StringStream</span><span class="p">(</span><span class="s1">&#39;abcdefgh&#39;</span><span class="p">)</span>
 <span class="nx">ss</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// &#39;ab&#39;</span>
 <span class="nx">ss</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1">// &#39;cdef&#39;</span>
@@ -278,16 +278,14 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: 2.1.1
+        v: 2.3.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
             <dd><a href="1.1.1/index.html">1.1.1</a></dd>
-            <dd><a href="2.0.0/utility.html">2.0.0</a></dd>
-            <dd><a href="2.1.0/utility.html">2.1.0</a></dd>
-            <dd><a href="2.1.1/utility.html">2.1.1</a></dd>
+            <dd><a href="2.3.0/utility.html">2.3.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -303,7 +301,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.1.1',
+            VERSION:'2.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

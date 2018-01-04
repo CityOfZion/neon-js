@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Node RPC &mdash; neon-js 2.1.1 documentation</title>
+  <title>Node RPC &mdash; neon-js 2.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 2.1.1 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 2.3.0 documentation" href="../index.html"/>
         <link rel="next" title="API" href="../api/index.html"/>
         <link rel="prev" title="Invocation Transaction" href="../transactions/invocation.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.1.1
+                2.3.0
               </div>
             
           
@@ -181,14 +181,14 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.1.1/rpc/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.1.1.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.3.0/rpc/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.3.0.</a></p>
 <div class="section" id="node-rpc">
 <h1>Node RPC<a class="headerlink" href="#node-rpc" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal"><span class="pre">rpc</span></code> module is exposed as:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="kr">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">rpcClient</span><span class="p">(</span><span class="nx">URL</span><span class="p">)</span>
 
-<span class="kr">import</span> <span class="p">{</span><span class="nx">rpc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">import</span> <span class="p">{</span><span class="nx">rpc</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="kr">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">rpc</span><span class="p">.</span><span class="nx">rpcClient</span><span class="p">(</span><span class="nx">URL</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -198,7 +198,7 @@
 <p>It provides built-in RPC methods for easy calling. Previous queries can be retrieved from the <code class="docutils literal"><span class="pre">history</span></code> property.</p>
 <p>RPC methods mirror the API reference found in the official NEO documentation. All RPC methods return a Promise.</p>
 <p>Do note that method names follow the JS convention of camelCase instead of all lowercase.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="c1">// Creates a RPCClient with URL of version 2.3.2</span>
 <span class="kr">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">rpcClient</span><span class="p">(</span><span class="s1">&#39;http://seed1.neo.org:10332&#39;</span><span class="p">,</span> <span class="s1">&#39;2.3.2&#39;</span><span class="p">)</span>
 <span class="c1">// Returns block number</span>
@@ -219,13 +219,13 @@
 <p>A Query object is a simple wrapper around a request/response pair. It allows us to generate queries quickly without being dependent on a client.</p>
 <p>Custom queries can be created by passing in the necessary parameters.</p>
 <p>There are also static methods to support generating supported RPC methods.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 
 <span class="c1">// Custom query</span>
 <span class="kr">const</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span><span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;newmethod&#39;</span><span class="p">,</span> <span class="nx">params</span><span class="o">:</span> <span class="p">[</span><span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">]})</span>
 <span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;http://mycustomneonode.com:10332&#39;</span><span class="p">)</span>
 
-<span class="kr">import</span> <span class="p">{</span> <span class="nx">rpc</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;neon-js&#39;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">rpc</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="c1">// Simple query creation and execution</span>
 <span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">rpc</span><span class="p">.</span><span class="nx">Query</span><span class="p">.</span><span class="nx">getBlock</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;http://seed1.neo.org:10332&#39;</span><span class="p">)</span>
 </pre></div>
@@ -280,9 +280,7 @@
         <dl>
             <dt>Tags</dt>
             <dd><a href="../../1.1.1/rpc/index.html">1.1.1</a></dd>
-            <dd><a href="../../2.0.0/rpc/index.html">2.0.0</a></dd>
-            <dd><a href="../../2.1.0/rpc/index.html">2.1.0</a></dd>
-            <dd><a href="../../2.1.1/rpc/index.html">2.1.1</a></dd>
+            <dd><a href="../../2.3.0/rpc/index.html">2.3.0</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -298,7 +296,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'2.1.1',
+            VERSION:'2.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
