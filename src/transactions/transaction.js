@@ -1,7 +1,8 @@
-import { getScriptHashFromPublicKey, getScriptHashFromAddress, isAddress } from '../wallet'
+import { Account, getScriptHashFromPublicKey, getScriptHashFromAddress, isAddress } from '../wallet'
 import { TX_VERSION, ASSET_ID } from '../consts'
 import { createScript } from '../sc'
 import { str2hexstring, num2VarInt } from '../utils'
+import TxAttrUsage from './txAttrUsage'
 import * as comp from './components'
 import * as core from './core'
 import * as exc from './exclusive'
@@ -104,7 +105,7 @@ class Transaction {
    * @return {Transaction} Unsigned Transaction
    */
   static createContractTx (balances, intents, override = {}) {
-    if (intents === null) throw new Error(`Useless transaction!`)
+    if (intents === null) throw new Error('Useless transaction!')
     const txConfig = Object.assign({
       type: 128,
       version: TX_VERSION.CONTRACT,
@@ -157,9 +158,24 @@ class Transaction {
       this.outputs.push(comp.createTransactionOutput(assetSymOrTxOut, value, address))
     } else if (typeof (arguments[0]) === 'object') {
       this.outputs.push(arguments[0])
-    } else throw new Error(`Invalid input given! Give either 1 or 3 arguments!`)
+    } else throw new Error('Invalid input given! Give either 1 or 3 arguments!')
+    return this
   }
 
+  /**
+   * Add an attribute.
+   * @param {number} usage - The usage type. Do refer to txAttrUsage enum values for all available options.
+   * @param {string} data - The data as hexstring.
+   */
+  addAttribute (usage, data) {
+    if (typeof data !== 'string') throw new TypeError('data should be formatted as string!')
+    const len = num2VarInt(data.length / 2)
+    this.attributes.push({
+      usage,
+      data: len + data
+    })
+    return this
+  }
   /**
    * Add a remark.
    * @param {string} remark - A remark in ASCII.
@@ -167,11 +183,7 @@ class Transaction {
    */
   addRemark (remark) {
     const hexRemark = str2hexstring(remark)
-    const len = num2VarInt(hexRemark.length / 2)
-    this.attributes.push({
-      usage: parseInt('f0', 16),
-      data: len + hexRemark
-    })
+    return this.addAttribute(TxAttrUsage.Remark, hexRemark)
   }
 
   /**
@@ -206,11 +218,14 @@ class Transaction {
 
   /**
    * Signs a transaction.
-   * @param {string} privateKey
+   * @param {Account|string} signer - Account, privateKey or WIF
    * @return {Transaction} this
    */
-  sign (privateKey) {
-    return core.signTransaction(this, privateKey)
+  sign (signer) {
+    if (typeof signer === 'string') {
+      signer = new Account(signer)
+    }
+    return core.signTransaction(this, signer.privateKey)
   }
 }
 

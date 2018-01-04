@@ -1,5 +1,5 @@
 import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256 } from '../utils'
-import { generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey, getScriptHashFromAddress } from '../wallet'
+import { generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey, getScriptHashFromAddress, isPrivateKey } from '../wallet'
 import { serializeExclusive, deserializeExclusive } from './exclusive'
 import { ASSETS, ASSET_ID } from '../consts'
 import * as comp from './components'
@@ -133,6 +133,7 @@ export const deserializeTransaction = (data) => {
  * @return {Transaction} Signed transaction as an object.
  */
 export const signTransaction = (transaction, privateKey) => {
+  if (!isPrivateKey(privateKey)) throw new Error('Key provided does not look like a private key!')
   const invocationScript = '40' + generateSignature(serializeTransaction(transaction, false), privateKey)
   const verificationScript = getVerificationScriptFromPublicKey(getPublicKeyFromPrivateKey(privateKey))
   const witness = { invocationScript, verificationScript }

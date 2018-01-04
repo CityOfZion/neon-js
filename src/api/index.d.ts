@@ -1,3 +1,6 @@
+///<reference path="../rpc/index.d.ts" />
+///<reference path="../transactions/index.d.ts" />
+
 declare module '@cityofzion/neon-js' {
   interface apiConfig {
     net: string,
@@ -37,6 +40,8 @@ declare module '@cityofzion/neon-js' {
 
 
     //core
+    export function setApiSwitch(newSetting: number): void
+    export function setSwitchFreeze(newSetting: boolean): void
     export function getBalanceFrom(config: apiConfig, api: object): apiConfig
     export function getClaimsFrom(config: apiConfig, api: object): apiConfig
     export function createTx(config: apiConfig, txType: string): apiConfig
@@ -107,8 +112,9 @@ declare module '@cityofzion/neon-js' {
 
     //nep5
     export namespace nep5 {
-      export function getTokenInfo(net: string, scriptHash: string): Promise<{ name: string, symbol: string, decimals: number, totalSupply: number }>
-      export function getTokenBalance(net: string, scriptHash: string, address: string): Promise<number>
+      export function getTokenInfo(url: string, scriptHash: string): Promise<{ name: string, symbol: string, decimals: number, totalSupply: number }>
+      export function getTokenBalance(url: string, scriptHash: string, address: string): Promise<number>
+      export function getToken(url: string, scriptHash: string, address?: string): Promise<object>
       export function doTransferToken(
         net: string,
         scriptHash: string,
@@ -123,6 +129,7 @@ declare module '@cityofzion/neon-js' {
   export interface semantic {
     get: {
       price: (coin?: string, currency?: string) => Promise<number>
+      prices: (coins?: Array<string>, currency?: string) => Promise<object>
       balance: (net: string, address: string) => Promise<Balance>
       claims: (net: string, address: string) => Promise<Claim>
       transactionHistory: (net: string, address: string) => Promise<History>

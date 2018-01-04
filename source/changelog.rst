@@ -4,6 +4,50 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
+2.3.0
+=====
+
+- Smart Contract
+
+  - Add OpCodes ``APPEND`` and ``REVERSE``.
+
+- API
+
+  - Add ``getPrices`` to get multiple token prices with a single API call.
+  - Update parsing of ``api/getToken`` to include case of empty string for parsing the ``decimals`` field.
+  - Update ``doMintToken`` to include extra information required for future invokes.
+
+    - This is in preparation of the upcoming changes for minting NEP5 tokens.
+
+  - Implement the API switch.
+
+    - This internal switch allows control over priority of API server.
+    - Set to 0 for neoscan priority, 1 for neonDB priority. Setting it in the middle results in a random choice.
+    - Switch will dynamically choose whichever server that respond better. A failure will start tilting the switch towards the other server. Freezing the switch will prevent this dynamic behavior.
+    - This is currently not fully exposed but will be in the future.
+
+    ::
+
+      import {api} from '@cityofzion/neon-js'
+      api.setApiSwitch(0)
+      api.sendAsset(config) // sendAsset, claimGas and doInvoke will default to use neoscan first
+      api.setApiSwitch(1)
+      api.doInvoke(config) // This call will default to use neonDB first
+
+      // This freezes the switch, preventing it from changing dynamically.
+      // You still can change it with setApiSwitch.
+      api.setSwitchFreeze(true)
+
+- Fixes
+
+  - Fix ``core.signTransaction`` to check if input is a HEX private key.
+  - Fix NEP5 tokens to parse by ``decimals`` field.
+  - Fix default values for invocation exclusive component.
+
+- Others
+
+  - Add docs build information to readme.
+
 2.2.2
 =====
 

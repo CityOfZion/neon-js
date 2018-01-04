@@ -4,6 +4,54 @@ import { Account } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Query } from '../rpc'
 import { Transaction } from '../transactions'
+import { reverseHex } from '../utils'
+import { txAttrUsage } from '../transactions/txAttrUsage'
+
+/** This determines which API we should dial.
+* 0 means 100% neoscan
+* 1 means 100% neonDB
+* This is ensure that we do not always hit the failing endpoint.
+*/
+var apiSwitch = 1
+var switchFrozen = true
+export const setApiSwitch = (newSetting) => {
+  if (newSetting >= 0 && newSetting <= 1) apiSwitch = newSetting
+}
+
+export const setSwitchFreeze = (newSetting) => {
+  switchFrozen = !!newSetting
+}
+
+const increaseNeoscanWeight = () => {
+  if (!switchFrozen && apiSwitch > 0) apiSwitch -= 0.2
+}
+
+const increaseNeonDBWeight = () => {
+  if (!switchFrozen && apiSwitch < 1) apiSwitch += 0.2
+}
+const loadBalance = (func, config) => {
+  if (Math.random() > apiSwitch) {
+    return func(config, neoscan)
+      .then((c) => {
+        increaseNeoscanWeight()
+        return c
+      })
+      .catch(() => {
+        increaseNeonDBWeight()
+        return func(config, neonDB)
+      })
+  } else {
+    return func(config, neonDB)
+      .then((c) => {
+        increaseNeonDBWeight()
+        return c
+      })
+      .catch(() => {
+        increaseNeoscanWeight()
+        return func(config, neoscan)
+      })
+  }
+}
 
 /**
  * Check that properties are defined in obj.
@@ -28,7 +76,7 @@ const checkProperty = (obj, ...props) => {
  */
 export const getBalanceFrom = (config, api) => {
   checkProperty(config, 'net', 'address')
-  if (!api.getBalance || !api.getRPCEndpoint) throw new Error(`Invalid type. Is this an API object?`)
+  if (!api.getBalance || !api.getRPCEndpoint) throw new Error('Invalid type. Is this an API object?')
   const balanceP = api.getBalance(config.net, config.address)
   const urlP = api.getRPCEndpoint(config.net)
 
@@ -50,7 +98,7 @@ export const getBalanceFrom = (config, api) => {
  */
 export const getClaimsFrom = (config, api) => {
   checkProperty(config, 'net', 'address')
-  if (!api.getBalance || !api.getRPCEndpoint) throw new Error(`Invalid type. Is this an API object?`)
+  if (!api.getBalance || !api.getRPCEndpoint) throw new Error('Invalid type. Is this an API object?')
   const claimsP = api.getClaims(config.net, config.address)
   // Get URL
   const urlP = api.getRPCEndpoint(config.net)
@@ -86,7 +134,7 @@ export const createTx = (config, txType) => {
     case 209:
       checkProperty(config, 'balance', 'gas', 'script')
       if (!config.intents) config.intents = []
-      tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas)
+      tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas, config.override)
       break
     default:
       throw new Error(`Tx Type not found: ${txType}`)
@@ -111,10 +159,10 @@ export const signTx = (config) => {
     promise = config.signingFunction(config.tx, acct.publicKey)
   } else if (config.privateKey) {
     let acct = new Account(config.privateKey)
-    if (config.address !== acct.address) throw new Error(`Private Key and Balance address does not match!`)
+    if (config.address !== acct.address) throw new Error('Private Key and Balance address does not match!')
     promise = Promise.resolve(config.tx.sign(config.privateKey))
   } else {
-    throw new Error(`Needs privateKey or signingFunction to sign!`)
+    throw new Error('Needs privateKey or signingFunction to sign!')
   }
   return promise.then((signedTx) => {
     return Object.assign(config, { tx: signedTx })
@@ -164,17 +212,13 @@ export const makeIntent = (assetAmts, address) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
- * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
- * @param {TransactionOutput[]} intents - Intents.
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {TransactionOutput[]} config.intents - Intents.
  * @return {object} Configuration object.
  */
 export const sendAsset = (config) => {
-  return getBalanceFrom(config, neonDB)
-    .then(
-    (c) => c,
-    () => getBalanceFrom(config, neoscan)
-    )
+  return loadBalance(getBalanceFrom, config)
     .then((c) => createTx(c, 'contract'))
     .then((c) => signTx(c))
     .then((c) => sendTx(c))
@@ -185,16 +229,12 @@ export const sendAsset = (config) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
- * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
  * @return {object} Configuration object.
  */
 export const claimGas = (config) => {
-  return getClaimsFrom(config, neonDB)
-    .then(
-    (c) => c,
-    () => getClaimsFrom(config, neoscan)
-    )
+  return loadBalance(getClaimsFrom, config)
     .then((c) => createTx(c, 'claim'))
     .then((c) => signTx(c))
     .then((c) => sendTx(c))
@@ -205,20 +245,54 @@ export const claimGas = (config) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [privateKey] - private key to sign with. Either this or signingFunction is required.
- * @param {function} [signingFunction] - An external signing function to sign with. Either this or privateKey is required.
- * @param {object} [intents] - Intents
- * @param {string} config.script - VM script.
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {object} [config.intents] - Intents
+ * @param {string} config.script - VM script. Must include empty args parameter even if no args are present
  * @param {number} config.gas - gasCost of VM script.
  * @return {object} Configuration object.
  */
 export const doInvoke = (config) => {
-  return getBalanceFrom(config, neonDB)
-    .then(
-    (c) => c,
-    () => getBalanceFrom(config, neoscan)
-    )
+  return loadBalance(getBalanceFrom, config)
+    .then((c) => addAttributesForMintToken(c))
     .then((c) => createTx(c, 'invocation'))
     .then((c) => signTx(c))
+    .then((c) => attachInvokedContractForMintToken(c))
     .then((c) => sendTx(c))
+}
+
+/**
+ * Adds attributes to the override object for mintTokens invocations.
+ * @param {object} config - Configuration object.
+ * @return {object} Configuration object.
+ */
+const addAttributesForMintToken = (config) => {
+  if (!config.override) config.override = {}
+  if ((typeof config.script === 'object') && config.script.operation === 'mintTokens' && config.script.scriptHash) {
+    config.override.attributes = [{
+      data: reverseHex(config.script.scriptHash),
+      usage: txAttrUsage.Script
+    }]
+  }
+  return config
+}
+
+/**
+ * Adds the contractState to mintTokens invocations.
+ * @param {object} config - Configuration object.
+ * @return {object} Configuration object.
+ */
+const attachInvokedContractForMintToken = (config) => {
+  if ((typeof config.script === 'object') && config.script.operation === 'mintTokens' && config.script.scriptHash) {
+    return Query.getContractState(config.script.scriptHash).execute(config.url)
+      .then((contractState) => {
+        const attachInvokedContract = {
+          invocationScript: '0000',
+          verificationScript: contractState.result.script
+        }
+        config.tx.scripts.unshift(attachInvokedContract)
+        return config
+      })
+  }
+  return config
 }

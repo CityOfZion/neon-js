@@ -14,7 +14,7 @@ import { ASSET_ID } from '../consts'
  * @return {string}
  */
 export const serializeTransactionInput = (input) => {
-  return reverseHex(input.prevHash) + reverseHex(num2hexstring(input.prevIndex, 4))
+  return reverseHex(input.prevHash) + reverseHex(num2hexstring(input.prevIndex, 2))
 }
 
 /**
