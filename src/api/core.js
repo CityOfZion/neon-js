@@ -12,8 +12,8 @@ import { txAttrUsage } from '../transactions/txAttrUsage'
 * 1 means 100% neonDB
 * This is ensure that we do not always hit the failing endpoint.
 */
-var apiSwitch = 0
-var switchFrozen = false
+var apiSwitch = 1
+var switchFrozen = true
 export const setApiSwitch = (newSetting) => {
   if (newSetting >= 0 && newSetting <= 1) apiSwitch = newSetting
 }

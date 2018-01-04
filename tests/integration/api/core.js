@@ -8,12 +8,14 @@ describe('Integration: API Core', function () {
   let mock
 
   const useNeonDB = () => {
+    core.setApiSwitch(0)
     mock = setupMock()
     mock.onGet(/neoscan/).timeout()
     mock.onAny().passThrough()
   }
 
   const useNeoscan = () => {
+    core.setApiSwitch(1)
     mock = setupMock()
     mock.onGet(/testnet-api.wallet/).timeout()
     mock.onAny().passThrough()
