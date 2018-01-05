@@ -37,7 +37,14 @@ class Balance {
     if (bal.assets) {
       Object.keys(bal.assets).map((key) => {
         if (typeof bal.assets[key] === 'object') {
-          this.addAsset(key, bal.assets[key])
+          const parsedAsset = {
+            balance: +(bal.assets[key].balance).toFixed(8),
+            unspent: bal.assets[key].unspent.map(coin => {
+              coin.value = +(coin.value).toFixed(8)
+              return coin
+            })
+          }
+          this.addAsset(key, parsedAsset)
         }
       })
     }
