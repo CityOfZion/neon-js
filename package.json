@@ -9,7 +9,6 @@
     "chai-as-promised": "^7.1.0",
     "clean-webpack-plugin": "^0.1.17",
     "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "^11.2.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.1.1",
@@ -27,15 +26,13 @@
   "types": "src/index.d.ts",
   "dependencies": {
     "axios": "^0.16.2",
-    "base-x": "^3.0.2",
-    "bigi": "^1.4.2",
-    "buffer": "^5.0.6",
+    "bs58": "^4.0.1",
+    "bs58check": "^2.1.1",
     "crypto-js": "^3.1.9-1",
-    "ecurve": "^1.0.5",
     "elliptic": "^6.4.0",
-    "fs": "^0.0.1-security",
     "js-scrypt": "^0.2.0",
     "secure-random": "^1.1.1",
+    "semver": "^5.4.1",
     "wif": "^2.0.6"
   },
   "scripts": {
