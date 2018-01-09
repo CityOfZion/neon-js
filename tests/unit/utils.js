@@ -14,7 +14,8 @@ import {
   reverseHex,
   sha256,
   str2ab,
-  str2hexstring
+  str2hexstring,
+  Fixed8
 } from '../../src/utils'
 
 describe('Utils', () => {
@@ -376,6 +377,43 @@ describe('Utils', () => {
       const again = sha256(expected)
       actual.should.eql(expected)
       again.should.eql(hash256(input))
+    })
+  })
+
+  describe('Fixed8', () => {
+    describe('constructor', () => {
+      it('number', () => {
+        let result = new Fixed8(1.23456789).toString()
+        result.should.eql('1.23456789')
+      })
+
+      it('hex', () => {
+        let result = new Fixed8('0000000005f5e100', 16).toNumber()
+        result.should.eql(100000000)
+      })
+
+      it('string', () => {
+        let result = new Fixed8('1.23456789').toNumber()
+        result.should.eql(1.23456789)
+      })
+    })
+    it('fromHex', () => {
+      let result = Fixed8.fromHex('0000000005f5e100').toNumber()
+      result.should.eql(1)
+    })
+
+    it('fromReverseHex', () => {
+      let result = Fixed8.fromReverseHex('00e1f50500000000').toNumber()
+      result.should.eql(1)
+    })
+    it('toHex', () => {
+      let result = new Fixed8(1).toHex()
+      result.should.eql('0000000005f5e100')
+    })
+
+    it('toReverseHex', () => {
+      let result = new Fixed8(1).toReverseHex()
+      result.should.eql('00e1f50500000000')
     })
   })
 })

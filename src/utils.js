@@ -1,4 +1,5 @@
 import { SHA256, RIPEMD160, enc } from 'crypto-js'
+import BN from 'bignumber.js'
 
 /**
  * @param {arrayBuffer} buf
@@ -284,4 +285,29 @@ export const sha256 = (hex) => {
   if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
   let hexEncoded = enc.Hex.parse(hex)
   return SHA256(hexEncoded).toString()
+}
+
+/**
+ * @class Fixed8
+ * @classdesc A warpper around bignumber.js that adds on helper methods commonly used in neon-js
+ * @param {string|int} value
+ * @param {[number]} base
+ */
+export class Fixed8 extends BN {
+  toHex () {
+    const hexstring = this.mul(100000000).trunc().toString(16)
+    return '0'.repeat(16 - hexstring.length) + hexstring
+  }
+
+  toReverseHex () {
+    return reverseHex(this.toHex())
+  }
+
+  static fromHex (hex) {
+    return new Fixed8(hex, 16).div(100000000)
+  }
+
+  static fromReverseHex (hex) {
+    return this.fromHex(reverseHex(hex))
+  }
 }
