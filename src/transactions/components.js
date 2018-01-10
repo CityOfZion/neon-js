@@ -34,14 +34,20 @@ export const deserializeTransactionInput = (stream) => {
  * @property {Fixed8} value - value of output, Fixed8
  * @property {string} scriptHash - Uint160
  */
-
+export const TransactionOutput = (input) => {
+  return {
+    assetId: input.assetId,
+    value: new Fixed8(input.value),
+    scriptHash: input.scriptHash
+  }
+}
 /**
  * Serializes a TransactionOutput.
  * @param {TransactionOutput} output
  * @return {string}
  */
 export const serializeTransactionOutput = (output) => {
-  const value = output.value.toReverseHex()
+  const value = new Fixed8(output.value).toReverseHex()
   return reverseHex(output.assetId) + value + reverseHex(output.scriptHash)
 }
 
