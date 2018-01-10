@@ -1,10 +1,11 @@
 import { Transaction } from '../transactions'
 import { ASSETS } from '../consts'
+import { Fixed8 } from '../utils'
 import { Query } from '../rpc'
 
 /**
  * @typedef AssetBalance
- * @property {number} balance - The total balance in this AssetBalance
+ * @property {Fixed8} balance - The total balance in this AssetBalance
  * @property {Coin[]} unspent - Unspent coins
  * @property {Coin[]} spent - Spent coins
  * @property {Coin[]} unconfirmed - Unconfirmed coins
@@ -14,8 +15,25 @@ import { Query } from '../rpc'
 * @typedef Coin
 * @property {number} index - Index in list.
 * @property {string} txid - Transaction ID which produced this coin.
-* @property {number} value - Value of this coin.
+* @property {Fixed8} value - Value of this coin.
 */
+
+const cleanAssetBalance = (assetBalance) => {
+  return {
+    balance: new Fixed8(assetBalance.balance),
+    unspent: assetBalance.unspent ? assetBalance.unspent.map(coin => cleanCoin(coin)) : [],
+    spent: assetBalance.spent ? assetBalance.spent.map(coin => cleanCoin(coin)) : [],
+    unconfirmed: assetBalance.unconfirmed ? assetBalance.unconfirmed.map(coin => cleanCoin(coin)) : []
+  }
+}
+
+const cleanCoin = (coin) => {
+  return {
+    index: coin.index,
+    txid: coin.txid,
+    value: new Fixed8(coin.value)
+  }
+}
 
 /**
  * @class Balance
@@ -37,14 +55,7 @@ class Balance {
     if (bal.assets) {
       Object.keys(bal.assets).map((key) => {
         if (typeof bal.assets[key] === 'object') {
-          const parsedAsset = {
-            balance: +(bal.assets[key].balance).toFixed(8),
-            unspent: bal.assets[key].unspent.map(coin => {
-              coin.value = +(coin.value).toFixed(8)
-              return coin
-            })
-          }
-          this.addAsset(key, parsedAsset)
+          this.addAsset(key, bal.assets[key])
         }
       })
     }
@@ -68,11 +79,11 @@ class Balance {
    * @param {AssetBalance} [assetBalance] - The assetBalance if initialized. Default is a zero balance object.
    * @return this
    */
-  addAsset (sym, assetBalance = { balance: 0, spent: [], unspent: [], unconfirmed: [] }) {
+  addAsset (sym, assetBalance = { balance: new Fixed8(0), spent: [], unspent: [], unconfirmed: [] }) {
     sym = sym.toUpperCase()
     this.assetSymbols.push(sym)
-    const newBalance = Object.assign({ balance: 0, spent: [], unspent: [], unconfirmed: [] }, assetBalance)
-    this.assets[sym] = JSON.parse(JSON.stringify(newBalance))
+    const cleanedAssetBalance = cleanAssetBalance(assetBalance)
+    this.assets[sym] = cleanedAssetBalance
     return this
   }
 
@@ -125,7 +136,7 @@ class Balance {
         if (unconfirmedIndex >= 0) {
           assetBalance.unconfirmed.splice(unconfirmedIndex, 1)
         }
-        assetBalance.balance += output.value
+        assetBalance.balance = assetBalance.balance.add(output.value)
         if (!assetBalance.unspent) assetBalance.unspent = []
         assetBalance.unspent.push(coin)
       } else {
@@ -181,15 +192,15 @@ class Balance {
  * @return {Promise<AssetBalance>} Returns a new AssetBalance
  */
 export const verifyAssetBalance = (url, assetBalance) => {
-  let newAssetBalance = { balance: 0, spent: [], unspent: [], unconfirmed: [] }
+  let newAssetBalance = { balance: new Fixed8(0), spent: [], unspent: [], unconfirmed: [] }
   return verifyCoins(url, assetBalance.unspent)
     .then((values) => {
       values.map((v, i) => {
         let coin = assetBalance.unspent[i]
         if (v) {
-          if (v.value !== coin.value) coin.value = v.value
+          if (v.value.cmp(coin.value) !== 0) coin.value = v.value
           newAssetBalance.unspent.push(coin)
-          newAssetBalance.balance += coin.value
+          newAssetBalance.balance = newAssetBalance.balance.add(coin.value)
         } else {
           newAssetBalance.spent.push(coin)
         }
@@ -215,7 +226,7 @@ export const verifyCoins = (url, coinArr) => {
           txid: coin.txid,
           index: result.n,
           assetId: result.asset,
-          value: parseInt(result.value, 10)
+          value: new Fixed8(result.value)
         }
       })
     promises.push(promise)

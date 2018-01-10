@@ -1,4 +1,4 @@
-import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256 } from '../utils'
+import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256, Fixed8 } from '../utils'
 import { generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey, getScriptHashFromAddress, isPrivateKey } from '../wallet'
 import { serializeExclusive, deserializeExclusive } from './exclusive'
 import { ASSETS, ASSET_ID } from '../consts'
@@ -8,56 +8,65 @@ import * as comp from './components'
  * Calculate the inputs required given the intents and gasCost. gasCost has to be seperate because it will not be reflected as an TransactionOutput.
  * @param {Balance} balances - Balance of all assets available.
  * @param {TransactionOutput[]} intents - All sending intents
- * @param {number} gasCost - gasCost required for the transaction.
+ * @param {number|Fixed8} gasCost - gasCost required for the transaction.
  * @return {object} {inputs: TransactionInput[], change: TransactionOutput[] }
  */
 export const calculateInputs = (balances, intents, gasCost = 0) => {
-  // We will work in integers here to be more accurate.
-  // As assets are stored as Fixed8, we just multiple everything by 10e8 and round off to get integers.
   if (intents === null) intents = []
   const requiredAssets = intents.reduce((assets, intent) => {
-    const fixed8Value = Math.round(intent.value * 100000000)
-    assets[intent.assetId] ? assets[intent.assetId] += fixed8Value : assets[intent.assetId] = fixed8Value
+    assets[intent.assetId] ? assets[intent.assetId] = assets[intent.assetId].add(intent.value) : assets[intent.assetId] = intent.value
     return assets
   }, {})
   // Add GAS cost in
-  if (gasCost > 0) {
-    const fixed8GasCost = gasCost * 100000000
-    requiredAssets[ASSET_ID.GAS] ? requiredAssets[ASSET_ID.GAS] += fixed8GasCost : requiredAssets[ASSET_ID.GAS] = fixed8GasCost
+  gasCost = new Fixed8(gasCost)
+  if (gasCost.gt(0)) {
+    requiredAssets[ASSET_ID.GAS] ? requiredAssets[ASSET_ID.GAS].add(gasCost) : requiredAssets[ASSET_ID.GAS] = gasCost
   }
-  let change = []
-  const inputs = Object.keys(requiredAssets).map((assetId) => {
+  const inputsAndChange = Object.keys(requiredAssets).map((assetId) => {
     const requiredAmt = requiredAssets[assetId]
     const assetSymbol = ASSETS[assetId]
     if (balances.assetSymbols.indexOf(assetSymbol) === -1) throw new Error(`This balance does not contain any ${assetSymbol}!`)
     const assetBalance = balances.assets[assetSymbol]
-    if (assetBalance.balance * 100000000 < requiredAmt) throw new Error(`Insufficient ${ASSETS[assetId]}! Need ${requiredAmt / 100000000} but only found ${assetBalance.balance}`)
-    // Ascending order sort
-    assetBalance.unspent.sort((a, b) => a.value - b.value)
-    let selectedInputs = 0
-    let selectedAmt = 0
-    // Selected min inputs to satisfy outputs
-    while (selectedAmt < requiredAmt) {
-      selectedInputs += 1
-      if (selectedInputs > assetBalance.unspent.length) throw new Error(`Insufficient ${ASSETS[assetId]}! Reached end of unspent coins!`)
-      selectedAmt += Math.round(assetBalance.unspent[selectedInputs - 1].value * 100000000)
+    if (assetBalance.balance.lt(requiredAmt)) throw new Error(`Insufficient ${ASSETS[assetId]}! Need ${requiredAmt.toString()} but only found ${assetBalance.balance.toString()}`)
+    return calculateInputsForAsset(assetBalance, requiredAmt, assetId, balances.address)
+  })
+
+  const output = inputsAndChange.reduce((prev, curr) => {
+    return {
+      inputs: prev.inputs.concat(curr.inputs),
+      change: prev.change.concat(curr.change)
     }
-    // Construct change output
-    if (selectedAmt > requiredAmt) {
-      change.push({
-        assetId,
-        value: (selectedAmt - requiredAmt) / 100000000,
-        scriptHash: getScriptHashFromAddress(balances.address)
-      })
-    }
-    // Format inputs
-    return assetBalance.unspent.slice(0, selectedInputs).map((input) => {
-      return { prevHash: input.txid, prevIndex: input.index }
-    })
-  }).reduce((prev, curr) => prev.concat(curr), [])
-  return { inputs, change }
+  }, { inputs: [], change: [] })
+  return output
+  // return { inputs, change }
 }
 
+const calculateInputsForAsset = (assetBalance, requiredAmt, assetId, address) => {
+  // Ascending order sort
+  assetBalance.unspent.sort((a, b) => a.value.sub(b.value))
+  let selectedInputs = 0
+  let selectedAmt = new Fixed8(0)
+  // Selected min inputs to satisfy outputs
+  while (selectedAmt.lt(requiredAmt)) {
+    selectedInputs += 1
+    if (selectedInputs > assetBalance.unspent.length) throw new Error(`Insufficient ${ASSETS[assetId]}! Reached end of unspent coins! ${assetBalance.unspent.length}`)
+    selectedAmt = selectedAmt.add(assetBalance.unspent[selectedInputs - 1].value)
+  }
+  const change = []
+  // Construct change output
+  if (selectedAmt.gt(requiredAmt)) {
+    change.push({
+      assetId,
+      value: selectedAmt.sub(requiredAmt),
+      scriptHash: getScriptHashFromAddress(address)
+    })
+  }
+  // Format inputs
+  const inputs = assetBalance.unspent.slice(0, selectedInputs).map((input) => {
+    return { prevHash: input.txid, prevIndex: input.index }
+  })
+  return { inputs, change }
+}
 /**
  * Serializes a given transaction object
  * @param {Transaction} tx
