@@ -303,6 +303,10 @@ export class Fixed8 extends BN {
     return reverseHex(this.toHex())
   }
 
+  inspect (depth, opts) {
+    return this.toFixed(8)
+  }
+
   static fromHex (hex) {
     return new Fixed8(hex, 16).div(100000000)
   }
