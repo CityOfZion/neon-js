@@ -23,7 +23,7 @@ import * as exc from './exclusive'
  * @param {Witness[]} tx.scripts - Witnesses.
  */
 class Transaction {
-  constructor (tx) {
+  constructor (tx = {}) {
     /** @type {number} */
     this.type = tx.type || 128
 

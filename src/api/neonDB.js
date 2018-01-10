@@ -34,14 +34,7 @@ export const getBalance = (net, address) => {
       const bal = new Balance({ net, address: res.data.address })
       Object.keys(res.data).map((key) => {
         if (key === 'net' || key === 'address') return
-        const parsedAsset = {
-          balance: +(res.data[key].balance).toFixed(8),
-          unspent: res.data[key].unspent.map(coin => {
-            coin.value = +(coin.value).toFixed(8)
-            return coin
-          })
-        }
-        bal.addAsset(key, parsedAsset)
+        bal.addAsset(key, res.data[key])
       })
       // To be deprecated
       Object.assign(bal, res.data)
