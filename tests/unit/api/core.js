@@ -3,6 +3,7 @@ import { neonDB, neoscan } from '../../../src/api'
 import { Transaction, signTransaction, getTransactionHash } from '../../../src/transactions'
 import { Balance } from '../../../src/wallet'
 import { DEFAULT_RPC } from '../../../src/consts'
+import { Fixed8 } from '../../../src/utils'
 import testKeys from '../testKeys.json'
 import testData from '../testData.json'
 import mockData from './mockData.json'
@@ -69,12 +70,12 @@ describe('Core API', function () {
       .should.deep.include.members([
         {
           assetId: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
-          value: 1,
+          value: new Fixed8(1),
           scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
         },
         {
           assetId: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
-          value: 1.1,
+          value: new Fixed8(1.1),
           scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
         }]
       )

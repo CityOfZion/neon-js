@@ -1,6 +1,7 @@
 import Balance from '../../../src/wallet/Balance'
 import testData from '../testData.json'
 import { Transaction } from '../../../src/transactions'
+import { Fixed8 } from '../../../src/utils'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 
@@ -29,7 +30,7 @@ describe('Balance', function () {
       bal.assetSymbols.length.should.equal(3)
       bal.assetSymbols[2].should.equal('NEW2')
       bal.assets.NEW2.should.have.keys(['balance', 'spent', 'unspent', 'unconfirmed'])
-      bal.assets.NEW2.balance.should.equal(1)
+      bal.assets.NEW2.balance.toNumber().should.equal(1)
     })
   })
 
@@ -37,22 +38,22 @@ describe('Balance', function () {
     const intents = [
       {
         assetId: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
-        value: 200,
+        value: new Fixed8(200),
         scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
       },
       {
         assetId: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
-        value: 59,
+        value: new Fixed8(59),
         scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
       },
       {
         assetId: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
-        value: 400,
+        value: new Fixed8(400),
         scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
       },
       {
         assetId: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
-        value: 20.96175487,
+        value: new Fixed8(20.96175487),
         scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
       }
     ]

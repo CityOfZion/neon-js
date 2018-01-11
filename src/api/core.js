@@ -3,7 +3,7 @@ import * as neoscan from './neoscan'
 import { Account } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Query } from '../rpc'
-import { Transaction } from '../transactions'
+import { Transaction, TransactionOutput } from '../transactions'
 import { reverseHex } from '../utils'
 import { txAttrUsage } from '../transactions/txAttrUsage'
 
@@ -203,7 +203,7 @@ export const sendTx = (config) => {
 export const makeIntent = (assetAmts, address) => {
   const acct = new Account(address)
   return Object.keys(assetAmts).map((key) => {
-    return { assetId: ASSET_ID[key], value: assetAmts[key], scriptHash: acct.scriptHash }
+    return TransactionOutput({ assetId: ASSET_ID[key], value: assetAmts[key], scriptHash: acct.scriptHash })
   })
 }
 

@@ -396,6 +396,12 @@ describe('Utils', () => {
         let result = new Fixed8('1.23456789').toNumber()
         result.should.eql(1.23456789)
       })
+
+      it('Fixed8', () => {
+        let anotherFixed8 = new Fixed8(1)
+        let result = new Fixed8(anotherFixed8).toNumber()
+        result.should.eql(1)
+      })
     })
     it('fromHex', () => {
       let result = Fixed8.fromHex('0000000005f5e100').toNumber()

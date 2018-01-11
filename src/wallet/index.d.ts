@@ -8,7 +8,7 @@ declare module '@cityofzion/neon-js' {
   }
 
   export interface AssetBalance {
-    balance: string
+    balance: Fixed8
     unspent: Coin[]
     spent: Coin[]
     uncofirmed: Coin[]
@@ -17,7 +17,7 @@ declare module '@cityofzion/neon-js' {
   export interface Coin {
     index: number
     txid: string
-    value: number
+    value: Fixed8
   }
 
   export interface ScryptParams {
@@ -77,7 +77,7 @@ declare module '@cityofzion/neon-js' {
       static import(jsonString: string): Balance
 
       addAsset(sym: string, assetBalance?: AssetBalance): this
-      addToken(sym: string, tokenBalance?: number): this
+      addToken(sym: string, tokenBalance?: number|Fixed8): this
       applyTx(tx: Transaction, confirmed?: boolean): this
       export(): string
       verifyAssets(url: string): Promise<Balance>

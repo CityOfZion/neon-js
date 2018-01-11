@@ -14,41 +14,33 @@ import * as exc from './exclusive'
  * A transaction is made up of components found in the component file.
  * Besides those components which are found in every transaction, there are also special data that is unique to each transaction type. These 'exclusive' data can be found in the exclusive file.
  * This class is a wrapper around the various transaction building methods found in this folder.
- * @param {object} config - A config object that contains all the properties of a Transaction
- * @param {number} config.type - Transaction type. Default is 128 (ContractTransaction).
- * @param {number} config.version - Transaction version. Default is latest version for ContractTransaction.
- * @param {TransactionAttribute[]} config.attributes - Transaction Attributes.
- * @param {TransactionInput[]} config.inputs - Transaction Inputs.
- * @param {TransactionOutput[]} config.outputs - Transaction Outputs.
- * @param {Witness[]} config.scripts - Witnesses.
+ * @param {object} tx - A Transaction-like object.
+ * @param {number} tx.type - Transaction type. Default is 128 (ContractTransaction).
+ * @param {number} tx.version - Transaction version. Default is latest version for ContractTransaction.
+ * @param {TransactionAttribute[]} tx.attributes - Transaction Attributes.
+ * @param {TransactionInput[]} tx.inputs - Transaction Inputs.
+ * @param {TransactionOutput[]} tx.outputs - Transaction Outputs.
+ * @param {Witness[]} tx.scripts - Witnesses.
  */
 class Transaction {
-  constructor (config) {
-    const tx = Object.assign({
-      type: 128,
-      version: TX_VERSION.CONTRACT,
-      attributes: [],
-      inputs: [],
-      outputs: [],
-      scripts: []
-    }, config)
+  constructor (tx = {}) {
     /** @type {number} */
-    this.type = tx.type
+    this.type = tx.type || 128
 
     /** @type {number} */
-    this.version = tx.version
+    this.version = tx.version || TX_VERSION.CONTRACT
 
     /** @type {TransactionAttribute[]} */
-    this.attributes = tx.attributes
+    this.attributes = tx.attributes || []
 
     /** @type {TransactionInput[]} */
-    this.inputs = tx.inputs
+    this.inputs = tx.inputs || []
 
     /** @type {TransactionOutput[]} */
-    this.outputs = tx.outputs
+    this.outputs = tx.outputs ? tx.outputs.map((tx) => comp.TransactionOutput(tx)) : []
 
     /** @type {Witness[]} */
-    this.scripts = tx.scripts
+    this.scripts = tx.scripts || []
     const exclusive = exc.getExclusive[this.type](tx)
     Object.keys(exclusive).map((k) => {
       this[k] = exclusive[k]
