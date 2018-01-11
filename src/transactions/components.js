@@ -31,7 +31,7 @@ export const deserializeTransactionInput = (stream) => {
 /**
  * @typedef TransactionOutput
  * @property {string} assetId - assetId, Uint256
- * @property {Fixed8} value - value of output, Fixed8
+ * @property {number|Fixed8} value - value of output, Fixed8
  * @property {string} scriptHash - Uint160
  */
 export const TransactionOutput = (input) => {

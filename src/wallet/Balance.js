@@ -90,13 +90,13 @@ class Balance {
   /**
    * Adds a new NEP-5 Token to this Balance.
    * @param {string} sym - The NEP-5 Token Symbol to refer by.
-   * @param {number} tokenBalance - The amount of tokens this account holds.
+   * @param {number|Fixed8} tokenBalance - The amount of tokens this account holds.
    * @return this
    */
   addToken (sym, tokenBalance = 0) {
     sym = sym.toUpperCase()
     this.tokenSymbols.push(sym)
-    this.tokens[sym] = tokenBalance
+    this.tokens[sym] = new Fixed8(tokenBalance)
     return this
   }
 
