@@ -294,6 +294,11 @@ export const sha256 = (hex) => {
  * @param {[number]} base
  */
 export class Fixed8 extends BN {
+  constructor (input) {
+    if (typeof input === 'number') input = input.toFixed(8)
+    super(input)
+  }
+
   toHex () {
     const hexstring = this.mul(100000000).trunc().toString(16)
     return '0'.repeat(16 - hexstring.length) + hexstring
