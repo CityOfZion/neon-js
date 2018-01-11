@@ -294,9 +294,9 @@ export const sha256 = (hex) => {
  * @param {[number]} base
  */
 export class Fixed8 extends BN {
-  constructor (input) {
+  constructor (input, base = undefined) {
     if (typeof input === 'number') input = input.toFixed(8)
-    super(input)
+    super(input, base)
   }
 
   toHex () {
