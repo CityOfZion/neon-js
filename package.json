@@ -34,7 +34,8 @@
     "js-scrypt": "^0.2.0",
     "secure-random": "^1.1.1",
     "semver": "^5.4.1",
-    "wif": "^2.0.6"
+    "wif": "^2.0.6",
+    "winston": "^3.0.0-rc1"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
