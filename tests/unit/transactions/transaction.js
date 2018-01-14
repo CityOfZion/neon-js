@@ -1,5 +1,5 @@
 import Tx from '../../../src/transactions/transaction'
-import { Balance, Account } from '../../../src/wallet'
+import { Balance, Account, Claims } from '../../../src/wallet'
 import data from './data.json'
 import createData from './createData.json'
 import { ASSET_ID, CONTRACTS } from '../../../src/consts'
@@ -33,7 +33,7 @@ describe('Transaction', function () {
   })
 
   it('create ClaimTx', () => {
-    const tx = Tx.createClaimTx(createData.claim.address, createData.claim)
+    const tx = Tx.createClaimTx(createData.claim.address, new Claims(createData.claim))
     tx.type.should.equal(2)
     tx.claims.length.should.equal(4)
     tx.outputs.length.should.equal(1)
@@ -79,7 +79,7 @@ describe('Transaction', function () {
   it('deserialize', () => {
     Object.keys(data).map((k) => {
       const tx = Tx.deserialize(data[k].serialized.stream)
-      tx.should.eql(data[k].deserialized)
+      tx.should.eql(new Tx(data[k].deserialized))
     })
   })
 
