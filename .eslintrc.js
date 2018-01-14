@@ -4,6 +4,7 @@ module.exports = {
     "mocha": true
   },
   "globals": {
-    "setupMock": true
+    "setupMock": true,
+    'setupLogs': true
   }
 };

@@ -173,8 +173,7 @@ describe('Core API', function () {
     })
 
     it('errors when given wrong type', () => {
-      const thrower = () => core.createTx(config, 'weird')
-      thrower.should.throw()
+      return core.createTx(config, 'weird').should.eventually.be.rejected
     })
   })
 

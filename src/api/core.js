@@ -3,9 +3,11 @@ import * as neoscan from './neoscan'
 import { Account } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Query } from '../rpc'
-import { Transaction, TransactionOutput } from '../transactions'
+import { Transaction, TransactionOutput, TxAttrUsage } from '../transactions'
 import { reverseHex } from '../utils'
-import { txAttrUsage } from '../transactions/txAttrUsage'
+import logger from '../logging'
+
+const log = logger('api')
 
 /** This determines which API we should dial.
 * 0 means 100% neoscan
@@ -20,13 +22,16 @@ export const setApiSwitch = (newSetting) => {
 
 export const setSwitchFreeze = (newSetting) => {
   switchFrozen = !!newSetting
+  log.info(`core/setSwitchFreeze API switch is frozen: ${switchFrozen}`)
 }
 
 const increaseNeoscanWeight = () => {
+  log.info(`core API Switch increasing weight towards neoscan`)
   if (!switchFrozen && apiSwitch > 0) apiSwitch -= 0.2
 }
 
 const increaseNeonDBWeight = () => {
+  log.info(`core API Switch increasing weight towards neonDB`)
   if (!switchFrozen && apiSwitch < 1) apiSwitch += 0.2
 }
 const loadBalance = (func, config) => {
@@ -61,7 +66,7 @@ const loadBalance = (func, config) => {
 const checkProperty = (obj, ...props) => {
   for (const prop of props) {
     if (!obj.hasOwnProperty(prop)) {
-      throw new Error(`Property not found: ${prop}`)
+      throw new ReferenceError(`Property not found: ${prop}`)
     }
   }
 }
@@ -86,6 +91,10 @@ export const getBalanceFrom = (config, api) => {
       if (!config.url) override.url = values[1]
       return Object.assign(config, override)
     })
+    .catch(err => {
+      log.error(`getBalanceFrom ${api.name} failed with: ${err.message}`)
+      throw err
+    })
 }
 
 /**
@@ -108,13 +117,17 @@ export const getClaimsFrom = (config, api) => {
     .then((values) => {
       return Object.assign(config, { claims: values[0], url: values[1] })
     })
+    .catch(err => {
+      log.error(`getClaimsFrom ${api.name} failed with: ${err.message}`)
+      throw err
+    })
 }
 
 /**
  * Creates a transaction with the given config and txType.
  * @param {object} config - Configuration object.
  * @param {string|number} txType - Transaction Type. Name of transaction or the transaction type number. eg, 'claim' or 2.
- * @return {object} Configuration object + tx
+ * @return {Promise<object>} Configuration object + tx
  */
 export const createTx = (config, txType) => {
   if (typeof txType === 'string') txType = txType.toLowerCase()
@@ -137,7 +150,7 @@ export const createTx = (config, txType) => {
       tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas, config.override)
       break
     default:
-      throw new Error(`Tx Type not found: ${txType}`)
+      return Promise.reject(new Error(`Tx Type not found: ${txType}`))
   }
   return Promise.resolve(Object.assign(config, { tx }))
 }
@@ -149,7 +162,7 @@ export const createTx = (config, txType) => {
  * @param {string} [config.privateKey] - private key to sign with.
  * @param {string} [config.publicKey] - public key. Required if using signingFunction.
  * @param {function} [config.signingFunction] - External signing function. Requires publicKey.
- * @return {object} Configuration object.
+ * @return {Promise<object>} Configuration object.
  */
 export const signTx = (config) => {
   checkProperty(config, 'tx')
@@ -159,10 +172,10 @@ export const signTx = (config) => {
     promise = config.signingFunction(config.tx, acct.publicKey)
   } else if (config.privateKey) {
     let acct = new Account(config.privateKey)
-    if (config.address !== acct.address) throw new Error('Private Key and Balance address does not match!')
+    if (config.address !== acct.address) return Promise.reject(new Error('Private Key and Balance address does not match!'))
     promise = Promise.resolve(config.tx.sign(config.privateKey))
   } else {
-    throw new Error('Needs privateKey or signingFunction to sign!')
+    return Promise.reject(new Error('Needs privateKey or signingFunction to sign!'))
   }
   return promise.then((signedTx) => {
     return Object.assign(config, { tx: signedTx })
@@ -187,6 +200,18 @@ export const sendTx = (config) => {
         if (config.balance) {
           config.balance.applyTx(config.tx, true)
         }
+      } else {
+        const dump = {
+          net: config.net,
+          address: config.address,
+          intents: config.intents,
+          balance: config.balance,
+          claims: config.claims,
+          script: config.script,
+          gas: config.gas,
+          tx: config.tx
+        }
+        log.error(`Transaction failed for ${config.address}: ${config.tx.serialize()}`, dump)
       }
       return Object.assign(config, { response: res })
     })
@@ -222,6 +247,17 @@ export const sendAsset = (config) => {
     .then((c) => createTx(c, 'contract'))
     .then((c) => signTx(c))
     .then((c) => sendTx(c))
+    .catch(err => {
+      const dump = {
+        net: config.net,
+        address: config.address,
+        intents: config.intents,
+        balance: config.balance,
+        tx: config.tx
+      }
+      log.error(`sendAsset failed with: ${err.message}. Dumping config`, dump)
+      throw err
+    })
 }
 
 /**
@@ -238,6 +274,17 @@ export const claimGas = (config) => {
     .then((c) => createTx(c, 'claim'))
     .then((c) => signTx(c))
     .then((c) => sendTx(c))
+    .catch(err => {
+      const dump = {
+        net: config.net,
+        address: config.address,
+        intents: config.intents,
+        claims: config.claims,
+        tx: config.tx
+      }
+      log.error(`claimGas failed with ${err.message}. Dumping config`, dump)
+      throw err
+    })
 }
 
 /**
@@ -259,6 +306,19 @@ export const doInvoke = (config) => {
     .then((c) => signTx(c))
     .then((c) => attachInvokedContractForMintToken(c))
     .then((c) => sendTx(c))
+    .catch(err => {
+      const dump = {
+        net: config.net,
+        address: config.address,
+        intents: config.intents,
+        balance: config.balance,
+        script: config.script,
+        gas: config.gas,
+        tx: config.tx
+      }
+      log.error(`doInvoke failed with ${err.message}. Dumping config`, dump)
+      throw err
+    })
 }
 
 /**
@@ -271,7 +331,7 @@ const addAttributesForMintToken = (config) => {
   if ((typeof config.script === 'object') && config.script.operation === 'mintTokens' && config.script.scriptHash) {
     config.override.attributes = [{
       data: reverseHex(config.script.scriptHash),
-      usage: txAttrUsage.Script
+      usage: TxAttrUsage.Script
     }]
   }
   return config

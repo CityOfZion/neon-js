@@ -5,6 +5,8 @@ import testKeys from '../../unit/testKeys.json'
 
 describe('Integration: API Core', function () {
   this.timeout(30000)
+  const log = setupLogs()
+  log.info('Integration: API Core')
   let mock
 
   const useNeonDB = () => {
@@ -39,7 +41,7 @@ describe('Integration: API Core', function () {
       return core.sendAsset(config1)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(`sendAsset(neonDB): ${c.response.txid}`)
         })
     })
 
@@ -56,7 +58,7 @@ describe('Integration: API Core', function () {
       return core.sendAsset(config2)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(`sendAsset(neoscan): ${c.response.txid}`)
         })
     })
   })
@@ -73,7 +75,7 @@ describe('Integration: API Core', function () {
       return core.claimGas(config)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(`claimGas(neonDB): ${c.response.txid}`)
         })
     })
 
@@ -88,7 +90,7 @@ describe('Integration: API Core', function () {
       return core.claimGas(config2)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(`claimGas(neoscan): ${c.response.txid}`)
         })
     })
   })
@@ -108,11 +110,11 @@ describe('Integration: API Core', function () {
       return core.doInvoke(config)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(`doInvoke(neonDB): ${c.response.txid}`)
         })
     })
 
-    it('neoscan: transfer tokens', () => {
+    it('neoscan', () => {
       // This does a transferToken
       useNeoscan()
       const fromAddrScriptHash = ContractParam.byteArray(testKeys.b.address, 'address')
@@ -134,7 +136,7 @@ describe('Integration: API Core', function () {
       return core.doInvoke(config2)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(`doInvoke(neoscan): ${c.response.txid}`)
         })
     })
 
@@ -157,7 +159,7 @@ describe('Integration: API Core', function () {
       return core.doInvoke(config2)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(`doInvoke(neoscan mint tokens): ${c.response.txid}`)
         })
     })
   })

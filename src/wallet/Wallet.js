@@ -1,6 +1,9 @@
 import fs from 'fs'
 import Account from './Account'
 import { DEFAULT_SCRYPT, DEFAULT_WALLET } from '../consts'
+import logger from '../logging'
+
+const log = logger('wallet')
 
 /**
  * @typedef WalletFile
@@ -100,6 +103,11 @@ class Wallet {
    * @return {number} Index position of Account in array.
    */
   addAccount (acct) {
+    try {
+      const address = acct.address
+    } catch (err) {
+      log.warn(`Encrypted account added to Wallet. You will not be able to export this wallet without first decrypting this account`)
+    }
     const index = this.accounts.length
     if (acct instanceof Account) {
       this.accounts.push(acct)

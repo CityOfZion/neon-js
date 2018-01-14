@@ -1,8 +1,11 @@
 import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256, Fixed8 } from '../utils'
-import { generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey, getScriptHashFromAddress, isPrivateKey } from '../wallet'
+import { Account, generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey, getScriptHashFromAddress, isPrivateKey } from '../wallet'
 import { serializeExclusive, deserializeExclusive } from './exclusive'
 import { ASSETS, ASSET_ID } from '../consts'
 import * as comp from './components'
+import logger from '../logging'
+
+const log = logger('tx')
 
 /**
  * Calculate the inputs required given the intents and gasCost. gasCost has to be seperate because it will not be reflected as an TransactionOutput.
@@ -143,10 +146,12 @@ export const deserializeTransaction = (data) => {
  */
 export const signTransaction = (transaction, privateKey) => {
   if (!isPrivateKey(privateKey)) throw new Error('Key provided does not look like a private key!')
+  const acct = new Account(privateKey)
   const invocationScript = '40' + generateSignature(serializeTransaction(transaction, false), privateKey)
   const verificationScript = getVerificationScriptFromPublicKey(getPublicKeyFromPrivateKey(privateKey))
   const witness = { invocationScript, verificationScript }
   transaction.scripts ? transaction.scripts.push(witness) : transaction.scripts = [witness]
+  log.info(`Signed tx ${transaction.hash} with Account[${acct.address}]`)
   return transaction
 }
 

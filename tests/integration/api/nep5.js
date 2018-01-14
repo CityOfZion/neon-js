@@ -4,6 +4,7 @@ import testKeys from '../../unit/testKeys.json'
 
 describe('Integration: API NEP5', function () {
   this.timeout(20000)
+  const log = setupLogs()
   const scriptHash = CONTRACTS.TEST_LWTF
 
   describe('getToken', function () {
@@ -52,7 +53,7 @@ describe('Integration: API NEP5', function () {
     return NEP5.doTransferToken(NEO_NETWORK.TEST, scriptHash, testKeys.c.wif, testKeys.b.address, transferAmount, gasCost)
       .then(({ result, txid }) => {
         result.should.equal(true)
-        console.log(txid)
+        log.info(`doTransferToken: ${txid}`)
       })
   })
 })

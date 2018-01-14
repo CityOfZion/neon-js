@@ -5,7 +5,9 @@ import { reverseHex, hexstring2str } from '../utils'
 import { getRPCEndpoint, getBalance } from './neonDB'
 import { Transaction } from '../transactions'
 import { ASSET_ID } from '../consts'
+import logger from '../logging'
 
+const log = logger('api')
 /**
  * Parses the VM output for decimals. The VM returns an integer for most cases but it can be an empty string for zero.
  */
@@ -41,6 +43,10 @@ export const getTokenInfo = (url, scriptHash) => {
         totalSupply: res[3] / Math.pow(10, res[2])
       }
     })
+    .catch(err => {
+      log.error(`getTokenInfo failed with : ${err.message}`)
+      throw err
+    })
 }
 
 /**
@@ -66,6 +72,10 @@ export const getTokenBalance = (url, scriptHash, address) => {
       } catch (error) {
         return 0
       }
+    })
+    .catch(err => {
+      log.error(`getTokenBalance failed with : ${err.message}`)
+      throw err
     })
 }
 
@@ -98,6 +108,10 @@ export const getToken = (url, scriptHash, address) => {
         totalSupply: res[3] / Math.pow(10, res[2]),
         balance: res.length === 5 ? res[4] / Math.pow(10, res[2]) : null
       }
+    })
+    .catch(err => {
+      log.error(`getToken failed with : ${err.message}`)
+      throw err
     })
 }
 
