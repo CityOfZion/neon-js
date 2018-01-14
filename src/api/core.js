@@ -26,13 +26,17 @@ export const setSwitchFreeze = (newSetting) => {
 }
 
 const increaseNeoscanWeight = () => {
-  log.info(`core API Switch increasing weight towards neoscan`)
-  if (!switchFrozen && apiSwitch > 0) apiSwitch -= 0.2
+  if (!switchFrozen && apiSwitch > 0) {
+    apiSwitch -= 0.2
+    log.info(`core API Switch increasing weight towards neoscan`)
+  }
 }
 
 const increaseNeonDBWeight = () => {
-  log.info(`core API Switch increasing weight towards neonDB`)
-  if (!switchFrozen && apiSwitch < 1) apiSwitch += 0.2
+  if (!switchFrozen && apiSwitch < 1) {
+    apiSwitch += 0.2
+    log.info(`core API Switch increasing weight towards neonDB`)
+  }
 }
 const loadBalance = (func, config) => {
   if (Math.random() > apiSwitch) {
