@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Balance } from '../wallet'
-import logger from '../logging'
+import { Fixed8 } from '../utils'
 
 const log = logger('api')
 export const name = 'neoscan'
@@ -102,10 +102,10 @@ const parseUnspent = (unspentArr) => {
 const parseClaims = (claimArr) => {
   return claimArr.map((c) => {
     return {
-      start: c.start_height,
-      end: c.ed_height,
+      start: new Fixed8(c.start_height),
+      end: new Fixed8(c.ed_height),
       index: c.n,
-      claim: Math.round(c.unclaimed * 100000000),
+      claim: new Fixed8(c.unclaimed),
       txid: c.txid,
       value: c.value
     }

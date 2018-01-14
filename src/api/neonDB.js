@@ -3,7 +3,7 @@ import { Account, Balance } from '../wallet'
 import { Transaction, TxAttrUsage } from '../transactions'
 import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
-import { reverseHex } from '../utils'
+import { Fixed8, reverseHex } from '../utils'
 import logger from '../logging'
 
 const log = logger('api')
@@ -55,8 +55,17 @@ export const getBalance = (net, address) => {
 export const getClaims = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/claims/' + address).then((res) => {
-    log.info(`Retrieved Claims for ${address} from neonDB ${net}`)
-    return res.data
+    const claims = res.data
+    claims.claims = claims.claims.map(c => {
+      return {
+        claim: new Fixed8(c.claim).div(100000000),
+        index: c.index,
+        start: new Fixed8(c.start),
+        end: new Fixed8(c.end),
+        txid: c.txid
+      }
+    })
+    return claims
   })
 }
 

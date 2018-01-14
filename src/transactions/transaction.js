@@ -1,7 +1,7 @@
 import { Account, getScriptHashFromPublicKey, getScriptHashFromAddress, isAddress } from '../wallet'
 import { TX_VERSION, ASSET_ID } from '../consts'
 import { createScript } from '../sc'
-import { str2hexstring, num2VarInt } from '../utils'
+import { Fixed8, str2hexstring, num2VarInt } from '../utils'
 import TxAttrUsage from './txAttrUsage'
 import * as comp from './components'
 import * as core from './core'
@@ -71,20 +71,21 @@ class Transaction {
    * @return {Transaction} Unsigned Transaction
    */
   static createClaimTx (publicKeyOrAddress, claimData, override = {}) {
+    if (claimData.claims.length === 0) throw new Error('Useless transaction! There is no claims!')
     const txConfig = Object.assign({
       type: 2,
       version: TX_VERSION.CLAIM
     }, override)
-    let totalClaim = 0
+    let totalClaim = new Fixed8(0)
     let maxClaim = 255
     txConfig.claims = claimData.claims.slice(0, maxClaim).map((c) => {
-      totalClaim += c.claim
+      totalClaim = totalClaim.add(c.claim)
       return { prevHash: c.txid, prevIndex: c.index }
     })
     txConfig.outputs = [{
       assetId: ASSET_ID.GAS,
-      value: totalClaim / 100000000,
-      scriptHash: isAddress(publicKeyOrAddress) ? getScriptHashFromAddress(publicKeyOrAddress) : getScriptHashFromPublicKey(publicKeyOrAddress)
+      value: totalClaim,
+      scriptHash: new Account(publicKeyOrAddress).acct.scriptHash
     }]
     return new Transaction(Object.assign(txConfig, override))
   }
@@ -97,7 +98,7 @@ class Transaction {
    * @return {Transaction} Unsigned Transaction
    */
   static createContractTx (balances, intents, override = {}) {
-    if (intents === null) throw new Error('Useless transaction!')
+    if (intents === null) throw new Error('Useless transaction! You are not sending anything!')
     const txConfig = Object.assign({
       type: 128,
       version: TX_VERSION.CONTRACT,
