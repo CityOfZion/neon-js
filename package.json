@@ -32,10 +32,11 @@
     "crypto-js": "^3.1.9-1",
     "elliptic": "^6.4.0",
     "js-scrypt": "^0.2.0",
+    "loglevel": "^1.6.1",
+    "loglevel-plugin-prefix": "^0.7.2",
     "secure-random": "^1.1.1",
     "semver": "^5.4.1",
-    "wif": "^2.0.6",
-    "winston": "^3.0.0-rc1"
+    "wif": "^2.0.6"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
