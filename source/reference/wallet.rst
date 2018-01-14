@@ -7,9 +7,12 @@ Module ``wallet``
 .. autoclass:: Account
     :members:
 
-.. autofunction:: encrypt
+.. autoclass:: Balance
+    :members:
 
-.. autofunction:: decrypt
+.. autofunction:: nep2.encrypt
+
+.. autofunction:: nep2.decrypt
 
 .. autofunction:: generatePrivateKey
 
@@ -40,3 +43,6 @@ Module ``wallet``
 .. autofunction:: isNEP2
 
 .. autofunction:: isWIF
+
+.. autoclass:: Wallet
+    :members:

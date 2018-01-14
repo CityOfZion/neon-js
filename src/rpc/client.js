@@ -3,7 +3,7 @@ import { isAddress } from '../wallet'
 import semver from 'semver'
 import { RPC_VERSION, DEFAULT_RPC, NEO_NETWORK } from '../consts'
 
-const versionRegex = /NEO:(\d+\.\d+\.\d+)/
+const versionRegex = /NEO: (\d+\.\d+\.\d+)/
 /**
  * @class RPCClient
  * @classdesc
@@ -228,6 +228,7 @@ class RPCClient {
       .catch((err) => {
         if (err.message.includes('Method not found')) {
           this.version = RPC_VERSION
+          return this.version
         } else {
           throw err
         }
@@ -240,7 +241,7 @@ class RPCClient {
    * @return {Promise<object>}
    */
   invoke (scriptHash, params) {
-    if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error(`This method is not implemented for this version`))
+    if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error('This method is not implemented for this version'))
     return this.execute(Query.invoke(scriptHash, params))
       .then((res) => {
         return res.result
@@ -255,7 +256,7 @@ class RPCClient {
    * @return {Promise<object>}
    */
   invokeFunction (scriptHash, operation, params) {
-    if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error(`This method is not implemented for this version`))
+    if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error('This method is not implemented for this version'))
     return this.execute(Query.invokeFunction(scriptHash, operation, params))
       .then((res) => {
         return res.result
@@ -268,7 +269,7 @@ class RPCClient {
    * @return {Promise<object>}
    */
   invokeScript (script) {
-    if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error(`This method is not implemented for this version`))
+    if (semver.lt(this.version, '2.3.3')) return Promise.reject(new Error('This method is not implemented for this version'))
     return this.execute(Query.invokeScript(script))
       .then((res) => {
         return res.result

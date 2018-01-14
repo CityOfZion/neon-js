@@ -1,49 +1,13 @@
 import axios from 'axios'
-import { Account } from '../wallet'
-import { Transaction } from '../transactions'
+import { Account, Balance } from '../wallet'
+import { Transaction, TxAttrUsage } from '../transactions'
 import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
+import { Fixed8, reverseHex } from '../utils'
+import logger from '../logging'
 
-/**
- * @typedef {object} Coin
- * @property {number} index - Index in list.
- * @property {string} txid - Transaction ID which produced this coin.
- * @property {number} value - Value of this coin.
- */
-
-/**
- * @typedef {object} Balance
- * @property {{balance: number, unspent: Coin[]}} NEO Amount of NEO in address
- * @property {{balance: number, unspent: Coin[]}} GAS Amount of GAS in address
- * @property {string} address - The Address that was queried
- * @property {string} net - 'MainNet' or 'TestNet'
- */
-
-/**
- * @typedef {object} History
- * @property {string} address - Address.
- * @property {string} name - API name.
- * @property {string} net - 'MainNet' or 'TestNet'
- * @property {PastTx[]} history - List of past transactions.
- */
-
-/**
- * @typedef {object} PastTx
- * @property {number} GAS - Gas involved.
- * @property {number} NEO - NEO involved.
- * @property {number} block_index - Block index.
- * @property {boolean} gas_sent - Was GAS sent.
- * @property {boolean} neo_sent - Was NEO sent.
- * @property {string} txid - Transaction ID.
- */
-/**
- * @typedef {object} Response
- * @property {string} jsonrpc - JSON-RPC Version
- * @property {number} id - Unique ID.
- * @property {any} result - Result
- * @property {string} [txid] - Transaction hash of the successful transaction. Only available when result is true.
-*/
-
+const log = logger('api')
+export const name = 'neonDB'
 /**
  * API Switch for MainNet and TestNet
  * @param {string} net - 'MainNet', 'TestNet', or custom neon-wallet-db URL.
@@ -66,10 +30,19 @@ export const getAPIEndpoint = (net) => {
  * @return {Promise<Balance>} Balance of address
  */
 export const getBalance = (net, address) => {
+  log.warn('Balance object expected to change shape in upcoming version')
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/balance/' + address)
     .then((res) => {
-      return res.data
+      const bal = new Balance({ net, address: res.data.address })
+      Object.keys(res.data).map((key) => {
+        if (key === 'net' || key === 'address') return
+        bal.addAsset(key, res.data[key])
+      })
+      // To be deprecated
+      Object.assign(bal, res.data)
+      log.info(`Retrieved Balance for ${address} from neonDB ${net}`)
+      return bal
     })
 }
 
@@ -82,7 +55,17 @@ export const getBalance = (net, address) => {
 export const getClaims = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/claims/' + address).then((res) => {
-    return res.data
+    const claims = res.data
+    claims.claims = claims.claims.map(c => {
+      return {
+        claim: new Fixed8(c.claim).div(100000000),
+        index: c.index,
+        start: new Fixed8(c.start),
+        end: new Fixed8(c.end),
+        txid: c.txid
+      }
+    })
+    return claims
   })
 }
 
@@ -94,6 +77,7 @@ export const getClaims = (net, address) => {
 export const getRPCEndpoint = (net) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/network/best_node').then((response) => {
+    log.info(`Best node from neonDB ${net}: ${response.data.node}`)
     return response.data.node
   })
 }
@@ -107,6 +91,7 @@ export const getRPCEndpoint = (net) => {
 export const getTransactionHistory = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/history/' + address).then((response) => {
+    log.info(`Retrieved History for ${address} from neonDB ${net}`)
     return response.data.history
   })
 }
@@ -131,6 +116,7 @@ export const getWalletDBHeight = (net) => {
  * @return {Promise<Response>} RPC response from sending transaction
  */
 export const doClaimAllGas = (net, privateKey, signingFunction) => {
+  log.warn('doClaimAllGas will be deprecated in favor of claimGas')
   const account = new Account(privateKey)
   const rpcEndpointPromise = getRPCEndpoint(net)
   const claimsPromise = getClaims(net, account.address)
@@ -155,6 +141,8 @@ export const doClaimAllGas = (net, privateKey, signingFunction) => {
     .then((res) => {
       if (res.result === true) {
         res.txid = signedTx
+      } else {
+        log.error(`Transaction failed: ${signedTx.serialize()}`)
       }
       return res
     })
@@ -170,9 +158,10 @@ export const doClaimAllGas = (net, privateKey, signingFunction) => {
  * @return {Promise<Response>} RPC Response
  */
 export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunction) => {
+  log.warn('doMintTokens will be deprecated in favor of doInvoke')
   const account = new Account(fromWif)
   const intents = [{ assetId: ASSET_ID.NEO, value: neo, scriptHash: scriptHash }]
-  const invoke = { operation: 'mintTokens', scriptHash }
+  const invoke = { operation: 'mintTokens', scriptHash, args: [] }
   const rpcEndpointPromise = getRPCEndpoint(net)
   const balancePromise = getBalance(net, account.address)
   let signedTx
@@ -181,20 +170,34 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
     .then((values) => {
       endpt = values[0]
       let balances = values[1]
-      const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { version: 1 })
+      const attributes = [{
+        data: reverseHex(scriptHash),
+        usage: TxAttrUsage.Script
+      }]
+      const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { attributes })
       if (signingFunction) {
         return signingFunction(unsignedTx, account.publicKey)
       } else {
-        unsignedTx.sign(account.privateKey)
+        return unsignedTx.sign(account.privateKey)
       }
     })
     .then((signedResult) => {
       signedTx = signedResult
+      return Query.getContractState(scriptHash).execute(endpt)
+    })
+    .then((contractState) => {
+      const attachInvokedContract = {
+        invocationScript: '0000',
+        verificationScript: contractState.result.script
+      }
+      signedTx.scripts.unshift(attachInvokedContract)
       return Query.sendRawTransaction(signedTx).execute(endpt)
     })
     .then((res) => {
       if (res.result === true) {
         res.txid = signedTx.hash
+      } else {
+        log.error(`Transaction failed: ${signedTx.serialize()}`)
       }
       return res
     })
@@ -209,6 +212,7 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
  * @return {Promise<Response>} RPC Response
  */
 export const doSendAsset = (net, toAddress, from, assetAmounts, signingFunction) => {
+  log.warn('doSendAsset will be deprecated in favor of sendAsset')
   const fromAcct = new Account(from)
   const toAcct = new Account(toAddress)
   const rpcEndpointPromise = getRPCEndpoint(net)
@@ -236,6 +240,8 @@ export const doSendAsset = (net, toAddress, from, assetAmounts, signingFunction)
     .then((res) => {
       if (res.result === true) {
         res.txid = signedTx.hash
+      } else {
+        log.error(`Transaction failed: ${signedTx.serialize()}`)
       }
       return res
     })

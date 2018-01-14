@@ -2,36 +2,60 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
+
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:8.9.3
 version: 2
 jobs:
   build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:7.10
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo-neon-js
-
+    <<: *defaults
     steps:
+      - run:
+          name: "Versions"
+          command: |
+            node --version
+            npm --version
+            yarn --version
       - checkout
-
       # Download and cache dependencies
       - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
-      - run: yarn install
-
+          key: neon-{{ checksum "package.json" }}
+      - run: npm install
       - save_cache:
+          key: neon-{{ checksum "package.json" }}
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+  integration-test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: neon-{{ checksum "package.json" }}
+      - run: npm run test:integration
+  unit-test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: neon-{{ checksum "package.json" }}
+      - run: npm run test:unit
 
-      # run tests!
-      - run: yarn test
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - integration-test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+      - unit-test:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: gh-pages

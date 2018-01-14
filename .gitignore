@@ -7,3 +7,5 @@ node_modules
 
 /source/_build/
 build
+
+*.log

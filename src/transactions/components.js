@@ -1,4 +1,4 @@
-import { num2hexstring, num2VarInt, reverseHex, fixed82num, num2fixed8 } from '../utils'
+import { num2hexstring, num2VarInt, reverseHex, Fixed8 } from '../utils'
 import { getScriptHashFromAddress } from '../wallet'
 import { ASSET_ID } from '../consts'
 
@@ -14,7 +14,7 @@ import { ASSET_ID } from '../consts'
  * @return {string}
  */
 export const serializeTransactionInput = (input) => {
-  return reverseHex(input.prevHash) + reverseHex(num2hexstring(input.prevIndex, 4))
+  return reverseHex(input.prevHash) + reverseHex(num2hexstring(input.prevIndex, 2))
 }
 
 /**
@@ -31,17 +31,23 @@ export const deserializeTransactionInput = (stream) => {
 /**
  * @typedef TransactionOutput
  * @property {string} assetId - assetId, Uint256
- * @property {number} value - value of output, Fixed8
+ * @property {number|Fixed8} value - value of output, Fixed8
  * @property {string} scriptHash - Uint160
  */
-
+export const TransactionOutput = (input) => {
+  return {
+    assetId: input.assetId,
+    value: new Fixed8(input.value),
+    scriptHash: input.scriptHash
+  }
+}
 /**
  * Serializes a TransactionOutput.
  * @param {TransactionOutput} output
  * @return {string}
  */
 export const serializeTransactionOutput = (output) => {
-  const value = num2fixed8(output.value)
+  const value = new Fixed8(output.value).toReverseHex()
   return reverseHex(output.assetId) + value + reverseHex(output.scriptHash)
 }
 
@@ -52,7 +58,7 @@ export const serializeTransactionOutput = (output) => {
  */
 export const deserializeTransactionOutput = (stream) => {
   const assetId = reverseHex(stream.read(32))
-  const value = fixed82num(stream.read(8))
+  const value = Fixed8.fromReverseHex(stream.read(8))
   const scriptHash = reverseHex(stream.read(20))
   return { assetId, value, scriptHash }
 }
@@ -60,13 +66,14 @@ export const deserializeTransactionOutput = (stream) => {
 /**
  * A helper method to create a TransactionOutput using human-friendly inputs.
  * @param {string} assetSym - The Symbol of the asset to send. Typically NEO or GAS.
- * @param {number} value - The value to send.
+ * @param {number|Fixed8} val - The value to send.
  * @param {string} address - The address to send the asset to.
  * @return {TransactionOutput}
  */
-export const createTransactionOutput = (assetSym, value, address) => {
+export const createTransactionOutput = (assetSym, val, address) => {
   const assetId = ASSET_ID[assetSym]
   const scriptHash = getScriptHashFromAddress(address)
+  const value = new Fixed8(val)
   return { assetId, value, scriptHash }
 }
 

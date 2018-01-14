@@ -9,16 +9,17 @@ import scrypt from 'js-scrypt'
 import { generatePrivateKey } from './core'
 import Account from './Account'
 import { ab2hexstring, hexXor } from '../utils'
+import { DEFAULT_SCRYPT, NEP_HEADER, NEP_FLAG } from '../consts'
+import logger from '../logging'
 
-// specified by nep2, same as bip38
-const NEP_HEADER = '0142'
-const NEP_FLAG = 'e0'
-const SCRYPT_OPTS = {
-  cost: 16384,
-  blockSize: 8,
-  parallel: 8,
-  size: 64
-}
+const log = logger('wallet')
+
+/**
+ * @typedef ScryptParams
+ * @param {number} cost - (n) Must be power of 2. 2^8 - 2^64
+ * @param {number} blockSize - (r) 1 - 256
+ * @param {number} parallel - (p) 1 - 256
+ */
 
 /**
  * Encrypts an WIF key with a given passphrase, returning a Promise<Account>.
@@ -27,6 +28,7 @@ const SCRYPT_OPTS = {
  * @return {Promise<Account>} A Promise returning an Account object.
  */
 export const encryptWifAccount = (wif, passphrase) => {
+  log.warn('encryptWifAccount to be deprecated in favor of Account.encrypt')
   return encryptWIF(wif, passphrase).then((encWif) => {
     const loadAccount = new Account(wif)
     loadAccount.encryptedWif = encWif
@@ -41,6 +43,7 @@ export const encryptWifAccount = (wif, passphrase) => {
  * @return {Promise<Account>} A Promise returning an Account object.
  */
 export const generateEncryptedWif = (passphrase) => {
+  log.warn('generateEncryptedWif to be deprecated.')
   const newPrivateKey = generatePrivateKey()
   return encryptWifAccount(newPrivateKey, passphrase)
 }
@@ -49,14 +52,16 @@ export const generateEncryptedWif = (passphrase) => {
  * Encrypts a WIF key using a given keyphrase under NEP-2 Standard.
  * @param {string} wifKey - WIF key to encrypt (52 chars long).
  * @param {string} keyphrase - The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
+ * @param {scryptParams} [scryptParams] - Parameters for Scrypt. Defaults to NEP2 specified parameters.
  * @returns {string} The encrypted key in Base58 (Case sensitive).
  */
-export const encrypt = (wifKey, keyphrase) => {
+export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
+  scryptParams = ensureScryptParams(scryptParams)
   const account = new Account(wifKey)
   // SHA Salt (use the first 4 bytes)
   const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
   // Scrypt
-  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), SCRYPT_OPTS).toString('hex')
+  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), scryptParams).toString('hex')
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   // AES Encrypt
@@ -71,13 +76,15 @@ export const encrypt = (wifKey, keyphrase) => {
  * Decrypts an encrypted key using a given keyphrase under NEP-2 Standard.
  * @param {string} encryptedKey - The encrypted key (58 chars long).
  * @param {string} keyphrase - The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
+ * @param {scryptParams} [scryptParams] - Parameters for Scrypt. Defaults to NEP2 specified parameters.
  * @returns {string} The decrypted WIF key.
  */
-export const decrypt = (encryptedKey, keyphrase) => {
+export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
+  scryptParams = ensureScryptParams(scryptParams)
   const assembled = ab2hexstring(bs58check.decode(encryptedKey))
   const addressHash = assembled.substr(6, 8)
   const encrypted = assembled.substr(-64)
-  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), SCRYPT_OPTS).toString('hex')
+  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), scryptParams).toString('hex')
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   const ciphertext = { ciphertext: enc.Hex.parse(encrypted), salt: '' }
@@ -92,9 +99,13 @@ export const decrypt = (encryptedKey, keyphrase) => {
 // helpers to wrap synchronous functions in promises
 
 export const encryptWIF = (wif, passphrase) => {
+  log.warn('encryptWIF to be deprecated in favor of Account.encrypt')
   return Promise.resolve(encrypt(wif, passphrase))
 }
 
 export const decryptWIF = (encrypted, passphrase) => {
+  log.warn('decryptWIF to be deprecated in favor of Account.decrypt')
   return Promise.resolve(decrypt(encrypted, passphrase))
 }
+
+const ensureScryptParams = (params) => Object.assign({}, DEFAULT_SCRYPT, params)

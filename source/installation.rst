@@ -2,27 +2,19 @@
 Installation
 ************
 
-neon-js does not currently live on the NPM system.
+``neon-js`` lives in the NPM system under the organization ``cityofzion``.
 
 
 Install
 --------
 
-To install, add this into your ``package.json``::
+To install::
 
-  "dependencies": {
-    ...
-    "neon-js": "git+https://github.com/CityOfZion/neon-js.git",
-  }
-  // This will grab the latest copy from master.
+  $ npm install @cityofzion/neon-js
 
-For a specific commit or release, add the commit hash behind::
+For a specific commit or release, add the commit hash / tag / branch behind::
 
-  "dependencies": {
-    ...
-    "neon-js": "git+https://github.com/CityOfZion/neon-js.git#8a52d07a4eda09afd1b57485deb6973409d0c342",
-  }
-  // This grabs v1.1.0
+  $ npm install @cityofzion/neon-js#dev //dev branch
 
 Import
 ------
@@ -33,7 +25,7 @@ A default import will import the semantic version of neon. Use this if you are n
 
 ::
 
-  import Neon from 'neon-js'
+  import Neon from '@cityofzion/neon-js'
 
   Neon.create.claimTx(...args)
   const query = Neon.create.query()
@@ -43,7 +35,7 @@ Modules are exposed through named imports. This allows more fine grained control
 
 ::
 
-  import {rpc, tx} from 'neon-js'
+  import {rpc, tx} from '@cityofzion/neon-js'
 
   Neon.tx.createClaimTx(...args)
   const query = new rpc.Query()
@@ -53,7 +45,7 @@ Require
 
 As neon-js package uses ES6 module conventions, ``require`` will need to specify which module do they want exactly::
 
-  var neon-js = require('neon-js')
+  var neon-js = require('@cityofzion/neon-js')
 
   // Semantic Style by using default import
   var Neon = neon-js.default
