@@ -2,10 +2,10 @@ import { ClaimItem } from './components'
 import util from 'util'
 
 export default class Claims {
-  constructor (config) {
-    this.address = config.address
-    this.net = config.net
-    this.claims = config.claims.map(c => ClaimItem(c))
+  constructor (config = {}) {
+    this.address = config.address || ''
+    this.net = config.net || 'NoNet'
+    this.claims = config.claims ? config.claims.map(c => ClaimItem(c)) : []
   }
 
   [util.inspect.custom] (depth, opts) {
