@@ -1,9 +1,13 @@
 import * as NEP5 from '../../../src/api/nep5'
 import { DEFAULT_RPC, CONTRACTS, NEO_NETWORK } from '../../../src/consts'
 import testKeys from '../../unit/testKeys.json'
+import logger from '../../../src/logging'
 
 describe('Integration: API NEP5', function () {
   this.timeout(20000)
+  before(() => logger.setAll('warn'))
+  after(() => logger.setAll('silent'))
+
   const scriptHash = CONTRACTS.TEST_LWTF
 
   describe('getToken', function () {

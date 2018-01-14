@@ -2,10 +2,14 @@ import * as core from '../../../src/api/core'
 import { CONTRACTS, NEO_NETWORK, TEST_NXT_ADDRESS } from '../../../src/consts'
 import { ContractParam } from '../../../src/sc'
 import testKeys from '../../unit/testKeys.json'
+import { logger } from '../../../src/logging'
 
 describe('Integration: API Core', function () {
   this.timeout(30000)
   let mock
+
+  before(() => logger.setAll('warn'))
+  after(() => logger.setAll('silent'))
 
   const useNeonDB = () => {
     core.setApiSwitch(0)

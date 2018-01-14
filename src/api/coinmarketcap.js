@@ -19,7 +19,7 @@ export const getPrice = (coin = 'NEO', currency = 'usd') => {
       else throw new Error('Something went wrong with the CoinMarketCap API!')
     })
     .catch(err => {
-      log.error(`CMC/getPrice ${err}`)
+      log.error(err)
       throw err
     })
 }

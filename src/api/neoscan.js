@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { Balance } from '../wallet'
+import logger from '../logging'
 
+const log = logger('api')
 /**
  * Returns the appropriate NeoScan endpoint.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
@@ -36,7 +38,9 @@ export const getRPCEndpoint = (net) => {
           nodes.push(node)
         }
       }
-      return nodes[Math.floor(Math.random() * nodes.length)].url
+      const selectedURL = nodes[Math.floor(Math.random() * nodes.length)].url
+      log.info(`Best node from neoscan ${net}: ${selectedURL}`)
+      return selectedURL
     })
 }
 
@@ -47,6 +51,7 @@ export const getRPCEndpoint = (net) => {
  * @return {Balance}
   */
 export const getBalance = (net, address) => {
+  log.warn('Balance object expected to change shape in upcoming version')
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_balance/' + address)
     .then((res) => {
@@ -62,6 +67,7 @@ export const getBalance = (net, address) => {
           unspent: parseUnspent(b.unspent)
         }
       })
+      log.info(`Retrieved Balance for ${address} from neoscan ${net}`)
       return bal
     })
 }
@@ -77,6 +83,7 @@ export const getClaims = (net, address) => {
   return axios.get(apiEndpoint + '/v1/get_claimable/' + address)
     .then((res) => {
       const claims = parseClaims(res.data.claimable)
+      log.info(`Retrieved Balance for ${address} from neoscan ${net}`)
       return { net, address: res.data.address, claims }
     })
 }
