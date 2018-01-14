@@ -1,7 +1,14 @@
 import loglevel from 'loglevel'
 import prefix from 'loglevel-plugin-prefix'
 
-loglevel.disableAll()
+loglevel.setDefaultLevel('silent')
+
+loglevel.setAll = (lvl) => {
+  Object.keys(loglevel.getLoggers()).map(key => {
+    const lg = loglevel.getLogger(key)
+    lg.setLevel(lvl)
+  })
+}
 
 const fn = (level, logger) => {
   const timestamp = new Date().toUTCString()
