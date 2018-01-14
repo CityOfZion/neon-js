@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Account, Balance } from '../wallet'
+import { Account, Balance, Claims } from '../wallet'
 import { Transaction, TxAttrUsage } from '../transactions'
 import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
@@ -55,17 +55,18 @@ export const getBalance = (net, address) => {
 export const getClaims = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/claims/' + address).then((res) => {
-    const claims = res.data
-    claims.claims = claims.claims.map(c => {
+    const claimData = res.data
+    claimData.claims = claimData.claims.map(c => {
       return {
         claim: new Fixed8(c.claim).div(100000000),
         index: c.index,
+        txid: c.txid,
         start: new Fixed8(c.start),
         end: new Fixed8(c.end),
-        txid: c.txid
+        value: c.value
       }
     })
-    return claims
+    return new Claims(claimData)
   })
 }
 

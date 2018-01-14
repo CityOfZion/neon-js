@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Balance } from '../wallet'
+import { Balance, Claims } from '../wallet'
 import { Fixed8 } from '../utils'
 import logger from '../logging'
 
@@ -86,7 +86,7 @@ export const getClaims = (net, address) => {
     .then((res) => {
       const claims = parseClaims(res.data.claimable)
       log.info(`Retrieved Balance for ${address} from neoscan ${net}`)
-      return { net, address: res.data.address, claims }
+      return new Claims({ net, address: res.data.address, claims })
     })
 }
 
