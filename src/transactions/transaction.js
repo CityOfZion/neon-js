@@ -85,7 +85,7 @@ class Transaction {
     txConfig.outputs = [{
       assetId: ASSET_ID.GAS,
       value: totalClaim,
-      scriptHash: new Account(publicKeyOrAddress).acct.scriptHash
+      scriptHash: new Account(publicKeyOrAddress).scriptHash
     }]
     return new Transaction(Object.assign(txConfig, override))
   }

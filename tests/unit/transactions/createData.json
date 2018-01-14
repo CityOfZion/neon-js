@@ -3,7 +3,7 @@
     "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
     "claims": [
       {
-        "claim": 1485205,
+        "claim": 0.01485205,
         "end": 532342,
         "index": 0,
         "start": 530504,
@@ -12,7 +12,7 @@
         "value": 101
       },
       {
-        "claim": 186400,
+        "claim": 0.00186400,
         "end": 532575,
         "index": 1,
         "start": 532342,
@@ -21,7 +21,7 @@
         "value": 100
       },
       {
-        "claim": 54648,
+        "claim": 0.00054648,
         "end": 532644,
         "index": 1,
         "start": 532575,
@@ -30,7 +30,7 @@
         "value": 99
       },
       {
-        "claim": 257152,
+        "claim": 0.00257152,
         "end": 532972,
         "index": 1,
         "start": 532644,
