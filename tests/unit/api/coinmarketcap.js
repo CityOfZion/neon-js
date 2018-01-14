@@ -40,7 +40,7 @@ describe('coinmarketcap', function () {
     })
 
     it('rejects Promise when given unknown coin', () => {
-      return CMC.getPrices(['NEON']).should.eventually.be.rejectedWith(Error, 'id not found')
+      return CMC.getPrices(['NEON']).should.eventually.be.rejectedWith(Error, 'None of the coin symbols are supported by CoinMarketCap!')
     })
   })
 })
