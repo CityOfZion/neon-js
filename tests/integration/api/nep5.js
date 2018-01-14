@@ -53,7 +53,7 @@ describe('Integration: API NEP5', function () {
     return NEP5.doTransferToken(NEO_NETWORK.TEST, scriptHash, testKeys.c.wif, testKeys.b.address, transferAmount, gasCost)
       .then(({ result, txid }) => {
         result.should.equal(true)
-        console.log(txid)
+        log.info(`doTransferToken: ${txid}`)
       })
   })
 })

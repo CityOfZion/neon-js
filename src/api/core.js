@@ -92,7 +92,7 @@ export const getBalanceFrom = (config, api) => {
       return Object.assign(config, override)
     })
     .catch(err => {
-      log.error(err)
+      log.error(`getBalanceFrom ${api.name} failed with: ${err.message}`)
       throw err
     })
 }
@@ -118,7 +118,7 @@ export const getClaimsFrom = (config, api) => {
       return Object.assign(config, { claims: values[0], url: values[1] })
     })
     .catch(err => {
-      log.error(err)
+      log.error(`getClaimsFrom ${api.name} failed with: ${err.message}`)
       throw err
     })
 }

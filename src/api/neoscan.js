@@ -3,6 +3,7 @@ import { Balance } from '../wallet'
 import logger from '../logging'
 
 const log = logger('api')
+export const name = 'neoscan'
 /**
  * Returns the appropriate NeoScan endpoint.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.

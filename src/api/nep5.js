@@ -44,7 +44,7 @@ export const getTokenInfo = (url, scriptHash) => {
       }
     })
     .catch(err => {
-      log.error(err)
+      log.error(`getTokenInfo failed with : ${err.message}`)
       throw err
     })
 }
@@ -74,7 +74,7 @@ export const getTokenBalance = (url, scriptHash, address) => {
       }
     })
     .catch(err => {
-      log.error(err)
+      log.error(`getTokenBalance failed with : ${err.message}`)
       throw err
     })
 }
@@ -110,7 +110,7 @@ export const getToken = (url, scriptHash, address) => {
       }
     })
     .catch(err => {
-      log.error(err)
+      log.error(`getToken failed with : ${err.message}`)
       throw err
     })
 }

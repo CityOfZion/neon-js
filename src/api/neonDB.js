@@ -7,6 +7,7 @@ import { reverseHex } from '../utils'
 import logger from '../logging'
 
 const log = logger('api')
+export const name = 'neonDB'
 /**
  * API Switch for MainNet and TestNet
  * @param {string} net - 'MainNet', 'TestNet', or custom neon-wallet-db URL.
