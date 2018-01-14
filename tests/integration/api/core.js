@@ -2,14 +2,12 @@ import * as core from '../../../src/api/core'
 import { CONTRACTS, NEO_NETWORK, TEST_NXT_ADDRESS } from '../../../src/consts'
 import { ContractParam } from '../../../src/sc'
 import testKeys from '../../unit/testKeys.json'
-import { logger } from '../../../src/logging'
 
 describe('Integration: API Core', function () {
   this.timeout(30000)
+  const log = setupLogs()
+  log.info('Integration: API Core')
   let mock
-
-  before(() => logger.setAll('warn'))
-  after(() => logger.setAll('silent'))
 
   const useNeonDB = () => {
     core.setApiSwitch(0)
@@ -43,7 +41,7 @@ describe('Integration: API Core', function () {
       return core.sendAsset(config1)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(c.response.txid)
         })
     })
 
@@ -60,7 +58,7 @@ describe('Integration: API Core', function () {
       return core.sendAsset(config2)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(c.response.txid)
         })
     })
   })
@@ -77,7 +75,7 @@ describe('Integration: API Core', function () {
       return core.claimGas(config)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(c.response.txid)
         })
     })
 
@@ -92,7 +90,7 @@ describe('Integration: API Core', function () {
       return core.claimGas(config2)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(c.response.txid)
         })
     })
   })
@@ -112,7 +110,7 @@ describe('Integration: API Core', function () {
       return core.doInvoke(config)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(c.response.txid)
         })
     })
 
@@ -138,7 +136,7 @@ describe('Integration: API Core', function () {
       return core.doInvoke(config2)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(c.response.txid)
         })
     })
 
@@ -161,7 +159,7 @@ describe('Integration: API Core', function () {
       return core.doInvoke(config2)
         .then((c) => {
           c.response.result.should.equal(true)
-          console.log(c.response.txid)
+          log.info(c.response.txid)
         })
     })
   })
