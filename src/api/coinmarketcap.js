@@ -19,7 +19,7 @@ export const getPrice = (coin = 'NEO', currency = 'usd') => {
       else throw new Error('Something went wrong with the CoinMarketCap API!')
     })
     .catch(err => {
-      log.error(err)
+      log.error(err.message)
       throw err
     })
 }
@@ -40,7 +40,7 @@ export const getPrices = (coins = ['NEO'], currency = 'usd') => {
       else throw new Error('None of the coin symbols are supported by CoinMarketCap!')
     })
     .catch(err => {
-      log.error(err)
+      log.error(err.message)
       throw err
     })
 }

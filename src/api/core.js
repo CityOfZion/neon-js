@@ -162,7 +162,7 @@ export const createTx = (config, txType) => {
  * @param {string} [config.privateKey] - private key to sign with.
  * @param {string} [config.publicKey] - public key. Required if using signingFunction.
  * @param {function} [config.signingFunction] - External signing function. Requires publicKey.
- * @return {object} Configuration object.
+ * @return {Promise<object>} Configuration object.
  */
 export const signTx = (config) => {
   checkProperty(config, 'tx')
@@ -172,7 +172,7 @@ export const signTx = (config) => {
     promise = config.signingFunction(config.tx, acct.publicKey)
   } else if (config.privateKey) {
     let acct = new Account(config.privateKey)
-    if (config.address !== acct.address) throw new Error('Private Key and Balance address does not match!')
+    if (config.address !== acct.address) return Promise.reject(new Error('Private Key and Balance address does not match!'))
     promise = Promise.resolve(config.tx.sign(config.privateKey))
   } else {
     return Promise.reject(new Error('Needs privateKey or signingFunction to sign!'))
@@ -201,7 +201,17 @@ export const sendTx = (config) => {
           config.balance.applyTx(config.tx, true)
         }
       } else {
-        log.error(`Transaction failed: ${config.tx.serialize()}`)
+        const dump = {
+          net: config.net,
+          address: config.address,
+          intents: config.intents,
+          balance: config.balance,
+          claims: config.claims,
+          script: config.script,
+          gas: config.gas,
+          tx: config.tx
+        }
+        log.error(`Transaction failed for ${config.address}: ${config.tx.serialize()}`, dump)
       }
       return Object.assign(config, { response: res })
     })
@@ -238,7 +248,14 @@ export const sendAsset = (config) => {
     .then((c) => signTx(c))
     .then((c) => sendTx(c))
     .catch(err => {
-      log.error(err)
+      const dump = {
+        net: config.net,
+        address: config.address,
+        intents: config.intents,
+        balance: config.balance,
+        tx: config.tx
+      }
+      log.error(`sendAsset failed with: ${err.message}. Dumping config`, dump)
       throw err
     })
 }
@@ -258,7 +275,14 @@ export const claimGas = (config) => {
     .then((c) => signTx(c))
     .then((c) => sendTx(c))
     .catch(err => {
-      log.error(err)
+      const dump = {
+        net: config.net,
+        address: config.address,
+        intents: config.intents,
+        claims: config.claims,
+        tx: config.tx
+      }
+      log.error(`claimGas failed with ${err.message}. Dumping config`, dump)
       throw err
     })
 }
@@ -283,7 +307,16 @@ export const doInvoke = (config) => {
     .then((c) => attachInvokedContractForMintToken(c))
     .then((c) => sendTx(c))
     .catch(err => {
-      log.error(err)
+      const dump = {
+        net: config.net,
+        address: config.address,
+        intents: config.intents,
+        balance: config.balance,
+        script: config.script,
+        gas: config.gas,
+        tx: config.tx
+      }
+      log.error(`doInvoke failed with ${err.message}. Dumping config`, dump)
       throw err
     })
 }
