@@ -1,7 +1,7 @@
 {
   "cmc": {
     "gas2usd": {
-      "url": "https://api.coinmarketcap.com/v1/ticker/gas/?convert=usd",
+      "url": "https://api.coinmarketcap.com/v1/ticker/gas/?limit=0&convert=usd",
       "response": [
         {
           "id": "gas",
@@ -23,7 +23,7 @@
       ]
     },
     "neo2sgd": {
-      "url": "https://api.coinmarketcap.com/v1/ticker/neo/?convert=sgd",
+      "url": "https://api.coinmarketcap.com/v1/ticker/neo/?limit=0&convert=sgd",
       "response": [
         {
           "id": "neo",
@@ -48,13 +48,13 @@
       ]
     },
     "error": {
-      "regex": "https:\\/\\/api.coinmarketcap.com\\/v1\\/ticker\\/[a-z]+\\/\\?convert=[a-z]+",
+      "regex": "https:\\/\\/api.coinmarketcap.com\\/v1\\/ticker\\/[a-z]+\\/\\?limit=0&convert=[a-z]+",
       "response": {
         "error": "id not found"
       }
     },
     "neogas2usd": {
-      "url": "https://api.coinmarketcap.com/v1/ticker/?convert=usd",
+      "url": "https://api.coinmarketcap.com/v1/ticker/?limit=0&convert=usd",
       "response": [
         {
           "id": "bitcoin",
@@ -110,7 +110,7 @@
       ]
     },
     "neogas2sgd": {
-      "url": "https://api.coinmarketcap.com/v1/ticker/?convert=sgd",
+      "url": "https://api.coinmarketcap.com/v1/ticker/?limit=0&convert=sgd",
       "response": [
         {
           "id": "bitcoin",
