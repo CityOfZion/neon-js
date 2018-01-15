@@ -16,10 +16,20 @@ const log = logger('api')
 */
 var apiSwitch = 1
 var switchFrozen = true
+
+/**
+ * Sets the API switch to the provided value
+ * @param {number} netSetting - The new value between 0 and 1 inclusive.
+ */
 export const setApiSwitch = (newSetting) => {
   if (newSetting >= 0 && newSetting <= 1) apiSwitch = newSetting
 }
 
+/**
+ * Sets the freeze setting for the API switch. A frozen switch will not dynamically shift towards the other provider when the main provider fails.
+ *  This does not mean that we do not use the other provider. This only means that we will not change our preference for the main provider.
+ * @param {bool} newSetting - The new setting for freeze.
+ */
 export const setSwitchFreeze = (newSetting) => {
   switchFrozen = !!newSetting
   log.info(`core/setSwitchFreeze API switch is frozen: ${switchFrozen}`)
@@ -63,22 +73,17 @@ const loadBalance = (func, config) => {
 }
 
 /**
- * Check that properties are defined in obj.
- * @param {object} obj - Object to check.
- * @param {string[]}  props - List of properties to check.
+ * The core API methods are series of methods defined to aid conducting core functionality while making it easy to modify any parts of it.
+ * The core functionality are sendAsset, claimGas and doInvoke.
+ * These methods are designed to be modular in nature and intended for developers to create their own custom methods.
+ * The methods revolve around a configuration object in which everything is placed. Each method will take in the configuration object, check for its required fields and perform its operations, adding its results to the configuration object and returning it.
+ * For example, the getBalanceFrom function requires net and address fields and appends the url and balance fields to the object.
  */
-const checkProperty = (obj, ...props) => {
-  for (const prop of props) {
-    if (!obj.hasOwnProperty(prop)) {
-      throw new ReferenceError(`Property not found: ${prop}`)
-    }
-  }
-}
 
 /**
  * Helper method to retrieve balance and URL from an endpoint. If URL is provided, it is not overriden.
  * @param {object} config - Configuration object.
- * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
+ * @param {string} config.net - 'MainNet' or 'TestNet'
  * @param {string} config.address - Wallet address
  * @param {object} api - The endpoint API object. eg, neonDB or Neoscan.
  * @return {object} Configuration object + url + balance
@@ -104,7 +109,7 @@ export const getBalanceFrom = (config, api) => {
 /**
  * Helper method to retrieve claims and URL from an endpoint.
  * @param {object} config - Configuration object.
- * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
+ * @param {string} config.net - 'MainNet', 'TestNet'
  * @param {string} config.address - Wallet address
  * @param {object} api - The endpoint APi object. eg, neonDB or Neoscan.
  * @return {object} Configuration object + url + balance
@@ -359,4 +364,17 @@ const attachInvokedContractForMintToken = (config) => {
       })
   }
   return config
+}
+
+/**
+ * Check that properties are defined in obj.
+ * @param {object} obj - Object to check.
+ * @param {string[]}  props - List of properties to check.
+ */
+const checkProperty = (obj, ...props) => {
+  for (const prop of props) {
+    if (!obj.hasOwnProperty(prop)) {
+      throw new ReferenceError(`Property not found: ${prop}`)
+    }
+  }
 }
