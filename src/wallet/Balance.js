@@ -16,9 +16,9 @@ import { Query } from '../rpc'
  * @param {object} bal.tokens - The collection of tokens in this Balance
  */
 class Balance {
-  constructor (bal) {
-    this.address = bal.address
-    this.net = bal.net
+  constructor (bal = {}) {
+    this.address = bal.address || ''
+    this.net = bal.net || 'NoNet'
     this.assetSymbols = bal.assetSymbols ? bal.assetSymbols : []
     this.assets = {}
     if (bal.assets) {

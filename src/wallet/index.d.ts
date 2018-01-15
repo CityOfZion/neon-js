@@ -11,13 +11,22 @@ declare module '@cityofzion/neon-js' {
     balance: Fixed8
     unspent: Coin[]
     spent: Coin[]
-    uncofirmed: Coin[]
+    unconfirmed: Coin[]
   }
 
   export interface Coin {
     index: number
     txid: string
     value: Fixed8
+  }
+
+  export interface ClaimItem {
+    claim: Fixed8
+    txid: string
+    index: number
+    value: number
+    start?: Fixed8
+    end?: Fixed8
   }
 
   export interface ScryptParams {
@@ -61,11 +70,14 @@ declare module '@cityofzion/neon-js' {
       address: string
 
       getPublicKey(encoded: boolean): string
+      encrypt(keyphrase: string, scryptParams?: ScryptParams): Account
+      decrypt(keyphrase: string, scryptParams?: ScryptParams): Account
+      export(): WalletAccount
     }
 
     //Balance
     export class Balance {
-      constructor(bal: object)
+      constructor(bal?: Balance)
 
       address: string
       net: NEO_NETWORK
@@ -77,11 +89,25 @@ declare module '@cityofzion/neon-js' {
       static import(jsonString: string): Balance
 
       addAsset(sym: string, assetBalance?: AssetBalance): this
-      addToken(sym: string, tokenBalance?: number|Fixed8): this
+      addToken(sym: string, tokenBalance?: number | Fixed8): this
       applyTx(tx: Transaction, confirmed?: boolean): this
       export(): string
       verifyAssets(url: string): Promise<Balance>
     }
+
+    //Claims
+    export class Claims {
+      constructor(claims?: Claims)
+
+      address: string
+      net: string
+      claims: ClaimItem[]
+    }
+
+    //components
+    export function AssetBalance(assetBalance?: AssetBalance): AssetBalance
+    export function Coin(coin?: Coin): Coin
+    export function ClaimItem(claimItem?: ClaimItem): ClaimItem
 
     //core
     export function getPublicKeyEncoded(publicKey: string): string

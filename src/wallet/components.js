@@ -32,7 +32,7 @@ export const Coin = (coin = {}) => {
 
 /**
  * @typedef ClaimItem
- * @property {Fixed8} value - Amt of gas claimable
+ * @property {Fixed8} claim - Amt of gas claimable
  * @property {string} txid - Transaction hash of the originaating coin
  * @property {number} index - Index of coin in the output array
  * @property {number} value - Amount of NEO involved.
