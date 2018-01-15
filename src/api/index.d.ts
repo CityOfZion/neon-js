@@ -32,7 +32,7 @@ declare module '@cityofzion/neon-js' {
     txid: string
   }
 
-  interface Price {
+  interface Prices {
     [key: string]: number
   }
 
@@ -40,7 +40,7 @@ declare module '@cityofzion/neon-js' {
     //coinmarketcap
     export namespace cmc {
       export function getPrice(coin?: string, currency?: string): Promise<number>
-      export function getPrices(coin?: Array<string>, currency?: string): Promise<Price>
+      export function getPrices(coin?: Array<string>, currency?: string): Promise<Prices>
     }
 
 
