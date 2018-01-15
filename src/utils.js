@@ -1,5 +1,6 @@
 import { SHA256, RIPEMD160, enc } from 'crypto-js'
 import BN from 'bignumber.js'
+import util from 'util'
 
 /**
  * @param {arrayBuffer} buf
@@ -308,7 +309,7 @@ export class Fixed8 extends BN {
     return reverseHex(this.toHex())
   }
 
-  inspect (depth, opts) {
+  [util.inspect.custom] (depth, opts) {
     return this.toFixed(8)
   }
 

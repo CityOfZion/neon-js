@@ -41,4 +41,5 @@ export default {
 export * from './core'
 export * from './verify'
 export * from './nep2'
+export * from './components'
 export { Account, Balance, Wallet, Claims }

@@ -26,8 +26,8 @@ export const getPrice = (coin = 'NEO', currency = 'usd') => {
 
 /**
  * Returns a mapping of the symbol for a coin to its price
- * @param {Array<string>} coins - Coin names. NEO or GAS.
- * @param {string} currency - Three letter currency symbol.
+ * @param {string[]} [coins] - Coin names. NEO or GAS.
+ * @param {string} [currency] - Three letter currency symbol.
  * @return {Promise<object>} object mapping symbol to price
  */
 export const getPrices = (coins = ['NEO'], currency = 'usd') => {

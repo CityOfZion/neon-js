@@ -75,7 +75,7 @@ declare module '@cityofzion/neon-js' {
   export interface semantic {
     create: {
       contractParam: (args: any) => sc.ContractParam
-      script: ({ scriptHash, operation, args, useTailCall }: sc.scriptParams) => string
+      script: ({ scriptHash, operation, args, useTailCall }: scriptParams) => string
       scriptBuilder: (args: any) => sc.ScriptBuilder
       deployScript: (any) => string
     }

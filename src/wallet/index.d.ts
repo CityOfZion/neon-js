@@ -1,3 +1,4 @@
+/// <reference path="../utils.d.ts" />
 declare module '@cityofzion/neon-js' {
   export interface Account {
     WIF: string
@@ -8,16 +9,25 @@ declare module '@cityofzion/neon-js' {
   }
 
   export interface AssetBalance {
-    balance: Fixed8
+    balance: u.Fixed8
     unspent: Coin[]
     spent: Coin[]
-    uncofirmed: Coin[]
+    unconfirmed: Coin[]
   }
 
   export interface Coin {
     index: number
     txid: string
-    value: Fixed8
+    value: u.Fixed8
+  }
+
+  export interface ClaimItem {
+    claim: u.Fixed8
+    txid: string
+    index: number
+    value: number
+    start?: u.Fixed8
+    end?: u.Fixed8
   }
 
   export interface ScryptParams {
@@ -61,14 +71,17 @@ declare module '@cityofzion/neon-js' {
       address: string
 
       getPublicKey(encoded: boolean): string
+      encrypt(keyphrase: string, scryptParams?: ScryptParams): Account
+      decrypt(keyphrase: string, scryptParams?: ScryptParams): Account
+      export(): WalletAccount
     }
 
     //Balance
     export class Balance {
-      constructor(bal: object)
+      constructor(bal?: Balance)
 
       address: string
-      net: NEO_NETWORK
+      net: 'MainNet' | 'TestNet'
       assetSymbols: string[]
       assets: { [index: string]: AssetBalance }
       tokenSymbols: string[]
@@ -77,11 +90,25 @@ declare module '@cityofzion/neon-js' {
       static import(jsonString: string): Balance
 
       addAsset(sym: string, assetBalance?: AssetBalance): this
-      addToken(sym: string, tokenBalance?: number|Fixed8): this
+      addToken(sym: string, tokenBalance?: number | u.Fixed8): this
       applyTx(tx: Transaction, confirmed?: boolean): this
       export(): string
       verifyAssets(url: string): Promise<Balance>
     }
+
+    //Claims
+    export class Claims {
+      constructor(claims?: Claims)
+
+      address: string
+      net: string
+      claims: ClaimItem[]
+    }
+
+    //components
+    export function AssetBalance(assetBalance?: AssetBalance): AssetBalance
+    export function Coin(coin?: Coin): Coin
+    export function ClaimItem(claimItem?: ClaimItem): ClaimItem
 
     //core
     export function getPublicKeyEncoded(publicKey: string): string
@@ -140,7 +167,7 @@ declare module '@cityofzion/neon-js' {
       account: (k: any) => Account
       privateKey: () => string
       signature: (tx: string, privateKey: string) => string
-      wallet: (k: any) => Wallet
+      wallet: (k: any) => wallet.Wallet
     }
     is: {
       address: (address: string) => boolean

@@ -1,39 +1,8 @@
+import { AssetBalance } from './components'
 import { Transaction } from '../transactions'
 import { ASSETS } from '../consts'
 import { Fixed8 } from '../utils'
 import { Query } from '../rpc'
-
-/**
- * @typedef AssetBalance
- * @property {Fixed8} balance - The total balance in this AssetBalance
- * @property {Coin[]} unspent - Unspent coins
- * @property {Coin[]} spent - Spent coins
- * @property {Coin[]} unconfirmed - Unconfirmed coins
- */
-
-/**
-* @typedef Coin
-* @property {number} index - Index in list.
-* @property {string} txid - Transaction ID which produced this coin.
-* @property {Fixed8} value - Value of this coin.
-*/
-
-const cleanAssetBalance = (assetBalance) => {
-  return {
-    balance: new Fixed8(assetBalance.balance),
-    unspent: assetBalance.unspent ? assetBalance.unspent.map(coin => cleanCoin(coin)) : [],
-    spent: assetBalance.spent ? assetBalance.spent.map(coin => cleanCoin(coin)) : [],
-    unconfirmed: assetBalance.unconfirmed ? assetBalance.unconfirmed.map(coin => cleanCoin(coin)) : []
-  }
-}
-
-const cleanCoin = (coin) => {
-  return {
-    index: coin.index,
-    txid: coin.txid,
-    value: new Fixed8(coin.value)
-  }
-}
 
 /**
  * @class Balance
@@ -47,9 +16,9 @@ const cleanCoin = (coin) => {
  * @param {object} bal.tokens - The collection of tokens in this Balance
  */
 class Balance {
-  constructor (bal) {
-    this.address = bal.address
-    this.net = bal.net
+  constructor (bal = {}) {
+    this.address = bal.address || ''
+    this.net = bal.net || 'NoNet'
     this.assetSymbols = bal.assetSymbols ? bal.assetSymbols : []
     this.assets = {}
     if (bal.assets) {
@@ -79,10 +48,10 @@ class Balance {
    * @param {AssetBalance} [assetBalance] - The assetBalance if initialized. Default is a zero balance object.
    * @return this
    */
-  addAsset (sym, assetBalance = { balance: new Fixed8(0), spent: [], unspent: [], unconfirmed: [] }) {
+  addAsset (sym, assetBalance = AssetBalance()) {
     sym = sym.toUpperCase()
     this.assetSymbols.push(sym)
-    const cleanedAssetBalance = cleanAssetBalance(assetBalance)
+    const cleanedAssetBalance = AssetBalance(assetBalance)
     this.assets[sym] = cleanedAssetBalance
     return this
   }
@@ -191,7 +160,7 @@ class Balance {
  * @param {AssetBalance} assetBalance
  * @return {Promise<AssetBalance>} Returns a new AssetBalance
  */
-export const verifyAssetBalance = (url, assetBalance) => {
+const verifyAssetBalance = (url, assetBalance) => {
   let newAssetBalance = { balance: new Fixed8(0), spent: [], unspent: [], unconfirmed: [] }
   return verifyCoins(url, assetBalance.unspent)
     .then((values) => {
@@ -215,7 +184,7 @@ export const verifyAssetBalance = (url, assetBalance) => {
  * @param {Coin[]} coinArr
  * @return {Promise<Coin[]>}
  */
-export const verifyCoins = (url, coinArr) => {
+const verifyCoins = (url, coinArr) => {
   const promises = []
   for (const coin of coinArr) {
     const promise = Query.getTxOut(coin.txid, coin.index)

@@ -1,6 +1,7 @@
 import * as core from './core'
 import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
 import { encrypt, decrypt } from './nep2'
+import util from 'util'
 
 /**
  * @class Account
@@ -172,6 +173,10 @@ class Account {
       contract: this.contract,
       extra: this.extra
     }
+  }
+
+  [util.inspect.custom] (depth, opts) {
+    return `[Account: ${this.label}]`
   }
 }
 

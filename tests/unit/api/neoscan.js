@@ -1,5 +1,5 @@
 import * as neoscan from '../../../src/api/neoscan'
-import Balance from '../../../src/wallet/Balance'
+import { Balance, Claims } from '../../../src/wallet'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
 
@@ -31,6 +31,7 @@ describe('Neoscan', function () {
   it('getClaims returns Claims object', () => {
     return neoscan.getClaims('TestNet', testKeys.a.address)
       .then((response) => {
+        (response instanceof Claims).should.equal(true)
         response.net.should.equal('TestNet')
         response.address.should.equal(testKeys.a.address)
         response.claims.should.be.an('array')

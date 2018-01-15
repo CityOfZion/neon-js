@@ -103,16 +103,16 @@ class Wallet {
    * @return {number} Index position of Account in array.
    */
   addAccount (acct) {
+    const index = this.accounts.length
+    if (!(acct instanceof Account)) {
+      acct = new Account(acct)
+    }
+    this.accounts.push(acct)
     try {
       const address = acct.address
+      log.info(`Added Account: ${address} to Wallet ${this.name}`)
     } catch (err) {
-      log.warn(`Encrypted account added to Wallet. You will not be able to export this wallet without first decrypting this account`)
-    }
-    const index = this.accounts.length
-    if (acct instanceof Account) {
-      this.accounts.push(acct)
-    } else {
-      this.accounts.push(new Account(acct))
+      log.warn(`Encrypted account added to Wallet ${this.name}. You will not be able to export this wallet without first decrypting this account`)
     }
     return index
   }
