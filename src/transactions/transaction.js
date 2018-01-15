@@ -1,4 +1,4 @@
-import { Account, getScriptHashFromPublicKey, getScriptHashFromAddress, isAddress } from '../wallet'
+import { Account } from '../wallet'
 import { TX_VERSION, ASSET_ID } from '../consts'
 import { createScript } from '../sc'
 import { Fixed8, str2hexstring, num2VarInt } from '../utils'
