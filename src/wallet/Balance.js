@@ -160,7 +160,7 @@ class Balance {
  * @param {AssetBalance} assetBalance
  * @return {Promise<AssetBalance>} Returns a new AssetBalance
  */
-export const verifyAssetBalance = (url, assetBalance) => {
+const verifyAssetBalance = (url, assetBalance) => {
   let newAssetBalance = { balance: new Fixed8(0), spent: [], unspent: [], unconfirmed: [] }
   return verifyCoins(url, assetBalance.unspent)
     .then((values) => {
@@ -184,7 +184,7 @@ export const verifyAssetBalance = (url, assetBalance) => {
  * @param {Coin[]} coinArr
  * @return {Promise<Coin[]>}
  */
-export const verifyCoins = (url, coinArr) => {
+const verifyCoins = (url, coinArr) => {
   const promises = []
   for (const coin of coinArr) {
     const promise = Query.getTxOut(coin.txid, coin.index)
