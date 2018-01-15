@@ -1,3 +1,4 @@
+/// <reference path="../utils.d.ts" />
 declare module '@cityofzion/neon-js' {
   export interface Account {
     WIF: string
@@ -8,7 +9,7 @@ declare module '@cityofzion/neon-js' {
   }
 
   export interface AssetBalance {
-    balance: Fixed8
+    balance: u.Fixed8
     unspent: Coin[]
     spent: Coin[]
     unconfirmed: Coin[]
@@ -17,16 +18,16 @@ declare module '@cityofzion/neon-js' {
   export interface Coin {
     index: number
     txid: string
-    value: Fixed8
+    value: u.Fixed8
   }
 
   export interface ClaimItem {
-    claim: Fixed8
+    claim: u.Fixed8
     txid: string
     index: number
     value: number
-    start?: Fixed8
-    end?: Fixed8
+    start?: u.Fixed8
+    end?: u.Fixed8
   }
 
   export interface ScryptParams {
@@ -80,7 +81,7 @@ declare module '@cityofzion/neon-js' {
       constructor(bal?: Balance)
 
       address: string
-      net: NEO_NETWORK
+      net: 'MainNet' | 'TestNet'
       assetSymbols: string[]
       assets: { [index: string]: AssetBalance }
       tokenSymbols: string[]
@@ -89,7 +90,7 @@ declare module '@cityofzion/neon-js' {
       static import(jsonString: string): Balance
 
       addAsset(sym: string, assetBalance?: AssetBalance): this
-      addToken(sym: string, tokenBalance?: number | Fixed8): this
+      addToken(sym: string, tokenBalance?: number | u.Fixed8): this
       applyTx(tx: Transaction, confirmed?: boolean): this
       export(): string
       verifyAssets(url: string): Promise<Balance>
@@ -166,7 +167,7 @@ declare module '@cityofzion/neon-js' {
       account: (k: any) => Account
       privateKey: () => string
       signature: (tx: string, privateKey: string) => string
-      wallet: (k: any) => Wallet
+      wallet: (k: any) => wallet.Wallet
     }
     is: {
       address: (address: string) => boolean
