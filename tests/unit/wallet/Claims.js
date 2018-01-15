@@ -1,5 +1,6 @@
 import Claims from '../../../src/wallet/Claims'
-describe.only('Claims', function () {
+
+describe('Claims', function () {
   const claimsLike = {
     address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW',
     net: 'TestNet',

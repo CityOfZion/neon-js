@@ -45,7 +45,7 @@ export const ClaimItem = (claimItem = {}) => {
     txid: claimItem.txid || '',
     index: claimItem.index || 0,
     value: claimItem.value || 0,
-    start: claimItem.start ? new Fixed8(claimItem.start) : new Fixed8(0),
-    end: claimItem.end ? new Fixed8(claimItem.end) : new Fixed8(0)
+    start: claimItem.start ? new Fixed8(claimItem.start) : null,
+    end: claimItem.end ? new Fixed8(claimItem.end) : null
   }
 }
