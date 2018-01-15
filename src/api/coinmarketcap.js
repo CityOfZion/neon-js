@@ -49,7 +49,7 @@ function query (url, currency) {
   currency = currency.toLowerCase()
 
   if (CURRENCY.includes(currency)) {
-    return axios.get(`${url}?convert=${currency}`)
+    return axios.get(`${url}?limit=0&convert=${currency}`)
       .then((response) => {
         const { data } = response
         if (data.error) throw new Error(data.error)
