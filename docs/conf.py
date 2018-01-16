@@ -30,6 +30,8 @@
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
+import re
+
 extensions = ['sphinx_js']
 primary_domain = 'js'
 js_source_path = '../src'
@@ -40,9 +42,10 @@ jsdoc_config_path = './conf.json'
 scv_banner_greatest_tag = True
 scv_show_banner = True
 scv_greatest_tag = True
+scv_sort = ('semver',)
 
 scv_whitelist_branches = ('master', 'dev')
-scv_whitelist_tags = ('1.1.1', '2.3.1')
+scv_whitelist_tags = ('1.1.2', '2.3.2', re.compile('3.[\d.]+'))
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
