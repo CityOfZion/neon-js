@@ -53,7 +53,6 @@ export const getRPCEndpoint = (net) => {
  * @return {Balance}
   */
 export const getBalance = (net, address) => {
-  log.warn('Balance object expected to change shape in upcoming version')
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_balance/' + address)
     .then((res) => {

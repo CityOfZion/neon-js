@@ -30,7 +30,6 @@ export const getAPIEndpoint = (net) => {
  * @return {Promise<Balance>} Balance of address
  */
 export const getBalance = (net, address) => {
-  log.warn('Balance object expected to change shape in upcoming version')
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/balance/' + address)
     .then((res) => {
