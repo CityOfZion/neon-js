@@ -53,7 +53,7 @@ $ sudo -H npm i -g jsdoc
 $ npm run build:docs
 ```
 
-For detailed instructions refer to [`source/readme.md`](https://github.com/CityOfZion/neon-js/blob/master/source/readme.md).
+For detailed instructions refer to [`docs/readme.md`](https://github.com/CityOfZion/neon-js/blob/master/docs/readme.md).
 
 ### Typescript
 

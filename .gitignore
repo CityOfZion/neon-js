@@ -5,7 +5,7 @@ node_modules
 /.settings/
 /npm-debug.log
 
-/source/_build/
+/docs/_build/
 build
 
 *.log

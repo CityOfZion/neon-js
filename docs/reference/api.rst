@@ -7,6 +7,10 @@ Module ``api``
 Core
 ----
 
+.. autofunction:: setApiSwitch
+
+.. autofunction:: setSwitchFreeze
+
 .. autofunction:: claimGas
 
 .. autofunction:: createTx
@@ -61,6 +65,8 @@ CoinMarketCap
 ---------------
 
 .. autofunction:: getPrice
+
+.. autofunction:: getPrices
 
 NEP5
 -----

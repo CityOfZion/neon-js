@@ -65,5 +65,6 @@ This documentation is meant to serve as a high level explaination of the library
     smart_contracts/index.rst
     utility
     constants
+    logging
     reference/index.rst
     changelog
