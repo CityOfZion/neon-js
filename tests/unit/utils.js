@@ -412,6 +412,7 @@ describe('Utils', () => {
       let result = Fixed8.fromReverseHex('00e1f50500000000').toNumber()
       result.should.eql(1)
     })
+
     it('toHex', () => {
       let result = new Fixed8(1).toHex()
       result.should.eql('0000000005f5e100')

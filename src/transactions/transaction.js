@@ -162,10 +162,9 @@ class Transaction {
    */
   addAttribute (usage, data) {
     if (typeof data !== 'string') throw new TypeError('data should be formatted as string!')
-    const len = num2VarInt(data.length / 2)
     this.attributes.push({
       usage,
-      data: len + data
+      data
     })
     return this
   }
