@@ -39,8 +39,6 @@ export const getBalance = (net, address) => {
         if (key === 'net' || key === 'address') return
         bal.addAsset(key, res.data[key])
       })
-      // To be deprecated
-      Object.assign(bal, res.data)
       log.info(`Retrieved Balance for ${address} from neonDB ${net}`)
       return bal
     })

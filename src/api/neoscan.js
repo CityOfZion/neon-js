@@ -63,11 +63,6 @@ export const getBalance = (net, address) => {
           balance: b.amount,
           unspent: parseUnspent(b.unspent)
         })
-        // To be deprecated
-        bal[b.asset] = {
-          balance: b.amount,
-          unspent: parseUnspent(b.unspent)
-        }
       })
       log.info(`Retrieved Balance for ${address} from neoscan ${net}`)
       return bal

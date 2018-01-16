@@ -5,6 +5,7 @@ import semanticSc, * as sc from './sc'
 import semanticTx, * as tx from './transactions'
 import semanticWallet, * as wallet from './wallet'
 import * as u from './utils'
+import * as logging from './logging'
 
 const mods = [semanticSc, semanticTx, semanticWallet, semanticApi, semanticRpc]
 
@@ -24,5 +25,6 @@ export {
   tx,
   wallet,
   u,
-  CONST
+  CONST,
+  logging
 }

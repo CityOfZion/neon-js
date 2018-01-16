@@ -140,7 +140,7 @@ declare module '@cityofzion/neon-js' {
       transactionHistory: (net: string, address: string) => Promise<History>
       tokenBalance: (net: string, scriptHash: string) => Promise<{ name: string, symbol: string, decimals: number, totalSupply: number }>
       tokenInfo: (net: string, scriptHash: string) => Promise<{ name: string, symbol: string, decimals: number, totalSupply: number }>
-    },
+    }
     do: {
       sendAsset: (
         net: string,
@@ -160,5 +160,8 @@ declare module '@cityofzion/neon-js' {
         gasCost: number
       ) => Promise<RPCResponse>
     }
+    sendAsset: (config: apiConfig) => apiConfig
+    claimGas: (config: apiConfig) => apiConfig
+    doInvoke: (config: apiConfig) => apiConfig
   }
 }
