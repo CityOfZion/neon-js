@@ -14,8 +14,8 @@ const log = logger('api')
  * 1 means 100% neonDB
  * This is ensure that we do not always hit the failing endpoint.
  */
-var apiSwitch = 1
-var switchFrozen = true
+let apiSwitch = 0
+let switchFrozen = true
 
 /**
  * Sets the API switch to the provided value
@@ -108,6 +108,17 @@ export const getBalanceFrom = (config, api) => {
 }
 
 /**
+ * Method to retrieve balance and URL from an endpoint. If URL is provided, it is not overriden.
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
+ * @param {string} config.address - Wallet address
+ * @return {Promise<string>} - URL
+ */
+export const getBalance = config => {
+  return loadBalance(getBalanceFrom, config)
+}
+
+/**
  * Helper method to retrieve claims and URL from an endpoint.
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet'
@@ -132,6 +143,17 @@ export const getClaimsFrom = (config, api) => {
       log.error(`getClaimsFrom ${api.name} failed with: ${err.message}`)
       throw err
     })
+}
+
+/**
+ * Method to retrieve claims and URL from an endpoint.
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
+ * @param {string} config.address - Wallet address
+ * @return {Promise<string>} - URL
+ */
+export const getClaims = config => {
+  return loadBalance(getClaimsFrom, config)
 }
 
 /**
@@ -193,7 +215,7 @@ export const signTx = config => {
       return Promise.reject(
         new Error('Private Key and Balance address does not match!')
       )
-    promise = Promise.resolve(config.tx.sign(config.privateKey))
+    promise = Promise.resolve(config.tx.sign(acct.privateKey))
   } else {
     return Promise.reject(
       new Error('Needs privateKey or signingFunction to sign!')
@@ -266,8 +288,9 @@ export const makeIntent = (assetAmts, address) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction and public key is required.
  * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {string} [config.publicKey] - A public key for the singing function. Either this or privateKey is required.
  * @param {TransactionOutput[]} config.intents - Intents.
  * @return {object} Configuration object.
  */
@@ -294,8 +317,9 @@ export const sendAsset = config => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction and publicKey is required.
  * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {string} [config.publicKey] - A public key for the singing function. Either this or privateKey is required.
  * @return {object} Configuration object.
  */
 export const claimGas = config => {
@@ -321,8 +345,9 @@ export const claimGas = config => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
- * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction is required.
+ * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction and publicKey is required.
  * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
+ * @param {string} [config.publicKey] - A public key for the singing function. Either this or privateKey is required.
  * @param {object} [config.intents] - Intents
  * @param {string} config.script - VM script. Must include empty args parameter even if no args are present
  * @param {number} config.gas - gasCost of VM script.
@@ -411,22 +436,75 @@ const checkProperty = (obj, ...props) => {
 }
 
 /**
- * Returns an appropriate RPC endpoint retrieved from a NeoScan endpoint.
- * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
+ * Helper method to returns an appropriate RPC endpoint retrieved from an endpoint.
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
  * @param {object} api - The endpoint API object. eg, neonDB or Neoscan.
  * @return {Promise<string>} - URL
  */
-export const getRPCEndpointFrom = (net, api) => {
+export const getRPCEndpointFrom = (config, api) => {
+  const { net } = config
   if (!api.getRPCEndpoint)
     throw new Error('Invalid type. Is this an API object?')
   return api.getRPCEndpoint(net)
 }
 
 /**
- * Returns an appropriate RPC endpoint retrieved from a NeoScan endpoint.
- * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
+ * Returns an appropriate RPC endpoint retrieved from an endpoint.
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
  * @return {Promise<string>} - URL
  */
-export const getRPCEndpoint = net => {
-  return loadBalance(getRPCEndpointFrom, net)
+export const getRPCEndpoint = config => {
+  return loadBalance(getRPCEndpointFrom, config)
+}
+
+/**
+ * Helper method to get transaction history for an account
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
+ * @param {string} config.address - Wallet address
+ * @param {object} api - The endpoint API object. eg, neonDB or Neoscan.
+ * @return {Promise<string>} - URL
+ */
+export const getTransactionHistoryFrom = (config, api) => {
+  const { address, net } = config
+  if (!api.getTransactionHistory)
+    throw new Error('Invalid type. Is this an API object?')
+  return api.getTransactionHistory(net, address)
+}
+
+/**
+ * Get transaction history for an account
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
+ * @param {string} config.address - Wallet address
+ * @return {Promise<string>} - URL
+ */
+export const getTransactionHistory = config => {
+  return loadBalance(getTransactionHistoryFrom, config)
+}
+
+/**
+ * Helper method to get the current height of the light wallet DB
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
+ * @param {object} api - The endpoint API object. eg, neonDB or Neoscan.
+ * @return {Promise<string>} - URL
+ */
+export const getWalletDBHeightFrom = (config, api) => {
+  const { net } = config
+  if (!api.getWalletDBHeight)
+    throw new Error('Invalid type. Is this an API object?')
+  return api.getWalletDBHeight(net)
+}
+
+/**
+ * Get the current height of the light wallet DB
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
+ * @return {Promise<string>} - URL
+ */
+export const getWalletDBHeight = config => {
+  return loadBalance(getWalletDBHeightFrom, config)
 }
