@@ -125,12 +125,8 @@ declare module '@cityofzion/neon-js' {
     export function generateRandomArray(length: number): string
 
     //nep2
-    export function encryptWifAccount(wif: string, passphrase: string): Promise<Account>
-    export function generateEncryptedWif(passphrase: string): Promise<Account>
     export function encrypt(wifKey: string, keyphrase: string): string
     export function decrypt(encryptedKey: string, keyphrase: string): string
-    export function encryptWIF(wif: string, passphrase: string): Promise<string>
-    export function decryptWIF(encrypted: string, passphrase: string): Promise<string>
 
     //verify
     export function isNEP2(nep2: string): boolean

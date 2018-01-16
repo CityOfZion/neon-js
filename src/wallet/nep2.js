@@ -22,33 +22,6 @@ const log = logger('wallet')
  */
 
 /**
- * Encrypts an WIF key with a given passphrase, returning a Promise<Account>.
- * @param {string} wif - The WIF key to encrypt.
- * @param {string} passphrase - The password.
- * @return {Promise<Account>} A Promise returning an Account object.
- */
-export const encryptWifAccount = (wif, passphrase) => {
-  log.warn('encryptWifAccount to be deprecated in favor of Account.encrypt')
-  return encryptWIF(wif, passphrase).then((encWif) => {
-    const loadAccount = new Account(wif)
-    loadAccount.encryptedWif = encWif
-    loadAccount.passphrase = passphrase
-    return loadAccount
-  })
-}
-
-/**
- * Generates a new private Key and encrypts it with the given passphrase.
- * @param {string} passphrase - The password.
- * @return {Promise<Account>} A Promise returning an Account object.
- */
-export const generateEncryptedWif = (passphrase) => {
-  log.warn('generateEncryptedWif to be deprecated.')
-  const newPrivateKey = generatePrivateKey()
-  return encryptWifAccount(newPrivateKey, passphrase)
-}
-
-/**
  * Encrypts a WIF key using a given keyphrase under NEP-2 Standard.
  * @param {string} wifKey - WIF key to encrypt (52 chars long).
  * @param {string} keyphrase - The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
@@ -94,18 +67,6 @@ export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) 
   const newAddressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
   if (addressHash !== newAddressHash) throw new Error('Wrong Password!')
   return account.WIF
-}
-
-// helpers to wrap synchronous functions in promises
-
-export const encryptWIF = (wif, passphrase) => {
-  log.warn('encryptWIF to be deprecated in favor of Account.encrypt')
-  return Promise.resolve(encrypt(wif, passphrase))
-}
-
-export const decryptWIF = (encrypted, passphrase) => {
-  log.warn('decryptWIF to be deprecated in favor of Account.decrypt')
-  return Promise.resolve(decrypt(encrypted, passphrase))
 }
 
 const ensureScryptParams = (params) => Object.assign({}, DEFAULT_SCRYPT, params)
