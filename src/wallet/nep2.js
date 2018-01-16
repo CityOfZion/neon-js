@@ -6,7 +6,6 @@
 import bs58check from 'bs58check' // This is importable because WIF specifies it as a dependency.
 import { SHA256, AES, enc, mode, pad } from 'crypto-js'
 import scrypt from 'js-scrypt'
-import { generatePrivateKey } from './core'
 import Account from './Account'
 import { ab2hexstring, hexXor } from '../utils'
 import { DEFAULT_SCRYPT, NEP_HEADER, NEP_FLAG } from '../consts'
@@ -42,7 +41,9 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
   const encrypted = AES.encrypt(enc.Hex.parse(xor), enc.Hex.parse(derived2), { mode: mode.ECB, padding: pad.NoPadding })
   // Construct
   const assembled = NEP_HEADER + NEP_FLAG + addressHash + encrypted.ciphertext.toString()
-  return bs58check.encode(Buffer.from(assembled, 'hex'))
+  const encryptedKey = bs58check.encode(Buffer.from(assembled, 'hex'))
+  log.info(`Successfully encrypted key to ${encryptedKey}`)
+  return encryptedKey
 }
 
 /**
@@ -66,6 +67,7 @@ export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) 
   const account = new Account(privateKey)
   const newAddressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
   if (addressHash !== newAddressHash) throw new Error('Wrong Password!')
+  log.info(`Successfully decrypted ${encryptedKey}`)
   return account.WIF
 }
 

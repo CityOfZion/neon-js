@@ -1,7 +1,7 @@
 import { Account } from '../wallet'
 import { TX_VERSION, ASSET_ID } from '../consts'
 import { createScript } from '../sc'
-import { Fixed8, str2hexstring, num2VarInt } from '../utils'
+import { Fixed8, str2hexstring } from '../utils'
 import TxAttrUsage from './txAttrUsage'
 import * as comp from './components'
 import * as core from './core'
