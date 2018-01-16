@@ -23,7 +23,11 @@ export const calculateInputs = (balances, intents, gasCost = 0) => {
   // Add GAS cost in
   gasCost = new Fixed8(gasCost)
   if (gasCost.gt(0)) {
-    requiredAssets[ASSET_ID.GAS] ? requiredAssets[ASSET_ID.GAS].add(gasCost) : requiredAssets[ASSET_ID.GAS] = gasCost
+    if (requiredAssets[ASSET_ID.GAS]) {
+      requiredAssets[ASSET_ID.GAS] = requiredAssets[ASSET_ID.GAS].add(gasCost)
+    } else {
+      requiredAssets[ASSET_ID.GAS] = gasCost
+    }
   }
   const inputsAndChange = Object.keys(requiredAssets).map((assetId) => {
     const requiredAmt = requiredAssets[assetId]
@@ -41,7 +45,6 @@ export const calculateInputs = (balances, intents, gasCost = 0) => {
     }
   }, { inputs: [], change: [] })
   return output
-  // return { inputs, change }
 }
 
 const calculateInputsForAsset = (assetBalance, requiredAmt, assetId, address) => {
