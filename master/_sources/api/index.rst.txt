@@ -46,7 +46,7 @@ These are core methods that help to tie up the different 3rd party APIs in order
   })
 
 
-These methods primarily rely on NeonDB for information with Neoscan as a fall back. Thus, they are generally more reliable.
+These methods are the core functionality that ``neon-js`` will maintain. There is in built API selection that will choose the more reliable API between neonDB and neoscan based on past transactions.
 
 The methods revolve around passing an configuration object containing all information down the chain. Each method digests the necessary information within the configuration object to perform its task and pass down the configuration object with new information added to it.
 

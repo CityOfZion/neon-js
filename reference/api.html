@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API &mdash; neon-js 2.3.0 documentation</title>
+  <title>API &mdash; neon-js 3.0.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 2.3.0 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 3.0.0 documentation" href="../index.html"/>
         <link rel="up" title="Reference" href="index.html"/>
         <link rel="next" title="RPC" href="rpc.html"/>
         <link rel="prev" title="Reference" href="index.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                2.3.0
+                3.0.0
               </div>
             
           
@@ -105,6 +105,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">API</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#core">Core</a></li>
@@ -199,6 +200,43 @@
 <div class="section" id="core">
 <h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="setApiSwitch">
+<code class="descname">setApiSwitch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#setApiSwitch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the API switch to the provided value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>netSetting</strong> (<em>number</em>) &#8211; The new value between 0 and 1 inclusive.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="setSwitchFreeze">
+<code class="descname">setSwitchFreeze</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#setSwitchFreeze" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Sets the freeze setting for the API switch. A frozen switch will not dynamically shift towards the other provider when the main provider fails.</dt>
+<dd>This does not mean that we do not use the other provider. This only means that we will not change our preference for the main provider.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>newSetting</strong> (<em>bool</em>) &#8211; The new setting for freeze.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="claimGas">
 <code class="descname">claimGas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#claimGas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a ClaimTransaction for all available GAS based on API</p>
@@ -236,7 +274,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; Configuration object + tx</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211; Configuration object + tx</p>
 </td>
 </tr>
 </tbody>
@@ -280,7 +318,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>config</strong> (<em>object</em>) &#8211; Configuration object.</li>
-<li><strong>config.net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217;, &#8216;TestNet&#8217; or a neon-wallet-db URL.</li>
+<li><strong>config.net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;</li>
 <li><strong>config.address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Wallet address</li>
 <li><strong>api</strong> (<em>object</em>) &#8211; The endpoint API object. eg, neonDB or Neoscan.</li>
 </ul>
@@ -303,7 +341,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>config</strong> (<em>object</em>) &#8211; Configuration object.</li>
-<li><strong>config.net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217;, &#8216;TestNet&#8217; or a neon-wallet-db URL.</li>
+<li><strong>config.net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217;, &#8216;TestNet&#8217;</li>
 <li><strong>config.address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Wallet address</li>
 <li><strong>api</strong> (<em>object</em>) &#8211; The endpoint APi object. eg, neonDB or Neoscan.</li>
 </ul>
@@ -403,7 +441,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; Configuration object.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211; Configuration object.</p>
 </td>
 </tr>
 </tbody>
@@ -715,6 +753,27 @@
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="getPrices">
+<code class="descname">getPrices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#getPrices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a mapping of the symbol for a coin to its price</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>coins</strong> (<em>Array.&lt;string&gt;</em>) &#8211; Coin names. NEO or GAS.</li>
+<li><strong>currency</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Three letter currency symbol.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211; object mapping symbol to price</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="nep5">
 <h2>NEP5<a class="headerlink" href="#nep5" title="Permalink to this headline">¶</a></h2>
@@ -852,14 +911,15 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: 2.3.0
+        v: 3.0.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../1.1.1/index.html">1.1.1</a></dd>
-            <dd><a href="../2.3.0/reference/api.html">2.3.0</a></dd>
+            <dd><a href="../3.0.0/reference/api.html">3.0.0</a></dd>
+            <dd><a href="../2.3.2/reference/api.html">2.3.2</a></dd>
+            <dd><a href="../1.1.2/index.html">1.1.2</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -875,7 +935,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'2.3.0',
+            VERSION:'3.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

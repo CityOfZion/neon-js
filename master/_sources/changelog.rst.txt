@@ -4,8 +4,66 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
-2.3.0
+3.0.0
 =====
+
+- Logging
+
+  - Setup logging directed at ``stdout`` and ``stderr``. Logging package is loglevel.
+  - Defaults to silent.
+  - Not exposed through semantic style currently.
+  - All deprecation messages are set to 'warn' level.
+  - See logging for more details.
+
+- Utils
+
+  - Fixed8: A new class extending bignumber.js that replaces all value storage in neon-js
+  - This class is now used for all classes that involves coin values with decimal places.
+  - Comes with helper methods such as ``toHex`` and ``fromHex``.
+
+  ::
+
+    import {u} from '@cityofzion/neon-js'
+    // accepts numbers or string
+    const num1 = new u.Fixed8(123.4567)
+    const num2 = u.Fixed8.fromHex('0000000005f5e100') // 1
+
+    const num3 = num1.add(num2) // immutable
+    console.log(num3.toString()) // '124.4567'
+
+- Wallet
+
+  - ``Claims`` is now a ES6 class. While it does not have any spceial methods for it now, it is one of the high level objects that we will be working with in ``neon-js``. This allows easy creation of ``Claims`` using the constructor by passing in a CLaims-like javascript object.
+  - ``components`` have been created for the minor sub-components found in ``Claims`` and ``Balance``. These methods are useful for us to rapidly create components that are usable with ``neon-js`` methods. Refer to the wallet section for more information.
+  - **BREAKING** Excess NEP2 functions are now fully deprecated. The list is ``encryptWifAccount``, ``generateENcryptedWif``, ``encryptWIF``, ``decryptWIF``.
+
+- Transaction
+
+  - Update all methods to conform with the new Fixed8 classes. This also means that ``neon-js`` will not be compatible with just normal javascript objects anymore.
+
+
+- API
+
+  - **BREAKING** Update external API libraries (neonDB and neoscan) to return ``Balance`` and ``Claims`` objects. Fixed8 will be used in the new models, making arithmetic operations very different from normal javascript numbers.
+  - A bug has been discovered in ``getPrice``. While it works for NEO and GAS, it will not work for any of the NEP5 tokens. ``getPrices`` has been fixed for this bug. However, there is no easy fix for ``getPrice`` and thus, we will move forward with deprecating ``getPrice`` in favor of ``getPrices``.
+
+
+- Fixes
+
+  - fix getPrices by adding a limit=0 to the query.
+  - fix default Account.contract field not having the required shape.
+  - fix transaction attribute being deserialized wrongly.
+
+2.x.x
+=====
+
+2.3.1
+-----
+
+- clean neonDB input numbers
+
+2.3.0
+-----
 
 - Smart Contract
 
@@ -49,17 +107,17 @@ This details the changes made from the previous recorded version.
   - Add docs build information to readme.
 
 2.2.2
-=====
+-----
 
 - Fix ``nep5/doTransferToken``
 
 2.2.1
-=====
+-----
 
 -Fix ``fixed82num`` not accepting empty string
 
 2.2.0
-=====
+-----
 
 - Wallet
 
@@ -107,7 +165,7 @@ This details the changes made from the previous recorded version.
   - Add ``hexstring2str`` method.
 
 2.1.0
-=====
+-----
 
 - Balance as an ES6 class.
 
@@ -130,7 +188,7 @@ This details the changes made from the previous recorded version.
 - Typescript typings fixed
 
 2.0.0
-======
+-----
 
 - Package exports semantic style
 
@@ -185,7 +243,7 @@ This details the changes made from the previous recorded version.
   - ContractParam added to support ``invoke`` and ``invokefunction`` RPC calls.
 
 
-1.1.x
+1.x.x
 =====
 
 1.1.1
@@ -216,9 +274,6 @@ This details the changes made from the previous recorded version.
 
   | getAccountsFromWIFKey -> getAccountFromWIFKey
   | getAccountsFromPrivateKey -> getAccountFromPrivateKey
-
-1.0.x
-=====
 
 1.0.4
 -----

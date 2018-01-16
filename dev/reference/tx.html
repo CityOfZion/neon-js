@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Transactions &mdash; neon-js 2.2.2 documentation</title>
+  <title>Transactions &mdash; neon-js 3.0.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 2.2.2 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 3.0.0 documentation" href="../index.html"/>
         <link rel="up" title="Reference" href="index.html"/>
         <link rel="next" title="Utility" href="utility.html"/>
         <link rel="prev" title="Smart Contract" href="sc.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                2.2.2
+                3.0.0
               </div>
             
           
@@ -105,6 +105,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rpc.html">RPC</a></li>
@@ -193,7 +194,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.3.0/reference/tx.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.3.0.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.0.0/reference/tx.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.0.0.</a></p>
 <div class="section" id="transactions">
 <h1>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h1>
 <p>Module <code class="docutils literal"><span class="pre">tx</span></code></p>
@@ -210,7 +211,7 @@
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>balances</strong> (<a class="reference internal" href="wallet.html#Balance" title="Balance"><em>Balance</em></a>) &#8211; Balance of all assets available.</li>
 <li><strong>intents</strong> (<em>Array.&lt;TransactionOutput&gt;</em>) &#8211; All sending intents</li>
-<li><strong>gasCost</strong> (<em>number</em>) &#8211; gasCost required for the transaction.</li>
+<li><strong>gasCost</strong> (<em>number|Fixed8</em>) &#8211; gasCost required for the transaction.</li>
 </ul>
 </td>
 </tr>
@@ -371,7 +372,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>assetId</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; assetId, Uint256</li>
-<li><strong>value</strong> (<em>number</em>) &#8211; value of output, Fixed8</li>
+<li><strong>value</strong> (<em>number|Fixed8</em>) &#8211; value of output, Fixed8</li>
 <li><strong>scriptHash</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Uint160</li>
 </ul>
 </td>
@@ -430,7 +431,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>assetSym</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The Symbol of the asset to send. Typically NEO or GAS.</li>
-<li><strong>value</strong> (<em>number</em>) &#8211; The value to send.</li>
+<li><strong>val</strong> (<em>number|Fixed8</em>) &#8211; The value to send.</li>
 <li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The address to send the asset to.</li>
 </ul>
 </td>
@@ -571,13 +572,13 @@ This class is a wrapper around the various transaction building methods found in
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>config</strong> (<em>object</em>) &#8211; A config object that contains all the properties of a Transaction</li>
-<li><strong>config.type</strong> (<em>number</em>) &#8211; Transaction type. Default is 128 (ContractTransaction).</li>
-<li><strong>config.version</strong> (<em>number</em>) &#8211; Transaction version. Default is latest version for ContractTransaction.</li>
-<li><strong>config.attributes</strong> (<em>Array.&lt;TransactionAttribute&gt;</em>) &#8211; Transaction Attributes.</li>
-<li><strong>config.inputs</strong> (<em>Array.&lt;TransactionInput&gt;</em>) &#8211; Transaction Inputs.</li>
-<li><strong>config.outputs</strong> (<em>Array.&lt;TransactionOutput&gt;</em>) &#8211; Transaction Outputs.</li>
-<li><strong>config.scripts</strong> (<em>Array.&lt;Witness&gt;</em>) &#8211; Witnesses.</li>
+<li><strong>tx</strong> (<em>object</em>) &#8211; A Transaction-like object.</li>
+<li><strong>tx.type</strong> (<em>number</em>) &#8211; Transaction type. Default is 128 (ContractTransaction).</li>
+<li><strong>tx.version</strong> (<em>number</em>) &#8211; Transaction version. Default is latest version for ContractTransaction.</li>
+<li><strong>tx.attributes</strong> (<em>Array.&lt;TransactionAttribute&gt;</em>) &#8211; Transaction Attributes.</li>
+<li><strong>tx.inputs</strong> (<em>Array.&lt;TransactionInput&gt;</em>) &#8211; Transaction Inputs.</li>
+<li><strong>tx.outputs</strong> (<em>Array.&lt;TransactionOutput&gt;</em>) &#8211; Transaction Outputs.</li>
+<li><strong>tx.scripts</strong> (<em>Array.&lt;Witness&gt;</em>) &#8211; Witnesses.</li>
 </ul>
 </td>
 </tr>
@@ -898,8 +899,9 @@ This class is a wrapper around the various transaction building methods found in
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../../1.1.1/index.html">1.1.1</a></dd>
-            <dd><a href="../../2.3.0/reference/tx.html">2.3.0</a></dd>
+            <dd><a href="../../3.0.0/reference/tx.html">3.0.0</a></dd>
+            <dd><a href="../../2.3.2/reference/tx.html">2.3.2</a></dd>
+            <dd><a href="../../1.1.2/index.html">1.1.2</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -915,7 +917,7 @@ This class is a wrapper around the various transaction building methods found in
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'2.2.2',
+            VERSION:'3.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Wallet &mdash; neon-js 2.3.0 documentation</title>
+  <title>Wallet &mdash; neon-js 3.0.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="neon-js 2.3.0 documentation" href="index.html"/>
+    <link rel="top" title="neon-js 3.0.0 documentation" href="index.html"/>
         <link rel="next" title="Transactions" href="transactions/index.html"/>
         <link rel="prev" title="Interface" href="interface.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.3.0
+                3.0.0
               </div>
             
           
@@ -100,6 +100,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Wallet</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#account">Account</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#balance">Balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#claims">Claims</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#core">Core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nep2">NEP2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#verify">Verify</a></li>
@@ -112,6 +113,7 @@
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts/index.html">Smart Contract</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -256,6 +258,12 @@
 </pre></div>
 </div>
 <p>The Balance class is used to track the unspent coins available to construct transactions with. <code class="docutils literal"><span class="pre">verifyAssets</span></code> is a handy method to make sure the unspent coins provided by the 3rd party API is really unspent by verifying them against a NEO node. However, this is an expensive operation so use sparingly.</p>
+<p>The constructor is a handy method to convert a Balance-like javascript object into a <code class="docutils literal"><span class="pre">neon-js</span></code> Balance.</p>
+</div>
+<div class="section" id="claims">
+<h2>Claims<a class="headerlink" href="#claims" title="Permalink to this headline">¶</a></h2>
+<p>The Claims class is a collection of claims data belonging to an account. It is usually retrieved from a 3rd part API. We do not recommend you craft your own Claims manually. This class is here for completeness in terms of high level objects.</p>
+<p>Like Balance, the constructor is the way to convert a Claims-like object into a <code class="docutils literal"><span class="pre">neon-js</span></code> Claims object. This is the primary method we use to convert the claims object we get from 3rd party API.</p>
 </div>
 <div class="section" id="core">
 <h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
@@ -375,14 +383,15 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: 2.3.0
+        v: 3.0.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="1.1.1/wallet.html">1.1.1</a></dd>
-            <dd><a href="2.3.0/wallet.html">2.3.0</a></dd>
+            <dd><a href="3.0.0/wallet.html">3.0.0</a></dd>
+            <dd><a href="2.3.2/wallet.html">2.3.2</a></dd>
+            <dd><a href="1.1.2/wallet.html">1.1.2</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -398,7 +407,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.3.0',
+            VERSION:'3.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

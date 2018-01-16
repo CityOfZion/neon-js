@@ -83,6 +83,14 @@ The Balance class stores the balance of the account. It is usually retrieved usi
 
 The Balance class is used to track the unspent coins available to construct transactions with. ``verifyAssets`` is a handy method to make sure the unspent coins provided by the 3rd party API is really unspent by verifying them against a NEO node. However, this is an expensive operation so use sparingly.
 
+The constructor is a handy method to convert a Balance-like javascript object into a ``neon-js`` Balance.
+
+Claims
+======
+
+The Claims class is a collection of claims data belonging to an account. It is usually retrieved from a 3rd part API. We do not recommend you craft your own Claims manually. This class is here for completeness in terms of high level objects.
+
+Like Balance, the constructor is the way to convert a Claims-like object into a ``neon-js`` Claims object. This is the primary method we use to convert the claims object we get from 3rd party API.
 
 Core
 ====

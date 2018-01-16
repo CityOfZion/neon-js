@@ -64,3 +64,18 @@ It is used in serializing and deserializing a transaction object. The ScriptBuil
   ss.read(1) // 'gh'
   ss.isEmpty() // true
   ss.str // 'abcdefgh'
+
+Fixed8 is a class based off bignumber.js for storage and accurate calculations of values. It is extended to have helper methods for converting between decimal and hex representation.
+
+::
+
+  import Neon from '@cityofzion/neon-js'
+  const a = new Neon.u.Fixed8(1)
+  a.toHex()        // '0000000005f5e100'
+  a.toReverseHex() // '00e1f50500000000'
+
+  const b = Neon.u.Fixed8.fromHex('0000000005f5e100') // 1
+
+  import {u} from '@cityofzion/neon-js'
+  const c = new u.Fixed8('2')
+  const d = u.Fixed8.fromReverseHex('00e1f50500000000')

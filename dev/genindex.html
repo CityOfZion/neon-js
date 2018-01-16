@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; neon-js 2.2.2 documentation</title>
+  <title>Index &mdash; neon-js 3.0.0 documentation</title>
   
 
   
@@ -38,7 +38,7 @@
         <link rel="index" title="Index"
               href="#"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="neon-js 2.2.2 documentation" href="index.html"/> 
+    <link rel="top" title="neon-js 3.0.0 documentation" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.2.2
+                3.0.0
               </div>
             
           
@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts/index.html">Smart Contract</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -199,13 +200,15 @@
 </li>
       <li><a href="reference/sc.html#_emitArray">_emitArray() (built-in function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/sc.html#_emitNum">_emitNum() (built-in function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/sc.html#_emitParam">_emitParam() (built-in function)</a>
 </li>
       <li><a href="reference/sc.html#_emitString">_emitString() (built-in function)</a>
+</li>
+      <li><a href="reference/wallet.html#_updateContractScript">_updateContractScript() (built-in function)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -399,10 +402,12 @@
 </li>
       <li><a href="reference/api.html#getPrice">getPrice() (built-in function)</a>
 </li>
-      <li><a href="reference/wallet.html#getPrivateKeyFromWIF">getPrivateKeyFromWIF() (built-in function)</a>
+      <li><a href="reference/api.html#getPrices">getPrices() (built-in function)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/wallet.html#getPrivateKeyFromWIF">getPrivateKeyFromWIF() (built-in function)</a>
+</li>
       <li><a href="reference/wallet.html#getPublicKey">getPublicKey() (built-in function)</a>
 </li>
       <li><a href="reference/wallet.html#getPublicKeyFromPrivateKey">getPublicKeyFromPrivateKey() (built-in function)</a>
@@ -627,13 +632,17 @@
 </li>
       <li><a href="reference/tx.html#serializeTransactionInput">serializeTransactionInput() (built-in function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/tx.html#serializeTransactionOutput">serializeTransactionOutput() (built-in function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/tx.html#serializeWitness">serializeWitness() (built-in function)</a>
 </li>
+      <li><a href="reference/api.html#setApiSwitch">setApiSwitch() (built-in function)</a>
+</li>
       <li><a href="reference/wallet.html#setDefault">setDefault() (built-in function)</a>
+</li>
+      <li><a href="reference/api.html#setSwitchFreeze">setSwitchFreeze() (built-in function)</a>
 </li>
       <li><a href="reference/utility.html#sha256">sha256() (built-in function)</a>
 </li>
@@ -744,8 +753,9 @@
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../1.1.1/index.html">1.1.1</a></dd>
-            <dd><a href="../2.3.0/index.html">2.3.0</a></dd>
+            <dd><a href="../3.0.0/index.html">3.0.0</a></dd>
+            <dd><a href="../2.3.2/index.html">2.3.2</a></dd>
+            <dd><a href="../1.1.2/index.html">1.1.2</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -761,7 +771,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.2.2',
+            VERSION:'3.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API &mdash; neon-js 2.3.0 documentation</title>
+  <title>API &mdash; neon-js 3.0.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 2.3.0 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 3.0.0 documentation" href="../index.html"/>
         <link rel="next" title="Smart Contract" href="../smart_contracts/index.html"/>
         <link rel="prev" title="Node RPC" href="../rpc/index.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.3.0
+                3.0.0
               </div>
             
           
@@ -111,6 +111,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
 </ul>
@@ -184,7 +185,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../2.3.0/api/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 2.3.0.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.0.0/api/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.0.0.</a></p>
 <div class="section" id="api">
 <h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal"><span class="pre">api</span></code> module is exposed as:</p>
@@ -225,7 +226,7 @@
 <span class="p">})</span>
 </pre></div>
 </div>
-<p>These methods primarily rely on NeonDB for information with Neoscan as a fall back. Thus, they are generally more reliable.</p>
+<p>These methods are the core functionality that <code class="docutils literal"><span class="pre">neon-js</span></code> will maintain. There is in built API selection that will choose the more reliable API between neonDB and neoscan based on past transactions.</p>
 <p>The methods revolve around passing an configuration object containing all information down the chain. Each method digests the necessary information within the configuration object to perform its task and pass down the configuration object with new information added to it.</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="p">{</span><span class="nx">api</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
 <span class="c1">// This chain is basically api.claimGas</span>
@@ -342,8 +343,9 @@
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../../1.1.1/index.html">1.1.1</a></dd>
-            <dd><a href="../../2.3.0/api/index.html">2.3.0</a></dd>
+            <dd><a href="../../3.0.0/api/index.html">3.0.0</a></dd>
+            <dd><a href="../../2.3.2/api/index.html">2.3.2</a></dd>
+            <dd><a href="../../1.1.2/index.html">1.1.2</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
@@ -359,7 +361,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'2.3.0',
+            VERSION:'3.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
