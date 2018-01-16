@@ -1,4 +1,6 @@
 import { calculateInputs, serializeTransaction, deserializeTransaction, signTransaction, getTransactionHash } from '../../../src/transactions/core'
+import { Balance } from '../../../src/wallet'
+import { Fixed8 } from '../../../src/utils'
 import createData from './createData.json'
 import data from './data.json'
 
@@ -7,10 +9,10 @@ describe('Core Transaction Methods', function () {
     it('outputs correctly', () => {
       const intents = [{
         assetId: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
-        value: 1,
+        value: new Fixed8(1),
         scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
       }]
-      const { inputs, change } = calculateInputs(createData.balance, intents, 0.1)
+      const { inputs, change } = calculateInputs(new Balance(createData.balance), intents, 0.1)
       inputs.length.should.be.least(2)
       change.length.should.be.least(1)
     })
@@ -18,11 +20,11 @@ describe('Core Transaction Methods', function () {
     it('Errors when insufficient balance', () => {
       const intents = [{
         assetId: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
-        value: 100,
+        value: new Fixed8(100),
         scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
       }]
       const thrower = () => {
-        calculateInputs(createData.balance, intents, 0.1)
+        calculateInputs(new Balance(createData.balance), intents, 0.1)
       }
       thrower.should.throw()
     })
@@ -46,8 +48,16 @@ describe('Core Transaction Methods', function () {
   it('deserialize', () => {
     Object.keys(data).map((key) => {
       let tx = data[key]
+      const expected = tx.deserialized
+      expected.outputs = expected.outputs.map(txout => {
+        return {
+          assetId: txout.assetId,
+          value: new Fixed8(txout.value),
+          scriptHash: txout.scriptHash
+        }
+      })
       const transaction = deserializeTransaction(tx.serialized.stream)
-      transaction.should.eql(tx.deserialized)
+      transaction.should.eql(expected)
     })
   })
 

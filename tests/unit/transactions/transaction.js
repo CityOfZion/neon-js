@@ -1,8 +1,9 @@
 import Tx from '../../../src/transactions/transaction'
-import { Balance, Account } from '../../../src/wallet'
+import { Balance, Account, Claims } from '../../../src/wallet'
 import data from './data.json'
 import createData from './createData.json'
 import { ASSET_ID, CONTRACTS } from '../../../src/consts'
+import { Fixed8 } from '../../../src/utils'
 
 describe('Transaction', function () {
   it('Constructor', () => {
@@ -32,13 +33,13 @@ describe('Transaction', function () {
   })
 
   it('create ClaimTx', () => {
-    const tx = Tx.createClaimTx(createData.claim.address, createData.claim)
+    const tx = Tx.createClaimTx(createData.claim.address, new Claims(createData.claim))
     tx.type.should.equal(2)
     tx.claims.length.should.equal(4)
     tx.outputs.length.should.equal(1)
     tx.outputs[0].should.eql({
       assetId: ASSET_ID['GAS'],
-      value: 0.01983405,
+      value: new Fixed8(0.01983405),
       scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
     })
   })
@@ -78,14 +79,14 @@ describe('Transaction', function () {
   it('deserialize', () => {
     Object.keys(data).map((k) => {
       const tx = Tx.deserialize(data[k].serialized.stream)
-      tx.should.eql(data[k].deserialized)
+      tx.should.eql(new Tx(data[k].deserialized))
     })
   })
 
   describe('addOutput', function () {
     const txOut = {
       assetId: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
-      value: 1,
+      value: new Fixed8(1),
       scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
     }
     const args = {
@@ -120,7 +121,7 @@ describe('Transaction', function () {
     const remark = 'This is a remark'
     const remarkAttr = {
       usage: parseInt('f0', 16),
-      data: '105468697320697320612072656d61726b'
+      data: '5468697320697320612072656d61726b'
     }
     const tx = new Tx()
     tx.addRemark(remark)

@@ -6,10 +6,12 @@
 import bs58check from 'bs58check' // This is importable because WIF specifies it as a dependency.
 import { SHA256, AES, enc, mode, pad } from 'crypto-js'
 import scrypt from 'js-scrypt'
-import { generatePrivateKey } from './core'
 import Account from './Account'
 import { ab2hexstring, hexXor } from '../utils'
 import { DEFAULT_SCRYPT, NEP_HEADER, NEP_FLAG } from '../consts'
+import logger from '../logging'
+
+const log = logger('wallet')
 
 /**
  * @typedef ScryptParams
@@ -17,33 +19,6 @@ import { DEFAULT_SCRYPT, NEP_HEADER, NEP_FLAG } from '../consts'
  * @param {number} blockSize - (r) 1 - 256
  * @param {number} parallel - (p) 1 - 256
  */
-
-/**
- * Encrypts an WIF key with a given passphrase, returning a Promise<Account>.
- * @param {string} wif - The WIF key to encrypt.
- * @param {string} passphrase - The password.
- * @return {Promise<Account>} A Promise returning an Account object.
- */
-export const encryptWifAccount = (wif, passphrase) => {
-  console.warn('To be deprecated in v3. Please use Account.encrypt')
-  return encryptWIF(wif, passphrase).then((encWif) => {
-    const loadAccount = new Account(wif)
-    loadAccount.encryptedWif = encWif
-    loadAccount.passphrase = passphrase
-    return loadAccount
-  })
-}
-
-/**
- * Generates a new private Key and encrypts it with the given passphrase.
- * @param {string} passphrase - The password.
- * @return {Promise<Account>} A Promise returning an Account object.
- */
-export const generateEncryptedWif = (passphrase) => {
-  console.warn('To be deprecated in v3. Please use new Account() and encrypt with Account.encrypt')
-  const newPrivateKey = generatePrivateKey()
-  return encryptWifAccount(newPrivateKey, passphrase)
-}
 
 /**
  * Encrypts a WIF key using a given keyphrase under NEP-2 Standard.
@@ -66,7 +41,9 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
   const encrypted = AES.encrypt(enc.Hex.parse(xor), enc.Hex.parse(derived2), { mode: mode.ECB, padding: pad.NoPadding })
   // Construct
   const assembled = NEP_HEADER + NEP_FLAG + addressHash + encrypted.ciphertext.toString()
-  return bs58check.encode(Buffer.from(assembled, 'hex'))
+  const encryptedKey = bs58check.encode(Buffer.from(assembled, 'hex'))
+  log.info(`Successfully encrypted key to ${encryptedKey}`)
+  return encryptedKey
 }
 
 /**
@@ -90,19 +67,8 @@ export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) 
   const account = new Account(privateKey)
   const newAddressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
   if (addressHash !== newAddressHash) throw new Error('Wrong Password!')
+  log.info(`Successfully decrypted ${encryptedKey}`)
   return account.WIF
-}
-
-// helpers to wrap synchronous functions in promises
-
-export const encryptWIF = (wif, passphrase) => {
-  console.warn('To be deprecated in v3. Please use Account.encrypt')
-  return Promise.resolve(encrypt(wif, passphrase))
-}
-
-export const decryptWIF = (encrypted, passphrase) => {
-  console.warn('To be deprecated in v3. Please use Account.decrypt')
-  return Promise.resolve(decrypt(encrypted, passphrase))
 }
 
 const ensureScryptParams = (params) => Object.assign({}, DEFAULT_SCRYPT, params)

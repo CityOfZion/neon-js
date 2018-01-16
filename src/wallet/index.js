@@ -6,6 +6,7 @@ import * as nep2 from './nep2'
 import Account from './Account'
 import Balance from './Balance'
 import Wallet from './Wallet'
+import Claims from './Claims'
 
 export default {
   create: {
@@ -40,4 +41,5 @@ export default {
 export * from './core'
 export * from './verify'
 export * from './nep2'
-export { Account, Balance, Wallet }
+export * from './components'
+export { Account, Balance, Wallet, Claims }

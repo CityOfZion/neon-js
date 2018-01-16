@@ -1,5 +1,5 @@
 import * as c from '../../../src/transactions/components'
-import { StringStream } from '../../../src/utils'
+import { StringStream, Fixed8 } from '../../../src/utils'
 
 describe('Components', function () {
   const deserializedTx = {
@@ -77,7 +77,9 @@ describe('Components', function () {
       for (let i = 0; i < serializedTx.outputs.length; i++) {
         let ss = new StringStream(serializedTx.outputs[i])
         let s = c.deserializeTransactionOutput(ss)
-        s.should.eql(deserializedTx.outputs[i])
+        s.assetId.should.eql(deserializedTx.outputs[i].assetId)
+        s.value.toNumber().should.eql(deserializedTx.outputs[i].value)
+        s.scriptHash.should.eql(deserializedTx.outputs[i].scriptHash)
       }
     })
 
@@ -85,7 +87,7 @@ describe('Components', function () {
       const txOut = c.createTransactionOutput('NEO', 1, 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW')
       txOut.should.eql({
         assetId: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
-        value: 1,
+        value: new Fixed8(1),
         scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
       })
     })

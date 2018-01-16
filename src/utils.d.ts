@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js'
 declare module '@cityofzion/neon-js' {
   export module u {
     export function ab2str(buf: ArrayBuffer): string
@@ -12,7 +13,7 @@ declare module '@cityofzion/neon-js' {
     export function fixed82num(fixed8: string): number
     export function num2VarInt(num: number): string
     export function hexXor(str1: string, str2: string): string
-    export function reverseArray(arr: Array): Uint8Array
+    export function reverseArray(arr: Array<number>): Uint8Array
     export function reverseHex(hex: string): string
 
     export class StringStream {
@@ -30,5 +31,13 @@ declare module '@cityofzion/neon-js' {
     export function hash160(hex: string): string
     export function hash256(hex: string): string
     export function sha256(hex: string): string
+
+    export class Fixed8 extends BigNumber {
+
+      public toHex(): string
+      public toReverseHex(): string
+      static fromHex(hex: string): Fixed8
+      static fromReverseHex(hex: string): Fixed8
+    }
   }
 }

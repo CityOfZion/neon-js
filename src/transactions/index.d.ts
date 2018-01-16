@@ -1,3 +1,5 @@
+/// <reference path="../utils.d.ts" />
+/// <reference path="../wallet/index.d.ts" />
 declare module '@cityofzion/neon-js' {
   export interface Transaction {
     type: number
@@ -21,7 +23,7 @@ declare module '@cityofzion/neon-js' {
   export interface TransactionOutput {
     assetId: string
     scriptHash: string
-    value: number
+    value: u.Fixed8
   }
 
   export interface Witness {
@@ -29,46 +31,21 @@ declare module '@cityofzion/neon-js' {
     verificationScript: string
   }
 
-  export interface Balance {
-    GAS: TokenBalance
-    NEO: TokenBalance
-    address: string
-    net: 'MainNet' | 'TestNet'
-  }
-
-  export interface Claim {
-    claim: number
-    index: number
-    txid: string
-  }
-
-  interface ClaimData {
-    claims: Claim[]
-  }
-
-  interface txConfig {
-    type: number,
-    version: number,
-    attributes: TransactionAttribute[]
-    inputs: TransactionInput[]
-    outputs: TransactionOutput[]
-    scripts: Witness[]
-  }
-
   export module tx {
     //components
     export function serializeTransactionInput(input: TransactionInput): string
     export function deserializeTransactionInput(stream: u.StringStream): TransactionInput
+    export function TransactionOutput(input: object): TransactionOutput
     export function serializeTransactionOutput(output: TransactionOutput): string
     export function deserializeTransactionOutput(stream: u.StringStream): TransactionOutput
-    export function createTransactionOutput(assetSym: string, value: number, address: string): TransactionOutput
+    export function createTransactionOutput(assetSym: string, value: number|u.Fixed8, address: string): TransactionOutput
     export function serializeTransactionAttribute(attr: TransactionAttribute): string
     export function deserializeTransactionAttribute(stream: u.StringStream): TransactionAttribute
     export function serializeWitness(witness: Witness): string
     export function deserializeWitness(stream: u.StringStream): Witness
 
     //core
-    export function calculateInputs(balances: Balance, intents: TransactionOutput[], gasCost?: number): { inputs: TransactionInput[], change: TransactionOutput[] }
+    export function calculateInputs(balances: wallet.Balance, intents: TransactionOutput[], gasCost?: number): { inputs: TransactionInput[], change: TransactionOutput[] }
     export function serializeTransaction(tx: Transaction, signed?: boolean): string
     export function deserializeTransaction(data: string): Transaction
     export function signTransaction(transaction: Transaction, privateKey: string): Transaction
@@ -102,25 +79,25 @@ declare module '@cityofzion/neon-js' {
       public outputs: TransactionOutput[]
       public scripts: Witness[]
 
-      constructor(TxConfig)
+      constructor(tx: Transaction)
 
       exclusiveData(): object
       hash(): string
 
-      static createClaimTx(publicKeyOrAddress: string, claimData: Claim, override: object): Transaction
-      static createContractTx(balances: Balance, intents: TransactionOutput[], override: object): Transaction
-      static createInvocationTx(balance: Balance, intents: TransactionOutput[], invoke: object | string, gasCost: number, override: object): Transaction
+      static createClaimTx(publicKeyOrAddress: string, claimData:wallet. Claims, override: object): Transaction
+      static createContractTx(balances: wallet.Balance, intents: TransactionOutput[], override: object): Transaction
+      static createInvocationTx(balance: wallet.Balance, intents: TransactionOutput[], invoke: object | string, gasCost: number, override: object): Transaction
     }
-
+    //txAttrUsage
     export enum TxAttrUsage {}
   }
 
   export interface semantic {
     create: {
       tx: (args: any[]) => Transaction
-      claimTx: (publicKeyOrAddress: string, claimData: Claim, override: object) => Transaction
-      contractTx: (balances: Balance, intents: TransactionOutput[], override: object) => Transaction
-      invocationTx: (balance: Balance, intents: TransactionOutput[], invoke: object | string, gasCost: number, override: object) => Transaction
+      claimTx: (publicKeyOrAddress: string, claimData: wallet.Claims, override: object) => Transaction
+      contractTx: (balances: wallet.Balance, intents: TransactionOutput[], override: object) => Transaction
+      invocationTx: (balance: wallet.Balance, intents: TransactionOutput[], invoke: object | string, gasCost: number, override: object) => Transaction
     }
     serialize: {
       attribute: (attr: TransactionAttribute) => string
@@ -130,11 +107,11 @@ declare module '@cityofzion/neon-js' {
       tx: (tx: Transaction) => string
     }
     deserialize: {
-      attribute: (stream: StringStream) => TransactionAttribute
-      input: (stream: StringStream) => TransactionInput
-      output: (stream: StringStream) => TransactionOutput
+      attribute: (stream: u.StringStream) => TransactionAttribute
+      input: (stream: u.StringStream) => TransactionInput
+      output: (stream: u.StringStream) => TransactionOutput
       exclusiveData: object
-      tx: (stream: StringStream) => Transaction
+      tx: (stream: u.StringStream) => Transaction
     }
     get: {
       transactionHash: (transaction: Transaction) => string

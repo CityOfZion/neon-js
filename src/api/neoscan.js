@@ -1,6 +1,10 @@
 import axios from 'axios'
-import { Balance } from '../wallet'
+import { Balance, Claims } from '../wallet'
+import { Fixed8 } from '../utils'
+import logger from '../logging'
 
+const log = logger('api')
+export const name = 'neoscan'
 /**
  * Returns the appropriate NeoScan endpoint.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
@@ -36,7 +40,9 @@ export const getRPCEndpoint = (net) => {
           nodes.push(node)
         }
       }
-      return nodes[Math.floor(Math.random() * nodes.length)].url
+      const selectedURL = nodes[Math.floor(Math.random() * nodes.length)].url
+      log.info(`Best node from neoscan ${net}: ${selectedURL}`)
+      return selectedURL
     })
 }
 
@@ -47,6 +53,7 @@ export const getRPCEndpoint = (net) => {
  * @return {Balance}
   */
 export const getBalance = (net, address) => {
+  log.warn('Balance object expected to change shape in upcoming version')
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_balance/' + address)
     .then((res) => {
@@ -56,12 +63,8 @@ export const getBalance = (net, address) => {
           balance: b.amount,
           unspent: parseUnspent(b.unspent)
         })
-        // To be deprecated
-        bal[b.asset] = {
-          balance: b.amount,
-          unspent: parseUnspent(b.unspent)
-        }
       })
+      log.info(`Retrieved Balance for ${address} from neoscan ${net}`)
       return bal
     })
 }
@@ -77,7 +80,8 @@ export const getClaims = (net, address) => {
   return axios.get(apiEndpoint + '/v1/get_claimable/' + address)
     .then((res) => {
       const claims = parseClaims(res.data.claimable)
-      return { net, address: res.data.address, claims }
+      log.info(`Retrieved Balance for ${address} from neoscan ${net}`)
+      return new Claims({ net, address: res.data.address, claims })
     })
 }
 
@@ -94,10 +98,10 @@ const parseUnspent = (unspentArr) => {
 const parseClaims = (claimArr) => {
   return claimArr.map((c) => {
     return {
-      start: c.start_height,
-      end: c.ed_height,
+      start: new Fixed8(c.start_height),
+      end: new Fixed8(c.end_height),
       index: c.n,
-      claim: Math.round(c.unclaimed * 100000000),
+      claim: new Fixed8(c.unclaimed),
       txid: c.txid,
       value: c.value
     }

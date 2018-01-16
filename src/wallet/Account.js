@@ -1,6 +1,7 @@
 import * as core from './core'
 import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
 import { encrypt, decrypt } from './nep2'
+import util from 'util'
 
 /**
  * @class Account
@@ -16,7 +17,11 @@ class Account {
     this.extra = null
     this.isDefault = false
     this.lock = false
-    this.contract = null
+    this.contract = {
+      script: '',
+      parameters: [],
+      deployed: false
+    }
     if (!str) {
       this._privateKey = core.generatePrivateKey()
     } else if (typeof str === 'object') {
@@ -48,6 +53,18 @@ class Account {
     if (!this.label) {
       try { this.label = this.address } catch (err) { this.label = '' }
     }
+    this._updateContractScript()
+  }
+
+  /**
+   * Attempts to update the contract.script field if public key is available.
+   */
+  _updateContractScript () {
+    try {
+      if (this.contract.script === '') {
+        this.contract.script = core.getVerificationScriptFromPublicKey(this.publicKey)
+      }
+    } catch (e) { }
   }
 
   /** @type {string} */
@@ -152,6 +169,7 @@ class Account {
    */
   decrypt (keyphrase, scryptParams = undefined) {
     this._WIF = decrypt(this.encrypted, keyphrase, scryptParams)
+    this._updateContractScript()
     return this
   }
 
@@ -172,6 +190,10 @@ class Account {
       contract: this.contract,
       extra: this.extra
     }
+  }
+
+  [util.inspect.custom] (depth, opts) {
+    return `[Account: ${this.label}]`
   }
 }
 
