@@ -68,16 +68,16 @@ export const getClaims = (net, address) => {
 }
 
 /**
- * Get total spent and unspent claimable amounts for an address.
+ * Gets the maximum amount of gas claimable after spending all NEO.
  * @param {string} net - 'MainNet' or 'TestNet'.
  * @param {string} address - Address to check.
- * @return {Promise<Claim>} An object with available and unavailable GAS amounts.
+ * @return {Promise<Fixed8>} An object with available and unavailable GAS amounts.
  */
-export const getClaimBalance = (net, address) => {
+export const getMaxClaimAmount = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/claims/' + address).then(res => {
     log.info(
-      `Retrieved Total Spent and Unspent Claim Balance for ${address} from neonDB ${net}`
+      `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neonDB ${net}`
     )
     return new Fixed8(res.data.total_claim + res.data.total_unspent_claim).div(
       100000000
@@ -175,14 +175,7 @@ export const doClaimAllGas = (net, privateKey, signingFunction) => {
  * @param {number} gasCost - The Gas to send as SC fee.
  * @return {Promise<Response>} RPC Response
  */
-export const doMintTokens = (
-  net,
-  scriptHash,
-  fromWif,
-  neo,
-  gasCost,
-  signingFunction
-) => {
+export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunction) => {
   log.warn('doMintTokens will be deprecated in favor of doInvoke')
   const account = new Account(fromWif)
   const intents = [
@@ -203,13 +196,7 @@ export const doMintTokens = (
           usage: TxAttrUsage.Script
         }
       ]
-      const unsignedTx = Transaction.createInvocationTx(
-        balances,
-        intents,
-        invoke,
-        gasCost,
-        { attributes }
-      )
+      const unsignedTx = Transaction.createInvocationTx(balances, intents, invoke, gasCost, { attributes })
       if (signingFunction) {
         return signingFunction(unsignedTx, account.publicKey)
       } else {
@@ -246,13 +233,7 @@ export const doMintTokens = (
  * @param {function} [signingFunction] - Optional signing function. Used for external signing.
  * @return {Promise<Response>} RPC Response
  */
-export const doSendAsset = (
-  net,
-  toAddress,
-  from,
-  assetAmounts,
-  signingFunction
-) => {
+export const doSendAsset = (net, toAddress, from, assetAmounts, signingFunction) => {
   log.warn('doSendAsset will be deprecated in favor of sendAsset')
   const fromAcct = new Account(from)
   const toAcct = new Account(toAddress)

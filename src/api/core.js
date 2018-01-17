@@ -169,13 +169,7 @@ export const createTx = (config, txType) => {
     case 209:
       checkProperty(config, 'balance', 'gas', 'script')
       if (!config.intents) config.intents = []
-      tx = Transaction.createInvocationTx(
-        config.balance,
-        config.intents,
-        config.script,
-        config.gas,
-        config.override
-      )
+      tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas, config.override)
       break
     default:
       return Promise.reject(new Error(`Tx Type not found: ${txType}`))
@@ -235,14 +229,7 @@ export const sendTx = config => {
         }
       } else {
         const dump = {
-          net: config.net,
-          address: config.address,
-          intents: config.intents,
-          balance: config.balance,
-          claims: config.claims,
-          script: config.script,
-          gas: config.gas,
-          tx: config.tx
+          net: config.net, address: config.address, intents: config.intents, balance: config.balance, claims: config.claims, script: config.script, gas: config.gas, tx: config.tx
         }
         log.error(
           `Transaction failed for ${config.address}: ${config.tx.serialize()}`,
@@ -318,11 +305,7 @@ export const claimGas = config => {
     .then(c => sendTx(c))
     .catch(err => {
       const dump = {
-        net: config.net,
-        address: config.address,
-        intents: config.intents,
-        claims: config.claims,
-        tx: config.tx
+        net: config.net, address: config.address, intents: config.intents, claims: config.claims, tx: config.tx
       }
       log.error(`claimGas failed with ${err.message}. Dumping config`, dump)
       throw err
@@ -351,13 +334,7 @@ export const doInvoke = config => {
     .then(c => sendTx(c))
     .catch(err => {
       const dump = {
-        net: config.net,
-        address: config.address,
-        intents: config.intents,
-        balance: config.balance,
-        script: config.script,
-        gas: config.gas,
-        tx: config.tx
+        net: config.net, address: config.address, intents: config.intents, balance: config.balance, script: config.script, gas: config.gas, tx: config.tx
       }
       log.error(`doInvoke failed with ${err.message}. Dumping config`, dump)
       throw err
@@ -502,28 +479,28 @@ export const getWalletDBHeight = config => {
 }
 
 /**
- * Helper method to retrieve total claimable (spent and unspent) from an endpoint.
+ * Helper method to get the maximum amount of gas claimable after spending all NEO.
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet'
  * @param {string} config.address - Wallet address
  * @param {object} api - The endpoint APi object. eg, neonDB or Neoscan.
  * @return {object} Configuration object + url + balance
  */
-export const getClaimBalanceFrom = (config, api) => {
+export const getMaxClaimAmountFrom = (config, api) => {
   checkProperty(config, 'net', 'address')
-  if (!api.getClaimBalance)
+  if (!api.getMaxClaimAmount)
     throw new Error('Invalid type. Is this an API object?')
   const { net, address } = config
-  return api.getClaimBalance(net, address)
+  return api.getMaxClaimAmount(net, address)
 }
 
 /**
- * Method to retrieve total claimable (spent and unspent) from an endpoint.
+ * Method to get the maximum amount of gas claimable after spending all NEO.
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
  * @param {string} config.address - Wallet address
  * @return {Promise<string>} - URL
  */
-export const getClaimBalance = config => {
+export const getMaxClaimAmount = config => {
   return loadBalance(getClaimsFrom, config)
 }

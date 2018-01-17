@@ -83,20 +83,18 @@ export const getClaims = (net, address) => {
 }
 
 /**
- * Get spent and unspent claimable amounts for an address.
+ * Gets the maximum amount of gas claimable after spending all NEO.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
  * @param {string} address - Address to check.
- * @return {Promise<Claim>}
+ * @return {Promise<Fixed8>}
  */
-export const getClaimBalance = (net, address) => {
+export const getMaxClaimAmount = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_claimable/' + address).then(res => {
-    let claimBalance = 0
-    if (res.data.unclaimed) claimBalance += new Fixed8(res.data.unclaimed)
     log.info(
-      `Retrieved Total Spent and Unspent Claim Balance for ${address} from neoscan ${net}`
+      `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neoscan ${net}`
     )
-    return claimBalance
+    return new Fixed8(res.data.unclaimed)
   })
 }
 
@@ -163,13 +161,6 @@ const parseTxHistory = txids => {
     })
     if (ASSET_ID.GAS === asset_moved) gas_sent = true
     if (ASSET_ID.NEO === asset_moved) neo_sent = true
-    return {
-      GAS,
-      NEO,
-      block_index: block_height,
-      gas_sent,
-      neo_sent,
-      txid
-    }
+    return { GAS, NEO, block_index: block_height, gas_sent, neo_sent, txid }
   })
 }
