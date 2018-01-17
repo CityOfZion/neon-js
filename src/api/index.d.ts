@@ -47,6 +47,10 @@ declare module '@cityofzion/neon-js' {
     //core
     export function getBalanceFrom(config: apiConfig, api: object): apiConfig
     export function getClaimsFrom(config: apiConfig, api: object): apiConfig
+    export function getRPCEndpointFrom(config: apiConfig, api: object): apiConfig
+    export function getTransactionHistoryFrom(config: apiConfig, api: object): apiConfig
+    export function getWalletDBHeightFrom(config: apiConfig, api: object): apiConfig
+    export function getMaxClaimAmountFrom(config: apiConfig, api: object): apiConfig
     export function createTx(config: apiConfig, txType: string): apiConfig
     export function signTx(config: apiConfig): apiConfig
     export function sendTx(config: apiConfig): apiConfig
