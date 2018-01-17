@@ -298,7 +298,6 @@ export const getBalanceFrom = (config, api) => {
     resolve()
   }).then(() => {
     const { net, address } = config
-    console.log(address)
     return api.getBalance(net, address)
   }).then(balance => {
     return Object.assign(config, { balance })

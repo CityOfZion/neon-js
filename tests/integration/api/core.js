@@ -1,4 +1,5 @@
 import * as core from '../../../src/api/core'
+import * as APIswitch from '../../../src/api/switch'
 import { CONTRACTS, NEO_NETWORK, TEST_NXT_ADDRESS } from '../../../src/consts'
 import { ContractParam } from '../../../src/sc'
 import testKeys from '../../unit/testKeys.json'
@@ -10,20 +11,20 @@ describe('Integration: API Core', function () {
   let mock
 
   const useNeonDB = () => {
-    core.setApiSwitch(0)
+    APIswitch.setApiSwitch(0)
     mock = setupMock()
     mock.onGet(/neoscan/).timeout()
     mock.onAny().passThrough()
   }
 
   const useNeoscan = () => {
-    core.setApiSwitch(1)
+    APIswitch.setApiSwitch(1)
     mock = setupMock()
     mock.onGet(/testnet-api.wallet/).timeout()
     mock.onAny().passThrough()
   }
   afterEach(() => {
-    core.setApiSwitch(0)
+    APIswitch.setApiSwitch(0)
     if (mock) mock.restore()
   })
   describe('sendAsset', function () {

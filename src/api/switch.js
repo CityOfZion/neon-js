@@ -42,6 +42,12 @@ const increaseNeonDBWeight = () => {
     log.info(`core API Switch increasing weight towards neonDB`)
   }
 }
+
+/**
+ * Load balances a API call according to the API switch. Selects the appropriate provider and sends the call towrads it.
+ * @param {function} func - The API call to load balance
+ * @param {object} config - The configuration object to pass in to the API function
+ */
 export const loadBalance = (func, config) => {
   if (Math.random() > apiSwitch) {
     return func(config, neoscan)
