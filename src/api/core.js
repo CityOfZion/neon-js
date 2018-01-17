@@ -108,17 +108,6 @@ export const getBalanceFrom = (config, api) => {
 }
 
 /**
- * Method to retrieve balance and URL from an endpoint. If URL is provided, it is not overriden.
- * @param {object} config - Configuration object.
- * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
- * @param {string} config.address - Wallet address
- * @return {Promise<string>} - URL
- */
-export const getBalance = config => {
-  return loadBalance(getBalanceFrom, config)
-}
-
-/**
  * Helper method to retrieve claims and URL from an endpoint.
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet'
@@ -417,16 +406,6 @@ export const getRPCEndpointFrom = (config, api) => {
 }
 
 /**
- * Returns an appropriate RPC endpoint retrieved from an endpoint.
- * @param {object} config - Configuration object.
- * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
- * @return {Promise<string>} - URL
- */
-export const getRPCEndpoint = config => {
-  return loadBalance(getRPCEndpointFrom, config)
-}
-
-/**
  * Helper method to get transaction history for an account
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
@@ -440,17 +419,6 @@ export const getTransactionHistoryFrom = (config, api) => {
     throw new Error('Invalid type. Is this an API object?')
   const { address, net } = config
   return api.getTransactionHistory(net, address)
-}
-
-/**
- * Get transaction history for an account
- * @param {object} config - Configuration object.
- * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
- * @param {string} config.address - Wallet address
- * @return {Promise<string>} - URL
- */
-export const getTransactionHistory = config => {
-  return loadBalance(getTransactionHistoryFrom, config)
 }
 
 /**
@@ -469,16 +437,6 @@ export const getWalletDBHeightFrom = (config, api) => {
 }
 
 /**
- * Get the current height of the light wallet DB
- * @param {object} config - Configuration object.
- * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
- * @return {Promise<string>} - URL
- */
-export const getWalletDBHeight = config => {
-  return loadBalance(getWalletDBHeightFrom, config)
-}
-
-/**
  * Helper method to get the maximum amount of gas claimable after spending all NEO.
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet'
@@ -492,15 +450,4 @@ export const getMaxClaimAmountFrom = (config, api) => {
     throw new Error('Invalid type. Is this an API object?')
   const { net, address } = config
   return api.getMaxClaimAmount(net, address)
-}
-
-/**
- * Method to get the maximum amount of gas claimable after spending all NEO.
- * @param {object} config - Configuration object.
- * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
- * @param {string} config.address - Wallet address
- * @return {Promise<string>} - URL
- */
-export const getMaxClaimAmount = config => {
-  return loadBalance(getMaxClaimAmountFrom, config)
 }
