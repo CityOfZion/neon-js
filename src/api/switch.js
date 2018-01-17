@@ -1,5 +1,7 @@
 import * as neonDB from './neonDB'
 import * as neoscan from './neoscan'
+import logger from '../logging'
+const log = logger('api')
 
 /** This determines which API we should dial.
  * 0 means 100% neoscan

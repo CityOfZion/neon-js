@@ -289,7 +289,7 @@ const checkProperty = (obj, ...props) => {
  * @param {string} config.net - 'MainNet' or 'TestNet'
  * @param {string} config.address - Wallet address
  * @param {object} api - The endpoint API object. eg, neonDB or Neoscan.
- * @return {object} Configuration object + balance
+ * @return {Promise<object>} Configuration object + balance
  */
 export const getBalanceFrom = (config, api) => {
   checkProperty(config, 'net', 'address')
@@ -306,7 +306,7 @@ export const getBalanceFrom = (config, api) => {
  * @param {string} config.net - 'MainNet', 'TestNet'
  * @param {string} config.address - Wallet address
  * @param {object} api - The endpoint APi object. eg, neonDB or Neoscan.
- * @return {object} Configuration object + claims
+ * @return {Promise<object>} Configuration object + claims
  */
 export const getClaimsFrom = (config, api) => {
   checkProperty(config, 'net', 'address')
