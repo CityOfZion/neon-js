@@ -4,6 +4,15 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
+3.1.0
+======
+
+- API
+
+  - Expose the ``loadBalance`` method. This method allows the use of the dynamic API switch within ``neon-js`` for the external providers.
+  - Implement the full set of APIs on neoscan. Neoscan is now complete and up to par with neonDB in terms of features.
+  - Expose ``getXFrom`` set of methods which follow the API config convention and is usable with the loadBalance function.
+
 3.0.0
 =====
 

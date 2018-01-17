@@ -17,10 +17,6 @@ Core
 
 .. autofunction:: doInvoke
 
-.. autofunction:: getBalanceFrom
-
-.. autofunction:: getClaimsFrom
-
 .. autofunction:: makeIntent
 
 .. autofunction:: sendAsset
@@ -29,14 +25,28 @@ Core
 
 .. autofunction:: signTx
 
+.. autofunction:: getRPCEndpointFrom
+
+.. autofunction:: getBalanceFrom
+
+.. autofunction:: getClaimsFrom
+
+.. autofunction:: getTransactionHistoryFrom
+
+.. autofunction:: getWalletDBHeightFrom
+
+.. autofunction:: getMaxClaimAmountFrom
+
+.. autofunction:: loadBalance
+
 NeonDB
 -------
 
-.. autofunction:: doClaimAllGas
+.. autofunction:: neonDB.doClaimAllGas
 
-.. autofunction:: doMintTokens
+.. autofunction:: neonDB.doMintTokens
 
-.. autofunction:: doSendAsset
+.. autofunction:: neonDB.doSendAsset
 
 .. autofunction:: neonDB.getAPIEndpoint
 
@@ -46,9 +56,11 @@ NeonDB
 
 .. autofunction:: neonDB.getRPCEndpoint
 
-.. autofunction:: getTransactionHistory
+.. autofunction:: neonDB.getTransactionHistory
 
-.. autofunction:: getWalletDBHeight
+.. autofunction:: neonDB.getWalletDBHeight
+
+.. autofunction:: neonDB.getMaxClaimAmount
 
 Neoscan
 -------
@@ -60,6 +72,12 @@ Neoscan
 .. autofunction:: neoscan.getClaims
 
 .. autofunction:: neoscan.getRPCEndpoint
+
+.. autofunction:: neoscan.getTransactionHistory
+
+.. autofunction:: neoscan.getWalletDBHeight
+
+.. autofunction:: neoscan.getMaxClaimAmount
 
 CoinMarketCap
 ---------------
