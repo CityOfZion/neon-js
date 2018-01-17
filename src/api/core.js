@@ -15,7 +15,7 @@ const log = logger('api')
  * This is ensure that we do not always hit the failing endpoint.
  */
 let apiSwitch = 0
-let switchFrozen = true
+let switchFrozen = false
 
 /**
  * Sets the API switch to the provided value
