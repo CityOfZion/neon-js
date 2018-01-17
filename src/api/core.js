@@ -48,7 +48,7 @@ const increaseNeonDBWeight = () => {
     log.info(`core API Switch increasing weight towards neonDB`)
   }
 }
-const loadBalance = (func, config) => {
+export const loadBalance = (func, config) => {
   if (Math.random() > apiSwitch) {
     return func(config, neoscan)
       .then(c => {
