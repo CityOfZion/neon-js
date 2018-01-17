@@ -146,17 +146,6 @@ export const getClaimsFrom = (config, api) => {
 }
 
 /**
- * Method to retrieve claims and URL from an endpoint.
- * @param {object} config - Configuration object.
- * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
- * @param {string} config.address - Wallet address
- * @return {Promise<string>} - URL
- */
-export const getClaims = config => {
-  return loadBalance(getClaimsFrom, config)
-}
-
-/**
  * Creates a transaction with the given config and txType.
  * @param {object} config - Configuration object.
  * @param {string|number} txType - Transaction Type. Name of transaction or the transaction type number. eg, 'claim' or 2.
@@ -443,9 +432,10 @@ const checkProperty = (obj, ...props) => {
  * @return {Promise<string>} - URL
  */
 export const getRPCEndpointFrom = (config, api) => {
-  const { net } = config
+  checkProperty(config, 'net')
   if (!api.getRPCEndpoint)
     throw new Error('Invalid type. Is this an API object?')
+  const { net } = config
   return api.getRPCEndpoint(net)
 }
 
@@ -468,9 +458,10 @@ export const getRPCEndpoint = config => {
  * @return {Promise<string>} - URL
  */
 export const getTransactionHistoryFrom = (config, api) => {
-  const { address, net } = config
+  checkProperty(config, 'net', 'address')
   if (!api.getTransactionHistory)
     throw new Error('Invalid type. Is this an API object?')
+  const { address, net } = config
   return api.getTransactionHistory(net, address)
 }
 
@@ -493,9 +484,10 @@ export const getTransactionHistory = config => {
  * @return {Promise<string>} - URL
  */
 export const getWalletDBHeightFrom = (config, api) => {
-  const { net } = config
+  checkProperty(config, 'net')
   if (!api.getWalletDBHeight)
     throw new Error('Invalid type. Is this an API object?')
+  const { net } = config
   return api.getWalletDBHeight(net)
 }
 
@@ -507,4 +499,31 @@ export const getWalletDBHeightFrom = (config, api) => {
  */
 export const getWalletDBHeight = config => {
   return loadBalance(getWalletDBHeightFrom, config)
+}
+
+/**
+ * Helper method to retrieve total claimable (spent and unspent) from an endpoint.
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet'
+ * @param {string} config.address - Wallet address
+ * @param {object} api - The endpoint APi object. eg, neonDB or Neoscan.
+ * @return {object} Configuration object + url + balance
+ */
+export const getClaimBalanceFrom = (config, api) => {
+  checkProperty(config, 'net', 'address')
+  if (!api.getClaimBalance)
+    throw new Error('Invalid type. Is this an API object?')
+  const { net, address } = config
+  return api.getClaimBalance(net, address)
+}
+
+/**
+ * Method to retrieve total claimable (spent and unspent) from an endpoint.
+ * @param {object} config - Configuration object.
+ * @param {string} config.net - 'MainNet', 'TestNet' or a neon-wallet-db URL.
+ * @param {string} config.address - Wallet address
+ * @return {Promise<string>} - URL
+ */
+export const getClaimBalance = config => {
+  return loadBalance(getClaimsFrom, config)
 }

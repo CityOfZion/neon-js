@@ -82,6 +82,24 @@ export const getClaims = (net, address) => {
   })
 }
 
+/**
+ * Get spent and unspent claimable amounts for an address.
+ * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
+ * @param {string} address - Address to check.
+ * @return {Promise<Claim>}
+ */
+export const getClaimBalance = (net, address) => {
+  const apiEndpoint = getAPIEndpoint(net)
+  return axios.get(apiEndpoint + '/v1/get_claimable/' + address).then(res => {
+    let claimBalance = 0
+    if (res.data.unclaimed) claimBalance += new Fixed8(res.data.unclaimed)
+    log.info(
+      `Retrieved Total Spent and Unspent Claim Balance for ${address} from neoscan ${net}`
+    )
+    return claimBalance
+  })
+}
+
 const parseUnspent = unspentArr => {
   return unspentArr.map(coin => {
     return {

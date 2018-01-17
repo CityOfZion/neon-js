@@ -62,7 +62,26 @@ export const getClaims = (net, address) => {
         value: c.value
       }
     })
+    log.info(`Retrieved Claims for ${address} from neonDB ${net}`)
     return new Claims(claimData)
+  })
+}
+
+/**
+ * Get total spent and unspent claimable amounts for an address.
+ * @param {string} net - 'MainNet' or 'TestNet'.
+ * @param {string} address - Address to check.
+ * @return {Promise<Claim>} An object with available and unavailable GAS amounts.
+ */
+export const getClaimBalance = (net, address) => {
+  const apiEndpoint = getAPIEndpoint(net)
+  return axios.get(apiEndpoint + '/v2/address/claims/' + address).then(res => {
+    log.info(
+      `Retrieved Total Spent and Unspent Claim Balance for ${address} from neonDB ${net}`
+    )
+    return new Fixed8(res.data.total_claim + res.data.total_unspent_claim).div(
+      100000000
+    )
   })
 }
 
