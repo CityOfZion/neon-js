@@ -14,7 +14,7 @@ export const name = 'neoscan'
 export const getAPIEndpoint = net => {
   switch (net) {
     case 'MainNet':
-      return 'https://neoscan.io/api/main_net'
+      return 'https://api.neoscan.io/api/main_net'
     case 'TestNet':
       return 'https://neoscan-testnet.io/api/test_net'
     default:
