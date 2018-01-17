@@ -23,48 +23,6 @@ describe('Core API', function () {
     mock.restore()
   })
 
-  describe('getBalanceFrom', function () {
-    it('neonDB', () => {
-      const config = {
-        net: 'TestNet',
-        address: testKeys.a.address,
-        privateKey: testKeys.a.privateKey,
-        other: 'props',
-        intents: {}
-      }
-      return core.getBalanceFrom(config, neonDB)
-        .should.eventually.have.keys([
-          'net',
-          'address',
-          'privateKey',
-          'other',
-          'intents',
-          'balance',
-          'url'
-        ])
-    })
-
-    it('neoscan', () => {
-      const config = {
-        net: 'TestNet',
-        address: testKeys.a.address,
-        privateKey: testKeys.a.privateKey,
-        other: 'props',
-        intents: {}
-      }
-      return core.getBalanceFrom(config, neoscan)
-        .should.eventually.have.keys([
-          'net',
-          'address',
-          'privateKey',
-          'other',
-          'intents',
-          'balance',
-          'url'
-        ])
-    })
-  })
-
   it('makeIntent', () => {
     core.makeIntent({ NEO: 1, GAS: 1.1 }, 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW')
       .should.deep.include.members([
@@ -82,51 +40,54 @@ describe('Core API', function () {
   })
 
   describe('getBalanceFrom', function () {
-    it('Retrieves information properly', () => {
+    it('neonDB', () => {
       const config = Object.assign({}, baseConfig)
       return core.getBalanceFrom(config, neonDB)
-        .then((conf) => {
-          conf.should.have.keys([
-            'net', 'address', 'url', 'balance'
-          ])
-        })
+        .should.eventually.have.keys([
+          'net',
+          'address',
+          'balance'
+        ])
+    })
+
+    it('neoscan', () => {
+      const config = Object.assign({}, baseConfig)
+      return core.getBalanceFrom(config, neoscan)
+        .should.eventually.have.keys([
+          'net',
+          'address',
+          'balance'
+        ])
     })
 
     it('errors when insufficient info', () => {
-      const thrower = () => core.getBalanceFrom({ net: 'TestNet' }, neonDB)
-      thrower.should.throw()
+      return core.getBalanceFrom({ net: 'TestNet' }, neonDB).should.be.rejected
     })
 
     it('errors when incorrect api', () => {
       const config = Object.assign({}, baseConfig)
-      const thrower = () => core.getBalanceFrom(config, {})
-      thrower.should.throw()
+      return core.getBalanceFrom(config, {}).should.be.rejected
     })
   })
 
   describe('getClaimsFrom', function () {
     it('Retrieves information properly', () => {
-      const config = {
-        net: 'TestNet',
-        address: testKeys.a.address
-      }
+      const config = Object.assign({}, baseConfig)
       return core.getClaimsFrom(config, neonDB)
         .then((conf) => {
           conf.should.have.keys([
-            'net', 'address', 'url', 'claims'
+            'net', 'address', 'claims'
           ])
         })
     })
 
     it('errors when insufficient info', () => {
-      const thrower = () => core.getClaimsFrom({ net: 'TestNet' }, neonDB)
-      thrower.should.throw()
+      return core.getClaimsFrom({ net: 'TestNet' }, neonDB).should.be.rejected
     })
 
     it('errors when incorrect api', () => {
       const config = Object.assign({}, baseConfig)
-      const thrower = () => core.getClaimsFrom(config, {})
-      thrower.should.throw()
+      return core.getClaimsFrom(config, {}).should.be.rejected
     })
   })
 

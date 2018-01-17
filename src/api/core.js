@@ -292,10 +292,15 @@ const checkProperty = (obj, ...props) => {
  * @return {Promise<object>} Configuration object + balance
  */
 export const getBalanceFrom = (config, api) => {
-  checkProperty(config, 'net', 'address')
-  if (!api.getBalance || !api.getRPCEndpoint) { throw new Error('Invalid type. Is this an API object?') }
-  const { net, address } = config
-  return api.getBalance(net, address).then(balance => {
+  return new Promise((resolve) => {
+    checkProperty(config, 'net', 'address')
+    if (!api.getBalance || !api.getRPCEndpoint) { throw new Error('Invalid type. Is this an API object?') }
+    resolve()
+  }).then(() => {
+    const { net, address } = config
+    console.log(address)
+    return api.getBalance(net, address)
+  }).then(balance => {
     return Object.assign(config, { balance })
   })
 }
@@ -309,10 +314,14 @@ export const getBalanceFrom = (config, api) => {
  * @return {Promise<object>} Configuration object + claims
  */
 export const getClaimsFrom = (config, api) => {
-  checkProperty(config, 'net', 'address')
-  if (!api.getBalance || !api.getRPCEndpoint) { throw new Error('Invalid type. Is this an API object?') }
-  const { net, address } = config
-  return api.getClaims(net, address).then(claims => {
+  return new Promise((resolve) => {
+    checkProperty(config, 'net', 'address')
+    if (!api.getBalance || !api.getRPCEndpoint) { throw new Error('Invalid type. Is this an API object?') }
+    resolve()
+  }).then(() => {
+    const { net, address } = config
+    return api.getClaims(net, address)
+  }).then(claims => {
     return Object.assign(config, { claims })
   })
 }
@@ -325,10 +334,14 @@ export const getClaimsFrom = (config, api) => {
  * @return {Promise<string>} - url
  */
 export const getRPCEndpointFrom = (config, api) => {
-  checkProperty(config, 'net')
-  if (!api.getRPCEndpoint) { throw new Error('Invalid type. Is this an API object?') }
-  const { net } = config
-  return api.getRPCEndpoint(net)
+  return new Promise((resolve) => {
+    checkProperty(config, 'net')
+    if (!api.getRPCEndpoint) { throw new Error('Invalid type. Is this an API object?') }
+    resolve()
+  }).then(() => {
+    const { net } = config
+    return api.getRPCEndpoint(net)
+  })
 }
 
 /**
@@ -340,10 +353,14 @@ export const getRPCEndpointFrom = (config, api) => {
  * @return {Promise<string>} - Transaction history
  */
 export const getTransactionHistoryFrom = (config, api) => {
-  checkProperty(config, 'net', 'address')
-  if (!api.getTransactionHistory) { throw new Error('Invalid type. Is this an API object?') }
-  const { address, net } = config
-  return api.getTransactionHistory(net, address)
+  return new Promise((resolve) => {
+    checkProperty(config, 'net', 'address')
+    if (!api.getTransactionHistory) { throw new Error('Invalid type. Is this an API object?') }
+    resolve()
+  }).then(() => {
+    const { address, net } = config
+    return api.getTransactionHistory(net, address)
+  })
 }
 
 /**
@@ -354,10 +371,14 @@ export const getTransactionHistoryFrom = (config, api) => {
  * @return {Promise<string>} - URL
  */
 export const getWalletDBHeightFrom = (config, api) => {
-  checkProperty(config, 'net')
-  if (!api.getWalletDBHeight) { throw new Error('Invalid type. Is this an API object?') }
-  const { net } = config
-  return api.getWalletDBHeight(net)
+  return new Promise((resolve) => {
+    checkProperty(config, 'net')
+    if (!api.getWalletDBHeight) { throw new Error('Invalid type. Is this an API object?') }
+    resolve()
+  }).then(() => {
+    const { net } = config
+    return api.getWalletDBHeight(net)
+  })
 }
 
 /**
@@ -369,8 +390,12 @@ export const getWalletDBHeightFrom = (config, api) => {
  * @return {Promise<Fixed8>} max claimable GAS
  */
 export const getMaxClaimAmountFrom = (config, api) => {
-  checkProperty(config, 'net', 'address')
-  if (!api.getMaxClaimAmount) { throw new Error('Invalid type. Is this an API object?') }
-  const { net, address } = config
-  return api.getMaxClaimAmount(net, address)
+  return new Promise((resolve) => {
+    checkProperty(config, 'net', 'address')
+    if (!api.getMaxClaimAmount) { throw new Error('Invalid type. Is this an API object?') }
+    resolve()
+  }).then(() => {
+    const { net, address } = config
+    return api.getMaxClaimAmount(net, address)
+  })
 }
