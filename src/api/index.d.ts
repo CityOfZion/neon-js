@@ -45,8 +45,6 @@ declare module '@cityofzion/neon-js' {
 
 
     //core
-    export function setApiSwitch(newSetting: number): void
-    export function setSwitchFreeze(newSetting: boolean): void
     export function getBalanceFrom(config: apiConfig, api: object): apiConfig
     export function getClaimsFrom(config: apiConfig, api: object): apiConfig
     export function createTx(config: apiConfig, txType: string): apiConfig
@@ -130,6 +128,10 @@ declare module '@cityofzion/neon-js' {
         signingFunction?: (unsigned: Transaction, publicKey: string) => Transaction
       ): Promise<RPCResponse>
     }
+
+    // switch
+    export function setApiSwitch(newSetting: number): void
+    export function setSwitchFreeze(newSetting: boolean): void
   }
   export interface semantic {
     get: {

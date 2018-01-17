@@ -3,7 +3,6 @@ import * as cmc from './coinmarketcap'
 import * as nep5 from './nep5'
 import * as neoscan from './neoscan'
 import * as core from './core'
-
 /**
  * @typedef {object} History
  * @property {string} address - Address.
@@ -44,4 +43,5 @@ export default {
 }
 
 export * from './core'
+export * from './switch'
 export { neonDB, cmc, nep5, neoscan }
