@@ -502,5 +502,5 @@ export const getMaxClaimAmountFrom = (config, api) => {
  * @return {Promise<string>} - URL
  */
 export const getMaxClaimAmount = config => {
-  return loadBalance(getClaimsFrom, config)
+  return loadBalance(getMaxClaimAmountFrom, config)
 }
