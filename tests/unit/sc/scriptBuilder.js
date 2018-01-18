@@ -49,11 +49,11 @@ describe('ScriptBuilder', function () {
     },
     {
       int: 500,
-      result: '02f401'  // prefixed with number of bytes following (02)
+      result: '08f401000000000000'
     },
     {
       int: 65536,
-      result: '03000001'
+      result: '080000010000000000'
     }
   ]
 
