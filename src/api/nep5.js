@@ -127,6 +127,7 @@ export const getToken = (url, scriptHash, address) => {
  * @return {Promise<Response>} RPC response
  */
 export const doTransferToken = (net, scriptHash, fromWif, toAddress, transferAmount, gasCost = 0, signingFunction = null) => {
+  log.warn('doTransferToken will be deprecated in favor of doInvoke')
   const account = new Account(fromWif)
   const rpcEndpointPromise = getRPCEndpoint(net)
   const balancePromise = getBalance(net, account.address)
