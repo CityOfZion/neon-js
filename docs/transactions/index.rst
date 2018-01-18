@@ -26,8 +26,8 @@ The Transaction class is a wrapper class that contains all the tools required to
 ::
 
   import Neon from '@cityofzion/neon-js'
-  // Let us create a ContractTransaction with a custom version
-  let tx = Neon.create.tx({type: 128, version:2})
+  // Let us create a ContractTransaction
+  let tx = Neon.create.tx({type: 128})
   // Now let us add an intention to send 1 NEO to someone
   tx
   .addOutput('NEO',1,someAddress)

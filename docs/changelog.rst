@@ -4,6 +4,13 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
+dev
+=====
+
+- Override more methods in Fixed8 to return Fixed8s.
+- Update util functions to use Fixed8 internally.
+- Mark ``api.nep5.doTransferToken`` for deprecation.
+
 3.1.0
 ======
 
