@@ -114,7 +114,7 @@ export const num2hexstring = (num, size = 1, littleEndian = false) => {
 export const num2fixed8 = (num, size = 8) => {
   if (typeof num !== 'number') throw new Error('num must be numeric')
   if (size % 1 !== 0) throw new Error('size must be a whole integer')
-  return num2hexstring(Math.round(num * Math.pow(10, 8)), size, true)
+  return new Fixed8(num.toFixed(8)).toReverseHex().slice(0, size * 2)
 }
 
 /**
@@ -126,7 +126,7 @@ export const fixed82num = (fixed8hex) => {
   if (typeof fixed8hex !== 'string') throw new Error('fixed8hex must be a string')
   if (fixed8hex.length % 2 !== 0) throw new Error('fixed8hex must be hex')
   if (fixed8hex === '') return 0
-  return parseInt(reverseHex(fixed8hex), 16) / Math.pow(10, 8)
+  return Fixed8.fromReverseHex(fixed8hex).toNumber()
 }
 
 /**
@@ -290,7 +290,7 @@ export const sha256 = (hex) => {
 
 /**
  * @class Fixed8
- * @classdesc A warpper around bignumber.js that adds on helper methods commonly used in neon-js
+ * @classdesc A wrapper around bignumber.js that adds on helper methods commonly used in neon-js
  * @param {string|int} value
  * @param {[number]} base
  */
