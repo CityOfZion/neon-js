@@ -6,14 +6,29 @@ describe('Claims', function () {
     net: 'TestNet',
     claims: [
       {
-        txid: '0ba525af5817b01314ef4e4bc9823986ca7e30871178ce2aa7b86d23d7937768',
+        txid: 'a',
         index: 0,
         claim: 0.02455600
       },
       {
-        txid: '27341b5fffa9b0c74e454cb73481b9d50cc9fb5856b9a468a7bb7dc4d518628d',
+        txid: 'b',
         index: 1,
         claim: 0.05267460
+      },
+      {
+        txid: 'c',
+        index: 2,
+        claim: 1.04
+      },
+      {
+        txid: 'd',
+        index: 3,
+        claim: 0.0012
+      },
+      {
+        txid: 'e',
+        index: 4,
+        claim: 0.05460
       }
     ]
   }
@@ -34,7 +49,7 @@ describe('Claims', function () {
 
       result.address.should.equal(claimsLike.address)
       result.net.should.equal(claimsLike.net)
-      result.claims.length.should.equal(2)
+      result.claims.length.should.equal(5)
       for (var i; i < claimsLike.claims.length; i++) {
         result.claims[i].txid.should.equal(claimsLike.claims[i].txid)
         result.claims[i].index.should.equal(claimsLike.claims[i].index)
@@ -48,5 +63,17 @@ describe('Claims', function () {
       claims1.should.eql(claims2);
       (claims1 === claims2).should.equal(false)
     })
+  })
+
+  it('slice', () => {
+    const original = new Claims(claimsLike)
+    const slice1 = original.slice(1, 3)
+    slice1.claims.length.should.equal(2)
+    slice1.claims[0].txid.should.equal('b')
+    slice1.claims[1].txid.should.equal('c')
+    const slice2 = original.slice(2)
+    slice2.claims.length.should.equal(3)
+    slice2.claims[0].txid.should.equal('c')
+    slice2.claims[2].txid.should.equal('e')
   })
 })
