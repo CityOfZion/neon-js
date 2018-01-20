@@ -54,6 +54,7 @@ This documentation is meant to serve as a high level explaination of the library
 .. toctree::
     :maxdepth: 2
     :caption: Contents:
+    :titlesonly:
 
     overview
     installation
