@@ -28,11 +28,11 @@ Core
 NeonDB
 -------
 
-.. autofunction:: doClaimAllGas
+.. autofunction:: neonDB.doClaimAllGas
 
-.. autofunction:: doMintTokens
+.. autofunction:: neonDB.doMintTokens
 
-.. autofunction:: doSendAsset
+.. autofunction:: neonDB.doSendAsset
 
 .. autofunction:: neonDB.getAPIEndpoint
 
@@ -42,9 +42,9 @@ NeonDB
 
 .. autofunction:: neonDB.getRPCEndpoint
 
-.. autofunction:: getTransactionHistory
+.. autofunction:: neonDB.getTransactionHistory
 
-.. autofunction:: getWalletDBHeight
+.. autofunction:: neonDB.getWalletDBHeight
 
 Neoscan
 -------
