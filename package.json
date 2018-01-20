@@ -80,7 +80,7 @@
     "require": [
       "babel-register"
     ],
-    "exclude": ["tests"],
+    "exclude": ["test"],
     "sourceMap": false,
     "instrument": false
   }

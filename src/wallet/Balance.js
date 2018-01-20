@@ -17,9 +17,13 @@ import { Query } from '../rpc'
  */
 class Balance {
   constructor (bal = {}) {
+    /** The address for this Balance */
     this.address = bal.address || ''
+    /** The network for this Balance */
     this.net = bal.net || 'NoNet'
+    /** The symbols of assets found in this Balance. Use this symbol to find the corresponding key in the assets object. */
     this.assetSymbols = bal.assetSymbols ? bal.assetSymbols : []
+    /** The object containing the balances for each asset keyed by its symbol. */
     this.assets = {}
     if (bal.assets) {
       Object.keys(bal.assets).map((key) => {
@@ -28,7 +32,9 @@ class Balance {
         }
       })
     }
+    /** The symbols of the NEP5 tokens in this Balance. Use this symbol to find the corresponding key in the tokens object. */
     this.tokenSymbols = bal.tokenSymbols ? bal.tokenSymbols : []
+    /** The token balances in this Balance for each token keyed by its symbol. */
     this.tokens = bal.tokens ? bal.tokens : {}
   }
 

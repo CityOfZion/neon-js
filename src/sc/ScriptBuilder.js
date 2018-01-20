@@ -20,6 +20,7 @@ class ScriptBuilder extends StringStream {
 
   /**
    * Private method to append an array
+   * @private
    * @param {Array} arr
    * @return {ScriptBuilder} this
    */
@@ -32,6 +33,7 @@ class ScriptBuilder extends StringStream {
 
   /**
    * Private method to append a hexstring.
+   * @private
    * @param {string} hexstring - Hexstring(BE)
    * @return {ScriptBuilder} this
    */
@@ -58,6 +60,7 @@ class ScriptBuilder extends StringStream {
 
   /**
    * Private method to append a number.
+   * @private
    * @param {number} num
    * @return {ScriptBuilder} this
    */
@@ -71,6 +74,7 @@ class ScriptBuilder extends StringStream {
 
   /**
    * Private method to append a ContractParam
+   * @private
    * @param {ContractParam} param
    * @return {ScriptBuilder} this
    */
