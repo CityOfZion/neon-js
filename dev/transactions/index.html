@@ -210,8 +210,8 @@
 <h2>Transaction<a class="headerlink" href="#transaction" title="Permalink to this headline">¶</a></h2>
 <p>The Transaction class is a wrapper class that contains all the tools required to manipulate and build transactions. This allows us to dynamically add intents, remarks at will instead of cramming everything into a single method.</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
-<span class="c1">// Let us create a ContractTransaction with a custom version</span>
-<span class="kd">let</span> <span class="nx">tx</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">tx</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="mi">128</span><span class="p">,</span> <span class="nx">version</span><span class="o">:</span><span class="mi">2</span><span class="p">})</span>
+<span class="c1">// Let us create a ContractTransaction</span>
+<span class="kd">let</span> <span class="nx">tx</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">tx</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="mi">128</span><span class="p">})</span>
 <span class="c1">// Now let us add an intention to send 1 NEO to someone</span>
 <span class="nx">tx</span>
 <span class="p">.</span><span class="nx">addOutput</span><span class="p">(</span><span class="s1">&#39;NEO&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nx">someAddress</span><span class="p">)</span>
@@ -396,6 +396,7 @@
         <dl>
             <dt>Tags</dt>
             <dd><a href="../../3.1.0/transactions/index.html">3.1.0</a></dd>
+            <dd><a href="../../2.3.2/transactions/index.html">2.3.2</a></dd>
             <dd><a href="../../1.1.2/transactions/index.html">1.1.2</a></dd>
         </dl>
         <dl>
