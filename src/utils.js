@@ -292,7 +292,7 @@ export const sha256 = (hex) => {
  * @class Fixed8
  * @classdesc A wrapper around bignumber.js that adds on helper methods commonly used in neon-js
  * @param {string|int} value
- * @param {[number]} base
+ * @param {number} [base]
  */
 export class Fixed8 extends BN {
   constructor (input, base = undefined) {

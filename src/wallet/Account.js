@@ -67,7 +67,10 @@ class Account {
     } catch (e) { }
   }
 
-  /** @type {string} */
+  /**
+   * Key encrypted according to NEP2 standard.
+   * @type {string}
+   */
   get encrypted () {
     if (this._encrypted) {
       return this._encrypted
@@ -76,7 +79,10 @@ class Account {
     }
   }
 
-  /** @type {string} */
+  /**
+   * Case sensitive key of 52 characters long.
+   * @type {string}
+   */
   get WIF () {
     if (this._WIF) {
       return this._WIF
@@ -86,7 +92,10 @@ class Account {
     }
   }
 
-  /** @type {string} */
+  /**
+   * Key of 64 hex characters.
+   * @type {string}
+   */
   get privateKey () {
     if (this._privateKey) {
       return this._privateKey
@@ -125,7 +134,10 @@ class Account {
     }
   }
 
-  /** @type {string} */
+  /**
+   * Script hash of the key. This format is usually used in the code instead of address as this is a non case sensitive version.
+   * @type {string}
+   */
   get scriptHash () {
     if (this._scriptHash) {
       return this._scriptHash
@@ -140,7 +152,10 @@ class Account {
     }
   }
 
-  /** @type {string} */
+  /**
+   * Public address used to receive transactions. Case sensitive.
+   * @type {string}
+   */
   get address () {
     if (this._address) {
       return this._address
