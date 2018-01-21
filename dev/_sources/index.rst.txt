@@ -54,11 +54,11 @@ This documentation is meant to serve as a high level explaination of the library
 .. toctree::
     :maxdepth: 2
     :caption: Contents:
+    :titlesonly:
 
     overview
     installation
-    interface
-    wallet
+    wallet/index.rst
     transactions/index.rst
     rpc/index.rst
     api/index.rst

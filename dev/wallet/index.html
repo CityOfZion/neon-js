@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Wallet &mdash; neon-js 3.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="neon-js 3.1.0 documentation" href="../index.html"/>
+        <link rel="next" title="Account" href="Account.html"/>
+        <link rel="prev" title="Installation" href="../installation.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> neon-js
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Wallet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Account.html">Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Balance.html">Balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Claims.html">Claims</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Wallet.html">Wallet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="methods/index.html">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">neon-js</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Wallet</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/wallet/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+    
+    
+
+
+
+    <p class="scv-banner scv-sphinx_rtd_theme"><b>Warning:</b> This document is for the development version of neon-js.</p>
+<div class="section" id="wallet">
+<h1>Wallet<a class="headerlink" href="#wallet" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>The Wallet module is exposed as:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">account</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">account</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">is</span><span class="p">.</span><span class="nx">address</span><span class="p">(</span><span class="nx">string</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">wallet</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">account</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+<span class="nx">wallet</span><span class="p">.</span><span class="nx">isAddress</span><span class="p">(</span><span class="nx">string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The Wallet module contains the core methods for manipulating keys, creating signatures and verifying keys.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="c1">// Key generation and conversion</span>
+<span class="kr">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">()</span>
+<span class="kr">const</span> <span class="nx">wif</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">WIFFromPrivateKey</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+
+<span class="c1">// Encryption / Decryption</span>
+<span class="kr">const</span> <span class="nx">encrypted</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">,</span> <span class="s1">&#39;myPassword&#39;</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">decrypted</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">(</span><span class="nx">encrypted</span><span class="p">,</span> <span class="s1">&#39;myPassword&#39;</span><span class="p">)</span>
+
+<span class="c1">// Verify keys</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">is</span><span class="p">.</span><span class="nx">wif</span><span class="p">(</span><span class="nx">wif</span><span class="p">)</span> <span class="c1">// true</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">is</span><span class="p">.</span><span class="nx">publicKey</span><span class="p">(</span><span class="s1">&#39;randomphrase&#39;</span><span class="p">)</span> <span class="c1">// false</span>
+
+<span class="c1">// Transaction signing</span>
+<span class="kr">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">signature</span><span class="p">(</span><span class="nx">tx</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric"><a class="reference internal" href="Account.html"><span class="doc">Account</span></a></p>
+<p>Accounts class allowing simple conversion between different key formats.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">account</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">account</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">publicKey</span> <span class="o">=</span> <span class="nx">account</span><span class="p">.</span><span class="nx">publicKey</span>
+<span class="kd">let</span> <span class="nx">address</span> <span class="o">=</span> <span class="nx">account</span><span class="p">.</span><span class="nx">address</span>
+
+<span class="kr">const</span> <span class="nx">account2</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">account</span><span class="p">(</span><span class="nx">publicKey</span><span class="p">)</span>
+<span class="nx">account</span><span class="p">.</span><span class="nx">privateKey</span> <span class="c1">// Throws error</span>
+</pre></div>
+</div>
+<p class="rubric"><a class="reference internal" href="Balance.html"><span class="doc">Balance</span></a></p>
+<p>Balance describes the amount of assets contained at a single address. It can hold both native assets as well as NEP5 token balances. It is used to create transactions.</p>
+<p class="rubric"><a class="reference internal" href="Claims.html"><span class="doc">Claims</span></a></p>
+<p>Claims is an object that contains a list of <code class="docutils literal"><span class="pre">ClaimItem</span></code> that is used to construct a <code class="docutils literal"><span class="pre">ClaimTransaction</span></code>.</p>
+<p class="rubric"><a class="reference internal" href="Wallet.html"><span class="doc">Wallet</span></a></p>
+<p>Wallet is a collection of accounts contained within a single file conforming to the NEP6 definition. This can be exported as a <code class="docutils literal"><span class="pre">json</span></code> file and contains the necessary information for any standard wallet to open.</p>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<p>All methods documented are available at the root of the <code class="docutils literal"><span class="pre">wallet</span></code> module. They are categorised according to their place in the code files.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="p">{</span><span class="nx">wallet</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="nx">wallet</span><span class="p">.</span><span class="nx">getScriptHashFromAddress</span><span class="p">(</span><span class="s1">&#39;ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW&#39;</span><span class="p">)</span> <span class="c1">// core</span>
+<span class="nx">wallet</span><span class="p">.</span><span class="nx">Coin</span><span class="p">({</span><span class="nx">index</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span> <span class="nx">txid</span><span class="o">:</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">1</span><span class="p">})</span> <span class="c1">// components</span>
+<span class="nx">wallet</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">(</span><span class="s1">&#39;L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g&#39;</span><span class="p">)</span> <span class="c1">//nep2</span>
+<span class="nx">wallet</span><span class="p">.</span><span class="nx">isAddress</span><span class="p">(</span><span class="s1">&#39;ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW&#39;</span><span class="p">)</span> <span class="c1">// verify</span>
+</pre></div>
+</div>
+<p class="rubric"><a class="reference internal" href="methods/core.html"><span class="doc">Core</span></a></p>
+<p>Methods for transforming between key formats.</p>
+<p class="rubric"><a class="reference internal" href="methods/components.html"><span class="doc">Components</span></a></p>
+<p>Components used in constructing the <code class="docutils literal"><span class="pre">Balance</span></code> and <code class="docutils literal"><span class="pre">Claims</span></code> object.</p>
+<p class="rubric"><a class="reference internal" href="methods/nep2.html"><span class="doc">NEP2</span></a></p>
+<p>Methods for encrypting or decrypting keys.</p>
+<p class="rubric"><a class="reference internal" href="methods/verify.html"><span class="doc">Verify</span></a></p>
+<p>Methods to verify the various key formats.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Account.html" class="btn btn-neutral float-right" title="Account" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: dev
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../../3.1.0/index.html">3.1.0</a></dd>
+            <dd><a href="../../2.3.2/index.html">2.3.2</a></dd>
+            <dd><a href="../../1.1.2/index.html">1.1.2</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="index.html">dev</a></dd>
+            <dd><a href="../../master/index.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'3.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

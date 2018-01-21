@@ -97,8 +97,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../interface.html">Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet/index.html">Wallet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
@@ -107,19 +106,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#core">Core</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#neondb">NeonDB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#neoscan">Neoscan</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#coinmarketcap">CoinMarketCap</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nep5">NEP5</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rpc.html">RPC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sc.html">Smart Contract</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tx.html">Transactions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utility.html">Utility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="wallet.html">Wallet</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
@@ -203,43 +194,6 @@
 <div class="section" id="core">
 <h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="setApiSwitch">
-<code class="descname">setApiSwitch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#setApiSwitch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the API switch to the provided value</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>netSetting</strong> (<em>number</em>) &#8211; The new value between 0 and 1 inclusive.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="setSwitchFreeze">
-<code class="descname">setSwitchFreeze</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#setSwitchFreeze" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Sets the freeze setting for the API switch. A frozen switch will not dynamically shift towards the other provider when the main provider fails.</dt>
-<dd>This does not mean that we do not use the other provider. This only means that we will not change our preference for the main provider.</dd>
-</dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>newSetting</strong> (<em>bool</em>) &#8211; The new setting for freeze.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="claimGas">
 <code class="descname">claimGas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#claimGas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a ClaimTransaction for all available GAS based on API</p>
@@ -307,101 +261,6 @@
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; Configuration object.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="makeIntent">
-<code class="descname">makeIntent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#makeIntent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Helper method to convert a AssetAmounts object to intents (TransactionOutput[]).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>assetAmts</strong> (<em>object</em>) &#8211; Asset Amounts</li>
-<li><strong>assetAmts.NEO</strong> (<em>number</em>) &#8211; Amt of NEO to send.</li>
-<li><strong>assetAmts.GAS</strong> (<em>number</em>) &#8211; Amt of GAS to send.</li>
-<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The address to send to.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Array.&lt;TransactionOutput&gt;</strong> &#8211; TransactionOutput</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="sendAsset">
-<code class="descname">sendAsset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sendAsset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to construct and execute a ContractTransaction.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>config</strong> (<em>object</em>) &#8211; Configuration object.</li>
-<li><strong>config.net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217;, &#8216;TestNet&#8217; or a neon-wallet-db URL.</li>
-<li><strong>config.address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Wallet address</li>
-<li><strong>config.privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; private key to sign with. Either this or signingFunction and public key is required.</li>
-<li><strong>config.signingFunction</strong> (<em>function</em>) &#8211; An external signing function to sign with. Either this or privateKey is required.</li>
-<li><strong>config.publicKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; A public key for the singing function. Either this or privateKey is required.</li>
-<li><strong>config.intents</strong> (<em>Array.&lt;TransactionOutput&gt;</em>) &#8211; Intents.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; Configuration object.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="sendTx">
-<code class="descname">sendTx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sendTx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sends a transaction off within the config object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>config</strong> (<em>object</em>) &#8211; Configuration object.</li>
-<li><strong>config.tx</strong> (<a class="reference internal" href="tx.html#Transaction" title="Transaction"><em>Transaction</em></a>) &#8211; Signed transaction.</li>
-<li><strong>config.url</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; NEO Node URL.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; Configuration object + response</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="signTx">
-<code class="descname">signTx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#signTx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Signs a transaction within the config object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>config</strong> (<em>object</em>) &#8211; Configuration object.</li>
-<li><strong>config.tx</strong> (<a class="reference internal" href="tx.html#Transaction" title="Transaction"><em>Transaction</em></a>) &#8211; Transaction.</li>
-<li><strong>config.privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; private key to sign with.</li>
-<li><strong>config.publicKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; public key. Required if using signingFunction.</li>
-<li><strong>config.signingFunction</strong> (<em>function</em>) &#8211; External signing function. Requires publicKey.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211; Configuration object.</p>
 </td>
 </tr>
 </tbody>
@@ -562,6 +421,138 @@
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="makeIntent">
+<code class="descname">makeIntent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#makeIntent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper method to convert a AssetAmounts object to intents (TransactionOutput[]).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>assetAmts</strong> (<em>object</em>) &#8211; Asset Amounts</li>
+<li><strong>assetAmts.NEO</strong> (<em>number</em>) &#8211; Amt of NEO to send.</li>
+<li><strong>assetAmts.GAS</strong> (<em>number</em>) &#8211; Amt of GAS to send.</li>
+<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; The address to send to.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Array.&lt;TransactionOutput&gt;</strong> &#8211; TransactionOutput</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sendAsset">
+<code class="descname">sendAsset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sendAsset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to construct and execute a ContractTransaction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>config</strong> (<em>object</em>) &#8211; Configuration object.</li>
+<li><strong>config.net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217;, &#8216;TestNet&#8217; or a neon-wallet-db URL.</li>
+<li><strong>config.address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Wallet address</li>
+<li><strong>config.privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; private key to sign with. Either this or signingFunction and public key is required.</li>
+<li><strong>config.signingFunction</strong> (<em>function</em>) &#8211; An external signing function to sign with. Either this or privateKey is required.</li>
+<li><strong>config.publicKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; A public key for the singing function. Either this or privateKey is required.</li>
+<li><strong>config.intents</strong> (<em>Array.&lt;TransactionOutput&gt;</em>) &#8211; Intents.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; Configuration object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sendTx">
+<code class="descname">sendTx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sendTx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a transaction off within the config object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>config</strong> (<em>object</em>) &#8211; Configuration object.</li>
+<li><strong>config.tx</strong> (<a class="reference internal" href="tx.html#Transaction" title="Transaction"><em>Transaction</em></a>) &#8211; Signed transaction.</li>
+<li><strong>config.url</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; NEO Node URL.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; Configuration object + response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="setApiSwitch">
+<code class="descname">setApiSwitch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#setApiSwitch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the API switch to the provided value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>netSetting</strong> (<em>number</em>) &#8211; The new value between 0 and 1 inclusive.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="setSwitchFreeze">
+<code class="descname">setSwitchFreeze</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#setSwitchFreeze" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Sets the freeze setting for the API switch. A frozen switch will not dynamically shift towards the other provider when the main provider fails.</dt>
+<dd>This does not mean that we do not use the other provider. This only means that we will not change our preference for the main provider.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>newSetting</strong> (<em>bool</em>) &#8211; The new setting for freeze.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="signTx">
+<code class="descname">signTx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#signTx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signs a transaction within the config object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>config</strong> (<em>object</em>) &#8211; Configuration object.</li>
+<li><strong>config.tx</strong> (<a class="reference internal" href="tx.html#Transaction" title="Transaction"><em>Transaction</em></a>) &#8211; Transaction.</li>
+<li><strong>config.privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; private key to sign with.</li>
+<li><strong>config.publicKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; public key. Required if using signingFunction.</li>
+<li><strong>config.signingFunction</strong> (<em>function</em>) &#8211; External signing function. Requires publicKey.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211; Configuration object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="neondb">
 <h2>NeonDB<a class="headerlink" href="#neondb" title="Permalink to this headline">¶</a></h2>
@@ -698,6 +689,27 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="neonDB.getMaxClaimAmount">
+<code class="descclassname">neonDB.</code><code class="descname">getMaxClaimAmount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neonDB.getMaxClaimAmount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the maximum amount of gas claimable after spending all NEO.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
+<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Address to check.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Fixed8&gt;</strong> &#8211; An object with available and unavailable GAS amounts.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="neonDB.getRPCEndpoint">
 <code class="descclassname">neonDB.</code><code class="descname">getRPCEndpoint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neonDB.getRPCEndpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the best performing (highest block + fastest) node RPC.</p>
@@ -752,27 +764,6 @@
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;number&gt;</strong> &#8211; Current height.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="neonDB.getMaxClaimAmount">
-<code class="descclassname">neonDB.</code><code class="descname">getMaxClaimAmount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neonDB.getMaxClaimAmount" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the maximum amount of gas claimable after spending all NEO.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217; or &#8216;TestNet&#8217;.</li>
-<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Address to check.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Fixed8&gt;</strong> &#8211; An object with available and unavailable GAS amounts.</p>
 </td>
 </tr>
 </tbody>
@@ -845,6 +836,27 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="neoscan.getMaxClaimAmount">
+<code class="descclassname">neoscan.</code><code class="descname">getMaxClaimAmount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoscan.getMaxClaimAmount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the maximum amount of gas claimable after spending all NEO.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217;, &#8216;TestNet&#8217; or a custom NeoScan-like url.</li>
+<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Address to check.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Fixed8&gt;</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="neoscan.getRPCEndpoint">
 <code class="descclassname">neoscan.</code><code class="descname">getRPCEndpoint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoscan.getRPCEndpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an appropriate RPC endpoint retrieved from a NeoScan endpoint.</p>
@@ -899,27 +911,6 @@
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;number&gt;</strong> &#8211; Current height.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="neoscan.getMaxClaimAmount">
-<code class="descclassname">neoscan.</code><code class="descname">getMaxClaimAmount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoscan.getMaxClaimAmount" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the maximum amount of gas claimable after spending all NEO.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>net</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; &#8216;MainNet&#8217;, &#8216;TestNet&#8217; or a custom NeoScan-like url.</li>
-<li><strong>address</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; Address to check.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;Fixed8&gt;</strong> &#8211;</p>
 </td>
 </tr>
 </tbody>

@@ -211,7 +211,8 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <dl class="attribute">
 <dt id="WIF">
 <code class="descname">WIF</code><a class="headerlink" href="#WIF" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Case sensitive key of 52 characters long.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="_updateContractScript">
@@ -222,7 +223,8 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <dl class="attribute">
 <dt id="address">
 <code class="descname">address</code><a class="headerlink" href="#address" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Public address used to receive transactions. Case sensitive.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="decrypt">
@@ -269,7 +271,8 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <dl class="attribute">
 <dt id="encrypted">
 <code class="descname">encrypted</code><a class="headerlink" href="#encrypted" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Key encrypted according to NEP2 standard.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="export">
@@ -308,7 +311,8 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <dl class="attribute">
 <dt id="privateKey">
 <code class="descname">privateKey</code><a class="headerlink" href="#privateKey" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Key of 64 hex characters.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="publicKey">
@@ -319,7 +323,8 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 <dl class="attribute">
 <dt id="scriptHash">
 <code class="descname">scriptHash</code><a class="headerlink" href="#scriptHash" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Script hash of the key. This format is usually used in the code instead of address as this is a non case sensitive version.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -386,6 +391,12 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="address">
+<code class="descname">address</code><a class="headerlink" href="#address" title="Permalink to this definition">¶</a></dt>
+<dd><p>The address for this Balance</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="applyTx">
 <code class="descname">applyTx</code><span class="sig-paren">(</span><em>tx</em>, <em>confirmed</em><span class="sig-paren">)</span><a class="headerlink" href="#applyTx" title="Permalink to this definition">¶</a></dt>
@@ -405,6 +416,18 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="assetSymbols">
+<code class="descname">assetSymbols</code><a class="headerlink" href="#assetSymbols" title="Permalink to this definition">¶</a></dt>
+<dd><p>The symbols of assets found in this Balance. Use this symbol to find the corresponding key in the assets object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="assets">
+<code class="descname">assets</code><a class="headerlink" href="#assets" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object containing the balances for each asset keyed by its symbol.</p>
 </dd></dl>
 
 <dl class="function">
@@ -439,6 +462,24 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="net">
+<code class="descname">net</code><a class="headerlink" href="#net" title="Permalink to this definition">¶</a></dt>
+<dd><p>The network for this Balance</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tokenSymbols">
+<code class="descname">tokenSymbols</code><a class="headerlink" href="#tokenSymbols" title="Permalink to this definition">¶</a></dt>
+<dd><p>The symbols of the NEP5 tokens in this Balance. Use this symbol to find the corresponding key in the tokens object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tokens">
+<code class="descname">tokens</code><a class="headerlink" href="#tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>The token balances in this Balance for each token keyed by its symbol.</p>
 </dd></dl>
 
 <dl class="function">
@@ -1108,7 +1149,7 @@ Throws error if no accounts available.</p>
         </dl>
         <dl>
             <dt>Branches</dt>
-            <dd><a href="../../dev/reference/wallet.html">dev</a></dd>
+            <dd><a href="../../dev/index.html">dev</a></dd>
             <dd><a href="../../master/reference/wallet.html">master</a></dd>
         </dl>
     </div>
