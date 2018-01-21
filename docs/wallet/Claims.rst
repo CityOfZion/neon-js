@@ -14,6 +14,10 @@ The Claims class is a collection of claims data belonging to an account. It is u
 
 Like Balance, the constructor is the way to convert a Claims-like object into a ``neon-js`` Claims object. This is the primary method we use to convert the claims object we get from 3rd party API.
 
+NEO generates GAS when held. When NEO is spent, the gas that it generates is unlocked and made claimable through ClaimTransaction. The formula for calcuating the claim per transaction is::
+
+  claim = ((start - end) * 8 + sysfee) * value
+
 .. autoclass:: Claims
   :members:
   :exclude-members: net, address, claims
