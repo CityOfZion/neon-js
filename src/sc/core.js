@@ -11,6 +11,9 @@ import ScriptBuilder from './ScriptBuilder'
  * @return {string} The VM Script.
  */
 export const createScript = (...scriptIntents) => {
+  if (scriptIntents.length === 1 && Array.isArray(scriptIntents[0])) {
+    scriptIntents = scriptIntents[0]
+  }
   const sb = new ScriptBuilder()
   for (var scriptIntent of scriptIntents) {
     if (!scriptIntent.scriptHash) throw new Error('No scriptHash found!')
