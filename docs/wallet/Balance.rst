@@ -2,6 +2,17 @@
 Balance
 *******
 
+::
+
+  class Balance {
+      address: string
+      net: string
+      assetSymbols: string[]
+      assets: { [index: string]: AssetBalance }
+      tokenSymbols: string[]
+      tokens: { [index: string]: number }
+  }
+
 The Balance class stores the balance of the account. It is usually retrieved using a 3rd party API as NEO nodes do not have a RPC call to easily retrieve this information with a single call.
 
 ::

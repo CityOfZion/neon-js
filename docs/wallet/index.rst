@@ -62,6 +62,8 @@ Balance describes the amount of assets contained at a single address. It can hol
 
 .. rubric:: :doc:`Claims`
 
+Claims is an object that contains a list of ``ClaimItem`` that is used to construct a ``ClaimTransaction``.
+
 .. rubric:: :doc:`Wallet`
 
 Wallet is a collection of accounts contained within a single file conforming to the NEP6 definition. This can be exported as a ``json`` file and contains the necessary information for any standard wallet to open.
@@ -69,12 +71,29 @@ Wallet is a collection of accounts contained within a single file conforming to 
 Methods
 -------
 
+All methods documented are available at the root of the ``wallet`` module. They are categorised according to their place in the code files.
+
+::
+
+  import {wallet} from '@cityofzion/neon-js'
+  wallet.getScriptHashFromAddress('ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW') // core
+  wallet.Coin({index:0, txid:'a', value: 1}) // components
+  wallet.encrypt('L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g') //nep2
+  wallet.isAddress('ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW') // verify
+
 .. rubric:: :doc:`methods/core`
+
+Methods for transforming between key formats.
 
 .. rubric:: :doc:`methods/components`
 
+Components used in constructing the ``Balance`` and ``Claims`` object.
+
 .. rubric:: :doc:`methods/nep2`
+
+Methods for encrypting or decrypting keys.
 
 .. rubric:: :doc:`methods/verify`
 
+Methods to verify the various key formats.
 
