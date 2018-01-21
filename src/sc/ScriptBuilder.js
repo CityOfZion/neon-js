@@ -148,6 +148,7 @@ class ScriptBuilder extends StringStream {
    * @return {ScriptBuilder} this
    */
   emitPush (data) {
+    if (data == null) return this.emitPush(false)
     switch (typeof (data)) {
       case 'boolean':
         return this.emit(data ? OpCode.PUSHT : OpCode.PUSHF)
@@ -167,20 +168,6 @@ class ScriptBuilder extends StringStream {
         throw new Error()
     }
   }
-}
-
-/**
- * A wrapper method around ScripBuilder for creating a VM script.
- * @param {object} props - Properties passed in as an object.
- * @param {string} props.scriptHash - The contract scriptHash.
- * @param {string} [props.operation=null] - The method name to call.
- * @param {Array} [props.args=undefined] - The arguments of the method to pass in.
- * @param {boolean} [props.useTailCall=false] - To use Tail Call.
- * @return {string} The VM Script.
- */
-export const createScript = ({ scriptHash, operation = null, args = undefined, useTailCall = false }) => {
-  const sb = new ScriptBuilder()
-  return sb.emitAppCall(scriptHash, operation, args, useTailCall).str
 }
 
 export default ScriptBuilder
