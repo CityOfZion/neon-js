@@ -22,7 +22,7 @@ $ pip install -r requirements.txt
 This command builds the documentation locally and places it in `docs` folder.
 
 ```sh
-$ cd source
+$ cd docs
 $ sphinx-versioning -g ../ -l ./conf.py build docs ../docs/_build
 ```
 
@@ -31,7 +31,7 @@ $ sphinx-versioning -g ../ -l ./conf.py build docs ../docs/_build
 This command immediately deploys to `gh-pages`.
 
 ```sh
-$ cd source
+$ cd docs
 $ sphinx-versioning -g ../ -l ./conf.py push docs gh-pages .
 ```
 ## References
