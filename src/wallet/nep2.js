@@ -6,9 +6,10 @@
 import bs58check from 'bs58check' // This is importable because WIF specifies it as a dependency.
 import { SHA256, AES, enc, mode, pad } from 'crypto-js'
 import scrypt from 'js-scrypt'
+import asyncScrypt from 'scrypt-js'
 import Account from './Account'
 import { ab2hexstring, hexXor } from '../utils'
-import { DEFAULT_SCRYPT, NEP_HEADER, NEP_FLAG } from '../consts'
+import { DEFAULT_SCRYPT, DEFAULT_SCRYPT_ASYNC, NEP_HEADER, NEP_FLAG } from '../consts'
 import logger from '../logging'
 
 const log = logger('wallet')
@@ -47,6 +48,39 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
 }
 
 /**
+ * Encrypts a WIF key using a given keyphrase under NEP-2 Standard.
+ * @param {string} wifKey - WIF key to encrypt (52 chars long).
+ * @param {string} keyphrase - The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
+ * @param {scryptParams} [scryptParams] - Parameters for Scrypt. Defaults to NEP2 specified parameters.
+ * @returns {string} The encrypted key in Base58 (Case sensitive).
+ */
+export const encryptAsync = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT_ASYNC) => {
+  return new Promise((resolve, reject) => {
+    scryptParams = ensureScryptParams(scryptParams)
+    const { N, r, p, dkLen } = scryptParams
+    const account = new Account(wifKey)
+    // SHA Salt (use the first 4 bytes)
+    const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
+    asyncScrypt(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), N, r, p, dkLen, (error, progress, key) => {
+      if (error != null) {
+        reject(error)
+      } else if (key) {
+        const derived = Buffer.from(key).toString('hex')
+        const derived1 = derived.slice(0, 64)
+        const derived2 = derived.slice(64)
+        // AES Encrypt
+        const xor = hexXor(account.privateKey, derived1)
+        const encrypted = AES.encrypt(enc.Hex.parse(xor), enc.Hex.parse(derived2), { mode: mode.ECB, padding: pad.NoPadding })
+        const assembled = NEP_HEADER + NEP_FLAG + addressHash + encrypted.ciphertext.toString()
+        const encryptedKey = bs58check.encode(Buffer.from(assembled, 'hex'))
+        log.info(`Successfully encrypted key to ${encryptedKey}`)
+        resolve(encryptedKey)
+      }
+    })
+  })
+}
+
+/**
  * Decrypts an encrypted key using a given keyphrase under NEP-2 Standard.
  * @param {string} encryptedKey - The encrypted key (58 chars long).
  * @param {string} keyphrase - The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
@@ -69,6 +103,40 @@ export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) 
   if (addressHash !== newAddressHash) throw new Error('Wrong Password!')
   log.info(`Successfully decrypted ${encryptedKey}`)
   return account.WIF
+}
+
+/**
+ * Decrypts an encrypted key using a given keyphrase under NEP-2 Standard.
+ * @param {string} encryptedKey - The encrypted key (58 chars long).
+ * @param {string} keyphrase - The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
+ * @param {scryptParams} [scryptParams] - Parameters for Scrypt. Defaults to NEP2 specified parameters.
+ * @returns {string} The decrypted WIF key.
+ */
+export const decryptAsync = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT_ASYNC) => {
+  return new Promise((resolve, reject) => {
+    scryptParams = ensureScryptParams(scryptParams)
+    const { N, r, p, dkLen } = scryptParams
+    const assembled = ab2hexstring(bs58check.decode(encryptedKey))
+    const addressHash = assembled.substr(6, 8)
+    const encrypted = assembled.substr(-64)
+    asyncScrypt(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), N, r, p, dkLen, (error, progress, key) => {
+      if (error != null) {
+        reject(error)
+      } else if (key) {
+        const derived = Buffer.from(key).toString('hex')
+        const derived1 = derived.slice(0, 64)
+        const derived2 = derived.slice(64)
+        const ciphertext = { ciphertext: enc.Hex.parse(encrypted), salt: '' }
+        const decrypted = AES.decrypt(ciphertext, enc.Hex.parse(derived2), { mode: mode.ECB, padding: pad.NoPadding })
+        const privateKey = hexXor(decrypted.toString(), derived1)
+        const account = new Account(privateKey)
+        const newAddressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
+        if (addressHash !== newAddressHash) throw new Error('Wrong Password!')
+        log.info(`Successfully decrypted ${encryptedKey}`)
+        resolve(account.WIF)
+      }
+    })
+  })
 }
 
 const ensureScryptParams = (params) => Object.assign({}, DEFAULT_SCRYPT, params)
