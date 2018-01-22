@@ -180,6 +180,7 @@ class Wallet {
   export () {
     return JSON.stringify({
       name: this.name,
+      version: this.version,
       scrypt: exportScryptParamsToWallet(this.scrypt),
       accounts: this.accounts.map((acct) => acct.export()),
       extra: this.extra
