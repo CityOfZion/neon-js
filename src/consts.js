@@ -44,6 +44,17 @@ export const DEFAULT_WALLET = {
   extra: null
 }
 
+export const DEFAULT_ACCOUNT_CONTRACT = {
+  'script': '',
+  'parameters': [
+    {
+      'name': 'Signature',
+      'type': 'Signature'
+    }
+  ],
+  'deployed': false
+}
+
 export const NEO_NETWORK = {
   MAIN: 'MainNet',
   TEST: 'TestNet'
