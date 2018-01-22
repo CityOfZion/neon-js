@@ -36,13 +36,6 @@ export const DEFAULT_SCRYPT = {
   size: 64
 }
 
-export const DEFAULT_SCRYPT_ASYNC = {
-  N: 16384,
-  r: 8,
-  p: 8,
-  dkLen: 64
-}
-
 export const DEFAULT_WALLET = {
   name: 'myWallet',
   version: '1.0',

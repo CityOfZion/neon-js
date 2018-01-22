@@ -9,7 +9,7 @@ import scrypt from 'js-scrypt'
 import asyncScrypt from 'scrypt-js'
 import Account from './Account'
 import { ab2hexstring, hexXor } from '../utils'
-import { DEFAULT_SCRYPT, DEFAULT_SCRYPT_ASYNC, NEP_HEADER, NEP_FLAG } from '../consts'
+import { DEFAULT_SCRYPT, NEP_HEADER, NEP_FLAG } from '../consts'
 import logger from '../logging'
 
 const log = logger('wallet')
@@ -54,14 +54,14 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
  * @param {scryptParams} [scryptParams] - Parameters for Scrypt. Defaults to NEP2 specified parameters.
  * @returns {string} The encrypted key in Base58 (Case sensitive).
  */
-export const encryptAsync = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT_ASYNC) => {
+export const encryptAsync = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
   return new Promise((resolve, reject) => {
     scryptParams = ensureScryptParams(scryptParams)
-    const { N, r, p, dkLen } = scryptParams
+    const { cost, blockSize, parallel } = scryptParams
     const account = new Account(wifKey)
     // SHA Salt (use the first 4 bytes)
     const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
-    asyncScrypt(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), N, r, p, dkLen, (error, progress, key) => {
+    asyncScrypt(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), cost, blockSize, parallel, 64, (error, progress, key) => {
       if (error != null) {
         reject(error)
       } else if (key) {
@@ -112,14 +112,14 @@ export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) 
  * @param {scryptParams} [scryptParams] - Parameters for Scrypt. Defaults to NEP2 specified parameters.
  * @returns {string} The decrypted WIF key.
  */
-export const decryptAsync = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT_ASYNC) => {
+export const decryptAsync = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
   return new Promise((resolve, reject) => {
     scryptParams = ensureScryptParams(scryptParams)
-    const { N, r, p, dkLen } = scryptParams
+    const { cost, blockSize, parallel } = scryptParams
     const assembled = ab2hexstring(bs58check.decode(encryptedKey))
     const addressHash = assembled.substr(6, 8)
     const encrypted = assembled.substr(-64)
-    asyncScrypt(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), N, r, p, dkLen, (error, progress, key) => {
+    asyncScrypt(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), cost, blockSize, parallel, 64, (error, progress, key) => {
       if (error != null) {
         reject(error)
       } else if (key) {

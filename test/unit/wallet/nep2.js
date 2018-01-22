@@ -4,18 +4,12 @@ import testKeys from '../testKeys.json'
 
 require('babel-polyfill')
 
-describe.only('NEP2', function () {
+describe('NEP2', function () {
   const simpleScrypt = {
     cost: 256,
     blockSize: 1,
     parallel: 1,
     size: 64
-  }
-  const simpleAsyncScrypt = {
-    N: 256,
-    r: 1,
-    p: 1,
-    dkLen: 64
   }
 
   describe('Basic (NEP2)', function () {
@@ -45,7 +39,7 @@ describe.only('NEP2', function () {
     })
 
     it('encryptAsync', async () => {
-      const encryptedKey = await NEP2.encryptAsync(testKeys.a.wif, passphrase, simpleAsyncScrypt)
+      const encryptedKey = await NEP2.encryptAsync(testKeys.a.wif, passphrase, simpleScrypt)
       asyncEncrypted = encryptedKey
       return isNEP2(asyncEncrypted).should.equal(true)
     })
@@ -57,7 +51,7 @@ describe.only('NEP2', function () {
     })
 
     it('decryptAsync', async () => {
-      const wif = await NEP2.decryptAsync(asyncEncrypted, passphrase, simpleAsyncScrypt)
+      const wif = await NEP2.decryptAsync(asyncEncrypted, passphrase, simpleScrypt)
       isWIF(wif).should.equal(true)
       return wif.should.equal(testKeys.a.wif)
     })
@@ -74,7 +68,7 @@ describe.only('NEP2', function () {
     })
 
     it('encryptAsync', async () => {
-      const encryptedKey = await NEP2.encryptAsync(testKeys.a.wif, passphrase, simpleAsyncScrypt)
+      const encryptedKey = await NEP2.encryptAsync(testKeys.a.wif, passphrase, simpleScrypt)
       asyncEncrypted = encryptedKey
       return isNEP2(asyncEncrypted).should.equal(true)
     })
@@ -86,7 +80,7 @@ describe.only('NEP2', function () {
     })
 
     it('decryptAsync', async () => {
-      const wif = await NEP2.decryptAsync(asyncEncrypted, passphrase, simpleAsyncScrypt)
+      const wif = await NEP2.decryptAsync(asyncEncrypted, passphrase, simpleScrypt)
       isWIF(wif).should.equal(true)
       return wif.should.equal(testKeys.a.wif)
     })
