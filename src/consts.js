@@ -48,7 +48,7 @@ export const DEFAULT_ACCOUNT_CONTRACT = {
   'script': '',
   'parameters': [
     {
-      'name': 'Signature',
+      'name': 'signature',
       'type': 'Signature'
     }
   ],

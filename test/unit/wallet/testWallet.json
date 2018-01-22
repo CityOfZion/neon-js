@@ -1,5 +1,6 @@
 {
   "name": "MyWallet",
+  "version":"1.0",
   "scrypt": {
     "n": 16384,
     "r": 8,
@@ -12,7 +13,16 @@
       "isDefault": false,
       "lock": false,
       "key": "6PYWB8m1bCnu5bQkRUKAwbZp2BHNvQ3BQRLbpLdTuizpyLkQPSZbtZfoxx",
-      "contract": {},
+      "contract": {
+        "script": "",
+        "parameters": [
+          {
+            "name": "signature",
+            "type": "Signature"
+          }
+        ],
+        "deployed": false
+      },
       "extra": null
     },
     {
@@ -21,7 +31,16 @@
       "isDefault": true,
       "lock": false,
       "key": "6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF",
-      "contract": {},
+      "contract": {
+        "script": "",
+        "parameters": [
+          {
+            "name": "signature",
+            "type": "Signature"
+          }
+        ],
+        "deployed": false
+      },
       "extra": null
     },
     {
@@ -30,7 +49,16 @@
       "isDefault": false,
       "lock": false,
       "key": "6PYWVp3xfgvnuNKP7ZavSViYvvim2zuzx9Q33vuWZr8aURiKeJ6Zm7BfPQ",
-      "contract": {},
+      "contract": {
+        "script": "",
+        "parameters": [
+          {
+            "name": "signature",
+            "type": "Signature"
+          }
+        ],
+        "deployed": false
+      },
       "extra": null
     },
     {
@@ -39,7 +67,16 @@
       "isDefault": false,
       "lock": false,
       "key": null,
-      "contract": null,
+      "contract": {
+        "script": "",
+        "parameters": [
+          {
+            "name": "signature",
+            "type": "Signature"
+          }
+        ],
+        "deployed": false
+      },
       "extra": null
     }
   ],

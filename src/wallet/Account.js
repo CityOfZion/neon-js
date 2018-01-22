@@ -18,7 +18,7 @@ class Account {
     this.extra = null
     this.isDefault = false
     this.lock = false
-    this.contract = DEFAULT_ACCOUNT_CONTRACT
+    this.contract = Object.assign({}, DEFAULT_ACCOUNT_CONTRACT)
     if (!str) {
       this._privateKey = core.generatePrivateKey()
     } else if (typeof str === 'object') {
@@ -28,7 +28,7 @@ class Account {
       this.extra = str.extra
       this.isDefault = str.isDefault || false
       this.lock = str.lock || false
-      this.contract = str.contract || DEFAULT_ACCOUNT_CONTRACT
+      this.contract = str.contract || Object.assign({}, DEFAULT_ACCOUNT_CONTRACT)
     } else if (isPrivateKey(str)) {
       this._privateKey = str
     } else if (isPublicKey(str, false)) {
@@ -59,7 +59,8 @@ class Account {
   _updateContractScript () {
     try {
       if (this.contract.script === '') {
-        this.contract.script = core.getVerificationScriptFromPublicKey(this.publicKey)
+        const publicKey = this.publicKey
+        this.contract.script = core.getVerificationScriptFromPublicKey(publicKey)
       }
     } catch (e) { }
   }

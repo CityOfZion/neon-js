@@ -19,27 +19,51 @@ describe('Account', function () {
   }
 
   const keyphrase = 'thisisakeyphrase'
-
-  it('can be created with different formats', () => {
-    Object.keys(acct).map((key) => {
-      // Skip scriptHash as it cannot be used.
-      if (key === 'scriptHash') return
-      const a = new Account(acct[key])
-      a.should.not.equal(undefined)
-      if (key === 'publicKeyUnencoded') {
-        a.publicKey.should.equal(acct.publicKey)
-        return
-      }
-      a[key].should.equal(acct[key])
+  describe('Constructor', function () {
+    it('can be created with different formats', () => {
+      Object.keys(acct).map((key) => {
+        // Skip scriptHash as it cannot be used.
+        if (key === 'scriptHash') return
+        const a = new Account(acct[key])
+        a.should.not.equal(undefined)
+        if (key === 'publicKeyUnencoded') {
+          a.publicKey.should.equal(acct.publicKey)
+          return
+        }
+        a[key].should.equal(acct[key])
+      })
     })
-  })
 
-  it('can be created from Wallet Account object', () => {
-    const walletAcct = testWallet.accounts[0]
-    const a = new Account(walletAcct)
-    a.should.not.equal(undefined)
-    a.encrypted.should.equal(walletAcct.key)
-    a.address.should.equal(walletAcct.address)
+    it('can be created from Wallet Account object', () => {
+      const walletAcct = testWallet.accounts[0]
+      const a = new Account(walletAcct)
+      a.should.not.equal(undefined)
+      a.encrypted.should.equal(walletAcct.key)
+      a.address.should.equal(walletAcct.address)
+    })
+
+    it('Accepts both public key forms', () => {
+      const a = new Account(acct.publicKeyUnencoded)
+      a.address.should.equal(acct.address)
+      a.publicKey.should.equal(acct.publicKey)
+      a.getPublicKey(false).should.equal(acct.publicKeyUnencoded)
+      a.getPublicKey(true).should.equal(acct.publicKey)
+    })
+
+    it('Accepts a partial Account object and setup defaults', () => {
+      const result = new Account({
+        key: acct.encrypted,
+        address: acct.address
+      })
+      result.label.should.equal(acct.address)
+      result.isDefault.should.equal(false)
+      result.lock.should.equal(false)
+      result.contract.should.eql({
+        script: '',
+        parameters: [{ name: 'signature', type: 'Signature' }],
+        deployed: false
+      })
+    })
   })
 
   it('can query different key formats', () => {
@@ -51,15 +75,6 @@ describe('Account', function () {
     a.address.should.equal(acct.address)
   })
 
-  it('Accepts both public key forms', () => {
-    const a = new Account(acct.publicKeyUnencoded)
-    a.address.should.equal(acct.address)
-    a.publicKey.should.equal(acct.publicKey)
-    a.getPublicKey(false).should.equal(acct.publicKeyUnencoded)
-    a.getPublicKey(true).should.equal(acct.publicKey)
-  })
-
-  this.timeout(15000)
   it('encrypts the key', () => {
     const a = new Account(acct.WIF)
     a.encrypt(keyphrase, scryptParams)
