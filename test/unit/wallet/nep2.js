@@ -2,6 +2,8 @@ import * as NEP2 from '../../../src/wallet/nep2'
 import { isNEP2, isWIF } from '../../../src/wallet/verify'
 import testKeys from '../testKeys.json'
 
+require('babel-polyfill')
+
 describe('NEP2', function () {
   const simpleScrypt = {
     cost: 256,
@@ -28,6 +30,7 @@ describe('NEP2', function () {
 
   describe('Non-english', function () {
     let encrypted
+    let asyncEncrypted
     const passphrase = testKeys.b.passphrase
 
     it('encrypt', () => {
@@ -35,15 +38,28 @@ describe('NEP2', function () {
       isNEP2(encrypted).should.equal(true)
     })
 
+    it('encryptAsync', async () => {
+      const encryptedKey = await NEP2.encryptAsync(testKeys.a.wif, passphrase, simpleScrypt)
+      asyncEncrypted = encryptedKey
+      return isNEP2(asyncEncrypted).should.equal(true)
+    })
+
     it('decrypt', () => {
       const wif = NEP2.decrypt(encrypted, passphrase, simpleScrypt)
       isWIF(wif).should.equal(true)
       wif.should.equal(testKeys.a.wif)
     })
+
+    it('decryptAsync', async () => {
+      const wif = await NEP2.decryptAsync(asyncEncrypted, passphrase, simpleScrypt)
+      isWIF(wif).should.equal(true)
+      return wif.should.equal(testKeys.a.wif)
+    })
   })
 
   describe('Symbols', function () {
     let encrypted
+    let asyncEncrypted
     const passphrase = testKeys.c.passphrase
 
     it('encrypt', () => {
@@ -51,10 +67,22 @@ describe('NEP2', function () {
       isNEP2(encrypted).should.equal(true)
     })
 
+    it('encryptAsync', async () => {
+      const encryptedKey = await NEP2.encryptAsync(testKeys.a.wif, passphrase, simpleScrypt)
+      asyncEncrypted = encryptedKey
+      return isNEP2(asyncEncrypted).should.equal(true)
+    })
+
     it('decrypt', () => {
       const wif = NEP2.decrypt(encrypted, passphrase, simpleScrypt)
       isWIF(wif).should.equal(true)
       wif.should.equal(testKeys.a.wif)
+    })
+
+    it('decryptAsync', async () => {
+      const wif = await NEP2.decryptAsync(asyncEncrypted, passphrase, simpleScrypt)
+      isWIF(wif).should.equal(true)
+      return wif.should.equal(testKeys.a.wif)
     })
   })
 
