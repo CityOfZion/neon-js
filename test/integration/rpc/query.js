@@ -5,6 +5,15 @@ import testKeys from '../../unit/testKeys.json'
 
 describe('Query', function () {
   this.timeout(10000)
+
+  before(() => {
+    DEFAULT_RPC.TEST = 'http://seed5.neo.org:20332'
+  })
+
+  after(() => {
+    DEFAULT_RPC.TEST = 'http://seed1.neo.org:20332'
+  })
+
   describe('RPC Queries', function () {
     it('getAccountState', () => {
       return Query.getAccountState(testKeys.a.address)
@@ -209,22 +218,21 @@ describe('Query', function () {
         })
     })
 
-    it('getVersion')
-    // , () => {
-      // Currently not implemented
-      // Query.getVersion()
-      //   .execute(DEFAULT_RPC.TEST)
-      //   .then((res) => {
-
-      //   })
-    // })
+    it('getVersion', () => {
+      return Query.getVersion()
+        .execute(DEFAULT_RPC.TEST)
+        .then((res) => {
+          res.result.should.have.all.keys(['port', 'nonce', 'useragent'])
+          res.useragent.should.match(/NEO: (\d+\.\d+\.\d+)/)
+        })
+    })
 
     describe('invoke', () => {
       it('simple', () => {
         return Query.invoke(CONTRACTS.TEST_RPX, ContractParam.string('name'), ContractParam.boolean(false))
           .execute(DEFAULT_RPC.TEST)
           .then((res) => {
-            res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
+            res.result.should.have.all.keys(['script', 'state', 'gas_consumed', 'stack'])
             res.result.state.should.equal('HALT, BREAK')
             res.result.stack[0].value.should.equal('5265642050756c736520546f6b656e20332e312e34')
           })
@@ -234,7 +242,7 @@ describe('Query', function () {
         return Query.invoke(CONTRACTS.TEST_RPX, ContractParam.string('balanceOf'), ContractParam.array(ContractParam.byteArray('AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx', 'address')))
           .execute(DEFAULT_RPC.TEST)
           .then((res) => {
-            res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
+            res.result.should.have.all.keys(['script', 'state', 'gas_consumed', 'stack'])
             res.result.state.should.equal('HALT, BREAK')
           })
       })
@@ -244,7 +252,7 @@ describe('Query', function () {
       return Query.invokeFunction(CONTRACTS.TEST_RPX, 'name')
         .execute(DEFAULT_RPC.TEST)
         .then((res) => {
-          res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
+          res.result.should.have.all.keys(['script', 'state', 'gas_consumed', 'stack'])
           res.result.state.should.equal('HALT, BREAK')
           res.result.stack[0].value.should.equal('5265642050756c736520546f6b656e20332e312e34')
         })
@@ -254,7 +262,7 @@ describe('Query', function () {
       return Query.invokeScript('00c1046e616d656711c4d1f4fba619f2628870d36e3a9773e874705b')
         .execute(DEFAULT_RPC.TEST)
         .then((res) => {
-          res.result.should.have.all.keys(['state', 'gas_consumed', 'stack'])
+          res.result.should.have.all.keys(['script', 'state', 'gas_consumed', 'stack'])
           res.result.state.should.equal('HALT, BREAK')
           res.result.stack[0].value.should.equal('5265642050756c736520546f6b656e20332e312e34')
         })
