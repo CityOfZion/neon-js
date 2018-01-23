@@ -1,4 +1,4 @@
-import Wallet, { parseWalletScryptParams } from '../../../src/wallet/Wallet'
+import Wallet from '../../../src/wallet/Wallet'
 import Account from '../../../src/wallet/Account'
 import simpleWallet from './simpleWallet.json'
 import testWallet from './testWallet.json'
@@ -22,7 +22,7 @@ describe('Wallet file', function () {
       }
       const w = new Wallet(config)
       w.name.should.equal(config.name)
-      w.scrypt.should.eql(parseWalletScryptParams(config.scrypt))
+      w.scrypt.should.eql(config.scrypt)
       w.accounts.should.eql([])
     })
   })
@@ -50,7 +50,7 @@ describe('Wallet file', function () {
     const testWalletString = JSON.stringify(testWallet)
     const w = Wallet.import(testWalletString)
     w.name.should.equal('MyWallet')
-    w.scrypt.should.eql(parseWalletScryptParams(testWallet.scrypt))
+    w.scrypt.should.eql(testWallet.scrypt)
     for (let i = 0; i < w.accounts.length; i++) {
       w.accounts[i].export().should.eql(testWallet.accounts[i])
     }

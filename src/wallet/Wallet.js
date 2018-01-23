@@ -45,7 +45,7 @@ class Wallet {
     /** @type {string} */
     this.version = version
     /** @type {ScryptParams} */
-    this.scrypt = parseWalletScryptParams(scrypt)
+    this.scrypt = scrypt
     /** @type {Account[]} */
     this.accounts = []
     for (const acct of accounts) {
@@ -181,7 +181,7 @@ class Wallet {
     return JSON.stringify({
       name: this.name,
       version: this.version,
-      scrypt: exportScryptParamsToWallet(this.scrypt),
+      scrypt: this.scrypt,
       accounts: this.accounts.map((acct) => acct.export()),
       extra: this.extra
     })
@@ -213,20 +213,3 @@ class Wallet {
 }
 
 export default Wallet
-
-export const parseWalletScryptParams = (params) => {
-  const parsed = {
-    cost: params.n,
-    blockSize: params.r,
-    parallel: params.p
-  }
-  return Object.assign({}, DEFAULT_SCRYPT, parsed)
-}
-
-export const exportScryptParamsToWallet = (scryptParams) => {
-  return {
-    n: scryptParams.cost,
-    r: scryptParams.blockSize,
-    p: scryptParams.parallel
-  }
-}

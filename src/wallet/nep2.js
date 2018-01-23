@@ -13,7 +13,7 @@ import { DEFAULT_SCRYPT, NEP_HEADER, NEP_FLAG } from '../consts'
 import logger from '../logging'
 
 const log = logger('wallet')
-
+log.warn('ScryptParams will be changing to use n,r,p in place of cost, blockSize, parallel. New standard will be preferred. DEFAULT_SCRYPT will use new standard upon major version bump.')
 /**
  * @typedef ScryptParams
  * @param {number} cost - (n) Must be power of 2. 2^8 - 2^64
@@ -30,11 +30,12 @@ const log = logger('wallet')
  */
 export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
   scryptParams = ensureScryptParams(scryptParams)
+  const scryptJsParams = {cost: scryptParams.n, blockSize: scryptParams.r, parallel: scryptParams.p}
   const account = new Account(wifKey)
   // SHA Salt (use the first 4 bytes)
   const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
   // Scrypt
-  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), scryptParams).toString('hex')
+  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), scryptJsParams).toString('hex')
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   // AES Encrypt
@@ -57,11 +58,11 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
 export const encryptAsync = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
   return new Promise((resolve, reject) => {
     scryptParams = ensureScryptParams(scryptParams)
-    const { cost, blockSize, parallel } = scryptParams
+    const { n, r, p } = scryptParams
     const account = new Account(wifKey)
     // SHA Salt (use the first 4 bytes)
     const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
-    asyncScrypt(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), cost, blockSize, parallel, 64, (error, progress, key) => {
+    asyncScrypt(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), n, r, p, 64, (error, progress, key) => {
       if (error != null) {
         reject(error)
       } else if (key) {
@@ -89,10 +90,11 @@ export const encryptAsync = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) =
  */
 export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
   scryptParams = ensureScryptParams(scryptParams)
+  const scryptJsParams = {cost: scryptParams.n, blockSize: scryptParams.r, parallel: scryptParams.p}
   const assembled = ab2hexstring(bs58check.decode(encryptedKey))
   const addressHash = assembled.substr(6, 8)
   const encrypted = assembled.substr(-64)
-  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), scryptParams).toString('hex')
+  const derived = scrypt.hashSync(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), scryptJsParams).toString('hex')
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   const ciphertext = { ciphertext: enc.Hex.parse(encrypted), salt: '' }
@@ -115,11 +117,11 @@ export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) 
 export const decryptAsync = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
   return new Promise((resolve, reject) => {
     scryptParams = ensureScryptParams(scryptParams)
-    const { cost, blockSize, parallel } = scryptParams
+    const { n, r, p } = scryptParams
     const assembled = ab2hexstring(bs58check.decode(encryptedKey))
     const addressHash = assembled.substr(6, 8)
     const encrypted = assembled.substr(-64)
-    asyncScrypt(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), cost, blockSize, parallel, 64, (error, progress, key) => {
+    asyncScrypt(Buffer.from(keyphrase.normalize('NFC'), 'utf8'), Buffer.from(addressHash, 'hex'), n, r, p, 64, (error, progress, key) => {
       if (error != null) {
         reject(error)
       } else if (key) {
@@ -139,4 +141,11 @@ export const decryptAsync = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCR
   })
 }
 
-const ensureScryptParams = (params) => Object.assign({}, DEFAULT_SCRYPT, params)
+const ensureScryptParams = (params) => {
+  const oldParams = Object.assign({}, DEFAULT_SCRYPT, params)
+  return {
+    n: oldParams.n || oldParams.cost,
+    r: oldParams.r || oldParams.blockSize,
+    p: oldParams.p || oldParams.parallel
+  }
+}
