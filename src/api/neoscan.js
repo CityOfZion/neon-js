@@ -149,7 +149,7 @@ export const getTransactionHistory = (net, address) => {
     })
 }
 /* eslint-disable camelcase */
-const parseTxHistory = txids => {
+const parseTxHistory = txids =>
   txids.map(({ txid, block_height, balance, asset_moved }) => {
     let gas_sent = false
     let neo_sent = false
@@ -163,5 +163,4 @@ const parseTxHistory = txids => {
     if (ASSET_ID.NEO === asset_moved) neo_sent = true
     return { GAS, NEO, block_index: block_height, gas_sent, neo_sent, txid }
   })
-}
 /* eslint-enable camelcase */
