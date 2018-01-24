@@ -2,8 +2,6 @@ import * as NEP2 from '../../../src/wallet/nep2'
 import { isNEP2, isWIF } from '../../../src/wallet/verify'
 import testKeys from '../testKeys.json'
 
-require('babel-polyfill')
-
 describe('NEP2', function () {
   const simpleScrypt = {
     cost: 256,

@@ -1,6 +1,6 @@
 import fs from 'fs'
 import Account from './Account'
-import { DEFAULT_SCRYPT, DEFAULT_WALLET } from '../consts'
+import { DEFAULT_WALLET } from '../consts'
 import logger from '../logging'
 
 const log = logger('wallet')

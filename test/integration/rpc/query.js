@@ -6,14 +6,6 @@ import testKeys from '../../unit/testKeys.json'
 describe('Query', function () {
   this.timeout(10000)
 
-  before(() => {
-    DEFAULT_RPC.TEST = 'http://seed5.neo.org:20332'
-  })
-
-  after(() => {
-    DEFAULT_RPC.TEST = 'http://seed1.neo.org:20332'
-  })
-
   describe('RPC Queries', function () {
     it('getAccountState', () => {
       return Query.getAccountState(testKeys.a.address)
@@ -222,8 +214,9 @@ describe('Query', function () {
       return Query.getVersion()
         .execute(DEFAULT_RPC.TEST)
         .then((res) => {
+          console.log(res)
           res.result.should.have.all.keys(['port', 'nonce', 'useragent'])
-          res.useragent.should.match(/NEO: (\d+\.\d+\.\d+)/)
+          res.result.useragent.should.match(/NEO: (\d+\.\d+\.\d+)/)
         })
     })
 

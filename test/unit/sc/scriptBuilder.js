@@ -5,7 +5,7 @@ describe('ScriptBuilder', function () {
   const integers = [
     {
       int: -1,
-      result: '4f'  // opCodes.PUSHM1 (0x4F)
+      result: '4f' // opCodes.PUSHM1 (0x4F)
     },
     {
       int: 0,

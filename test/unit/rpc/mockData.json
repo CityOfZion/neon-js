@@ -1,7 +1,7 @@
 {
   "query": {
     "parserTest": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "parsertest",
@@ -15,7 +15,7 @@
       }
     },
     "getAccountState": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getaccountstate",
@@ -46,7 +46,7 @@
       }
     },
     "getAssetState": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getassetstate",
@@ -84,7 +84,7 @@
       }
     },
     "getBlockVerboseIndex": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getblock",
@@ -132,7 +132,7 @@
       }
     },
     "getBlockVerboseHash": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getblock",
@@ -180,7 +180,7 @@
       }
     },
     "getBlockIndex": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getblock",
@@ -197,7 +197,7 @@
       }
     },
     "getBestBlockHash": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getbestblockhash",
@@ -211,7 +211,7 @@
       }
     },
     "getBlockCount": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getblockcount",
@@ -225,7 +225,7 @@
       }
     },
     "getBlockSysFee": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getblocksysfee",
@@ -241,7 +241,7 @@
       }
     },
     "getConnectionCount": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getconnectioncount",
@@ -255,7 +255,7 @@
       }
     },
     "getContractState": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getcontractstate",
@@ -286,7 +286,7 @@
       }
     },
     "getPeers": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getpeers",
@@ -2794,7 +2794,7 @@
       }
     },
     "getRawMemPool": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getrawmempool",
@@ -2808,7 +2808,7 @@
       }
     },
     "getRawTransactionVerbose": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getrawtransaction",
@@ -2866,7 +2866,7 @@
       }
     },
     "getRawTransaction": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getrawtransaction",
@@ -2883,7 +2883,7 @@
       }
     },
     "getStorage": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "getstorage",
@@ -2900,7 +2900,7 @@
       }
     },
     "getTxOutValid": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "gettxout",
@@ -2922,7 +2922,7 @@
       }
     },
     "getTxOutNull": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "gettxout",
@@ -2939,7 +2939,7 @@
       }
     },
     "getVersion": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "id": 1234,
@@ -2957,7 +2957,7 @@
       }
     },
     "invokeSimple": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "invoke",
@@ -2992,7 +2992,7 @@
       }
     },
     "invokeComplex": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "invoke",
@@ -3032,7 +3032,7 @@
       }
     },
     "invokeFunction": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "invokefunction",
@@ -3059,7 +3059,7 @@
       }
     },
     "invokeScript": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "invokescript",
@@ -3084,7 +3084,7 @@
       }
     },
     "validateAddressTrue": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "validateaddress",
@@ -3103,7 +3103,7 @@
       }
     },
     "validateAddressFalse": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "validateaddress",

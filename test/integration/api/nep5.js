@@ -7,14 +7,6 @@ describe('Integration: API NEP5', function () {
   const log = setupLogs()
   const scriptHash = CONTRACTS.TEST_LWTF
 
-  before(() => {
-    DEFAULT_RPC.TEST = 'http://seed5.neo.org:20332'
-  })
-
-  after(() => {
-    DEFAULT_RPC.TEST = 'http://seed1.neo.org:20332'
-  })
-
   describe('getToken', function () {
     it('get info and balance', () => {
       return NEP5.getToken(DEFAULT_RPC.TEST, scriptHash, testKeys.c.address)

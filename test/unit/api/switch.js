@@ -5,8 +5,6 @@ import { Fixed8 } from '../../../src/utils'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
 
-require('babel-polyfill')
-
 describe('Switch API', function () {
   let mock
   const baseConfig = {

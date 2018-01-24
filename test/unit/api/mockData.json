@@ -467,7 +467,7 @@
   },
   "nep5": {
     "getTokenInfo": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "invokescript",
@@ -504,7 +504,7 @@
       }
     },
     "getTokenBalance": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "invokescript",
@@ -533,7 +533,7 @@
       }
     },
     "getToken": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "invokescript",
@@ -574,7 +574,7 @@
       }
     },
     "getTokenZero": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "invokescript",
@@ -617,7 +617,7 @@
   },
   "core": {
     "sendTx": {
-      "url": "http://seed1.neo.org:20332",
+      "url": "https://seed1.neo.org:20331",
       "body": {
         "jsonrpc": "2.0",
         "method": "sendrawtransaction",

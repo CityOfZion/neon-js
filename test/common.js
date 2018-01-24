@@ -1,9 +1,9 @@
+import 'babel-polyfill'
 import chai from 'chai'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import fs from 'fs'
 import logging, { logger } from '../src/logging'
-
 const testlog = fs.createWriteStream('test.log')
 const oldStderrWrite = process.stderr.write
 function newStderrWrite () {
