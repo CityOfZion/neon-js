@@ -58,6 +58,7 @@ This documentation is meant to serve as a high level explaination of the library
 
     overview
     installation
+    tutorial/index.rst
     wallet/index.rst
     transactions/index.rst
     rpc/index.rst
