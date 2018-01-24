@@ -306,6 +306,18 @@
         {
           "url": "http://test2.cityofzion.io:8880",
           "height": 850301
+        },
+        {
+          "url": "http://test3.cityofzion.io:8880",
+          "height": 850300
+        },
+        {
+          "url": "http://test4.cityofzion.io:8880",
+          "height": 850280
+        },
+        {
+          "url": "http://test5.cityofzion.io:8880",
+          "height": 850306
         }
       ]
     },
