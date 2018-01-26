@@ -7,23 +7,11 @@ Module ``api``
 Core
 ----
 
-.. autofunction:: setApiSwitch
-
-.. autofunction:: setSwitchFreeze
-
 .. autofunction:: claimGas
 
 .. autofunction:: createTx
 
 .. autofunction:: doInvoke
-
-.. autofunction:: makeIntent
-
-.. autofunction:: sendAsset
-
-.. autofunction:: sendTx
-
-.. autofunction:: signTx
 
 .. autofunction:: getRPCEndpointFrom
 
@@ -38,6 +26,18 @@ Core
 .. autofunction:: getMaxClaimAmountFrom
 
 .. autofunction:: loadBalance
+
+.. autofunction:: makeIntent
+
+.. autofunction:: sendAsset
+
+.. autofunction:: sendTx
+
+.. autofunction:: setApiSwitch
+
+.. autofunction:: setSwitchFreeze
+
+.. autofunction:: signTx
 
 NeonDB
 -------
@@ -54,13 +54,13 @@ NeonDB
 
 .. autofunction:: neonDB.getClaims
 
+.. autofunction:: neonDB.getMaxClaimAmount
+
 .. autofunction:: neonDB.getRPCEndpoint
 
 .. autofunction:: neonDB.getTransactionHistory
 
 .. autofunction:: neonDB.getWalletDBHeight
-
-.. autofunction:: neonDB.getMaxClaimAmount
 
 Neoscan
 -------
@@ -71,13 +71,13 @@ Neoscan
 
 .. autofunction:: neoscan.getClaims
 
+.. autofunction:: neoscan.getMaxClaimAmount
+
 .. autofunction:: neoscan.getRPCEndpoint
 
 .. autofunction:: neoscan.getTransactionHistory
 
 .. autofunction:: neoscan.getWalletDBHeight
-
-.. autofunction:: neoscan.getMaxClaimAmount
 
 CoinMarketCap
 ---------------

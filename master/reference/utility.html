@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Utility &mdash; neon-js 3.1.0 documentation</title>
+  <title>Utility &mdash; neon-js 3.2.0 documentation</title>
   
 
   
@@ -37,9 +37,9 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 3.1.0 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 3.2.0 documentation" href="../index.html"/>
         <link rel="up" title="Reference" href="index.html"/>
-        <link rel="next" title="Wallet" href="wallet.html"/>
+        <link rel="next" title="Changelog" href="../changelog.html"/>
         <link rel="prev" title="Transactions" href="tx.html"/> 
 
   
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                3.1.0
+                3.2.0
               </div>
             
           
@@ -97,8 +97,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../interface.html">Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet/index.html">Wallet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
@@ -111,13 +111,7 @@
 <li class="toctree-l2"><a class="reference internal" href="rpc.html">RPC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sc.html">Smart Contract</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tx.html">Transactions</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Utility</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#format">Format</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#hashing">Hashing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="wallet.html">Wallet</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Utility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
@@ -194,7 +188,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.1.0/reference/utility.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.1.0.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.2.0/reference/utility.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.2.0.</a></p>
 <div class="section" id="utility">
 <h1>Utility<a class="headerlink" href="#utility" title="Permalink to this headline">¶</a></h1>
 <p>Module <code class="docutils literal"><span class="pre">u</span></code></p>
@@ -604,18 +598,159 @@
 
 </dd></dl>
 
-<dl class="docutils">
-<dt>..autoclass:: Fixed8</dt>
-<dd><table class="first last docutils field-list" frame="void" rules="none">
+<dl class="class">
+<dt id="Fixed8">
+<em class="property">class </em><code class="descname">Fixed8</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Fixed8" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper around bignumber.js that adds on helper methods commonly used in neon-js</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">members:</th><td class="field-body"></td>
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>value</strong> (<em>string|int</em>) &#8211; </li>
+<li><strong>base</strong> (<em>number</em>) &#8211; </li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
-</dd>
-</dl>
+<dl class="function">
+<dt id="add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>n</em>, <em>base</em><span class="sig-paren">)</span><a class="headerlink" href="#add" title="Permalink to this definition">¶</a></dt>
+<dd><p>See [[plus]]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> (<em>string|number|Fixed8</em>) &#8211; </li>
+<li><strong>base</strong> (<em>number</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Fixed8</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ceil">
+<code class="descname">ceil</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ceil" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Fixed8 whose value is rounded upwards to the next whole number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Fixed8</strong> &#8211;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="div">
+<code class="descname">div</code><span class="sig-paren">(</span><em>n</em>, <em>base</em><span class="sig-paren">)</span><a class="headerlink" href="#div" title="Permalink to this definition">¶</a></dt>
+<dd><p>See [[dividedBy]]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> (<em>string|number|Fixed8</em>) &#8211; </li>
+<li><strong>base</strong> (<em>number</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Fixed8</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="floor">
+<code class="descname">floor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#floor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Fixed8 whose value is rounded downwards to the previous whole number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Fixed8</strong> &#8211;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="mul">
+<code class="descname">mul</code><span class="sig-paren">(</span><em>n</em>, <em>base</em><span class="sig-paren">)</span><a class="headerlink" href="#mul" title="Permalink to this definition">¶</a></dt>
+<dd><p>See [[times]]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> (<em>string|number|Fixed8</em>) &#8211; </li>
+<li><strong>base</strong> (<em>number</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Fixed8</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="round">
+<code class="descname">round</code><span class="sig-paren">(</span><em>dp</em>, <em>rm</em><span class="sig-paren">)</span><a class="headerlink" href="#round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Fixed8 rounded to the nearest dp decimal places according to rounding mode rm.
+If dp is null, round to whole number.
+If rm is null, round according to default rounding mode.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>dp</strong> (<em>number</em>) &#8211; </li>
+<li><strong>rm</strong> (<em>number</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Fixed8</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sub">
+<code class="descname">sub</code><span class="sig-paren">(</span><em>n</em>, <em>base</em><span class="sig-paren">)</span><a class="headerlink" href="#sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>See [[minus]]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> (<em>string|number|Fixed8</em>) &#8211; </li>
+<li><strong>base</strong> (<em>number</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Fixed8</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -629,7 +764,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="wallet.html" class="btn btn-neutral float-right" title="Wallet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="tx.html" class="btn btn-neutral" title="Transactions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -665,7 +800,7 @@
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../../3.1.0/reference/utility.html">3.1.0</a></dd>
+            <dd><a href="../../3.2.0/reference/utility.html">3.2.0</a></dd>
             <dd><a href="../../2.3.2/reference/utility.html">2.3.2</a></dd>
             <dd><a href="../../1.1.2/index.html">1.1.2</a></dd>
         </dl>
@@ -683,7 +818,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'3.1.0',
+            VERSION:'3.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

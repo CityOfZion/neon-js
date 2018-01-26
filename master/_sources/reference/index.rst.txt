@@ -10,4 +10,3 @@ Reference
     sc
     tx
     utility
-    wallet

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Account &mdash; neon-js 3.1.0 documentation</title>
+  <title>Account &mdash; neon-js 3.2.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 3.1.0 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 3.2.0 documentation" href="../index.html"/>
         <link rel="up" title="Wallet" href="index.html"/>
         <link rel="next" title="Balance" href="Balance.html"/>
         <link rel="prev" title="Wallet" href="index.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                3.1.0
+                3.2.0
               </div>
             
           
@@ -97,6 +97,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Wallet</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Account</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Balance.html">Balance</a></li>
@@ -187,21 +188,49 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><b>Warning:</b> This document is for the development version of neon-js.</p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.2.0/wallet/Account.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.2.0.</a></p>
 <div class="section" id="account">
 <h1>Account<a class="headerlink" href="#account" title="Permalink to this headline">¶</a></h1>
-<p>The Account class is constructed from a given key and provides methods to derive all other key formats from the given key. The class is smart enough to differentiate between the different key formats and assign them correctly. Once an <code class="docutils literal"><span class="pre">Account</span></code> object is created from a key, all other higher level keys can be derived and retrieved. You are unable to derive a lower level key from a higher level.</p>
-<p>The keys are arranged below starting from the lowest level:</p>
-<ol class="arabic simple">
-<li>Encrypted Key (NEP2)</li>
-<li>Private Key (HEX or WIF)</li>
-<li>Public Key</li>
-<li>ScriptHash</li>
-<li>Address</li>
+<p>The <code class="docutils literal"><span class="pre">Account</span></code> class is used to store and transform keys to its various formats. It can be instantiated with any key format and is smart enough to recognise the format and store it appropriately.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">wallet</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+
+<span class="kr">const</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="s1">&#39;ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s&#39;</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">address</span><span class="p">)</span> <span class="c1">// ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s</span>
+
+<span class="kr">const</span> <span class="nx">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="s1">&#39;9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69&#39;</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">)</span> <span class="c1">// 9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69</span>
+</pre></div>
+</div>
+<p>The class enables us to easily retrieve keys in any derivable format without needing to remember any methods. However, we can only retrieve formats that can be derived from our input. For example, we cannot retrieve any formats other than address and scripthash from <code class="docutils literal"><span class="pre">a</span></code> because we instantiated it with an address. However, we can get any format from <code class="docutils literal"><span class="pre">b</span></code> because it was instantiated with a private key, which is the lowest level key available.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">publicKey</span><span class="p">)</span> <span class="c1">// throws an error</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">publicKey</span><span class="p">)</span> <span class="c1">// prints the public key</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">address</span><span class="p">)</span> <span class="c1">// prints the address</span>
+</pre></div>
+</div>
+<p>The order of the keys are:</p>
+<ol class="arabic simple" start="0">
+<li>encrypted (NEP2)</li>
+<li>privateKey / WIF</li>
+<li>publicKey</li>
+<li>scriptHash</li>
+<li>address</li>
 </ol>
-<p>For example, you cannot derive a private key from a Account created using a Public Key. (<code class="docutils literal"><span class="pre">Account</span></code> will throw an error)
-From the same <code class="docutils literal"><span class="pre">Account</span></code>, you can retrieve the scriptHash and the address.</p>
-<p>The Account class can only be created from encrypted key, private key, public key, or address. ScriptHash is not accepted as there is currently no way to verify if a scripthash is legitimate.</p>
+<p>(these are the getters)</p>
+<p>When you instantiate a <code class="docutils literal"><span class="pre">Account</span></code> with a key, you can retrieve any format that is below it in the list. For example, if we instantiate with a public key, we can get the publc key, scriptHash and address but not the private key.</p>
+<p>The Account class can only be instantiated from encrypted key, private key, public key, or address. ScriptHash is not accepted as there is currently no way to verify if a scripthash is legitimate.</p>
+<p>The <code class="docutils literal"><span class="pre">encryptedKey</span></code> is special as it is the lowest level key but requires the user to unlock it first before we can derive anything from it. This can be done through the <code class="docutils literal"><span class="pre">decrypt</span></code> method.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="s1">&#39;6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF&#39;</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">encrypted</span><span class="p">)</span> <span class="c1">// encrypted key</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">address</span><span class="p">)</span> <span class="c1">// throws error</span>
+<span class="nx">c</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="s1">&#39;city of zion&#39;</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">address</span><span class="p">)</span> <span class="c1">// ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW</span>
+</pre></div>
+</div>
+<p>You can encrypt the key by using the <code class="docutils literal"><span class="pre">encrypt</span></code> method. This is necessary if you want to export this key to a JSON file.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">c</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">(</span><span class="s1">&#39;new password&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This action will encrypt the private key with the provided password and replace any old NEP2 key.</p>
 <dl class="class">
 <dt id="Account">
 <em class="property">class </em><code class="descname">Account</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Account" title="Permalink to this definition">¶</a></dt>
@@ -388,14 +417,14 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../../3.1.0/index.html">3.1.0</a></dd>
+            <dd><a href="../../3.2.0/wallet/Account.html">3.2.0</a></dd>
             <dd><a href="../../2.3.2/index.html">2.3.2</a></dd>
             <dd><a href="../../1.1.2/index.html">1.1.2</a></dd>
         </dl>
         <dl>
             <dt>Branches</dt>
             <dd><a href="Account.html">dev</a></dd>
-            <dd><a href="../../master/index.html">master</a></dd>
+            <dd><a href="../../master/wallet/Account.html">master</a></dd>
         </dl>
     </div>
 </div>
@@ -406,7 +435,7 @@ NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Add
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'3.1.0',
+            VERSION:'3.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

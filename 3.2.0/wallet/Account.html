@@ -1,0 +1,463 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Account &mdash; neon-js 3.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="neon-js 3.2.0 documentation" href="../index.html"/>
+        <link rel="up" title="Wallet" href="index.html"/>
+        <link rel="next" title="Balance" href="Balance.html"/>
+        <link rel="prev" title="Wallet" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> neon-js
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Wallet</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Balance.html">Balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Claims.html">Claims</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Wallet.html">Wallet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="methods/index.html">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">neon-js</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Wallet</a> &raquo;</li>
+        
+      <li>Account</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/wallet/Account.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<div class="section" id="account">
+<h1>Account<a class="headerlink" href="#account" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">Account</span></code> class is used to store and transform keys to its various formats. It can be instantiated with any key format and is smart enough to recognise the format and store it appropriately.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">wallet</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+
+<span class="kr">const</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="s1">&#39;ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s&#39;</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">address</span><span class="p">)</span> <span class="c1">// ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s</span>
+
+<span class="kr">const</span> <span class="nx">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="s1">&#39;9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69&#39;</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">)</span> <span class="c1">// 9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69</span>
+</pre></div>
+</div>
+<p>The class enables us to easily retrieve keys in any derivable format without needing to remember any methods. However, we can only retrieve formats that can be derived from our input. For example, we cannot retrieve any formats other than address and scripthash from <code class="docutils literal"><span class="pre">a</span></code> because we instantiated it with an address. However, we can get any format from <code class="docutils literal"><span class="pre">b</span></code> because it was instantiated with a private key, which is the lowest level key available.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">publicKey</span><span class="p">)</span> <span class="c1">// throws an error</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">publicKey</span><span class="p">)</span> <span class="c1">// prints the public key</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">address</span><span class="p">)</span> <span class="c1">// prints the address</span>
+</pre></div>
+</div>
+<p>The order of the keys are:</p>
+<ol class="arabic simple" start="0">
+<li>encrypted (NEP2)</li>
+<li>privateKey / WIF</li>
+<li>publicKey</li>
+<li>scriptHash</li>
+<li>address</li>
+</ol>
+<p>(these are the getters)</p>
+<p>When you instantiate a <code class="docutils literal"><span class="pre">Account</span></code> with a key, you can retrieve any format that is below it in the list. For example, if we instantiate with a public key, we can get the publc key, scriptHash and address but not the private key.</p>
+<p>The Account class can only be instantiated from encrypted key, private key, public key, or address. ScriptHash is not accepted as there is currently no way to verify if a scripthash is legitimate.</p>
+<p>The <code class="docutils literal"><span class="pre">encryptedKey</span></code> is special as it is the lowest level key but requires the user to unlock it first before we can derive anything from it. This can be done through the <code class="docutils literal"><span class="pre">decrypt</span></code> method.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="s1">&#39;6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF&#39;</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">encrypted</span><span class="p">)</span> <span class="c1">// encrypted key</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">address</span><span class="p">)</span> <span class="c1">// throws error</span>
+<span class="nx">c</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="s1">&#39;city of zion&#39;</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">address</span><span class="p">)</span> <span class="c1">// ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW</span>
+</pre></div>
+</div>
+<p>You can encrypt the key by using the <code class="docutils literal"><span class="pre">encrypt</span></code> method. This is necessary if you want to export this key to a JSON file.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">c</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">(</span><span class="s1">&#39;new password&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This action will encrypt the private key with the provided password and replace any old NEP2 key.</p>
+<dl class="class">
+<dt id="Account">
+<em class="property">class </em><code class="descname">Account</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Account" title="Permalink to this definition">¶</a></dt>
+<dd><p>This allows for simple utilisation and manipulating of keys without need the long access methods.
+Key formats are derived from each other lazily and stored for future access.
+If the previous key (one level higher) is not found, it will attempt to generate it or throw an Error if insufficient information was provided (eg. trying to generate private key when only address was given.)
+NEP2 &lt;=&gt; WIF &lt;=&gt; Private =&gt; Public =&gt; ScriptHash &lt;=&gt; Address</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>str</strong> (<em>string|object</em>) &#8211; WIF/ Private Key / Public Key / Address or a Wallet Account object.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="Account.encrypted">
+<code class="descclassname">Account.</code><code class="descname">encrypted</code><a class="headerlink" href="#Account.encrypted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Key encrypted according to NEP2 standard.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Account.WIF">
+<code class="descclassname">Account.</code><code class="descname">WIF</code><a class="headerlink" href="#Account.WIF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Case sensitive key of 52 characters long.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Account.privateKey">
+<code class="descclassname">Account.</code><code class="descname">privateKey</code><a class="headerlink" href="#Account.privateKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Key of 64 hex characters.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Account.publicKey">
+<code class="descclassname">Account.</code><code class="descname">publicKey</code><a class="headerlink" href="#Account.publicKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the public key in encoded form. This is the form that is the short version (starts with 02 or 03). If you require the unencoded form, do use the publicKey method instead of this getter.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Account.scriptHash">
+<code class="descclassname">Account.</code><code class="descname">scriptHash</code><a class="headerlink" href="#Account.scriptHash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Script hash of the key. This format is usually used in the code instead of address as this is a non case sensitive version.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Account.address">
+<code class="descclassname">Account.</code><code class="descname">address</code><a class="headerlink" href="#Account.address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Public address used to receive transactions. Case sensitive.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_updateContractScript">
+<code class="descname">_updateContractScript</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_updateContractScript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to update the contract.script field if public key is available.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="decrypt">
+<code class="descname">decrypt</code><span class="sig-paren">(</span><em>keyphrase</em>, <em>scryptParams</em><span class="sig-paren">)</span><a class="headerlink" href="#decrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decrypts the encrypted key and return the Account object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>keyphrase</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+<li><strong>scryptParams</strong> (<em>object</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Account</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="encrypt">
+<code class="descname">encrypt</code><span class="sig-paren">(</span><em>keyphrase</em>, <em>scryptParams</em><span class="sig-paren">)</span><a class="headerlink" href="#encrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encrypts the current privateKey and return the Account object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>keyphrase</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+<li><strong>scryptParams</strong> (<em>object</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Account</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="export">
+<code class="descname">export</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export Account as a WalletAccount object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>WalletAccount</strong> &#8211;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="getPublicKey">
+<code class="descname">getPublicKey</code><span class="sig-paren">(</span><em>encoded</em><span class="sig-paren">)</span><a class="headerlink" href="#getPublicKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the Public Key in encoded / unencoded form.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>encoded</strong> (<a class="reference internal" href="../reference/sc.html#boolean" title="boolean"><em>boolean</em></a>) &#8211; Encoded or unencoded.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Balance.html" class="btn btn-neutral float-right" title="Balance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Wallet" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: 3.2.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="Account.html">3.2.0</a></dd>
+            <dd><a href="../../2.3.2/index.html">2.3.2</a></dd>
+            <dd><a href="../../1.1.2/index.html">1.1.2</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../dev/wallet/Account.html">dev</a></dd>
+            <dd><a href="../../master/wallet/Account.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'3.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

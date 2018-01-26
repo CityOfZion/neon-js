@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Transactions &mdash; neon-js 3.1.0 documentation</title>
+  <title>Transactions &mdash; neon-js 3.2.0 documentation</title>
   
 
   
@@ -37,9 +37,9 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 3.1.0 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 3.2.0 documentation" href="../index.html"/>
         <link rel="next" title="Contract Transaction" href="contract.html"/>
-        <link rel="prev" title="Wallet" href="../wallet.html"/> 
+        <link rel="prev" title="Verify" href="../wallet/methods/verify.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                3.1.0
+                3.2.0
               </div>
             
           
@@ -96,17 +96,12 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../interface.html">Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../wallet.html">Wallet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet/index.html">Wallet</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Transactions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#transaction">Transaction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#components">Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#types">Types</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="contract.html">Contract Transaction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="claim.html">Claim Transaction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="invocation.html">Invocation Transaction</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="contract.html">Contract Transaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="claim.html">Claim Transaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="invocation.html">Invocation Transaction</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
@@ -188,7 +183,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.1.0/transactions/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.1.0.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.2.0/transactions/index.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.2.0.</a></p>
 <div class="section" id="transactions">
 <h1>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h1>
 <p>The Transactions module is exposed as:</p>
@@ -210,8 +205,8 @@
 <h2>Transaction<a class="headerlink" href="#transaction" title="Permalink to this headline">¶</a></h2>
 <p>The Transaction class is a wrapper class that contains all the tools required to manipulate and build transactions. This allows us to dynamically add intents, remarks at will instead of cramming everything into a single method.</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
-<span class="c1">// Let us create a ContractTransaction with a custom version</span>
-<span class="kd">let</span> <span class="nx">tx</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">tx</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="mi">128</span><span class="p">,</span> <span class="nx">version</span><span class="o">:</span><span class="mi">2</span><span class="p">})</span>
+<span class="c1">// Let us create a ContractTransaction</span>
+<span class="kd">let</span> <span class="nx">tx</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">tx</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="mi">128</span><span class="p">})</span>
 <span class="c1">// Now let us add an intention to send 1 NEO to someone</span>
 <span class="nx">tx</span>
 <span class="p">.</span><span class="nx">addOutput</span><span class="p">(</span><span class="s1">&#39;NEO&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nx">someAddress</span><span class="p">)</span>
@@ -362,7 +357,7 @@
         <a href="contract.html" class="btn btn-neutral float-right" title="Contract Transaction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../wallet.html" class="btn btn-neutral" title="Wallet" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../wallet/methods/verify.html" class="btn btn-neutral" title="Verify" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -395,7 +390,7 @@
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../../3.1.0/transactions/index.html">3.1.0</a></dd>
+            <dd><a href="../../3.2.0/transactions/index.html">3.2.0</a></dd>
             <dd><a href="../../2.3.2/transactions/index.html">2.3.2</a></dd>
             <dd><a href="../../1.1.2/transactions/index.html">1.1.2</a></dd>
         </dl>
@@ -413,7 +408,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'3.1.0',
+            VERSION:'3.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

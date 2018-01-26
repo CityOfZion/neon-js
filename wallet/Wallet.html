@@ -1,0 +1,592 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Wallet &mdash; neon-js 3.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="neon-js 3.2.0 documentation" href="../index.html"/>
+        <link rel="up" title="Wallet" href="index.html"/>
+        <link rel="next" title="Methods" href="methods/index.html"/>
+        <link rel="prev" title="Claims" href="Claims.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> neon-js
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Wallet</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Account.html">Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Balance.html">Balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Claims.html">Claims</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Wallet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="methods/index.html">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">neon-js</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Wallet</a> &raquo;</li>
+        
+      <li>Wallet</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/wallet/Wallet.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<div class="section" id="wallet">
+<h1>Wallet<a class="headerlink" href="#wallet" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">Wallet</span></code> class implements the NEP-6 convention which is a standard way set by NEO council on how to export keys in a JSON file. By doing this, we can move keys across different software providers without worry.</p>
+<p>The <code class="docutils literal"><span class="pre">Wallet</span></code> class is essentially a collection of encrypted keys as well as the parameters used to encrypt them.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">wallet</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;cityofzion/neon-js&#39;</span>
+
+<span class="kr">const</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="s1">&#39;6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF&#39;</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Account</span><span class="p">(</span><span class="s1">&#39;9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69&#39;</span><span class="p">)</span>
+
+<span class="c1">// We create a wallet with name &#39;myWallet&#39;. This is optional. The constructor is fine with no arguments.</span>
+<span class="kr">const</span> <span class="nx">w1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">wallet</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;myWallet&#39;</span><span class="p">})</span>
+
+<span class="c1">// We generate a new Account and add it to the wallet</span>
+<span class="nx">w1</span><span class="p">.</span><span class="nx">addAccount</span><span class="p">()</span>
+<span class="c1">// We add Account a to the wallet.</span>
+<span class="nx">w1</span><span class="p">.</span><span class="nx">addAccount</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
+<span class="c1">// We add Account b to the wallet.</span>
+<span class="c1">// Note that Account b is unencrypted and we can add this Account.</span>
+<span class="c1">// The wallet will only error when trying to export an unencrypted key but does not prevent you from adding it.</span>
+<span class="nx">w1</span><span class="p">.</span><span class="nx">addAccount</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If your Account is not encrypted, it is still possible to add it to the Wallet. However, you will be unable to export the wallet until you encrypt it. The Wallet class provides some helper methods to quickly encrypt or decrypt all accounts.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="c1">// encrypting Account a will fail as it has not been unlocked.</span>
+<span class="nx">w1</span><span class="p">.</span><span class="nx">encryptAll</span><span class="p">(</span><span class="s1">&#39;lousypassword&#39;</span><span class="p">)</span> <span class="c1">// returns [false, true]</span>
+
+<span class="c1">// we will decrypt a (account at array position 0)</span>
+<span class="nx">w1</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;city of zion&#39;</span><span class="p">)</span>  <span class="c1">// returns true</span>
+<span class="c1">// so we can encrypt everything with the same password</span>
+<span class="nx">w1</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;lousypassword&#39;</span><span class="p">)</span> <span class="c1">// returns true</span>
+</pre></div>
+</div>
+<p>Similar methods for decryption (<code class="docutils literal"><span class="pre">wallet.decrypt</span></code>, <code class="docutils literal"><span class="pre">wallet.decryptAll</span></code>) is available. Encryption and decryption methods will return booleans which corresponds to the success or failure of the action.</p>
+<p>Do note that decrypting does not mean that you cannot export the wallet. Decryption does not erase the old encryption but merely exposes your keys.</p>
+<p>Once encrypted, you can proceed to export your wallet through <code class="docutils literal"><span class="pre">writeFile</span></code> or <code class="docutils literal"><span class="pre">export</span></code>.</p>
+<p>The static method <code class="docutils literal"><span class="pre">readFile</span></code> is available to construct a wallet through reading a JSON file.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="c1">// writes to a file on cwd</span>
+<span class="nx">w1</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="s1">&#39;mywallet.json&#39;</span><span class="p">)</span>
+
+<span class="c1">// exports as JSON string</span>
+<span class="kr">const</span> <span class="nx">walletString</span> <span class="o">=</span> <span class="nx">w1</span><span class="p">.</span><span class="kr">export</span><span class="p">()</span>
+
+<span class="c1">// read wallet from file</span>
+<span class="kr">const</span> <span class="nx">w2</span> <span class="o">=</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">Wallet</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;mywallet.json&#39;</span><span class="p">)</span>
+
+<span class="c1">// Decryption failed for account[0]</span>
+<span class="nx">w2</span><span class="p">.</span><span class="nx">decryptAll</span><span class="p">(</span><span class="s1">&#39;lousypassword&#39;</span><span class="p">)</span> <span class="c1">// returns [true, true]</span>
+</pre></div>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Do note that NEO-GUI does not support multiple passwords.</li>
+<li>It is possible to change the encryption parameters such that it is harder or easier to encrypt/decrypt.</li>
+</ul>
+<dl class="class">
+<dt id="Wallet">
+<em class="property">class </em><code class="descname">Wallet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Wallet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wallet class to read and integrate a Wallet file into the library. This class is responsible for ensuring that the Wallet File is read correctly and usable by the library.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file</strong> (<em>WalletFile</em>) &#8211; Wallet file</li>
+<li><strong>file.name</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; Name of wallet</li>
+<li><strong>file.scrypt</strong> (<em>WalletScryptParams</em>) &#8211; Scrypt parameters</li>
+<li><strong>file.accounts</strong> (<em>Array.&lt;WalletAccount&gt;</em>) &#8211; Accounts in wallet</li>
+<li><strong>file.extra</strong> (<em>object</em>) &#8211; Extra information of wallet.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="Wallet.name">
+<code class="descclassname">Wallet.</code><code class="descname">name</code><a class="headerlink" href="#Wallet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Wallet.version">
+<code class="descclassname">Wallet.</code><code class="descname">version</code><a class="headerlink" href="#Wallet.version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Wallet.scrypt">
+<code class="descclassname">Wallet.</code><code class="descname">scrypt</code><a class="headerlink" href="#Wallet.scrypt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Wallet.accounts">
+<code class="descclassname">Wallet.</code><code class="descname">accounts</code><a class="headerlink" href="#Wallet.accounts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Wallet.extra">
+<code class="descclassname">Wallet.</code><code class="descname">extra</code><a class="headerlink" href="#Wallet.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="addAccount">
+<code class="descname">addAccount</code><span class="sig-paren">(</span><em>acct</em><span class="sig-paren">)</span><a class="headerlink" href="#addAccount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>acct</strong> (<em>Account|WalletAccount</em>) &#8211; Account or WalletAccount object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>number</strong> &#8211; Index position of Account in array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="decrypt">
+<code class="descname">decrypt</code><span class="sig-paren">(</span><em>index</em>, <em>keyphrase</em><span class="sig-paren">)</span><a class="headerlink" href="#decrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to decrypt Account at index in array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> (<em>number</em>) &#8211; Index of Account in array.</li>
+<li><strong>keyphrase</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; keyphrase</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>boolean</strong> &#8211; Decryption success/failure</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="decryptAll">
+<code class="descname">decryptAll</code><span class="sig-paren">(</span><em>keyphrase</em><span class="sig-paren">)</span><a class="headerlink" href="#decryptAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to decrypt all accounts with keyphrase.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>keyphrase</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Array.&lt;boolean&gt;</strong> &#8211; Each boolean represents if that Account has been decrypted successfully.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="defaultAccount">
+<code class="descname">defaultAccount</code><a class="headerlink" href="#defaultAccount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the default Account according to the following rules:
+1. First Account where isDefault is true.
+2. First Account with a decrypted private key.
+3. First Account with an encrypted private key.
+4. First Account in the array.
+Throws error if no accounts available.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="encrypt">
+<code class="descname">encrypt</code><span class="sig-paren">(</span><em>index</em>, <em>keyphrase</em><span class="sig-paren">)</span><a class="headerlink" href="#encrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to encrypt Account at index in array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> (<em>number</em>) &#8211; Index of Account in array.</li>
+<li><strong>keyphrase</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>boolean</strong> &#8211; Encryption success/failure</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="encryptAll">
+<code class="descname">encryptAll</code><span class="sig-paren">(</span><em>keyphrase</em><span class="sig-paren">)</span><a class="headerlink" href="#encryptAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to encrypt all accounts with keyphrase.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>keyphrase</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Array.&lt;boolean&gt;</strong> &#8211; Each boolean represents if that Account has been encrypted successfully.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="export">
+<code class="descname">export</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export this class as a string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>string</strong> &#8211;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="import">
+<code class="descname">import</code><span class="sig-paren">(</span><em>jsonString</em><span class="sig-paren">)</span><a class="headerlink" href="#import" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a Wallet through a JSON string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>jsonString</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; JSON string</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Wallet</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="readFile">
+<code class="descname">readFile</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#readFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a Wallet file sync.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>filepath</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; Relative path from cwd</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Wallet</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="setDefault">
+<code class="descname">setDefault</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#setDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set Account at index in array to be default account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> (<em>number</em>) &#8211; The index of the Account in accounts array.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="writeFile">
+<code class="descname">writeFile</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#writeFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the Wallet file to a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>filepath</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;boolean&gt;</strong> &#8211; write success / failure</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="methods/index.html" class="btn btn-neutral float-right" title="Methods" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Claims.html" class="btn btn-neutral" title="Claims" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: 3.2.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../3.2.0/wallet/Wallet.html">3.2.0</a></dd>
+            <dd><a href="../2.3.2/index.html">2.3.2</a></dd>
+            <dd><a href="../1.1.2/index.html">1.1.2</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../dev/wallet/Wallet.html">dev</a></dd>
+            <dd><a href="../master/wallet/Wallet.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'3.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
