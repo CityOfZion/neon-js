@@ -13,6 +13,14 @@ describe('Switch API', function () {
   const addressConfig = Object.assign({}, baseConfig, {
     address: testKeys.a.address
   })
+  const checkProperty = (obj, ...props) => {
+    for (const prop of props) {
+      if (!obj.hasOwnProperty(prop)) {
+        return false
+      }
+    }
+    return true
+  }
 
   before(() => {
     mock = setupMock([mockData.neonDB, mockData.neoscan])
@@ -59,6 +67,7 @@ describe('Switch API', function () {
         core.getTransactionHistoryFrom,
         addressConfig
       )
+      historyResponseCheck(response[0])
       return response[0].NEO.should.equal(227)
     })
 
@@ -67,6 +76,7 @@ describe('Switch API', function () {
         core.getClaimsFrom,
         addressConfig
       )
+      claimsResponseCheck(response.claims.claims[0])
       ;(response.claims instanceof Claims).should.equal(true)
       response.net.should.equal('TestNet')
       response.address.should.equal(testKeys.a.address)
@@ -79,6 +89,7 @@ describe('Switch API', function () {
         addressConfig
       )
       const { balance } = response
+      balanceResponseCheck(balance)
       ;(balance instanceof Balance).should.equal(true)
       balance.assetSymbols.should.have.members(['NEO', 'GAS'])
       balance.assets.NEO.balance.toNumber().should.equal(261)
@@ -127,6 +138,7 @@ describe('Switch API', function () {
         core.getTransactionHistoryFrom,
         addressConfig
       )
+      historyResponseCheck(response[0])
       return response[0].NEO.should.equal(1)
     })
 
@@ -135,6 +147,7 @@ describe('Switch API', function () {
         core.getClaimsFrom,
         addressConfig
       )
+      claimsResponseCheck(response.claims.claims[0])
       ;(response.claims instanceof Claims).should.equal(true)
       response.net.should.equal('TestNet')
       response.address.should.equal(testKeys.a.address)
@@ -147,6 +160,7 @@ describe('Switch API', function () {
         addressConfig
       )
       const { balance } = response
+      balanceResponseCheck(balance)
       ;(balance instanceof Balance).should.equal(true)
       balance.assetSymbols.should.have.members(['NEO', 'GAS'])
       balance.assets.NEO.balance.toNumber().should.equal(261)
@@ -157,4 +171,40 @@ describe('Switch API', function () {
       return balance.address.should.equal(testKeys.a.address)
     })
   })
+
+  const historyResponseCheck = obj =>
+    checkProperty(
+      obj,
+      'GAS',
+      'NEO',
+      'block_index',
+      'gas_sent',
+      'neo_sent',
+      'txid'
+    ).should.equal(true)
+
+  const claimsResponseCheck = obj =>
+    checkProperty(obj, 'claim', 'txid', 'value', 'start', 'end').should.equal(
+      true
+    )
+
+  const balanceResponseCheck = obj => {
+    checkProperty(
+      obj,
+      'address',
+      'net',
+      'assetSymbols',
+      'assets',
+      'tokenSymbols',
+      'tokens'
+    ).should.equal(true)
+    checkProperty(obj.assets, 'NEO', 'GAS').should.equal(true)
+    return checkProperty(
+      obj.assets.GAS,
+      'balance',
+      'spent',
+      'unspent',
+      'unconfirmed'
+    ).should.equal(true)
+  }
 })
