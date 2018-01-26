@@ -4,12 +4,41 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
-dev
+3.2.0
 =====
 
-- Override more methods in Fixed8 to return Fixed8s.
-- Update util functions to use Fixed8 internally.
-- Mark ``api.nep5.doTransferToken`` for deprecation.
+- Wallet
+
+  - Implement encryptAsync and decryptAsync using a new scrypt library. Further work will be done to convert the existing encrypt/decrypt to use the new library.
+  - Claims object is now slicable, allowing users to break up the Claims object into smaller Claims.
+
+- Util
+
+  - Override more methods in Fixed8 to return Fixed8s.
+  - Update util functions to use Fixed8 internally.
+
+- API
+
+  - Mark ``api.nep5.doTransferToken`` for deprecation.
+
+- Sc
+
+  - createScript now accepts an array of scripts to parse and concatenate.
+
+- Docs
+
+  - Start to overhaul docs to favor examples and integrating the reference into the main docs instead of having it as a standalone section.
+
+- Others
+
+  - NPM packages updated to latest.
+
+- Fixes
+
+  - Fix scryptParams to use n,r,p
+  - Update default RPC endpoints to use https
+  - Fix Account defaults
+  - Fix _emitNum emitting trimmed hex numbers
 
 3.1.0
 ======
