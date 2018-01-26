@@ -14,6 +14,9 @@
   <a href="https://circleci.com/gh/CityOfZion/neon-js">
     <img src="https://circleci.com/gh/CityOfZion/neon-js.svg?style=svg">
   </a>
+  <a href="https://www.codetriage.com/cityofzion/neon-js">
+    <img src="https://www.codetriage.com/cityofzion/neon-js/badges/users.svg">
+  </a>
 </p>
 
 ## Overview
