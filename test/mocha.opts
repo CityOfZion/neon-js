@@ -1,0 +1,2 @@
+--require babel-core/register ./test/common.js
+--recursive

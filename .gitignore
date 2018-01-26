@@ -1,11 +1,18 @@
 node_modules
-/.jshintrc
 /.npmignore
 /.project
 /.settings/
-/npm-debug.log
+
 
 /docs/_build/
 build
 
+# Logs
 *.log
+
+# Coverage
+/.nyc_output
+/coverage
+
+# IDE specific
+/.vscode

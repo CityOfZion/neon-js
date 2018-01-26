@@ -13,28 +13,30 @@ const versionRegex = /NEO: (\d+\.\d+\.\d+)/
  */
 class RPCClient {
   constructor (net, version = RPC_VERSION) {
-    /**
-     * @type {string}
-     * The URL of the node that this client queries.
-     */
     if (net === NEO_NETWORK.MAIN) {
       this.net = DEFAULT_RPC.MAIN
     } else if (net === NEO_NETWORK.TEST) {
       this.net = DEFAULT_RPC.TEST
     } else {
+      /**
+        * The URL of the node that this client queries.
+        * @type string
+        */
       this.net = net
     }
     /**
-     * @type {Query[]}
      * History of queries made with this client.
+     * @type Query[]
      */
+
     this.history = []
 
+    /**
+     * Version of this client. Used to check if RPC call is implemented.
+     * @type string
+     */
+    this.version = ''
     if (semver.valid(version)) {
-      /**
-      * @type {string}
-      * Version of this client. Used to check if RPC call is implemented.
-      */
       this.version = semver.clean(version)
     } else {
       throw new Error(`Invalid Version: ${version}`)

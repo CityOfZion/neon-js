@@ -3,26 +3,34 @@ import { serializeTransaction } from '../transactions'
 import { DEFAULT_REQ } from '../consts'
 
 /**
+ * @typedef RPCRequest
+ * @property {string} method - RPC Method to call.
+ * @property {any[]} params - Parameters to pass to RPC method.
+ * @property {number} id - ID of this request. Will be passed back in response.
+ */
+/**
  * @class Query
  * @classdesc
  * A Query object helps us to construct and record requests
- * @param {object} req
+ * @param {RPCRequest} req - Request object
  */
 class Query {
   constructor (req) {
     /**
-     * @type {object}
      * The request object.
+     * @type {object}
      */
     this.req = Object.assign({}, DEFAULT_REQ, req)
     /**
-     * @type {boolean}
      * If this request has been completed.
+     * @type {boolean}
+     * @default false
      */
     this.completed = false
     /**
-     * @type {function}
      * Optional parsing function for the response.
+     * @type {function}
+     * @default null
      */
     this.parse = null
   }

@@ -1,0 +1,84 @@
+{
+  "name": "MyWallet",
+  "version":"1.0",
+  "scrypt": {
+    "n": 16384,
+    "r": 8,
+    "p": 8
+  },
+  "accounts": [
+    {
+      "address": "AQLASLtT6pWbThcSCYU1biVqhMnzhTgLFq",
+      "label": "MyAddress",
+      "isDefault": false,
+      "lock": false,
+      "key": "6PYWB8m1bCnu5bQkRUKAwbZp2BHNvQ3BQRLbpLdTuizpyLkQPSZbtZfoxx",
+      "contract": {
+        "script": "",
+        "parameters": [
+          {
+            "name": "signature",
+            "type": "Signature"
+          }
+        ],
+        "deployed": false
+      },
+      "extra": null
+    },
+    {
+      "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+      "label": "addressA",
+      "isDefault": true,
+      "lock": false,
+      "key": "6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF",
+      "contract": {
+        "script": "",
+        "parameters": [
+          {
+            "name": "signature",
+            "type": "Signature"
+          }
+        ],
+        "deployed": false
+      },
+      "extra": null
+    },
+    {
+      "address": "ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s",
+      "label": "addressB",
+      "isDefault": false,
+      "lock": false,
+      "key": "6PYWVp3xfgvnuNKP7ZavSViYvvim2zuzx9Q33vuWZr8aURiKeJ6Zm7BfPQ",
+      "contract": {
+        "script": "",
+        "parameters": [
+          {
+            "name": "signature",
+            "type": "Signature"
+          }
+        ],
+        "deployed": false
+      },
+      "extra": null
+    },
+    {
+      "address": "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
+      "label": "addressC",
+      "isDefault": false,
+      "lock": false,
+      "key": null,
+      "contract": {
+        "script": "",
+        "parameters": [
+          {
+            "name": "signature",
+            "type": "Signature"
+          }
+        ],
+        "deployed": false
+      },
+      "extra": null
+    }
+  ],
+  "extra": null
+}

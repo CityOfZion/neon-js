@@ -1,6 +1,7 @@
 import * as core from './core'
 import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
 import { encrypt, decrypt } from './nep2'
+import { DEFAULT_ACCOUNT_CONTRACT } from '../consts'
 import util from 'util'
 
 /**
@@ -17,21 +18,17 @@ class Account {
     this.extra = null
     this.isDefault = false
     this.lock = false
-    this.contract = {
-      script: '',
-      parameters: [],
-      deployed: false
-    }
+    this.contract = Object.assign({}, DEFAULT_ACCOUNT_CONTRACT)
     if (!str) {
       this._privateKey = core.generatePrivateKey()
     } else if (typeof str === 'object') {
       this._encrypted = str.key
       this._address = str.address
-      this.label = str.label
+      this.label = str.label || ''
       this.extra = str.extra
-      this.isDefault = str.isDefault
-      this.lock = str.lock
-      this.contract = str.contract
+      this.isDefault = str.isDefault || false
+      this.lock = str.lock || false
+      this.contract = str.contract || Object.assign({}, DEFAULT_ACCOUNT_CONTRACT)
     } else if (isPrivateKey(str)) {
       this._privateKey = str
     } else if (isPublicKey(str, false)) {
@@ -62,12 +59,16 @@ class Account {
   _updateContractScript () {
     try {
       if (this.contract.script === '') {
-        this.contract.script = core.getVerificationScriptFromPublicKey(this.publicKey)
+        const publicKey = this.publicKey
+        this.contract.script = core.getVerificationScriptFromPublicKey(publicKey)
       }
     } catch (e) { }
   }
 
-  /** @type {string} */
+  /**
+   * Key encrypted according to NEP2 standard.
+   * @type {string}
+   */
   get encrypted () {
     if (this._encrypted) {
       return this._encrypted
@@ -76,7 +77,10 @@ class Account {
     }
   }
 
-  /** @type {string} */
+  /**
+   * Case sensitive key of 52 characters long.
+   * @type {string}
+   */
   get WIF () {
     if (this._WIF) {
       return this._WIF
@@ -86,7 +90,10 @@ class Account {
     }
   }
 
-  /** @type {string} */
+  /**
+   * Key of 64 hex characters.
+   * @type {string}
+   */
   get privateKey () {
     if (this._privateKey) {
       return this._privateKey
@@ -125,7 +132,10 @@ class Account {
     }
   }
 
-  /** @type {string} */
+  /**
+   * Script hash of the key. This format is usually used in the code instead of address as this is a non case sensitive version.
+   * @type {string}
+   */
   get scriptHash () {
     if (this._scriptHash) {
       return this._scriptHash
@@ -140,7 +150,10 @@ class Account {
     }
   }
 
-  /** @type {string} */
+  /**
+   * Public address used to receive transactions. Case sensitive.
+   * @type {string}
+   */
   get address () {
     if (this._address) {
       return this._address

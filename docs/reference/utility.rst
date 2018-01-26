@@ -48,5 +48,5 @@ Classes
 .. autoclass:: StringStream
   :members:
 
-..autoclass:: Fixed8
+.. autoclass:: Fixed8
   :members:
