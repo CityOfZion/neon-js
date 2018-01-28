@@ -3,6 +3,9 @@ import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
 import { encrypt, decrypt } from './nep2'
 import { DEFAULT_ACCOUNT_CONTRACT } from '../consts'
 import util from 'util'
+import logger from '../logging'
+
+const log = logger('wallet')
 
 /**
  * @class Account
@@ -61,6 +64,7 @@ class Account {
       if (this.contract.script === '') {
         const publicKey = this.publicKey
         this.contract.script = core.getVerificationScriptFromPublicKey(publicKey)
+        log.debug(`Updated ContractScript for Account: ${this.label}`)
       }
     } catch (e) { }
   }
