@@ -6,7 +6,7 @@ import TxAttrUsage from './txAttrUsage'
 import * as comp from './components'
 import * as core from './core'
 import * as exc from './exclusive'
-import logger from '../logger'
+import logger from '../logging'
 
 const log = logger('tx')
 

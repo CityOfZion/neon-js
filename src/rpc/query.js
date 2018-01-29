@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { serializeTransaction } from '../transactions'
 import { DEFAULT_REQ } from '../consts'
-import logger from './logging'
+import logger from '../logging'
 
 const log = logger('rpc')
 
