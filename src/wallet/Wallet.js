@@ -53,6 +53,8 @@ class Wallet {
     }
     /** @type {object|null} */
     this.extra = extra
+
+    log.info(`New Wallet created: ${this.name}`)
   }
 
   /**
@@ -94,6 +96,7 @@ class Wallet {
   * @return {Wallet}
   */
   static readFile (filepath) {
+    log.info(`Importing wallet from file: ${filepath}`)
     return this.import(fs.readFileSync(filepath, 'utf8'))
   }
 
@@ -142,6 +145,7 @@ class Wallet {
     this.accounts.map((acct, i) => {
       results.push(this.decrypt(i, keyphrase))
     })
+    log.info(`decryptAll for Wallet ${this.name}: ${results.reduce((c, p) => { return p + (c ? '1' : '0') }, '')}`)
     return results
   }
 
@@ -170,6 +174,7 @@ class Wallet {
     this.accounts.map((acct, i) => {
       results.push(this.encrypt(i, keyphrase))
     })
+    log.info(`decryptAll for Wallet ${this.name}: ${results.reduce((c, p) => { return p + (c ? '1' : '0') }, '')}`)
     return results
   }
 
@@ -196,6 +201,7 @@ class Wallet {
     for (let i = 0; i < this.accounts.length; i++) {
       this.accounts[i].isDefault = i === index
     }
+    log.info(`Set Account: ${this.accounts[index]} as default for Wallet ${this.name}`)
   }
 
   /**
@@ -204,6 +210,7 @@ class Wallet {
    * @return {Promise<boolean>} write success / failure
    */
   writeFile (filepath) {
+    log.info(`Exporting wallet file to: ${filepath}`)
     return fs.writeFile(filepath, this.export(), (err) => {
       if (err) throw err
       console.log('Wallet file written!')
