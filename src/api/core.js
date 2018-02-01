@@ -1,4 +1,4 @@
-import { Account } from '../wallet'
+import { Account, getScriptHashFromAddress } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Query } from '../rpc'
 import { Transaction, TransactionOutput, TxAttrUsage } from '../transactions'
@@ -31,8 +31,10 @@ export const sendAsset = config => {
   return loadBalance(getRPCEndpointFrom, config)
     .then(url => Object.assign(config, { url }))
     .then(c => loadBalance(getBalanceFrom, config))
+    .then(c => addAttributesIfExecutingAsContract(c))
     .then(c => createTx(c, 'contract'))
     .then(c => signTx(c))
+    .then(c => attachContractIfExecutingAsContract(c))
     .then(c => sendTx(c))
     .catch(err => {
       const dump = {
@@ -90,10 +92,10 @@ export const doInvoke = config => {
   return loadBalance(getRPCEndpointFrom, config)
     .then(url => Object.assign(config, { url }))
     .then(c => loadBalance(getBalanceFrom, config))
-    .then(c => addAttributesForMintToken(c))
+    .then(c => addAttributesIfExecutingAsContract(c))
     .then(c => createTx(c, 'invocation'))
     .then(c => signTx(c))
-    .then(c => attachInvokedContractForMintToken(c))
+    .then(c => attachContractIfExecutingAsContract(c))
     .then(c => sendTx(c))
     .catch(err => {
       const dump = {
@@ -122,7 +124,7 @@ export const createTx = (config, txType) => {
     case 'contract':
     case 128:
       checkProperty(config, 'balance', 'intents')
-      tx = Transaction.createContractTx(config.balance, config.intents)
+      tx = Transaction.createContractTx(config.balance, config.intents, config.override)
       break
     case 'invocation':
     case 209:
@@ -153,7 +155,7 @@ export const signTx = config => {
     promise = config.signingFunction(config.tx, acct.publicKey)
   } else if (config.privateKey) {
     let acct = new Account(config.privateKey)
-    if (config.address !== acct.address) {
+    if (config.address !== acct.address && !sendingAddressIsContract(config)) {
       return Promise.reject(
         new Error('Private Key and Balance address does not match!')
       )
@@ -220,49 +222,72 @@ export const makeIntent = (assetAmts, address) => {
 }
 
 /**
+ * Helper method to check if we're sending assets from the contract's balance
+ * @param {object} config - Configuration object.
+ * @param {object} config.script - VM script object (string not supported).
+ * @return {bool} If it's from the contract or not
+ */
+const sendingAddressIsContract = config => {
+  if (typeof config.script === 'object' && config.script.scriptHash) {
+    const sendingAddressScriptHash = getScriptHashFromAddress(config.address)
+    if (sendingAddressScriptHash == config.script.scriptHash) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
  * Adds attributes to the override object for mintTokens invocations.
  * @param {object} config - Configuration object.
  * @return {object} Configuration object.
  */
-const addAttributesForMintToken = config => {
+const addAttributesIfExecutingAsContract = config => {
   if (!config.override) config.override = {}
-  if (
-    typeof config.script === 'object' &&
-    config.script.operation === 'mintTokens' &&
-    config.script.scriptHash
-  ) {
+
+  if (sendingAddressIsContract(config)) {
+    const acct = config.privateKey ? new Account(config.privateKey) : new Account(config.publicKey)
     config.override.attributes = [
       {
-        data: reverseHex(config.script.scriptHash),
+        data: reverseHex(acct.scriptHash),
         usage: TxAttrUsage.Script
       }
     ]
   }
+
   return config
 }
 
 /**
- * Adds the contractState to mintTokens invocations.
+ * Adds the contractState to invocations sending from the contract's balance.
  * @param {object} config - Configuration object.
  * @return {object} Configuration object.
  */
-const attachInvokedContractForMintToken = config => {
-  if (
-    typeof config.script === 'object' &&
-    config.script.operation === 'mintTokens' &&
-    config.script.scriptHash
-  ) {
+const attachContractIfExecutingAsContract = config => {
+  if (sendingAddressIsContract(config)) {
     return Query.getContractState(config.script.scriptHash)
       .execute(config.url)
       .then(contractState => {
+        const { parameters, script } = contractState.result
         const attachInvokedContract = {
-          invocationScript: '0000',
-          verificationScript: contractState.result.script
+          invocationScript: ('00').repeat(parameters.length),
+          verificationScript: script
         }
-        config.tx.scripts.unshift(attachInvokedContract)
+
+        // We need to order this for the VM.
+        const acct = config.privateKey ? new Account(config.privateKey) : new Account(config.publicKey)
+        const sendingAddressScriptHash = getScriptHashFromAddress(config.address)
+        if (parseInt(sendingAddressScriptHash, 16) > parseInt(acct.scriptHash, 16)) {
+          config.tx.scripts.push(attachInvokedContract)
+        } else {
+          config.tx.scripts.unshift(attachInvokedContract)
+        }
+
         return config
       })
   }
+
   return config
 }
 
@@ -278,7 +303,6 @@ const checkProperty = (obj, ...props) => {
     }
   }
 }
-
 /**
  * These are a set of helper methods that can be used to retrieve information from 3rd party API in conjunction with the API chain methods
  */

@@ -157,6 +157,33 @@ describe('Core API', function () {
         })
     })
 
+    it('sign for contract assets', () => {
+      return core.signTx({
+        tx,
+        address: 'AXhgHZtAYC8ZztJo8B1LV2kLyeMrXr39La',
+        privateKey: testKeys.a.privateKey,
+        script: {
+          scriptHash: 'a3d29a3bfe0e0fc00928847d3e4db82b78ddb6ae'
+        }
+      })
+        .then((conf) => {
+          conf.tx.scripts.length.should.equal(1)
+          conf.tx.scripts[0].should.eql(signature)
+        })
+    })
+
+    it('cannot sign for contract assets with address that does not match', () => {
+      const config = {
+        tx,
+        address: 'AXhgHZtAYC8ZztJo8B1LV2kLyeMrXr39La',
+        privateKey: testKeys.a.privateKey,
+        script: {
+          scriptHash: testKeys.a.scriptHash
+        }
+      }
+      return core.signTx(config).should.be.rejectedWith(Error)
+    })
+
     it('sign with signingFunction', () => {
       const signingFunction = (tx, publicKey) => {
         return Promise.resolve(signTransaction(tx, testKeys.a.privateKey))
