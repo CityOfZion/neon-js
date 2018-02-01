@@ -230,7 +230,7 @@ export const makeIntent = (assetAmts, address) => {
 const sendingAddressIsContract = config => {
   if (typeof config.script === 'object' && config.script.scriptHash) {
     const sendingAddressScriptHash = getScriptHashFromAddress(config.address)
-    if (sendingAddressScriptHash == config.script.scriptHash) {
+    if (sendingAddressScriptHash === config.script.scriptHash) {
       return true
     }
   }
