@@ -31,10 +31,10 @@ export const sendAsset = config => {
   return loadBalance(getRPCEndpointFrom, config)
     .then(url => Object.assign(config, { url }))
     .then(c => loadBalance(getBalanceFrom, config))
-    .then(c => addAttributesIfExecutingAsContract(c))
+    .then(c => addAttributesIfExecutingAsSmartContract(c))
     .then(c => createTx(c, 'contract'))
     .then(c => signTx(c))
-    .then(c => attachContractIfExecutingAsContract(c))
+    .then(c => attachContractIfExecutingAsSmartContract(c))
     .then(c => sendTx(c))
     .catch(err => {
       const dump = {
@@ -92,10 +92,12 @@ export const doInvoke = config => {
   return loadBalance(getRPCEndpointFrom, config)
     .then(url => Object.assign(config, { url }))
     .then(c => loadBalance(getBalanceFrom, config))
-    .then(c => addAttributesIfExecutingAsContract(c))
+    .then(c => addAttributesIfExecutingAsSmartContract(c))
+    .then(c => addAttributesForMintToken(c))
     .then(c => createTx(c, 'invocation'))
     .then(c => signTx(c))
-    .then(c => attachContractIfExecutingAsContract(c))
+    .then(c => attachInvokedContractForMintToken(c))
+    .then(c => attachContractIfExecutingAsSmartContract(c))
     .then(c => sendTx(c))
     .catch(err => {
       const dump = {
@@ -155,7 +157,7 @@ export const signTx = config => {
     promise = config.signingFunction(config.tx, acct.publicKey)
   } else if (config.privateKey) {
     let acct = new Account(config.privateKey)
-    if (config.address !== acct.address && !sendingAddressIsContract(config)) {
+    if (config.address !== acct.address && !sendingAddressIsSmartContract(config)) {
       return Promise.reject(
         new Error('Private Key and Balance address does not match!')
       )
@@ -222,12 +224,59 @@ export const makeIntent = (assetAmts, address) => {
 }
 
 /**
+ * Adds attributes to the override object for mintTokens invocations.
+ * @param {object} config - Configuration object.
+ * @return {object} Configuration object.
+ */
+const addAttributesForMintToken = config => {
+  if (!config.override) config.override = {}
+  if (
+    typeof config.script === 'object' &&
+    config.script.operation === 'mintTokens' &&
+    config.script.scriptHash
+  ) {
+    config.override.attributes = [
+      {
+        data: reverseHex(config.script.scriptHash),
+        usage: TxAttrUsage.Script
+      }
+    ]
+  }
+  return config
+}
+
+/**
+ * Adds the contractState to mintTokens invocations.
+ * @param {object} config - Configuration object.
+ * @return {object} Configuration object.
+ */
+const attachInvokedContractForMintToken = config => {
+  if (
+    typeof config.script === 'object' &&
+    config.script.operation === 'mintTokens' &&
+    config.script.scriptHash
+  ) {
+    return Query.getContractState(config.script.scriptHash)
+      .execute(config.url)
+      .then(contractState => {
+        const attachInvokedContract = {
+          invocationScript: '0000',
+          verificationScript: contractState.result.script
+        }
+        config.tx.scripts.unshift(attachInvokedContract)
+        return config
+      })
+  }
+  return config
+}
+
+/**
  * Helper method to check if we're sending assets from the contract's balance
  * @param {object} config - Configuration object.
  * @param {object} config.script - VM script object (string not supported).
  * @return {bool} If it's from the contract or not
  */
-const sendingAddressIsContract = config => {
+const sendingAddressIsSmartContract = config => {
   if (typeof config.script === 'object' && config.script.scriptHash) {
     const sendingAddressScriptHash = getScriptHashFromAddress(config.address)
     if (sendingAddressScriptHash === config.script.scriptHash) {
@@ -243,10 +292,10 @@ const sendingAddressIsContract = config => {
  * @param {object} config - Configuration object.
  * @return {object} Configuration object.
  */
-const addAttributesIfExecutingAsContract = config => {
+const addAttributesIfExecutingAsSmartContract = config => {
   if (!config.override) config.override = {}
 
-  if (sendingAddressIsContract(config)) {
+  if (sendingAddressIsSmartContract(config)) {
     const acct = config.privateKey ? new Account(config.privateKey) : new Account(config.publicKey)
     config.override.attributes = [
       {
@@ -264,8 +313,8 @@ const addAttributesIfExecutingAsContract = config => {
  * @param {object} config - Configuration object.
  * @return {object} Configuration object.
  */
-const attachContractIfExecutingAsContract = config => {
-  if (sendingAddressIsContract(config)) {
+const attachContractIfExecutingAsSmartContract = config => {
+  if (sendingAddressIsSmartContract(config)) {
     return Query.getContractState(config.script.scriptHash)
       .execute(config.url)
       .then(contractState => {

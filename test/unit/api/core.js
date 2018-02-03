@@ -157,13 +157,16 @@ describe('Core API', function () {
         })
     })
 
-    it('sign for contract assets', () => {
+    it('sign for smart contract assets', () => {
+      const testSmartContractAddress = 'AXhgHZtAYC8ZztJo8B1LV2kLyeMrXr39La'
+      const testSmartContractScriptAddress = 'a3d29a3bfe0e0fc00928847d3e4db82b78ddb6ae'
+
       return core.signTx({
         tx,
-        address: 'AXhgHZtAYC8ZztJo8B1LV2kLyeMrXr39La',
+        address: testSmartContractAddress,
         privateKey: testKeys.a.privateKey,
         script: {
-          scriptHash: 'a3d29a3bfe0e0fc00928847d3e4db82b78ddb6ae'
+          scriptHash: testSmartContractScriptAddress
         }
       })
         .then((conf) => {
@@ -172,10 +175,12 @@ describe('Core API', function () {
         })
     })
 
-    it('cannot sign for contract assets with address that does not match', () => {
+    it('cannot sign for smart contract assets with address that does not match', () => {
+      const testSmartContractAddress = 'AXhgHZtAYC8ZztJo8B1LV2kLyeMrXr39La'
+
       const config = {
         tx,
-        address: 'AXhgHZtAYC8ZztJo8B1LV2kLyeMrXr39La',
+        address: testSmartContractAddress,
         privateKey: testKeys.a.privateKey,
         script: {
           scriptHash: testKeys.a.scriptHash
