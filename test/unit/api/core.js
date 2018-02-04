@@ -157,6 +157,45 @@ describe('Core API', function () {
         })
     })
 
+    it('cannot sign for assets on address mismatch', () => {
+      return core.signTx({
+        tx,
+        address,
+        privateKey: testKeys.b.privateKey
+      })
+        .then((conf) => {
+          conf.tx.scripts.length.should.equal(1)
+          conf.tx.scripts[0].should.eql(signature)
+        })
+        .should.be.rejectedWith(Error)
+    })
+
+    it('sign for smart contract assets', () => {
+      const testSmartContractAddress = 'AXhgHZtAYC8ZztJo8B1LV2kLyeMrXr39La'
+
+      return core.signTx({
+        tx,
+        address: testSmartContractAddress,
+        privateKey: testKeys.a.privateKey,
+        sendingFromSmartContract: true
+      })
+        .then((conf) => {
+          conf.tx.scripts.length.should.equal(1)
+          conf.tx.scripts[0].should.eql(signature)
+        })
+    })
+
+    it('cannot sign for smart contract assets without option', () => {
+      const testSmartContractAddress = 'AXhgHZtAYC8ZztJo8B1LV2kLyeMrXr39La'
+
+      const config = {
+        tx,
+        address: testSmartContractAddress,
+        privateKey: testKeys.a.privateKey
+      }
+      return core.signTx(config).should.be.rejectedWith(Error)
+    })
+
     it('sign with signingFunction', () => {
       const signingFunction = (tx, publicKey) => {
         return Promise.resolve(signTransaction(tx, testKeys.a.privateKey))
