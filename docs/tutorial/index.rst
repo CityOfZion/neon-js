@@ -7,3 +7,4 @@ Tutorial
 
   basic-sendasset.rst
   basic-claimgas.rst
+  basic-createscript.rst
