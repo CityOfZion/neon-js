@@ -157,17 +157,27 @@ describe('Core API', function () {
         })
     })
 
+    it('cannot sign for assets on address mismatch', () => {
+      return core.signTx({
+        tx,
+        address,
+        privateKey: testKeys.b.privateKey
+      })
+        .then((conf) => {
+          conf.tx.scripts.length.should.equal(1)
+          conf.tx.scripts[0].should.eql(signature)
+        })
+        .should.be.rejectedWith(Error)
+    })
+
     it('sign for smart contract assets', () => {
       const testSmartContractAddress = 'AXhgHZtAYC8ZztJo8B1LV2kLyeMrXr39La'
-      const testSmartContractScriptAddress = 'a3d29a3bfe0e0fc00928847d3e4db82b78ddb6ae'
 
       return core.signTx({
         tx,
         address: testSmartContractAddress,
         privateKey: testKeys.a.privateKey,
-        script: {
-          scriptHash: testSmartContractScriptAddress
-        }
+        sendingFromSmartContract: true
       })
         .then((conf) => {
           conf.tx.scripts.length.should.equal(1)
@@ -175,16 +185,13 @@ describe('Core API', function () {
         })
     })
 
-    it('cannot sign for smart contract assets with address that does not match', () => {
+    it('cannot sign for smart contract assets without option', () => {
       const testSmartContractAddress = 'AXhgHZtAYC8ZztJo8B1LV2kLyeMrXr39La'
 
       const config = {
         tx,
         address: testSmartContractAddress,
-        privateKey: testKeys.a.privateKey,
-        script: {
-          scriptHash: testKeys.a.scriptHash
-        }
+        privateKey: testKeys.a.privateKey
       }
       return core.signTx(config).should.be.rejectedWith(Error)
     })

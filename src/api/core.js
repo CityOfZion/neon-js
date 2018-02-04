@@ -25,6 +25,7 @@ const log = logger('api')
  * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
  * @param {string} [config.publicKey] - A public key for the singing function. Either this or privateKey is required.
  * @param {TransactionOutput[]} config.intents - Intents.
+ * @param {bool} [config.sendingFromSmartContract] - Optionally specify that the source address is a smart contract that doesn't correspond to the private key.
  * @return {object} Configuration object.
  */
 export const sendAsset = config => {
@@ -86,6 +87,7 @@ export const claimGas = config => {
  * @param {object} [config.intents] - Intents
  * @param {string} config.script - VM script. Must include empty args parameter even if no args are present
  * @param {number} config.gas - gasCost of VM script.
+ * @param {bool} [config.sendingFromSmartContract] - Optionally specify that the source address is a smart contract that doesn't correspond to the private key.
  * @return {object} Configuration object.
  */
 export const doInvoke = config => {
@@ -147,6 +149,7 @@ export const createTx = (config, txType) => {
  * @param {string} [config.privateKey] - private key to sign with.
  * @param {string} [config.publicKey] - public key. Required if using signingFunction.
  * @param {function} [config.signingFunction] - External signing function. Requires publicKey.
+ * @param {bool} [config.sendingFromSmartContract] - Optionally specify that the source address is a smart contract that doesn't correspond to the private key.
  * @return {Promise<object>} Configuration object.
  */
 export const signTx = config => {
@@ -157,7 +160,7 @@ export const signTx = config => {
     promise = config.signingFunction(config.tx, acct.publicKey)
   } else if (config.privateKey) {
     let acct = new Account(config.privateKey)
-    if (config.address !== acct.address && !sendingAddressIsSmartContract(config)) {
+    if (config.address !== acct.address && !config.sendingFromSmartContract) {
       return Promise.reject(
         new Error('Private Key and Balance address does not match!')
       )
@@ -271,23 +274,6 @@ const attachInvokedContractForMintToken = config => {
 }
 
 /**
- * Helper method to check if we're sending assets from the contract's balance
- * @param {object} config - Configuration object.
- * @param {object} config.script - VM script object (string not supported).
- * @return {bool} If it's from the contract or not
- */
-const sendingAddressIsSmartContract = config => {
-  if (typeof config.script === 'object' && config.script.scriptHash) {
-    const sendingAddressScriptHash = getScriptHashFromAddress(config.address)
-    if (sendingAddressScriptHash === config.script.scriptHash) {
-      return true
-    }
-  }
-
-  return false
-}
-
-/**
  * Adds attributes to the override object for mintTokens invocations.
  * @param {object} config - Configuration object.
  * @return {object} Configuration object.
@@ -295,7 +281,7 @@ const sendingAddressIsSmartContract = config => {
 const addAttributesIfExecutingAsSmartContract = config => {
   if (!config.override) config.override = {}
 
-  if (sendingAddressIsSmartContract(config)) {
+  if (config.sendingFromSmartContract) {
     const acct = config.privateKey ? new Account(config.privateKey) : new Account(config.publicKey)
     config.override.attributes = [
       {
@@ -314,8 +300,10 @@ const addAttributesIfExecutingAsSmartContract = config => {
  * @return {object} Configuration object.
  */
 const attachContractIfExecutingAsSmartContract = config => {
-  if (sendingAddressIsSmartContract(config)) {
-    return Query.getContractState(config.script.scriptHash)
+  if (config.sendingFromSmartContract) {
+    const smartContractScriptHash = getScriptHashFromAddress(config.address)
+
+    return Query.getContractState(smartContractScriptHash)
       .execute(config.url)
       .then(contractState => {
         const { parameters, script } = contractState.result
@@ -326,8 +314,7 @@ const attachContractIfExecutingAsSmartContract = config => {
 
         // We need to order this for the VM.
         const acct = config.privateKey ? new Account(config.privateKey) : new Account(config.publicKey)
-        const sendingAddressScriptHash = getScriptHashFromAddress(config.address)
-        if (parseInt(sendingAddressScriptHash, 16) > parseInt(acct.scriptHash, 16)) {
+        if (parseInt(smartContractScriptHash, 16) > parseInt(acct.scriptHash, 16)) {
           config.tx.scripts.push(attachInvokedContract)
         } else {
           config.tx.scripts.unshift(attachInvokedContract)
