@@ -29,6 +29,13 @@ describe('ContractParam', function () {
     cp2.should.eql({ type: 'Integer', value: 10 })
   })
 
+  it('Hash160', () => {
+    const cp1 = ContractParam.hash160('cef0c0fdcfe7838eff6ff104f9cdec2922297537')
+    cp1.should.eql({type: 'Hash160', value: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'})
+    const cp2 = ContractParam.hash160('ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW')
+    cp2.should.eql({type: 'Hash160', value: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'})
+  })
+
   describe('ByteArray', function () {
     it('bytearray', () => {
       const cp = ContractParam.byteArray('010101')

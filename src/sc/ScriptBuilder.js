@@ -92,6 +92,8 @@ class ScriptBuilder extends StringStream {
         return this._emitString(param.value)
       case 'Array':
         return this._emitArray(param.value)
+      case 'Hash160':
+        return this._emitString(reverseHex(param.value))
     }
   }
 
