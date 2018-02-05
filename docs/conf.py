@@ -61,7 +61,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'neon-js'
-copyright = u'2017, Ethan Fast, Jun Xiang Yak'
+copyright = u'2017 - 2018, Ethan Fast, Jun Xiang Yak'
 author = u'Ethan Fast, Jun Xiang Yak'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -165,6 +165,6 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'neon-js', u'neon-js Documentation',
-     author, 'neon-js', 'One line description of project.',
+     author, 'neon-js', 'JS SDK for interacting with NEO blockchain',
      'Miscellaneous'),
 ]

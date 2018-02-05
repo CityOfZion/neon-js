@@ -125,6 +125,19 @@ class Balance {
   }
 
   /**
+   * Informs the Balance that the next block is confirmed, thus moving all unconfirmed transaction to unspent.
+   * @return {Balance}
+   */
+  confirm () {
+    for (const sym of this.assetSymbols) {
+      let assetBalance = this.assets[sym]
+      assetBalance.unspent = assetBalance.unspent.concat(assetBalance.unconfirmed)
+      assetBalance.unconfirmed = []
+    }
+    return this
+  }
+
+  /**
    * Export this class as a string
    * @return {string}
    */
