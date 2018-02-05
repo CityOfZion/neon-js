@@ -216,7 +216,7 @@ describe('Query', function () {
         .then((res) => {
           console.log(res)
           res.result.should.have.all.keys(['port', 'nonce', 'useragent'])
-          res.result.useragent.should.match(/NEO: (\d+\.\d+\.\d+)/)
+          res.result.useragent.should.match(/NEO:(\d+\.\d+\.\d+)/)
         })
     })
 

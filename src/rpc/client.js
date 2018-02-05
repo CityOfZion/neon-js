@@ -6,7 +6,7 @@ import logger from '../logging'
 
 const log = logger('rpc')
 
-const versionRegex = /NEO: (\d+\.\d+\.\d+)/
+const versionRegex = /NEO:(\d+\.\d+\.\d+)/
 /**
  * @class RPCClient
  * @classdesc
