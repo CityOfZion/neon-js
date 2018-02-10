@@ -290,7 +290,7 @@ const attachInvokedContractForMintToken = (config) => {
           invocationScript: '0000',
           verificationScript: contractState.result.script
         }
-        config.tx.scripts.unshift(attachInvokedContract)
+        config.tx.scripts.push(attachInvokedContract)
         return config
       })
   }
