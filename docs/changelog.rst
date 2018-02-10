@@ -4,6 +4,11 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
+2.3.4
+=====
+
+  - Fix ``TxAttrUsage`` not being imported properly.
+
 2.3.3
 =====
 
