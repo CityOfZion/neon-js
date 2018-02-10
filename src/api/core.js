@@ -158,6 +158,10 @@ export const signTx = config => {
   if (config.signingFunction) {
     let acct = new Account(config.publicKey)
     promise = config.signingFunction(config.tx, acct.publicKey)
+      .then(res => {
+        if (typeof (res) === 'string') { res = Transaction.deserialize(res) }
+        return res
+      })
   } else if (config.privateKey) {
     let acct = new Account(config.privateKey)
     if (config.address !== acct.address && !config.sendingFromSmartContract) {
