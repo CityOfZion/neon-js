@@ -32,7 +32,17 @@ describe('coinmarketcap', function () {
 
   describe('getPrices', function () {
     it('gets prices of NEO & GAS in USD', () => {
-      return CMC.getPrices(['NEO', 'GAS']).should.eventually.deep.equal({ NEO: 66.5875, GAS: 28.7096 })
+      return CMC.getPrices(['NEO', 'GAS']).should.eventually.deep.equal({
+        NEO: 66.5875,
+        GAS: 28.7096
+      })
+    })
+
+    it('gets prices of NEO & GAS in SGD', () => {
+      return CMC.getPrices(['NEO', 'GAS'], 'SGD').should.eventually.deep.equal({
+        NEO: 89.2645815294,
+        GAS: 38.3191052616
+      })
     })
 
     it('rejects Promise when given unknown currency', () => {

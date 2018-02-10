@@ -2,35 +2,6 @@ import axios from 'axios'
 
 const CURRENCY = ['aud', 'brl', 'cad', 'chf', 'clp', 'cny', 'czk', 'dkk', 'eur', 'gbp', 'hkd', 'huf', 'idr', 'ils', 'inr', 'jpy', 'krw', 'mxn', 'myr', 'nok', 'nzd', 'php', 'pkr', 'pln', 'rub', 'sek', 'sgd', 'thb', 'try', 'twd', 'usd', 'zar']
 
-function mapPrices (tickers, currency) {
-  const mapping = {}
-
-  tickers.forEach((ticker) => {
-    mapping[ticker.symbol] = parseFloat(ticker[`price_${currency.toLowerCase()}`])
-  })
-
-  return mapping
-}
-
-function query (url, currency) {
-  currency = currency.toLowerCase()
-
-  if (CURRENCY.includes(currency)) {
-    return axios.get(`${url}?convert=${currency}`)
-      .then((response) => {
-        const { data } = response
-        if (data.error) throw new Error(data.error)
-        return mapPrices(data, currency)
-      })
-  } else {
-    return Promise.reject(new ReferenceError(`${currency} is not one of the accepted currencies!`))
-  }
-}
-
-function pick (obj, ...props) {
-  return Object.assign({}, ...props.map((prop) => ({ [prop]: obj[prop] })))
-}
-
 /**
  * Returns the price of coin in the symbol given
  * @param {string} coin - Coin name. NEO or GAS.
@@ -62,4 +33,33 @@ export const getPrices = (coins = ['NEO'], currency = 'usd') => {
       if (!coins.some((coin) => !prices[coin])) return prices
       else throw new Error('id not found')
     })
+}
+
+function query (url, currency) {
+  currency = currency.toLowerCase()
+
+  if (CURRENCY.includes(currency)) {
+    return axios.get(`${url}?limit=0&convert=${currency}`)
+      .then((response) => {
+        const { data } = response
+        if (data.error) throw new Error(data.error)
+        return mapPrices(data, currency)
+      })
+  } else {
+    return Promise.reject(new ReferenceError(`${currency} is not one of the accepted currencies!`))
+  }
+}
+
+function mapPrices (tickers, currency) {
+  const mapping = {}
+
+  tickers.forEach((ticker) => {
+    mapping[ticker.symbol] = parseFloat(ticker[`price_${currency.toLowerCase()}`])
+  })
+
+  return mapping
+}
+
+function pick (obj, ...props) {
+  return Object.assign({}, ...props.map((prop) => ({ [prop]: obj[prop] })))
 }
