@@ -107,7 +107,7 @@ export const deserializeTransaction = (data) => {
   tx.scripts = []
   const attrLength = ss.readVarInt()
   for (let i = 0; i < attrLength; i++) {
-    tx.inputs.push(comp.deserializeTransactionAttribute(ss))
+    tx.attributes.push(comp.deserializeTransactionAttribute(ss))
   }
   const inputLength = ss.readVarInt()
   for (let i = 0; i < inputLength; i++) {

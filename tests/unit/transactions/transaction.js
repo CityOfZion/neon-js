@@ -120,7 +120,7 @@ describe('Transaction', function () {
     const remark = 'This is a remark'
     const remarkAttr = {
       usage: parseInt('f0', 16),
-      data: '105468697320697320612072656d61726b'
+      data: '5468697320697320612072656d61726b'
     }
     const tx = new Tx()
     tx.addRemark(remark)
