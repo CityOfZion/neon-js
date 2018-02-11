@@ -12,8 +12,8 @@ declare module '@cityofzion/neon-js' {
   }
 
   interface AssetAmounts {
-    GAS: number
-    NEO: number
+    GAS?: number
+    NEO?: number
   }
 
   interface History {
