@@ -28,3 +28,9 @@ Do note that the encryption/decryption takes a long time and might not work very
 
 .. autofunction:: nep2.decrypt
   :short-name:
+
+.. autofunction:: nep2.encryptAsync
+  :short-name:
+
+.. autofunction:: nep2.decryptAsync
+  :short-name:
