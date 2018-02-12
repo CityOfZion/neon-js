@@ -1,10 +1,10 @@
 {
   "docs": {
-    "Getting Started": ["installation"],
-    "Guides": ["guide-1"],
-    "Further Information": ["info"]
+    "Getting Started": ["overview", "installation"],
+    "Guides": ["basic_sendasset"]
   },
   "api": {
-    "API": ["api-index"]
+    "Overview": ["api-index"],
+    "Modules": ["api-wallet"]
   }
 }

@@ -9,14 +9,14 @@ title: Installation
 
 To install
 
-```js
-$ npm install @cityofzion/neon-js
+```sh
+npm install @cityofzion/neon-js
 ```
 
 For a specific commit or release, add the commit hash / tag / branch behind:
 
-```js
-$ npm install @cityofzion/neon-js#dev //dev branch
+```sh
+npm install @cityofzion/neon-js#dev
 ```
 
 ## Import
@@ -43,7 +43,6 @@ const query = new rpc.Query()
 
 ## Require
 
-
 As neon-js package uses ES6 module conventions, `require` will need to specify which module do they want exactly:
 
 ```js
@@ -67,4 +66,5 @@ neon-js is also packaged for the web. You can add it through a script tag
 ```html
   <script src="./lib/browser.js"></script>
 ```
+
 The library will be available as a global variable `Neon`. Similar to `require` style, you will have the semantic style under `default` and the rest of the named modules exposed at the same level.

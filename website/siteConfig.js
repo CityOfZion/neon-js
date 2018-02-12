@@ -42,7 +42,7 @@ const siteConfig = {
     'Copyright © ' +
     new Date().getFullYear() +
     ' Ethan Fast, Yak Jun Xiang',
-  organizationName: 'City of Zion', // or set an env variable ORGANIZATION_NAME
+  organizationName: 'snowypowers', // or set an env variable ORGANIZATION_NAME
   projectName: 'neon-js', // or set an env variable PROJECT_NAME
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks

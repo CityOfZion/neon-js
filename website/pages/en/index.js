@@ -12,6 +12,8 @@ const MarkdownBlock = CompLibrary.MarkdownBlock /* Used to read markdown */
 const Container = CompLibrary.Container
 const GridBlock = CompLibrary.GridBlock
 
+const translate = require('../../server/translate.js').translate
+
 const siteConfig = require(process.cwd() + '/siteConfig.js')
 
 function imgUrl (img) {
@@ -80,9 +82,9 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
-            <Button href={docUrl('getting-started.html', language)}>Get Started</Button>
-            <Button href={docUrl('tutorial.html', language)}>Tutorial</Button>
-            <Button href={docUrl('api.html', language)}>API</Button>
+            <Button href={docUrl('installation.html', language)}><translate>Get Started</translate></Button>
+            <Button href={docUrl('basic_sendasset.html', language)}><translate>Tutorial</translate></Button>
+            <Button href={docUrl('api-index.html', language)}><translate>API</translate></Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -103,25 +105,19 @@ const Features = props => (
   <Block layout="fourColumn">
     {[
       {
-        content: 'Let Neon handle the intricacies and work with high level objects like accounts and transactions.',
+        content: <translate>Key generation, manipulation and encryption</translate>,
         image: imgUrl('docusaurus.svg'),
         imageAlign: 'top',
-        title: 'Abstraction'
+        title: 'Wallet'
       },
       {
-        content: 'The SDK comes set with a few pre-defined settings to connect easily to the main and test net.',
+        content: 'Transaction creation, serialization and signing.',
         image: imgUrl('docusaurus.svg'),
         imageAlign: 'top',
-        title: 'Ready to Roll'
+        title: 'Transactions'
       },
       {
-        content: 'Available in both ES6 module and CommonJS',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'top',
-        title: 'Modern'
-      },
-      {
-        content: 'Retrieve information from 3rd party providers like NeoScan and NeonDB easily.',
+        content: 'Various API integration required for light wallet support',
         image: imgUrl('docusaurus.svg'),
         imageAlign: 'top',
         title: 'Integration'
@@ -134,10 +130,10 @@ const LearnHow = props => (
   <Block background="light">
     {[
       {
-        content: 'Talk about learning how to use this',
+        content: 'The SDK is made with both beginners and experts in mind. Start off with playing with the high level semantic API. Once you are comfortable, dive in deep and code your own custom tools with the modules provided.',
         image: imgUrl('docusaurus.svg'),
         imageAlign: 'right',
-        title: 'Learn How'
+        title: 'Made for everyone'
       }
     ]}
   </Block>
@@ -147,7 +143,7 @@ const TryOut = props => (
   <Block id="try">
     {[
       {
-        content: 'Talk about trying this out',
+        content: 'Get your feet wet with our simple quickstart or follow one of our tutorials!',
         image: imgUrl('docusaurus.svg'),
         imageAlign: 'left',
         title: 'Try it Out'
@@ -160,10 +156,10 @@ const Description = props => (
   <Block background="dark">
     {[
       {
-        content: 'This is another description of how this project is useful',
+        content: 'Stop wasting time reading the front page!',
         image: imgUrl('docusaurus.svg'),
         imageAlign: 'right',
-        title: 'Description'
+        title: 'Why are you reading this'
       }
     ]}
   </Block>
