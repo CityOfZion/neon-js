@@ -4,6 +4,11 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
+3.2.1
+=====
+
+- Update typescript typings
+
 3.2.0
 =====
 
