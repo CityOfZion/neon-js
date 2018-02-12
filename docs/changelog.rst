@@ -25,7 +25,10 @@ This details the changes made from the previous recorded version.
   - ``api.signTx`` now checks and converts the return value from external function to a Transaction object.
   - Fix regex string for ``rpc.getVersion``.
 
+3.2.1
+=====
 
+- Update typescript typings
 
 3.2.0
 =====
