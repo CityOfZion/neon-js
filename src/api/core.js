@@ -289,7 +289,12 @@ const attachInvokedContractForMintToken = (config) => {
           invocationScript: '0000',
           verificationScript: contractState.result.script
         }
-        config.tx.scripts.push(attachInvokedContract)
+        const acct = config.privateKey ? new Account(config.privateKey) : new Account(config.publicKey)
+        if (parseInt(config.script.scriptHash, 16) > parseInt(acct.scriptHash, 16)) {
+          config.tx.scripts.push(attachInvokedContract)
+        } else {
+          config.tx.scripts.unshift(attachInvokedContract)
+        }
         return config
       })
   }
