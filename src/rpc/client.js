@@ -104,6 +104,18 @@ class RPCClient {
   }
 
   /**
+   * Gets the block hash at a given height.
+   * @param {number} index
+   * @return {Promise<string>}
+   */
+  getBlockHash(index) {
+    return this.execute(Query.getBlockHash(index))
+      .then((res) => {
+        return res.result
+      })
+  }
+
+  /**
    * Get the latest block hash.
    * @return {Promise<string>}
    */

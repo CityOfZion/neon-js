@@ -90,6 +90,15 @@ describe('Query', function () {
       })
     })
 
+    it('getBlockHash', () => {
+      Query.getBlockHash().req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getblockhash',
+        params: [1]
+      })
+    })
+
     it('getBestBlockHash', () => {
       Query.getBestBlockHash().req.should.eql({
         id: 1234,

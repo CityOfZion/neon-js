@@ -105,6 +105,17 @@ class Query {
   }
 
   /**
+   * @param {number} index
+   * @return {Query}
+   */
+  static getBlockHash (index) {
+    return new Query({
+      method: 'getblockhash',
+      params: [index]
+    })
+  }
+
+  /**
    * @return {Query}
    */
   static getBestBlockHash () {

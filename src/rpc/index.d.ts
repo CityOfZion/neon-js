@@ -22,6 +22,7 @@ export class RPCClient {
   getAccountState(addr: string): Promise<any>
   getAssetState(assetId: string): Promise<any>
   getBlock(indexOrHash: string | number, verbose?: number): Promise<object | string>
+  getBlockHash(index: number): Promise<string>
   getBestBlockHash(): Promise<string>
   getBlockCount(): Promise<number>
   getBlockSysFee(index: number): Promise<string>
@@ -56,6 +57,7 @@ export class Query {
   static getAccountState(addr: string): Query
   static getAssetState(assetId: string): Query
   static getBlock(indexOrHash: string | number, verbose?: number): Query
+  static getBlockHash(index: number): Query
   static getBestBlockHash(): Query
   static getBlockCount(): Query
   static getBlockSysFee(index: number): Query
