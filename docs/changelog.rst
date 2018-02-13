@@ -4,6 +4,11 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
+2.3.5
+=====
+
+  - Fix compare script hashes for deciding when to push or unshift for ``api.attachInvokedContractForMintToken``.
+
 2.3.4
 =====
 
