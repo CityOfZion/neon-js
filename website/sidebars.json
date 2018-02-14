@@ -5,7 +5,10 @@
       "installation"
     ],
     "Guides": [
-      "basic_sendasset"
+      "basic_sendasset",
+      "basic_claimgas",
+      "basic_createscript",
+      "adv_multitx"
     ]
   },
   "api": {
