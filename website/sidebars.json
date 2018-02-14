@@ -1,10 +1,26 @@
 {
   "docs": {
-    "Getting Started": ["overview", "installation"],
-    "Guides": ["basic_sendasset"]
+    "Getting Started": [
+      "overview",
+      "installation"
+    ],
+    "Guides": [
+      "basic_sendasset"
+    ]
   },
   "api": {
-    "Overview": ["api-index"],
-    "Modules": ["api-wallet"]
+    "Overview": [
+      "api-index"
+    ],
+    "Modules": [
+      "api-wallet",
+      "api-transactions",
+      "api-rpc",
+      "api-sc",
+      "api-api",
+      "api-u",
+      "api-CONST",
+      "api-logging"
+    ]
   }
 }
