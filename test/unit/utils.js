@@ -12,6 +12,7 @@ import {
   num2VarInt,
   reverseArray,
   reverseHex,
+  isHex,
   sha256,
   str2ab,
   str2hexstring,
@@ -332,6 +333,21 @@ describe('Utils', () => {
       const actual = reverseHex('feff')
       const expected = 'fffe'
       actual.should.eql(expected)
+    })
+  })
+
+  describe('isHex', () => {
+    it('true given hexstring', () => {
+      isHex('abcd').should.equal(true)
+      isHex('D1F2').should.equal(true)
+      isHex('9090').should.equal(true)
+      isHex('').should.equal(true)
+    })
+
+    it('false given non hexstring', () => {
+      isHex('0x12').should.equal(false)
+      isHex('*123').should.equal(false)
+      isHex('1').should.equal(false)
     })
   })
 
