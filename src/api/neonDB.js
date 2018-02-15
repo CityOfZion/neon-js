@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Account, Balance, Claims } from '../wallet'
 import { Transaction, TxAttrUsage } from '../transactions'
 import { Query } from '../rpc'
-import { ASSET_ID } from '../consts'
+import { ASSET_ID, PROTOCOLS } from '../consts'
 import { Fixed8, reverseHex } from '../utils'
 import logger from '../logging'
 
@@ -14,14 +14,8 @@ export const name = 'neonDB'
  * @return {string} URL of API endpoint.
  */
 export const getAPIEndpoint = net => {
-  switch (net) {
-    case 'MainNet':
-      return 'http://api.wallet.cityofzion.io'
-    case 'TestNet':
-      return 'http://testnet-api.wallet.cityofzion.io'
-    default:
-      return net
-  }
+  if (PROTOCOLS[net]) return PROTOCOLS[net].extra.neonDB
+  return net
 }
 /**
  * Get balances of NEO and GAS for an address

@@ -13,14 +13,8 @@ export const name = 'neoscan'
  * @return {string} - URL
  */
 export const getAPIEndpoint = net => {
-  switch (net) {
-    case 'MainNet':
-      return 'https://api.neoscan.io/api/main_net'
-    case 'TestNet':
-      return 'https://neoscan-testnet.io/api/test_net'
-    default:
-      return net
-  }
+  if (PROTOCOLS[net]) return PROTOCOLS[net].extra.neoscan
+  return net
 }
 
 /**

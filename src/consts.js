@@ -1,3 +1,6 @@
+import protocols from './protocols.json'
+import Protocol from './protocol'
+
 export const ADDR_VERSION = '17'
 
 export const ASSETS = {
@@ -20,8 +23,6 @@ export const CONTRACTS = {
   TEST_RHTT4: 'f9572c5b119a6b5775a6af07f1cef5d310038f55'
 }
 
-export const TEST_NXT_ADDRESS = 'AHcLAfnvzzHyuPPULeXrXZ6RK3Hkdvi1qi'
-
 export const DEFAULT_RPC = {
   MAIN: 'https://seed1.neo.org:10331',
   TEST: 'https://seed1.neo.org:20331'
@@ -34,6 +35,13 @@ export const DEFAULT_SCRYPT = {
   blockSize: 8,
   parallel: 8,
   size: 64
+}
+
+export const DEFAULT_SYSFEE = {
+  enrollmentTransaction: 1000,
+  issueTransaction: 500,
+  publishTransaction: 500,
+  registerTransaction: 10000
 }
 
 export const DEFAULT_WALLET = {
@@ -72,3 +80,9 @@ export const TX_VERSION = {
   'CONTRACT': 0,
   'INVOCATION': 1
 }
+
+export const PROTOCOLS = {}
+
+Object.keys(protocols).map(key => {
+  PROTOCOLS[key] = Protocol.import(protocols[key])
+})

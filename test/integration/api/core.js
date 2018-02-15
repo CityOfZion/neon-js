@@ -1,6 +1,6 @@
 import * as core from '../../../src/api/core'
 import * as APIswitch from '../../../src/api/switch'
-import { CONTRACTS, NEO_NETWORK, TEST_NXT_ADDRESS } from '../../../src/consts'
+import { CONTRACTS, NEO_NETWORK } from '../../../src/consts'
 import { ContractParam } from '../../../src/sc'
 import { Account } from '../../../src/wallet'
 import testKeys from '../../unit/testKeys.json'
@@ -153,7 +153,7 @@ describe('Integration: API Core', function () {
         net: NEO_NETWORK.TEST,
         address: testKeys.a.address,
         privateKey: testKeys.a.privateKey,
-        intents: core.makeIntent({ NEO: 1 }, TEST_NXT_ADDRESS),
+        intents: core.makeIntent({ NEO: 1 }, 'AHcLAfnvzzHyuPPULeXrXZ6RK3Hkdvi1qi'),
         script,
         gas: 0
       }
