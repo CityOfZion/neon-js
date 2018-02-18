@@ -222,7 +222,6 @@ describe('Query', function () {
       return Query.getVersion()
         .execute(DEFAULT_RPC.TEST)
         .then((res) => {
-          console.log(res)
           res.result.should.have.all.keys(['port', 'nonce', 'useragent'])
           res.result.useragent.should.match(/NEO:(\d+\.\d+\.\d+)/)
         })

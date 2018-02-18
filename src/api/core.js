@@ -95,7 +95,8 @@ export const claimGas = config => {
 export const doInvoke = config => {
   return loadBalance(getRPCEndpointFrom, config)
     .then(url => Object.assign(config, { url }))
-    .then(c => loadBalance(getBalanceFrom, config))
+    .then(fillKeys)
+    .then(fillBalance)
     .then(c => createTx(c, 'invocation'))
     .then(c => addAttributesIfExecutingAsSmartContract(c))
     .then(c => addAttributesForMintToken(c))
@@ -132,8 +133,8 @@ export const fillKeys = config => {
     if (!config.address) config.address = config.account.address
     if (!config.privateKey && !config.signingFunction) config.privateKey = config.account.privateKey
     if (!config.publicKey && config.signingFunction) config.publicKey = config.account.publicKey
-    return Promise.resolve(config)
   }
+  return Promise.resolve(config)
 }
 /**
  * Creates a transaction with the given config and txType.
