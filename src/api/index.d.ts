@@ -3,11 +3,15 @@ import { Transaction, TransactionOutput } from '../transactions'
 import { RPCResponse } from '../rpc'
 import { Fixed8 } from '../utils'
 
+export type net = 'MainNet' | 'TestNet' | string;
+export type signingFunction = (unsigned: Transaction, publicKey: string) => Transaction
+
 interface apiConfig {
   net: net
   address: string
   privateKey?: string
   publicKey?: string
+  signingFunction?: signingFunction
   url?: string
   balance?: Balance
   response?: string
@@ -18,8 +22,6 @@ interface AssetAmounts {
   GAS?: number
   NEO?: number
 }
-
-export type net = 'MainNet' | 'TestNet' | string;
 
 interface History {
   address: string
@@ -78,7 +80,7 @@ export namespace neonDB {
   export function doClaimAllGas(
     net: net,
     publicKey: string,
-    signingFunction: (unsigned: Transaction, publicKey: string) => Transaction
+    signingFunction: signingFunction
   ): Promise<RPCResponse>
 
   export function doMintTokens(
@@ -94,7 +96,7 @@ export namespace neonDB {
     publicKey: string,
     neo: number,
     gasCost: number,
-    signingFunction: (unsigned: Transaction, publicKey: string) => Transaction
+    signingFunction: signingFunction
   ): Promise<RPCResponse>
 
   export function doSendAsset(
@@ -108,7 +110,7 @@ export namespace neonDB {
     toAddress: string,
     publicKey: string,
     assetAmounts: AssetAmounts,
-    signingFunction: (unsigned: Transaction, publicKey: string) => Transaction
+    signingFunction: signingFunction
   ): Promise<RPCResponse>
 }
 
@@ -135,7 +137,7 @@ export namespace nep5 {
     toAddress: string,
     transferAmount: number,
     gasCost?: number,
-    signingFunction?: (unsigned: Transaction, publicKey: string) => Transaction
+    signingFunction?: signingFunction
   ): Promise<RPCResponse>
 }
 
