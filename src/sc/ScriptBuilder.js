@@ -1,4 +1,4 @@
-import { StringStream, num2hexstring, reverseHex, isHex, ensureHex, int2hex, str2ab, ab2hexstring, str2hexstring } from '../utils.js'
+import { StringStream, num2hexstring, reverseHex, ensureHex, int2hex, str2ab, ab2hexstring, str2hexstring } from '../utils.js'
 import OpCode from './opCode.js'
 
 /**

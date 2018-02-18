@@ -108,7 +108,7 @@ class RPCClient {
    * @param {number} index
    * @return {Promise<string>}
    */
-  getBlockHash(index) {
+  getBlockHash (index) {
     return this.execute(Query.getBlockHash(index))
       .then((res) => {
         return res.result
