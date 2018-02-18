@@ -404,7 +404,7 @@ export const getRPCEndpointFrom = (config, api) => {
  * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
  * @param {string} config.address - Wallet address
  * @param {object} api - The endpoint API object. eg, neonDB or Neoscan.
- * @return {Promise<string>} - Transaction history
+ * @return {Promise<History>} - Transaction history
  */
 export const getTransactionHistoryFrom = (config, api) => {
   return new Promise((resolve) => {
@@ -422,7 +422,7 @@ export const getTransactionHistoryFrom = (config, api) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
  * @param {object} api - The endpoint API object. eg, neonDB or Neoscan.
- * @return {Promise<string>} - URL
+ * @return {Promise<number>} Current height.
  */
 export const getWalletDBHeightFrom = (config, api) => {
   return new Promise((resolve) => {

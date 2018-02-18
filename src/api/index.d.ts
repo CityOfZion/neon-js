@@ -4,12 +4,13 @@ import { RPCResponse } from '../rpc'
 import { Fixed8 } from '../utils'
 
 interface apiConfig {
-  net: string,
+  net: net,
   address: string,
   privateKey?: string,
   publicKey?: string,
   url?: string,
-  balance?: Balance
+  balance?: Balance,
+  response?: string
 }
 
 interface AssetAmounts {
@@ -17,11 +18,13 @@ interface AssetAmounts {
   NEO?: number
 }
 
+export type net = 'MainNet' | 'TestNet' | string;
+
 interface History {
   address: string
   history: PastTransaction[]
   name: string
-  net: 'MainNet' | 'TestNet' | string
+  net: net
 }
 
 interface PastTransaction {
@@ -44,48 +47,48 @@ export namespace cmc {
 
 
 //core
-export function getBalanceFrom(config: apiConfig, api: object): apiConfig
-export function getClaimsFrom(config: apiConfig, api: object): apiConfig
-export function getRPCEndpointFrom(config: apiConfig, api: object): apiConfig
-export function getTransactionHistoryFrom(config: apiConfig, api: object): apiConfig
-export function getWalletDBHeightFrom(config: apiConfig, api: object): apiConfig
-export function getMaxClaimAmountFrom(config: apiConfig, api: object): apiConfig
-export function createTx(config: apiConfig, txType: string): apiConfig
-export function signTx(config: apiConfig): apiConfig
-export function sendTx(config: apiConfig): apiConfig
+export function getBalanceFrom(config: apiConfig, api: object): Promise<apiConfig>
+export function getClaimsFrom(config: apiConfig, api: object): Promise<apiConfig>
+export function getRPCEndpointFrom(config: apiConfig, api: object): Promise<string>
+export function getTransactionHistoryFrom(config: apiConfig, api: object): Promise<History>
+export function getWalletDBHeightFrom(config: apiConfig, api: object): Promise<number>
+export function getMaxClaimAmountFrom(config: apiConfig, api: object): Promise<Fixed8>
+export function createTx(config: apiConfig, txType: string): Promise<apiConfig>
+export function signTx(config: apiConfig): Promise<apiConfig>
+export function sendTx(config: apiConfig): Promise<apiConfig>
 export function makeIntent(assetAmts: AssetAmounts, address: string): TransactionOutput[]
-export function sendAsset(config: apiConfig): apiConfig
-export function claimGas(config: apiConfig): apiConfig
-export function doInvoke(config: apiConfig): apiConfig
+export function sendAsset(config: apiConfig): Promise<apiConfig>
+export function claimGas(config: apiConfig): Promise<apiConfig>
+export function doInvoke(config: apiConfig): Promise<apiConfig>
 
 //neonDB
 export namespace neonDB {
-  export function getAPIEndpoint(net: string): string
-  export function getBalance(net: string, address: string): Promise<Balance>
-  export function getClaims(net: string, address: string): Promise<Claims>
-  export function getRPCEndpoint(net: string): Promise<string>
-  export function getTransactionHistory(net: string, address: string): Promise<History>
-  export function getWalletDBHeight(net: string): Promise<number>
+  export function getAPIEndpoint(net: net): string
+  export function getBalance(net: net, address: string): Promise<Balance>
+  export function getClaims(net: net, address: string): Promise<Claims>
+  export function getRPCEndpoint(net: net): Promise<string>
+  export function getTransactionHistory(net: net, address: string): Promise<History>
+  export function getWalletDBHeight(net: net): Promise<number>
 
   export function doClaimAllGas(
-    net: string,
+    net: net,
     privateKey: string
   ): Promise<RPCResponse>
   export function doClaimAllGas(
-    net: string,
+    net: net,
     publicKey: string,
     signingFunction: (unsigned: Transaction, publicKey: string) => Transaction
   ): Promise<RPCResponse>
 
   export function doMintTokens(
-    net: string,
+    net: net,
     scriptHash: string,
     fromWif: string,
     neo: number,
     gasCost: number
   ): Promise<RPCResponse>
   export function doMintTokens(
-    net: string,
+    net: net,
     scriptHash: string,
     publicKey: string,
     neo: number,
@@ -94,13 +97,13 @@ export namespace neonDB {
   ): Promise<RPCResponse>
 
   export function doSendAsset(
-    net: string,
+    net: net,
     toAddress: string,
     from: string,
     assetAmounts: AssetAmounts
   ): Promise<RPCResponse>
   export function doSendAsset(
-    net: string,
+    net: net,
     toAddress: string,
     publicKey: string,
     assetAmounts: AssetAmounts,
@@ -110,13 +113,13 @@ export namespace neonDB {
 
 //neoscan
 export namespace neoscan {
-  export function getAPIEndpoint(net: string): string
-  export function getRPCEndpoint(net: string): Promise<string>
-  export function getBalance(net: string, address: string): Promise<Balance>
-  export function getClaims(net: string, address: string): Promise<Claims>
-  export function getMaxClaimAmount(net: string, address: string): Promise<Fixed8>
-  export function getWalletDBHeight(net: string): Promise<number>
-  export function getTransactionHistory(net: string, address: string): Promise<History>
+  export function getAPIEndpoint(net: net): string
+  export function getRPCEndpoint(net: net): Promise<string>
+  export function getBalance(net: net, address: string): Promise<Balance>
+  export function getClaims(net: net, address: string): Promise<Claims>
+  export function getMaxClaimAmount(net: net, address: string): Promise<Fixed8>
+  export function getWalletDBHeight(net: net): Promise<number>
+  export function getTransactionHistory(net: net, address: string): Promise<History>
 }
 
 //nep5
@@ -125,7 +128,7 @@ export namespace nep5 {
   export function getTokenBalance(url: string, scriptHash: string, address: string): Promise<number>
   export function getToken(url: string, scriptHash: string, address?: string): Promise<object>
   export function doTransferToken(
-    net: string,
+    net: net,
     scriptHash: string,
     fromWif: string,
     toAddress: string,
