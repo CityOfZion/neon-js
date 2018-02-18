@@ -4,13 +4,14 @@ import { RPCResponse } from '../rpc'
 import { Fixed8 } from '../utils'
 
 interface apiConfig {
-  net: net,
-  address: string,
-  privateKey?: string,
-  publicKey?: string,
-  url?: string,
-  balance?: Balance,
+  net: net
+  address: string
+  privateKey?: string
+  publicKey?: string
+  url?: string
+  balance?: Balance
   response?: string
+  intents?: TransactionOutput[]
 }
 
 interface AssetAmounts {
