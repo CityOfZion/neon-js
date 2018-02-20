@@ -2,6 +2,7 @@ import * as core from '../../../src/api/core'
 import * as APIswitch from '../../../src/api/switch'
 import { CONTRACTS, NEO_NETWORK, TEST_NXT_ADDRESS } from '../../../src/consts'
 import { ContractParam } from '../../../src/sc'
+import { Account } from '../../../src/wallet'
 import testKeys from '../../unit/testKeys.json'
 
 describe('Integration: API Core', function () {
@@ -34,8 +35,7 @@ describe('Integration: API Core', function () {
       const intent1 = core.makeIntent({ NEO: 1 }, testKeys.a.address)
       const config1 = {
         net: NEO_NETWORK.TEST,
-        address: testKeys.b.address,
-        privateKey: testKeys.b.privateKey,
+        account: new Account(testKeys.b.privateKey),
         intents: intent1
       }
 

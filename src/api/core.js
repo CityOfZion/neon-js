@@ -31,7 +31,8 @@ const log = logger('api')
 export const sendAsset = config => {
   return loadBalance(getRPCEndpointFrom, config)
     .then(url => Object.assign(config, { url }))
-    .then(c => loadBalance(getBalanceFrom, config))
+    .then(fillKeys)
+    .then(fillBalance)
     .then(c => createTx(c, 'contract'))
     .then(c => addAttributesIfExecutingAsSmartContract(c))
     .then(c => signTx(c))
@@ -63,6 +64,7 @@ export const sendAsset = config => {
 export const claimGas = config => {
   return loadBalance(getRPCEndpointFrom, config)
     .then(url => Object.assign(config, { url }))
+    .then(fillKeys)
     .then(c => loadBalance(getClaimsFrom, config))
     .then(c => createTx(c, 'claim'))
     .then(c => signTx(c))
@@ -93,7 +95,8 @@ export const claimGas = config => {
 export const doInvoke = config => {
   return loadBalance(getRPCEndpointFrom, config)
     .then(url => Object.assign(config, { url }))
-    .then(c => loadBalance(getBalanceFrom, config))
+    .then(fillKeys)
+    .then(fillBalance)
     .then(c => createTx(c, 'invocation'))
     .then(c => addAttributesIfExecutingAsSmartContract(c))
     .then(c => addAttributesForMintToken(c))
@@ -110,6 +113,29 @@ export const doInvoke = config => {
     })
 }
 
+/**
+ * Retrieves Balance if no balance has been attached
+ * @param {object} config
+ * @return {Promise<object>} Configuration object.
+ */
+export const fillBalance = config => {
+  if (config.balance) return Promise.resolve(config)
+  return loadBalance(getBalanceFrom, config)
+}
+
+/**
+ * Fills the relevant key fields if account has been attached.
+ * @param {object} config
+ * @return {Promise<object>} Configuration object.
+ */
+export const fillKeys = config => {
+  if (config.account) {
+    if (!config.address) config.address = config.account.address
+    if (!config.privateKey && !config.signingFunction) config.privateKey = config.account.privateKey
+    if (!config.publicKey && config.signingFunction) config.publicKey = config.account.publicKey
+  }
+  return Promise.resolve(config)
+}
 /**
  * Creates a transaction with the given config and txType.
  * @param {object} config - Configuration object.
@@ -196,7 +222,7 @@ export const sendTx = config => {
       if (res.result === true) {
         res.txid = config.tx.hash
         if (config.balance) {
-          config.balance.applyTx(config.tx, true)
+          config.balance.applyTx(config.tx, false)
         }
       } else {
         const dump = {

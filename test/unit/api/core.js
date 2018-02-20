@@ -1,7 +1,7 @@
 import * as core from '../../../src/api/core'
 import { neonDB, neoscan } from '../../../src/api'
 import { Transaction, signTransaction, getTransactionHash } from '../../../src/transactions'
-import { Balance } from '../../../src/wallet'
+import { Account, Balance } from '../../../src/wallet'
 import { DEFAULT_RPC } from '../../../src/consts'
 import { Fixed8 } from '../../../src/utils'
 import testKeys from '../testKeys.json'
@@ -219,6 +219,60 @@ describe('Core API', function () {
           conf.response.should.be.an('object')
           conf.response.result.should.equal(true)
           conf.response.txid.should.equal(getTransactionHash(config.tx))
+        })
+    })
+  })
+
+  describe('fillKeys', function () {
+    it('fill address and privateKey', () => {
+      const config = {
+        account: new Account(testKeys.a.privateKey)
+      }
+
+      return core.fillKeys(config)
+        .then((conf) => {
+          conf.address.should.equal(testKeys.a.address)
+          conf.privateKey.should.equal(testKeys.a.privateKey)
+        })
+    })
+
+    it('fill address and publicKey when using signingFunction', () => {
+      const config = {
+        account: new Account(testKeys.a.publicKey),
+        signingFunction: () => true
+      }
+
+      return core.fillKeys(config)
+        .then(conf => {
+          conf.address.should.equal(testKeys.a.address)
+          conf.publicKey.should.equal(testKeys.a.publicKey)
+        })
+    })
+  })
+
+  describe('fillBalance', function () {
+    it('does not call getBalance when balance exists', () => {
+      const expectedBalance = new Balance()
+      const config = {
+        net: 'RandomNet',
+        address: testKeys.b.address,
+        balance: expectedBalance
+      }
+      return core.fillBalance(config)
+        .then(conf => {
+          conf.balance.should.equal(expectedBalance)
+        })
+    })
+
+    it('calls getBalance when balance is not available', () => {
+      const config = Object.assign({}, baseConfig)
+      return core.fillBalance(config)
+        .then(conf => {
+          conf.should.have.keys([
+            'net',
+            'address',
+            'balance'
+          ])
         })
     })
   })
