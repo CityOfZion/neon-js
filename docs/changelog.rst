@@ -9,7 +9,9 @@ This details the changes made from the previous recorded version.
 
 - API
 
-  - Add support for manpulating smart contracts. This means that you can send assets from smart contracts. This support is currently enabled only in the core API methods ``sendAsset`` and ``doInvoke``.
+  - Add support for manpulating smart contracts. This means that you can send assets from smart contracts. This support is currently enabled only in the core API methods ``sendAsset`` and ``doInvoke``. **This is currently experimental and is subject to breaking changes without notice** (no minor version bump for changes to these).
+  - Add support for ``config.account``. You can now use Account in place of address and private key.
+  - Add support for ``config.balance``. You can use an old Balance object instead of retrieving a new one. Attaching a Balance object will cause the function to skip over the retrieval process.
 
 - Wallet
 
@@ -18,6 +20,10 @@ This details the changes made from the previous recorded version.
 - SC
 
   - Add ContractParam.hash160
+
+- Util
+
+  - Add ``isHex`` and ``ensureHex`` as ways to conveniently check format of hexstrings.
 
 - Fixes
 
@@ -131,10 +137,7 @@ This details the changes made from the previous recorded version.
 2.3.4
 -----
 
-- Fix ``TxAttrUsage`` not being imported properly.
-
-2.3.3
------
+- Docs moved to ``docs`` folder
 
 - Fixes
 
@@ -143,16 +146,8 @@ This details the changes made from the previous recorded version.
   - update export name for ``TxAttrUsage``.
   - Fix transaction attribute deserialization.
   - Fix _emitNum emitting trimmed hex numbers.
-
-2.3.2
------
-
-- Docs moved to ``docs`` folder
-
-2.3.1
------
-
-- clean neonDB input numbers
+  - clean neonDB input numbers
+  - Fix ``TxAttrUsage`` not being imported properly.
 
 2.3.0
 -----

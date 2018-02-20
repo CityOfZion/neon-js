@@ -45,7 +45,7 @@ scv_greatest_tag = True
 scv_sort = ('semver',)
 
 scv_whitelist_branches = ('master', 'dev')
-scv_whitelist_tags = ('1.1.2', '2.3.4', re.compile('3.3.[\d.]+'))
+scv_whitelist_tags = ('1.1.2', '2.3.5', re.compile('3.3.[\d.]+'))
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
