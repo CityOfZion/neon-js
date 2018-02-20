@@ -1,6 +1,9 @@
 import axios from 'axios'
 import { serializeTransaction } from '../transactions'
 import { DEFAULT_REQ } from '../consts'
+import logger from '../logging'
+
+const log = logger('rpc')
 
 /**
  * @typedef RPCRequest
@@ -60,6 +63,7 @@ class Query {
           throw new Error(res.error.message)
         }
         if (this.parse) {
+          log.info(`Query[${this.req.method}] successful`)
           return this.parse(res)
         }
         return res
@@ -97,6 +101,17 @@ class Query {
     return new Query({
       method: 'getblock',
       params: [indexOrHash, verbose]
+    })
+  }
+
+  /**
+   * @param {number} index
+   * @return {Query}
+   */
+  static getBlockHash (index) {
+    return new Query({
+      method: 'getblockhash',
+      params: [index]
     })
   }
 

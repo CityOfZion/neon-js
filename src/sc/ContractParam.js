@@ -1,5 +1,5 @@
 import { num2fixed8, reverseHex } from '../utils'
-import { getScriptHashFromAddress } from '../wallet'
+import { getScriptHashFromAddress, isAddress } from '../wallet'
 
 /**
  * @class ContractParam
@@ -31,6 +31,18 @@ class ContractParam {
    */
   static boolean (value) {
     return new ContractParam('Boolean', !!value)
+  }
+
+  /**
+   * Creates a Hash160 ContractParam. This is used for containing a scriptHash. Do not reverse the input if using this format.
+   * @param {string} value - A 40 character long hexstring. Automatically converts an address to scripthash if provided.
+   * @return {ContractParam}
+   */
+  static hash160 (value) {
+    if (typeof value !== 'string') throw new Error(`Input should be string!`)
+    if (isAddress(value)) value = getScriptHashFromAddress(value)
+    if (value.length !== 40) throw new Error(`Input should be 40 characters long!`)
+    return new ContractParam('Hash160', value)
   }
 
   /**

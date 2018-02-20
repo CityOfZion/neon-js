@@ -14,6 +14,8 @@ export function num2VarInt(num: number): string
 export function hexXor(str1: string, str2: string): string
 export function reverseArray(arr: Array<number>): Uint8Array
 export function reverseHex(hex: string): string
+export function isHex(str: string): boolean
+export function ensureHex(str: string): void
 
 export class StringStream {
   public pter: 0

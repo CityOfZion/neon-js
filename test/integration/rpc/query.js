@@ -96,6 +96,14 @@ describe('Query', function () {
       })
     })
 
+    it('getBlockHash', () => {
+      return Query.getBlockHash(1)
+        .execute(DEFAULT_RPC.TEST)
+        .then((res) => {
+          res.result.should.be.a('string')
+        })
+    })
+
     it('getBestBlockHash', () => {
       return Query.getBestBlockHash()
         .execute(DEFAULT_RPC.TEST)
@@ -214,7 +222,6 @@ describe('Query', function () {
       return Query.getVersion()
         .execute(DEFAULT_RPC.TEST)
         .then((res) => {
-          console.log(res)
           res.result.should.have.all.keys(['port', 'nonce', 'useragent'])
           res.result.useragent.should.match(/NEO:(\d+\.\d+\.\d+)/)
         })

@@ -1,4 +1,4 @@
-import { Account } from '../wallet'
+import { Account, getScriptHashFromAddress } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Query } from '../rpc'
 import { Transaction, TransactionOutput, TxAttrUsage } from '../transactions'
@@ -25,14 +25,18 @@ const log = logger('api')
  * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
  * @param {string} [config.publicKey] - A public key for the singing function. Either this or privateKey is required.
  * @param {TransactionOutput[]} config.intents - Intents.
- * @return {object} Configuration object.
+ * @param {bool} [config.sendingFromSmartContract] - Optionally specify that the source address is a smart contract that doesn't correspond to the private key.
+ * @return {Promise<object>} Configuration object.
  */
 export const sendAsset = config => {
   return loadBalance(getRPCEndpointFrom, config)
     .then(url => Object.assign(config, { url }))
-    .then(c => loadBalance(getBalanceFrom, config))
+    .then(fillKeys)
+    .then(fillBalance)
     .then(c => createTx(c, 'contract'))
+    .then(c => addAttributesIfExecutingAsSmartContract(c))
     .then(c => signTx(c))
+    .then(c => attachContractIfExecutingAsSmartContract(c))
     .then(c => sendTx(c))
     .catch(err => {
       const dump = {
@@ -55,11 +59,12 @@ export const sendAsset = config => {
  * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction and publicKey is required.
  * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
  * @param {string} [config.publicKey] - A public key for the singing function. Either this or privateKey is required.
- * @return {object} Configuration object.
+ * @return {Promise<object>} Configuration object.
  */
 export const claimGas = config => {
   return loadBalance(getRPCEndpointFrom, config)
     .then(url => Object.assign(config, { url }))
+    .then(fillKeys)
     .then(c => loadBalance(getClaimsFrom, config))
     .then(c => createTx(c, 'claim'))
     .then(c => signTx(c))
@@ -84,16 +89,20 @@ export const claimGas = config => {
  * @param {object} [config.intents] - Intents
  * @param {string} config.script - VM script. Must include empty args parameter even if no args are present
  * @param {number} config.gas - gasCost of VM script.
- * @return {object} Configuration object.
+ * @param {bool} [config.sendingFromSmartContract] - Optionally specify that the source address is a smart contract that doesn't correspond to the private key.
+ * @return {Promise<object>} Configuration object.
  */
 export const doInvoke = config => {
   return loadBalance(getRPCEndpointFrom, config)
     .then(url => Object.assign(config, { url }))
-    .then(c => loadBalance(getBalanceFrom, config))
-    .then(c => addAttributesForMintToken(c))
+    .then(fillKeys)
+    .then(fillBalance)
     .then(c => createTx(c, 'invocation'))
+    .then(c => addAttributesIfExecutingAsSmartContract(c))
+    .then(c => addAttributesForMintToken(c))
     .then(c => signTx(c))
     .then(c => attachInvokedContractForMintToken(c))
+    .then(c => attachContractIfExecutingAsSmartContract(c))
     .then(c => sendTx(c))
     .catch(err => {
       const dump = {
@@ -104,6 +113,29 @@ export const doInvoke = config => {
     })
 }
 
+/**
+ * Retrieves Balance if no balance has been attached
+ * @param {object} config
+ * @return {Promise<object>} Configuration object.
+ */
+export const fillBalance = config => {
+  if (config.balance) return Promise.resolve(config)
+  return loadBalance(getBalanceFrom, config)
+}
+
+/**
+ * Fills the relevant key fields if account has been attached.
+ * @param {object} config
+ * @return {Promise<object>} Configuration object.
+ */
+export const fillKeys = config => {
+  if (config.account) {
+    if (!config.address) config.address = config.account.address
+    if (!config.privateKey && !config.signingFunction) config.privateKey = config.account.privateKey
+    if (!config.publicKey && config.signingFunction) config.publicKey = config.account.publicKey
+  }
+  return Promise.resolve(config)
+}
 /**
  * Creates a transaction with the given config and txType.
  * @param {object} config - Configuration object.
@@ -122,7 +154,7 @@ export const createTx = (config, txType) => {
     case 'contract':
     case 128:
       checkProperty(config, 'balance', 'intents')
-      tx = Transaction.createContractTx(config.balance, config.intents)
+      tx = Transaction.createContractTx(config.balance, config.intents, config.override)
       break
     case 'invocation':
     case 209:
@@ -143,6 +175,7 @@ export const createTx = (config, txType) => {
  * @param {string} [config.privateKey] - private key to sign with.
  * @param {string} [config.publicKey] - public key. Required if using signingFunction.
  * @param {function} [config.signingFunction] - External signing function. Requires publicKey.
+ * @param {bool} [config.sendingFromSmartContract] - Optionally specify that the source address is a smart contract that doesn't correspond to the private key.
  * @return {Promise<object>} Configuration object.
  */
 export const signTx = config => {
@@ -151,9 +184,13 @@ export const signTx = config => {
   if (config.signingFunction) {
     let acct = new Account(config.publicKey)
     promise = config.signingFunction(config.tx, acct.publicKey)
+      .then(res => {
+        if (typeof (res) === 'string') { res = Transaction.deserialize(res) }
+        return res
+      })
   } else if (config.privateKey) {
     let acct = new Account(config.privateKey)
-    if (config.address !== acct.address) {
+    if (config.address !== acct.address && !config.sendingFromSmartContract) {
       return Promise.reject(
         new Error('Private Key and Balance address does not match!')
       )
@@ -174,7 +211,7 @@ export const signTx = config => {
  * @param {object} config - Configuration object.
  * @param {Transaction} config.tx - Signed transaction.
  * @param {string} config.url - NEO Node URL.
- * @return {object} Configuration object + response
+ * @return {Promise<object>} Configuration object + response
  */
 export const sendTx = config => {
   checkProperty(config, 'tx', 'url')
@@ -185,7 +222,7 @@ export const sendTx = config => {
       if (res.result === true) {
         res.txid = config.tx.hash
         if (config.balance) {
-          config.balance.applyTx(config.tx, true)
+          config.balance.applyTx(config.tx, false)
         }
       } else {
         const dump = {
@@ -222,7 +259,7 @@ export const makeIntent = (assetAmts, address) => {
 /**
  * Adds attributes to the override object for mintTokens invocations.
  * @param {object} config - Configuration object.
- * @return {object} Configuration object.
+ * @return {Promise<object>} Configuration object.
  */
 const addAttributesForMintToken = config => {
   if (!config.override) config.override = {}
@@ -231,20 +268,15 @@ const addAttributesForMintToken = config => {
     config.script.operation === 'mintTokens' &&
     config.script.scriptHash
   ) {
-    config.override.attributes = [
-      {
-        data: reverseHex(config.script.scriptHash),
-        usage: TxAttrUsage.Script
-      }
-    ]
+    config.tx.addAttribute(TxAttrUsage.Script, reverseHex(config.script.scriptHash))
   }
-  return config
+  return Promise.resolve(config)
 }
 
 /**
  * Adds the contractState to mintTokens invocations.
  * @param {object} config - Configuration object.
- * @return {object} Configuration object.
+ * @return {Promise<object>} Configuration object.
  */
 const attachInvokedContractForMintToken = config => {
   if (
@@ -259,11 +291,61 @@ const attachInvokedContractForMintToken = config => {
           invocationScript: '0000',
           verificationScript: contractState.result.script
         }
-        config.tx.scripts.unshift(attachInvokedContract)
+        config.tx.scripts.push(attachInvokedContract)
+        return config
+      })
+  } else {
+    return Promise.resolve(config)
+  }
+}
+
+/**
+ * Adds attributes to the override object for mintTokens invocations.
+ * @param {object} config - Configuration object.
+ * @return {Promise<object>} Configuration object.
+ */
+const addAttributesIfExecutingAsSmartContract = config => {
+  if (!config.override) config.override = {}
+
+  if (config.sendingFromSmartContract) {
+    const acct = config.privateKey ? new Account(config.privateKey) : new Account(config.publicKey)
+    config.tx.addAttribute(TxAttrUsage.Script, reverseHex(acct.scriptHash))
+  }
+
+  return Promise.resolve(config)
+}
+
+/**
+ * Adds the contractState to invocations sending from the contract's balance.
+ * @param {object} config - Configuration object.
+ * @return {Promise<object>} Configuration object.
+ */
+const attachContractIfExecutingAsSmartContract = config => {
+  if (config.sendingFromSmartContract) {
+    const smartContractScriptHash = getScriptHashFromAddress(config.address)
+
+    return Query.getContractState(smartContractScriptHash)
+      .execute(config.url)
+      .then(contractState => {
+        const { parameters, script } = contractState.result
+        const attachInvokedContract = {
+          invocationScript: ('00').repeat(parameters.length),
+          verificationScript: script
+        }
+
+        // We need to order this for the VM.
+        const acct = config.privateKey ? new Account(config.privateKey) : new Account(config.publicKey)
+        if (parseInt(smartContractScriptHash, 16) > parseInt(acct.scriptHash, 16)) {
+          config.tx.scripts.push(attachInvokedContract)
+        } else {
+          config.tx.scripts.unshift(attachInvokedContract)
+        }
+
         return config
       })
   }
-  return config
+
+  return Promise.resolve(config)
 }
 
 /**
@@ -278,7 +360,6 @@ const checkProperty = (obj, ...props) => {
     }
   }
 }
-
 /**
  * These are a set of helper methods that can be used to retrieve information from 3rd party API in conjunction with the API chain methods
  */
@@ -349,7 +430,7 @@ export const getRPCEndpointFrom = (config, api) => {
  * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
  * @param {string} config.address - Wallet address
  * @param {object} api - The endpoint API object. eg, neonDB or Neoscan.
- * @return {Promise<string>} - Transaction history
+ * @return {Promise<History>} - Transaction history
  */
 export const getTransactionHistoryFrom = (config, api) => {
   return new Promise((resolve) => {
@@ -367,7 +448,7 @@ export const getTransactionHistoryFrom = (config, api) => {
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet' or a custom URL.
  * @param {object} api - The endpoint API object. eg, neonDB or Neoscan.
- * @return {Promise<string>} - URL
+ * @return {Promise<number>} Current height.
  */
 export const getWalletDBHeightFrom = (config, api) => {
   return new Promise((resolve) => {

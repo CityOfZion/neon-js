@@ -12,6 +12,7 @@ const CURRENCY = ['aud', 'brl', 'cad', 'chf', 'clp', 'cny', 'czk', 'dkk', 'eur',
  * @return {Promise<number>} price
  */
 export const getPrice = (coin = 'NEO', currency = 'usd') => {
+  log.warn(`This is deprecated in favor of getPrices. There is a known bug for NEP5 tokens with this function.`)
   return query(`https://api.coinmarketcap.com/v1/ticker/${coin.toLowerCase()}/`, currency)
     .then((mapping) => {
       const price = mapping[coin.toUpperCase()]

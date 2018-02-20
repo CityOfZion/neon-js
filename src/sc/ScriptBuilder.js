@@ -1,4 +1,4 @@
-import { StringStream, num2hexstring, reverseHex, int2hex, str2ab, ab2hexstring, str2hexstring } from '../utils.js'
+import { StringStream, num2hexstring, reverseHex, ensureHex, int2hex, str2ab, ab2hexstring, str2hexstring } from '../utils.js'
 import OpCode from './opCode.js'
 
 /**
@@ -14,7 +14,8 @@ class ScriptBuilder extends StringStream {
    * @return {ScriptBuilder} this
    */
   _emitAppCall (scriptHash, useTailCall = false) {
-    if (scriptHash.length !== 40) throw new Error()
+    ensureHex(scriptHash)
+    if (scriptHash.length !== 40) throw new Error('ScriptHash should be 20 bytes long!')
     return this.emit(useTailCall ? OpCode.TAILCALL : OpCode.APPCALL, reverseHex(scriptHash))
   }
 
@@ -38,6 +39,7 @@ class ScriptBuilder extends StringStream {
    * @return {ScriptBuilder} this
    */
   _emitString (hexstring) {
+    ensureHex(hexstring)
     const size = hexstring.length / 2
     if (size <= OpCode.PUSHBYTES75) {
       this.str += num2hexstring(size)
@@ -92,6 +94,8 @@ class ScriptBuilder extends StringStream {
         return this._emitString(param.value)
       case 'Array':
         return this._emitArray(param.value)
+      case 'Hash160':
+        return this._emitString(reverseHex(param.value))
     }
   }
 

@@ -4,6 +4,27 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
+3.3.0
+=====
+
+- API
+
+  - Add support for manpulating smart contracts. This means that you can send assets from smart contracts. This support is currently enabled only in the core API methods ``sendAsset`` and ``doInvoke``.
+
+- Wallet
+
+  - Add ``confirm`` to Balance object.
+
+- SC
+
+  - Add ContractParam.hash160
+
+- Fixes
+
+  - Add more logging messages throughout.
+  - ``api.signTx`` now checks and converts the return value from external function to a Transaction object.
+  - Fix regex string for ``rpc.getVersion``.
+
 3.2.1
 =====
 
@@ -106,6 +127,27 @@ This details the changes made from the previous recorded version.
 
 2.x.x
 =====
+
+2.3.4
+-----
+
+- Fix ``TxAttrUsage`` not being imported properly.
+
+2.3.3
+-----
+
+- Fixes
+
+  - push instead of unshift for ``api.attachInvokedContractForMintToken``.
+  - getPrices patch.
+  - update export name for ``TxAttrUsage``.
+  - Fix transaction attribute deserialization.
+  - Fix _emitNum emitting trimmed hex numbers.
+
+2.3.2
+-----
+
+- Docs moved to ``docs`` folder
 
 2.3.1
 -----

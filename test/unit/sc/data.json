@@ -21,13 +21,24 @@
       "script": "205fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b",
       "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
       "operation": "balanceOf",
-      "args": ["5fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b"
-    ]
+      "args": ["5fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b"]
   },
     "5": {
       "script": "5767b7040c106561763ce38c0ce658a946e5d1b381db",
       "scriptHash": "db81b3d1e546a958e60c8ce33c766165100c04b7",
       "operation": null,
       "args": 7
+  },
+  "6": {
+    "script": "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b",
+    "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+    "operation": "balanceOf",
+    "args": [{"type": "Hash160", "value": "cef0c0fdcfe7838eff6ff104f9cdec2922297537"}]
+  },
+  "7": {
+    "script": "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b",
+    "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+    "operation": "balanceOf",
+    "args": {"type": "Array", "value": [{"type": "Hash160", "value": "cef0c0fdcfe7838eff6ff104f9cdec2922297537"}]}
   }
 }

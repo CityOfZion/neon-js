@@ -2,6 +2,9 @@ import Query from './query'
 import { isAddress } from '../wallet'
 import semver from 'semver'
 import { RPC_VERSION, DEFAULT_RPC, NEO_NETWORK } from '../consts'
+import logger from '../logging'
+
+const log = logger('rpc')
 
 const versionRegex = /NEO:(\d+\.\d+\.\d+)/
 /**
@@ -50,6 +53,7 @@ class RPCClient {
    */
   execute (query) {
     this.history.push(query)
+    log.info(`RPC: ${this.net} executing Query[${query.req.method}]`)
     return query.execute(this.net)
   }
 
@@ -94,6 +98,18 @@ class RPCClient {
    */
   getBlock (indexOrHash, verbose = 1) {
     return this.execute(Query.getBlock(indexOrHash, verbose))
+      .then((res) => {
+        return res.result
+      })
+  }
+
+  /**
+   * Gets the block hash at a given height.
+   * @param {number} index
+   * @return {Promise<string>}
+   */
+  getBlockHash (index) {
+    return this.execute(Query.getBlockHash(index))
       .then((res) => {
         return res.result
       })
