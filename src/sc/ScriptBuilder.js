@@ -82,7 +82,7 @@ class ScriptBuilder extends StringStream {
    */
   _emitParam (param) {
     if (!param.type) throw new Error('No type available!')
-    if (!this._isValidValue(param.value)) throw new Error('Invalid value provided!')
+    if (!isValidValue(param.value)) throw new Error('Invalid value provided!')
     switch (param.type) {
       case 'String':
         return this._emitString(str2hexstring(param.value))
@@ -97,17 +97,6 @@ class ScriptBuilder extends StringStream {
       case 'Hash160':
         return this._emitString(reverseHex(param.value))
     }
-  }
-
-  _isValidValue (value) {
-    if (value) {
-      return true
-    } else if (value === 0) {
-      return true
-    } else if (value === '') {
-      return true
-    }
-    return false
   }
 
   /**
@@ -183,6 +172,17 @@ class ScriptBuilder extends StringStream {
         throw new Error()
     }
   }
+}
+
+const isValidValue = (value) => {
+  if (value) {
+    return true
+  } else if (value === 0) {
+    return true
+  } else if (value === '') {
+    return true
+  }
+  return false
 }
 
 export default ScriptBuilder
