@@ -16,7 +16,6 @@ interface apiConfig {
   balance?: Balance
   response?: string
   intents?: TransactionOutput[]
-
   sendingFromSmartContract?: boolean
   tx?: Transaction
   claims?: Claims
