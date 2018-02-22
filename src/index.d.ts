@@ -96,9 +96,9 @@ declare const semantic: {
       gasCost: number
     ) => Promise<RPCResponse>
   }
-  sendAsset: (config: apiConfig) => apiConfig
-  claimGas: (config: apiConfig) => apiConfig
-  doInvoke: (config: apiConfig) => apiConfig
+  sendAsset: (config: apiConfig) => Promise<apiConfig>
+  claimGas: (config: apiConfig) => Promise<apiConfig>
+  doInvoke: (config: apiConfig) => Promise<apiConfig>
 }
 
 export default semantic;
