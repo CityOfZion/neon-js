@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; neon-js 3.2.0 documentation</title>
+  <title>Index &mdash; neon-js 3.3.0 documentation</title>
   
 
   
@@ -38,7 +38,7 @@
         <link rel="index" title="Index"
               href="#"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="neon-js 3.2.0 documentation" href="index.html"/> 
+    <link rel="top" title="neon-js 3.3.0 documentation" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                3.2.0
+                3.3.0
               </div>
             
           
@@ -190,6 +190,7 @@
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
  
@@ -301,9 +302,11 @@
 </li>
       <li><a href="wallet/Claims.html#Claims.net">Claims.net (Claims attribute)</a>
 </li>
+      <li><a href="wallet/methods/components.html#Coin">Coin() (built-in function)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="wallet/methods/components.html#Coin">Coin() (built-in function)</a>
+      <li><a href="wallet/Balance.html#confirm">confirm() (built-in function)</a>
 </li>
       <li><a href="reference/sc.html#ContractParam">ContractParam() (class)</a>
 </li>
@@ -333,16 +336,18 @@
 </li>
       <li><a href="wallet/Wallet.html#decryptAll">decryptAll() (built-in function)</a>
 </li>
+      <li><a href="wallet/methods/nep2.html#decryptAsync">decryptAsync() (built-in function)</a>
+</li>
       <li><a href="wallet/Wallet.html#defaultAccount">defaultAccount (None attribute)</a>
 </li>
       <li><a href="reference/tx.html#deserialize">deserialize() (built-in function)</a>
 </li>
       <li><a href="reference/tx.html#deserializeTransaction">deserializeTransaction() (built-in function)</a>
 </li>
-      <li><a href="reference/tx.html#deserializeTransactionAttribute">deserializeTransactionAttribute() (built-in function)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/tx.html#deserializeTransactionAttribute">deserializeTransactionAttribute() (built-in function)</a>
+</li>
       <li><a href="reference/tx.html#deserializeTransactionInput">deserializeTransactionInput() (built-in function)</a>
 </li>
       <li><a href="reference/tx.html#deserializeTransactionOutput">deserializeTransactionOutput() (built-in function)</a>
@@ -369,11 +374,13 @@
 </li>
       <li><a href="reference/sc.html#emitSysCall">emitSysCall() (built-in function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="wallet/Account.html#encrypt">encrypt() (built-in function)</a>, <a href="wallet/Wallet.html#encrypt">[1]</a>, <a href="wallet/methods/nep2.html#encrypt">[2]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="wallet/Wallet.html#encryptAll">encryptAll() (built-in function)</a>
+</li>
+      <li><a href="wallet/methods/nep2.html#encryptAsync">encryptAsync() (built-in function)</a>
 </li>
       <li><a href="reference/tx.html#exclusiveData">exclusiveData (None attribute)</a>
 </li>
@@ -420,6 +427,8 @@
       <li><a href="reference/rpc.html#getBlock">getBlock() (built-in function)</a>, <a href="reference/rpc.html#getBlock">[1]</a>
 </li>
       <li><a href="reference/rpc.html#getBlockCount">getBlockCount() (built-in function)</a>, <a href="reference/rpc.html#getBlockCount">[1]</a>
+</li>
+      <li><a href="reference/rpc.html#getBlockHash">getBlockHash() (built-in function)</a>, <a href="reference/rpc.html#getBlockHash">[1]</a>
 </li>
       <li><a href="reference/rpc.html#getBlockSysFee">getBlockSysFee() (built-in function)</a>, <a href="reference/rpc.html#getBlockSysFee">[1]</a>
 </li>
@@ -485,7 +494,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/tx.html#hash">hash (None attribute)</a>
 </li>
-      <li><a href="reference/utility.html#hash160">hash160() (built-in function)</a>
+      <li><a href="reference/sc.html#hash160">hash160() (built-in function)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -744,6 +753,14 @@
   </ul></td>
 </tr></table>
 
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/utility.html#utils.hash160">utils.hash160() (utils method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -796,7 +813,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+        &copy; Copyright 2017 - 2018, Ethan Fast, Jun Xiang Yak.
 
     </p>
   </div>
@@ -814,14 +831,13 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: 3.2.0
+        v: 3.3.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="3.2.0/genindex.html">3.2.0</a></dd>
-            <dd><a href="2.3.2/index.html">2.3.2</a></dd>
+            <dd><a href="3.3.0/genindex.html">3.3.0</a></dd>
             <dd><a href="1.1.2/index.html">1.1.2</a></dd>
         </dl>
         <dl>
@@ -838,7 +854,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'3.2.0',
+            VERSION:'3.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

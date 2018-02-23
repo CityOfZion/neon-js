@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API &mdash; neon-js 3.2.0 documentation</title>
+  <title>API &mdash; neon-js 3.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 3.2.0 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 3.3.0 documentation" href="../index.html"/>
         <link rel="up" title="Reference" href="index.html"/>
         <link rel="next" title="RPC" href="rpc.html"/>
         <link rel="prev" title="Reference" href="index.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                3.2.0
+                3.3.0
               </div>
             
           
@@ -209,7 +209,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; Configuration object.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211; Configuration object.</p>
 </td>
 </tr>
 </tbody>
@@ -255,10 +255,11 @@
 <li><strong>config.intents</strong> (<em>object</em>) &#8211; Intents</li>
 <li><strong>config.script</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; VM script. Must include empty args parameter even if no args are present</li>
 <li><strong>config.gas</strong> (<em>number</em>) &#8211; gasCost of VM script.</li>
+<li><strong>config.sendingFromSmartContract</strong> (<em>bool</em>) &#8211; Optionally specify that the source address is a smart contract that doesn&#8217;t correspond to the private key.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; Configuration object.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211; Configuration object.</p>
 </td>
 </tr>
 </tbody>
@@ -349,7 +350,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;string&gt;</strong> &#8211; - Transaction history</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;History&gt;</strong> &#8211; - Transaction history</p>
 </td>
 </tr>
 </tbody>
@@ -371,7 +372,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;string&gt;</strong> &#8211; - URL</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;number&gt;</strong> &#8211; Current height.</p>
 </td>
 </tr>
 </tbody>
@@ -458,10 +459,11 @@
 <li><strong>config.signingFunction</strong> (<em>function</em>) &#8211; An external signing function to sign with. Either this or privateKey is required.</li>
 <li><strong>config.publicKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; A public key for the singing function. Either this or privateKey is required.</li>
 <li><strong>config.intents</strong> (<em>Array.&lt;TransactionOutput&gt;</em>) &#8211; Intents.</li>
+<li><strong>config.sendingFromSmartContract</strong> (<em>bool</em>) &#8211; Optionally specify that the source address is a smart contract that doesn&#8217;t correspond to the private key.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; Configuration object.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211; Configuration object.</p>
 </td>
 </tr>
 </tbody>
@@ -483,7 +485,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>object</strong> &#8211; Configuration object + response</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Promise.&lt;object&gt;</strong> &#8211; Configuration object + response</p>
 </td>
 </tr>
 </tbody>
@@ -541,6 +543,7 @@
 <li><strong>config.privateKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; private key to sign with.</li>
 <li><strong>config.publicKey</strong> (<a class="reference internal" href="sc.html#string" title="string"><em>string</em></a>) &#8211; public key. Required if using signingFunction.</li>
 <li><strong>config.signingFunction</strong> (<em>function</em>) &#8211; External signing function. Requires publicKey.</li>
+<li><strong>config.sendingFromSmartContract</strong> (<em>bool</em>) &#8211; Optionally specify that the source address is a smart contract that doesn&#8217;t correspond to the private key.</li>
 </ul>
 </td>
 </tr>
@@ -1079,7 +1082,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+        &copy; Copyright 2017 - 2018, Ethan Fast, Jun Xiang Yak.
 
     </p>
   </div>
@@ -1097,14 +1100,13 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: 3.2.0
+        v: 3.3.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../3.2.0/reference/api.html">3.2.0</a></dd>
-            <dd><a href="../2.3.2/reference/api.html">2.3.2</a></dd>
+            <dd><a href="../3.3.0/reference/api.html">3.3.0</a></dd>
             <dd><a href="../1.1.2/index.html">1.1.2</a></dd>
         </dl>
         <dl>
@@ -1121,7 +1123,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'3.2.0',
+            VERSION:'3.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

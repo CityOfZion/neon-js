@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>NEP2 &mdash; neon-js 3.2.0 documentation</title>
+  <title>NEP2 &mdash; neon-js 3.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="neon-js 3.2.0 documentation" href="../../index.html"/>
+    <link rel="top" title="neon-js 3.3.0 documentation" href="../../index.html"/>
         <link rel="up" title="Methods" href="index.html"/>
         <link rel="next" title="Verify" href="verify.html"/>
         <link rel="prev" title="Components" href="components.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                3.2.0
+                3.3.0
               </div>
             
           
@@ -196,7 +196,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../../3.2.0/wallet/methods/nep2.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.2.0.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../../3.3.0/wallet/methods/nep2.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.3.0.</a></p>
 <div class="section" id="nep2">
 <h1>NEP2<a class="headerlink" href="#nep2" title="Permalink to this headline">¶</a></h1>
 <p>The NEP2 standard describes the procedure to encrypt or decrypt a private key. The encryption method accepts either a WIF or HEX private key. However, the decryption method will always return a WIF for consistency.</p>
@@ -260,6 +260,50 @@
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="encryptAsync">
+<code class="descname">encryptAsync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#encryptAsync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encrypts a WIF key using a given keyphrase under NEP-2 Standard.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>wifKey</strong> (<a class="reference internal" href="../../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; WIF key to encrypt (52 chars long).</li>
+<li><strong>keyphrase</strong> (<a class="reference internal" href="../../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).</li>
+<li><strong>scryptParams</strong> (<em>scryptParams</em>) &#8211; Parameters for Scrypt. Defaults to NEP2 specified parameters.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211; The encrypted key in Base58 (Case sensitive).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="decryptAsync">
+<code class="descname">decryptAsync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decryptAsync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decrypts an encrypted key using a given keyphrase under NEP-2 Standard.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>encryptedKey</strong> (<a class="reference internal" href="../../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; The encrypted key (58 chars long).</li>
+<li><strong>keyphrase</strong> (<a class="reference internal" href="../../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).</li>
+<li><strong>scryptParams</strong> (<em>scryptParams</em>) &#8211; Parameters for Scrypt. Defaults to NEP2 specified parameters.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211; The decrypted WIF key.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -284,7 +328,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+        &copy; Copyright 2017 - 2018, Ethan Fast, Jun Xiang Yak.
 
     </p>
   </div>
@@ -308,8 +352,7 @@
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../../../3.2.0/wallet/methods/nep2.html">3.2.0</a></dd>
-            <dd><a href="../../../2.3.2/index.html">2.3.2</a></dd>
+            <dd><a href="../../../3.3.0/wallet/methods/nep2.html">3.3.0</a></dd>
             <dd><a href="../../../1.1.2/index.html">1.1.2</a></dd>
         </dl>
         <dl>
@@ -326,7 +369,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'3.2.0',
+            VERSION:'3.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

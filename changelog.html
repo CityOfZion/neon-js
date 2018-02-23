@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Changelog &mdash; neon-js 3.2.0 documentation</title>
+  <title>Changelog &mdash; neon-js 3.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="neon-js 3.2.0 documentation" href="index.html"/>
+    <link rel="top" title="neon-js 3.3.0 documentation" href="index.html"/>
         <link rel="prev" title="Utility" href="reference/utility.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                3.2.0
+                3.3.0
               </div>
             
           
@@ -179,7 +179,42 @@
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
 <p>This details the changes made from the previous recorded version.</p>
 <div class="section" id="id1">
-<h2>3.2.0<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>3.3.0<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>API<ul>
+<li>Add support for manpulating smart contracts. This means that you can send assets from smart contracts. This support is currently enabled only in the core API methods <code class="docutils literal"><span class="pre">sendAsset</span></code> and <code class="docutils literal"><span class="pre">doInvoke</span></code>. <strong>This is currently experimental and is subject to breaking changes without notice</strong> (no minor version bump for changes to these).</li>
+<li>Add support for <code class="docutils literal"><span class="pre">config.account</span></code>. You can now use Account in place of address and private key.</li>
+<li>Add support for <code class="docutils literal"><span class="pre">config.balance</span></code>. You can use an old Balance object instead of retrieving a new one. Attaching a Balance object will cause the function to skip over the retrieval process.</li>
+</ul>
+</li>
+<li>Wallet<ul>
+<li>Add <code class="docutils literal"><span class="pre">confirm</span></code> to Balance object.</li>
+</ul>
+</li>
+<li>SC<ul>
+<li>Add ContractParam.hash160</li>
+</ul>
+</li>
+<li>Util<ul>
+<li>Add <code class="docutils literal"><span class="pre">isHex</span></code> and <code class="docutils literal"><span class="pre">ensureHex</span></code> as ways to conveniently check format of hexstrings.</li>
+</ul>
+</li>
+<li>Fixes<ul>
+<li>Add more logging messages throughout.</li>
+<li><code class="docutils literal"><span class="pre">api.signTx</span></code> now checks and converts the return value from external function to a Transaction object.</li>
+<li>Fix regex string for <code class="docutils literal"><span class="pre">rpc.getVersion</span></code>.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>3.2.1<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Update typescript typings</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>3.2.0<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Wallet<ul>
 <li>Implement encryptAsync and decryptAsync using a new scrypt library. Further work will be done to convert the existing encrypt/decrypt to use the new library.</li>
@@ -216,8 +251,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id2">
-<h2>3.1.0<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h2>3.1.0<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>API<ul>
 <li>Expose the <code class="docutils literal"><span class="pre">loadBalance</span></code> method. This method allows the use of the dynamic API switch within <code class="docutils literal"><span class="pre">neon-js</span></code> for the external providers.</li>
@@ -227,8 +262,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id3">
-<h2>3.0.0<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h2>3.0.0<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first">Logging</p>
 <ul class="simple">
@@ -284,14 +319,24 @@
 </div>
 <div class="section" id="x-x">
 <h2>2.x.x<a class="headerlink" href="#x-x" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id4">
-<h3>2.3.1<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>2.3.4<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li>Docs moved to <code class="docutils literal"><span class="pre">docs</span></code> folder</li>
+<li>Fixes<ul>
+<li>push instead of unshift for <code class="docutils literal"><span class="pre">api.attachInvokedContractForMintToken</span></code>.</li>
+<li>getPrices patch.</li>
+<li>update export name for <code class="docutils literal"><span class="pre">TxAttrUsage</span></code>.</li>
+<li>Fix transaction attribute deserialization.</li>
+<li>Fix _emitNum emitting trimmed hex numbers.</li>
 <li>clean neonDB input numbers</li>
+<li>Fix <code class="docutils literal"><span class="pre">TxAttrUsage</span></code> not being imported properly.</li>
+</ul>
+</li>
 </ul>
 </div>
-<div class="section" id="id5">
-<h3>2.3.0<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>2.3.0<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Smart Contract</p>
 <ul class="simple">
@@ -344,18 +389,18 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id6">
-<h3>2.2.2<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h3>2.2.2<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fix <code class="docutils literal"><span class="pre">nep5/doTransferToken</span></code></li>
 </ul>
 </div>
-<div class="section" id="id7">
-<h3>2.2.1<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id9">
+<h3>2.2.1<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <p>-Fix <code class="docutils literal"><span class="pre">fixed82num</span></code> not accepting empty string</p>
 </div>
-<div class="section" id="id8">
-<h3>2.2.0<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h3>2.2.0<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Wallet</p>
 <ul class="simple">
@@ -408,8 +453,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id9">
-<h3>2.1.0<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id11">
+<h3>2.1.0<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Balance as an ES6 class.</p>
 <ul class="simple">
@@ -435,8 +480,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id10">
-<h3>2.0.0<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id12">
+<h3>2.0.0<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Package exports semantic style</p>
 <ul class="simple">
@@ -498,10 +543,10 @@
 </ul>
 </div>
 </div>
-<div class="section" id="id11">
-<h2>1.x.x<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id12">
-<h3>1.1.1<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id13">
+<h2>1.x.x<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id14">
+<h3>1.1.1<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Ledger support<ul>
 <li>Add ability to sign using external function for neonDB API.</li>
@@ -510,8 +555,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id13">
-<h3>1.1.0<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id15">
+<h3>1.1.0<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Transaction Overhaul</p>
 <ul class="simple">
@@ -536,21 +581,21 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id14">
-<h3>1.0.4<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id16">
+<h3>1.0.4<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Additional NEP2 wrapper methods (Simple encrypted WIF creation)</li>
 <li>Address validation to guard against sending to non-NEO addresses.</li>
 </ul>
 </div>
-<div class="section" id="id15">
-<h3>1.0.2<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id17">
+<h3>1.0.2<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Introduce NEP2 Support (encrypt / decrypt WIF)</li>
 </ul>
 </div>
-<div class="section" id="id16">
-<h3>1.0.1<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id18">
+<h3>1.0.1<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Upgrade API support to v2 for neon-wallet-db</li>
 </ul>
@@ -578,7 +623,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+        &copy; Copyright 2017 - 2018, Ethan Fast, Jun Xiang Yak.
 
     </p>
   </div>
@@ -596,14 +641,13 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: 3.2.0
+        v: 3.3.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="3.2.0/changelog.html">3.2.0</a></dd>
-            <dd><a href="2.3.2/changelog.html">2.3.2</a></dd>
+            <dd><a href="3.3.0/changelog.html">3.3.0</a></dd>
             <dd><a href="1.1.2/index.html">1.1.2</a></dd>
         </dl>
         <dl>
@@ -620,7 +664,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'3.2.0',
+            VERSION:'3.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

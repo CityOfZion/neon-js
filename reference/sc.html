@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Smart Contract &mdash; neon-js 3.2.0 documentation</title>
+  <title>Smart Contract &mdash; neon-js 3.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 3.2.0 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 3.3.0 documentation" href="../index.html"/>
         <link rel="up" title="Reference" href="index.html"/>
         <link rel="next" title="Transactions" href="tx.html"/>
         <link rel="prev" title="RPC" href="rpc.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                3.2.0
+                3.3.0
               </div>
             
           
@@ -255,6 +255,26 @@ ContractParams come with convenient static methods to create arguments. For exam
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>value</strong> (<em>any</em>) &#8211; </li>
 <li><strong>format</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; The format that this value represents. Different formats are parsed differently.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hash160">
+<code class="descname">hash160</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#hash160" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a Hash160 ContractParam. This is used for containing a scriptHash. Do not reverse the input if using this format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; A 40 character long hexstring. Automatically converts an address to scripthash if provided.</li>
 </ul>
 </td>
 </tr>
@@ -466,7 +486,7 @@ ContractParams come with convenient static methods to create arguments. For exam
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+        &copy; Copyright 2017 - 2018, Ethan Fast, Jun Xiang Yak.
 
     </p>
   </div>
@@ -484,14 +504,13 @@ ContractParams come with convenient static methods to create arguments. For exam
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: 3.2.0
+        v: 3.3.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../3.2.0/reference/sc.html">3.2.0</a></dd>
-            <dd><a href="../2.3.2/reference/sc.html">2.3.2</a></dd>
+            <dd><a href="../3.3.0/reference/sc.html">3.3.0</a></dd>
             <dd><a href="../1.1.2/index.html">1.1.2</a></dd>
         </dl>
         <dl>
@@ -508,7 +527,7 @@ ContractParams come with convenient static methods to create arguments. For exam
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'3.2.0',
+            VERSION:'3.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

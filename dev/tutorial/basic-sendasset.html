@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Basic: Sending Assets &mdash; neon-js 3.2.0 documentation</title>
+  <title>Basic: Sending Assets &mdash; neon-js 3.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 3.2.0 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 3.3.0 documentation" href="../index.html"/>
         <link rel="up" title="Tutorial" href="index.html"/>
         <link rel="next" title="Basic: Claiming Gas" href="basic-claimgas.html"/>
         <link rel="prev" title="Tutorial" href="index.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                3.2.0
+                3.3.0
               </div>
             
           
@@ -100,6 +100,8 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorial</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Basic: Sending Assets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic-claimgas.html">Basic: Claiming Gas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic-createscript.html">Basic - Creating an invocation script (NEP5)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adv-multitx.html">Advanced: Multiple Transactions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../wallet/index.html">Wallet</a></li>
@@ -185,7 +187,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.2.0/tutorial/basic-sendasset.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.2.0.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.3.0/tutorial/basic-sendasset.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.3.0.</a></p>
 <div class="section" id="basic-sending-assets">
 <h1>Basic: Sending Assets<a class="headerlink" href="#basic-sending-assets" title="Permalink to this headline">¶</a></h1>
 <p>This is a basic tutorial to send assets using the <code class="docutils literal"><span class="pre">sendAsset</span></code> method.</p>
@@ -242,6 +244,7 @@
 <ul class="simple">
 <li>The <code class="docutils literal"><span class="pre">sendAsset</span></code> method is found under the <code class="docutils literal"><span class="pre">api</span></code> module for named imports.</li>
 <li>This method only accepts one source of assets to send from. This does not support using multiple sources or multi-sig addresses.</li>
+<li>This supports sending assets from a smart contract by setting the <code class="docutils literal"><span class="pre">address</span></code> field to the contract&#8217;s address, signing with a private key that is allowed to send from the contract and setting <code class="docutils literal"><span class="pre">sendingFromSmartContract</span></code> to true.</li>
 </ul>
 </div>
 </div>
@@ -268,7 +271,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Ethan Fast, Jun Xiang Yak.
+        &copy; Copyright 2017 - 2018, Ethan Fast, Jun Xiang Yak.
 
     </p>
   </div>
@@ -292,8 +295,7 @@
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../../3.2.0/tutorial/basic-sendasset.html">3.2.0</a></dd>
-            <dd><a href="../../2.3.2/index.html">2.3.2</a></dd>
+            <dd><a href="../../3.3.0/tutorial/basic-sendasset.html">3.3.0</a></dd>
             <dd><a href="../../1.1.2/index.html">1.1.2</a></dd>
         </dl>
         <dl>
@@ -310,7 +312,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'3.2.0',
+            VERSION:'3.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -36,7 +36,7 @@ Format
 Hashing
 -------
 
-.. autofunction:: hash160
+.. autofunction:: utils.hash160
 
 .. autofunction:: hash256
 

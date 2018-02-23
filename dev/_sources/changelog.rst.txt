@@ -4,6 +4,38 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
+3.3.0
+=====
+
+- API
+
+  - Add support for manpulating smart contracts. This means that you can send assets from smart contracts. This support is currently enabled only in the core API methods ``sendAsset`` and ``doInvoke``. **This is currently experimental and is subject to breaking changes without notice** (no minor version bump for changes to these).
+  - Add support for ``config.account``. You can now use Account in place of address and private key.
+  - Add support for ``config.balance``. You can use an old Balance object instead of retrieving a new one. Attaching a Balance object will cause the function to skip over the retrieval process.
+
+- Wallet
+
+  - Add ``confirm`` to Balance object.
+
+- SC
+
+  - Add ContractParam.hash160
+
+- Util
+
+  - Add ``isHex`` and ``ensureHex`` as ways to conveniently check format of hexstrings.
+
+- Fixes
+
+  - Add more logging messages throughout.
+  - ``api.signTx`` now checks and converts the return value from external function to a Transaction object.
+  - Fix regex string for ``rpc.getVersion``.
+
+3.2.1
+=====
+
+- Update typescript typings
+
 3.2.0
 =====
 
@@ -102,10 +134,20 @@ This details the changes made from the previous recorded version.
 2.x.x
 =====
 
-2.3.1
+2.3.4
 -----
 
-- clean neonDB input numbers
+- Docs moved to ``docs`` folder
+
+- Fixes
+
+  - push instead of unshift for ``api.attachInvokedContractForMintToken``.
+  - getPrices patch.
+  - update export name for ``TxAttrUsage``.
+  - Fix transaction attribute deserialization.
+  - Fix _emitNum emitting trimmed hex numbers.
+  - clean neonDB input numbers
+  - Fix ``TxAttrUsage`` not being imported properly.
 
 2.3.0
 -----

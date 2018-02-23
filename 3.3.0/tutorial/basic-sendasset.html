@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Basic: Sending Assets &mdash; neon-js 3.3.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="neon-js 3.3.0 documentation" href="../index.html"/>
+        <link rel="up" title="Tutorial" href="index.html"/>
+        <link rel="next" title="Basic: Claiming Gas" href="basic-claimgas.html"/>
+        <link rel="prev" title="Tutorial" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> neon-js
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorial</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Basic: Sending Assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic-claimgas.html">Basic: Claiming Gas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic-createscript.html">Basic - Creating an invocation script (NEP5)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adv-multitx.html">Advanced: Multiple Transactions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet/index.html">Wallet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">neon-js</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tutorial</a> &raquo;</li>
+        
+      <li>Basic: Sending Assets</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorial/basic-sendasset.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<div class="section" id="basic-sending-assets">
+<h1>Basic: Sending Assets<a class="headerlink" href="#basic-sending-assets" title="Permalink to this headline">¶</a></h1>
+<p>This is a basic tutorial to send assets using the <code class="docutils literal"><span class="pre">sendAsset</span></code> method.</p>
+<p><code class="docutils literal"><span class="pre">neon-js</span></code> provides out-of-the-box functionality for sending assets, claiming gas and invoking smart contracts. In this tutorial, I will be demostrating how to use the high level functions to send some native assets.</p>
+<p>For clarification, when we talk about assets, we are referring to native assets such as NEO or GAS. NEP5 tokens are not considered assets as they are records within smart contracts. Thus, this is not applicable for sending those tokens.</p>
+<div class="section" id="creating-the-intent">
+<h2>Creating the Intent<a class="headerlink" href="#creating-the-intent" title="Permalink to this headline">¶</a></h2>
+<p>To send an asset, we first have to create an <code class="docutils literal"><span class="pre">Intent</span></code>. This intent is represents the instructions to send assets to a specific address.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span><span class="p">,</span> <span class="p">{</span><span class="nx">api</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+
+<span class="c1">// We want to send 1 NEO and 1 GAS to ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW</span>
+<span class="kr">const</span> <span class="nx">intent</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">makeIntent</span><span class="p">({</span><span class="nx">NEO</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span> <span class="nx">GAS</span><span class="o">:</span><span class="mi">1</span><span class="p">},</span> <span class="s1">&#39;ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW&#39;</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">intent</span><span class="p">)</span> <span class="c1">// This is an array of 2 Intent objects, one for each asset</span>
+</pre></div>
+</div>
+<p>To add more intents, simply use the <code class="docutils literal"><span class="pre">api.makeIntent</span></code> to create them and concatenate them together in a single array.</p>
+</div>
+<div class="section" id="setup-the-configuration-object">
+<h2>Setup the configuration object<a class="headerlink" href="#setup-the-configuration-object" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">sendAsset</span></code> accepts an configuration object that contains all the necessary details to construct the transaction.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">config</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">net</span><span class="o">:</span> <span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="c1">// The network to perform the action, MainNet or TestNet.</span>
+  <span class="nx">address</span><span class="o">:</span> <span class="s1">&#39;ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s&#39;</span><span class="p">,</span>  <span class="c1">// This is the address which the assets come from.</span>
+  <span class="nx">privateKey</span><span class="o">:</span> <span class="s1">&#39;9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69&#39;</span><span class="p">,</span>
+  <span class="nx">intents</span><span class="o">:</span> <span class="nx">intent</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Do make sure that the address and private key matches. These are used to retrieve the balance from 3rd party APIs (neonDB and neoscan) and to sign the transaction.</p>
+</div>
+<div class="section" id="send">
+<h2>Send<a class="headerlink" href="#send" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">Neon</span><span class="p">.</span><span class="nx">sendAsset</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">config</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">response</span><span class="p">)</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">config</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">sendAsset</span></code> automatically does all the work in retrieving the balance, constructing the transaction, signing it and sending it off to the optimal node. When this is done, the promise returns the <code class="docutils literal"><span class="pre">config</span></code> object. The object is the same object passed in at the beginning with all the additional information used in the process appended to it. For example, the <code class="docutils literal"><span class="pre">url</span></code> field is the NEO node that sent the transaction to.</p>
+<p>Here, we are interested in the <code class="docutils literal"><span class="pre">response</span></code> property, which contains the response from the RPC endpoint upon sending the transaction.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nx">result</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nx">txid</span><span class="o">:</span> <span class="s1">&#39;3be60dd2b3ce44d4e84f17519d0afce6372e269aafb9598e5b7be8230f6b6380&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If the transaction is successful, the <code class="docutils literal"><span class="pre">txid</span></code> is attached in the response. We can take this string and use it in a block explorer to check out our transaction.</p>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The <code class="docutils literal"><span class="pre">sendAsset</span></code> method is found under the <code class="docutils literal"><span class="pre">api</span></code> module for named imports.</li>
+<li>This method only accepts one source of assets to send from. This does not support using multiple sources or multi-sig addresses.</li>
+<li>This supports sending assets from a smart contract by setting the <code class="docutils literal"><span class="pre">address</span></code> field to the contract&#8217;s address, signing with a private key that is allowed to send from the contract and setting <code class="docutils literal"><span class="pre">sendingFromSmartContract</span></code> to true.</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="basic-claimgas.html" class="btn btn-neutral float-right" title="Basic: Claiming Gas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 - 2018, Ethan Fast, Jun Xiang Yak.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: 3.3.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="basic-sendasset.html">3.3.0</a></dd>
+            <dd><a href="../../1.1.2/index.html">1.1.2</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../dev/tutorial/basic-sendasset.html">dev</a></dd>
+            <dd><a href="../../master/tutorial/basic-sendasset.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'3.3.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

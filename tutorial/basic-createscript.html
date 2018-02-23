@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Basic - Creating an invocation script (NEP5) &mdash; neon-js 3.3.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="neon-js 3.3.0 documentation" href="../index.html"/>
+        <link rel="up" title="Tutorial" href="index.html"/>
+        <link rel="next" title="Advanced: Multiple Transactions" href="adv-multitx.html"/>
+        <link rel="prev" title="Basic: Claiming Gas" href="basic-claimgas.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> neon-js
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorial</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basic-sendasset.html">Basic: Sending Assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic-claimgas.html">Basic: Claiming Gas</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Basic - Creating an invocation script (NEP5)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adv-multitx.html">Advanced: Multiple Transactions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet/index.html">Wallet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">neon-js</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tutorial</a> &raquo;</li>
+        
+      <li>Basic - Creating an invocation script (NEP5)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorial/basic-createscript.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<div class="section" id="basic-creating-an-invocation-script-nep5">
+<h1>Basic - Creating an invocation script (NEP5)<a class="headerlink" href="#basic-creating-an-invocation-script-nep5" title="Permalink to this headline">¶</a></h1>
+<p>This is a tutorial for constructing invocation scripts for invoking smart contract functions. This tutorial is specifically targeted at NEP5 contracts as it is currently the most common contract type.</p>
+<p>The example I will be using for this tutorial can be found <a class="reference external" href="https://github.com/neo-project/examples-csharp/blob/master/ICO_Template/ICO_Template.cs">here</a>.</p>
+<div class="section" id="the-parts">
+<h2>The parts<a class="headerlink" href="#the-parts" title="Permalink to this headline">¶</a></h2>
+<p>We first look at the entry method for the NEP5 contract. The entry method for smart contracts are always named <code class="docutils literal"><span class="pre">Main</span></code></p>
+<div class="highlight-C#"><div class="highlight"><pre><span></span><span class="k">public</span> <span class="k">static</span> <span class="n">Object</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span> <span class="n">operation</span><span class="p">,</span> <span class="k">params</span> <span class="kt">object</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+<span class="p">{</span>
+</pre></div>
+</div>
+<p>There are 2 arguments for the entry method: a string <code class="docutils literal"><span class="pre">operation</span></code> and an array <code class="docutils literal"><span class="pre">args</span></code>. This means that for every invocation script, the contract expects exactly 2 arguments.</p>
+<p>Of course, this style is not enforced and you can have a smart contract that simply accepts an integer as the only argument. However, it is recommended that any complex contract implement this string and array pattern as it is super flexible and tools will most likely be built around serving this pattern.</p>
+</div>
+<div class="section" id="simple-calls-with-create-script">
+<h2>Simple calls with create.script<a class="headerlink" href="#simple-calls-with-create-script" title="Permalink to this headline">¶</a></h2>
+<p>In <code class="docutils literal"><span class="pre">neon-js</span></code>, there is a simple way exposed to create an invocation script through the semantic call <code class="docutils literal"><span class="pre">Neon.create.script</span></code>. It is an alias for the method <code class="docutils literal"><span class="pre">Neon.sc.createScript</span></code>.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">props</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">scriptHash</span><span class="o">:</span> <span class="s1">&#39;5b7074e873973a6ed3708862f219a6fbf4d1c411&#39;</span><span class="p">,</span> <span class="c1">// Scripthash for the contract</span>
+  <span class="nx">operation</span><span class="o">:</span> <span class="s1">&#39;balanceOf&#39;</span><span class="p">,</span> <span class="c1">// name of operation to perform.</span>
+  <span class="nx">args</span><span class="o">:</span> <span class="p">[</span><span class="nx">Neon</span><span class="p">.</span><span class="nx">u</span><span class="p">.</span><span class="nx">reverseHex</span><span class="p">(</span><span class="s1">&#39;cef0c0fdcfe7838eff6ff104f9cdec2922297537&#39;</span><span class="p">)]</span> <span class="c1">// any optional arguments to pass in. If null, use empty array.</span>
+<span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">script</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">script</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">script</span></code> is now a hexstring that you can use in a <code class="docutils literal"><span class="pre">invokescript</span></code> RPC call or an invocationTransaction.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">Neon</span><span class="p">.</span><span class="nx">rpc</span><span class="p">.</span><span class="nx">Query</span><span class="p">.</span><span class="nx">invokeScript</span><span class="p">(</span><span class="nx">script</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;http://seed3.neo.org:20332&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="c1">// You should get a result with state: &quot;HALT, BREAK&quot;</span>
+  <span class="p">})</span>
+</pre></div>
+</div>
+<p>Your console result should look something like this:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;jsonrpc&quot;</span><span class="o">:</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="mi">1234</span><span class="p">,</span>
+    <span class="s2">&quot;result&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;script&quot;</span><span class="o">:</span> <span class="s2">&quot;143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;state&quot;</span><span class="o">:</span> <span class="s2">&quot;HALT, BREAK&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gas_consumed&quot;</span><span class="o">:</span> <span class="s2">&quot;0.338&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stack&quot;</span><span class="o">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;ByteArray&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="o">:</span> <span class="s2">&quot;80778e06&quot;</span> <span class="c1">// This value will vary</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">value</span></code> field is our result and we can turn that into a human readable form by parsing it as a Fixed8:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">Neon</span><span class="p">.</span><span class="nx">u</span><span class="p">.</span><span class="nx">Fixed8</span><span class="p">.</span><span class="nx">fromReverseHex</span><span class="p">(</span><span class="s1">&#39;80778e06&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a generic case for NEP5 tokens with 8 decimals. Some tokens might require different parsing solutions. This will be covered in another tutorial or you can check out the source code under src/api/nep5 .</p>
+</div>
+</div>
+<div class="section" id="chaining-scripts">
+<h2>Chaining scripts<a class="headerlink" href="#chaining-scripts" title="Permalink to this headline">¶</a></h2>
+<p>Invocation transactions might be free now so we are fine with sending an transaction for every transfer but in the future, we want to aggregate them so we fully maximise the 10 free gas that we get per transaction. This is achieved by chaining scripts together.</p>
+<p><code class="docutils literal"><span class="pre">create.script</span></code> has the functionality in built for us. Let us use it to retrieve all the information about a specific token.</p>
+<p>There are many fields that we want to know about in an NEP5 token: name, decimals, total supply, etc. Instead of performing a <code class="docutils literal"><span class="pre">invokescript</span></code> RPC call for each field, we will be combining it in a single call. The example we are using here is the testnet contract for Red Pulse.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">scriptHash</span> <span class="o">=</span> <span class="s1">&#39;5b7074e873973a6ed3708862f219a6fbf4d1c411&#39;</span> <span class="c1">// TestNet RPX</span>
+
+<span class="kr">const</span> <span class="nx">getName</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">scriptHash</span><span class="p">,</span> <span class="nx">operation</span><span class="o">:</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="nx">args</span><span class="o">:</span> <span class="p">[]</span> <span class="p">}</span>
+<span class="kr">const</span> <span class="nx">getDecimals</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">scriptHash</span><span class="p">,</span> <span class="nx">operation</span><span class="o">:</span> <span class="s1">&#39;decimals&#39;</span><span class="p">,</span> <span class="nx">args</span><span class="o">:</span> <span class="p">[]</span> <span class="p">}</span>
+<span class="kr">const</span> <span class="nx">getSymbol</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">scriptHash</span><span class="p">,</span> <span class="nx">operation</span><span class="o">:</span> <span class="s1">&#39;symbol&#39;</span><span class="p">,</span> <span class="nx">args</span><span class="o">:</span> <span class="p">[]</span> <span class="p">}</span>
+<span class="kr">const</span> <span class="nx">getTotalSupply</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">scriptHash</span><span class="p">,</span> <span class="nx">operation</span><span class="o">:</span> <span class="s1">&#39;totalSupply&#39;</span><span class="p">,</span> <span class="nx">args</span><span class="o">:</span> <span class="p">[]</span> <span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">script</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">script</span><span class="p">([</span><span class="nx">getName</span><span class="p">,</span> <span class="nx">getDecimals</span><span class="p">,</span> <span class="nx">getSymbol</span><span class="p">,</span> <span class="nx">getTotalSupply</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Similar to the previous example, our <code class="docutils literal"><span class="pre">script</span></code> is now ready to be used in a <code class="docutils literal"><span class="pre">invokescript</span></code> RPC call or an invocationTransaction.</p>
+<p>Now our result would look like:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;jsonrpc&quot;</span><span class="o">:</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="mi">1234</span><span class="p">,</span>
+    <span class="s2">&quot;result&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;script&quot;</span><span class="o">:</span> <span class="s2">&quot;00c1046e616d656711c4d1f4fba619f2628870d36e3a9773e874705b00c108646563696d616c736711c4d1f4fba619f2628870d36e3a9773e874705b00c10673796d626f6c6711c4d1f4fba619f2628870d36e3a9773e874705b00c10b746f74616c537570706c796711c4d1f4fba619f2628870d36e3a9773e874705b&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;state&quot;</span><span class="o">:</span> <span class="s2">&quot;HALT, BREAK&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gas_consumed&quot;</span><span class="o">:</span> <span class="s2">&quot;0.646&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stack&quot;</span><span class="o">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;ByteArray&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="o">:</span> <span class="s2">&quot;5265642050756c736520546f6b656e20332e312e34&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;Integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="o">:</span> <span class="s2">&quot;8&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;ByteArray&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="o">:</span> <span class="s2">&quot;525058&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;ByteArray&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="o">:</span> <span class="s2">&quot;00f871f54c710f&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We can see that the result stack returns the results in the order of our scripts. The first result <code class="docutils literal"><span class="pre">5265642050756c736520546f6b656e20332e312e34</span></code> is the hexstring representation of the name of the token. The second result is the decimal places. The third result is the symbol in hexstring and the last result is the total supply in Fixed8 format.</p>
+<p>This last bit in parsing is intentionally left for the reader to try parsing the values themselves.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Red Pulse Token 3.1.4&#39;</span>
+<span class="kr">const</span> <span class="nx">decimals</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="kr">const</span> <span class="nx">symbol</span> <span class="o">=</span> <span class="s1">&#39;RPX&#39;</span>
+<span class="kr">const</span> <span class="nx">totalSupply</span> <span class="o">=</span> <span class="mf">43467000.00000000</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="adv-multitx.html" class="btn btn-neutral float-right" title="Advanced: Multiple Transactions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="basic-claimgas.html" class="btn btn-neutral" title="Basic: Claiming Gas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 - 2018, Ethan Fast, Jun Xiang Yak.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: 3.3.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../3.3.0/tutorial/basic-createscript.html">3.3.0</a></dd>
+            <dd><a href="../1.1.2/index.html">1.1.2</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../dev/tutorial/basic-createscript.html">dev</a></dd>
+            <dd><a href="../master/tutorial/basic-createscript.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'3.3.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
