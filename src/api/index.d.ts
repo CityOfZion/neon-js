@@ -16,6 +16,13 @@ interface apiConfig {
   balance?: Balance
   response?: string
   intents?: TransactionOutput[]
+  sendingFromSmartContract?: boolean
+  tx?: Transaction
+  claims?: Claims
+  script?: string
+  gas?: number
+  account?: Account
+  override?: object
 }
 
 interface AssetAmounts {
