@@ -176,11 +176,84 @@
     }
   },
   "neonDB": {
-    "getBestNode": {
-      "url": "http://testnet-api.wallet.cityofzion.io/v2/network/best_node",
+    "getNodes": {
+      "url": "http://testnet-api.wallet.cityofzion.io/v2/network/nodes",
       "response": {
         "net": "TestNet",
-        "node": "http://seed8.antshares.org:20332"
+        "nodes": [
+          {
+            "block_height": null,
+            "status": false,
+            "time": null,
+            "url": "http://seed1.neo.org:20332"
+          },
+          {
+            "block_height": 1180515,
+            "status": true,
+            "time": 2.4572107791900635,
+            "url": "http://seed2.neo.org:20332"
+          },
+          {
+            "block_height": 1180515,
+            "status": true,
+            "time": 0.3124654293060303,
+            "url": "http://seed3.neo.org:20332"
+          },
+          {
+            "block_height": 1180515,
+            "status": true,
+            "time": 0.5505275726318359,
+            "url": "http://seed4.neo.org:20332"
+          },
+          {
+            "block_height": 1180515,
+            "status": true,
+            "time": 0.886979341506958,
+            "url": "http://seed5.neo.org:20332"
+          },
+          {
+            "block_height": 1180515,
+            "status": true,
+            "time": 0.04218435287475586,
+            "url": "http://seed8.antshares.org:20332"
+          },
+          {
+            "block_height": 1180515,
+            "status": true,
+            "time": 1.7845439910888672,
+            "url": "http://api.otcgo.cn:20332"
+          },
+          {
+            "block_height": 1180515,
+            "status": true,
+            "time": 0.09355401992797852,
+            "url": "http://test1.cityofzion.io:8880"
+          },
+          {
+            "block_height": 1180515,
+            "status": true,
+            "time": 0.09590768814086914,
+            "url": "http://test2.cityofzion.io:8880"
+          },
+          {
+            "block_height": 1177929,
+            "status": true,
+            "time": 0.16830968856811523,
+            "url": "http://test3.cityofzion.io:8880"
+          },
+          {
+            "block_height": 1180515,
+            "status": true,
+            "time": 0.12138891220092773,
+            "url": "http://test4.cityofzion.io:8880"
+          },
+          {
+            "block_height": 1180515,
+            "status": true,
+            "time": 0.07945847511291504,
+            "url": "http://test5.cityofzion.io:8880"
+          }
+        ]
       }
     },
     "getWalletDBHeight": {
