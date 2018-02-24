@@ -92,9 +92,20 @@ export const getMaxClaimAmount = (net, address) => {
  */
 export const getRPCEndpoint = net => {
   const apiEndpoint = getAPIEndpoint(net)
-  return axios.get(apiEndpoint + '/v2/network/best_node').then(response => {
-    log.info(`Best node from neonDB ${net}: ${response.data.node}`)
-    return response.data.node
+  return axios.get(apiEndpoint + '/v2/network/nodes')
+  .then((response) => {
+    const goodNodes = response.data.nodes.filter(n => n.status)
+    let bestHeight = 0
+    let nodes = []
+    for (const node of goodNodes) {
+      if (node.block_height > bestHeight) {
+        bestHeight = node.height
+        nodes = [node]
+      } else if (node.height === bestHeight) {
+        nodes.push(node)
+      }
+    }
+    return nodes[Math.floor(Math.random() * nodes.length)].url
   })
 }
 
