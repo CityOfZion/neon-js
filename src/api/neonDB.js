@@ -99,9 +99,9 @@ export const getRPCEndpoint = net => {
     let nodes = []
     for (const node of goodNodes) {
       if (node.block_height > bestHeight) {
-        bestHeight = node.height
+        bestHeight = node.block_height
         nodes = [node]
-      } else if (node.height === bestHeight) {
+      } else if (node.block_height === bestHeight) {
         nodes.push(node)
       }
     }
