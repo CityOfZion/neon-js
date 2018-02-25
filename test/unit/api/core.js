@@ -223,6 +223,27 @@ describe('Core API', function () {
     })
   })
 
+  describe('fillUrl', function () {
+    it('does nothing when url provided', () => {
+      const config = {
+        url: 'http://random.org:20332'
+      }
+
+      return core.fillUrl(config)
+        .then(conf => {
+          conf.url.should.equal('http://random.org:20332')
+        })
+    })
+
+    it('fills url', () => {
+      const config = Object.assign({}, baseConfig)
+      return core.fillUrl(config)
+        .then(conf => {
+          conf.url.should.be.a('string')
+        })
+    })
+  })
+
   describe('fillKeys', function () {
     it('fill address and privateKey', () => {
       const config = {

@@ -29,8 +29,7 @@ const log = logger('api')
  * @return {Promise<object>} Configuration object.
  */
 export const sendAsset = config => {
-  return loadBalance(getRPCEndpointFrom, config)
-    .then(url => Object.assign(config, { url }))
+  return fillUrl(config)
     .then(fillKeys)
     .then(fillBalance)
     .then(c => createTx(c, 'contract'))
@@ -62,8 +61,7 @@ export const sendAsset = config => {
  * @return {Promise<object>} Configuration object.
  */
 export const claimGas = config => {
-  return loadBalance(getRPCEndpointFrom, config)
-    .then(url => Object.assign(config, { url }))
+  return fillUrl(config)
     .then(fillKeys)
     .then(c => loadBalance(getClaimsFrom, config))
     .then(c => createTx(c, 'claim'))
@@ -93,8 +91,7 @@ export const claimGas = config => {
  * @return {Promise<object>} Configuration object.
  */
 export const doInvoke = config => {
-  return loadBalance(getRPCEndpointFrom, config)
-    .then(url => Object.assign(config, { url }))
+  return fillUrl(config)
     .then(fillKeys)
     .then(fillBalance)
     .then(c => createTx(c, 'invocation'))
@@ -113,6 +110,13 @@ export const doInvoke = config => {
     })
 }
 
+export const fillUrl = config => {
+  if (config.url) return Promise.resolve(config)
+  return loadBalance(getRPCEndpointFrom, config)
+    .then(url => {
+      return Object.assign(config, { url })
+    })
+}
 /**
  * Retrieves Balance if no balance has been attached
  * @param {object} config
@@ -143,6 +147,7 @@ export const fillKeys = config => {
  * @return {Promise<object>} Configuration object + tx
  */
 export const createTx = (config, txType) => {
+  if (config.tx) return config
   if (typeof txType === 'string') txType = txType.toLowerCase()
   let tx
   switch (txType) {
