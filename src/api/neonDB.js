@@ -73,12 +73,10 @@ export const getClaims = (net, address) => {
  * @param {string} address - Address to check.
  * @return {Promise<Fixed8>} An object with available and unavailable GAS amounts.
  */
-export const getMaxClaimAmount = (net, address) => {
+export const getClaimData = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/address/claims/' + address).then(res => {
-    log.info(
-      `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neonDB ${net}`
-    )
+    log.info(`Retrieved gas claim info for ${address} from neonDB ${net}`)
     return new Fixed8(res.data.total_claim + res.data.total_unspent_claim).div(
       100000000
     )

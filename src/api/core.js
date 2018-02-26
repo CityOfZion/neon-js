@@ -467,20 +467,20 @@ export const getWalletDBHeightFrom = (config, api) => {
 }
 
 /**
- * Helper method to get the maximum amount of gas claimable after spending all NEO.
+ * Helper method to get gas claim info after spending all NEO.
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet'
  * @param {string} config.address - Wallet address
  * @param {object} api - The endpoint APi object. eg, neonDB or Neoscan.
  * @return {Promise<Fixed8>} max claimable GAS
  */
-export const getMaxClaimAmountFrom = (config, api) => {
+export const getClaimDataFrom = (config, api) => {
   return new Promise((resolve) => {
     checkProperty(config, 'net', 'address')
-    if (!api.getMaxClaimAmount) { throw new Error('Invalid type. Is this an API object?') }
+    if (!api.getClaimData) { throw new Error('Invalid type. Is this an API object?') }
     resolve()
   }).then(() => {
     const { net, address } = config
-    return api.getMaxClaimAmount(net, address)
+    return api.getClaimData(net, address)
   })
 }
