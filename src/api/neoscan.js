@@ -94,7 +94,7 @@ export const getMaxClaimAmount = (net, address) => {
     log.info(
       `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neoscan ${net}`
     )
-    return new Fixed8(res.data.unclaimed)
+    return new Fixed8(res.data.unclaimed || 0)
   })
 }
 
