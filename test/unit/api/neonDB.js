@@ -2,6 +2,7 @@ import * as neonDB from '../../../src/api/neonDB'
 import {Balance, Claims} from '../../../src/wallet'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
+import { Fixed8 } from '../../../src/utils'
 
 describe('NeonDB', function () {
   let mock
@@ -42,6 +43,15 @@ describe('NeonDB', function () {
     return neonDB.getWalletDBHeight('TestNet')
       .then((response) => {
         response.should.equal(850226)
+      })
+  })
+
+  it.only('getMaxClaimAmount returns correct info', () => {
+    return neonDB.getMaxClaimAmount('TestNet', testKeys.a.address)
+      .then((response) => {
+        response.total.toNumber().should.equal(new Fixed8(157807799).div(100000000).toNumber())
+        response.spent.toNumber().should.equal(new Fixed8(45672365).div(100000000).toNumber())
+        response.unspent.toNumber().should.equal(new Fixed8(112135434).div(100000000).toNumber())
       })
   })
 

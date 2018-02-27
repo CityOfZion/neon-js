@@ -88,7 +88,7 @@ export const getClaims = (net, address) => {
  * @param {string} address - Address to check.
  * @return {Promise<Fixed8>}
  */
-export const getClaimData = (net, address) => {
+export const getMaxClaimAmount = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_claimable/' + address).then(res => {
     const spent = parseClaims(res.data.claimable).reduce((acc, { claim }) =>

@@ -51,14 +51,20 @@ describe('Neoscan', function () {
       })
   })
 
-  it('getMaxClaimAmount returns amount', () => {
+  it.only('getMaxClaimAmount returns amount', () => {
     return neoscan
       .getMaxClaimAmount('TestNet', testKeys.a.address)
       .then(response => {
-        ;(response instanceof Fixed8).should.equal(true)
-        const testNum = new Fixed8(0.03455555)
-        const responseNumber = response.toNumber()
-        responseNumber.should.equal(testNum.toNumber())
+        ;(response.total instanceof Fixed8).should.equal(true)
+        const totalNumber = new Fixed8(0.03455555)
+        const spentNumber = new Fixed8(0.00197538)
+        const unspentNumber = totalNumber.minus(spentNumber)
+        const totalResponseNumber = response.total.toNumber()
+        const spentResponseNumber = response.spent.toNumber()
+        const unspentResponseNumber = response.unspent.toNumber()
+        unspentResponseNumber.should.equal(unspentNumber.toNumber())
+        spentResponseNumber.should.equal(spentNumber.toNumber())
+        totalResponseNumber.should.equal(totalNumber.toNumber())
       })
   })
 

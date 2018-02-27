@@ -474,13 +474,13 @@ export const getWalletDBHeightFrom = (config, api) => {
  * @param {object} api - The endpoint APi object. eg, neonDB or Neoscan.
  * @return {Promise<Fixed8>} max claimable GAS
  */
-export const getClaimDataFrom = (config, api) => {
+export const getMaxClaimAmountFrom = (config, api) => {
   return new Promise((resolve) => {
     checkProperty(config, 'net', 'address')
-    if (!api.getClaimData) { throw new Error('Invalid type. Is this an API object?') }
+    if (!api.getMaxClaimAmount) { throw new Error('Invalid type. Is this an API object?') }
     resolve()
   }).then(() => {
     const { net, address } = config
-    return api.getClaimData(net, address)
+    return api.getMaxClaimAmount(net, address)
   })
 }
