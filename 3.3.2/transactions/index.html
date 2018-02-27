@@ -1,0 +1,437 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Transactions &mdash; neon-js 3.3.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="neon-js 3.3.2 documentation" href="../index.html"/>
+        <link rel="next" title="Contract Transaction" href="contract.html"/>
+        <link rel="prev" title="Verify" href="../wallet/methods/verify.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> neon-js
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.3.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet/index.html">Wallet</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Transactions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contract.html">Contract Transaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="claim.html">Claim Transaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="invocation.html">Invocation Transaction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">neon-js</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Transactions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/transactions/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<div class="section" id="transactions">
+<h1>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h1>
+<p>The Transactions module is exposed as:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="kd">let</span> <span class="nx">transaction1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">claimTx</span><span class="p">(...</span><span class="nx">args</span><span class="p">)</span>
+<span class="nx">transaction1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">sign</span><span class="p">.</span><span class="nx">transaction</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">serialized1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">serialize</span><span class="p">.</span><span class="nx">tx</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">txid1</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">transactionHash</span><span class="p">(</span><span class="nx">transaction1</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">tx</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="kd">let</span> <span class="nx">transaction2</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">createClaimTx</span><span class="p">(...</span><span class="nx">args</span><span class="p">)</span>
+<span class="nx">transaction2</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">signTransaction</span><span class="p">(</span><span class="nx">transaction2</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">serialized2</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">serializeTransaction</span><span class="p">(</span><span class="nx">transaction2</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">txid2</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">getTransactionHash</span><span class="p">(</span><span class="nx">transaction2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Transactions form the core of the interaction with the blockchain. In order to effect any state changes on the chain, a transaction is required to be sent and processed into a block by the consensus nodes.</p>
+<div class="section" id="transaction">
+<h2>Transaction<a class="headerlink" href="#transaction" title="Permalink to this headline">¶</a></h2>
+<p>The Transaction class is a wrapper class that contains all the tools required to manipulate and build transactions. This allows us to dynamically add intents, remarks at will instead of cramming everything into a single method.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="c1">// Let us create a ContractTransaction</span>
+<span class="kd">let</span> <span class="nx">tx</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">tx</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="mi">128</span><span class="p">})</span>
+<span class="c1">// Now let us add an intention to send 1 NEO to someone</span>
+<span class="nx">tx</span>
+<span class="p">.</span><span class="nx">addOutput</span><span class="p">(</span><span class="s1">&#39;NEO&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nx">someAddress</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">addRemark</span><span class="p">(</span><span class="s1">&#39;I am sending 1 NEO to someAddress&#39;</span><span class="p">)</span> <span class="c1">// Add an remark</span>
+<span class="p">.</span><span class="nx">calculate</span><span class="p">(</span><span class="nx">balance</span><span class="p">)</span> <span class="c1">// Now we add in the balance we retrieve from an external API and calculate the required inputs.</span>
+<span class="p">.</span><span class="nx">sign</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span> <span class="c1">// Sign with the private key of the balance</span>
+
+<span class="kr">const</span> <span class="nx">hash</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">hash</span> <span class="c1">// Store the hash so we can use it to query a block explorer.</span>
+
+<span class="c1">// Now we can use this serializedTx string and send it through sendrawtransaction RPC call.</span>
+<span class="kr">const</span> <span class="nx">serializedTx</span> <span class="o">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">serialize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="components">
+<h2>Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h2>
+<p>Transactions are composed of the following parts:</p>
+<ol class="arabic simple">
+<li>Type</li>
+</ol>
+<blockquote>
+<div><p>This determines the transaction type. This determines how the transaction is serialized or deserialized. Currently, the library only support the following types:</p>
+<ol class="arabic simple">
+<li>Contract</li>
+<li>Claim</li>
+<li>Invocation</li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Version</li>
+</ol>
+<blockquote>
+<div>This determines the version of the transaction. Protocol may defer for different versions.</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>Attribute</li>
+</ol>
+<dl class="function">
+<dt id="TransactionAttribute">
+<code class="descname">TransactionAttribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TransactionAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>usage</strong> (<em>number</em>) &#8211; Identifying byte</li>
+<li><strong>data</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; Data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Extra attributes that are attached to the transaction. An example is a Remark.</p>
+</dd></dl>
+
+<ol class="arabic simple" start="4">
+<li>Input</li>
+</ol>
+<dl class="function">
+<dt id="TransactionInput">
+<code class="descname">TransactionInput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TransactionInput" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>prevHash</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; Transaction hash, Uint256</li>
+<li><strong>prevIndex</strong> (<em>number</em>) &#8211; Index of the coin in the previous transaction, Uint16</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The inputs of the transaction. This is the assets being &#8216;spent&#8217; by this transaction. System fees are also included here. Inputs are considered &#8216;spent&#8217; after the transaction is processed.</p>
+</dd></dl>
+
+<ol class="arabic simple" start="5">
+<li>Output</li>
+</ol>
+<dl class="function">
+<dt id="TransactionOutput">
+<code class="descname">TransactionOutput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TransactionOutput" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>assetId</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; assetId, Uint256</li>
+<li><strong>value</strong> (<em>number|Fixed8</em>) &#8211; value of output, Fixed8</li>
+<li><strong>scriptHash</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; Uint160</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The outputs of the transaction. This indicates the unspent assets created by this transaction. These outputs are &#8216;unspent&#8217; and can be referenced as inputs in future transactions.</p>
+</dd></dl>
+
+<ol class="arabic simple" start="6">
+<li>Witness</li>
+</ol>
+<dl class="function">
+<dt id="Witness">
+<code class="descname">Witness</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Witness" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>invocationScript</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; This data is stored as is (Little Endian)</li>
+<li><strong>verificationScript</strong> (<a class="reference internal" href="../reference/sc.html#string" title="string"><em>string</em></a>) &#8211; This data is stored as is (Little Endian)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The witnesses to the transaction. These are the signatures to authorise the transaction. Usually the private key of the owner of the input assets is used to generate the signature. Do note that although this component is named <code class="docutils literal"><span class="pre">Witness</span></code>, its key in the Transaction object is <code class="docutils literal"><span class="pre">scripts</span></code> (we try to keep to the original names as described in the C# repo).</p>
+</dd></dl>
+
+<ol class="arabic simple" start="7">
+<li>Exclusive Data (unique to each transaction type)</li>
+</ol>
+<blockquote>
+<div>Various data required for each transaction. For example, a ClaimTransaction will have the <code class="docutils literal"><span class="pre">claims</span></code> field which contains all claimable transactions. An InvocationTransaction will have the <code class="docutils literal"><span class="pre">script</span></code> field instead for smart contract invocation.</div></blockquote>
+</div>
+<div class="section" id="types">
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contract.html">Contract Transaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="claim.html">Claim Transaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="invocation.html">Invocation Transaction</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="contract.html" class="btn btn-neutral float-right" title="Contract Transaction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../wallet/methods/verify.html" class="btn btn-neutral" title="Verify" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 - 2018, Ethan Fast, Jun Xiang Yak.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: 3.3.2
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="index.html">3.3.2</a></dd>
+            <dd><a href="../../3.3.1/transactions/index.html">3.3.1</a></dd>
+            <dd><a href="../../3.3.0/transactions/index.html">3.3.0</a></dd>
+            <dd><a href="../../1.1.2/transactions/index.html">1.1.2</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../dev/transactions/index.html">dev</a></dd>
+            <dd><a href="../../master/transactions/index.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'3.3.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

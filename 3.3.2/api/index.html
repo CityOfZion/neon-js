@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API &mdash; neon-js 3.3.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="neon-js 3.3.2 documentation" href="../index.html"/>
+        <link rel="next" title="Smart Contract" href="../smart_contracts/index.html"/>
+        <link rel="prev" title="Node RPC" href="../rpc/index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> neon-js
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.3.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet/index.html">Wallet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">neon-js</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">api</span></code> module is exposed as:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">balance</span><span class="p">(</span><span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">tokenBalance</span><span class="p">(</span><span class="nx">contractScriptHash</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">api</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">getBalance</span><span class="p">(</span><span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">api</span></code> module contains all 3rd party API that is useful together with Neon. The main highlight is the NeonDB API which provides the necessary information to construct a ClaimTransaction or ContractTransaction. A normal NEO node does not provide us with a convenient way of retrieving the balance or claimable transactions through RPC.</p>
+<p>However, do note that these APIs rely on hosted nodes by 3rd party and thus use them at your own risk.</p>
+<div class="section" id="core">
+<h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
+<p>These are core methods that help to tie up the different 3rd party APIs in order to simplify transaction creation and sending.</p>
+<p><code class="docutils literal"><span class="pre">core</span></code> methods are exposed at the top level of <code class="docutils literal"><span class="pre">api</span></code>. The 3 high level methods are:</p>
+<ol class="arabic simple">
+<li>claimGas</li>
+<li>sendAsset</li>
+<li>doInvoke</li>
+</ol>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">config</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">net</span><span class="o">:</span> <span class="s1">&#39;TestNet&#39;</span>
+  <span class="nx">address</span><span class="o">:</span> <span class="s1">&#39;ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW&#39;</span><span class="p">,</span>
+  <span class="nx">privateKey</span><span class="o">:</span> <span class="s1">&#39;7d128a6d096f0c14c3a25a2b0c41cf79661bfcb4a8cc95aaaea28bde4d732344&#39;</span>
+<span class="p">}</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">api</span><span class="p">.</span><span class="nx">claimGas</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">conf</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">response</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">api</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">claimGas</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">conf</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">response</span><span class="p">)</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>These methods are the core functionality that <code class="docutils literal"><span class="pre">neon-js</span></code> will maintain. There is in built API selection that will choose the more reliable API between neonDB and neoscan based on past transactions.</p>
+<p>The methods revolve around passing an configuration object containing all information down the chain. Each method digests the necessary information within the configuration object to perform its task and pass down the configuration object with new information added to it.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="p">{</span><span class="nx">api</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="c1">// This chain is basically api.claimGas</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">getClaimsFrom</span><span class="p">(</span><span class="nx">config</span><span class="p">,</span> <span class="nx">api</span><span class="p">.</span><span class="nx">neonDB</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">c</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">api</span><span class="p">.</span><span class="nx">createTx</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="s1">&#39;claim&#39;</span><span class="p">))</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">c</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">api</span><span class="p">.</span><span class="nx">signTx</span><span class="p">(</span><span class="nx">c</span><span class="p">))</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">c</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">api</span><span class="p">.</span><span class="nx">sendTx</span><span class="p">(</span><span class="nx">c</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="neondb">
+<h2>NeonDB<a class="headerlink" href="#neondb" title="Permalink to this headline">¶</a></h2>
+<p>The NeonDB API is exposed as:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">balance</span><span class="p">(</span><span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="k">do</span><span class="p">.</span><span class="nx">claimAllGas</span><span class="p">(</span><span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">api</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">neonDB</span><span class="p">.</span><span class="nx">getBalance</span><span class="p">(</span><span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">neonDB</span><span class="p">.</span><span class="nx">doClaimAllGas</span><span class="p">(</span><span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The NeonDB API describes the API set exposed by <a class="reference external" href="https://github.com/CityOfZion/neon-wallet-db">neon-wallet-db</a> as well as other convenient methods. The node is hosted by CityOfZion.</p>
+<p>The API returns useful information that is not built into standard NEO nodes such as claimable transactions or spendable coins. These information are used to construct transactions.</p>
+<p>For example, the <code class="docutils literal"><span class="pre">getBalance</span></code> method returns a list of spendable assets of a specific address. This is then used to construct a ContractTransaction.</p>
+</div>
+<div class="section" id="neoscan">
+<h2>Neoscan<a class="headerlink" href="#neoscan" title="Permalink to this headline">¶</a></h2>
+<p>The Neoscan API serves as a backup in case NeonDB fails. It is not exposed in semantic exports. Instead, use named exports:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="p">{</span><span class="nx">api</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">neoscan</span><span class="p">.</span><span class="nx">getBalance</span><span class="p">(</span><span class="s1">&#39;TestNet&#39;</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">neoscan</span><span class="p">.</span><span class="nx">getClaims</span><span class="p">(</span><span class="s1">&#39;MainNet&#39;</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The methods found here are similar to NeonDB but does not cover everything. Methods will return similar data structures to what is expected from NeonDB.</p>
+</div>
+<div class="section" id="coinmarketcap">
+<h2>CoinMarketCap<a class="headerlink" href="#coinmarketcap" title="Permalink to this headline">¶</a></h2>
+<p>A straightforward call to CoinMarketCap API to retrieve the latest price information. This is exposed as <code class="docutils literal"><span class="pre">cmc</span></code> within <code class="docutils literal"><span class="pre">api</span></code>.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">price</span><span class="p">(</span><span class="s1">&#39;NEO&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">)</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">price</span><span class="p">(</span><span class="s1">&#39;GAS&#39;</span><span class="p">)</span> <span class="c1">// defaults to USD</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">prices</span><span class="p">([</span><span class="s1">&#39;NEO&#39;</span><span class="p">,</span> <span class="s1">&#39;GAS&#39;</span><span class="p">],</span> <span class="s1">&#39;EUR&#39;</span><span class="p">)</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">prices</span><span class="p">([</span><span class="s1">&#39;NEO&#39;</span><span class="p">,</span> <span class="s1">&#39;GAS&#39;</span><span class="p">])</span> <span class="c1">// defaults to USD</span>
+
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">api</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">cmc</span><span class="p">.</span><span class="nx">getPrice</span><span class="p">(</span><span class="s1">&#39;NEO&#39;</span><span class="p">,</span> <span class="s1">&#39;SGD&#39;</span><span class="p">)</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">cmc</span><span class="p">.</span><span class="nx">getPrices</span><span class="p">([</span><span class="s1">&#39;NEO&#39;</span><span class="p">,</span> <span class="s1">&#39;GAS&#39;</span><span class="p">],</span> <span class="s1">&#39;SGD&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="nep5">
+<h2>NEP5<a class="headerlink" href="#nep5" title="Permalink to this headline">¶</a></h2>
+<p>The NEP5 Standard describes a set of methods to implement as a token in a smart contract. This is the NEO equivalent of the ERC-20 token standard in Ethereum.</p>
+<p>This set of methods rely on the NEO node having version &gt;= 2.3.3. The method uses <code class="docutils literal"><span class="pre">DEFAULT_RPC</span></code> found in constants as the default node.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">Neon</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="kr">const</span> <span class="nx">rpxScriptHash</span> <span class="o">=</span> <span class="nx">Neon</span><span class="p">.</span><span class="nx">CONST</span><span class="p">.</span><span class="nx">CONTRACTS</span><span class="p">.</span><span class="nx">TEST_RPX</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">tokenInfo</span><span class="p">(</span><span class="s1">&#39;http://seed1.neo.org:20332&#39;</span><span class="p">,</span> <span class="nx">rpxScriptHash</span><span class="p">)</span>
+<span class="nx">Neon</span><span class="p">.</span><span class="nx">get</span><span class="p">.</span><span class="nx">tokenBalance</span><span class="p">(</span><span class="s1">&#39;http://seed1.neo.org:20332&#39;</span><span class="p">,</span> <span class="nx">rpxScriptHash</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">api</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@cityofzion/neon-js&#39;</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">nep5</span><span class="p">.</span><span class="nx">getTokenInfo</span><span class="p">(</span><span class="s1">&#39;http://seed1.neo.org:20332&#39;</span><span class="p">,</span> <span class="nx">rpxScriptHash</span><span class="p">)</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">nep5</span><span class="p">.</span><span class="nx">getTokenBalance</span><span class="p">(</span><span class="s1">&#39;http://seed1.neo.org:20332&#39;</span><span class="p">,</span> <span class="nx">rpxScriptHash</span><span class="p">)</span>
+<span class="c1">// This is a combination of both info and balance within a single call</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">nep5</span><span class="p">.</span><span class="nx">getToken</span><span class="p">(</span><span class="s1">&#39;http://seed1.neo.org:20332&#39;</span><span class="p">,</span> <span class="nx">rpxScriptHash</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../smart_contracts/index.html" class="btn btn-neutral float-right" title="Smart Contract" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../rpc/index.html" class="btn btn-neutral" title="Node RPC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 - 2018, Ethan Fast, Jun Xiang Yak.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: 3.3.2
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="index.html">3.3.2</a></dd>
+            <dd><a href="../../3.3.1/api/index.html">3.3.1</a></dd>
+            <dd><a href="../../3.3.0/api/index.html">3.3.0</a></dd>
+            <dd><a href="../../1.1.2/index.html">1.1.2</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../dev/api/index.html">dev</a></dd>
+            <dd><a href="../../master/api/index.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'3.3.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

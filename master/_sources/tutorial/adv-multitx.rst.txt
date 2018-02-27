@@ -38,8 +38,8 @@ Now, our asset balance should look like::
 
   {
     balance: 1,
-    spent: [{ txid: 'abc', index: 0, value: 10 }],
-    unspent: [{ txid: 'abc', index: 1, value: 5 }],
+    spent: [{ txid: 'abc', index: 1, value: 5 }],
+    unspent: [{ txid: 'abc', index: 0, value: 10 }],
     unconfirmed: [
       // This is the change from spending the 5 neo
       { txid: 'ghi', index: 0, value: 2}
@@ -59,7 +59,7 @@ Now, our asset balance will look like::
 
   {
     balance: 1,
-    spent: [{ txid: 'abc', index: 0, value: 10 }],
+    spent: [{ txid: 'abc', index: 1, value: 5 }],
     unspent: [
       { txid: 'abc',index: 0, value: 10 },
       { txid: 'ghi', index: 0, value: 2}

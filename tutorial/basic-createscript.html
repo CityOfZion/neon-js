@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Basic - Creating an invocation script (NEP5) &mdash; neon-js 3.3.0 documentation</title>
+  <title>Basic - Creating an invocation script (NEP5) &mdash; neon-js 3.3.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 3.3.0 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 3.3.2 documentation" href="../index.html"/>
         <link rel="up" title="Tutorial" href="index.html"/>
         <link rel="next" title="Advanced: Multiple Transactions" href="adv-multitx.html"/>
         <link rel="prev" title="Basic: Claiming Gas" href="basic-claimgas.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                3.3.0
+                3.3.2
               </div>
             
           
@@ -212,7 +212,7 @@
 </pre></div>
 </div>
 <p><code class="docutils literal"><span class="pre">script</span></code> is now a hexstring that you can use in a <code class="docutils literal"><span class="pre">invokescript</span></code> RPC call or an invocationTransaction.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">Neon</span><span class="p">.</span><span class="nx">rpc</span><span class="p">.</span><span class="nx">Query</span><span class="p">.</span><span class="nx">invokeScript</span><span class="p">(</span><span class="nx">script</span><span class="p">)</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">rpc</span><span class="p">.</span><span class="nx">Query</span><span class="p">.</span><span class="nx">invokeScript</span><span class="p">(</span><span class="nx">script</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;http://seed3.neo.org:20332&#39;</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="c1">// You should get a result with state: &quot;HALT, BREAK&quot;</span>
@@ -343,12 +343,14 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: 3.3.0
+        v: 3.3.2
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="../3.3.2/tutorial/basic-createscript.html">3.3.2</a></dd>
+            <dd><a href="../3.3.1/tutorial/basic-createscript.html">3.3.1</a></dd>
             <dd><a href="../3.3.0/tutorial/basic-createscript.html">3.3.0</a></dd>
             <dd><a href="../1.1.2/index.html">1.1.2</a></dd>
         </dl>
@@ -366,7 +368,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'3.3.0',
+            VERSION:'3.3.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

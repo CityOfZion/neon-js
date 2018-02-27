@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Advanced: Multiple Transactions &mdash; neon-js 3.3.0 documentation</title>
+  <title>Advanced: Multiple Transactions &mdash; neon-js 3.3.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="neon-js 3.3.0 documentation" href="../index.html"/>
+    <link rel="top" title="neon-js 3.3.2 documentation" href="../index.html"/>
         <link rel="up" title="Tutorial" href="index.html"/>
         <link rel="next" title="Wallet" href="../wallet/index.html"/>
         <link rel="prev" title="Basic - Creating an invocation script (NEP5)" href="basic-createscript.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                3.3.0
+                3.3.2
               </div>
             
           
@@ -187,7 +187,7 @@
 
 
 
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.3.0/tutorial/adv-multitx.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.3.0.</a></p>
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.3.2/tutorial/adv-multitx.html"><b>Warning:</b> This document is for the development version of neon-js. The latest version is 3.3.2.</a></p>
 <div class="section" id="advanced-multiple-transactions">
 <h1>Advanced: Multiple Transactions<a class="headerlink" href="#advanced-multiple-transactions" title="Permalink to this headline">¶</a></h1>
 <p>In this tutorial, I shall go through how can we send multiple transactions within the same block.</p>
@@ -220,8 +220,8 @@
 <p>Now, our asset balance should look like:</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nx">balance</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
-  <span class="nx">spent</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">txid</span><span class="o">:</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">10</span> <span class="p">}],</span>
-  <span class="nx">unspent</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">txid</span><span class="o">:</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">5</span> <span class="p">}],</span>
+  <span class="nx">spent</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">txid</span><span class="o">:</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">5</span> <span class="p">}],</span>
+  <span class="nx">unspent</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">txid</span><span class="o">:</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">10</span> <span class="p">}],</span>
   <span class="nx">unconfirmed</span><span class="o">:</span> <span class="p">[</span>
     <span class="c1">// This is the change from spending the 5 neo</span>
     <span class="p">{</span> <span class="nx">txid</span><span class="o">:</span> <span class="s1">&#39;ghi&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">2</span><span class="p">}</span>
@@ -240,7 +240,7 @@
 <p>Now, our asset balance will look like:</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nx">balance</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
-  <span class="nx">spent</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">txid</span><span class="o">:</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">10</span> <span class="p">}],</span>
+  <span class="nx">spent</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">txid</span><span class="o">:</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">5</span> <span class="p">}],</span>
   <span class="nx">unspent</span><span class="o">:</span> <span class="p">[</span>
     <span class="p">{</span> <span class="nx">txid</span><span class="o">:</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span><span class="nx">index</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">10</span> <span class="p">},</span>
     <span class="p">{</span> <span class="nx">txid</span><span class="o">:</span> <span class="s1">&#39;ghi&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">2</span><span class="p">}</span>
@@ -298,6 +298,8 @@
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="../../3.3.2/tutorial/adv-multitx.html">3.3.2</a></dd>
+            <dd><a href="../../3.3.1/tutorial/adv-multitx.html">3.3.1</a></dd>
             <dd><a href="../../3.3.0/tutorial/adv-multitx.html">3.3.0</a></dd>
             <dd><a href="../../1.1.2/index.html">1.1.2</a></dd>
         </dl>
@@ -315,7 +317,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'3.3.0',
+            VERSION:'3.3.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

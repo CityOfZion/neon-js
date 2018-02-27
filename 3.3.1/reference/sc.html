@@ -1,0 +1,563 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Smart Contract &mdash; neon-js 3.3.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="neon-js 3.3.1 documentation" href="../index.html"/>
+        <link rel="up" title="Reference" href="index.html"/>
+        <link rel="next" title="Transactions" href="tx.html"/>
+        <link rel="prev" title="RPC" href="rpc.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> neon-js
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wallet/index.html">Wallet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transactions/index.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rpc/index.html">Node RPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smart_contracts/index.html">Smart Contract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logging</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpc.html">RPC</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Smart Contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tx.html">Transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utility.html">Utility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">neon-js</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Reference</a> &raquo;</li>
+        
+      <li>Smart Contract</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/sc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+    
+    
+
+
+
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../3.3.2/reference/sc.html"><b>Warning:</b> This document is for an old version of neon-js. The latest version is 3.3.2.</a></p>
+<div class="section" id="smart-contract">
+<h1>Smart Contract<a class="headerlink" href="#smart-contract" title="Permalink to this headline">¶</a></h1>
+<p>Module <code class="docutils literal"><span class="pre">sc</span></code></p>
+<dl class="class">
+<dt id="ContractParam">
+<em class="property">class </em><code class="descname">ContractParam</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ContractParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>ContractParam models after the ContractParameter class in C#. It is useful to craft arguments that are used in invoke and invokefunction RPC calls.
+ContractParams come with convenient static methods to create arguments. For example, the byteArray method helps convert an address into reversed ScriptHash form used in smart contracts.</p>
+<dl class="attribute">
+<dt id="ContractParam.type">
+<code class="descclassname">ContractParam.</code><code class="descname">type</code><a class="headerlink" href="#ContractParam.type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ContractParam.value">
+<code class="descclassname">ContractParam.</code><code class="descname">value</code><a class="headerlink" href="#ContractParam.value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="array">
+<code class="descname">array</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an Array ContractParam.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>params</strong> (<em>any</em>) &#8211; params to be encapsulated in an array.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="boolean">
+<code class="descname">boolean</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#boolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a Boolean ContractParam. Does basic checks to convert value into a boolean.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>any</em>) &#8211; A value that can be converted to a boolean</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="byteArray">
+<code class="descname">byteArray</code><span class="sig-paren">(</span><em>value</em>, <em>format</em><span class="sig-paren">)</span><a class="headerlink" href="#byteArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a ByteArray ContractParam.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>any</em>) &#8211; </li>
+<li><strong>format</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; The format that this value represents. Different formats are parsed differently.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hash160">
+<code class="descname">hash160</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#hash160" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a Hash160 ContractParam. This is used for containing a scriptHash. Do not reverse the input if using this format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; A 40 character long hexstring. Automatically converts an address to scripthash if provided.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="integer">
+<code class="descname">integer</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#integer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an Integer ContractParam. Does basic parsing and rounding to convert value into an Integer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>any</em>) &#8211; A value that can be parsed to an Integer using parseInt.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="string">
+<code class="descname">string</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a String ContractParam.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; A string.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ContractParam</strong> &#8211;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ScriptBuilder">
+<em class="property">class </em><code class="descname">ScriptBuilder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ScriptBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a VM script in hexstring. Used for constructing smart contract method calls.</p>
+<dl class="function">
+<dt id="_emitAppCall">
+<code class="descname">_emitAppCall</code><span class="sig-paren">(</span><em>scriptHash</em>, <em>useTailCall</em><span class="sig-paren">)</span><a class="headerlink" href="#_emitAppCall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a AppCall and scriptHash. Used to end off a script.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>scriptHash</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; Hexstring(BE)</li>
+<li><strong>useTailCall</strong> (<a class="reference internal" href="#boolean" title="boolean"><em>boolean</em></a>) &#8211; Defaults to false</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ScriptBuilder</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="emit">
+<code class="descname">emit</code><span class="sig-paren">(</span><em>op</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#emit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends an Opcode, followed by args</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>op</strong> (<em>OpCode</em>) &#8211; </li>
+<li><strong>args</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ScriptBuilder</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="emitAppCall">
+<code class="descname">emitAppCall</code><span class="sig-paren">(</span><em>scriptHash</em>, <em>operation</em>, <em>args</em>, <em>useTailCall</em><span class="sig-paren">)</span><a class="headerlink" href="#emitAppCall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends args, operation and scriptHash</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>scriptHash</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; Hexstring(BE)</li>
+<li><strong>operation</strong> (<em>string|null</em>) &#8211; ASCII, defaults to null</li>
+<li><strong>args</strong> (<em>Array|string|number|boolean</em>) &#8211; any</li>
+<li><strong>useTailCall</strong> (<a class="reference internal" href="#boolean" title="boolean"><em>boolean</em></a>) &#8211; Use TailCall instead of AppCall</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ScriptBuilder</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="emitPush">
+<code class="descname">emitPush</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#emitPush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends data depending on type. Used to append params/array lengths.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>Array|string|number|boolean</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ScriptBuilder</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="emitSysCall">
+<code class="descname">emitSysCall</code><span class="sig-paren">(</span><em>api</em><span class="sig-paren">)</span><a class="headerlink" href="#emitSysCall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a SysCall</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>api</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; api of SysCall</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ScriptBuilder</strong> &#8211; this</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="createScript">
+<code class="descname">createScript</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#createScript" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper method around ScripBuilder for creating a VM script.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>props</strong> (<em>object</em>) &#8211; Properties passed in as an object.</li>
+<li><strong>props.scriptHash</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; The contract scriptHash.</li>
+<li><strong>props.operation</strong> (<a class="reference internal" href="#string" title="string"><em>string</em></a>) &#8211; The method name to call.</li>
+<li><strong>props.args</strong> (<em>Array</em>) &#8211; The arguments of the method to pass in.</li>
+<li><strong>props.useTailCall</strong> (<a class="reference internal" href="#boolean" title="boolean"><em>boolean</em></a>) &#8211; To use Tail Call.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string</strong> &#8211; The VM Script.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tx.html" class="btn btn-neutral float-right" title="Transactions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="rpc.html" class="btn btn-neutral" title="RPC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 - 2018, Ethan Fast, Jun Xiang Yak.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: 3.3.1
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../../3.3.2/reference/sc.html">3.3.2</a></dd>
+            <dd><a href="sc.html">3.3.1</a></dd>
+            <dd><a href="../../3.3.0/reference/sc.html">3.3.0</a></dd>
+            <dd><a href="../../1.1.2/index.html">1.1.2</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../dev/reference/sc.html">dev</a></dd>
+            <dd><a href="../../master/reference/sc.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'3.3.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
