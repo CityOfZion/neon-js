@@ -41,7 +41,9 @@ describe('Claims', function () {
         claims: []
       }
       const result = new Claims()
-      result.should.eql(expected)
+      result.address.should.equal(expected.address)
+      result.net.should.equal(expected.net)
+      result.claims.should.eql(expected.claims)
     })
 
     it('CLaims-like', () => {

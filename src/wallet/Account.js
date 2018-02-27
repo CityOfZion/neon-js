@@ -56,6 +56,13 @@ class Account {
     this._updateContractScript()
   }
 
+  get [Symbol.toStringTag] () {
+    return 'Account'
+  }
+
+  [util.inspect.custom] (depth, opts) {
+    return `[Account: ${this.label}]`
+  }
   /**
    * Attempts to update the contract.script field if public key is available.
    */
@@ -207,10 +214,6 @@ class Account {
       contract: this.contract,
       extra: this.extra
     }
-  }
-
-  [util.inspect.custom] (depth, opts) {
-    return `[Account: ${this.label}]`
   }
 }
 

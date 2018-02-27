@@ -20,6 +20,10 @@ class Claims {
     this.claims = config.claims ? config.claims.map(c => ClaimItem(c)) : []
   }
 
+  get [Symbol.toStringTag] () {
+    return 'Claims'
+  }
+
   [util.inspect.custom] (depth, opts) {
     const claimsDump = this.claims.map(c => {
       return `${c.txid} <${c.index}>: ${c.claim.toString()}`

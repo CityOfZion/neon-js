@@ -38,6 +38,10 @@ class Balance {
     this.tokens = bal.tokens ? bal.tokens : {}
   }
 
+  get [Symbol.toStringTag] () {
+    return 'Balance'
+  }
+
   /**
    * Imports a string
    * @param {string} jsonString

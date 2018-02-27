@@ -57,6 +57,10 @@ class Wallet {
     log.info(`New Wallet created: ${this.name}`)
   }
 
+  get [Symbol.toStringTag] () {
+    return 'Wallet'
+  }
+
   /**
    * Returns the default Account according to the following rules:
    * 1. First Account where isDefault is true.
