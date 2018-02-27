@@ -41,7 +41,7 @@ In ``neon-js``, there is a simple way exposed to create an invocation script thr
 
 ::
 
-  Neon.rpc.Query.invokeScript(script)
+  rpc.Query.invokeScript(script)
     .execute('http://seed3.neo.org:20332')
     .then(res => {
       console.log(res) // You should get a result with state: "HALT, BREAK"
