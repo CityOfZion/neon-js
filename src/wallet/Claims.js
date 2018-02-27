@@ -31,6 +31,14 @@ class Claims {
     return `[Claims(${this.net}): ${this.address}]\n${JSON.stringify(claimsDump, null, 2)}`
   }
 
+  export () {
+    return {
+      address: this.address,
+      net: this.net,
+      claims: this.claims.map(exportClaimItem)
+    }
+  }
+
   /**
    * Returns a Claims object that contains part of the total claims starting at [[start]], ending at [[end]].
    * @param {number} start
@@ -47,3 +55,14 @@ class Claims {
 }
 
 export default Claims
+
+const exportClaimItem = claimItem => {
+  return {
+    claim: claimItem.claim.toNumber(),
+    txid: claimItem.txid,
+    index: claimItem.index,
+    value: claimItem.value,
+    start: claimItem.start ? claimItem.start.toNumber() : null,
+    end: claimItem.end ? claimItem.end.toNumber() : null
+  }
+}

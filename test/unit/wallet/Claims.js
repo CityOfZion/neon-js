@@ -67,6 +67,18 @@ describe('Claims', function () {
     })
   })
 
+  describe('export', function () {
+    it('works', () => {
+      const c = new Claims(claimsLike)
+      const result = c.export()
+      result.address.should.equal(claimsLike.address)
+      result.claims.forEach((claim, i) => {
+        const item = { 'claim': claim.claim, 'index': claim.index, 'txid': claim.txid }
+        item.should.eql(claimsLike.claims[i])
+      })
+    })
+  })
+
   it('slice', () => {
     const original = new Claims(claimsLike)
     const slice1 = original.slice(1, 3)

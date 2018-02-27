@@ -81,7 +81,7 @@ describe('Balance', function () {
   })
 
   it('confirm', () => {
-    bal.assets.NEO.unconfirmed = [{txid: 'abc', index: 0, value: 1}]
+    bal.assets.NEO.unconfirmed = [{ txid: 'abc', index: 0, value: 1 }]
     const unspentLength = bal.assets.NEO.unspent.length
     bal.confirm()
     bal.assets.NEO.unspent.length.should.equal(unspentLength + 1)
@@ -105,6 +105,13 @@ describe('Balance', function () {
           bal.assets.GAS.spent.length.should.equal(2)
           bal.assets.NEO.spent.length.should.equal(1)
         })
+    })
+  })
+
+  describe('export', function () {
+    it('exports correctly', () => {
+      const result = bal.export()
+      result.assets.should.eql(testData.a.balance.assets)
     })
   })
 })
