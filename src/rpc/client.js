@@ -46,6 +46,9 @@ class RPCClient {
     }
   }
 
+  get [Symbol.toStringTag] () {
+    return 'RPC Client'
+  }
   /**
    * Takes an Query object and executes it. Adds the Query object to history.
    * @param {Query} query

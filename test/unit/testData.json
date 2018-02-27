@@ -15,7 +15,9 @@
               "txid": "4146bc7276635d1cfe4c9a3db18d56b8cbb9599a3272ba53467fe228e5f6ab87",
               "value": 420.96175487
             }
-          ]
+          ],
+          "spent": [],
+          "unconfirmed": []
         },
         "NEO": {
           "balance": 259,
@@ -25,7 +27,9 @@
               "txid": "f8aa4c8d29529a2424426a29e51f646398beba59c6b7bcd344b66ba72784b22c",
               "value": 259
             }
-          ]
+          ],
+          "spent": [],
+          "unconfirmed": []
         }
       },
       "assetSymbols": [

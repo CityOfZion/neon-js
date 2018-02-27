@@ -42,6 +42,13 @@ describe('Account', function () {
       a.address.should.equal(walletAcct.address)
     })
 
+    it('exports to a Wallet Account object', () => {
+      const walletAcct = testWallet.accounts[0]
+      const a = new Account(walletAcct)
+      const result = a.export()
+      result.should.eql(testWallet.accounts[0])
+    })
+
     it('Accepts both public key forms', () => {
       const a = new Account(acct.publicKeyUnencoded)
       a.address.should.equal(acct.address)

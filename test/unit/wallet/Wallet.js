@@ -58,9 +58,9 @@ describe('Wallet file', function () {
 
   it('export', () => {
     const w = new Wallet(testWallet)
-    const exportString = w.export()
-    exportString.should.equal(JSON.stringify(testWallet))
-    const imported = Wallet.import(exportString)
+    const exportObj = w.export()
+    exportObj.should.eql(testWallet)
+    const imported = Wallet.import(JSON.stringify(exportObj))
     w.should.eql(imported)
   })
 

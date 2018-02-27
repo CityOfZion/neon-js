@@ -41,7 +41,9 @@ describe('Claims', function () {
         claims: []
       }
       const result = new Claims()
-      result.should.eql(expected)
+      result.address.should.equal(expected.address)
+      result.net.should.equal(expected.net)
+      result.claims.should.eql(expected.claims)
     })
 
     it('CLaims-like', () => {
@@ -62,6 +64,18 @@ describe('Claims', function () {
       const claims2 = new Claims(claims1)
       claims1.should.eql(claims2);
       (claims1 === claims2).should.equal(false)
+    })
+  })
+
+  describe('export', function () {
+    it('works', () => {
+      const c = new Claims(claimsLike)
+      const result = c.export()
+      result.address.should.equal(claimsLike.address)
+      result.claims.forEach((claim, i) => {
+        const item = { 'claim': claim.claim, 'index': claim.index, 'txid': claim.txid }
+        item.should.eql(claimsLike.claims[i])
+      })
     })
   })
 

@@ -38,6 +38,10 @@ class Query {
     this.parse = null
   }
 
+  get [Symbol.toStringTag] () {
+    return 'Query'
+  }
+
   /**
    * Attaches a parser method to the Query. This method will be used to parse the response.
    * @param {function} parser

@@ -55,6 +55,7 @@ export const getRPCEndpoint = net => {
 export const getBalance = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_balance/' + address).then(res => {
+    if (res.data.address !== address && res.data.balance === null) return new Balance({ address: res.data.address })
     const bal = new Balance({ address: res.data.address, net })
     res.data.balance.map(b => {
       bal.addAsset(b.asset, {
@@ -76,6 +77,7 @@ export const getBalance = (net, address) => {
 export const getClaims = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_claimable/' + address).then(res => {
+    if (res.address !== address && res.data.claimable === null) return new Claims({ address: res.data.address })
     const claims = parseClaims(res.data.claimable)
     log.info(`Retrieved Balance for ${address} from neoscan ${net}`)
     return new Claims({ net, address: res.data.address, claims })
@@ -94,7 +96,7 @@ export const getMaxClaimAmount = (net, address) => {
     log.info(
       `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neoscan ${net}`
     )
-    return new Fixed8(res.data.unclaimed)
+    return new Fixed8(res.data.unclaimed || 0)
   })
 }
 

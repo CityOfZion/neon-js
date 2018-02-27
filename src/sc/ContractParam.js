@@ -15,6 +15,10 @@ class ContractParam {
     this.value = value
   }
 
+  get [Symbol.toStringTag] () {
+    return { type: this.type, value: this.value }
+  }
+
   /**
    * Creates a String ContractParam.
    * @param {string} value - A string.

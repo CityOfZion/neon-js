@@ -50,6 +50,10 @@ class Transaction {
     })
   }
 
+  get [Symbol.toStringTag] () {
+    return 'Transaction'
+  }
+
   /**
    * Exclusive Data
    * @type {Object}

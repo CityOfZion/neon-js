@@ -20,11 +20,23 @@ class Claims {
     this.claims = config.claims ? config.claims.map(c => ClaimItem(c)) : []
   }
 
+  get [Symbol.toStringTag] () {
+    return 'Claims'
+  }
+
   [util.inspect.custom] (depth, opts) {
     const claimsDump = this.claims.map(c => {
       return `${c.txid} <${c.index}>: ${c.claim.toString()}`
     })
     return `[Claims(${this.net}): ${this.address}]\n${JSON.stringify(claimsDump, null, 2)}`
+  }
+
+  export () {
+    return {
+      address: this.address,
+      net: this.net,
+      claims: this.claims.map(exportClaimItem)
+    }
   }
 
   /**
@@ -43,3 +55,14 @@ class Claims {
 }
 
 export default Claims
+
+const exportClaimItem = claimItem => {
+  return {
+    claim: claimItem.claim.toNumber(),
+    txid: claimItem.txid,
+    index: claimItem.index,
+    value: claimItem.value,
+    start: claimItem.start ? claimItem.start.toNumber() : null,
+    end: claimItem.end ? claimItem.end.toNumber() : null
+  }
+}

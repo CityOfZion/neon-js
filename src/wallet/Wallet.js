@@ -57,6 +57,10 @@ class Wallet {
     log.info(`New Wallet created: ${this.name}`)
   }
 
+  get [Symbol.toStringTag] () {
+    return 'Wallet'
+  }
+
   /**
    * Returns the default Account according to the following rules:
    * 1. First Account where isDefault is true.
@@ -180,16 +184,16 @@ class Wallet {
 
   /**
    * Export this class as a string
-   * @return {string}
+   * @return {object}
    */
   export () {
-    return JSON.stringify({
+    return {
       name: this.name,
       version: this.version,
       scrypt: this.scrypt,
       accounts: this.accounts.map((acct) => acct.export()),
       extra: this.extra
-    })
+    }
   }
 
   /**
@@ -211,7 +215,7 @@ class Wallet {
    */
   writeFile (filepath) {
     log.info(`Exporting wallet file to: ${filepath}`)
-    return fs.writeFile(filepath, this.export(), (err) => {
+    return fs.writeFile(filepath, JSON.stringify(this.export()), (err) => {
       if (err) throw err
       console.log('Wallet file written!')
       return true
