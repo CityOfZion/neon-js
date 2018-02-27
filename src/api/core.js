@@ -467,7 +467,7 @@ export const getWalletDBHeightFrom = (config, api) => {
 }
 
 /**
- * Helper method to get gas claim info after spending all NEO.
+ * Helper method to get the gas claim info for a NEO address on a given network.
  * @param {object} config - Configuration object.
  * @param {string} config.net - 'MainNet', 'TestNet'
  * @param {string} config.address - Wallet address

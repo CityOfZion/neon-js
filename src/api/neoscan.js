@@ -83,7 +83,7 @@ export const getClaims = (net, address) => {
 }
 
 /**
- * Gets the maximum amount of gas claimable after spending all NEO.
+ * Gets the gas claim info for a NEO address on a given network.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
  * @param {string} address - Address to check.
  * @return {Promise<Fixed8>}
