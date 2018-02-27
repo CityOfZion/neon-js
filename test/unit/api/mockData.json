@@ -48,8 +48,7 @@
       ]
     },
     "error": {
-      "regex":
-        "https:\\/\\/api.coinmarketcap.com\\/v1\\/ticker\\/[a-z]+\\/\\?limit=0&convert=[a-z]+",
+      "regex": "https:\\/\\/api.coinmarketcap.com\\/v1\\/ticker\\/[a-z]+\\/\\?limit=0&convert=[a-z]+",
       "response": {
         "error": "id not found"
       }
@@ -265,22 +264,19 @@
       }
     },
     "balanceA": {
-      "url":
-        "http://testnet-api.wallet.cityofzion.io/v2/address/balance/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+      "url": "http://testnet-api.wallet.cityofzion.io/v2/address/balance/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
       "response": {
         "GAS": {
           "balance": 1117.93620487,
           "unspent": [
             {
               "index": 1,
-              "txid":
-                "8019d2e1aa49adcd0be7dd133f4d6d5687a176e40a5c4eeaebaa32484de6e04b",
+              "txid": "8019d2e1aa49adcd0be7dd133f4d6d5687a176e40a5c4eeaebaa32484de6e04b",
               "value": 698
             },
             {
               "index": 1000,
-              "txid":
-                "e38df7d8cb09b48adc709f0ac02f46e95ec957b3a147214250460483df4c4cc3",
+              "txid": "e38df7d8cb09b48adc709f0ac02f46e95ec957b3a147214250460483df4c4cc3",
               "value": 418.93620487
             }
           ]
@@ -290,14 +286,12 @@
           "unspent": [
             {
               "index": 1,
-              "txid":
-                "749d6cb25b00274848b5e30b00de88b8b858c78a7ccd53a7937b2ec4d6cb4581",
+              "txid": "749d6cb25b00274848b5e30b00de88b8b858c78a7ccd53a7937b2ec4d6cb4581",
               "value": 258
             },
             {
               "index": 0,
-              "txid":
-                "891f295a23485f3a9b01596990bd97ef3095c6997ce84ab786aff3585b59c3a2",
+              "txid": "891f295a23485f3a9b01596990bd97ef3095c6997ce84ab786aff3585b59c3a2",
               "value": 1
             }
           ]
@@ -307,8 +301,7 @@
       }
     },
     "claimsA": {
-      "url":
-        "http://testnet-api.wallet.cityofzion.io/v2/address/claims/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+      "url": "http://testnet-api.wallet.cityofzion.io/v2/address/claims/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
       "response": {
         "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
         "claims": [
@@ -318,8 +311,7 @@
             "index": 0,
             "start": 786191,
             "sysfee": 2496,
-            "txid":
-              "0ba525af5817b01314ef4e4bc9823986ca7e30871178ce2aa7b86d23d7937768",
+            "txid": "0ba525af5817b01314ef4e4bc9823986ca7e30871178ce2aa7b86d23d7937768",
             "value": 350
           },
           {
@@ -328,8 +320,7 @@
             "index": 1,
             "start": 786756,
             "sysfee": 2970,
-            "txid":
-              "27341b5fffa9b0c74e454cb73481b9d50cc9fb5856b9a468a7bb7dc4d518628d",
+            "txid": "27341b5fffa9b0c74e454cb73481b9d50cc9fb5856b9a468a7bb7dc4d518628d",
             "value": 330
           }
         ],
@@ -339,8 +330,7 @@
       }
     },
     "historyA": {
-      "url":
-        "http://testnet-api.wallet.cityofzion.io/v2/address/history/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+      "url": "http://testnet-api.wallet.cityofzion.io/v2/address/history/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
       "response": {
         "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
         "history": [
@@ -350,8 +340,7 @@
             "block_index": 849080,
             "gas_sent": false,
             "neo_sent": true,
-            "txid":
-              "2aee5a5336e9c212b14c4744c458ed1c8aa6f926fa73ef678b804e1cd747cbe4"
+            "txid": "2aee5a5336e9c212b14c4744c458ed1c8aa6f926fa73ef678b804e1cd747cbe4"
           },
           {
             "GAS": 0,
@@ -359,8 +348,7 @@
             "block_index": 842709,
             "gas_sent": false,
             "neo_sent": true,
-            "txid":
-              "6106b017f670de7d7fe992dc0e5e6aa91cc4fbf9f9d492a4ff0d65f990177d83"
+            "txid": "6106b017f670de7d7fe992dc0e5e6aa91cc4fbf9f9d492a4ff0d65f990177d83"
           }
         ],
         "name": "transaction_history",
@@ -401,13 +389,11 @@
       }
     },
     "historyA": {
-      "url":
-        "https://neoscan-testnet.io/api/test_net/v1/get_address_neon/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+      "url": "https://neoscan-testnet.io/api/test_net/v1/get_address_neon/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
       "response": {
         "txids": [
           {
-            "txid":
-              "b547578b13e0497def584ef3f3e37537114b53235e070bf1617aab597fa0e278",
+            "txid": "b547578b13e0497def584ef3f3e37537114b53235e070bf1617aab597fa0e278",
             "block_height": 1015666,
             "balance": [
               {
@@ -419,13 +405,11 @@
                 "amount": 227
               }
             ],
-            "asset_moved":
-              "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+            "asset_moved": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
             "amount_moved": 20
           },
           {
-            "txid":
-              "d9ef8a7db9ff2205853a6ac303673c1c17ba8064a584e1cce0a76f892306de06",
+            "txid": "d9ef8a7db9ff2205853a6ac303673c1c17ba8064a584e1cce0a76f892306de06",
             "block_height": 1015633,
             "balance": [
               {
@@ -437,8 +421,7 @@
                 "amount": 227
               }
             ],
-            "asset_moved":
-              "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
+            "asset_moved": "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
             "amount_moved": -1
           }
         ],
@@ -457,14 +440,12 @@
             "unspent": [
               {
                 "value": 100,
-                "txid":
-                  "9a67d7d997f23cf2af13006cd4f626ee914be5056faf71ff289f8a73194d4985",
+                "txid": "9a67d7d997f23cf2af13006cd4f626ee914be5056faf71ff289f8a73194d4985",
                 "n": 0
               },
               {
                 "value": 361.25574245,
-                "txid":
-                  "b5da25576457dc93cf3c832b114deda6718f4cf2dc58cac24f7476065dd9edef",
+                "txid": "b5da25576457dc93cf3c832b114deda6718f4cf2dc58cac24f7476065dd9edef",
                 "n": 1
               }
             ],
@@ -476,8 +457,7 @@
       }
     },
     "balanceA": {
-      "url":
-        "https://neoscan-testnet.io/api/test_net/v1/get_balance/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+      "url": "https://neoscan-testnet.io/api/test_net/v1/get_balance/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
       "response": {
         "unclaimed": 1.5806253499999998,
         "balance": [
@@ -485,8 +465,7 @@
             "unspent": [
               {
                 "value": 698,
-                "txid":
-                  "8019d2e1aa49adcd0be7dd133f4d6d5687a176e40a5c4eeaebaa32484de6e04b",
+                "txid": "8019d2e1aa49adcd0be7dd133f4d6d5687a176e40a5c4eeaebaa32484de6e04b",
                 "n": 1
               }
             ],
@@ -497,8 +476,7 @@
             "unspent": [
               {
                 "value": 258,
-                "txid":
-                  "749d6cb25b00274848b5e30b00de88b8b858c78a7ccd53a7937b2ec4d6cb4581",
+                "txid": "749d6cb25b00274848b5e30b00de88b8b858c78a7ccd53a7937b2ec4d6cb4581",
                 "n": 1
               }
             ],
@@ -509,17 +487,24 @@
         "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
       }
     },
+    "balanceInvalid": {
+      "url": "https://neoscan-testnet.io/api/test_net/v1/get_balance/invalidAddress",
+      "response": {
+        "txids": null,
+        "claimed": null,
+        "balance": null,
+        "address": "not found"
+      }
+    },
     "claimsA": {
-      "url":
-        "https://neoscan-testnet.io/api/test_net/v1/get_claimable/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+      "url": "https://neoscan-testnet.io/api/test_net/v1/get_claimable/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
       "response": {
         "unclaimed": 0.03455555,
         "claimable": [
           {
             "value": 1,
             "unclaimed": 0.00196914,
-            "txid":
-              "a98630f1d77bda71b84edf300af910f6382c0d5eca21a63e9e22c40c8455a05c",
+            "txid": "a98630f1d77bda71b84edf300af910f6382c0d5eca21a63e9e22c40c8455a05c",
             "start_height": 821831,
             "n": 0,
             "end_height": 842709
@@ -527,14 +512,20 @@
           {
             "value": 1,
             "unclaimed": 0.00000624,
-            "txid":
-              "2bf3419fb70d71a1ce202a1af276c1eba3adb42b0626acc4f415e5270741096c",
+            "txid": "2bf3419fb70d71a1ce202a1af276c1eba3adb42b0626acc4f415e5270741096c",
             "start_height": 821753,
             "n": 0,
             "end_height": 821831
           }
         ],
         "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+      }
+    },
+    "claimsInvalid": {
+      "url": "https://neoscan-testnet.io/api/test_net/v1/get_claimable/invalidAddress",
+      "response": {
+        "claimable": null,
+        "address": "not found"
       }
     }
   },
