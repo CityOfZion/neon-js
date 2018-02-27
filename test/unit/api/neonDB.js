@@ -46,7 +46,7 @@ describe('NeonDB', function () {
       })
   })
 
-  it.only('getMaxClaimAmount returns correct info', () => {
+  it('getMaxClaimAmount returns correct info', () => {
     return neonDB.getMaxClaimAmount('TestNet', testKeys.a.address)
       .then((response) => {
         response.total.toNumber().should.equal(new Fixed8(157807799).div(100000000).toNumber())

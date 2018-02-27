@@ -51,7 +51,7 @@ describe('Neoscan', function () {
       })
   })
 
-  it.only('getMaxClaimAmount returns amount', () => {
+  it('getMaxClaimAmount returns amount', () => {
     return neoscan
       .getMaxClaimAmount('TestNet', testKeys.a.address)
       .then(response => {

@@ -93,7 +93,7 @@ export const getMaxClaimAmount = (net, address) => {
   return axios.get(apiEndpoint + '/v1/get_claimable/' + address).then(res => {
     const spent = parseClaims(res.data.claimable).reduce((acc, { claim }) =>
       acc.plus(claim), new Fixed8(0))
-    const total = new Fixed8(res.data.unclaimed)
+    const total = new Fixed8(res.data.unclaimed || 0)
     const unspent = total.minus(spent)
     log.info(`Retrieved gas claim info for ${address} from neoscan ${net}`)
     return { total, spent, unspent }

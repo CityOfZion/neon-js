@@ -70,6 +70,7 @@ export function makeIntent(assetAmts: AssetAmounts, address: string): Transactio
 export function sendAsset(config: apiConfig): Promise<apiConfig>
 export function claimGas(config: apiConfig): Promise<apiConfig>
 export function doInvoke(config: apiConfig): Promise<apiConfig>
+export function fillUrl(config: apiConfig): Promise<apiConfig>
 export function fillKeys(config: apiConfig): Promise<apiConfig>
 export function fillBalance(config: apiConfig):Promise<apiConfig>
 
