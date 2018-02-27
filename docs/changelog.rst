@@ -4,7 +4,7 @@ Changelog
 
 This details the changes made from the previous recorded version.
 
-3.3.1
+3.3.2
 =====
 
 - Fixes
@@ -13,6 +13,8 @@ This details the changes made from the previous recorded version.
   - Use user provided parameters when given for api core methods
   - Fix ScriptBuilder to accept empty string and zero value
   - neonDB to use ``get_all_nodes`` endpoint instead of ``best_node`` endpoint
+  - Fix neoscan ``getMaxClaimAmount``, ``getBalance`` and ``getClaims`` for invalid addresses
+
 3.3.0
 =====
 
