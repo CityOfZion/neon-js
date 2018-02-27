@@ -83,7 +83,7 @@ export const getClaims = (net, address) => {
 }
 
 /**
- * Gets the maximum amount of gas claimable after spending all NEO.
+ * Gets the gas claim info for a NEO address on a given network.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
  * @param {string} address - Address to check.
  * @return {Promise<Fixed8>}
@@ -91,10 +91,12 @@ export const getClaims = (net, address) => {
 export const getMaxClaimAmount = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_claimable/' + address).then(res => {
-    log.info(
-      `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neoscan ${net}`
-    )
-    return new Fixed8(res.data.unclaimed || 0)
+    const spent = parseClaims(res.data.claimable).reduce((acc, { claim }) =>
+      acc.plus(claim), new Fixed8(0))
+    const total = new Fixed8(res.data.unclaimed || 0)
+    const unspent = total.minus(spent)
+    log.info(`Retrieved gas claim info for ${address} from neoscan ${net}`)
+    return { total, spent, unspent }
   })
 }
 

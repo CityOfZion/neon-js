@@ -56,10 +56,10 @@ describe('Switch API', function () {
         core.getMaxClaimAmountFrom,
         addressConfig
       )
-      ;(response instanceof Fixed8).should.equal(true)
-      const testNum = new Fixed8(0.03455555)
-      const responseNumber = response.toNumber()
-      responseNumber.should.equal(testNum.toNumber())
+      ;(response.total instanceof Fixed8).should.equal(true)
+      const totalNumber = new Fixed8(0.03455555)
+      const totalResponseNumber = response.total.toNumber()
+      totalResponseNumber.should.equal(totalNumber.toNumber())
     })
 
     it('calls getTransactionHistory', async () => {
@@ -127,9 +127,9 @@ describe('Switch API', function () {
         core.getMaxClaimAmountFrom,
         addressConfig
       )
-      ;(response instanceof Fixed8).should.equal(true)
+      ;(response.total instanceof Fixed8).should.equal(true)
       const testNum = new Fixed8(45672365 + 112135434).div(100000000)
-      const responseNumber = response.toNumber()
+      const responseNumber = response.total.toNumber()
       responseNumber.should.equal(testNum.toNumber())
     })
 

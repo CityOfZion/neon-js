@@ -62,7 +62,7 @@ export function getClaimsFrom(config: apiConfig, api: object): Promise<apiConfig
 export function getRPCEndpointFrom(config: apiConfig, api: object): Promise<string>
 export function getTransactionHistoryFrom(config: apiConfig, api: object): Promise<History>
 export function getWalletDBHeightFrom(config: apiConfig, api: object): Promise<number>
-export function getMaxClaimAmountFrom(config: apiConfig, api: object): Promise<Fixed8>
+export function getMaxClaimAmountFrom(config: apiConfig, api: object): Promise<object>
 export function createTx(config: apiConfig, txType: string): Promise<apiConfig>
 export function signTx(config: apiConfig): Promise<apiConfig>
 export function sendTx(config: apiConfig): Promise<apiConfig>
@@ -130,7 +130,7 @@ export namespace neoscan {
   export function getRPCEndpoint(net: net): Promise<string>
   export function getBalance(net: net, address: string): Promise<Balance>
   export function getClaims(net: net, address: string): Promise<Claims>
-  export function getMaxClaimAmount(net: net, address: string): Promise<Fixed8>
+  export function getMaxClaimAmount(net: net, address: string): Promise<object>
   export function getWalletDBHeight(net: net): Promise<number>
   export function getTransactionHistory(net: net, address: string): Promise<History>
 }
