@@ -1,6 +1,6 @@
 import fs from 'fs'
 import Account from './Account'
-import { DEFAULT_WALLET } from '../consts'
+import { DEFAULT_WALLET, DEFAULT_SCRYPT } from '../consts'
 import logger from '../logging'
 
 const log = logger('wallet')
@@ -39,13 +39,17 @@ const log = logger('wallet')
  * @param {object} file.extra - Extra information of wallet.
  */
 class Wallet {
-  constructor ({ name = 'myWallet', version = DEFAULT_WALLET.version, scrypt = {}, accounts = [], extra = null } = DEFAULT_WALLET) {
+  constructor ({ name = 'myWallet', version = DEFAULT_WALLET.version, scrypt = DEFAULT_SCRYPT, accounts = [], extra = null } = DEFAULT_WALLET) {
     /** @type {string} */
     this.name = name
     /** @type {string} */
     this.version = version
     /** @type {ScryptParams} */
-    this.scrypt = scrypt
+    this.scrypt = {
+      n: scrypt.n || scrypt.cost,
+      r: scrypt.r || scrypt.blockSize,
+      p: scrypt.p || scrypt.parallel
+    }
     /** @type {Account[]} */
     this.accounts = []
     for (const acct of accounts) {
