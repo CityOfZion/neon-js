@@ -21,13 +21,15 @@
     "mocha": "^5.0.1",
     "nyc": "^11.5.0",
     "webpack": "^4.0.1",
-    "webpack-cli": "^2.0.9"
+    "webpack-cli": "^2.0.9",
+    "zopfli-webpack-plugin": "^0.1.0"
   },
   "name": "@cityofzion/neon-js",
   "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
   "version": "3.3.2",
   "main": "lib/index.js",
   "browser": "lib/browser.js",
+  "module":"src/index.js",
   "types": "src/index.d.ts",
   "dependencies": {
     "axios": "^0.17.1",
@@ -52,8 +54,8 @@
     "cover:unit": "cross-env NODE_ENV=test ./node_modules/.bin/nyc ./node_modules/.bin/mocha ./test/unit && ./node_modules/.bin/nyc report --reporter=lcov",
     "cover:integration": "cross-env NODE_ENV=test ./node_modules/.bin/nyc ./node_modules/.bin/mocha ./test/integration && ./node_modules/.bin/nyc report --reporter=lcov",
     "lint": "./node_modules/.bin/eslint ./src/**/*.js ./test/**/*.js",
-    "build:dev": "./node_modules/.bin/webpack --mode development",
-    "build:prod": "./node_modules/.bin/webpack --mode production",
+    "build:dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --mode development",
+    "build:prod": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --mode production",
     "watch:test": "./node_modules/.bin/mocha ./test/unit --bail --watch --reporter=min",
     "watch:docs": "cd docs && sphinx-autobuild . _build/html",
     "build:docs": "cd docs && sphinx-versioning -g ../ -l ./conf.py build docs ../docs/_build/html",

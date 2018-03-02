@@ -1,20 +1,18 @@
-const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-const ZopfliPlugin = require('zopfli-webpack-plugin')
+const ZopfliWebpackPlugin = require('zopfli-webpack-plugin')
 
 let common = {
   entry: './src/index.js',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env'],
-            plugins: [require('babel-plugin-transform-object-rest-spread')]
+            presets: ['@babel/preset-env'],
+            plugins: ['@babel/plugin-proposal-object-rest-spread']
           }
         }
       }
@@ -29,29 +27,21 @@ let common = {
   ]
 }
 
-module.exports = function (env) {
-  if (env && env.prod) {
-    common.plugins = common.plugins.concat([
-      new UglifyJSPlugin({
-        parallel: true,
-        sourceMap: true
-      }),
-      new ZopfliPlugin({
-        asset: '[path].gz[query]',
-        algorithm: 'zopfli',
-        test: /\.(js|html)$/,
-        threshold: 10240,
-        minRatio: 0.8
-      }),
-      new webpack.DefinePlugin({
-        'process.env': {
-          'NODE_ENV': JSON.stringify('production')
-        }
-      })
-    ])
-  } else {
-    common.devtool = 'source-map'
-  }
+if (process.env.NODE_ENV === 'development') {
+  common.devtool = 'source-map'
+}
+
+if (process.env.NODE_ENV === 'production') {
+  common.plugins.push(new ZopfliWebpackPlugin({
+    asset: '[path].gz[query]',
+    algorithm: 'zopfli',
+    test: /\.(js|html)$/,
+    threshold: 10240,
+    minRatio: 0.8
+  }))
+}
+
+module.exports = function (mode) {
   return [
     Object.assign({}, common, {
       target: 'node',
