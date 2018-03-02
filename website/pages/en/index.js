@@ -78,7 +78,7 @@ class HomeSplash extends React.Component {
     let language = this.props.language || ''
     return (
       <SplashContainer>
-        <Logo img_src={imgUrl('docusaurus.svg')} />
+        <Logo img_src={imgUrl('neon_small.png')} />
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
@@ -106,19 +106,19 @@ const Features = props => (
     {[
       {
         content: <translate>Key generation, manipulation and encryption</translate>,
-        image: imgUrl('docusaurus.svg'),
+        image: imgUrl('neon_small.png'),
         imageAlign: 'top',
         title: 'Wallet'
       },
       {
         content: 'Transaction creation, serialization and signing.',
-        image: imgUrl('docusaurus.svg'),
+        image: imgUrl('neon_small.png'),
         imageAlign: 'top',
         title: 'Transactions'
       },
       {
         content: 'Various API integration required for light wallet support',
-        image: imgUrl('docusaurus.svg'),
+        image: imgUrl('neon_small.png'),
         imageAlign: 'top',
         title: 'Integration'
       }
@@ -131,7 +131,7 @@ const LearnHow = props => (
     {[
       {
         content: 'The SDK is made with both beginners and experts in mind. Start off with playing with the high level semantic API. Once you are comfortable, dive in deep and code your own custom tools with the modules provided.',
-        image: imgUrl('docusaurus.svg'),
+        image: imgUrl('neon_long.png'),
         imageAlign: 'right',
         title: 'Made for everyone'
       }
@@ -143,7 +143,7 @@ const TryOut = props => (
   <Block id="try">
     {[
       {
-        content: 'Get your feet wet with our simple quickstart or follow one of our tutorials!',
+        content: 'Get your feet wet with our simple quickstart or follow one of our tutorials! Or heck that, just open your console and start playing with it! (Neon)',
         image: imgUrl('docusaurus.svg'),
         imageAlign: 'left',
         title: 'Try it Out'

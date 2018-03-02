@@ -8,9 +8,9 @@
 /* List of projects/orgs using your project for the users page */
 const users = [
   {
-    caption: 'User1',
-    image: '/test-site/img/docusaurus.svg',
-    infoLink: 'https://www.facebook.com',
+    caption: 'Neon Wallet',
+    image: 'https://github.com/CityOfZion/neon-wallet/blob/dev/icons/png/512x512.png?raw=true',
+    infoLink: 'http://neonwallet.com/',
     pinned: true
   }
 ]
@@ -29,13 +29,13 @@ const siteConfig = {
   ],
   users,
   /* path to images for header/footer */
-  headerIcon: 'img/docusaurus.svg',
-  footerIcon: 'img/docusaurus.svg',
+  headerIcon: 'img/neon_small.png',
+  footerIcon: 'img/neon_small.png',
   favicon: 'img/favicon.png',
   /* colors for website */
   colors: {
-    primaryColor: '#2E8555',
-    secondaryColor: '#205C3B'
+    primaryColor: '#2b2b5e',
+    secondaryColor: '#212146'
   },
   // This copyright info is used in /core/Footer.js and blog rss/atom feeds.
   copyright:
@@ -43,12 +43,11 @@ const siteConfig = {
     new Date().getFullYear() +
     ' Ethan Fast, Yak Jun Xiang',
   organizationName: 'snowypowers', // or set an env variable ORGANIZATION_NAME
-  projectName: 'neon-js', // or set an env variable PROJECT_NAME
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks
     theme: 'dracula'
   },
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: ['https://buttons.github.io/buttons.js', '/neon-js/browser.js'],
   // You may provide arbitrary config keys to be used as needed by your template.
   repoUrl: 'https://github.com/cityofzion/neon-js'
 }
