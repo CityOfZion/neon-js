@@ -78,7 +78,7 @@ class HomeSplash extends React.Component {
     let language = this.props.language || ''
     return (
       <SplashContainer>
-        <Logo img_src={imgUrl('neon_small.png')} />
+        <Logo img_src={imgUrl('logo.svg')} />
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
@@ -106,19 +106,19 @@ const Features = props => (
     {[
       {
         content: <translate>Key generation, manipulation and encryption</translate>,
-        image: imgUrl('neon_small.png'),
+        image: imgUrl('logo.svg'),
         imageAlign: 'top',
         title: 'Wallet'
       },
       {
         content: 'Transaction creation, serialization and signing.',
-        image: imgUrl('neon_small.png'),
+        image: imgUrl('logo.svg'),
         imageAlign: 'top',
         title: 'Transactions'
       },
       {
         content: 'Various API integration required for light wallet support',
-        image: imgUrl('neon_small.png'),
+        image: imgUrl('logo.svg'),
         imageAlign: 'top',
         title: 'Integration'
       }
@@ -131,7 +131,7 @@ const LearnHow = props => (
     {[
       {
         content: 'The SDK is made with both beginners and experts in mind. Start off with playing with the high level semantic API. Once you are comfortable, dive in deep and code your own custom tools with the modules provided.',
-        image: imgUrl('neon_long.png'),
+        image: imgUrl('logo.svg'),
         imageAlign: 'right',
         title: 'Made for everyone'
       }
@@ -143,8 +143,8 @@ const TryOut = props => (
   <Block id="try">
     {[
       {
-        content: 'Get your feet wet with our simple quickstart or follow one of our tutorials! Or heck that, just open your console and start playing with it! (Neon)',
-        image: imgUrl('docusaurus.svg'),
+        content: 'Get your feet wet with our simple quickstart or follow one of our tutorials! Or heck that, just open your console and start playing with it!',
+        image: imgUrl('console.png'),
         imageAlign: 'left',
         title: 'Try it Out'
       }
@@ -156,10 +156,10 @@ const Description = props => (
   <Block background="dark">
     {[
       {
-        content: 'Stop wasting time reading the front page!',
-        image: imgUrl('docusaurus.svg'),
+        content: 'We are open source and MIT-licensed, meaning anyone can use this library for free without reprecussions! This project is developed and maintained under the City of Zion community developer group and is supported by the NEO project team.',
+        image: imgUrl('coz_med.png'),
         imageAlign: 'right',
-        title: 'Why are you reading this'
+        title: 'Open source'
       }
     ]}
   </Block>
