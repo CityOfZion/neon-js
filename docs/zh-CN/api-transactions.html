@@ -1,0 +1,79 @@
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Transactions · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Transactions · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="交易模块暴露为："/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/neon-js/browser.js"></script><link rel="stylesheet" href="/neon-js/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/neon-js/"><img class="logo" src="/neon-js/img/logo.svg"/><h2 class="headerTitle">neon-js</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li><a href="/neon-js/docs/zh-CN/installation.html" target="_self">文档</a></li><li><a href="/neon-js/docs/zh-CN/api-index.html" target="_self">API</a></li><li><a href="/neon-js/zh-CN/help.html" target="_self">Help</a></li><span><li><a id="languages-menu" href="#"><img class="languages-icon" src="/neon-js/img/language.svg"/>English</a><div id="languages-dropdown" class="hide"><ul id="languages-dropdown-items"><li><a href="/neon-js/en">English</a></li><li><a href="/neon-js/zh-CN">中文</a></li></ul></div></li><script>
+        const languagesMenuItem = document.getElementById("languages-menu");
+        const languagesDropDown = document.getElementById("languages-dropdown");
+        languagesMenuItem.addEventListener("click", function(){
+          if(languagesDropDown.className == "hide") {
+            languagesDropDown.className = "visible";
+          } else {
+            languagesDropDown.className = "hide";
+          }
+        });
+      </script></span></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Modules</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>介绍</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/api-index.html">API</a></li></ul></div><div class="navGroup navGroupActive"><h3>模块</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/api-wallet.html">Wallet</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/neon-js/docs/zh-CN/api-transactions.html">Transactions</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/api-rpc.html">RPC</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/api-sc.html">Smart Contract</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/api-api.html">API</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/api-u.html">Utility</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/api-CONST.html">Constants</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/api-logging.html">Logging</a></li></ul></div></div></section></div><script>
+          var toggler = document.getElementById('navToggler');
+          var nav = document.getElementById('docsNav');
+          toggler.onclick = function() {
+            nav.classList.toggle('docsSliderActive');
+          };
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Transactions</h1></header><article><div><span><p>交易模块暴露为：</p>
+<pre><code class="hljs css js"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<span class="hljs-keyword">let</span> transaction1 = Neon.create.claimTx(...args)
+transaction1 = Neon.sign.transaction(transaction1, privateKey)
+<span class="hljs-keyword">let</span> serialized1 = Neon.serialize.tx(transaction1)
+<span class="hljs-keyword">let</span> txid1 = Neon.get.transactionHash(transaction1)
+
+<span class="hljs-keyword">import</span> {tx} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<span class="hljs-keyword">let</span> transaction2 = tx.createClaimTx(...args)
+transaction2 = tx.signTransaction(transaction2, privateKey)
+<span class="hljs-keyword">let</span> serialized2 = tx.serializeTransaction(transaction2)
+<span class="hljs-keyword">let</span> txid2 = tx.getTransactionHash(transaction2)
+</code></pre>
+<p>交易形成了与区块链交互的核心。为了在链上实现任何状态变化，交易需要由共识节点发送并处理成块。</p>
+<h2><a class="anchor" aria-hidden="true" name=""></a><a href="#" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>类</h2>
+<h3><a class="anchor" aria-hidden="true" name=""></a><a href="#" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>交易</h3>
+<p>Transaction类是一个包装类，它包含操作和构建交易所需的所有工具。这允许我们动态地添加意图，随意地评论，而不是将所有东西都塞进一个单一的方法中。</p>
+<pre><code class="hljs css js"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<span class="hljs-comment">// Let us create a ContractTransaction</span>
+<span class="hljs-keyword">let</span> tx = Neon.create.tx({<span class="hljs-attr">type</span>: <span class="hljs-number">128</span>})
+<span class="hljs-comment">// Now let us add an intention to send 1 NEO to someone</span>
+tx
+.addOutput(<span class="hljs-string">'NEO'</span>,<span class="hljs-number">1</span>,someAddress)
+.addRemark(<span class="hljs-string">'I am sending 1 NEO to someAddress'</span>) <span class="hljs-comment">// Add an remark</span>
+.calculate(balance) <span class="hljs-comment">// Now we add in the balance we retrieve from an external API and calculate the required inputs.</span>
+.sign(privateKey) <span class="hljs-comment">// Sign with the private key of the balance</span>
+
+<span class="hljs-keyword">const</span> hash = tx.hash <span class="hljs-comment">// Store the hash so we can use it to query a block explorer.</span>
+
+<span class="hljs-comment">// Now we can use this serializedTx string and send it through sendrawtransaction RPC call.</span>
+<span class="hljs-keyword">const</span> serializedTx = tx.serialize()
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" name=""></a><a href="#" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>交易组件</h3>
+<p>交易由以下部分组成：</p>
+<ol>
+<li>类型</li>
+</ol>
+<p>这决定了交易类型。这决定了交易如何被序列化或反序列化。目前该库仅支持以下几种类型：</p>
+<ol>
+<li><p>Contract合约</p></li>
+<li><p>Claim提取</p></li>
+<li><p>Invocation调用</p></li>
+<li><p>版本</p></li>
+</ol>
+<p>这决定了交易的版本。版本不同，协议可能延迟。</p>
+<ol start="3">
+<li><p>属性</p></li>
+<li><p>输入</p></li>
+</ol>
+<p>交易的输入。这是这笔交易正在“花费”的资产。系统费用也包括在这里。交易处理后，输入被视为“花费”。</p>
+<ol start="5">
+<li>输出</li>
+</ol>
+<p>交易的输出。这表示由此交易创建的未花费资产。这些产出是“未花费”的，可以在未来的交易中作为输入参考。</p>
+<ol start="6">
+<li>见证人</li>
+</ol>
+<p>交易的见证人。这些是授权交易的签名。通常使用输入资产所有者的私钥来生成签名。请务必注意，虽然这个组件是被命名的 <code>Witness</code>，但它在 <code>Transaction</code> 对象中的关键是 <code>scripts</code>（我们试图保持C＃回购中描述的原始名称）。</p>
+<ol start="7">
+<li>独占数据（每种交易类型都是唯一的）</li>
+</ol>
+<p>各项交易所需的各种数据。例如，ClaimTransaction 将具有 <code>claims</code> 包含所有可提取的（claimable）交易的字段。 InvocationTransaction 将具有该 <code>script</code> 字段来代替智能合同调用。</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="api-wallet.html">← Wallet</a><a class="docs-next button" href="api-rpc.html">RPC →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/zh-CN/installation.html">Getting Started</a><a href="/neon-js/docs/zh-CN/tutorial.html">Guides</a><a href="/neon-js/docs/zh-CN/api.html">API Reference</a></div><div><h5>Community</h5><a href="/neon-js/zh-CN/users.html">User Showcase</a><a href="https://neo.stackexchange.com/" target="_blank">Stack Overflow</a><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>
