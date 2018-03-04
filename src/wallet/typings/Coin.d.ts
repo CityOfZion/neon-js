@@ -3,13 +3,7 @@ import { Fixed8 } from '../../utils';
 export interface CoinObj {
   index: number
   txid: string
-  value: number
+  value: number|Fixed8
 }
 
-export class Coin {
-  constructor(coinObj: CoinObj)
-
-  index: number;
-  txid: string;
-  value: Fixed8;
-}
+export function Coin (coinObj: CoinObj): CoinObj;

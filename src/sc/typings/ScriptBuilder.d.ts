@@ -2,7 +2,7 @@ import { StringStream } from '../../utils'
 import { ContractParam } from './ContractParam';
 import { OpCode } from './OpCode';
 
-export default class ScriptBuilder extends StringStream {
+export class ScriptBuilder extends StringStream {
   constructor()
 
   _emitAppCall(scriptHash: string, useTailCall?: boolean): this

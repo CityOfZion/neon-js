@@ -13,7 +13,7 @@ import Coin from './Coin'
 export default {
   create: {
     account: (k) => new Account(k),
-        privateKey: core.generatePrivateKey,
+    privateKey: core.generatePrivateKey,
     signature: core.generateSignature,
     wallet: (k) => new Wallet(k)
   },

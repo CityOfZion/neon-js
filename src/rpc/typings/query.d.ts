@@ -4,7 +4,7 @@ import { RPCRequest, RPCResponse } from './rpc'
 /**
 * A Query object helps us to construct and record requests
 */
-export default class Query {
+export class Query {
   constructor(req: RPCRequest)
 
   /**

@@ -6,7 +6,7 @@ export class Claims {
 
   address: string
   net: string
-  claims: ClaimItem[]
+  claims: ClaimItemObj[]
 
   export(): ClaimsObj
 }

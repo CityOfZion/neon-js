@@ -1,5 +1,5 @@
 import { Transaction } from '../../transactions/index'
-import Query from './query';
+import { Query } from './query';
 import { RPCRequest } from './rpc'
 
 export class RPCClient {
