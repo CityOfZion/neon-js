@@ -1,0 +1,29 @@
+{
+  "docs": {
+    "Getting Started": [
+      "overview",
+      "installation"
+    ],
+    "Guides": [
+      "basic_sendasset",
+      "basic_claimgas",
+      "basic_createscript",
+      "adv_multitx"
+    ]
+  },
+  "api": {
+    "Overview": [
+      "api-index"
+    ],
+    "Modules": [
+      "api-wallet",
+      "api-transactions",
+      "api-rpc",
+      "api-sc",
+      "api-api",
+      "api-u",
+      "api-CONST",
+      "api-logging"
+    ]
+  }
+}
