@@ -16,7 +16,7 @@ export const ClaimItem = (config = {}) => {
     index: config.index || 0,
     value: config.value || 0,
     start: config.start ? new Fixed8(config.start) : null,
-    end: config.end ? new Fixed8(config.end) : null,
+    end: config.end ? new Fixed8(config.end) : null
   }
 }
 

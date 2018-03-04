@@ -50,5 +50,5 @@ export {
   Wallet,
   Claims,
   AssetBalance,
-  Coin,
+  Coin
 }

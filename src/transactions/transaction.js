@@ -183,7 +183,7 @@ class Transaction {
     })
     return this
   }
-  
+
   /**
    * Add a remark.
    * @param {string} remark - A remark in ASCII.
