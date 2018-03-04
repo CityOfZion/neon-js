@@ -35,7 +35,7 @@ class Footer extends React.Component {
           </a>
           <div>
             <h5>Docs</h5>
-            <a href={this.docUrl('getting-started.html', this.props.language)}>
+            <a href={this.docUrl('installation.html', this.props.language)}>
               Getting Started
             </a>
             <a href={this.docUrl('tutorial.html', this.props.language)}>
@@ -60,6 +60,7 @@ class Footer extends React.Component {
           </div>
           <div>
             <h5>More</h5>
+            <a href="https://neo.org/" target="_blank" >NEO</a>
             <a href="https://github.com/cityofzion/neon-js" target="_blank" >GitHub</a>
             <a
               className="github-button"
