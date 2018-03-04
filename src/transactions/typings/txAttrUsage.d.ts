@@ -1,3 +1,4 @@
+/** Enum for TransactionAttributeUsage */
 export interface TxAttrUsage {
   ContractHash: 0;
   ECDH02: 2;

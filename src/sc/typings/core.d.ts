@@ -5,6 +5,7 @@ export interface scriptParams {
   useTailCall?: boolean
 }
 
+/** A wrapper method around ScripBuilder for creating a VM script. */
 export function createScript({ scriptHash, operation, args, useTailCall }: scriptParams): string
 
 interface DeployScriptConfig {
@@ -19,6 +20,7 @@ interface DeployScriptConfig {
   paramaterList?: string
 }
 
+/** Generates script for deploying contract */
 export function generateDeployScript({
   script,
   name,

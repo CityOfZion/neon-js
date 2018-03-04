@@ -1,18 +1,27 @@
 import { Fixed8 } from '../../utils';
-import { ClaimItem, ClaimItemObj } from './ClaimItem';
+import { ClaimItem } from './ClaimItem';
 
-export class Claims {
-  constructor(claims?: ClaimsObj)
-
-  address: string
-  net: string
-  claims: ClaimItemObj[]
-
-  export(): ClaimsObj
-}
-
-export interface ClaimsObj {
+export interface Claims {
   address?: string
   net?: string
-  claims?: ClaimItemObj[]
+  claims?: ClaimItem[]
+}
+
+/** Claims object used for claiming GAS. */
+export class Claims {
+  constructor(claims?: Claims)
+
+  /** The address for this Claims */
+  address?: string
+
+  /** Network which this Claims is using */
+  net?: string
+
+  /** The list of claimable transactions */
+  claims?: ClaimItem[]
+
+  export(): Claims
+
+  /** Returns a Claims object that contains part of the total claims starting at [[start]], ending at [[end]]. */
+  slice (start: number, end?: number): Claims
 }

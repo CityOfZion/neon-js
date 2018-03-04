@@ -1,10 +1,6 @@
 import { Fixed8 } from '../../utils';
 
-export function ClaimItem (config: ClaimItemObj): ClaimItemObj;
-
-export function exportClaimItem(claimItem: ClaimItemObj): ClaimItemObj;
-
-export interface ClaimItemObj {
+export interface ClaimItem {
   claim?: number;
   txid?: string;
   index?: number;
@@ -12,3 +8,7 @@ export interface ClaimItemObj {
   start?: number;
   end?: number;
 }
+
+export function ClaimItem (config: ClaimItem): ClaimItem;
+
+export function exportClaimItem(claimItem: ClaimItem): ClaimItem;

@@ -3,61 +3,41 @@ import { RPCResponse } from '../../rpc'
 import { Fixed8 } from '../../utils'
 import { signingFunction, net, AssetAmounts } from './core';
 
-/**
- * API Switch for MainNet and TestNet
- */
+/** API Switch for MainNet and TestNet */
 export function getAPIEndpoint(net: net): string
 
-/**
- * Get balances of NEO and GAS for an address
- */
+/** Get balances of NEO and GAS for an address */
 export function getBalance(net: net, address: string): Promise<Balance>
 
-/**
- * Get amounts of available (spent) and unavailable claims.
- */
+/** Get amounts of available (spent) and unavailable claims. */
 export function getClaims(net: net, address: string): Promise<Claims>
 
-/**
- * Gets the maximum amount of gas claimable after spending all NEO.
- */
+/** Gets the maximum amount of gas claimable after spending all NEO. */
 export function getMaxClaimAmount(net: net, address: string): Promise<Fixed8>
 
-/**
- * Returns the best performing (highest block + fastest) node RPC.
- */
+/** Returns the best performing (highest block + fastest) node RPC. */
 export function getRPCEndpoint(net: net): Promise<string>
 
-/**
- * Get transaction history for an account
- */
+/** Get transaction history for an account */
 export function getTransactionHistory(net: net, address: string): Promise<History>
 
-/**
- * Get the current height of the light wallet DB
- */
+/** Get the current height of the light wallet DB */
 export function getWalletDBHeight(net: net): Promise<number>
 
-/**
- * DEPRECATED: use claimGas instead
- */
+/** DEPRECATED: use claimGas instead */
 export function doClaimAllGas(
   net: net,
   privateKey: string
 ): Promise<RPCResponse>
 
-/**
- * DEPRECATED: use claimGas instead
- */
+/** DEPRECATED: use claimGas instead */
 export function doClaimAllGas(
   net: net,
   publicKey: string,
   signingFunction: signingFunction
 ): Promise<RPCResponse>
 
-/**
- * Call mintTokens for RPX
- */
+/** Call mintTokens for RPX */
 export function doMintTokens(
   net: net,
   scriptHash: string,
@@ -66,9 +46,7 @@ export function doMintTokens(
   gasCost: number
 ): Promise<RPCResponse>
 
-/**
- * Call mintTokens for RPX
- */
+/** Call mintTokens for RPX */
 export function doMintTokens(
   net: net,
   scriptHash: string,
@@ -79,9 +57,7 @@ export function doMintTokens(
 ): Promise<RPCResponse>
 
 
-/**
- * Send an asset to an address
- */
+/** Send an asset to an address */
 export function doSendAsset(
   net: net,
   toAddress: string,
@@ -89,9 +65,7 @@ export function doSendAsset(
   assetAmounts: AssetAmounts
 ): Promise<RPCResponse>
 
-/**
- * Send an asset to an address
- */
+/** Send an asset to an address */
 export function doSendAsset(
   net: net,
   toAddress: string,

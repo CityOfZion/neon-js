@@ -1,6 +1,4 @@
-/**
- * Sets the API switch to the provided value
- */
+/** Sets the API switch to the provided value */
 export function setApiSwitch(newSetting: number): void
 
 /**

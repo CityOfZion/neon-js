@@ -1,11 +1,11 @@
 import { Fixed8 } from '../../utils';
-import { CoinObj } from './Coin';
+import { Coin } from './Coin';
 
-export interface AssetBalanceObj {
+export interface AssetBalance {
   balance: number|Fixed8
-  unspent: CoinObj[]
-  spent: CoinObj[]
-  unconfirmed: CoinObj[]
+  unspent: Coin[]
+  spent: Coin[]
+  unconfirmed: Coin[]
 }
 
-export function AssetBalance(assetBalance?: AssetBalanceObj): AssetBalanceObj
+export function AssetBalance(assetBalance?: AssetBalance): AssetBalance

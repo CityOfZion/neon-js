@@ -1,3 +1,4 @@
+/** Enum for OpCode */
 export interface OpCode {
   PUSH0: 0;
   PUSHF: 0;
