@@ -7,11 +7,13 @@ import Account from './Account'
 import Balance from './Balance'
 import Wallet from './Wallet'
 import Claims from './Claims'
+import AssetBalance from './AssetBalance'
+import Coin from './Coin'
 
 export default {
   create: {
     account: (k) => new Account(k),
-    privateKey: core.generatePrivateKey,
+        privateKey: core.generatePrivateKey,
     signature: core.generateSignature,
     wallet: (k) => new Wallet(k)
   },
@@ -41,5 +43,12 @@ export default {
 export * from './core'
 export * from './verify'
 export * from './nep2'
-export * from './components'
-export { Account, Balance, Wallet, Claims }
+export * from './ClaimItem'
+export {
+  Account,
+  Balance,
+  Wallet,
+  Claims,
+  AssetBalance,
+  Coin,
+}

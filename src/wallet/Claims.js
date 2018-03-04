@@ -1,4 +1,4 @@
-import { ClaimItem } from './components'
+import { ClaimItem, exportClaimItem } from './ClaimItem'
 import util from 'util'
 
 /**
@@ -55,14 +55,3 @@ class Claims {
 }
 
 export default Claims
-
-const exportClaimItem = claimItem => {
-  return {
-    claim: claimItem.claim.toNumber(),
-    txid: claimItem.txid,
-    index: claimItem.index,
-    value: claimItem.value,
-    start: claimItem.start ? claimItem.start.toNumber() : null,
-    end: claimItem.end ? claimItem.end.toNumber() : null
-  }
-}

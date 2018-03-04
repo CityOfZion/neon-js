@@ -8,6 +8,7 @@ import { ASSET_ID } from '../consts'
 import logger from '../logging'
 
 const log = logger('api')
+
 /**
  * Parses the VM output for decimals. The VM returns an integer for most cases but it can be an empty string for zero.
  */
@@ -20,6 +21,7 @@ const parseHexNum = (hex) => hex ? parseInt(reverseHex(hex), 16) : 0
 const parseTokenInfo = VMZip(hexstring2str, hexstring2str, parseDecimals, parseHexNum)
 
 const parseTokenInfoAndBalance = VMZip(hexstring2str, hexstring2str, parseDecimals, parseHexNum, parseHexNum)
+
 /**
  * Queries for NEP5 Token information.
  * @param {string} url - URL of the NEO node to query.
