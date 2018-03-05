@@ -172,6 +172,19 @@ class ScriptBuilder extends StringStream {
         throw new Error()
     }
   }
+
+  /**
+   * Reverse engineer a script back to its params.
+   * @return {scriptParams[]}
+   */
+  toScriptParams () {
+    this.reset()
+    const scripts = []
+    while (!this.isEmpty()) {
+      scripts.push(retrieveAppCall(this))
+    }
+    return scripts
+  }
 }
 
 const isValidValue = (value) => {
@@ -183,6 +196,51 @@ const isValidValue = (value) => {
     return true
   }
   return false
+}
+
+/**
+ * Retrieves a single AppCall from a ScriptBuilder object.
+ * @param {ScriptBuilder} sb
+ * @return {ScriptParams}
+ */
+const retrieveAppCall = (sb) => {
+  const output = {
+    scriptHash: '',
+    args: []
+  }
+
+  while (!sb.isEmpty()) {
+    let b = sb.read()
+    let n = parseInt(b, 16)
+    switch (true) {
+      case (n === 0):
+        output.args.unshift(0)
+        break
+      case (n < 75):
+        output.args.unshift(sb.read(n))
+        break
+      case (n >= 81 && n <= 96):
+        output.args.unshift(n - 80)
+        break
+      case (n === 193):
+        const len = output.args.shift()
+        const cache = []
+        for (var i = 0; i < len; i++) { cache.unshift(output.args.shift()) }
+        output.args.unshift(cache)
+        break
+      case (n === 103):
+        output.scriptHash = reverseHex(sb.read(20))
+        output.useTailCall = false
+        return output
+      case (n === 105):
+        output.scriptHash = reverseHex(sb.read(20))
+        output.useTailCall = true
+        return output
+      default:
+        throw new Error(`Encounter unknown byte: ${b}`)
+    }
+  }
+  return output
 }
 
 export default ScriptBuilder

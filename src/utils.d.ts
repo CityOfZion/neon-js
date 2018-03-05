@@ -24,9 +24,11 @@ export class StringStream {
   constructor(str?: string)
 
   public isEmpty(): boolean
-  public read(bytes: number): string
+  public read(bytes?: number): string
   public readVarBytes(): string
   public readVarInt(): string
+  public reset(): void
+  public peek(bytes?:number):string
 }
 
 export function hash160(hex: string): string

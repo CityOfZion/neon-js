@@ -40,6 +40,7 @@ export class ScriptBuilder extends StringStream {
     useTailCall?: boolean): this
   emitSysCall(api: string): this
   emitPush(data: Array<any> | string | number | boolean): this
+  toScriptParams(): ScriptParams[]
 }
 
 export function createScript({ scriptHash, operation, args, useTailCall }: scriptParams): string
