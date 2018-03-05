@@ -3,6 +3,7 @@
 import * as core from './core'
 import * as verify from './verify'
 import * as nep2 from './nep2'
+import * as message from './message'
 import Account from './Account'
 import Balance from './Balance'
 import Wallet from './Wallet'
@@ -35,6 +36,12 @@ export default {
     scriptHashFromPublicKey: core.getScriptHashFromPublicKey,
     addressFromScriptHash: core.getAddressFromScriptHash,
     scriptHashFromAddress: core.getScriptHashFromAddress
+  },
+  sign: {
+    message: message.signMessage
+  },
+  verify: {
+    message: message.verifyMessage
   }
 }
 
@@ -42,4 +49,5 @@ export * from './core'
 export * from './verify'
 export * from './nep2'
 export * from './components'
+export * from './message'
 export { Account, Balance, Wallet, Claims }
