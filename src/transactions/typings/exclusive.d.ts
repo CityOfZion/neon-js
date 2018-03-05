@@ -1,5 +1,5 @@
 import { StringStream } from '../../utils'
-import { TransactionInput } from './core';
+import { TransactionInput } from './components';
 import { Transaction } from './Transaction';
 
 export const serializeExclusive: {

@@ -1,10 +1,26 @@
 import { Fixed8, StringStream } from '../../utils';
-import {
-  TransactionInput,
-  TransactionAttribute,
-  TransactionOutputLike,
-  Witness,
-} from './core';
+
+export interface TransactionAttribute {
+  data: string
+  usage: number
+}
+
+export interface TransactionInput {
+  prevHash: string
+  prevIndex: number
+}
+
+export interface TransactionOutput {
+  assetId: string
+  scriptHash: string
+  value: number|Fixed8
+}
+
+export interface Witness {
+  invocationScript: string
+  verificationScript: string
+}
+
 
 /** Serializes a TransactionInput. */
 export function serializeTransactionInput(input: TransactionInput): string
@@ -13,16 +29,16 @@ export function serializeTransactionInput(input: TransactionInput): string
 export function deserializeTransactionInput(stream: StringStream): TransactionInput
 
 /** TransactionOutput */
-export function TransactionOutput(input: TransactionOutputLike): TransactionOutputLike
+export function TransactionOutput(input: TransactionOutput): TransactionOutput
 
 /**Serializes a TransactionOutput*/
-export function serializeTransactionOutput(output: TransactionOutputLike): string
+export function serializeTransactionOutput(output: TransactionOutput): string
 
 /** Deserializes a stream into a TransactionOutput. */
-export function deserializeTransactionOutput(stream: StringStream): TransactionOutputLike
+export function deserializeTransactionOutput(stream: StringStream): TransactionOutput
 
 /** A helper method to create a TransactionOutput using human-friendly inputs. */
-export function createTransactionOutput(assetSym: string, value: number | Fixed8, address: string): TransactionOutputLike
+export function createTransactionOutput(assetSym: string, value: number | Fixed8, address: string): TransactionOutput
 
 /** Serializes a TransactionAttribute. */
 export function serializeTransactionAttribute(attr: TransactionAttribute): string

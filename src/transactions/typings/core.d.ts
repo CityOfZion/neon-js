@@ -1,30 +1,15 @@
 import { Fixed8 } from '../../utils';
 import { Balance } from '../../wallet'
 import { Transaction } from './Transaction';
-
-export interface TransactionAttribute {
-  data: string
-  usage: number
-}
-
-export interface TransactionInput {
-  prevHash: string
-  prevIndex: number
-}
-
-export interface TransactionOutputLike {
-  assetId: string
-  scriptHash: string
-  value: number|Fixed8
-}
-
-export interface Witness {
-  invocationScript: string
-  verificationScript: string
-}
+import {
+  TransactionInput,
+  TransactionAttribute,
+  TransactionOutput,
+  Witness,
+} from './components';
 
 /** Calculate the inputs required given the intents and gasCost. gasCost has to be seperate because it will not be reflected as an TransactionOutput. */
-export function calculateInputs(balances: Balance, intents: TransactionOutputLike[], gasCost?: number): { inputs: TransactionInput[], change: TransactionOutputLike[] }
+export function calculateInputs(balances: Balance, intents: TransactionOutput[], gasCost?: number): { inputs: TransactionInput[], change: TransactionOutput[] }
 
 /** Serializes a given transaction object */
 export function serializeTransaction(tx: Transaction, signed?: boolean): string
