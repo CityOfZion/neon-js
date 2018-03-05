@@ -1,6 +1,6 @@
 import { Fixed8 } from '../../utils';
 
-export interface ClaimItem {
+export class ClaimItemLike {
   claim?: number;
   txid?: string;
   index?: number;
@@ -9,6 +9,15 @@ export interface ClaimItem {
   end?: number;
 }
 
-export function ClaimItem (config: ClaimItem): ClaimItem;
+export class ClaimItem {
+  constructor(claims?: ClaimItemLike)
 
-export function exportClaimItem(claimItem: ClaimItem): ClaimItem;
+  claim: Fixed8;
+  txid: string;
+  index: number;
+  value: number;
+  start?: number;
+  end?: number;
+
+  export(): ClaimItemLike
+}

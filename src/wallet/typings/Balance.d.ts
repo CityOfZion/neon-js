@@ -1,16 +1,26 @@
 import { Fixed8 } from '../../utils';
 import { Transaction } from '../../transactions/index'
 import { AssetBalance } from './AssetBalance';
+import { net } from '../../api/typings/core'
+
+export interface BalanceLike {
+  net: net;
+  address: string;
+  assetSymbols:  string[];
+  assets: { [index: string]: AssetBalance };
+  tokenSymbols: string[];
+  tokens: { [index: string]: number };
+}
 
 /** Describes the coins found within an Account. Look up various balances through its symbol. For example, NEO or GAS. */
 export class Balance {
-  constructor(bal?: Balance)
+  constructor(bal?: BalanceLike)
 
   /** The address for this Balance */
   address: string
 
   /** The network for this Balance */
-  net: 'MainNet' | 'TestNet'
+  net: net
 
   /** The symbols of assets found in this Balance. Use this symbol to find the corresponding key in the assets object. */
   assetSymbols: string[]
@@ -37,7 +47,7 @@ export class Balance {
   applyTx(tx: Transaction, confirmed?: boolean): this
 
   /** Export this class as a plain JS object */
-  export(): string
+  export(): BalanceLike
 
   /** Verifies the coins in balance are unspent. This is an expensive call. */
   verifyAssets(url: string): Promise<Balance>

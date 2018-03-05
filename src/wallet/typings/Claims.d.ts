@@ -1,10 +1,10 @@
 import { Fixed8 } from '../../utils';
-import { ClaimItem } from './ClaimItem';
+import { ClaimItem, ClaimItemLike } from './ClaimItem';
 
-export interface Claims {
+export interface ClaimsLike {
   address?: string
   net?: string
-  claims?: ClaimItem[]
+  claims?: ClaimItemLike[]
 }
 
 /** Claims object used for claiming GAS. */
@@ -20,7 +20,7 @@ export class Claims {
   /** The list of claimable transactions */
   claims?: ClaimItem[]
 
-  export(): Claims
+  export(): ClaimsLike
 
   /** Returns a Claims object that contains part of the total claims starting at [[start]], ending at [[end]]. */
   slice (start: number, end?: number): Claims

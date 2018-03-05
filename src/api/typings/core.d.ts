@@ -29,7 +29,7 @@ interface PastTransaction {
 
 export interface apiConfig {
   net: net
-  address: string
+  address?: string
   privateKey?: string
   publicKey?: string
   signingFunction?: signingFunction

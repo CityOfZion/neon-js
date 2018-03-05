@@ -37,7 +37,7 @@ export function doClaimAllGas(
   signingFunction: signingFunction
 ): Promise<RPCResponse>
 
-/** Call mintTokens for RPX */
+/** DEPRECATED: Call mintTokens for RPX */
 export function doMintTokens(
   net: net,
   scriptHash: string,
@@ -46,7 +46,7 @@ export function doMintTokens(
   gasCost: number
 ): Promise<RPCResponse>
 
-/** Call mintTokens for RPX */
+/** DEPRECATED: Call mintTokens for RPX */
 export function doMintTokens(
   net: net,
   scriptHash: string,
@@ -56,8 +56,7 @@ export function doMintTokens(
   signingFunction: signingFunction
 ): Promise<RPCResponse>
 
-
-/** Send an asset to an address */
+/** DEPRECATED: Send an asset to an address */
 export function doSendAsset(
   net: net,
   toAddress: string,
@@ -65,7 +64,7 @@ export function doSendAsset(
   assetAmounts: AssetAmounts
 ): Promise<RPCResponse>
 
-/** Send an asset to an address */
+/** DEPRECATED: Send an asset to an address */
 export function doSendAsset(
   net: net,
   toAddress: string,

@@ -1,4 +1,4 @@
-import { ClaimItem, exportClaimItem } from './ClaimItem'
+import { ClaimItem } from './ClaimItem'
 import util from 'util'
 
 /**
@@ -17,7 +17,7 @@ class Claims {
     /** Network which this Claims is using */
     this.net = config.net || 'NoNet'
     /** The list of claimable transactions */
-    this.claims = config.claims ? config.claims.map(c => ClaimItem(c)) : []
+    this.claims = config.claims ? config.claims.map(c => new ClaimItem(c)) : []
   }
 
   get [Symbol.toStringTag] () {
@@ -35,7 +35,7 @@ class Claims {
     return {
       address: this.address,
       net: this.net,
-      claims: this.claims.map(exportClaimItem)
+      claims: this.claims.map(claimItem => claimItem.export())
     }
   }
 

@@ -9,24 +9,24 @@ import { Fixed8 } from '../utils'
  * @property {Fixed8} [start] - Starting block. Optional.
  * @property {Fixed8} [end] - Ending block. Optional.
  */
-export const ClaimItem = (config = {}) => {
-  return {
-    claim: config.claim ? new Fixed8(config.claim) : new Fixed8(0),
-    txid: config.txid || '',
-    index: config.index || 0,
-    value: config.value || 0,
-    start: config.start ? new Fixed8(config.start) : null,
-    end: config.end ? new Fixed8(config.end) : null
+export class ClaimItem {
+  constructor (config = {}) {
+    this.claim = config.claim ? new Fixed8(config.claim) : new Fixed8(0);
+    this.txid = config.txid || '';
+    this.index = config.index || 0;
+    this.value = config.value || 0;
+    this.start = config.start ? new Fixed8(config.start) : null;
+    this.end = config.end ? new Fixed8(config.end) : null;
   }
-}
 
-export const exportClaimItem = (claimItem) => {
-  return {
-    claim: claimItem.claim.toNumber(),
-    txid: claimItem.txid,
-    index: claimItem.index,
-    value: claimItem.value,
-    start: claimItem.start ? claimItem.start.toNumber() : null,
-    end: claimItem.end ? claimItem.end.toNumber() : null
+  export () {
+    return {
+      claim: this.claim.toNumber(),
+      txid: this.txid,
+      index: this.index,
+      value: this.value,
+      start: this.start ? this.start.toNumber() : null,
+      end: this.end ? this.end.toNumber() : null
+    }
   }
 }

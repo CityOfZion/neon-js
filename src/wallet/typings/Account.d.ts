@@ -1,5 +1,14 @@
 import { ScryptParams } from './core';
-import { WalletAccount } from './Wallet';
+
+export interface AccountLike {
+  address: string
+  label: string
+  isDefault: boolean
+  lock: boolean
+  key: string
+  contract: object | null
+  extra: object
+}
 
 /**
  * This allows for simple utilisation and manipulating of keys without need the long access methods.
@@ -10,6 +19,7 @@ import { WalletAccount } from './Wallet';
 export class Account {
   constructor(str: string|object)
 
+  encrypted: string
   WIF: string
   privateKey: string
   publicKey: string
@@ -25,6 +35,6 @@ export class Account {
   /** Decrypts the encrypted key and return the Account object. */
   decrypt(keyphrase: string, scryptParams?: ScryptParams): Account
 
-  /** Export Account as a WalletAccount object. */
-  export(): WalletAccount
+  /** Export Account as a AccountLike object. */
+  export(): AccountLike
 }

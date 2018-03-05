@@ -1,7 +1,9 @@
-export interface WalletFile {
+import { Account, AccountLike } from './Account';
+
+export interface WalletLike {
   name: string
   scrypt: WalletScryptParams
-  accounts: WalletAccount[]
+  accounts: (Account|AccountLike)[]
   extra: object
 }
 
@@ -11,16 +13,6 @@ export interface WalletScryptParams {
   p: number
 }
 
-export interface WalletAccount {
-  address: string
-  label: string
-  isDefault: boolean
-  lock: boolean
-  key: string
-  contract: object | null
-  extra: object
-}
-
 /** Wallet class to read and integrate a Wallet file into the library. This class is responsible for ensuring that the Wallet File is read correctly and usable by the library. */
 export class Wallet {
   name: string
@@ -28,7 +20,7 @@ export class Wallet {
   accounts: Account[]
   extra: object
 
-  constructor(file: WalletFile)
+  constructor(file: WalletLike)
 
   /** Imports a Wallet through a JSON string */
   static import(jsonString: string): Wallet
