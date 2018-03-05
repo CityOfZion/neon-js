@@ -9,7 +9,7 @@ import { Fixed8 } from '../utils'
  * @property {Fixed8} [start] - Starting block. Optional.
  * @property {Fixed8} [end] - Ending block. Optional.
  */
-export class ClaimItem {
+export default class ClaimItem {
   constructor (config = {}) {
     this.claim = config.claim ? new Fixed8(config.claim) : new Fixed8(0);
     this.txid = config.txid || '';

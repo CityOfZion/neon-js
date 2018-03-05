@@ -1,4 +1,4 @@
-import { ClaimItem } from './ClaimItem'
+import ClaimItem from './ClaimItem'
 import util from 'util'
 
 /**

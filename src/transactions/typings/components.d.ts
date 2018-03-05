@@ -2,7 +2,7 @@ import { Fixed8, StringStream } from '../../utils';
 import {
   TransactionInput,
   TransactionAttribute,
-  TransactionOutput,
+  TransactionOutputLike,
   Witness,
 } from './core';
 
@@ -13,16 +13,16 @@ export function serializeTransactionInput(input: TransactionInput): string
 export function deserializeTransactionInput(stream: StringStream): TransactionInput
 
 /** TransactionOutput */
-export function TransactionOutput(input: TransactionOutput): TransactionOutput
+export function TransactionOutput(input: TransactionOutputLike): TransactionOutputLike
 
 /**Serializes a TransactionOutput*/
-export function serializeTransactionOutput(output: TransactionOutput): string
+export function serializeTransactionOutput(output: TransactionOutputLike): string
 
 /** Deserializes a stream into a TransactionOutput. */
-export function deserializeTransactionOutput(stream: StringStream): TransactionOutput
+export function deserializeTransactionOutput(stream: StringStream): TransactionOutputLike
 
 /** A helper method to create a TransactionOutput using human-friendly inputs. */
-export function createTransactionOutput(assetSym: string, value: number | Fixed8, address: string): TransactionOutput
+export function createTransactionOutput(assetSym: string, value: number | Fixed8, address: string): TransactionOutputLike
 
 /** Serializes a TransactionAttribute. */
 export function serializeTransactionAttribute(attr: TransactionAttribute): string

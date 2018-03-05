@@ -2,7 +2,7 @@ import { Balance, Claims } from '../../wallet';
 import {
   TransactionInput,
   TransactionAttribute,
-  TransactionOutput,
+  TransactionOutputLike,
   Witness,
 } from './core';
 
@@ -17,7 +17,7 @@ export class Transaction {
   public version: number
   public attributes: TransactionAttribute[]
   public inputs: TransactionInput[]
-  public outputs: TransactionOutput[]
+  public outputs: TransactionOutputLike[]
   public scripts: Witness[]
 
   constructor(tx: Transaction)
@@ -32,10 +32,10 @@ export class Transaction {
   static createClaimTx(publicKeyOrAddress: string, claimData: Claims, override: object): Transaction
 
   /** Creates a ContractTransaction with the given parameters. */
-  static createContractTx(balances: Balance, intents: TransactionOutput[], override: object): Transaction
+  static createContractTx(balances: Balance, intents: TransactionOutputLike[], override: object): Transaction
 
   /** Creates an InvocationTransaction with the given parameters. */
-  static createInvocationTx(balance: Balance, intents: TransactionOutput[], invoke: object | string, gasCost: number, override: object): Transaction
+  static createInvocationTx(balance: Balance, intents: TransactionOutputLike[], invoke: object | string, gasCost: number, override: object): Transaction
 
   static deserialize(hexstring: string): Transaction
 

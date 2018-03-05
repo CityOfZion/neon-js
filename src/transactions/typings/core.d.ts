@@ -12,10 +12,10 @@ export interface TransactionInput {
   prevIndex: number
 }
 
-export interface TransactionOutput {
+export interface TransactionOutputLike {
   assetId: string
   scriptHash: string
-  value: Fixed8
+  value: number|Fixed8
 }
 
 export interface Witness {
@@ -24,7 +24,7 @@ export interface Witness {
 }
 
 /** Calculate the inputs required given the intents and gasCost. gasCost has to be seperate because it will not be reflected as an TransactionOutput. */
-export function calculateInputs(balances: Balance, intents: TransactionOutput[], gasCost?: number): { inputs: TransactionInput[], change: TransactionOutput[] }
+export function calculateInputs(balances: Balance, intents: TransactionOutputLike[], gasCost?: number): { inputs: TransactionInput[], change: TransactionOutputLike[] }
 
 /** Serializes a given transaction object */
 export function serializeTransaction(tx: Transaction, signed?: boolean): string
