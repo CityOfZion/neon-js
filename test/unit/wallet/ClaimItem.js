@@ -1,4 +1,4 @@
-import { ClaimItem } from '../../../src/wallet/ClaimItem'
+import ClaimItem from '../../../src/wallet/ClaimItem'
 import { Fixed8 } from '../../../src/utils'
 
 describe('ClaimItem', function () {
@@ -12,7 +12,7 @@ describe('ClaimItem', function () {
       end: null
     }
 
-    const result = ClaimItem()
+    const result = new ClaimItem()
     result.should.eql(expected)
   })
 
@@ -26,7 +26,7 @@ describe('ClaimItem', function () {
       end: 23456
     }
 
-    const result = ClaimItem(claimItemLike)
+    const result = new ClaimItem(claimItemLike)
 
     result.claim.toNumber().should.equal(claimItemLike.claim)
     result.txid.should.equal(claimItemLike.txid)
