@@ -41,4 +41,30 @@ describe('ScriptBuilder', function () {
       result.str.should.equal(integers[i].result)
     }
   })
+
+  describe('toScriptParams', function () {
+    it('simple', () => {
+      Object.keys(data).map((key) => {
+        let testcase = data[key]
+        let sb = new ScriptBuilder(testcase.script)
+        let scriptParams = sb.toScriptParams()
+        scriptParams.should.eql(testcase.toScriptParams)
+      })
+    })
+
+    it('complex', () => {
+      const s = '00046e616d656754a64cac1b1073e662933ef3e30b007cd98d67d7000673796d626f6c6754a64cac1b1073e662933ef3e30b007cd98d67d70008646563696d616c736754a64cac1b1073e662933ef3e30b007cd98d67d7000b746f74616c537570706c796754a64cac1b1073e662933ef3e30b007cd98d67d7149847e26135152874355e324afd5cc99f002acb3351c10962616c616e63654f666754a64cac1b1073e662933ef3e30b007cd98d67d7'
+      const expected = [
+        { scriptHash: 'd7678dd97c000be3f33e9362e673101bac4ca654', args: ['6e616d65', 0], useTailCall: false },
+        { scriptHash: 'd7678dd97c000be3f33e9362e673101bac4ca654', args: ['73796d626f6c', 0], useTailCall: false },
+        { scriptHash: 'd7678dd97c000be3f33e9362e673101bac4ca654', args: ['646563696d616c73', 0], useTailCall: false },
+        { scriptHash: 'd7678dd97c000be3f33e9362e673101bac4ca654', args: ['746f74616c537570706c79', 0], useTailCall: false },
+        { scriptHash: 'd7678dd97c000be3f33e9362e673101bac4ca654', args: ['62616c616e63654f66', ['9847e26135152874355e324afd5cc99f002acb33']], useTailCall: false }
+      ]
+      let sb = new ScriptBuilder(s)
+      let result = sb.toScriptParams()
+      result.length.should.equal(5)
+      result.should.eql(expected)
+    })
+  })
 })
