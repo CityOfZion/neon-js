@@ -1,4 +1,4 @@
-import Coin from '../../../src/wallet/Coin'
+import Coin from '../../../src/wallet/components/Coin'
 import { Fixed8 } from '../../../src/utils'
 
 describe('Coin', function () {

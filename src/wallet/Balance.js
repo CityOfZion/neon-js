@@ -1,4 +1,4 @@
-import AssetBalance from './AssetBalance'
+import AssetBalance from './components/AssetBalance'
 import { Transaction } from '../transactions'
 import { ASSETS } from '../consts'
 import { Fixed8 } from '../utils'

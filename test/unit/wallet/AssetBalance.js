@@ -1,4 +1,4 @@
-import AssetBalance from '../../../src/wallet/AssetBalance'
+import AssetBalance from '../../../src/wallet/components/AssetBalance'
 import { Fixed8 } from '../../../src/utils'
 
 describe('AssetBalance', function () {

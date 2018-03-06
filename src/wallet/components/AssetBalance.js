@@ -1,4 +1,4 @@
-import { Fixed8 } from '../utils'
+import { Fixed8 } from '../../utils'
 import Coin from './Coin'
 
 /**

@@ -9,7 +9,7 @@ export interface ClaimsLike {
 
 /** Claims object used for claiming GAS. */
 export class Claims {
-  constructor(claims?: Claims)
+  constructor(claims?: ClaimsLike)
 
   /** The address for this Claims */
   address?: string
