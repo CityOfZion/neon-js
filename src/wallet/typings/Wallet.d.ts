@@ -43,8 +43,8 @@ export class Wallet {
   /** Attempts to encrypt all accounts with keyphrase. */
   encryptAll(keyphrase: string): boolean[]
 
-  /** Export this class as a string */
-  export(): string
+  /** Export this class as a object */
+  export(): WalletLike
 
   /** Set Account at index in array to be default account. */
   setDefault(index: number): this
