@@ -235,6 +235,7 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
       return res
     })
 }
+
 /**
  * Send an asset to an address
  * @param {string} net - 'MainNet' or 'TestNet'.

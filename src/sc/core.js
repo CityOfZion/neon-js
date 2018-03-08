@@ -24,6 +24,9 @@ export const createScript = (...scriptIntents) => {
   return sb.str
 }
 
+/**
+ * Generates script for deploying contract
+ */
 export const generateDeployScript = ({ script, name, version, author, email, description, needsStorage = false, returnType = 'ff', paramaterList = undefined }) => {
   const sb = new ScriptBuilder()
   sb

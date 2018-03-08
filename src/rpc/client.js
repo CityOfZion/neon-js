@@ -49,6 +49,7 @@ class RPCClient {
   get [Symbol.toStringTag] () {
     return 'RPC Client'
   }
+
   /**
    * Takes an Query object and executes it. Adds the Query object to history.
    * @param {Query} query
@@ -84,6 +85,7 @@ class RPCClient {
   }
 
   /**
+   * Gets the state of an asset given an id.
    * @param {string} assetId
    * @return {Promise<object>}
    */
@@ -224,6 +226,7 @@ class RPCClient {
   }
 
   /**
+   * Gets the transaction output given a transaction id and index
    * @param {string} txid
    * @param {number} index
    * @return {Promise<object>}
@@ -255,6 +258,7 @@ class RPCClient {
         }
       })
   }
+
   /**
    * Calls a smart contract with the given parameters. This method is a local invoke, results are not reflected on the blockchain.
    * @param {string} scriptHash

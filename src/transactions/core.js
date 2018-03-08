@@ -73,6 +73,7 @@ const calculateInputsForAsset = (assetBalance, requiredAmt, assetId, address) =>
   })
   return { inputs, change }
 }
+
 /**
  * Serializes a given transaction object
  * @param {Transaction} tx

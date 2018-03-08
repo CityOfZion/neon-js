@@ -187,7 +187,7 @@ class Wallet {
   }
 
   /**
-   * Export this class as a string
+   * Export this class as a object
    * @return {object}
    */
   export () {

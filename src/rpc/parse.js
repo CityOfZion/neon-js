@@ -1,4 +1,5 @@
 import { ab2str, hexstring2ab } from '../utils'
+
 /**
  * Parses the VM Stack and returns human readable strings
  * @param {any} res - RPC Response

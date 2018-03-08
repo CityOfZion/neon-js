@@ -41,6 +41,7 @@ export const TransactionOutput = (input) => {
     scriptHash: input.scriptHash
   }
 }
+
 /**
  * Serializes a TransactionOutput.
  * @param {TransactionOutput} output

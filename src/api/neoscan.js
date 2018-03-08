@@ -6,6 +6,7 @@ import logger from '../logging'
 
 const log = logger('api')
 export const name = 'neoscan'
+
 /**
  * Returns the appropriate NeoScan endpoint.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
@@ -150,6 +151,7 @@ export const getTransactionHistory = (net, address) => {
       return parseTxHistory(response.data.txids)
     })
 }
+
 /* eslint-disable camelcase */
 const parseTxHistory = txids =>
   txids.map(({ txid, block_height, balance, asset_moved }) => {

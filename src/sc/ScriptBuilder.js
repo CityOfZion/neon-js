@@ -201,7 +201,7 @@ const isValidValue = (value) => {
 /**
  * Retrieves a single AppCall from a ScriptBuilder object.
  * @param {ScriptBuilder} sb
- * @return {ScriptParams}
+ * @return {scriptParams}
  */
 const retrieveAppCall = (sb) => {
   const output = {
