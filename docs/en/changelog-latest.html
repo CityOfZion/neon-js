@@ -1,0 +1,152 @@
+<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Changelog (v3) · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Changelog (v3) · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="3.3.2"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/neon-js/browser.js"></script><link rel="stylesheet" href="/neon-js/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/neon-js/"><img class="logo" src="/neon-js/img/logo.svg"/><h2 class="headerTitle">neon-js</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li><a href="/neon-js/docs/en/installation.html" target="_self">Docs</a></li><li><a href="/neon-js/docs/en/api-index.html" target="_self">API</a></li><li><a href="/neon-js/docs/en/changelog-latest.html" target="_self">Changelog</a></li><li><a href="/neon-js/en/help.html" target="_self">Help</a></li><span><li><a id="languages-menu" href="#"><img class="languages-icon" src="/neon-js/img/language.svg"/>English</a><div id="languages-dropdown" class="hide"><ul id="languages-dropdown-items"><li><a href="/neon-js/en">English</a></li><li><a href="/neon-js/zh-CN">中文</a></li></ul></div></li><script>
+        const languagesMenuItem = document.getElementById("languages-menu");
+        const languagesDropDown = document.getElementById("languages-dropdown");
+        languagesMenuItem.addEventListener("click", function(){
+          if(languagesDropDown.className == "hide") {
+            languagesDropDown.className = "visible";
+          } else {
+            languagesDropDown.className = "hide";
+          }
+        });
+      </script></span></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Latest</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Latest</h3><ul><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/neon-js/docs/en/changelog-latest.html">Changelog (v3)</a></li></ul></div><div class="navGroup navGroupActive"><h3>Past Versions</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/changelog-2.html">Changelog (v2)</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/changelog-1.html">Changelog (v1)</a></li></ul></div></div></section></div><script>
+          var toggler = document.getElementById('navToggler');
+          var nav = document.getElementById('docsNav');
+          toggler.onclick = function() {
+            nav.classList.toggle('docsSliderActive');
+          };
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Changelog (v3)</h1></header><article><div><span><h1><a class="anchor" aria-hidden="true" name="332"></a><a href="#332" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3.3.2</h1>
+<ul>
+<li><p>Fixes</p>
+<ul>
+<li>Update typescript typings</li>
+<li>Use user provided parameters when given for api core methods</li>
+<li>Fix ScriptBuilder to accept empty string and zero value</li>
+<li>neonDB to use <code>get_all_nodes</code> endpoint instead of <code>best_node</code> endpoint</li>
+<li>Fix neoscan <code>getMaxClaimAmount</code>, <code>getBalance</code> and <code>getClaims</code> for invalid addresses</li>
+</ul></li>
+</ul>
+<h1><a class="anchor" aria-hidden="true" name="330"></a><a href="#330" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3.3.0</h1>
+<ul>
+<li><p>API</p>
+<ul>
+<li>Add support for manpulating smart contracts. This means that you can send assets from smart contracts. This support is currently enabled only in the core API methods <code>sendAsset</code> and <code>doInvoke</code>. <strong>This is currently experimental and is subject to breaking changes without notice</strong> (no minor version bump for changes to these).</li>
+<li>Add support for <code>config.account</code>. You can now use Account in place of address and private key.</li>
+<li>Add support for <code>config.balance</code>. You can use an old Balance object instead of retrieving a new one. Attaching a Balance object will cause the function to skip over the retrieval process.</li>
+</ul></li>
+<li><p>Wallet</p>
+<ul>
+<li>Add <code>confirm</code> to Balance object.</li>
+</ul></li>
+<li><p>SC</p>
+<ul>
+<li>Add ContractParam.hash160</li>
+</ul></li>
+<li><p>Util</p>
+<ul>
+<li>Add <code>isHex</code> and <code>ensureHex</code> as ways to conveniently check format of hexstrings.</li>
+</ul></li>
+<li><p>Fixes</p>
+<ul>
+<li>Add more logging messages throughout.</li>
+<li><code>api.signTx</code> now checks and converts the return value from external function to a Transaction object.</li>
+<li>Fix regex string for <code>rpc.getVersion</code>.</li>
+</ul></li>
+</ul>
+<h1><a class="anchor" aria-hidden="true" name="321"></a><a href="#321" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3.2.1</h1>
+<ul>
+<li>Update typescript typings</li>
+</ul>
+<h1><a class="anchor" aria-hidden="true" name="320"></a><a href="#320" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3.2.0</h1>
+<ul>
+<li><p>Wallet</p>
+<ul>
+<li>Implement encryptAsync and decryptAsync using a new scrypt library. Further work will be done to convert the existing encrypt/decrypt to use the new library.</li>
+<li>Claims object is now slicable, allowing users to break up the Claims object into smaller Claims.</li>
+</ul></li>
+<li><p>Util</p>
+<ul>
+<li>Override more methods in Fixed8 to return Fixed8s.</li>
+<li>Update util functions to use Fixed8 internally.</li>
+</ul></li>
+<li><p>API</p>
+<ul>
+<li>Mark <code>api.nep5.doTransferToken</code> for deprecation.</li>
+</ul></li>
+<li><p>Sc</p>
+<ul>
+<li>createScript now accepts an array of scripts to parse and concatenate.</li>
+</ul></li>
+<li><p>Docs</p>
+<ul>
+<li>Start to overhaul docs to favor examples and integrating the reference into the main docs instead of having it as a standalone section.</li>
+</ul></li>
+<li><p>Others</p>
+<ul>
+<li>NPM packages updated to latest.</li>
+</ul></li>
+<li><p>Fixes</p>
+<ul>
+<li>Fix scryptParams to use n,r,p</li>
+<li>Update default RPC endpoints to use https</li>
+<li>Fix Account defaults</li>
+<li>Fix _emitNum emitting trimmed hex numbers</li>
+</ul></li>
+</ul>
+<h1><a class="anchor" aria-hidden="true" name="310"></a><a href="#310" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3.1.0</h1>
+<ul>
+<li><p>API</p>
+<ul>
+<li>Expose the <code>loadBalance</code> method. This method allows the use of the dynamic API switch within <code>neon-js</code> for the external providers.</li>
+<li>Implement the full set of APIs on neoscan. Neoscan is now complete and up to par with neonDB in terms of features.</li>
+<li>Expose <code>getXFrom</code> set of methods which follow the API config convention and is usable with the loadBalance function.</li>
+</ul></li>
+</ul>
+<h1><a class="anchor" aria-hidden="true" name="300"></a><a href="#300" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3.0.0</h1>
+<ul>
+<li><p>Logging</p>
+<ul>
+<li>Setup logging directed at <code>stdout</code> and <code>stderr</code>. Logging package is loglevel.</li>
+<li>Defaults to silent.</li>
+<li>Not exposed through semantic style currently.</li>
+<li>All deprecation messages are set to 'warn' level.</li>
+<li>See logging for more details.</li>
+</ul></li>
+<li><p>Utils</p>
+<ul>
+<li>Fixed8: A new class extending bignumber.js that replaces all value storage in neon-js</li>
+<li>This class is now used for all classes that involves coin values with decimal places.</li>
+<li>Comes with helper methods such as <code>toHex</code> and <code>fromHex</code>.</li>
+</ul></li>
+</ul>
+<pre><code class="hljs css js"><span class="hljs-keyword">import</span> {u} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<span class="hljs-comment">// accepts numbers or string</span>
+<span class="hljs-keyword">const</span> num1 = <span class="hljs-keyword">new</span> u.Fixed8(<span class="hljs-number">123.4567</span>)
+<span class="hljs-keyword">const</span> num2 = u.Fixed8.fromHex(<span class="hljs-string">'0000000005f5e100'</span>) <span class="hljs-comment">// 1</span>
+
+<span class="hljs-keyword">const</span> num3 = num1.add(num2) <span class="hljs-comment">// immutable</span>
+<span class="hljs-built_in">console</span>.log(num3.toString()) <span class="hljs-comment">// '124.4567'</span>
+</code></pre>
+<ul>
+<li><p>Wallet</p>
+<ul>
+<li><code>Claims</code> is now a ES6 class. While it does not have any spceial methods for it now, it is one of the high level objects that we will be working with in <code>neon-js</code>. This allows easy creation of <code>Claims</code> using the constructor by passing in a CLaims-like javascript object.</li>
+<li><code>components</code> have been created for the minor sub-components found in <code>Claims</code> and <code>Balance</code>. These methods are useful for us to rapidly create components that are usable with <code>neon-js</code> methods. Refer to the wallet section for more information.</li>
+<li><strong>BREAKING</strong> Excess NEP2 functions are now fully deprecated. The list is <code>encryptWifAccount</code>, <code>generateENcryptedWif</code>, <code>encryptWIF</code>, <code>decryptWIF</code>.</li>
+</ul></li>
+<li><p>Transaction</p>
+<ul>
+<li>Update all methods to conform with the new Fixed8 classes. This also means that <code>neon-js</code> will not be compatible with just normal javascript objects anymore.</li>
+</ul></li>
+<li><p>API</p>
+<ul>
+<li><strong>BREAKING</strong> Update external API libraries (neonDB and neoscan) to return <code>Balance</code> and <code>Claims</code> objects. Fixed8 will be used in the new models, making arithmetic operations very different from normal javascript numbers.</li>
+<li>A bug has been discovered in <code>getPrice</code>. While it works for NEO and GAS, it will not work for any of the NEP5 tokens. <code>getPrices</code> has been fixed for this bug. However, there is no easy fix for <code>getPrice</code> and thus, we will move forward with deprecating <code>getPrice</code> in favor of <code>getPrices</code>.</li>
+</ul></li>
+<li><p>Fixes</p>
+<ul>
+<li>fix getPrices by adding a limit=0 to the query.</li>
+<li>fix default Account.contract field not having the required shape.</li>
+<li>fix transaction attribute being deserialized wrongly.</li>
+</ul></li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-next button" href="changelog-2.html">Changelog (v2) →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/tutorial.html">Guides</a><a href="/neon-js/docs/en/api.html">API Reference</a></div><div><h5>Community</h5><a href="/neon-js/en/users.html">User Showcase</a><a href="https://neo.stackexchange.com/" target="_blank">Stack Overflow</a><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>
