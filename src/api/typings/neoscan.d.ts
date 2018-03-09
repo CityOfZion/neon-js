@@ -21,4 +21,4 @@ export function getMaxClaimAmount(net: net, address: string): Promise<Fixed8>
 export function getWalletDBHeight(net: net): Promise<number>
 
 /** Get transaction history for an account */
-export function getTransactionHistory(net: net, address: string): Promise<History>
+export function getTransactionHistory(net: net, address: string): Promise<PastTransaction[]>

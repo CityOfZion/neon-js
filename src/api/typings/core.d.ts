@@ -11,19 +11,11 @@ export interface AssetAmounts {
   NEO?: number
 }
 
-export interface History {
-  address: string
-  history: PastTransaction[]
-  name: string
-  net: net
-}
-
-interface PastTransaction {
-  GAS: number
-  NEO: number
-  block_index: number
-  gas_sent: boolean
-  neo_sent: boolean
+export interface PastTransaction {
+  change: {
+    [assetSymbol: string]: Fixed8
+  }
+  blockHeight: Fixed8
   txid: string
 }
 
@@ -86,7 +78,7 @@ export function getClaimsFrom(config: apiConfig, api: object): Promise<apiConfig
 export function getRPCEndpointFrom(config: apiConfig, api: object): Promise<string>
 
 /** Helper method to get transaction history for an account */
-export function getTransactionHistoryFrom(config: apiConfig, api: object): Promise<History>
+export function getTransactionHistoryFrom(config: apiConfig, api: object): Promise<PastTransaction[]>
 
 /** Helper method to get the current height of the light wallet DB */
 export function getWalletDBHeightFrom(config: apiConfig, api: object): Promise<number>

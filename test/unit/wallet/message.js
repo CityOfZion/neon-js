@@ -1,7 +1,6 @@
 import * as M from '../../../src/wallet/message'
-import Neon from '../../../src/index'
 
-describe('Message Methods', function() {
+describe('Message Methods', function () {
   const account1 = {
     address: 'Adc4jT59RjDLdXbBni6xzg6SEcLVhHZ5Z9',
     publicKey: '02963fc761eb7135c4593bfc6a0af96d8588b70d8f6ef3af8549181e57772181f5',
@@ -22,40 +21,40 @@ describe('Message Methods', function() {
     message: 'Morpheus'
   }
 
-  it('sign using private key and verify', function() {
+  it('sign using private key and verify', () => {
     const signature = M.signMessage(account1.message, account1.privateKey)
     M.verifyMessage(account1.message, signature, account1.publicKey).should.equal(true)
   })
 
-  it('sign using WIF and verify', function() {
+  it('sign using WIF and verify', () => {
     const signature = M.signMessage(account1.message, account1.WIF)
     M.verifyMessage(account1.message, signature, account1.publicKey).should.equal(true)
   })
 
-  it('sign using WIF and verify using public Key unencoded', function() {
+  it('sign using WIF and verify using public Key unencoded', () => {
     const signature = M.signMessage(account1.message, account1.WIF)
     M.verifyMessage(account1.message, signature, account1.publicKeyUnencoded).should.equal(true)
   })
 
-  it('not verify signature with wrong public key', function() {
+  it('not verify signature with wrong public key', () => {
     const signature = M.signMessage(account1.message, account1.privateKey)
     M.verifyMessage(account1.message, signature, account2.publicKey).should.equal(false)
   })
 
-  it('not verify signature with changed message', function() {
+  it('not verify signature with changed message', () => {
     const signature = M.signMessage(account1.message, account1.privateKey)
     M.verifyMessage(account2.message, signature, account1.publicKey).should.equal(false)
   })
 
-  it('raise error for invalid public Key', function() {
-    ;(function() {
+  it('raise error for invalid public Key', () => {
+    ; (function () {
       const signature = M.signMessage(account1.message, account1.privateKey)
       M.verifyMessage(account2.message, signature, 'x')
     }.should.throw(Error, 'Invalid public key'))
   })
 
-  it('raise error for invalid signature', function() {
-    ;(function() {
+  it('raise error for invalid signature', () => {
+    ; (function () {
       M.verifyMessage(account2.message, 'x', account1.publicKey).should.equal(false)
     }.should.throw(Error, 'Invalid signature format expected hex'))
   })
