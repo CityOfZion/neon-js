@@ -68,7 +68,8 @@ describe('Switch API', function () {
         addressConfig
       )
       historyResponseCheck(response[0])
-      return response[0].NEO.should.equal(227)
+      console.log(response[0])
+      return response[0].change.NEO.toNumber().should.equal(0)
     })
 
     it('calls getClaimsFrom', async () => {
@@ -139,7 +140,7 @@ describe('Switch API', function () {
         addressConfig
       )
       historyResponseCheck(response[0])
-      return response[0].NEO.should.equal(1)
+      return response[0].change.NEO.toNumber().should.equal(1)
     })
 
     it('calls getClaimsFrom', async () => {
@@ -175,11 +176,8 @@ describe('Switch API', function () {
   const historyResponseCheck = obj =>
     checkProperty(
       obj,
-      'GAS',
-      'NEO',
-      'block_index',
-      'gas_sent',
-      'neo_sent',
+      'change',
+      'blockHeight',
       'txid'
     ).should.equal(true)
 

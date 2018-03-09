@@ -19,7 +19,7 @@ export function getMaxClaimAmount(net: net, address: string): Promise<Fixed8>
 export function getRPCEndpoint(net: net): Promise<string>
 
 /** Get transaction history for an account */
-export function getTransactionHistory(net: net, address: string): Promise<History>
+export function getTransactionHistory(net: net, address: string): Promise<PastTransaction[]>
 
 /** Get the current height of the light wallet DB */
 export function getWalletDBHeight(net: net): Promise<number>

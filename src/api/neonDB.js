@@ -113,7 +113,7 @@ export const getRPCEndpoint = net => {
  * Get transaction history for an account
  * @param {string} net - 'MainNet' or 'TestNet'.
  * @param {string} address - Address to check.
- * @return {Promise<History>} History
+ * @return {Promise<PastTransaction[]>} a list of PastTransaction
  */
 export const getTransactionHistory = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
@@ -121,7 +121,16 @@ export const getTransactionHistory = (net, address) => {
     .get(apiEndpoint + '/v2/address/history/' + address)
     .then(response => {
       log.info(`Retrieved History for ${address} from neonDB ${net}`)
-      return response.data.history
+      return response.data.history.map(rawTx => {
+        return {
+          change: {
+            NEO: new Fixed8(rawTx.NEO || 0),
+            GAS: new Fixed8(rawTx.GAS || 0)
+          },
+          blockHeight: new Fixed8(rawTx.block_index),
+          txid: rawTx.txid
+        }
+      })
     })
 }
 
