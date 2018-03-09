@@ -25,5 +25,9 @@
       "api-CONST",
       "api-logging"
     ]
+  },
+  "changelog": {
+    "Latest": ["changelog-latest"],
+    "Past Versions": ["changelog-2", "changelog-1"]
   }
 }

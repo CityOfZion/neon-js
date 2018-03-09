@@ -13,6 +13,9 @@
     "api-transactions": "Transactions",
     "api-u": "Utility",
     "api-wallet": "Wallet",
+    "changelog-1": "Changelog (v1)",
+    "changelog-2": "Changelog (v2)",
+    "changelog-latest": "Changelog (v3)",
     "installation": "Installation",
     "overview": "Overview",
     "adv_multitx": "Advanced - Sending multiple transactions in a block",
@@ -21,11 +24,14 @@
     "basic_sendasset": "Basic - Sending assets",
     "Docs": "Docs",
     "API": "API",
+    "Changelog": "Changelog",
     "Help": "Help",
     "Getting Started": "Getting Started",
     "Guides": "Guides",
     "Overview": "Overview",
-    "Modules": "Modules"
+    "Modules": "Modules",
+    "Latest": "Latest",
+    "Past Versions": "Past Versions"
   },
   "pages-strings": {
     "Learn more using the [documentation on this site.](/test-site/docs/en/doc1.html)|no description given": "Learn more using the [documentation on this site.](/test-site/docs/en/doc1.html)",
