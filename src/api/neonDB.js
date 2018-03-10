@@ -4,8 +4,8 @@ import { Transaction, TxAttrUsage } from '../transactions'
 import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
 import { Fixed8, reverseHex } from '../utils'
+import { networks, httpsOnly } from '../settings'
 import logger from '../logging'
-import { networks } from '../settings'
 
 const log = logger('api')
 export const name = 'neonDB'
@@ -93,6 +93,7 @@ export const getRPCEndpoint = net => {
       let bestHeight = 0
       let nodes = []
       for (const node of goodNodes) {
+        if (httpsOnly && !node.url.includes('https://')) continue
         if (node.block_height > bestHeight) {
           bestHeight = node.block_height
           nodes = [node]
@@ -100,6 +101,7 @@ export const getRPCEndpoint = net => {
           nodes.push(node)
         }
       }
+      if (nodes.length === 0) throw new Error('No eligible nodes found!')
       return nodes[Math.floor(Math.random() * nodes.length)].url
     })
 }

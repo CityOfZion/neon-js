@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Balance, Claims } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Fixed8 } from '../utils'
-import { networks } from '../settings'
+import { networks, httpsOnly } from '../settings'
 import logger from '../logging'
 
 const log = logger('api')
@@ -29,6 +29,7 @@ export const getRPCEndpoint = net => {
     let bestHeight = 0
     let nodes = []
     for (const node of data) {
+      if (httpsOnly && !node.url.includes('https://')) continue
       if (node.height > bestHeight) {
         bestHeight = node.height
         nodes = [node]
@@ -36,6 +37,7 @@ export const getRPCEndpoint = net => {
         nodes.push(node)
       }
     }
+    if (nodes.length === 0) throw new Error('No eligible nodes found!')
     const selectedURL = nodes[Math.floor(Math.random() * nodes.length)].url
     log.info(`Best node from neoscan ${net}: ${selectedURL}`)
     return selectedURL

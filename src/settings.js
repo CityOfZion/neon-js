@@ -6,6 +6,8 @@ Object.keys(defaultNetworks).map(key => {
   networks[key] = Network.import(defaultNetworks[key])
 })
 
+export var httpsOnly = false
+
 /**
  * Attempts to add a new Network to settings. This will fail if attempting to add a Network with the same name unless override is set to true.
  * @param {Network} network
