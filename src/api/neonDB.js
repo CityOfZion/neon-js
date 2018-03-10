@@ -2,9 +2,10 @@ import axios from 'axios'
 import { Account, Balance, Claims } from '../wallet'
 import { Transaction, TxAttrUsage } from '../transactions'
 import { Query } from '../rpc'
-import { ASSET_ID, PROTOCOLS } from '../consts'
+import { ASSET_ID } from '../consts'
 import { Fixed8, reverseHex } from '../utils'
 import logger from '../logging'
+import { networks } from '../settings'
 
 const log = logger('api')
 export const name = 'neonDB'
@@ -14,7 +15,7 @@ export const name = 'neonDB'
  * @return {string} URL of API endpoint.
  */
 export const getAPIEndpoint = net => {
-  if (PROTOCOLS[net]) return PROTOCOLS[net].extra.neonDB
+  if (networks[net]) return networks[net].extra.neonDB
   return net
 }
 /**

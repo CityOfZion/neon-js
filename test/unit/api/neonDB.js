@@ -1,5 +1,6 @@
 import * as neonDB from '../../../src/api/neonDB'
-import {Balance, Claims} from '../../../src/wallet'
+import * as settings from '../../../src/settings'
+import { Balance, Claims } from '../../../src/wallet'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
 
@@ -12,6 +13,18 @@ describe('NeonDB', function () {
 
   after(() => {
     mock.restore()
+  })
+
+  it('getAPIEndpoint', () => {
+    neonDB.getAPIEndpoint('MainNet').should.equal(settings.networks['MainNet'].extra.neonDB)
+    neonDB.getAPIEndpoint('TestNet').should.equal(settings.networks['TestNet'].extra.neonDB)
+  })
+
+  it('geRPCEndpoint returns https only', () => {
+    settings.httpsOnly = true
+    neonDB.getRPCEndpoint('TestNet')
+      .then(res => res.should.have.string('https://'))
+      .then(() => { settings.httpsOnly = false })
   })
 
   it('getBalance returns Balance object', () => {

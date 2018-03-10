@@ -27,10 +27,10 @@
         "RegisterTransaction": 10000
       }
     },
-      "Extra": {
-        "neonDB": "http://api.wallet.cityofzion.io",
-        "neoscan": "https://api.neoscan.io/api/main_net"
-      }
+    "ExtraConfiguration": {
+      "neonDB": "http://api.wallet.cityofzion.io",
+      "neoscan": "https://api.neoscan.io/api/main_net"
+    }
   },
   "TestNet": {
     "Name": "TestNet",
@@ -60,10 +60,10 @@
         "RegisterTransaction": 100
       }
     },
-      "Extra": {
-        "neonDB": "http://testnet-api.wallet.cityofzion.io",
-        "neoscan": "https://neoscan-testnet.io/api/test_net"
-      }
+    "ExtraConfiguration": {
+      "neonDB": "http://testnet-api.wallet.cityofzion.io",
+      "neoscan": "https://neoscan-testnet.io/api/test_net"
+    }
   },
   "CozNet": {
     "Name": "CozNet",
@@ -88,6 +88,9 @@
         "PublishTransaction": 500,
         "RegisterTransaction": 10000
       }
+    },
+    "ExtraConfiguration": {
+      "neoscan": "https://coz.neoscan-testnet.io/"
     }
   }
 }

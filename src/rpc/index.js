@@ -1,5 +1,6 @@
 import RPCClient from './client'
 import Query, { queryRPC } from './query'
+import Network from './Network'
 
 /**
  * @typedef {object} RPCResponse
@@ -16,5 +17,5 @@ export default {
   }
 }
 
-export { RPCClient, Query, queryRPC }
+export { RPCClient, Query, Network, queryRPC }
 export * from './parse'

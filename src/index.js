@@ -5,8 +5,9 @@ import semanticSc, * as sc from './sc'
 import semanticTx, * as tx from './transactions'
 import semanticWallet, * as wallet from './wallet'
 import * as u from './utils'
-import Protocol from './protocol'
+import * as settings from './settings'
 import * as logging from './logging'
+
 const mods = [semanticSc, semanticTx, semanticWallet, semanticApi, semanticRpc]
 
 const Neon = mods.reduce((neon, mod) => {
@@ -26,6 +27,6 @@ export {
   wallet,
   u,
   CONST,
-  logging,
-  Protocol
+  settings,
+  logging
 }

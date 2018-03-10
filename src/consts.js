@@ -1,5 +1,3 @@
-import protocols from './protocols.json'
-import Protocol from './protocol'
 
 export const ADDR_VERSION = '17'
 
@@ -80,9 +78,3 @@ export const TX_VERSION = {
   'CONTRACT': 0,
   'INVOCATION': 1
 }
-
-export const PROTOCOLS = {}
-
-Object.keys(protocols).map(key => {
-  PROTOCOLS[key] = Protocol.import(protocols[key])
-})

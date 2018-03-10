@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Balance, Claims } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Fixed8 } from '../utils'
+import { networks } from '../settings'
 import logger from '../logging'
 
 const log = logger('api')
@@ -13,7 +14,7 @@ export const name = 'neoscan'
  * @return {string} - URL
  */
 export const getAPIEndpoint = net => {
-  if (PROTOCOLS[net]) return PROTOCOLS[net].extra.neoscan
+  if (networks[net]) return networks[net].extra.neoscan
   return net
 }
 

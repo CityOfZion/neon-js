@@ -1,12 +1,12 @@
-import { DEFAULT_SYSFEE } from './consts'
+import { DEFAULT_SYSFEE } from '../consts'
 import fs from 'fs'
-import logger from './logging'
+import logger from '../logging'
 
 const log = logger('protocol')
 
 class Protocol {
-  constructor (config) {
-    this.magic = config.magic || config.Magic
+  constructor (config = {}) {
+    this.magic = config.magic || config.Magic || 0
     this.addressVersion = config.addressVersion || config.AddressVersion || 23
     this.standbyValidators = config.standbyValidators || config.StandbyValidators || []
     this.seedList = config.seedList || config.SeedList || []
@@ -15,10 +15,10 @@ class Protocol {
 
   static import (jsonLike, name = null) {
     const config = typeof (jsonLike) === 'string' ? JSON.parse(jsonLike) : jsonLike
-    return new Protocol(Object.assign(config.ProtocolConfiguration, { extra: config.extra || config.Extra, name: config.name || config.Name || name }))
+    return new Protocol(Object.assign(config, { extra: config.extra || config.Extra, name: config.name || config.Name || name }))
   }
 
-  static importFile (filepath, name = null) {
+  static readFile (filepath, name = null) {
     log.info(`Importing protocol file from ${filepath}`)
     return this.import(fs.readFileSync(filepath, 'utf8'), name)
   }
@@ -32,13 +32,13 @@ class Protocol {
   }
 
   export () {
-    return JSON.stringify({
-        Magic: this.magic,
-        AddressVersion: this.addressVersion,
-        StandbyValidators: this.standbyValidators,
-        SeedList: this.seedList,
-        SystemFee: this.systemFee
-    })
+    return {
+      Magic: this.magic,
+      AddressVersion: this.addressVersion,
+      StandbyValidators: this.standbyValidators,
+      SeedList: this.seedList,
+      SystemFee: this.systemFee
+    }
   }
 }
 
