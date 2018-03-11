@@ -339,7 +339,7 @@ export class Fixed8 extends BN {
   }
 
   toHex () {
-    const hexstring = this.mul(100000000).round().toString(16)
+    const hexstring = this.times(100000000).dp(0).toString(16)
     return '0'.repeat(16 - hexstring.length) + hexstring
   }
 
