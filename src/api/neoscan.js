@@ -1,25 +1,21 @@
 import axios from 'axios'
 import { Balance, Claims } from '../wallet'
-import { ASSETS, ASSET_ID } from '../consts'
+import { ASSET_ID } from '../consts'
 import { Fixed8 } from '../utils'
+import { networks, httpsOnly } from '../settings'
 import logger from '../logging'
 
 const log = logger('api')
 export const name = 'neoscan'
+
 /**
  * Returns the appropriate NeoScan endpoint.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
  * @return {string} - URL
  */
 export const getAPIEndpoint = net => {
-  switch (net) {
-    case 'MainNet':
-      return 'https://api.neoscan.io/api/main_net'
-    case 'TestNet':
-      return 'https://neoscan-testnet.io/api/test_net'
-    default:
-      return net
-  }
+  if (networks[net]) return networks[net].extra.neoscan
+  return net
 }
 
 /**
@@ -33,6 +29,7 @@ export const getRPCEndpoint = net => {
     let bestHeight = 0
     let nodes = []
     for (const node of data) {
+      if (httpsOnly && !node.url.includes('https://')) continue
       if (node.height > bestHeight) {
         bestHeight = node.height
         nodes = [node]
@@ -40,6 +37,7 @@ export const getRPCEndpoint = net => {
         nodes.push(node)
       }
     }
+    if (nodes.length === 0) throw new Error('No eligible nodes found!')
     const selectedURL = nodes[Math.floor(Math.random() * nodes.length)].url
     log.info(`Best node from neoscan ${net}: ${selectedURL}`)
     return selectedURL
@@ -50,7 +48,7 @@ export const getRPCEndpoint = net => {
  * Gat balances for an address.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
  * @param {string} address - Address to check.
- * @return {Balance}
+ * @return {Promise<Balance>}
  */
 export const getBalance = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
@@ -72,7 +70,7 @@ export const getBalance = (net, address) => {
  * Get claimable amounts for an address.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
  * @param {string} address - Address to check.
- * @return {Promise<Claim>}
+ * @return {Promise<Claims>}
  */
 export const getClaims = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
@@ -139,7 +137,7 @@ export const getWalletDBHeight = net => {
  * Get transaction history for an account
  * @param {string} net - 'MainNet' or 'TestNet'.
  * @param {string} address - Address to check.
- * @return {Promise<History>} History
+ * @return {Promise<PastTransaction[]>} A listof PastTransactionPastTransaction[]
  */
 export const getTransactionHistory = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
@@ -150,19 +148,38 @@ export const getTransactionHistory = (net, address) => {
       return parseTxHistory(response.data.txids)
     })
 }
+
 /* eslint-disable camelcase */
-const parseTxHistory = txids =>
-  txids.map(({ txid, block_height, balance, asset_moved }) => {
-    let gas_sent = false
-    let neo_sent = false
-    let GAS = ASSETS.GAS
-    let NEO = ASSETS.NEO
-    balance.forEach(({ asset, amount }) => {
-      if (asset === GAS) GAS = amount
-      if (asset === NEO) NEO = amount
+const parseTxHistory = rawTxs => {
+  const txs = []
+  const lastItem = rawTxs.length - 1
+  rawTxs.forEach((tx, ind) => {
+    let change
+    if (ind !== lastItem) {
+      const prevTx = rawTxs[ind + 1]
+      const currBal = flattenBalance(tx.balance)
+      const prevBal = flattenBalance(prevTx.balance)
+      change = {
+        NEO: new Fixed8(currBal.NEO || 0).minus(prevBal.NEO || 0),
+        GAS: new Fixed8(currBal.GAS || 0).minus(prevBal.GAS || 0)
+      }
+    } else {
+      let symbol = tx.asset_moved === ASSET_ID.NEO ? 'NEO' : 'GAS'
+      change = { [symbol]: new Fixed8(tx.amount_moved) }
+    }
+    txs.push({
+      txid: tx.txid,
+      blockHeight: tx.block_height,
+      change
     })
-    if (ASSET_ID.GAS === asset_moved) gas_sent = true
-    if (ASSET_ID.NEO === asset_moved) neo_sent = true
-    return { GAS, NEO, block_index: block_height, gas_sent, neo_sent, txid }
   })
+  return txs
+}
 /* eslint-enable camelcase */
+
+const flattenBalance = balance => {
+  return balance.reduce((bal, asset) => {
+    bal[asset.asset] = new Fixed8(asset.amount)
+    return bal
+  }, {})
+}

@@ -1,5 +1,6 @@
 import * as neonDB from '../../../src/api/neonDB'
-import {Balance, Claims} from '../../../src/wallet'
+import * as settings from '../../../src/settings'
+import { Balance, Claims } from '../../../src/wallet'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
 
@@ -12,6 +13,18 @@ describe('NeonDB', function () {
 
   after(() => {
     mock.restore()
+  })
+
+  it('getAPIEndpoint', () => {
+    neonDB.getAPIEndpoint('MainNet').should.equal(settings.networks['MainNet'].extra.neonDB)
+    neonDB.getAPIEndpoint('TestNet').should.equal(settings.networks['TestNet'].extra.neonDB)
+  })
+
+  it('geRPCEndpoint returns https only', () => {
+    settings.httpsOnly = true
+    neonDB.getRPCEndpoint('TestNet')
+      .then(res => res.should.have.string('https://'))
+      .then(() => { settings.httpsOnly = false })
   })
 
   it('getBalance returns Balance object', () => {
@@ -49,72 +62,9 @@ describe('NeonDB', function () {
     return neonDB.getTransactionHistory('TestNet', testKeys.a.address)
       .then((response) => {
         response.should.be.an('array')
-      })
-  })
-
-  // TODO: this works, but will not work repeatedly for obvious reasons :)
-  it.skip('should claim GAS', () => {
-    return neonDB.doClaimAllGas('TestNet', testKeys.b.wif)
-      .then((response) => {
-        console.log('claim', response)
-      }).catch((e) => {
-        console.log(e)
-        throw e
-      })
-  })
-
-  it.skip('should send NEO', () => {
-    return neonDB.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'NEO': 1 })
-      .then((response) => {
-        response.result.should.equal(true)
-        response.txid.should.be.a('string')
-        // send back so we can re-run
-        return neonDB.doSendAsset('TestNet', testKeys.a.address, testKeys.b.wif, { 'NEO': 1 })
-      })
-      .then((response) => {
-        response.result.should.equal(true)
-        response.txid.should.be.a('string')
-      })
-      .catch((e) => {
-        console.log(e)
-        throw e
-      })
-  })
-
-  it.skip('should send GAS', () => {
-    return neonDB.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'GAS': 1 })
-      .then((response) => {
-        response.should.have.property('result', true)
-        response.txid.should.be.a('string')
-        // send back so we can re-run
-        return neonDB.doSendAsset('TestNet', testKeys.a.address, testKeys.b.wif, { 'GAS': 1 })
-      })
-      .then((response) => {
-        response.should.have.property('result', true)
-        response.txid.should.be.a('string')
-      })
-      .catch((e) => {
-        console.log(e)
-        throw e
-      })
-  })
-  // this test passes, but cannot be run immediately following previous tests given state changes
-  it.skip('should send NEO and GAS', (done) => {
-    return neonDB.doSendAsset('TestNet', testKeys.b.address, testKeys.a.wif, { 'GAS': 1, 'NEO': 1 })
-      .then((response) => {
-        response.should.have.property('result', true)
-        response.txid.should.be.a('string')
-        // send back so we can re-run
-        return neonDB.doSendAsset('TestNet', testKeys.a.address, testKeys.b.wif, { 'GAS': 1, 'NEO': 1 })
-      })
-      .then((response) => {
-        response.should.have.property('result', true)
-        response.txid.should.be.a('string')
-        done()
-      })
-      .catch((e) => {
-        console.log(e)
-        throw e
+        response.map(tx => {
+          tx.should.have.keys(['change', 'blockHeight', 'txid'])
+        })
       })
   })
 

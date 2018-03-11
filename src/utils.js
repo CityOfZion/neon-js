@@ -239,11 +239,21 @@ export class StringStream {
   }
 
   /**
+   * Peek at the next bytes  on the string. May return less than intended bytes if reaching end of stream.
+   * @param {number} bytes
+   * @return {string}
+   */
+  peek (bytes = 1) {
+    if (this.isEmpty()) return ''
+    return this.substr(this.ptr, bytes * 2)
+  }
+
+  /**
    * Reads some bytes off the stream.
    * @param {number} bytes - Number of bytes to read
    * @returns {string}
    */
-  read (bytes) {
+  read (bytes = 1) {
     if (this.isEmpty()) throw new Error()
     const out = this.str.substr(this.pter, bytes * 2)
     this.pter += bytes * 2
@@ -268,6 +278,13 @@ export class StringStream {
     else if (len === 0xfe) len = parseInt(reverseHex(this.read(4)), 16)
     else if (len === 0xff) len = parseInt(reverseHex(this.read(8)), 16)
     return len
+  }
+
+  /**
+   * Resets the pointer to start of string.
+   */
+  reset () {
+    this.pter = 0
   }
 }
 

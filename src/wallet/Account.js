@@ -198,8 +198,8 @@ class Account {
   }
 
   /**
-   * Export Account as a WalletAccount object.
-   * @return {WalletAccount}
+   * Export Account as a AccountLike object.
+   * @return {AccountLike}
    */
   export () {
     let key = null

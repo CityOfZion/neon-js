@@ -1,8 +1,9 @@
 import * as neoscan from '../../../src/api/neoscan'
+import * as settings from '../../../src/settings'
 import { Balance, Claims } from '../../../src/wallet'
+import { Fixed8 } from '../../../src/utils'
 import testKeys from '../testKeys.json'
 import mockData from './mockData.json'
-import { Fixed8 } from '../../../src/utils'
 
 describe('Neoscan', function () {
   let mock
@@ -13,6 +14,19 @@ describe('Neoscan', function () {
 
   after(() => {
     mock.restore()
+  })
+
+  it('getAPIEndpoint', () => {
+    neoscan.getAPIEndpoint('MainNet').should.equal(settings.networks['MainNet'].extra.neoscan)
+    neoscan.getAPIEndpoint('TestNet').should.equal(settings.networks['TestNet'].extra.neoscan)
+    neoscan.getAPIEndpoint('CozNet').should.equal(settings.networks['CozNet'].extra.neoscan)
+  })
+
+  it('geRPCEndpoint returns https only', () => {
+    settings.httpsOnly = true
+    neoscan.getRPCEndpoint('TestNet')
+      .then(res => res.should.have.string('https://'))
+      .then(() => { settings.httpsOnly = false })
   })
 
   it('getBalance returns Balance object', () => {

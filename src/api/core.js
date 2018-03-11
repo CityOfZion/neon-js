@@ -110,6 +110,11 @@ export const doInvoke = config => {
     })
 }
 
+/**
+ * Retrieves RPC endpoint URL of best available node
+ * @param {object} config
+ * @return {Promise<object>} Configuration object with url field.
+ */
 export const fillUrl = config => {
   if (config.url) return Promise.resolve(config)
   return loadBalance(getRPCEndpointFrom, config)
@@ -117,6 +122,7 @@ export const fillUrl = config => {
       return Object.assign(config, { url })
     })
 }
+
 /**
  * Retrieves Balance if no balance has been attached
  * @param {object} config
@@ -140,6 +146,7 @@ export const fillKeys = config => {
   }
   return Promise.resolve(config)
 }
+
 /**
  * Creates a transaction with the given config and txType.
  * @param {object} config - Configuration object.

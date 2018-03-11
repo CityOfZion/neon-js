@@ -4,6 +4,7 @@ import { Transaction, TxAttrUsage } from '../transactions'
 import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
 import { Fixed8, reverseHex } from '../utils'
+import { networks, httpsOnly } from '../settings'
 import logger from '../logging'
 
 const log = logger('api')
@@ -14,14 +15,8 @@ export const name = 'neonDB'
  * @return {string} URL of API endpoint.
  */
 export const getAPIEndpoint = net => {
-  switch (net) {
-    case 'MainNet':
-      return 'http://api.wallet.cityofzion.io'
-    case 'TestNet':
-      return 'http://testnet-api.wallet.cityofzion.io'
-    default:
-      return net
-  }
+  if (networks[net]) return networks[net].extra.neonDB
+  return net
 }
 /**
  * Get balances of NEO and GAS for an address
@@ -98,6 +93,7 @@ export const getRPCEndpoint = net => {
       let bestHeight = 0
       let nodes = []
       for (const node of goodNodes) {
+        if (httpsOnly && !node.url.includes('https://')) continue
         if (node.block_height > bestHeight) {
           bestHeight = node.block_height
           nodes = [node]
@@ -105,6 +101,7 @@ export const getRPCEndpoint = net => {
           nodes.push(node)
         }
       }
+      if (nodes.length === 0) throw new Error('No eligible nodes found!')
       return nodes[Math.floor(Math.random() * nodes.length)].url
     })
 }
@@ -113,7 +110,7 @@ export const getRPCEndpoint = net => {
  * Get transaction history for an account
  * @param {string} net - 'MainNet' or 'TestNet'.
  * @param {string} address - Address to check.
- * @return {Promise<History>} History
+ * @return {Promise<PastTransaction[]>} a list of PastTransaction
  */
 export const getTransactionHistory = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
@@ -121,7 +118,16 @@ export const getTransactionHistory = (net, address) => {
     .get(apiEndpoint + '/v2/address/history/' + address)
     .then(response => {
       log.info(`Retrieved History for ${address} from neonDB ${net}`)
-      return response.data.history
+      return response.data.history.map(rawTx => {
+        return {
+          change: {
+            NEO: new Fixed8(rawTx.NEO || 0),
+            GAS: new Fixed8(rawTx.GAS || 0)
+          },
+          blockHeight: new Fixed8(rawTx.block_index),
+          txid: rawTx.txid
+        }
+      })
     })
 }
 
@@ -235,6 +241,7 @@ export const doMintTokens = (net, scriptHash, fromWif, neo, gasCost, signingFunc
       return res
     })
 }
+
 /**
  * Send an asset to an address
  * @param {string} net - 'MainNet' or 'TestNet'.

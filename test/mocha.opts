@@ -1,2 +1,2 @@
---require babel-core/register ./test/common.js
+--require @babel/register ./test/common.js
 --recursive
