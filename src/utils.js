@@ -1,4 +1,6 @@
-import { SHA256, RIPEMD160, enc } from 'crypto-js'
+import hexEncoding from 'crypto-js/enc-hex'
+import SHA256 from 'crypto-js/sha256'
+import RIPEMD160 from 'crypto-js/ripemd160'
 import BN from 'bignumber.js'
 import util from 'util'
 
@@ -296,7 +298,7 @@ export class StringStream {
 export const hash160 = (hex) => {
   if (typeof hex !== 'string') throw new Error('reverseHex expects a string')
   if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
-  let hexEncoded = enc.Hex.parse(hex)
+  let hexEncoded = hexEncoding.parse(hex)
   let ProgramSha256 = SHA256(hexEncoded)
   return RIPEMD160(ProgramSha256).toString()
 }
@@ -309,7 +311,7 @@ export const hash160 = (hex) => {
 export const hash256 = (hex) => {
   if (typeof hex !== 'string') throw new Error('reverseHex expects a string')
   if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
-  let hexEncoded = enc.Hex.parse(hex)
+  let hexEncoded = hexEncoding.parse(hex)
   let ProgramSha256 = SHA256(hexEncoded)
   return SHA256(ProgramSha256).toString()
 }
@@ -322,7 +324,7 @@ export const hash256 = (hex) => {
 export const sha256 = (hex) => {
   if (typeof hex !== 'string') throw new Error('reverseHex expects a string')
   if (hex.length % 2 !== 0) throw new Error(`Incorrect Length: ${hex}`)
-  let hexEncoded = enc.Hex.parse(hex)
+  let hexEncoded = hexEncoding.parse(hex)
   return SHA256(hexEncoded).toString()
 }
 
