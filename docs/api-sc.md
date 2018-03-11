@@ -75,6 +75,21 @@ const props = {
 const vmScript = Neon.create.script(props)
 ```
 
+The ScriptBuilder can also reverse scripts back to its arguments. However, this process is not a complete reverse engineer due to the varied nature of arguments. The arguments are returned as hexstrings and it is left to the developer to parse them meaningfully.
+
+```js
+const sb = new sb.ScriptBuilder('00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc')
+const params = sb.toScriptParams()
+params = [{
+      "scriptHash": "dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f",
+      "args": [
+        "6e616d65", // 'name' in hexstring
+        []
+      ],
+      "useTailCall": false
+    }]
+```
+
 ### ContractParam
 
 ContractParam objects provide a convenient way to construct calls for `invoke` and ``invokefunction``. These RPC calls utilise a JSON struct for arguments and can be messy to create by hand:
