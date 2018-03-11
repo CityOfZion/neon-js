@@ -191,7 +191,7 @@
             "block_height": 1180515,
             "status": true,
             "time": 2.4572107791900635,
-            "url": "http://seed2.neo.org:20332"
+            "url": "https://seed2.neo.org:20331"
           },
           {
             "block_height": 1180515,
@@ -361,7 +361,7 @@
       "url": "https://neoscan-testnet.io/api/test_net/v1/get_all_nodes",
       "response": [
         {
-          "url": "http://test1.cityofzion.io:8880",
+          "url": "https://test1.cityofzion.io:8880",
           "height": 850301
         },
         {

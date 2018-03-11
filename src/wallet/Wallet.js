@@ -221,7 +221,7 @@ class Wallet {
     log.info(`Exporting wallet file to: ${filepath}`)
     return fs.writeFile(filepath, JSON.stringify(this.export()), (err) => {
       if (err) throw err
-      console.log('Wallet file written!')
+      log.info('Wallet file written!')
       return true
     })
   }
