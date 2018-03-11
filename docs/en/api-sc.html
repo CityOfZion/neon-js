@@ -8,7 +8,7 @@
             languagesDropDown.className = "hide";
           }
         });
-      </script></span></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Modules</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Overview</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-index.html">API</a></li></ul></div><div class="navGroup navGroupActive"><h3>Modules</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-wallet.html">Wallet</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-transactions.html">Transactions</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-rpc.html">RPC</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/neon-js/docs/en/api-sc.html">Smart Contract</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-api.html">API</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-u.html">Utility</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-CONST.html">Constants</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-logging.html">Logging</a></li></ul></div></div></section></div><script>
+      </script></span></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Modules</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Overview</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-index.html">API</a></li></ul></div><div class="navGroup navGroupActive"><h3>Modules</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-wallet.html">Wallet</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-transactions.html">Transactions</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-rpc.html">RPC</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/neon-js/docs/en/api-sc.html">Smart Contract</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-api.html">API</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-u.html">Utility</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-CONST.html">Constants</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-settings.html">Settings</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api-logging.html">Logging</a></li></ul></div></div></section></div><script>
           var toggler = document.getElementById('navToggler');
           var nav = document.getElementById('docsNav');
           toggler.onclick = function() {
@@ -67,6 +67,18 @@ rpc.Query.invokeScript(sb.str)
 }
 <span class="hljs-comment">// Returns a hexstring</span>
 <span class="hljs-keyword">const</span> vmScript = Neon.create.script(props)
+</code></pre>
+<p>The ScriptBuilder can also reverse scripts back to its arguments. However, this process is not a complete reverse engineer due to the varied nature of arguments. The arguments are returned as hexstrings and it is left to the developer to parse them meaningfully.</p>
+<pre><code class="hljs css js"><span class="hljs-keyword">const</span> sb = <span class="hljs-keyword">new</span> sb.ScriptBuilder(<span class="hljs-string">'00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc'</span>)
+<span class="hljs-keyword">const</span> params = sb.toScriptParams()
+params = [{
+      <span class="hljs-string">"scriptHash"</span>: <span class="hljs-string">"dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f"</span>,
+      <span class="hljs-string">"args"</span>: [
+        <span class="hljs-string">"6e616d65"</span>, <span class="hljs-comment">// 'name' in hexstring</span>
+        []
+      ],
+      <span class="hljs-string">"useTailCall"</span>: <span class="hljs-literal">false</span>
+    }]
 </code></pre>
 <h3><a class="anchor" aria-hidden="true" name="contractparam"></a><a href="#contractparam" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>ContractParam</h3>
 <p>ContractParam objects provide a convenient way to construct calls for <code>invoke</code> and <code>invokefunction</code>. These RPC calls utilise a JSON struct for arguments and can be messy to create by hand:</p>
