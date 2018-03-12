@@ -22,6 +22,7 @@
     "adv_multitx": "Advanced - Sending multiple transactions in a block",
     "basic_claimgas": "Basic - Claiming Gas",
     "basic_createscript": "Basic - Create Smart Contract Script",
+    "basic_invoke": "Basic - Invoking a Smart Contract",
     "basic_sendasset": "Basic - Sending assets",
     "basic_privnet": "Basic - Using a Private Net",
     "Docs": "Docs",
