@@ -25,8 +25,39 @@ config.intents = intents;
 
 Neon.doInvoke(config).then(res => {
   console.log(res);
-})
+});
 ```
 
 ## signingFunction
+Right now we're adding a user's private key to the config object, which is sensitive information and should be handled carefully.  
+One way to do so is to externalize the signing of the transaction in a separate function.
 
+Instead of sending a user's private key to the config object, we can send the public key and a function that will sign the transaction.  
+This function, the signingFunction, will receive the transaction and public key as parameters. Now, we can provide logic that retrieves the private key from our user - using the public key to do so - and signs the transaction when we retrieve the key.
+
+> Do note that the signing function has to return a Promise!
+
+```js
+
+function signTx(tx, publicKey) {
+  // Create logic that gets the privateKey based on the publicKey
+  const privateKey = getPrivateKey(publicKey);
+
+  return new Promise(resolve =>
+    resolve(Neon.sign(tx, privateKey))
+  );
+}
+
+const config = {
+  net: "http://localhost:5000",
+  script: Neon.create.script(props),
+  address: account.address,
+  publicKey: account.publicKey,
+  signingFunction: signTx
+  gas: 1
+}
+
+Neon.doInvoke(config).then(res => {
+  console.log(res);
+});
+```
