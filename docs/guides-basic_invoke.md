@@ -32,9 +32,41 @@ const config = {
   gas: 1
 }
 ```
-and ultimately we call doInvoke as a promise:
+
+and ultimately we call doInvoke as a promise
 ```js
 Neon.doInvoke(config).then(res => {
   console.log(res)
 })
+```
+
+In the console result, you will find:
+* the data of your config object
+* the balance of your account (which is queried from either neoscan or neon-wallet-db)
+* the signed transaction
+* the response from the JSON RPC
+* the url of the NEO node it communicated with
+
+A high-level example of a response:
+```js
+{
+  "address": /* the user's address */,
+  "balance": {
+    /* an overview of your balance */
+  },
+  "gas": 1,
+  "net": "http://localhost:5000",
+  "privateKey": /* the user's private key */,
+  "response": {
+    "id": 1234,
+    "jsonrpc": "2.0",
+    "result": true,
+    "txid": "763d2d61703f59f014d05052e14c856175b464c59b18a80fa68cd40c71d5d369"
+  },
+  "script": /* the script generated from Neon.create.script */,
+  "tx": {
+    /* a copy of the transaction doInvoke sent */
+  },
+  "url": /* the url of the NEO node the transaction was sent to */
+}
 ```
