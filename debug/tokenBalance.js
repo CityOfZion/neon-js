@@ -1,7 +1,7 @@
 const Neon = require('../lib/index.js')
-const testKeys = require('../tests/unit/testKeys.json')
+const testKeys = require('../test/unit/testKeys.json')
 
-const url = Neon.CONST.DEFAULT_RPC.TEST
+const url = 'http://test1.cityofzion.io:8880'
 
 const printTokenBalances = function (scriptHash) {
   return Neon.api.nep5.getTokenInfo(url, scriptHash)
@@ -20,3 +20,4 @@ const printTokenBalances = function (scriptHash) {
 
 printTokenBalances(Neon.CONST.CONTRACTS.TEST_LWTF)
   .then(() => printTokenBalances(Neon.CONST.CONTRACTS.TEST_RPX))
+  .then(() => printTokenBalances('ae36e5a84ee861200676627df409b0f6eec44bd7'))
