@@ -18,8 +18,8 @@ export default (assetBalanceObj = {}) => {
 
   return {
     balance: balance ? new Fixed8(balance) : new Fixed8(0),
-    unspent: unspent ? unspent.map(coin => new Coin(coin)) : [],
-    spent: spent ? spent.map(coin => new Coin(coin)) : [],
-    unconfirmed: unconfirmed ? unconfirmed.map(coin => new Coin(coin)) : []
+    unspent: unspent ? unspent.map(coin => Coin(coin)) : [],
+    spent: spent ? spent.map(coin => Coin(coin)) : [],
+    unconfirmed: unconfirmed ? unconfirmed.map(coin => Coin(coin)) : []
   }
 }
