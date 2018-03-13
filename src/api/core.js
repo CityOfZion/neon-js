@@ -292,11 +292,20 @@ const attachInvokedContractForMintToken = config => {
     return Query.getContractState(config.script.scriptHash)
       .execute(config.url)
       .then(contractState => {
+        const { parameters } = contractState.result
         const attachInvokedContract = {
-          invocationScript: '0000',
-          verificationScript: contractState.result.script
+          invocationScript: ('00').repeat(parameters.length),
+          verificationScript: ''
         }
-        config.tx.scripts.push(attachInvokedContract)
+
+        // We need to order this for the VM.
+        const acct = new Account(config.address)
+        if (parseInt(config.script.scriptHash, 16) > parseInt(acct.scriptHash, 16)) {
+          config.tx.scripts.push(attachInvokedContract)
+        } else {
+          config.tx.scripts.unshift(attachInvokedContract)
+        }
+
         return config
       })
   } else {
@@ -332,14 +341,14 @@ const attachContractIfExecutingAsSmartContract = config => {
     return Query.getContractState(smartContractScriptHash)
       .execute(config.url)
       .then(contractState => {
-        const { parameters, script } = contractState.result
+        const { parameters } = contractState.result
         const attachInvokedContract = {
           invocationScript: ('00').repeat(parameters.length),
-          verificationScript: script
+          verificationScript: ''
         }
 
         // We need to order this for the VM.
-        const acct = config.privateKey ? new Account(config.privateKey) : new Account(config.publicKey)
+        const acct = new Account(config.address)
         if (parseInt(smartContractScriptHash, 16) > parseInt(acct.scriptHash, 16)) {
           config.tx.scripts.push(attachInvokedContract)
         } else {
