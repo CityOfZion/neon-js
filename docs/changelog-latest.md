@@ -3,6 +3,13 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.4.1
+=====
+
+- Fixes
+
+  - Fix script ordering for mintTokens
+
 3.4.0
 =====
 
