@@ -60,3 +60,16 @@ import { rpc } from '@cityofzion/neon-js'
 // Simple query creation and execution
 const response = rpc.Query.getBlock(1).execute('http://seed1.neo.org:10332')
 ```
+
+### Network
+
+The Network class is a configuration object that contains the information required to connect to a blockchain. The default networks avaialble in `neon-js` can be found in the global settings object. This class can be used to add support for a private network to `neon-js`.
+
+```js
+import Neon, { rpc } from '@cityofzion/neon-js'
+
+const newNet = new rpc.Network({name: 'NewNet'})
+Neon.add.network(newNet)
+
+console.log(Neon.settings.networks['NewNet'])
+```

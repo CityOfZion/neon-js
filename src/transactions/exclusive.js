@@ -68,7 +68,7 @@ const getContractExclusive = (tx) => {
  */
 const deserializeInvocationExclusive = (ss) => {
   const script = ss.readVarBytes()
-  const version = parseInt(ss.str.substr(2, 2), 2)
+  const version = parseInt(ss.str.substr(2, 2), 16)
   const gas = version >= 1 ? fixed82num(ss.read(8)) : 0
   return { script, gas }
 }

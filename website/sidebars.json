@@ -8,6 +8,7 @@
       "basic_sendasset",
       "basic_claimgas",
       "basic_createscript",
+      "basic_privnet",
       "adv_multitx"
     ]
   },
@@ -23,6 +24,7 @@
       "api-api",
       "api-u",
       "api-CONST",
+      "api-settings",
       "api-logging"
     ]
   },

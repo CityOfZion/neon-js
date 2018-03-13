@@ -4,13 +4,25 @@
  * It is useful for storing private keys in a JSON file securely or to mask the key before printing it.
  */
 import bs58check from 'bs58check' // This is importable because WIF specifies it as a dependency.
-import { SHA256, AES, enc, mode, pad } from 'crypto-js'
+import latin1Encoding from 'crypto-js/enc-latin1'
+import hexEncoding from 'crypto-js/enc-hex'
+import SHA256 from 'crypto-js/sha256'
+import AES from 'crypto-js/aes'
+import ECBMode from 'crypto-js/mode-ecb'
+import NoPadding from 'crypto-js/pad-nopadding'
 import scrypt from 'js-scrypt'
 import asyncScrypt from 'scrypt-js'
 import Account from './Account'
 import { ab2hexstring, hexXor } from '../utils'
 import { DEFAULT_SCRYPT, NEP_HEADER, NEP_FLAG } from '../consts'
 import logger from '../logging'
+
+const enc = {
+  Latin1: latin1Encoding,
+  Hex: hexEncoding
+}
+
+const AES_OPTIONS = { mode: ECBMode, padding: NoPadding }
 
 const log = logger('wallet')
 log.warn('ScryptParams will be changing to use n,r,p in place of cost, blockSize, parallel. New standard will be preferred. DEFAULT_SCRYPT will use new standard upon major version bump.')
@@ -29,8 +41,9 @@ log.warn('ScryptParams will be changing to use n,r,p in place of cost, blockSize
  * @returns {string} The encrypted key in Base58 (Case sensitive).
  */
 export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
+  log.warn('This method will be replaced by encryptAsync in the next major version bump')
   scryptParams = ensureScryptParams(scryptParams)
-  const scryptJsParams = {cost: scryptParams.n, blockSize: scryptParams.r, parallel: scryptParams.p}
+  const scryptJsParams = { cost: scryptParams.n, blockSize: scryptParams.r, parallel: scryptParams.p }
   const account = new Account(wifKey)
   // SHA Salt (use the first 4 bytes)
   const addressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
@@ -40,7 +53,7 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
   const derived2 = derived.slice(64)
   // AES Encrypt
   const xor = hexXor(account.privateKey, derived1)
-  const encrypted = AES.encrypt(enc.Hex.parse(xor), enc.Hex.parse(derived2), { mode: mode.ECB, padding: pad.NoPadding })
+  const encrypted = AES.encrypt(enc.Hex.parse(xor), enc.Hex.parse(derived2), AES_OPTIONS)
   // Construct
   const assembled = NEP_HEADER + NEP_FLAG + addressHash + encrypted.ciphertext.toString()
   const encryptedKey = bs58check.encode(Buffer.from(assembled, 'hex'))
@@ -56,6 +69,7 @@ export const encrypt = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
  * @returns {string} The encrypted key in Base58 (Case sensitive).
  */
 export const encryptAsync = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
+  log.warn('This method will be renamed to encrypt in the next major version bump')
   return new Promise((resolve, reject) => {
     scryptParams = ensureScryptParams(scryptParams)
     const { n, r, p } = scryptParams
@@ -71,7 +85,7 @@ export const encryptAsync = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) =
         const derived2 = derived.slice(64)
         // AES Encrypt
         const xor = hexXor(account.privateKey, derived1)
-        const encrypted = AES.encrypt(enc.Hex.parse(xor), enc.Hex.parse(derived2), { mode: mode.ECB, padding: pad.NoPadding })
+        const encrypted = AES.encrypt(enc.Hex.parse(xor), enc.Hex.parse(derived2), AES_OPTIONS)
         const assembled = NEP_HEADER + NEP_FLAG + addressHash + encrypted.ciphertext.toString()
         const encryptedKey = bs58check.encode(Buffer.from(assembled, 'hex'))
         log.info(`Successfully encrypted key to ${encryptedKey}`)
@@ -89,8 +103,9 @@ export const encryptAsync = (wifKey, keyphrase, scryptParams = DEFAULT_SCRYPT) =
  * @returns {string} The decrypted WIF key.
  */
 export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
+  log.warn('This method will be replaced by decryptAsync in the next major version bump')
   scryptParams = ensureScryptParams(scryptParams)
-  const scryptJsParams = {cost: scryptParams.n, blockSize: scryptParams.r, parallel: scryptParams.p}
+  const scryptJsParams = { cost: scryptParams.n, blockSize: scryptParams.r, parallel: scryptParams.p }
   const assembled = ab2hexstring(bs58check.decode(encryptedKey))
   const addressHash = assembled.substr(6, 8)
   const encrypted = assembled.substr(-64)
@@ -98,7 +113,7 @@ export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) 
   const derived1 = derived.slice(0, 64)
   const derived2 = derived.slice(64)
   const ciphertext = { ciphertext: enc.Hex.parse(encrypted), salt: '' }
-  const decrypted = AES.decrypt(ciphertext, enc.Hex.parse(derived2), { mode: mode.ECB, padding: pad.NoPadding })
+  const decrypted = AES.decrypt(ciphertext, enc.Hex.parse(derived2), AES_OPTIONS)
   const privateKey = hexXor(decrypted.toString(), derived1)
   const account = new Account(privateKey)
   const newAddressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
@@ -115,6 +130,7 @@ export const decrypt = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) 
  * @returns {string} The decrypted WIF key.
  */
 export const decryptAsync = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCRYPT) => {
+  log.warn('This method will be renamed to decrypt in the next major version bump')
   return new Promise((resolve, reject) => {
     scryptParams = ensureScryptParams(scryptParams)
     const { n, r, p } = scryptParams
@@ -129,7 +145,7 @@ export const decryptAsync = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCR
         const derived1 = derived.slice(0, 64)
         const derived2 = derived.slice(64)
         const ciphertext = { ciphertext: enc.Hex.parse(encrypted), salt: '' }
-        const decrypted = AES.decrypt(ciphertext, enc.Hex.parse(derived2), { mode: mode.ECB, padding: pad.NoPadding })
+        const decrypted = AES.decrypt(ciphertext, enc.Hex.parse(derived2), AES_OPTIONS)
         const privateKey = hexXor(decrypted.toString(), derived1)
         const account = new Account(privateKey)
         const newAddressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)

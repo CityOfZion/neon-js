@@ -9,6 +9,6 @@
     "rename-version": "./node_modules/.bin/docusaurus-rename-version"
   },
   "devDependencies": {
-    "docusaurus": "^1.0.6"
+    "docusaurus": "^1.0.7"
   }
 }
