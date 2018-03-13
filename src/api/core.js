@@ -345,7 +345,7 @@ const attachContractIfExecutingAsSmartContract = config => {
     return Query.getContractState(smartContractScriptHash)
       .execute(config.url)
       .then(contractState => {
-        const { parameters, script } = contractState.result
+        const { parameters } = contractState.result
         const attachInvokedContract = {
           invocationScript: ('00').repeat(parameters.length),
           verificationScript: ''
