@@ -50,12 +50,14 @@ class ScriptBuilder extends StringStream {
       this.str += hexstring
     } else if (size < 0x10000) {
       this.emit(OpCode.PUSHDATA2)
-      this.str += num2hexstring(size, 2)
+      this.str += num2hexstring(size, 2, true)
+      this.str += hexstring
+    } else if (size < 0x100000000) {
+      this.emit(OpCode.PUSHDATA4)
+      this.str += num2hexstring(size, 4, true)
       this.str += hexstring
     } else {
-      this.emit(OpCode.PUSHDATA4)
-      this.str += num2hexstring(size, 4)
-      this.str += hexstring
+      throw new Error(`String too big to emit!`)
     }
     return this
   }
