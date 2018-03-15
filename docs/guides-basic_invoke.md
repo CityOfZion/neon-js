@@ -16,17 +16,27 @@ Unless we turn this into an `invocationTransaction` RPC call, this will not pers
 Luckily, `doInvoke` handles this for us! It will configure our script as a transaction, sign it with our private key and ultimately send it via an `invocationTransaction` RPC call.
 
 To use the `doInvoke` function, we need the following minimal ingredients:
-* `net`: 'MainNet', 'TestNet' or a neon-wallet-db URL
-* `script`: the VM script, as we created with `Neon.create.script`
-* `address`: the NEO address of the user
-* `privateKey`: the private key of the user
-* `gas`: the gas fee we will attach to the transaction (this has to be greater than 0!)
+* `net`: 'MainNet', 'TestNet' or an API (like neoscan or neon-wallet-db)
+* `script`: the Smart Contract script. You can use a VM script - created with `Neon.create.script` - or a ScriptParams object that looks like:
+```js
+{
+  scriptHash: '5b7074e873973a6ed3708862f219a6fbf4d1c411',
+  operation: 'balanceOf',
+  args: [Neon.u.reverseHex('cef0c0fdcfe7838eff6ff104f9cdec2922297537')]
+}
+```
+* `account`: an `Account` object that has an address and private key stored. Alternatively, you can use `address` and `privateKey` directly to pass these values.
+* `gas`: the gas fee we will attach to the transaction (this has to be an integer!)
 
 This in turn will be stored in a configuration object
 ```js
 const config = {
   net: "http://localhost:5000",
-  script: Neon.create.script(props),
+  script: Neon.create.script({
+    scriptHash: '5b7074e873973a6ed3708862f219a6fbf4d1c411',
+    operation: 'balanceOf',
+    args: [Neon.u.reverseHex('cef0c0fdcfe7838eff6ff104f9cdec2922297537')]
+  }),
   address: account.address,
   privateKey: account.privateKey,
   gas: 1
