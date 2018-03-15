@@ -8,7 +8,7 @@ In this guide, we will discuss features of `doInvoke` that seem a little more co
 ## Intents - adding extra transactions
 In the previous `doInvoke` guide, we sent 1 GAS alongside our invocation as a fee. As described [here](http://docs.neo.org/en-us/sc/systemfees.html#smart-contract-fees), transactions with a cost under 10 GAS are essentially free. 
 
-So our `gas` field should stay 0 if your calculated fee remains below 10 GAS. You can determine this cost with an `invokeScript` RPC as we did [here](http://cityofzion.io/neon-js/docs/en/basic_createscript.html), evaluating the `gas_consumed` field in the response object.
+So our `gas` field should stay 0 if your calculated fee remains below 10 GAS. You can determine this cost with an `invokeScript` RPC as we did [here](basic_createscript.md), evaluating the `gas_consumed` field in the response object.
 
 There is a way to achieve this. We can add a transaction to ourselves as an intent, with a minimum amount of 0.00000001 GAS. This makes sure we don't have to send 1 GAS to our transaction (without that GAS being needed to consume the transaction), while making sure a transaction is registered and persisted to the blockchain.
 
@@ -45,8 +45,8 @@ This function, the signingFunction, will receive the transaction and public key 
 import Neon from '@cityofzion/neon-js';
 
 function signTx(tx, publicKey) {
-  // Create logic that gets the privateKey based on the publicKey
-  const privateKey = getPrivateKey(publicKey);
+  // Sign tx and attach signature onto tx
+  // The publicKey passed in is used as a check to ensure that the private and public keys match.
 
   return new Promise(resolve =>
     resolve(Neon.sign(tx, privateKey))
