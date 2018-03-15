@@ -1,0 +1,76 @@
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Advanced - Additional doInvoke functions · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Advanced - Additional doInvoke functions · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="In this guide, we will discuss features of `doInvoke` that seem a little more complex. We will add an extra transaction to our invoke with `intents` and externalize the signing of our transaction - so we don&#x27;t have to pass a user&#x27;s private key to the config."/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/neon-js/browser.js"></script><link rel="stylesheet" href="/neon-js/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/neon-js/"><img class="logo" src="/neon-js/img/logo.svg"/><h2 class="headerTitle">neon-js</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li><a href="/neon-js/docs/zh-CN/installation.html" target="_self">文档</a></li><li><a href="/neon-js/docs/zh-CN/api-index.html" target="_self">API</a></li><li><a href="/neon-js/docs/zh-CN/changelog-latest.html" target="_self">Changelog</a></li><li><a href="/neon-js/zh-CN/help.html" target="_self">Help</a></li><span><li><a id="languages-menu" href="#"><img class="languages-icon" src="/neon-js/img/language.svg"/>English</a><div id="languages-dropdown" class="hide"><ul id="languages-dropdown-items"><li><a href="/neon-js/en">English</a></li><li><a href="/neon-js/zh-CN">中文</a></li></ul></div></li><script>
+        const languagesMenuItem = document.getElementById("languages-menu");
+        const languagesDropDown = document.getElementById("languages-dropdown");
+        languagesMenuItem.addEventListener("click", function(){
+          if(languagesDropDown.className == "hide") {
+            languagesDropDown.className = "visible";
+          } else {
+            languagesDropDown.className = "hide";
+          }
+        });
+      </script></span></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Guides</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>开始</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/overview.html">概述</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/installation.html">安装</a></li></ul></div><div class="navGroup navGroupActive"><h3>教程</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/basic_sendasset.html">Basic - Sending assets</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/basic_claimgas.html">Basic - Claiming Gas</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/basic_createscript.html">Basic - Create Smart Contract Script</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/basic_invoke.html">Basic - Invoking a Smart Contract</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/basic_privnet.html">Basic - Using a Private Net</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/adv_multitx.html">Advanced - Sending multiple transactions in a block</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/neon-js/docs/zh-CN/adv_invokeconcepts.html">Advanced - Additional doInvoke functions</a></li></ul></div></div></section></div><script>
+          var toggler = document.getElementById('navToggler');
+          var nav = document.getElementById('docsNav');
+          toggler.onclick = function() {
+            nav.classList.toggle('docsSliderActive');
+          };
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Advanced - Additional doInvoke functions</h1></header><article><div><span><p>In this guide, we will discuss features of <code>doInvoke</code> that seem a little more complex. We will add an extra transaction to our invoke with <code>intents</code> and externalize the signing of our transaction - so we don't have to pass a user's private key to the config.</p>
+<h2><a class="anchor" aria-hidden="true" name="intents-adding-extra-transactions"></a><a href="#intents-adding-extra-transactions" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Intents - adding extra transactions</h2>
+<p>In the previous <code>doInvoke</code> guide, we sent 1 GAS alongside our invocation as a fee. As described <a href="http://docs.neo.org/en-us/sc/systemfees.html#smart-contract-fees">here</a>, transactions with a cost under 10 GAS are essentially free.</p>
+<p>So our <code>gas</code> field should stay 0 if your calculated fee remains below 10 GAS. You can determine this cost with an <code>invokeScript</code> RPC as we did <a href="basic_createscript.html">here</a>, evaluating the <code>gas_consumed</code> field in the response object.</p>
+<p>There is a way to achieve this. We can add a transaction to ourselves as an intent, with a minimum amount of 0.00000001 GAS. This makes sure we don't have to send 1 GAS to our transaction (without that GAS being needed to consume the transaction), while making sure a transaction is registered and persisted to the blockchain.</p>
+<p>The config object that <code>doInvoke</code> needs allows for a child object name intents. We set up our intents array as follows:</p>
+<pre><code class="hljs css js"><span class="hljs-keyword">import</span> Neon, { CONST } <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>;
+
+<span class="hljs-keyword">const</span> intents = [
+  {
+    <span class="hljs-attr">assetId</span>: CONST.ASSET_ID.GAS,
+    <span class="hljs-attr">value</span>: <span class="hljs-number">0.00000001</span>,
+    <span class="hljs-attr">scriptHash</span>: Neon.get.scriptHashFromAddress(account.address)
+  }
+];
+
+<span class="hljs-comment">// Add to config</span>
+config.intents = intents;
+
+Neon.doInvoke(config).then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(res);
+});
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" name="signingfunction"></a><a href="#signingfunction" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>signingFunction</h2>
+<p>Right now we're adding a user's private key to the config object, which is sensitive information and should be handled carefully.
+One way to do so is to externalize the signing of the transaction in a separate function. Right now, <code>signingFunction</code> is already used to sign with the Ledger.</p>
+<p>Instead of sending a user's private key to the config object, we can send the public key and a function that will sign the transaction.
+This function, the signingFunction, will receive the transaction and public key as parameters. Now, we can provide logic that retrieves the private key from our user - using the public key to do so - and signs the transaction when we retrieve the key.</p>
+<blockquote>
+<p>Do note that the signing function has to return a Promise!</p>
+</blockquote>
+<pre><code class="hljs css js"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">signTx</span>(<span class="hljs-params">tx, publicKey</span>) </span>{
+  <span class="hljs-comment">// Sign tx and attach signature onto tx</span>
+  <span class="hljs-comment">// The publicKey passed in is used as a check to ensure that the private and public keys match.</span>
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span>
+    resolve(Neon.sign(tx, privateKey))
+  );
+}
+
+<span class="hljs-keyword">const</span> config = {
+  <span class="hljs-attr">net</span>: <span class="hljs-string">"http://localhost:5000"</span>,
+  <span class="hljs-attr">script</span>: Neon.create.script({
+    <span class="hljs-attr">scriptHash</span>: <span class="hljs-string">'5b7074e873973a6ed3708862f219a6fbf4d1c411'</span>,
+    <span class="hljs-attr">operation</span>: <span class="hljs-string">'balanceOf'</span>,
+    <span class="hljs-attr">args</span>: [Neon.u.reverseHex(<span class="hljs-string">'cef0c0fdcfe7838eff6ff104f9cdec2922297537'</span>)]
+  }),
+  <span class="hljs-attr">address</span>: account.address,
+  <span class="hljs-attr">publicKey</span>: account.publicKey,
+  <span class="hljs-attr">signingFunction</span>: signTx
+  gas: <span class="hljs-number">1</span>
+}
+
+Neon.doInvoke(config).then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(res);
+});
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="adv_multitx.html">← Advanced - Sending multiple transactions in a block</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/zh-CN/installation.html">Getting Started</a><a href="/neon-js/docs/zh-CN/tutorial.html">Guides</a><a href="/neon-js/docs/zh-CN/api.html">API Reference</a></div><div><h5>Community</h5><a href="/neon-js/zh-CN/users.html">User Showcase</a><a href="https://neo.stackexchange.com/" target="_blank">Stack Overflow</a><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>
