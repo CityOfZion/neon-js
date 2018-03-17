@@ -1,6 +1,6 @@
 import { Balance, Claims } from '../../wallet'
 import { Fixed8 } from '../../utils'
-import { net } from './core';
+import { net, PastTransaction } from './core';
 
 /** Returns the appropriate NeoScan endpoint. */
 export function getAPIEndpoint(net: net): string

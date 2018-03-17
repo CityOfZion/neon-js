@@ -1,4 +1,7 @@
 
+import { Protocol } from './Protocol'
+import { RPCClient } from './client'
+
 export interface NetworkLike {
   name?: string
   protocol?: object
