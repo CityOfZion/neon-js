@@ -63,7 +63,7 @@
     "deploy:docs": "cd docs && sphinx-versioning -g ../ -l ./conf.py push docs gh-pages .",
     "rebuild": "rm -rf ./node_modules && npm install && ./node_modules/.bin/webpack",
     "prepublishOnly": "npm run lint && npm run build:prod",
-    "compile-typings": "tsc src/**/*.d.ts"
+    "compile-typings": "tsc"
   },
   "repository": {
     "type": "git",
