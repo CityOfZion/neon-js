@@ -2,29 +2,6 @@ import ScriptBuilder from '../../../src/sc/ScriptBuilder'
 import data from './data.json'
 
 describe('ScriptBuilder', function () {
-  const integers = [
-    {
-      int: -1,
-      result: '4f' // opCodes.PUSHM1 (0x4F)
-    },
-    {
-      int: 0,
-      result: '00'
-    },
-    {
-      int: 13,
-      result: (0x50 + 13).toString(16)
-    },
-    {
-      int: 500,
-      result: '08f401000000000000'
-    },
-    {
-      int: 65536,
-      result: '080000010000000000'
-    }
-  ]
-
   it('emitAppCall', () => {
     Object.keys(data).map((key) => {
       let testcase = data[key]
@@ -35,10 +12,63 @@ describe('ScriptBuilder', function () {
   })
 
   it('_emitNum', () => {
+    const integers = [
+      {
+        int: -1,
+        result: '4f' // opCodes.PUSHM1 (0x4F)
+      },
+      {
+        int: 0,
+        result: '00'
+      },
+      {
+        int: 13,
+        result: (0x50 + 13).toString(16)
+      },
+      {
+        int: 500,
+        result: '08f401000000000000'
+      },
+      {
+        int: 65536,
+        result: '080000010000000000'
+      }
+    ]
+
     for (let i = 0; i < integers.length; i++) {
       let sb = new ScriptBuilder()
       const result = sb._emitNum(integers[i].int)
       result.str.should.equal(integers[i].result)
+    }
+  })
+
+  it('_emitString', () => {
+    const strings = [
+      {
+        input: 'a'.repeat(75 * 2),
+        output: '4b' + 'a'.repeat(75 * 2)
+      },
+      {
+        input: 'a'.repeat(0xff * 2),
+        output: '4c' + 'ff' + 'a'.repeat(0xff * 2)
+      },
+      {
+        input: 'a'.repeat(0xffff * 2),
+        output: '4d' + 'ffff' + 'a'.repeat(0xffff * 2)
+      },
+      {
+        input: 'a'.repeat(0x1234 * 2),
+        output: '4d' + '3412' + 'a'.repeat(0x1234 * 2)
+      },
+      {
+        input: 'a'.repeat(0x00010000 * 2),
+        output: '4e' + '00000100' + 'a'.repeat(0x00010000 * 2)
+      }
+    ]
+    for (let i = 0; i < strings.length; i++) {
+      let sb = new ScriptBuilder()
+      const result = sb._emitString(strings[i].input)
+      result.str.should.equal(strings[i].output, 'uh huh')
     }
   })
 
