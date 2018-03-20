@@ -6,12 +6,15 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:8.9.3
+    - image: circleci/node:8-stretch
 version: 2
 jobs:
-  build:
+  setup:
     <<: *defaults
     steps:
+      - run:
+          name: "Update npm"
+          command: "sudo npm i -g npm"
       - run:
           name: "Versions"
           command: |
@@ -21,41 +24,62 @@ jobs:
       - checkout
       # Download and cache dependencies
       - restore_cache:
-          key: neon-{{ checksum "package.json" }}
-      - run: npm install
+          keys:
+            - neon-{{ checksum "package-lock.json" }}
+            - neon-
+      - run: npm ci
       - save_cache:
-          key: neon-{{ checksum "package.json" }}
+          key: neon-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-  integration-test:
+  build:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
-          key: neon-{{ checksum "package.json" }}
-      - run: npm run test:integration
+          keys:
+            - neon-{{ checksum "package-lock.json" }}
+            - neon-
+      - run: npm run prepublishOnly
   unit-test:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
-          key: neon-{{ checksum "package.json" }}
+          keys:
+            - neon-{{ checksum "package-lock.json" }}
+            - neon-
       - run: npm run test:unit
+  integration-test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - neon-{{ checksum "package-lock.json" }}
+            - neon-
+      - run: npm run test:integration
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
-      - integration-test:
+      - setup
+      - build:
           requires:
-            - build
-          filters:
-            branches:
-              only: master
-      - unit-test:
-          requires:
-            - build
+            - setup
           filters:
             branches:
               ignore: gh-pages
+      - unit-test:
+          requires:
+            - setup
+          filters:
+            branches:
+              ignore: gh-pages
+      - integration-test:
+          requires:
+            - setup
+          filters:
+            branches:
+              only: master
