@@ -1,4 +1,3 @@
-
 import { Protocol } from './Protocol';
 import { RPCClient } from './client';
 
