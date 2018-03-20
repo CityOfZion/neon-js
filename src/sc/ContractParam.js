@@ -64,11 +64,19 @@ class ContractParam {
    * @param {string} format - The format that this value represents. Different formats are parsed differently.
    * @return {ContractParam}
    */
-  static byteArray (value, format) {
+  static byteArray (value, format, decimals = 8) {
     if (format) format = format.toLowerCase()
     if (format === 'address') {
       return new ContractParam('ByteArray', reverseHex(getScriptHashFromAddress(value)))
     } else if (format === 'fixed8') {
+      if (!isFinite(value)) throw new Error(`Input should be number!`)
+      var e = 1, p = 0
+      while (Math.round(value * e) / e !== value) { 
+        e *= 10
+        p++ 
+      }
+      if (p > decimals) throw new Error(`Input value exceeds maximum precision!`)
+      value = value / Math.pow(10, 8 - decimals)
       return new ContractParam('ByteArray', num2fixed8(value))
     } else {
       return new ContractParam('ByteArray', value)
