@@ -6,7 +6,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:8.9.3
+    - image: circleci/node:8-stretch
 version: 2
 jobs:
   setup:
