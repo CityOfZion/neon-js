@@ -8,8 +8,10 @@
       "basic_sendasset",
       "basic_claimgas",
       "basic_createscript",
+      "basic_invoke",
       "basic_privnet",
-      "adv_multitx"
+      "adv_multitx",
+      "adv_invokeconcepts"
     ]
   },
   "api": {

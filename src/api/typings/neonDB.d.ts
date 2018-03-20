@@ -1,7 +1,7 @@
 import { Balance, Claims } from '../../wallet'
 import { RPCResponse } from '../../rpc'
 import { Fixed8 } from '../../utils'
-import { signingFunction, net, AssetAmounts } from './core';
+import { signingFunction, net, AssetAmounts, PastTransaction } from './core';
 
 /** API Switch for MainNet and TestNet */
 export function getAPIEndpoint(net: net): string

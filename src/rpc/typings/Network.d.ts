@@ -1,3 +1,5 @@
+import { Protocol } from './Protocol'
+import { RPCClient } from './client'
 
 export interface NetworkLike {
   name?: string
@@ -18,10 +20,10 @@ export class Network {
   constructor(config: NetworkLike, name?: string)
 
   /** Imports a Network from a jsonString */
-  static import(jsonLike: object, name?: string)
+  static import(jsonLike: object, name?: string): Network
 
   /** Reads a Network file */
-  static readFile(filePath: string, name?: string)
+  static readFile(filePath: string, name?: string): Network
 
   /** Export this class as a object */
   export(protocolOnly?: boolean): NetworkLike
