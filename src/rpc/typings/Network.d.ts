@@ -1,5 +1,5 @@
-import { Protocol } from './Protocol';
-import { RPCClient } from './client';
+import { Protocol } from './Protocol'
+import { RPCClient } from './client'
 
 export interface NetworkLike {
   name?: string
