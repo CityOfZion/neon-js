@@ -3,6 +3,70 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.4.5
+=====
+
+- Docs
+
+  - Add 2 new guides around `doInvoke`
+
+- Fixes
+
+  - Fix script ordering for mintTokens
+  - Remove `new` for Coin
+  - Revert upgrade for bignumber.js
+  - Fix typings and add typings check
+  - Fix `ScriptBuilder._emitString` for large strings
+
+3.4.0
+=====
+
+- Settings
+
+  - There is now global settings that control how `neon-js` works.  The first settings available are `httpsOnly` and `networks`.
+
+    - `httpsOnly` is a boolean which will force neonDB and neoscan to return only https RPC nodes. Do note that an error will be thrown if no suitable nodes are found.
+    - `networks` is an object containing every network configuration available for consumption. It comes default with `MainNet`, `TestNet` and `CozNet`. For now, these configurations only determine the neonDB/neoscan urls used for each network but they will serve more purposes in the future.
+
+- RPC
+
+  - Network class representing a NEO network. This can be created by importing a protocol file or just manually entering the parameters. This is the new way which we can link `neon-js` to a private net that comes with a neoscan or neonDB setup.
+
+- Smart Contract
+
+  - ScriptBuilder.toScriptParams allows you to reverse engineer a VM script back to its arguments. Due to the varied nature of the arguments, it is not possible to reverse it completely. More work has to be done on the user side to parse it in a meaningful manner.
+
+  ```js
+  const sb = new sb.ScriptBuilder('00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc')
+  const params = sb.toScriptParams()
+  params = [{
+        "scriptHash": "dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f",
+        "args": [
+          "6e616d65", // 'name' in hexstring
+          []
+        ],
+        "useTailCall": false
+      }]
+  ```
+
+- Wallet
+
+  - New methods added for signing and verifying messages: `signMessage`, `verifyMessage`
+
+- Docs
+
+  - Docs migrated to Docusaurus! This will make it easier to customize docs and also allow us to support Chinese as the alternative language.
+
+- Development
+
+  - Upgraded dependencies to use webpack v4 and the new babel exports from its monorepo.
+
+- Fixes
+
+  - Fix neonDB and neoscan `getTransactionHistory`. **Do note that this can be considered a breaking change for some as the return structure has changed. However, this is considered a fix as the original return structure was not intended.**
+  - new Wallet to use default scrypt params when not provided.
+  - Typescript typings refactored and cleaned up. Introduces the object-like interfaces which are the neon-js classes exported as plain javascript objects.
+
 3.3.2
 =====
 

@@ -3,13 +3,20 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
-3.4.2
+3.4.5
 =====
+
+- Docs
+
+  - Add 2 new guides around `doInvoke`
 
 - Fixes
 
   - Fix script ordering for mintTokens
   - Remove `new` for Coin
+  - Revert upgrade for bignumber.js
+  - Fix typings and add typings check
+  - Fix `ScriptBuilder._emitString` for large strings
 
 3.4.0
 =====
@@ -41,6 +48,7 @@ title: Changelog (v3)
         "useTailCall": false
       }]
   ```
+
 - Wallet
 
   - New methods added for signing and verifying messages: `signMessage`, `verifyMessage`
