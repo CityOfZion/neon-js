@@ -1,4 +1,4 @@
-import { num2fixed8, reverseHex } from '../utils'
+import { num2fixed8, reverseHex, Fixed8 } from '../utils'
 import { getScriptHashFromAddress, isAddress } from '../wallet'
 
 /**
@@ -62,21 +62,29 @@ class ContractParam {
    * Creates a ByteArray ContractParam.
    * @param {any} value
    * @param {string} format - The format that this value represents. Different formats are parsed differently.
+   * @param {any} args - Additional arguments such as decimal precision
    * @return {ContractParam}
    */
-  static byteArray (value, format, decimals = 8) {
+  static byteArray (value, format, ...args) {
     if (format) format = format.toLowerCase()
     if (format === 'address') {
       return new ContractParam('ByteArray', reverseHex(getScriptHashFromAddress(value)))
     } else if (format === 'fixed8') {
+      var decimals = 8
+      if (args.length === 1) {
+        decimals = args[0]
+      }
       if (!isFinite(value)) throw new Error(`Input should be number!`)
-      var e = 1, p = 0
-      while (Math.round(value * e) / e !== value) { 
+      var e = 1
+      var p = 0
+      while (Math.round(value * e) / e !== value) {
         e *= 10
-        p++ 
+        p++
       }
       if (p > decimals) throw new Error(`Input value exceeds maximum precision!`)
-      value = value / Math.pow(10, 8 - decimals)
+      value = new Fixed8(value)
+      let divisor = new Fixed8(Math.pow(10, 8 - decimals))
+      value /= divisor
       return new ContractParam('ByteArray', num2fixed8(value))
     } else {
       return new ContractParam('ByteArray', value)
