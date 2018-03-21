@@ -46,14 +46,13 @@ npm run test
 
 ### Docs
 
-```bash
-# Make sure you have python and pip
-$ sudo -H pip install 'sphinx>=1.5,<1.6' sphinxcontrib-versioning sphinx_rtd_theme
-$ sudo -H npm i -g jsdoc
-$ npm run build:docs
-```
+We use Docusaurus for our docs website. The docs are stores in `./docs` while the main website and its configuration is in `./website`.
 
-For detailed instructions refer to [`docs/readme.md`](https://github.com/CityOfZion/neon-js/blob/master/docs/readme.md).
+```bash
+cd website
+npm install
+npm run start
+```
 
 ### Typescript
 
