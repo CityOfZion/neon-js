@@ -51,6 +51,16 @@ describe('ContractParam', function () {
       const cp = ContractParam.byteArray(1000, 'fixed8')
       cp.should.eql({ type: 'ByteArray', value: '00e8764817000000' })
     })
+
+    it('fixed8 with zero decimals', () => {
+      const cp = ContractParam.byteArray(1, 'fixed8', 0)
+      cp.should.eql({ type: 'ByteArray', value: '0100000000000000' })
+    })
+
+    it('fixed8 with four decimals', () => {
+      const cp = ContractParam.byteArray(222, 'fixed8', 4)
+      cp.should.eql({ type: 'ByteArray', value: 'e0df210000000000' })
+    })
   })
 
   it('Array', () => {
