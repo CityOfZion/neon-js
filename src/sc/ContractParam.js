@@ -1,4 +1,4 @@
-import { num2fixed8, reverseHex, Fixed8 } from '../utils'
+import { reverseHex, Fixed8 } from '../utils'
 import { getScriptHashFromAddress, isAddress } from '../wallet'
 
 /**
@@ -75,17 +75,13 @@ class ContractParam {
         decimals = args[0]
       }
       if (!isFinite(value)) throw new Error(`Input should be number!`)
-      var e = 1
-      var p = 0
-      while (Math.round(value * e) / e !== value) {
-        e *= 10
-        p++
-      }
-      if (p > decimals) throw new Error(`Input value exceeds maximum precision!`)
-      value = new Fixed8(value)
-      let divisor = new Fixed8(Math.pow(10, 8 - decimals))
-      value /= divisor
-      return new ContractParam('ByteArray', num2fixed8(value))
+      const divisor = new Fixed8(Math.pow(10, 8 - decimals))
+      const fixed8Value = new Fixed8(value)
+      const adjustedValue = fixed8Value.times(divisor)
+      const modValue = adjustedValue.mod(1)
+      if (!modValue.isZero()) throw new Error(`wrong precision`)
+      value = fixed8Value.div(divisor)
+      return new ContractParam('ByteArray', value.toReverseHex().slice(0, 16))
     } else {
       return new ContractParam('ByteArray', value)
     }

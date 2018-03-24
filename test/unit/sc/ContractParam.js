@@ -58,8 +58,14 @@ describe('ContractParam', function () {
     })
 
     it('fixed8 with four decimals', () => {
-      const cp = ContractParam.byteArray(222, 'fixed8', 4)
-      cp.should.eql({ type: 'ByteArray', value: 'e0df210000000000' })
+      const cp = ContractParam.byteArray(222.1234, 'fixed8', 4)
+      cp.should.eql({ type: 'ByteArray', value: 'b2e4210000000000' })
+    })
+
+    it('exceeds allowed precision', () => {
+      ; (function () {
+      const cp = ContractParam.byteArray(222.12345, 'fixed8', 4)
+      }.should.throw(Error, 'wrong precision'))
     })
   })
 
