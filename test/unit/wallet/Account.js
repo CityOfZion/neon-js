@@ -22,8 +22,6 @@ describe('Account', function () {
   describe('Constructor', function () {
     it('can be created with different formats', () => {
       Object.keys(acct).map((key) => {
-        // Skip scriptHash as it cannot be used.
-        if (key === 'scriptHash') return
         const a = new Account(acct[key])
         a.should.not.equal(undefined)
         if (key === 'publicKeyUnencoded') {

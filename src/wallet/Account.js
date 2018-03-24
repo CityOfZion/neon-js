@@ -1,5 +1,5 @@
 import * as core from './core'
-import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
+import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2, isScriptHash } from './verify'
 import { encrypt, decrypt } from './nep2'
 import { DEFAULT_ACCOUNT_CONTRACT } from '../consts'
 import util from 'util'
@@ -38,6 +38,8 @@ class Account {
       this._publicKey = core.getPublicKeyEncoded(str)
     } else if (isPublicKey(str, true)) {
       this._publicKey = str
+    } else if (isScriptHash(str)) {
+      this._scriptHash = str
     } else if (isAddress(str)) {
       this._address = str
     } else if (isWIF(str)) {
