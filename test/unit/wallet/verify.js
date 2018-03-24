@@ -25,6 +25,9 @@ describe('Key Verification', function () {
       '04c663ba46afa8349f020eb9e8f9e1dc1c8e877b9d239e139af699049126e0f321869971106d82de8ffd0d424eea84a0d67294eecab7b89e861b3bb1fc37f8d905',
       '04c1a9b2d0580902a6c2d09a8febd0a7a13518a9a61d08183f09ff929b66ac7c26a4ddc2ceb4ddc55ae7b2920f79fdbfe5b91e6184d7d487e71030007a56a302f2'
     ],
+    scriptHash: [
+      '0000000000000000000000000000000000000000'
+    ],
     addresses: [
       'Adc4jT59RjDLdXbBni6xzg6SEcLVhHZ5Z9',
       'ARCvt1d5qAGzcHqJCWA2MxvhTLQDb9dvjQ',
@@ -52,6 +55,10 @@ describe('Key Verification', function () {
       '800C28FCA386C7A227600B2FE50B7CAE11EC86D3BF1FBE471BE89827E19D72AA1D',
       '01c663ba46afa8349f020eb9e8f9e1dc1c8e877b9d239e139af699049126e0f321',
       '02c1a9b2d0580902a6c2d09a8febd0a7a13518a9a61d08183f09ff929b66ac7c2g'
+    ],
+    scriptHash: [
+      '00000000000000000000000000000000000000',
+      '332432324324143214325323654765876985988z'
     ],
     addresses: [
       '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2',
@@ -83,6 +90,10 @@ describe('Key Verification', function () {
     valid.publicKeysUnencoded.map((key) => V.isPublicKey(key, false).should.be.true)
   })
 
+  it('returns true for valid scriptHash', () => {
+    valid.scriptHash.map((addr) => V.isScriptHash(addr).should.be.true)
+  })
+
   it('returns true for valid address', () => {
     valid.addresses.map((addr) => V.isAddress(addr).should.be.true)
   })
@@ -103,6 +114,10 @@ describe('Key Verification', function () {
     invalid.publicKeys.map((key) => V.isPublicKey(key).should.be.false)
     valid.publicKeys.map((key) => V.isPublicKey(key, false).should.be.false)
     valid.publicKeysUnencoded.map((key) => V.isPublicKey(key, true).should.be.false)
+  })
+
+  it('returns true for valid scriptHash', () => {
+    invalid.scriptHash.map((addr) => V.isScriptHash(addr).should.be.false)
   })
 
   it('returns false for invalid address', () => {

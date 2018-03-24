@@ -9,7 +9,7 @@
  */
 
 import base58 from 'bs58'
-import { ab2hexstring, reverseHex, hash256 } from '../utils'
+import { ab2hexstring, isHex, reverseHex, hash256 } from '../utils'
 import { getAddressFromScriptHash, getPublicKeyEncoded, getPublicKeyUnencoded } from './core'
 
 /**
@@ -82,6 +82,15 @@ export const isPublicKey = (key, encoded) => {
     if (encodedKey.substr(0, 2) === '03' && tail % 2 === 1) return true
   } catch (e) { }
   return false
+}
+
+/**
+ * Verifies if string is a scripthash.
+ * @param {string} scriptHash
+ * @return {boolean}
+ */
+export const isScriptHash = (scriptHash) => {
+  return isHex(scriptHash) && (scriptHash.length === 40)
 }
 
 /**
