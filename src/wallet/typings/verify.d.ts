@@ -10,5 +10,8 @@ export function isPrivateKey(key: string): boolean
 /** Checks if hexstring is a valid Public Key. Accepts both encoded and unencoded forms. */
 export function isPublicKey(key: string, encoded?: boolean): boolean
 
+/** Verifies if hexstring is a scripthash. */
+export function isScriptHash(scriptHash: string): boolean
+
 /** Verifies an address using its checksum. */
 export function isAddress(address: string): boolean
