@@ -64,3 +64,5 @@ The typescript declaration files are included _(no need of any @types/...)_.
 - Open-source [MIT](https://github.com/CityOfZion/neon-js/blob/master/LICENSE.md).
 - Main author is [Ethan Fast](https://github.com/Ejhfast).
 - Maintainer is [Yak Jun Xiang](https://github.com/snowypowers)
+
+-Jyrone Parker PR
