@@ -77,9 +77,9 @@ class ContractParam {
       if (!isFinite(value)) throw new Error(`Input should be number!`)
       const divisor = new Fixed8(Math.pow(10, 8 - decimals))
       const fixed8Value = new Fixed8(value)
-      const adjustedValue = fixed8Value.times(divisor)
+      const adjustedValue = fixed8Value.times(Math.pow(10, decimals))
       const modValue = adjustedValue.mod(1)
-      if (!modValue.isZero()) throw new Error(`wrong precision`)
+      if (!modValue.isZero()) throw new Error(`wrong precision: expected ${decimals}`)
       value = fixed8Value.div(divisor)
       return new ContractParam('ByteArray', value.toReverseHex().slice(0, 16))
     } else {

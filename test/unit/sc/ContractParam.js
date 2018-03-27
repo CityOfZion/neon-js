@@ -48,8 +48,8 @@ describe('ContractParam', function () {
     })
 
     it('fixed8', () => {
-      const cp = ContractParam.byteArray(1000, 'fixed8')
-      cp.should.eql({ type: 'ByteArray', value: '00e8764817000000' })
+      const cp = ContractParam.byteArray(1000.12345678, 'fixed8')
+      cp.should.eql({ type: 'ByteArray', value: '4e49334917000000' })
     })
 
     it('fixed8 with zero decimals', () => {
@@ -62,10 +62,8 @@ describe('ContractParam', function () {
       cp.should.eql({ type: 'ByteArray', value: 'b2e4210000000000' })
     })
 
-    it('exceeds allowed precision', () => {
-      ; (function () {
-      const cp = ContractParam.byteArray(222.12345, 'fixed8', 4)
-      }.should.throw(Error, 'wrong precision'))
+    it('errors when exceeds allowed precision', () => {
+      (() => { ContractParam.byteArray(222.12345, 'fixed8', 4) }).should.throw(Error, 'wrong precision')
     })
   })
 
