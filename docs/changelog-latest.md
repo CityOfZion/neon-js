@@ -3,6 +3,17 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.5.0
+=====
+
+- Wallet
+
+  - Add scripthash support. `Account` now accepts scripthash as a constructor and `isScriptHash` is available as a verification method.
+
+- SC
+
+  - Add arguments for handling specific ContractParam transformation. The first one to do this is Fixed8 which takes a decimals argument which adjusts the number to the number of decimals given. This is useful for contracts that use decimals places other than 8.
+
 3.4.5
 =====
 
