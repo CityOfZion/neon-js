@@ -22,6 +22,7 @@ Thank you for reading this file. Do adhere to these guidelines as much as possib
 
   - Ensure code is formatted through `npm run lint`.
   - Ensure tests pass through `npm run test:unit`.
+  - If modifying typings, check it through `npm run test:typings`.
 
   Just before you submit, you can run `npm run test` to run integration tests together. We do not encourage running integration tests in `watch` mode or everytime as it performs real transactions on the blockchain and should be reserved for the final step.
 

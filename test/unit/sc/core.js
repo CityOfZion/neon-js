@@ -2,7 +2,7 @@
 import { createScript, generateDeployScript } from '../../../src/sc/core'
 import data from './data.json'
 
-describe.only('SC Core', function () {
+describe('SC Core', function () {
   describe('createScript', function () {
     it('single intent', () => {
       Object.keys(data).map(key => {
