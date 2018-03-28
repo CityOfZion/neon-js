@@ -14,7 +14,7 @@ const log = logger('tx')
  * @param {number|Fixed8} gasCost - gasCost required for the transaction.
  * @return {object} {inputs: TransactionInput[], change: TransactionOutput[] }
  */
-export const calculateInputs = (balances, intents, gasCost = 0) => {
+export const calculateInputs = (balances, intents, gasCost = 0, strategy = smallestFirst) => {
   if (intents === null) intents = []
   const requiredAssets = intents.reduce((assets, intent) => {
     assets[intent.assetId] ? assets[intent.assetId] = assets[intent.assetId].add(intent.value) : assets[intent.assetId] = intent.value
@@ -35,7 +35,7 @@ export const calculateInputs = (balances, intents, gasCost = 0) => {
     if (balances.assetSymbols.indexOf(assetSymbol) === -1) throw new Error(`This balance does not contain any ${assetSymbol}!`)
     const assetBalance = balances.assets[assetSymbol]
     if (assetBalance.balance.lt(requiredAmt)) throw new Error(`Insufficient ${ASSETS[assetId]}! Need ${requiredAmt.toString()} but only found ${assetBalance.balance.toString()}`)
-    return calculateInputsForAsset(assetBalance, requiredAmt, assetId, balances.address)
+    return calculateInputsForAsset(assetBalance, requiredAmt, assetId, balances.address, strategy)
   })
 
   const output = inputsAndChange.reduce((prev, curr) => {
@@ -47,17 +47,9 @@ export const calculateInputs = (balances, intents, gasCost = 0) => {
   return output
 }
 
-const calculateInputsForAsset = (assetBalance, requiredAmt, assetId, address) => {
-  // Ascending order sort
-  assetBalance.unspent.sort((a, b) => a.value.sub(b.value))
-  let selectedInputs = 0
-  let selectedAmt = new Fixed8(0)
-  // Selected min inputs to satisfy outputs
-  while (selectedAmt.lt(requiredAmt)) {
-    selectedInputs += 1
-    if (selectedInputs > assetBalance.unspent.length) throw new Error(`Insufficient ${ASSETS[assetId]}! Reached end of unspent coins! ${assetBalance.unspent.length}`)
-    selectedAmt = selectedAmt.add(assetBalance.unspent[selectedInputs - 1].value)
-  }
+const calculateInputsForAsset = (assetBalance, requiredAmt, assetId, address, strategy) => {
+  const selectedInputs = strategy(assetBalance, requiredAmt)
+  const selectedAmt = selectedInputs.reduce((prev, curr) => prev.add(curr.value), new Fixed8(0))
   const change = []
   // Construct change output
   if (selectedAmt.gt(requiredAmt)) {
@@ -68,10 +60,24 @@ const calculateInputsForAsset = (assetBalance, requiredAmt, assetId, address) =>
     })
   }
   // Format inputs
-  const inputs = assetBalance.unspent.slice(0, selectedInputs).map((input) => {
+  const inputs = selectedInputs.map((input) => {
     return { prevHash: input.txid, prevIndex: input.index }
   })
   return { inputs, change }
+}
+
+const smallestFirst = (assetBalance, requiredAmt, assetId) => {
+  // Ascending order sort
+  assetBalance.unspent.sort((a, b) => a.value.sub(b.value))
+  let selectedInputs = 0
+  let selectedAmt = new Fixed8(0)
+  // Selected min inputs to satisfy outputs
+  while (selectedAmt.lt(requiredAmt)) {
+    selectedInputs += 1
+    if (selectedInputs > assetBalance.unspent.length) throw new Error(`Insufficient assets! Reached end of unspent coins! ${assetBalance.unspent.length}`)
+    selectedAmt = selectedAmt.add(assetBalance.unspent[selectedInputs - 1].value)
+  }
+  return assetBalance.unspent.slice(0, selectedInputs)
 }
 
 /**
