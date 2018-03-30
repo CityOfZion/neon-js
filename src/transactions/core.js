@@ -1,8 +1,9 @@
 import { num2VarInt, num2hexstring, StringStream, reverseHex, hash256, Fixed8 } from '../utils'
-import { Account, generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey, getScriptHashFromAddress, isPrivateKey } from '../wallet'
+import { Account, AssetBalance, generateSignature, getVerificationScriptFromPublicKey, getPublicKeyFromPrivateKey, getScriptHashFromAddress, isPrivateKey } from '../wallet'
 import { serializeExclusive, deserializeExclusive } from './exclusive'
 import { ASSETS, ASSET_ID } from '../consts'
 import * as comp from './components'
+import { defaultCalculationStrategy } from '../settings'
 import logger from '../logging'
 
 const log = logger('tx')
@@ -14,8 +15,9 @@ const log = logger('tx')
  * @param {number|Fixed8} gasCost - gasCost required for the transaction.
  * @return {object} {inputs: TransactionInput[], change: TransactionOutput[] }
  */
-export const calculateInputs = (balances, intents, gasCost = 0, strategy = smallestFirst) => {
+export const calculateInputs = (balances, intents, gasCost = 0, strategy = null) => {
   if (intents === null) intents = []
+  if (strategy === null) strategy = defaultCalculationStrategy
   const requiredAssets = intents.reduce((assets, intent) => {
     assets[intent.assetId] ? assets[intent.assetId] = assets[intent.assetId].add(intent.value) : assets[intent.assetId] = intent.value
     return assets
@@ -35,7 +37,7 @@ export const calculateInputs = (balances, intents, gasCost = 0, strategy = small
     if (balances.assetSymbols.indexOf(assetSymbol) === -1) throw new Error(`This balance does not contain any ${assetSymbol}!`)
     const assetBalance = balances.assets[assetSymbol]
     if (assetBalance.balance.lt(requiredAmt)) throw new Error(`Insufficient ${ASSETS[assetId]}! Need ${requiredAmt.toString()} but only found ${assetBalance.balance.toString()}`)
-    return calculateInputsForAsset(assetBalance, requiredAmt, assetId, balances.address, strategy)
+    return calculateInputsForAsset(AssetBalance(assetBalance), requiredAmt, assetId, balances.address, strategy)
   })
 
   const output = inputsAndChange.reduce((prev, curr) => {
@@ -64,20 +66,6 @@ const calculateInputsForAsset = (assetBalance, requiredAmt, assetId, address, st
     return { prevHash: input.txid, prevIndex: input.index }
   })
   return { inputs, change }
-}
-
-const smallestFirst = (assetBalance, requiredAmt, assetId) => {
-  // Ascending order sort
-  assetBalance.unspent.sort((a, b) => a.value.sub(b.value))
-  let selectedInputs = 0
-  let selectedAmt = new Fixed8(0)
-  // Selected min inputs to satisfy outputs
-  while (selectedAmt.lt(requiredAmt)) {
-    selectedInputs += 1
-    if (selectedInputs > assetBalance.unspent.length) throw new Error(`Insufficient assets! Reached end of unspent coins! ${assetBalance.unspent.length}`)
-    selectedAmt = selectedAmt.add(assetBalance.unspent[selectedInputs - 1].value)
-  }
-  return assetBalance.unspent.slice(0, selectedInputs)
 }
 
 /**
