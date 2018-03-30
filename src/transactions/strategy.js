@@ -35,7 +35,7 @@ export const balancedApproach = (assetBalance, requiredAmt) => {
   assetBalance.unspent.sort((a, b) => a.value.sub(b.value))
   // Trim off coins larger than requiredAmt
   const availableCoins = assetBalance.unspent.filter((c) => c.value <= requiredAmt)
-  if (availableCoins.length === 0) return assetBalance.unspent[0]
+  if (availableCoins.length === 0) return [assetBalance.unspent[0]]
   // Check for naive solution
   const i = availableCoins.findIndex((c) => requiredAmt.eq(c.value))
   if (i >= 0) return [availableCoins[i]]

@@ -13,6 +13,7 @@ const log = logger('tx')
  * @param {Balance} balances - Balance of all assets available.
  * @param {TransactionOutput[]} intents - All sending intents
  * @param {number|Fixed8} gasCost - gasCost required for the transaction.
+ * @param {function} strategy
  * @return {object} {inputs: TransactionInput[], change: TransactionOutput[] }
  */
 export const calculateInputs = (balances, intents, gasCost = 0, strategy = null) => {

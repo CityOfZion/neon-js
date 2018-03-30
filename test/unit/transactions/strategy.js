@@ -32,6 +32,10 @@ describe('Strategy', function () {
   })
 
   describe('balancedApproach', function () {
+    it('tiny requiredAmt', () => {
+      const result = balancedApproach(assetBalance, new Fixed8(0.1))
+      result.should.have.members([coins[0]])
+    })
     it('exact', () => {
       const result = balancedApproach(assetBalance, new Fixed8(4))
       result.should.have.members([coins[3]])
