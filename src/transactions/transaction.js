@@ -197,10 +197,11 @@ class Transaction {
   /**
    * Calculate the inputs required based on existing outputs provided. Also takes into account the fees required through the gas property.
    * @param {Balance} balance - Balance to retrieve inputs from.
+   * @param {function} strategy
    * @return {Transaction} this
    */
-  calculate (balance) {
-    const { inputs, change } = core.calculateInputs(balance, this.outputs, this.gas)
+  calculate (balance, strategy = null) {
+    const { inputs, change } = core.calculateInputs(balance, this.outputs, this.gas, strategy)
     this.inputs = inputs
     this.outputs = this.outputs.concat(change)
     balance.applyTx(this)
