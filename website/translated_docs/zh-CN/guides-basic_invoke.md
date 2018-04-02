@@ -55,6 +55,7 @@ Neon.doInvoke(config).then(res => {
 ```
 
 In the console result, you will find:
+
 * the data of your config object
 * the balance of your account (which is queried from either neoscan or neon-wallet-db)
 * the signed transaction
@@ -85,3 +86,11 @@ A high-level example of a response:
   "url": /* the url of the NEO node the transaction was sent to */
 }
 ```
+
+## Circumventing asset-less transactions
+
+In our example above, we decided to attach a fee of 1 GAS for our smart contract script. However, because the system waives 10 GAS for every invocation transaction, most of us are likely to set this fee to 0.
+
+WIthout the fee, we may end up with a transaction that involves zero assets. Unfortunately for us, the NEO nodes will reject any transaction with zero assets attached.
+
+The workaround is to attach assets and send it back to your own address.The smallest available asset is 0.00000001 GAS. This will allow us to successfully register the blockchain without wasting any assets.

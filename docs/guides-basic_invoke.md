@@ -55,6 +55,7 @@ Neon.doInvoke(config).then(res => {
 ```
 
 In the console result, you will find:
+
 * the data of your config object
 * the balance of your account (which is queried from either neoscan or neon-wallet-db)
 * the signed transaction
@@ -84,4 +85,33 @@ A high-level example of a response:
   },
   "url": /* the url of the NEO node the transaction was sent to */
 }
+```
+
+## Circumventing asset-less transactions
+
+In our example above, we sent 1 GAS alongside our invocation as a fee. As described [here](http://docs.neo.org/en-us/sc/systemfees.html#smart-contract-fees), transactions with a cost under 10 GAS are essentially free.
+
+So our `gas` field should stay 0 if your calculated fee remains below 10 GAS. You can determine this cost with an `invokeScript` RPC as we did [here](basic_createscript.html), evaluating the `gas_consumed` field in the response object.
+
+WIthout the fee, we may end up with a transaction that involves zero assets. Unfortunately for us, the NEO nodes will reject any transaction with zero assets attached.
+
+The workaround is to attach assets and send it back to your own address.The smallest available asset is 0.00000001 GAS. This will allow us to successfully register the blockchain without wasting any assets.
+
+```js
+import Neon, { CONST } from '@cityofzion/neon-js';
+
+const intents = [
+  {
+    assetId: CONST.ASSET_ID.GAS,
+    value: 0.00000001,
+    scriptHash: Neon.get.scriptHashFromAddress(account.address)
+  }
+];
+
+// Add to config
+config.intents = intents;
+
+Neon.doInvoke(config).then(res => {
+  console.log(res);
+});
 ```

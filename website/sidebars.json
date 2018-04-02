@@ -11,7 +11,7 @@
       "basic_invoke",
       "basic_privnet",
       "adv_multitx",
-      "adv_invokeconcepts"
+      "adv_apicore"
     ]
   },
   "api": {
