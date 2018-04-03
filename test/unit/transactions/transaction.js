@@ -54,10 +54,10 @@ describe('Transaction', function () {
     const tx = Tx.createContractTx(balance, intents)
     tx.type.should.equal(128)
     tx.exclusiveData.should.eql({})
-    tx.inputs.length.should.equal(2)
-    tx.outputs.length.should.equal(2)
-    balance.assets.NEO.unconfirmed.length.should.equal(2)
-    balance.assets.NEO.spent.length.should.equal(2)
+    tx.inputs.length.should.equal(1)
+    tx.outputs.length.should.equal(1)
+    balance.assets.NEO.unconfirmed.length.should.equal(1)
+    balance.assets.NEO.spent.length.should.equal(1)
   })
 
   it('create InvocationTx', () => {

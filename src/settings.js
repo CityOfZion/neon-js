@@ -1,5 +1,6 @@
 import defaultNetworks from './networks.json'
 import Network from './rpc/Network'
+import { balancedApproach } from './transactions/strategy'
 
 export const networks = {}
 Object.keys(defaultNetworks).map(key => {
@@ -7,6 +8,8 @@ Object.keys(defaultNetworks).map(key => {
 })
 
 export var httpsOnly = false
+
+export var defaultCalculationStrategy = balancedApproach
 
 /**
  * Attempts to add a new Network to settings. This will fail if attempting to add a Network with the same name unless override is set to true.

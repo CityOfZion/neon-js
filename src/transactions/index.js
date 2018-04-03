@@ -2,6 +2,7 @@ import Tx from './transaction'
 import * as core from './core'
 import * as comp from './components'
 import * as e from './exclusive'
+import * as calculationStrategy from './strategy'
 import TxAttrUsage from './txAttrUsage'
 
 /**
@@ -48,7 +49,7 @@ export default {
   }
 }
 
-export { Tx as Transaction, TxAttrUsage }
+export { Tx as Transaction, TxAttrUsage, calculationStrategy }
 export * from './core'
 export * from './components'
 export * from './exclusive'
