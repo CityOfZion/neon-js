@@ -27,7 +27,7 @@
   },
   "name": "@cityofzion/neon-js",
   "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "main": "lib/index.js",
   "browser": "lib/browser.js",
   "module": "src/index.js",
