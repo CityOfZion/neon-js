@@ -11,9 +11,9 @@ The 3 managed methods are:
 - claimGas
 - doInvoke
 
-They represent the 3 major functions available to the NEO network at the moment. Each method basically takes in a configuration object and attempts to create and send a transaction based on the configuration provided. These methods are maintained by `neon-js` and acts as a simple beginner template for people to start sending transactions.
+They represent the 3 major functions available to the NEO network at the moment. Each method basically takes in a configuration object and attempts to create and send a transaction based on the configuration provided. These methods are maintained by `neon-js` and act as a simple beginner template for people to start sending transactions.
 
-All 3 methods follow a similar flow with minor differences based on their requirements. The methods accept a configuration object and returns the same configuration object at the end. Do note that the methods mutate the configuration object passed in and thus the objects are not reusable.
+All 3 methods follow a similar flow with minor differences based on their requirements. The methods accept a configuration object and return the same configuration object at the end. Do note that the methods mutate the configuration object passed in and thus the objects are not reusable.
 
 These are the available properties for a configuration object:
 
@@ -42,7 +42,7 @@ This is the first step of every method. Based on the properties `net` and `addre
 
 `net` represents the network which `neon-js` will attempt to work on. Usual terms provided are `MainNet` or `TestNet` which are networks hard-coded within the SDK itself. If you are using a private network, you will need to add a new network in settings or provide the direct url of your 3rd party provider here (NeonDB or neoscan).
 
-`address` is the address of the account that you wish to send from. This is the address which the assets originate from. This field is used to query your balance or claims from the 3rd party provider.
+`address` is the address of the account that you wish to send from. This is the address from which the assets originate from. This field is used to query your balance or claims from the 3rd party provider.
 
 Once the information is retrieved, it is appended to the configuration object under properties like `url`, `balance`, etc. and passed onto the next step.
 

@@ -93,7 +93,7 @@ In our example above, we sent 1 GAS alongside our invocation as a fee. As descri
 
 So our `gas` field should stay 0 if your calculated fee remains below 10 GAS. You can determine this cost with an `invokeScript` RPC as we did [here](basic_createscript.html), evaluating the `gas_consumed` field in the response object.
 
-WIthout the fee, we may end up with a transaction that involves zero assets. Unfortunately for us, the NEO nodes will reject any transaction with zero assets attached.
+Without the fee, we may end up with a transaction that involves zero assets. Unfortunately for us, the NEO nodes will reject any transaction with zero assets attached.
 
 The workaround is to attach assets and send it back to your own address.The smallest available asset is 0.00000001 GAS. This will allow us to successfully register the blockchain without wasting any assets.
 
