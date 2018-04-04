@@ -3,6 +3,22 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.6.0
+=====
+
+- Transaction
+
+  - Add calculation strategies to modify how inputs are selected. Current available strategies are `smallestFirst`, `biggestFirst` and `balancedApproach`. Currently only available as a global setting.
+
+  ```js
+  import { tx, settings } from '@cityofzion/neon-js'
+
+  // Change the strategy to use the biggest valued output available.
+  settings.defaultCalculationStrategy = tx.calculationStrategy.biggestFirst
+  // See all available strategies
+  console.log(tx.calculationStrategy)
+  ```
+
 3.5.0
 =====
 
