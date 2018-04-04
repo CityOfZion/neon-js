@@ -77,4 +77,4 @@ export class Query {
   static validateAddress(addr: string): Query
 }
 
-export function queryRPC(urrl: string, req: RPCRequest): Promise<any>
+export function queryRPC(url: string, req: RPCRequest): Promise<any>
