@@ -149,7 +149,7 @@ export const decryptAsync = (encryptedKey, keyphrase, scryptParams = DEFAULT_SCR
         const privateKey = hexXor(decrypted.toString(), derived1)
         const account = new Account(privateKey)
         const newAddressHash = SHA256(SHA256(enc.Latin1.parse(account.address))).toString().slice(0, 8)
-        if (addressHash !== newAddressHash) throw new Error('Wrong Password!')
+        if (addressHash !== newAddressHash) reject(new Error('Wrong Password or scrypt parameters!'))
         log.info(`Successfully decrypted ${encryptedKey}`)
         resolve(account.WIF)
       }
