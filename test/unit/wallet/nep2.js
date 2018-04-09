@@ -84,7 +84,7 @@ describe('NEP2', function () {
     })
   })
 
-  describe('Error', function () {
+  describe.only('Error', function () {
     const encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase, simpleScrypt)
 
     it('Errors on wrong password (sync)', () => {
@@ -96,24 +96,14 @@ describe('NEP2', function () {
       thrower.should.throw()
     })
 
-    it('Errors on wrong password (async)', (done) => {
-      NEP2.decryptAsync(encrypted, 'wrongpassword', simpleScrypt)
-        .then(r => {
-          done('Should not pass!')
-        })
-        .catch(_ => {
-          done()
-        })
+    it('Errors on wrong password (async)', () => {
+      const thrower = NEP2.decryptAsync(encrypted, 'wrongpassword', simpleScrypt)
+      return thrower.should.be.rejectedWith(Error, 'Wrong Password')
     })
 
-    it('Errors on wrong scrypt params (async)', (done) => {
-      NEP2.decryptAsync(testKeys.a.encryptedWif, testKeys.a.passphrase, simpleScrypt)
-        .then(r => {
-          done('Should not pass!')
-        })
-        .catch(_ => {
-          done()
-        })
+    it('Errors on wrong scrypt params (async)', () => {
+      const thrower = NEP2.decryptAsync(testKeys.a.encryptedWif, testKeys.a.passphrase, simpleScrypt)
+      return thrower.should.be.rejectedWith(Error, `scrypt parameters`)
     })
   })
 })
