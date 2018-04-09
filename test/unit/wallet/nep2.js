@@ -84,7 +84,7 @@ describe('NEP2', function () {
     })
   })
 
-  describe.only('Error', function () {
+  describe('Error', function () {
     const encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase, simpleScrypt)
 
     it('Errors on wrong password (sync)', () => {
