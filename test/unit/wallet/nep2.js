@@ -90,6 +90,12 @@ describe('NEP2', function () {
     thrower.should.throw()
   })
 
+  it('Errors on wrong password async', () => {
+    const encrypted = NEP2.encrypt(testKeys.a.wif, testKeys.a.passphrase, simpleScrypt)
+    const thrower = NEP2.decryptAsync(encrypted, 'wrongpassword', simpleScrypt)
+    return thrower.should.be.rejectedWith(Error, 'Wrong Password!')
+  })
+
   it('Errors on wrong scrypt params', () => {
     const thrower = () => NEP2.decrypt(testKeys.a.encryptedWif, testKeys.a.passphrase, simpleScrypt)
     thrower.should.throw()
