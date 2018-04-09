@@ -59,7 +59,7 @@ const fillFromLeft = (requiredAmt, availableInputs) => {
   // Selected min inputs to satisfy outputs
   while (selectedAmt.lt(requiredAmt)) {
     selectPointer += 1
-    if (selectPointer > availableInputs) throw new Error(`Insufficient assets! Reached end of unspent coins! ${availableInputs.length}`)
+    if (selectPointer > availableInputs.length) throw new Error(`Insufficient assets! Reached end of unspent coins! ${availableInputs.length}`)
     selectedAmt = selectedAmt.add(availableInputs[selectPointer - 1].value)
   }
   return availableInputs.slice(0, selectPointer)
