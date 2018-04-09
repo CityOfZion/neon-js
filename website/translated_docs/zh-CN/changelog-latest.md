@@ -3,6 +3,15 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.6.1
+=====
+
+- Fixes
+
+  - `wallet.decryptAsync` to properly reject all errors
+  - fix `balancedApproach` calculation strategy to consider bigger coins when insufficient small coins
+  - Fix typo in typings
+
 3.6.0
 =====
 
