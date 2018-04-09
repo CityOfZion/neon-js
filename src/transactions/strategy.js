@@ -34,16 +34,17 @@ export const balancedApproach = (assetBalance, requiredAmt) => {
   // Ascending sort first
   assetBalance.unspent.sort((a, b) => a.value.sub(b.value))
   // Trim off coins larger than requiredAmt
-  const availableCoins = assetBalance.unspent.filter((c) => c.value <= requiredAmt)
-  if (availableCoins.length === 0) return [assetBalance.unspent[0]]
+  const smallCoins = assetBalance.unspent.filter((c) => c.value <= requiredAmt)
+  if (smallCoins.length === 0) return [assetBalance.unspent[0]]
   // Check for naive solution
-  const i = availableCoins.findIndex((c) => requiredAmt.eq(c.value))
-  if (i >= 0) return [availableCoins[i]]
+  const i = smallCoins.findIndex((c) => requiredAmt.eq(c.value))
+  if (i >= 0) return [smallCoins[i]]
   // Take the largest coin available and fill it up with little pieces
+  const bigCoins = assetBalance.unspent.slice(smallCoins.length)
   const selectedInputs = []
-  selectedInputs.push(availableCoins.pop())
-  const remainderAmt = requiredAmt.minus(selectedInputs[0].value)
-  const remainderInputs = fillFromLeft(remainderAmt, availableCoins)
+  if (smallCoins.length > 0) selectedInputs.push(smallCoins.pop())
+  const remainderAmt = requiredAmt.minus(selectedInputs.length > 0 ? selectedInputs[0].value : 0)
+  const remainderInputs = fillFromLeft(remainderAmt, smallCoins.concat(bigCoins))
   return selectedInputs.concat(remainderInputs)
 }
 
