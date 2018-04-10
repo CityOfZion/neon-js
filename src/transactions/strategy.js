@@ -32,9 +32,9 @@ export const biggestFirst = (assetBalance, requiredAmt) => {
  */
 export const balancedApproach = (assetBalance, requiredAmt) => {
   // Ascending sort first
-  assetBalance.unspent.sort((a, b) => a.value.sub(b.value))
+  assetBalance.unspent.sort((a, b) => a.value.sub(b.value).toNumber())
   // Trim off coins larger than requiredAmt
-  const smallCoins = assetBalance.unspent.filter((c) => c.value <= requiredAmt)
+  const smallCoins = assetBalance.unspent.filter((c) => c.value.lte(requiredAmt))
   if (smallCoins.length === 0) return [assetBalance.unspent[0]]
   // Check for naive solution
   const i = smallCoins.findIndex((c) => requiredAmt.eq(c.value))
