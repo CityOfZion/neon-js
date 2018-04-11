@@ -3,7 +3,7 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
-3.6.1
+3.6.2
 =====
 
 - Fixes
