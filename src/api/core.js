@@ -1,4 +1,4 @@
-import { Account, getScriptHashFromAddress } from '../wallet'
+import { Account, getScriptHashFromAddress, generatePrivateKey } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Query } from '../rpc'
 import { Transaction, TransactionOutput, TxAttrUsage } from '../transactions'
@@ -97,6 +97,7 @@ export const doInvoke = config => {
     .then(c => createTx(c, 'invocation'))
     .then(c => addAttributesIfExecutingAsSmartContract(c))
     .then(c => addAttributesForMintToken(c))
+    .then(attachAttributesForEmptyTransaction)
     .then(c => signTx(c))
     .then(c => attachInvokedContractForMintToken(c))
     .then(c => attachContractIfExecutingAsSmartContract(c))
@@ -363,6 +364,20 @@ const attachContractIfExecutingAsSmartContract = config => {
       })
   }
 
+  return Promise.resolve(config)
+}
+
+/**
+ * Adds the necessary attributes for validating an empty transaction.
+ * @param {object} config
+ * @return {Promise<object>}
+ */
+const attachAttributesForEmptyTransaction = config => {
+  if (config.tx.inputs.length === 0 && config.tx.outputs.length === 0) {
+    config.tx.addAttribute(TxAttrUsage.Script, reverseHex(getScriptHashFromAddress(config.address)))
+    // This adds some random bits to the transaction to prevent any hash collision.
+    config.tx.addRemark(Date.now().toString() + generatePrivateKey().substr(0, 8))
+  }
   return Promise.resolve(config)
 }
 

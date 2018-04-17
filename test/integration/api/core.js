@@ -104,7 +104,6 @@ describe('Integration: API Core', function () {
         net: NEO_NETWORK.TEST,
         address: testKeys.a.address,
         privateKey: testKeys.a.privateKey,
-        intents: core.makeIntent({ GAS: 0.1 }, testKeys.a.address),
         script: '00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc',
         gas: 0
       }
@@ -130,7 +129,6 @@ describe('Integration: API Core', function () {
         net: NEO_NETWORK.TEST,
         address: testKeys.b.address,
         privateKey: testKeys.b.privateKey,
-        intents: core.makeIntent({ GAS: 0.1 }, testKeys.b.address),
         script,
         gas: 0
       }
