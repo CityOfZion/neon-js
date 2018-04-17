@@ -1,6 +1,7 @@
 import loglevel from 'loglevel'
 import prefix from 'loglevel-plugin-prefix'
 
+prefix.reg(loglevel)
 loglevel.setDefaultLevel('silent')
 
 loglevel.setAll = (lvl) => {
