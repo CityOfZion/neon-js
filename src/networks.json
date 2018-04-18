@@ -90,7 +90,7 @@
       }
     },
     "ExtraConfiguration": {
-      "neoscan": "https://coz.neoscan-testnet.io/"
+      "neoscan": "https://coz.neoscan-testnet.io/api/main_net"
     }
   }
 }
