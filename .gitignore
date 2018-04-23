@@ -16,3 +16,4 @@ build
 
 # IDE specific
 /.vscode
+.idea

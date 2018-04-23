@@ -67,4 +67,4 @@ If the transaction is successful, the `txid` is attached in the response. We can
 
 - The `sendAsset` method is found under the `api` module for named imports.
 - This method only accepts one source of assets to send from. This does not support using multiple sources or multi-sig addresses.
-- This supports sending assets from a smart contract by setting the `address` field to the contract's address, signing with a private key that is allowed to send from the contract and setting `sendingFromSmartContract` to true.
+- This supports sending assets from a smart contract by setting the `address` field to the contract's address, signing with a private key that is allowed to send from the contract and setting `sendingFromSmartContract` to true in the configuration object.

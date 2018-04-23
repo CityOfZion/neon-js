@@ -3,7 +3,7 @@ id: basic_privnet
 title: Basic - Using a Private Net
 ---
 
-This article describes the necessary setup required in order for `neon-js` to useful on a private net.
+This article describes the necessary setup required in order to use `neon-js` on a private net.
 
 A private net is defined as a private instance of the NEO blockchain. It can be running either locally or on the cloud depending on your needs. It is useful for development work as it gives the developer all the GAS and NEO needed without having to beg and steal.
 
