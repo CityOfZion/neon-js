@@ -66,6 +66,16 @@ import Neon from '@cityofzion/neon-js'
 Neon.u.reverseHex(hexstring)
 Neon.u.num2fixed8(1)
 Neon.u.ab2str(arrayBuffer)
+
+// Conversions to hex
+Neon.u.str2hexstring('normalString') // 6e6f726d616c537472696e67
+Neon.u.int2hex(234) // EA
+Neon.u.ab2hexstring(arrayBuffer)
+
+// Conversion from hex
+Neon.u.hexstring2str('6e6f726d616c537472696e67') // normalString
+Neon.u.hex2int('EA') // 234
+Neon.u.hexstring2ab(hexString)
 ```
 
 最常见的格式是十六进制字符串。这是一个字符串，每2个字符代表一个字节数组中的一个字节。`neon-js` 故意使用十六进制字符串，因为字符串很容易打印和操作。

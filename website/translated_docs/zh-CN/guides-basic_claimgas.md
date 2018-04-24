@@ -24,7 +24,7 @@ const config = {
 ## Execute
 
 ```js
-Neon.sendAsset(config)
+Neon.claimGas(config)
 .then(config => {
   console.log(config.response)
 })

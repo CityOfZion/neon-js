@@ -36,7 +36,7 @@ const props = {
 const script = Neon.create.script(props)
 ```
 
-`script` is now a hexstring that you can use in a `invokescript` RPC call or an invocationTransaction.
+`script` is now a hexstring that you can use in an `invokescript` RPC call or an invocationTransaction.
 
 ```js
 Neon.rpc.Query.invokeScript(script)
@@ -77,9 +77,9 @@ Neon.u.Fixed8.fromReverseHex('80778e06')
 
 ## Chaining scripts
 
-Invocation transactions might be free now so we are fine with sending an transaction for every transfer but in the future, we want to aggregate them so we fully maximise the 10 free gas that we get per transaction. This is achieved by chaining scripts together.
+Invocation transactions might be free now so we are fine with sending a transaction for every transfer but in the future, we want to aggregate them so we fully maximise the 10 free gas that we get per transaction. This is achieved by chaining scripts together.
 
-`create.script` has the functionality in built for us. Let us use it to retrieve all the information about a specific token.
+`create.script` has the functionality built-in for us and let's us use it to retrieve all the information about a specific token.
 
 There are many fields that we want to know about in an NEP5 token: name, decimals, total supply, etc. Instead of performing a `invokescript` RPC call for each field, we will be combining it in a single call. The example we are using here is the testnet contract for Red Pulse.
 
