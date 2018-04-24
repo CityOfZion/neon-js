@@ -66,6 +66,16 @@ import Neon from '@cityofzion/neon-js'
 Neon.u.reverseHex(hexstring)
 Neon.u.num2fixed8(1)
 Neon.u.ab2str(arrayBuffer)
+
+// Conversions to hex
+Neon.u.str2hexstring('normalString') // 6e6f726d616c537472696e67
+Neon.u.int2hex(234) // EA
+Neon.u.ab2hexstring(arrayBuffer)
+
+// Conversion from hex
+Neon.u.hexstring2str('6e6f726d616c537472696e67') // normalString
+Neon.u.hex2int('EA') // 234
+Neon.u.hexstring2ab(hexString)
 ```
 
 The most common format is hex string. This is a string where every 2 characters represents a byte in an bytearray. `neon-js` intentionally works with hex strings because strings are easy to print and manipulate.
