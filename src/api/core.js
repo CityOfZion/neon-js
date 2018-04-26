@@ -63,7 +63,7 @@ export const sendAsset = config => {
 export const claimGas = config => {
   return fillUrl(config)
     .then(fillKeys)
-    .then(c => loadBalance(getClaimsFrom, config))
+    .then(fillClaims)
     .then(c => createTx(c, 'claim'))
     .then(c => signTx(c))
     .then(c => sendTx(c))
@@ -146,6 +146,16 @@ export const fillKeys = config => {
     if (!config.publicKey && config.signingFunction) config.publicKey = config.account.publicKey
   }
   return Promise.resolve(config)
+}
+
+/**
+ * Retrieves Claims if no claims has been attached.
+ * @param {object} config
+ * @return {Promise<object>} Configuration object.
+ */
+export const fillClaims = config => {
+  if (config.claims) return Promise.resolve(config)
+  return loadBalance(getClaimsFrom, config)
 }
 
 /**
