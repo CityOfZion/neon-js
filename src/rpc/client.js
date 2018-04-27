@@ -33,6 +33,8 @@ class RPCClient {
      */
 
     this.history = []
+    this.lastSeenHeight = 0
+    this._latencies = []
 
     /**
      * Version of this client. Used to check if RPC call is implemented.
@@ -48,6 +50,35 @@ class RPCClient {
 
   get [Symbol.toStringTag] () {
     return 'RPC Client'
+  }
+
+  get latency () {
+    if (this._latencies.length === 0) return 99999
+    return this._latencies.reduce((p, c) => p + c, 0) / this._latencies.length
+  }
+
+  set latency (lat) {
+    if (this._latencies.length > 4) this._latencies.unshift()
+    this._latencies.push(lat)
+  }
+
+  /**
+   * Measures the latency using getBlockCount call. Returns the current latency. For average, call this.latency
+   * @returns {number}
+   */
+  ping () {
+    const timeStart = Date.now()
+    return this.getBlockCount()
+      .then(height => {
+        this.lastSeenHeight = height
+        const newPing = Date.now() - timeStart
+        this.latency = newPing
+        return newPing
+      })
+      .catch(_ => {
+        this.latency = 99999
+        return 99999
+      })
   }
 
   /**
