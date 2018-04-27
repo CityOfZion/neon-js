@@ -54,11 +54,11 @@ class RPCClient {
 
   get latency () {
     if (this._latencies.length === 0) return 99999
-    return this._latencies.reduce((p, c) => p + c, 0) / this._latencies.length
+    return Math.floor(this._latencies.reduce((p, c) => p + c, 0) / this._latencies.length)
   }
 
   set latency (lat) {
-    if (this._latencies.length > 4) this._latencies.unshift()
+    if (this._latencies.length > 4) this._latencies.shift()
     this._latencies.push(lat)
   }
 
