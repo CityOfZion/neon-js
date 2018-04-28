@@ -5,8 +5,15 @@ import { RPCRequest } from './rpc'
 export class RPCClient {
   constructor(net: string, version: string)
 
+  history: Query[]
+  latency: number
+  lastSeenHeight: number
+
   /** Takes an Query object and executes it. Adds the Query object to history. */
   execute(query: Query): Promise<any>
+
+  /**Returns the latency gotten by sending a bestBlockHeight request. */
+  ping(): Promise<number>
 
   /** Creates a query with the given req and immediately executes it. */
   query(req: RPCRequest): Promise<any>
