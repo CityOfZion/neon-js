@@ -1,6 +1,7 @@
 import RPCClient from '../../../src/rpc/client'
 import Query from '../../../src/rpc/query'
 import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from '../../../src/consts'
+import { timeout } from '../../../src/settings'
 import mockData from './mockData.json'
 
 describe('RPC Client', function () {
@@ -104,8 +105,8 @@ describe('RPC Client', function () {
       client.lastSeenHeight = 0
       return client.ping()
         .then(num => {
-          num.should.equal(99999)
-          client._latencies.should.eql([99999])
+          num.should.equal(timeout.ping)
+          client._latencies.should.eql([timeout.ping])
           client.lastSeenHeight.should.equal(0)
         })
     })

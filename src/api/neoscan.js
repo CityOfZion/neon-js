@@ -4,6 +4,7 @@ import { ASSET_ID } from '../consts'
 import { Fixed8 } from '../utils'
 import { networks, httpsOnly } from '../settings'
 import logger from '../logging'
+import RPCClient from '../rpc/client'
 
 const log = logger('api')
 export const name = 'neoscan'
@@ -38,9 +39,8 @@ export const getRPCEndpoint = net => {
       }
     }
     if (nodes.length === 0) throw new Error('No eligible nodes found!')
-    const selectedURL = nodes[Math.floor(Math.random() * nodes.length)].url
-    log.info(`Best node from neoscan ${net}: ${selectedURL}`)
-    return selectedURL
+    var clients = nodes.map(n => new RPCClient(n.url))
+    return Promise.race(clients.map(c => c.ping().then(_ => c.net)))
   })
 }
 
