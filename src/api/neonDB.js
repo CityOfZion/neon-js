@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Account, Balance, Claims } from '../wallet'
 import { Transaction, TxAttrUsage } from '../transactions'
-import { Query } from '../rpc'
+import { RPCClient, Query } from '../rpc'
 import { ASSET_ID } from '../consts'
 import { Fixed8, reverseHex } from '../utils'
 import { networks, httpsOnly } from '../settings'
@@ -102,7 +102,8 @@ export const getRPCEndpoint = net => {
         }
       }
       if (nodes.length === 0) throw new Error('No eligible nodes found!')
-      return nodes[Math.floor(Math.random() * nodes.length)].url
+      var clients = nodes.map(n => new RPCClient(n.url))
+      return Promise.race(clients.map(c => c.ping().then(_ => c.net)))
     })
 }
 

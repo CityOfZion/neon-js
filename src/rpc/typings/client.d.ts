@@ -1,6 +1,7 @@
 import { Transaction } from '../../transactions/index'
 import { Query } from './query';
 import { RPCRequest } from './rpc'
+import { AxiosRequestConfig } from 'axios'
 
 export class RPCClient {
   constructor(net: string, version: string)
@@ -9,14 +10,14 @@ export class RPCClient {
   latency: number
   lastSeenHeight: number
 
-  /** Takes an Query object and executes it. Adds the Query object to history. */
-  execute(query: Query): Promise<any>
-
   /**Returns the latency gotten by sending a bestBlockHeight request. */
   ping(): Promise<number>
 
+  /** Takes an Query object and executes it. Adds the Query object to history. */
+  execute(query: Query, config: AxiosRequestConfig): Promise<any>
+
   /** Creates a query with the given req and immediately executes it. */
-  query(req: RPCRequest): Promise<any>
+  query(req: RPCRequest, config: AxiosRequestConfig): Promise<any>
 
   /** Gets the state of an account given an address. */
   getAccountState(addr: string): Promise<any>

@@ -3,6 +3,7 @@ import { isAddress } from '../wallet'
 import semver from 'semver'
 import { RPC_VERSION, DEFAULT_RPC, NEO_NETWORK } from '../consts'
 import logger from '../logging'
+import { timeout } from '../settings'
 
 const log = logger('rpc')
 
@@ -68,38 +69,41 @@ class RPCClient {
    */
   ping () {
     const timeStart = Date.now()
-    return this.getBlockCount()
-      .then(height => {
-        this.lastSeenHeight = height
+    var query = Query.getBlockCount()
+    return this.execute(query, { timeout: timeout.ping })
+      .then(res => {
+        this.lastSeenHeight = res.result
         const newPing = Date.now() - timeStart
         this.latency = newPing
         return newPing
       })
       .catch(_ => {
-        this.latency = 99999
-        return 99999
+        this.latency = timeout.ping
+        return timeout.ping
       })
   }
 
   /**
    * Takes an Query object and executes it. Adds the Query object to history.
    * @param {Query} query
+   * @param {AxiosRequestConfig} config
    * @return {Promise<any>}
    */
-  execute (query) {
+  execute (query, config) {
     this.history.push(query)
     log.info(`RPC: ${this.net} executing Query[${query.req.method}]`)
-    return query.execute(this.net)
+    return query.execute(this.net, config)
   }
 
   /**
    * Creates a query with the given req and immediately executes it.
    * @param {object} req
+   * @param {AxiosRequestConfig} config
    * @return {Promise<any>}
    */
-  query (req) {
+  query (req, config) {
     const query = new Query(req)
-    return this.execute(query)
+    return this.execute(query, config)
   }
 
   /**
