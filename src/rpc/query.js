@@ -317,7 +317,7 @@ export default Query
 export const queryRPC = (url, req, config) => {
   const jsonRequest = axios.create({ headers: {
     'Content-Type': 'application/json',
-    timeout: timeout.all
+    timeout: timeout.rpc
   } })
   const jsonRpcData = Object.assign({}, DEFAULT_REQ, req)
   return jsonRequest.post(url, jsonRpcData, config).then((response) => {
