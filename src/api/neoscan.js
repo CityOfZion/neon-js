@@ -90,7 +90,7 @@ export const getClaims = (net, address) => {
  */
 export const getMaxClaimAmount = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
-  return axios.get(apiEndpoint + '/v1/get_claimable/' + address).then(res => {
+  return axios.get(apiEndpoint + '/v1/get_unclaimed/' + address).then(res => {
     log.info(
       `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neoscan ${net}`
     )
