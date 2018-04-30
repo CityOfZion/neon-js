@@ -9,6 +9,8 @@ import RPCClient from '../rpc/client'
 const log = logger('api')
 export const name = 'neoscan'
 
+var cachedRPC = null
+
 /**
  * Returns the appropriate NeoScan endpoint.
  * @param {string} net - 'MainNet', 'TestNet' or a custom NeoScan-like url.
@@ -39,9 +41,15 @@ export const getRPCEndpoint = net => {
       }
     }
     if (nodes.length === 0) throw new Error('No eligible nodes found!')
-    var clients = nodes.map(n => new RPCClient(n.url))
+    var urls = nodes.map(n => n.url)
+    if (urls.includes(cachedRPC)) return cachedRPC
+    var clients = urls.map(u => new RPCClient(u))
     return Promise.race(clients.map(c => c.ping().then(_ => c.net)))
   })
+    .then(fastestUrl => {
+      cachedRPC = fastestUrl
+      return fastestUrl
+    })
 }
 
 /**

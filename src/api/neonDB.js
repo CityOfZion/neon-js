@@ -9,6 +9,8 @@ import logger from '../logging'
 
 const log = logger('api')
 export const name = 'neonDB'
+
+var cachedRPC = null
 /**
  * API Switch for MainNet and TestNet
  * @param {string} net - 'MainNet', 'TestNet', or custom neon-wallet-db URL.
@@ -102,8 +104,14 @@ export const getRPCEndpoint = net => {
         }
       }
       if (nodes.length === 0) throw new Error('No eligible nodes found!')
-      var clients = nodes.map(n => new RPCClient(n.url))
+      var urls = nodes.map(n => n.url)
+      if (urls.includes(cachedRPC)) return cachedRPC
+      var clients = urls.map(u => new RPCClient(u))
       return Promise.race(clients.map(c => c.ping().then(_ => c.net)))
+    })
+    .then(fastestUrl => {
+      cachedRPC = fastestUrl
+      return fastestUrl
     })
 }
 
