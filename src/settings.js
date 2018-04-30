@@ -11,6 +11,10 @@ export var httpsOnly = false
 
 export var defaultCalculationStrategy = balancedApproach
 
+export var timeout = {
+  ping: 2000,
+  rpc: 5000
+}
 /**
  * Attempts to add a new Network to settings. This will fail if attempting to add a Network with the same name unless override is set to true.
  * @param {Network} network
