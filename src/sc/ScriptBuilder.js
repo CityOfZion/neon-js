@@ -183,7 +183,8 @@ class ScriptBuilder extends StringStream {
     this.reset()
     const scripts = []
     while (!this.isEmpty()) {
-      scripts.push(retrieveAppCall(this))
+      let a = retrieveAppCall(this)
+      if (a) scripts.push(a)
     }
     return scripts
   }
@@ -247,7 +248,7 @@ const retrieveAppCall = (sb) => {
         throw new Error(`Encounter unknown byte: ${b}`)
     }
   }
-  return output
+  if (output.scriptHash != '') return output
 }
 
 export default ScriptBuilder
