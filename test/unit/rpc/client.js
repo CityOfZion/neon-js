@@ -1,6 +1,7 @@
 import RPCClient from '../../../src/rpc/client'
 import Query from '../../../src/rpc/query'
 import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from '../../../src/consts'
+import { timeout } from '../../../src/settings'
 import mockData from './mockData.json'
 
 describe('RPC Client', function () {
@@ -69,6 +70,44 @@ describe('RPC Client', function () {
         .then((ver) => {
           ver.should.equal('2.3.4')
           client.version.should.equal('2.3.4')
+        })
+    })
+
+    it('latency', () => {
+      client.latency.should.equal(99999)
+      const latencies = [Math.floor(Math.random() * 101), Math.floor(Math.random() * 101)]
+      client.latency = latencies[0]
+      client.latency.should.equal(latencies[0])
+      client.latency = latencies[1]
+      client.latency.should.equal(Math.floor((latencies[0] + latencies[1]) / 2))
+    })
+
+    it('latencies use latest 5', () => {
+      client._latencies = [10, 10, 10, 10, 10]
+      client.latency.should.equal(10)
+      client.latency = 60
+      client.latency.should.equal(20)
+    })
+
+    it('ping', () => {
+      client._latencies = [1, 2, 3, 4, 5]
+      return client.ping()
+        .then(num => {
+          num.should.equal(client._latencies[4])
+          client.lastSeenHeight.should.equal(850546)
+        })
+    })
+
+    it('ping error', () => {
+      mock.reset()
+      mock.onPost().timeout()
+      client._latencies = []
+      client.lastSeenHeight = 0
+      return client.ping()
+        .then(num => {
+          num.should.equal(timeout.ping)
+          client._latencies.should.eql([timeout.ping])
+          client.lastSeenHeight.should.equal(0)
         })
     })
   })
