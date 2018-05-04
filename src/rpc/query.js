@@ -2,7 +2,6 @@ import axios from 'axios'
 import { serializeTransaction } from '../transactions'
 import { DEFAULT_REQ } from '../consts'
 import logger from '../logging'
-import {timeout} from '../settings'
 
 const log = logger('rpc')
 
@@ -56,12 +55,11 @@ class Query {
   /**
    * Executes the Query by sending the RPC request to the provided net.
    * @param {string} url - The URL of the node.
-   * @param {AxiosRequestConfig} config - Request configuration
    * @return {Response|any}
    */
-  execute (url, config) {
+  execute (url) {
     if (this.completed) throw new Error('This request has been sent')
-    return queryRPC(url, this.req, config)
+    return queryRPC(url, this.req)
       .then((res) => {
         this.res = res
         this.completed = true
@@ -311,16 +309,12 @@ export default Query
  * @param {string} req.method - RPC Method name.
  * @param {Array} req.params - Array of parameters to send.
  * @param {number} req.id - Unique id to identity yourself. RPC should reply with same id.
- * @param {AxiosRequestConfig} config - Configuration to pass down to axios
  * @returns {Promise<Response>} RPC Response
  */
-export const queryRPC = (url, req, config) => {
-  const jsonRequest = axios.create({ headers: {
-    'Content-Type': 'application/json',
-    timeout: timeout.rpc
-  } })
+export const queryRPC = (url, req) => {
+  const jsonRequest = axios.create({ headers: { 'Content-Type': 'application/json' } })
   const jsonRpcData = Object.assign({}, DEFAULT_REQ, req)
-  return jsonRequest.post(url, jsonRpcData, config).then((response) => {
+  return jsonRequest.post(url, jsonRpcData).then((response) => {
     return response.data
   })
 }

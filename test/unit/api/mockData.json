@@ -521,13 +521,6 @@
         "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
       }
     },
-    "claimsB": {
-      "url": "https://neoscan-testnet.io/api/test_net/v1/get_unclaimed/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
-      "response": {
-        "unclaimed": 0.03455555,
-        "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
-      }
-    },
     "claimsInvalid": {
       "url": "https://neoscan-testnet.io/api/test_net/v1/get_claimable/invalidAddress",
       "response": {

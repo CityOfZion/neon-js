@@ -96,7 +96,7 @@ import {wallet, api} from '@cityofzion/neon-js'
 // This form is useless as it is an empty balance.
 const balance = new wallet.Balance({net: 'TestNet', address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW'})
 // We get a useful balance that can be used to fill a transaction through api
-const filledBalance = api.neonDB.getBalance('MainNet','ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW')
+const filledBalance = api.getBalanceFrom('ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW', api.neonDB)
 // This contains all symbols of assets available in this balance
 const symbols = filledBalance.assetSymbols
 // We retrieve the unspent coins from the assets object using the symbol

@@ -183,8 +183,7 @@ class ScriptBuilder extends StringStream {
     this.reset()
     const scripts = []
     while (!this.isEmpty()) {
-      let a = retrieveAppCall(this)
-      if (a) scripts.push(a)
+      scripts.push(retrieveAppCall(this))
     }
     return scripts
   }
@@ -231,9 +230,6 @@ const retrieveAppCall = (sb) => {
         for (var i = 0; i < len; i++) { cache.unshift(output.args.shift()) }
         output.args.unshift(cache)
         break
-      case (n === 102):
-        sb.pter = sb.str.length
-        break
       case (n === 103):
         output.scriptHash = reverseHex(sb.read(20))
         output.useTailCall = false
@@ -242,13 +238,11 @@ const retrieveAppCall = (sb) => {
         output.scriptHash = reverseHex(sb.read(20))
         output.useTailCall = true
         return output
-      case (n === 241):
-        break
       default:
         throw new Error(`Encounter unknown byte: ${b}`)
     }
   }
-  if (output.scriptHash !== '') return output
+  return output
 }
 
 export default ScriptBuilder

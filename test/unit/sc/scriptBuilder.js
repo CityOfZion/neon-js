@@ -96,18 +96,5 @@ describe('ScriptBuilder', function () {
       result.length.should.equal(5)
       result.should.eql(expected)
     })
-
-    it('nonce parsing', () => {
-      const s = '0500aba2bb00147a0b8862fdcae2cc8118b8f4e036d4ccf98bb61b14235a717ed7ed18a43de47499c3d05b8d4a4bcf3a53c1087472616e7366657267fb1c540417067c270dee32f21023aa8b9b71abcef10580dda2a30b14d1e8f4ede57f233d744551c53f0b3d31d9f1d35714235a717ed7ed18a43de47499c3d05b8d4a4bcf3a53c1087472616e7366657267fb1c540417067c270dee32f21023aa8b9b71abcef16694e6b7719d8e7ead'
-      const expected = [
-        { scriptHash: 'ceab719b8baa2310f232ee0d277c061704541cfb', args: ['7472616e73666572', ['00aba2bb00', '7a0b8862fdcae2cc8118b8f4e036d4ccf98bb61b', '235a717ed7ed18a43de47499c3d05b8d4a4bcf3a']], useTailCall: false },
-        { scriptHash: 'ceab719b8baa2310f232ee0d277c061704541cfb', args: ['7472616e73666572', ['80dda2a30b', 'd1e8f4ede57f233d744551c53f0b3d31d9f1d357', '235a717ed7ed18a43de47499c3d05b8d4a4bcf3a']], useTailCall: false }
-      ]
-      let sb = new ScriptBuilder(s)
-      let result = sb.toScriptParams()
-      result.length.should.equal(2)
-      result.should.eql(expected)
-    })
-
   })
 })

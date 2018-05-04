@@ -3,43 +3,6 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
-3.7.0
-=====
-
-- RPC
-
-  - RPC Client now has the fields `latency` and `lastSeenHeight` and method `ping()`.
-
-  ```js
-  import {rpc} from '@cityofzion/neon-js
-
-  var client = new rpc.RPCClient(url)
-  client.ping()
-  .then(ms => {
-    console.log(ms) // latency in milliseconds. Max of 2000 (default timeout for ping)
-    console.log(client.latency) // This is an average of last 5 values retrieved using ping()
-    console.log(client.lastSeenHeight) // This is filled whenever getBlockCount is called
-  })
-  ```
-
-  - RPC Client now takes an extra argument `config` which exposes the underlying axios instance, allowing users to customize the axios configuration.
-
-- API
-
-  - Add attribute and remark for signing empty transactions. Now if you use `doInvoke` for your token transfers, it will automatically setup your transaction to be accepted by the NEO node without the need for any asset inputs.
-  - `claimGas` now accepts a `claims` property as an override for claims. This behavior is inline with `sendAsset` and `doInvoke` accepting `balance` overrides.
-  - `getRPCEndpoint` now ensures that the returned endpoint is callable by doing a ping check internally. It will also cache the endpoint to return next time instead of repeatedly pinging every single healthy node.
-
-- Settings
-
-  - Settings now contain `timeout` which setups the timeouts for `ping` and all rpc calls
-
-- Fixes
-
-  - Fix faulty url in networks config file
-  - Fix typings for strategy
-  - Update `neoscan.getMaxClaimAmount` to use `get_unclaimed` endpoint
-
 3.6.2
 =====
 

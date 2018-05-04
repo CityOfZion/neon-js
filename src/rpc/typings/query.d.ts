@@ -1,6 +1,5 @@
 import { Transaction } from '../../transactions/index'
 import { RPCRequest, RPCResponse } from './rpc'
-import { AxiosRequestConfig } from 'axios';
 
 /**
 * A Query object helps us to construct and record requests
@@ -12,7 +11,7 @@ export class Query {
   parseWith(parser: Function): this
 
   /** Executes the Query by sending the RPC request to the provided net. */
-  execute(url: string, config: AxiosRequestConfig): Promise<RPCResponse | any>
+  execute(url: string): Promise<RPCResponse | any>
 
   /** Gets the state of an account given an address. */
   static getAccountState(addr: string): Query
@@ -78,4 +77,4 @@ export class Query {
   static validateAddress(addr: string): Query
 }
 
-export function queryRPC(url: string, req: RPCRequest, config: AxiosRequestConfig): Promise<any>
+export function queryRPC(url: string, req: RPCRequest): Promise<any>

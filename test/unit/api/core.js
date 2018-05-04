@@ -1,7 +1,7 @@
 import * as core from '../../../src/api/core'
 import { neonDB, neoscan } from '../../../src/api'
 import { Transaction, signTransaction, getTransactionHash } from '../../../src/transactions'
-import { Account, Balance, Claims } from '../../../src/wallet'
+import { Account, Balance } from '../../../src/wallet'
 import { DEFAULT_RPC } from '../../../src/consts'
 import { Fixed8 } from '../../../src/utils'
 import testKeys from '../testKeys.json'
@@ -293,33 +293,6 @@ describe('Core API', function () {
             'net',
             'address',
             'balance'
-          ])
-        })
-    })
-  })
-
-  describe('fillClaims', function () {
-    it('does not call getClaims when claims exist', () => {
-      const expectedClaims = new Claims()
-      const config = {
-        net: 'RandomNet',
-        address: testKeys.b.address,
-        claims: expectedClaims
-      }
-      return core.fillClaims(config)
-        .then(conf => {
-          conf.claims.should.equal(expectedClaims)
-        })
-    })
-
-    it('calls getClaims when claims is not available', () => {
-      const config = Object.assign({}, baseConfig)
-      return core.fillClaims(config)
-        .then(conf => {
-          conf.should.have.keys([
-            'net',
-            'address',
-            'claims'
           ])
         })
     })

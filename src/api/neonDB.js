@@ -1,16 +1,14 @@
 import axios from 'axios'
 import { Account, Balance, Claims } from '../wallet'
 import { Transaction, TxAttrUsage } from '../transactions'
-import { RPCClient, Query } from '../rpc'
+import { Query } from '../rpc'
 import { ASSET_ID } from '../consts'
 import { Fixed8, reverseHex } from '../utils'
-import { networks, httpsOnly, timeout } from '../settings'
+import { networks, httpsOnly } from '../settings'
 import logger from '../logging'
 
 const log = logger('api')
 export const name = 'neonDB'
-
-var cachedRPC = null
 /**
  * API Switch for MainNet and TestNet
  * @param {string} net - 'MainNet', 'TestNet', or custom neon-wallet-db URL.
@@ -104,20 +102,7 @@ export const getRPCEndpoint = net => {
         }
       }
       if (nodes.length === 0) throw new Error('No eligible nodes found!')
-      var urls = nodes.map(n => n.url)
-      if (urls.includes(cachedRPC)) {
-        return new RPCClient(cachedRPC).ping().then(num => {
-          if (num <= timeout.ping) return cachedRPC
-          cachedRPC = null
-          return getRPCEndpoint(net)
-        })
-      }
-      var clients = urls.map(u => new RPCClient(u))
-      return Promise.race(clients.map(c => c.ping().then(_ => c.net)))
-    })
-    .then(fastestUrl => {
-      cachedRPC = fastestUrl
-      return fastestUrl
+      return nodes[Math.floor(Math.random() * nodes.length)].url
     })
 }
 

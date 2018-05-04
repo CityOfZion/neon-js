@@ -3,7 +3,6 @@ import { isAddress } from '../wallet'
 import semver from 'semver'
 import { RPC_VERSION, DEFAULT_RPC, NEO_NETWORK } from '../consts'
 import logger from '../logging'
-import { timeout } from '../settings'
 
 const log = logger('rpc')
 
@@ -34,8 +33,6 @@ class RPCClient {
      */
 
     this.history = []
-    this.lastSeenHeight = 0
-    this._latencies = []
 
     /**
      * Version of this client. Used to check if RPC call is implemented.
@@ -53,57 +50,25 @@ class RPCClient {
     return 'RPC Client'
   }
 
-  get latency () {
-    if (this._latencies.length === 0) return 99999
-    return Math.floor(this._latencies.reduce((p, c) => p + c, 0) / this._latencies.length)
-  }
-
-  set latency (lat) {
-    if (this._latencies.length > 4) this._latencies.shift()
-    this._latencies.push(lat)
-  }
-
-  /**
-   * Measures the latency using getBlockCount call. Returns the current latency. For average, call this.latency
-   * @returns {number}
-   */
-  ping () {
-    const timeStart = Date.now()
-    var query = Query.getBlockCount()
-    return this.execute(query, { timeout: timeout.ping })
-      .then(res => {
-        this.lastSeenHeight = res.result
-        const newPing = Date.now() - timeStart
-        this.latency = newPing
-        return newPing
-      })
-      .catch(_ => {
-        this.latency = timeout.ping
-        return timeout.ping
-      })
-  }
-
   /**
    * Takes an Query object and executes it. Adds the Query object to history.
    * @param {Query} query
-   * @param {AxiosRequestConfig} config
    * @return {Promise<any>}
    */
-  execute (query, config) {
+  execute (query) {
     this.history.push(query)
     log.info(`RPC: ${this.net} executing Query[${query.req.method}]`)
-    return query.execute(this.net, config)
+    return query.execute(this.net)
   }
 
   /**
    * Creates a query with the given req and immediately executes it.
    * @param {object} req
-   * @param {AxiosRequestConfig} config
    * @return {Promise<any>}
    */
-  query (req, config) {
+  query (req) {
     const query = new Query(req)
-    return this.execute(query, config)
+    return this.execute(query)
   }
 
   /**
