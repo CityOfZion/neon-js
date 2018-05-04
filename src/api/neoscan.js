@@ -2,11 +2,14 @@ import axios from 'axios'
 import { Balance, Claims } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Fixed8 } from '../utils'
-import { networks, httpsOnly } from '../settings'
+import { networks, httpsOnly, timeout } from '../settings'
 import logger from '../logging'
+import RPCClient from '../rpc/client'
 
 const log = logger('api')
 export const name = 'neoscan'
+
+var cachedRPC = null
 
 /**
  * Returns the appropriate NeoScan endpoint.
@@ -38,10 +41,21 @@ export const getRPCEndpoint = net => {
       }
     }
     if (nodes.length === 0) throw new Error('No eligible nodes found!')
-    const selectedURL = nodes[Math.floor(Math.random() * nodes.length)].url
-    log.info(`Best node from neoscan ${net}: ${selectedURL}`)
-    return selectedURL
+    var urls = nodes.map(n => n.url)
+    if (urls.includes(cachedRPC)) {
+      return new RPCClient(cachedRPC).ping().then(num => {
+        if (num <= timeout.ping) return cachedRPC
+        cachedRPC = null
+        return getRPCEndpoint(net)
+      })
+    }
+    var clients = urls.map(u => new RPCClient(u))
+    return Promise.race(clients.map(c => c.ping().then(_ => c.net)))
   })
+    .then(fastestUrl => {
+      cachedRPC = fastestUrl
+      return fastestUrl
+    })
 }
 
 /**
@@ -90,7 +104,7 @@ export const getClaims = (net, address) => {
  */
 export const getMaxClaimAmount = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
-  return axios.get(apiEndpoint + '/v1/get_claimable/' + address).then(res => {
+  return axios.get(apiEndpoint + '/v1/get_unclaimed/' + address).then(res => {
     log.info(
       `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neoscan ${net}`
     )
