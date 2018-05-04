@@ -1,8 +1,8 @@
-import { Account, getScriptHashFromAddress, generatePrivateKey } from '../wallet'
+import { Account, getScriptHashFromAddress, generateRandomArray } from '../wallet'
 import { ASSET_ID } from '../consts'
 import { Query } from '../rpc'
 import { Transaction, TransactionOutput, TxAttrUsage } from '../transactions'
-import { reverseHex } from '../utils'
+import { reverseHex, ab2hexstring } from '../utils'
 import { loadBalance } from './switch'
 import logger from '../logging'
 
@@ -376,7 +376,7 @@ const attachAttributesForEmptyTransaction = config => {
   if (config.tx.inputs.length === 0 && config.tx.outputs.length === 0) {
     config.tx.addAttribute(TxAttrUsage.Script, reverseHex(getScriptHashFromAddress(config.address)))
     // This adds some random bits to the transaction to prevent any hash collision.
-    config.tx.addRemark(Date.now().toString() + generatePrivateKey().substr(0, 8))
+    config.tx.addRemark(Date.now().toString() + ab2hexstring(generateRandomArray(4)))
   }
   return Promise.resolve(config)
 }
