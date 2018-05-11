@@ -2,7 +2,7 @@ import axios from 'axios'
 import { serializeTransaction } from '../transactions'
 import { DEFAULT_REQ } from '../consts'
 import logger from '../logging'
-import {timeout} from '../settings'
+import { timeout } from '../settings'
 
 const log = logger('rpc')
 
@@ -315,10 +315,12 @@ export default Query
  * @returns {Promise<Response>} RPC Response
  */
 export const queryRPC = (url, req, config) => {
-  const jsonRequest = axios.create({ headers: {
-    'Content-Type': 'application/json',
+  const jsonRequest = axios.create({
+    headers: {
+      'Content-Type': 'application/json'
+    },
     timeout: timeout.rpc
-  } })
+  })
   const jsonRpcData = Object.assign({}, DEFAULT_REQ, req)
   return jsonRequest.post(url, jsonRpcData, config).then((response) => {
     return response.data
