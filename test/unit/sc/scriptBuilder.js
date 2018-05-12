@@ -108,6 +108,5 @@ describe('ScriptBuilder', function () {
       result.length.should.equal(2)
       result.should.eql(expected)
     })
-
   })
 })

@@ -82,3 +82,23 @@ Transactions are composed of the following parts:
 7. Exclusive Data (unique to each transaction type)
 
   Various data required for each transaction. For example, a ClaimTransaction will have the ``claims`` field which contains all claimable transactions. An InvocationTransaction will have the ``script`` field instead for smart contract invocation.
+
+## Calculation Strategies
+
+You may specify the calculation strategy used when calculating inputs. The strategy determines how inputs are chosen to meet the intents. For example, in a wallet with inputs of 1,2,3,4 and 5 NEO, there are many ways to fill an intent of 3 NEO. We can either fill it exactly with the 5 NEO input, or choose to use the smallest possible inputs so as to slowly consolidate our coins.
+
+Currently, the only way to do that is to set the default strategy in settings.
+
+There are 3 strategies to choose from. They are:
+
+1. `balancedApproach`. This is the default strategy. It tried to find an single input that matches the entire output. Failing that, it chooses the largest possible input that fits within the output before filling the rest of the requirement. Taking the example above, we will choose the 3 NEO coin immediately as it fits the output exactly.
+
+2. `largestFirst`. As the name suggests, the intent is filled starting with the largest input available. Here, we will choose the 5 NEO coin, constructing a change output of 2 NEO.
+
+3. `smallestFirst`. We fill the intent starting with the smallest input available. We will choose the inputs 1 and 2 NEO to fill the intent fo 3 NEO.
+
+```js
+import {settings, tx} from '@cityofzion/neon-js'
+
+settings.defaultCalculationStrategy = tx.calculationStrategy.smallestFirst
+```

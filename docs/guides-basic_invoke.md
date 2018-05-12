@@ -87,31 +87,8 @@ A high-level example of a response:
 }
 ```
 
-## Circumventing asset-less transactions
+## About asset-less transactions
 
-In our example above, we sent 1 GAS alongside our invocation as a fee. As described [here](http://docs.neo.org/en-us/sc/systemfees.html#smart-contract-fees), transactions with a cost under 10 GAS are essentially free.
+Currently, the fees for transactions are zero, making it possible for us to send transactions that are without any assets attached to them. This is done through attching an extra `Script` attribute. The value of this attribute is the scripthash of your address. This ties the transaction to an address so that the node knows who the signature came from.
 
-So our `gas` field should stay 0 if your calculated fee remains below 10 GAS. You can determine this cost with an `invokeScript` RPC as we did [here](basic_createscript.html), evaluating the `gas_consumed` field in the response object.
-
-Without the fee, we may end up with a transaction that involves zero assets. Unfortunately for us, the NEO nodes will reject any transaction with zero assets attached.
-
-The workaround is to attach assets and send it back to your own address.The smallest available asset is 0.00000001 GAS. This will allow us to successfully register the blockchain without wasting any assets.
-
-```js
-import Neon, { CONST } from '@cityofzion/neon-js';
-
-const intents = [
-  {
-    assetId: CONST.ASSET_ID.GAS,
-    value: 0.00000001,
-    scriptHash: Neon.get.scriptHashFromAddress(account.address)
-  }
-];
-
-// Add to config
-config.intents = intents;
-
-Neon.doInvoke(config).then(res => {
-  console.log(res);
-});
-```
+However, you will realise that without transaction inputs, it results in the possibility of collisions for transactions hashes. This is solved by attaching a nonce in the form of a remark. In `neon-js`, the `doInvoke` method detects if there are no assets attached and inserts the nonce. This nonce is crafted using a random hexstring with the current timestamp.

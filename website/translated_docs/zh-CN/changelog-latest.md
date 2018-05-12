@@ -3,6 +3,15 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.7.1
+=====
+
+- Fixes
+
+  - Fix scriptBuilder to ScriptParams error parsing nonce
+  - Use generateRandomArray in attachAttributes
+  - Fix timeout setting for api calls
+
 3.7.0
 =====
 
