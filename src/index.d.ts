@@ -34,9 +34,10 @@ declare const semantic: {
   is: {
     address: (address: string) => boolean
     publicKey: (key: string, encode?: boolean) => boolean
-    encryptedKey: (bep2: string) => string
-    privateKey: (key: string) => string
-    wif: (wif: string) => string
+    encryptedKey: (nep2: string) => boolean
+    privateKey: (key: string) => boolean
+    wif: (wif: string) => boolean
+    scriptHash: (scriptHash: string) => boolean
   }
   encrypt: {
     privateKey: (wifKey: string, keyphrase: string) => string
