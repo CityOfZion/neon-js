@@ -6,7 +6,8 @@
     "publish-gh-pages": "./node_modules/.bin/docusaurus-publish",
     "write-translations": "./node_modules/.bin/docusaurus-write-translations",
     "version": "./node_modules/.bin/docusaurus-version",
-    "rename-version": "./node_modules/.bin/docusaurus-rename-version"
+    "rename-version": "./node_modules/.bin/docusaurus-rename-version",
+    "update-neon": "node update.js"
   },
   "devDependencies": {
     "docusaurus": "^1.0.15"
