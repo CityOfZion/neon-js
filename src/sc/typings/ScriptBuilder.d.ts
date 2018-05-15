@@ -29,8 +29,8 @@ export class ScriptBuilder extends StringStream {
   /** Appends args, operation and scriptHash */
   emitAppCall(
     scriptHash: string,
-    operation: string,
-    args: Array<any> | string | number | boolean,
+    operation?: string,
+    args?: Array<any> | string | number | boolean,
     useTailCall?: boolean): this
 
   /** Appends a SysCall */
