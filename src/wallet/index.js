@@ -24,7 +24,8 @@ export default {
     publicKey: verify.isPublicKey,
     encryptedKey: verify.isNEP2,
     privateKey: verify.isPrivateKey,
-    wif: verify.isWIF
+    wif: verify.isWIF,
+    scriptHash: verify.isScriptHash
   },
   encrypt: {
     privateKey: nep2.encrypt

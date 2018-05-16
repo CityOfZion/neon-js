@@ -59,7 +59,7 @@ class Query {
    * @param {AxiosRequestConfig} config - Request configuration
    * @return {Response|any}
    */
-  execute (url, config) {
+  execute (url, config = {}) {
     if (this.completed) throw new Error('This request has been sent')
     return queryRPC(url, this.req, config)
       .then((res) => {
@@ -314,7 +314,7 @@ export default Query
  * @param {AxiosRequestConfig} config - Configuration to pass down to axios
  * @returns {Promise<Response>} RPC Response
  */
-export const queryRPC = (url, req, config) => {
+export const queryRPC = (url, req, config = {}) => {
   const jsonRequest = axios.create({
     headers: {
       'Content-Type': 'application/json'
