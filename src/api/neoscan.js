@@ -36,7 +36,7 @@ export const getRPCEndpoint = net => {
       if (node.height > bestHeight) {
         bestHeight = node.height
         nodes = [node]
-      } else if (node.height === bestHeight) {
+      } else if (node.height + 1 >= bestHeight) {
         nodes.push(node)
       }
     }
