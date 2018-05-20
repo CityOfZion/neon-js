@@ -1,23 +1,12 @@
+# Globally ignored folder names
 node_modules
-/.npmignore
-/.project
-/.settings/
-
-
-/docs/_build/
+coverage
+.nyc_output
 build
 
 # Logs
 *.log
 
-# Coverage
-/.nyc_output
-/coverage
-
 # IDE specific
 /.vscode
 .idea
-
-# Packages
-
-/packages/**/coverage
