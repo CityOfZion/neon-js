@@ -1,6 +1,5 @@
 import * as neonDB from './neonDB'
 import * as cmc from './coinmarketcap'
-import * as nep5 from './nep5'
 import * as neoscan from './neoscan'
 import * as core from './core'
 /**
@@ -27,10 +26,7 @@ export default {
     prices: cmc.getPrices,
     balance: neonDB.getBalance,
     claims: neonDB.getClaims,
-    transactionHistory: neonDB.getTransactionHistory,
-    tokenBalance: nep5.getTokenBalance,
-    tokenInfo: nep5.getTokenInfo,
-    token: nep5.getToken
+    transactionHistory: neonDB.getTransactionHistory
   },
   do: {
     sendAsset: neonDB.doSendAsset,
@@ -44,4 +40,4 @@ export default {
 
 export * from './core'
 export * from './switch'
-export { neonDB, cmc, nep5, neoscan }
+export { neonDB, cmc, neoscan }
