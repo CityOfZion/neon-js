@@ -3,6 +3,6 @@
     "strict": true
   },
     "include": [
-        "src/**/*.d.ts"
+        "./packages/**/src/**/*.d.ts"
     ]
 }

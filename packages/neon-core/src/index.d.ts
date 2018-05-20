@@ -10,8 +10,10 @@ import * as sc from './sc'
 import * as tx from './transactions'
 import * as wallet from './wallet'
 import * as u from './utils'
+import * as logging from './logging'
+import * as settings from './settings'
 
-export { api, CONST, rpc, sc, tx, wallet, u }
+export { api, CONST, rpc, sc, tx, wallet, u, logging, settings }
 
 
 declare const semantic: {

@@ -17,3 +17,7 @@ build
 # IDE specific
 /.vscode
 .idea
+
+# Packages
+
+/packages/**/coverage

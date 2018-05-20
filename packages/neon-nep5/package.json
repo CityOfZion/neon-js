@@ -1,0 +1,47 @@
+{
+  "name": "@cityofzion/neon-nep5",
+  "description": "Neon-NEP5 Module",
+  "version": "3.7.2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CityOfZion/neon-js.git"
+  },
+  "keywords": ["neo", "antshares", "javascript", "libraries"],
+  "author":
+    "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "src/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint src/**/*.ts __tests__/**/*.ts __integration__/**/*.ts",
+    "lint:fix": "tslint src/**/*.ts --fix",
+    "prepublishOnly": "yarn lint && yarn build",
+    "pretty": "prettier",
+    "test": "jest --coverage",
+    "test:unit": "jest ./__tests/.*",
+    "test:integration": "jest ./__integration__/.*"
+  },
+  "devDependencies": {
+    "@cityofzion/neon-core": "^3.7.2",
+    "@types/jest": "^22.2.3",
+    "jest": "^22.4.4",
+    "ts-jest": "^22.4.6",
+    "tslint": "^5.10.0",
+    "typescript": "^2.8.3"
+  },
+  "peerDependencies": {
+    "@cityofzion/neon-core": "^3.7.2"
+  },
+  "files": ["lib/", "src/"],
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex":
+      "(/__(tests|integration)__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "collectCoverage": true,
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
+  }
+}

@@ -1,7 +1,44 @@
 {
-	"devDependencies": {
-		"lerna": "^2.11.0"
-  },
-  "private": true,
-  "workspaces": ["packages/*"]
+   "devDependencies": {
+      "@babel/core": "^7.0.0-beta.46",
+      "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.46",
+      "@babel/polyfill": "^7.0.0-beta.46",
+      "@babel/preset-env": "^7.0.0-beta.46",
+      "@babel/register": "^7.0.0-beta.46",
+      "axios-mock-adapter": "^1.15.0",
+      "babel-loader": "^8.0.0-beta.0",
+      "babel-plugin-istanbul": "^4.1.6",
+      "chai": "^4.0.2",
+      "chai-as-promised": "^7.1.0",
+      "clean-webpack-plugin": "^0.1.19",
+      "cross-env": "^5.1.4",
+      "eslint": "^4.19.1",
+      "eslint-config-standard": "^11.0.0",
+      "eslint-plugin-import": "^2.11.0",
+      "eslint-plugin-node": "^6.0.1",
+      "eslint-plugin-promise": "^3.7.0",
+      "eslint-plugin-standard": "^3.1.0",
+      "lerna": "^2.11.0",
+      "mocha": "^5.1.1",
+      "nyc": "^11.7.1",
+      "prettier": "^1.12.1",
+      "tslint": "^5.10.0",
+      "tslint-config-prettier": "^1.12.0",
+      "typescript": "^2.8.3",
+      "webpack": "^4.6.0",
+      "webpack-cli": "^2.1.2"
+   },
+   "private": true,
+   "workspaces": [
+      "packages/*"
+   ],
+   "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex":
+      "(/packages/.*/__(tests|integration)__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "collectCoverage": true,
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
+  }
 }
