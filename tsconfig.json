@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "strict": true
-  },
-    "include": [
-        "./packages/**/src/**/*.d.ts"
-    ]
+    "target": "ES6",
+    "module": "commonjs",
+    "declaration": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "sourceMap":true
+  }
 }

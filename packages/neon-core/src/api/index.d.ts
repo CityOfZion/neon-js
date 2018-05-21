@@ -6,7 +6,6 @@ export * from './typings/core';
 export * from './typings/switch';
 export {
   cmc,
-  nep5,
   neonDB,
   neoscan,
 }
