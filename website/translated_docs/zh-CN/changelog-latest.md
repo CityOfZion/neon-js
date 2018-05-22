@@ -3,6 +3,21 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.8.0
+=====
+
+- Transactions
+
+  - Transactions now support attaching fees
+
+- API
+
+  - Neoscan `getTransactionHistory` is updated to use a paginated endpoint. It currently only supports a single page but it should speed up loading by a significant amount. The downside is that it will not return the full history.
+
+- Fixes
+
+  - `getRPCEndpoint` is adjusted to also return RPCs that are only 1 block behind the best height. This reduces the load on a single RPC on the chance that only 1 endpoint has the best height. This should increase RPC reliability while not sacrificing too much in terms of information.
+
 3.7.3
 =====
 
