@@ -25,6 +25,14 @@ const Deserialize = serializedArray => {
       if (hasChildren) {
         if (_result.type === 'Array' || _result.type === 'Struct') {
           _result.value.push(stackItemIterator())
+        } else if (_result.type === 'Map') {
+          // Map is basically JSON, each entry has 2 values (first is the key, second the actual value)
+          // But both key and value will be StackItems, we'll store them as an array of key-value pairs...
+          // until we have a better solution of course
+          _result.value.push({
+            key: stackItemIterator(),
+            value: stackItemIterator()
+          })
         }
       } else if (!hasChildren) {
         if (_result.type === 'Boolean') {
@@ -82,7 +90,7 @@ const setResultBase = byte => {
   const type = determineType(byte)
   let value
 
-  if (type === 'Array' || type === 'Struct') {
+  if (type === 'Array' || type === 'Struct' || type === 'Map') {
     value = []
   } else if (type === 'Boolean') {
     // Initializing boolean to undefined, because we'd never use a push or += equivalent with booleans
