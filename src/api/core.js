@@ -167,6 +167,7 @@ export const fillClaims = config => {
 export const createTx = (config, txType) => {
   if (config.tx) return config
   if (typeof txType === 'string') txType = txType.toLowerCase()
+  if (!config.fees) config.fees = 0
   let tx
   switch (txType) {
     case 'claim':
@@ -177,13 +178,13 @@ export const createTx = (config, txType) => {
     case 'contract':
     case 128:
       checkProperty(config, 'balance', 'intents')
-      tx = Transaction.createContractTx(config.balance, config.intents, config.override)
+      tx = Transaction.createContractTx(config.balance, config.intents, config.override, config.fees)
       break
     case 'invocation':
     case 209:
       checkProperty(config, 'balance', 'gas', 'script')
       if (!config.intents) config.intents = []
-      tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas, config.override)
+      tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas, config.override, config.fees)
       break
     default:
       return Promise.reject(new Error(`Tx Type not found: ${txType}`))

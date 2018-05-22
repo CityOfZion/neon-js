@@ -106,16 +106,17 @@ class Transaction {
    * @param {Balance} balances - Current assets available.
    * @param {TransactionOutput[]} intents - All sending intents as TransactionOutputs
    * @param {Object} [override={}] - Optional overrides (eg.custom versions)
+   * @param {number|Fixed8} [fees]
    * @return {Transaction} Unsigned Transaction
    */
-  static createContractTx (balances, intents, override = {}) {
+  static createContractTx (balances, intents, override = {}, fees = 0) {
     if (intents === null) throw new Error('Useless transaction! You are not sending anything!')
     const txConfig = Object.assign({
       type: 128,
       version: TX_VERSION.CONTRACT,
       outputs: intents
     }, override)
-    const tx = new Transaction(txConfig).calculate(balances)
+    const tx = new Transaction(txConfig).calculate(balances, null, fees)
     log.info(`New ContractTransaction for ${balances.address}`)
     return tx
   }
@@ -127,9 +128,10 @@ class Transaction {
    * @param {object|string} invoke - Invoke Script as an object or hexstring
    * @param {number} gasCost - Gas to attach for invoking script
    * @param {object} [override={}] - Optional overrides (eg.custom versions)
+   * @param {number|Fixed8} [fees]
    * @return {Transaction} Unsigned Transaction
    */
-  static createInvocationTx (balances, intents, invoke, gasCost = 0, override = {}) {
+  static createInvocationTx (balances, intents, invoke, gasCost = 0, override = {}, fees = 0) {
     if (intents === null) intents = []
     const txConfig = Object.assign({
       type: 209,
@@ -138,7 +140,7 @@ class Transaction {
       script: typeof (invoke) === 'string' ? invoke : createScript(invoke),
       gas: gasCost
     }, override)
-    const tx = new Transaction(txConfig).calculate(balances)
+    const tx = new Transaction(txConfig).calculate(balances, null, fees)
     log.info(`New InvocationTransaction for ${balances.address}`)
     return tx
   }
@@ -198,10 +200,11 @@ class Transaction {
    * Calculate the inputs required based on existing outputs provided. Also takes into account the fees required through the gas property.
    * @param {Balance} balance - Balance to retrieve inputs from.
    * @param {function} strategy
+   * @param {number|Fixed8} fees
    * @return {Transaction} this
    */
-  calculate (balance, strategy = null) {
-    const { inputs, change } = core.calculateInputs(balance, this.outputs, this.gas, strategy)
+  calculate (balance, strategy = null, fees = 0) {
+    const { inputs, change } = core.calculateInputs(balance, this.outputs, this.gas, strategy, fees)
     this.inputs = inputs
     this.outputs = this.outputs.concat(change)
     balance.applyTx(this)

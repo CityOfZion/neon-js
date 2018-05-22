@@ -36,7 +36,7 @@ export const getRPCEndpoint = net => {
       if (node.height > bestHeight) {
         bestHeight = node.height
         nodes = [node]
-      } else if (node.height === bestHeight) {
+      } else if (node.height + 1 >= bestHeight) {
         nodes.push(node)
       }
     }
@@ -156,44 +156,25 @@ export const getWalletDBHeight = net => {
 export const getTransactionHistory = (net, address) => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios
-    .get(apiEndpoint + '/v1/get_address_neon/' + address)
+    .get(apiEndpoint + '/v1/get_last_transactions_by_address/' + address)
     .then(response => {
       log.info(`Retrieved History for ${address} from neoscan ${net}`)
-      return parseTxHistory(response.data.txids)
+      return parseTxHistory(response.data, address)
     })
 }
 
-/* eslint-disable camelcase */
-const parseTxHistory = rawTxs => {
-  const txs = []
-  const lastItem = rawTxs.length - 1
-  rawTxs.forEach((tx, ind) => {
-    let change
-    if (ind !== lastItem) {
-      const prevTx = rawTxs[ind + 1]
-      const currBal = flattenBalance(tx.balance)
-      const prevBal = flattenBalance(prevTx.balance)
-      change = {
-        NEO: new Fixed8(currBal.NEO || 0).minus(prevBal.NEO || 0),
-        GAS: new Fixed8(currBal.GAS || 0).minus(prevBal.GAS || 0)
-      }
-    } else {
-      let symbol = tx.asset_moved === ASSET_ID.NEO ? 'NEO' : 'GAS'
-      change = { [symbol]: new Fixed8(tx.amount_moved) }
+function parseTxHistory (rawTxs, address) {
+  return rawTxs.map(tx => {
+    const vin = tx.vin.filter(i => i.address_hash === address)
+    const vout = tx.vouts.filter(o => o.address_hash === address)
+    const change = {
+      NEO: vin.filter(i => i.asset === ASSET_ID.NEO).reduce((p, c) => p.add(c.value), new Fixed8(0)),
+      GAS: vout.filter(i => i.asset === ASSET_ID.GAS).reduce((p, c) => p.add(c.value), new Fixed8(0))
     }
-    txs.push({
+    return {
       txid: tx.txid,
-      blockHeight: tx.block_height,
+      blockHeight: new Fixed8(tx.block_height),
       change
-    })
+    }
   })
-  return txs
-}
-/* eslint-enable camelcase */
-
-const flattenBalance = balance => {
-  return balance.reduce((bal, asset) => {
-    bal[asset.asset] = new Fixed8(asset.amount)
-    return bal
-  }, {})
 }

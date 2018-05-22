@@ -99,7 +99,8 @@ export const getRPCEndpoint = net => {
         if (node.block_height > bestHeight) {
           bestHeight = node.block_height
           nodes = [node]
-        } else if (node.block_height === bestHeight) {
+          // Tolerance of 1 blocks to increase our choices and not spam down the best node
+        } else if (node.block_height + 1 >= bestHeight) {
           nodes.push(node)
         }
       }
