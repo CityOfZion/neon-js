@@ -81,12 +81,15 @@ const setResultBase = byte => {
 
   if (type === 'Array' || type === 'Struct') {
     value = []
-  } else if (type === 'ByteArray' || type === 'Integer') {
-    value = '' // Integer = bigInt aka hexstring
-  } else {
+  } else if (type === 'Boolean') {
     // Initializing boolean to undefined, because we'd never use a push or += equivalent with booleans
     value = undefined
+  } else {
+    // if (type === 'ByteArray' || type === 'Integer') {
+    value = '' // Integer = bigInt aka hexstring
   }
+
+  // TODO: Map
 
   return { type, value }
 }
