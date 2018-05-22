@@ -1,30 +1,44 @@
 import Deserialize from '../../../src/sc/Deserialize'
 import { hexstring2str, reverseHex } from '../../../src/utils'
 
+import serializedData from './serializedData.json'
+
 describe('Deserialize', () => {
-  it('should pass with array', () => {
-    const toDeserialize = '800300126d65737361676520746f206d7973656c66210204438ffc5a001423ba2703c53263e8d6e522dc32203339dcd8eee9'
+  it('ByteArray', () => {
+    const toSerialize = serializedData.byteArray
+    const d = Deserialize(toSerialize)
 
-    const d = Deserialize(toDeserialize)
-    d.value.forEach(v => {
-      if (v.type === 'Integer') console.warn(parseInt(reverseHex(v.value), 16))
-      else console.warn(hexstring2str(v.value))
-    })
-
-    d.type.should.eql('Array')
-    d.value.length.should.eql(3)
+    d.type.should.eql('ByteArray')
+    hexstring2str(d.value).should.eql('message to myself!')
   })
 
-  it('should pass with nested large bytearray', () => {
-    const toDeserialize = '800300fdfd00617366617366617366617366617366617320666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173666173206661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661736661207366617366743235330204e20aff5a001486d0b148dd9c0b5cd2382428d3cd0fd0969aade4'
+  it('Integer', () => {
+    const toSerialize = serializedData.integer
+    const d = Deserialize(toSerialize)
 
-    const d = Deserialize(toDeserialize)
-    d.value.forEach(v => {
-      if (v.type === 'Integer') console.warn(parseInt(reverseHex(v.value), 16))
-      else console.warn(hexstring2str(v.value))
-    })
+    d.type.should.eql('Integer')
+    parseInt(reverseHex(d.value), 16).toString().should.eql('1526501187')
+  })
+
+  it('Array', () => {
+    const toSerialize = serializedData.array
+    const d = Deserialize(toSerialize)
 
     d.type.should.eql('Array')
-    d.value.length.should.eql(3)
+    d.value.length.should.eql(2)
+    d.value[0].type.should.eql('ByteArray')
+    d.value[1].type.should.eql('Integer')
+    hexstring2str(d.value[0].value).should.eql('message to myself!')
+    parseInt(reverseHex(d.value[1].value), 16).toString().should.eql('1526501187')
   })
+
+  it('longString (length > 0xFD)', () => {
+    const toSerialize = serializedData.longString
+    const d = Deserialize(toSerialize)
+
+    d.type.should.eql('ByteArray')
+    hexstring2str(d.value).should.eql('asfasfasfasfasfas fasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfas fasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfasfa sfasft253')
+  })
+
+  // TODO: booleans, structs, maps, even longer strings
 })
