@@ -97,3 +97,22 @@ import {settings, tx} from '@cityofzion/neon-js'
 
 settings.defaultCalculationStrategy = tx.calculationStrategy.smallestFirst
 ```
+
+## Fees
+
+Attaching fees is supported as the last argument in both creating transactions and also calculating. Fees work by having more GAS inputs than outputs. The difference between the inputs and the outputs are taken as fees. Fees first contribute towards system fees (eg. transaction costs, etc). Any excess will be considered as network fees and are used to prioritise transactions.
+
+In the case of InvocationTransactions, the fees paid for running the smart contract is indicated by a separate field. So there are 3 fees available in InvocationTransactions: smart contract execution fees, system fees and network fees. Do note they are separate so any excess fees paid towards running the smart contract will not spill into system or network fees.
+
+```js
+import {tx} from '@cityofzion/neon-js'
+
+// This attaches a fee of 1 GAS.
+tx.Transaction.createContractTx(balances, intents, {}, 1)
+
+// Another way is to attach fees on calculation
+var newTx = new tx.Transaction()
+newTx.addIntent({})
+.calculate(balance, null, 1)
+
+```
