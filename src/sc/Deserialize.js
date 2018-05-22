@@ -1,4 +1,5 @@
 import StackItemType from './StackItemType'
+import { reverseHex } from './../utils'
 
 const Deserialize = serializedArray => {
   // Split into bytes of 2 characters
@@ -41,18 +42,20 @@ const Deserialize = serializedArray => {
   }
 
   const intIterator = () => {
-    const baseLength = setIteratedByte()
-    baseLength.toLowerCase()
-    if (baseLength === 'fd' || baseLength === 'fe' || baseLength === 'ff') {
-      let length = 0
-      const byteLength = determineByteLength(baseLength)
+    let length = ''
+    const base = setIteratedByte()
+    base.toLowerCase()
+    if (base === 'fd' || base === 'fe' || base === 'ff') {
+      const byteLength = determineByteLength(base)
       for (let i = 0; i < byteLength; i++) {
-        length += parseInt(setIteratedByte(), 16)
+        length += setIteratedByte()
       }
-      return length
+      length = reverseHex(length)
+    } else {
+      length += base
     }
 
-    return parseInt(baseLength, 16)
+    return parseInt(length, 16)
   }
 
   return stackItemIterator()
