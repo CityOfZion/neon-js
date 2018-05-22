@@ -80,7 +80,7 @@ const determineType = byte => StackItemType[byte]
 
 // Determine if there's a nested set based on type
 const determineChildren = type => {
-  if (type === 'Array' || type === 'Struct') return true
+  if (type === 'Array' || type === 'Struct' || type === 'Map') return true
   // TODO: map
   return false
 }
