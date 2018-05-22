@@ -1,6 +1,6 @@
 import { scriptParams } from './sc'
 import { TransactionAttribute, TransactionInput, TransactionOutput } from './transactions'
-import { apiConfig, AssetAmounts } from './api'
+import { apiConfig, AssetAmounts, PastTransaction } from './api'
 import { RPCRequest, RPCResponse } from './rpc'
 
 import * as api from './api'
@@ -16,7 +16,7 @@ export { api, CONST, rpc, sc, tx, wallet, u }
 
 declare const semantic: {
   create: {
-    account: (k: any) => Account
+    account: (k: any) => wallet.Account
     privateKey: () => string
     signature: (tx: string, privateKey: string) => string
     wallet: (k: any) => wallet.Wallet,
@@ -56,7 +56,7 @@ declare const semantic: {
     prices: (coins?: string[], currency?: string) => Promise<object>
     balance: (net: string, address: string) => Promise<wallet.Balance>
     claims: (net: string, address: string) => Promise<wallet.Claims>
-    transactionHistory: (net: string, address: string) => Promise<History>
+    transactionHistory: (net: string, address: string) => Promise<PastTransaction[]>
     tokenBalance: (net: string, scriptHash: string) => Promise<{ name: string, symbol: string, decimals: number, totalSupply: number }>
     tokenInfo: (net: string, scriptHash: string) => Promise<{ name: string, symbol: string, decimals: number, totalSupply: number }>
     transactionHash: (transaction: tx.Transaction) => string
