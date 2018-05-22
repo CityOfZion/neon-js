@@ -11,6 +11,7 @@ const Deserialize = serializedArray => {
   const setIteratedByte = () => {
     iterator++
     iteratedByte = byteArray[iterator]
+    return iteratedByte
   }
 
   const stackItemIterator = () => {
@@ -29,16 +30,20 @@ const Deserialize = serializedArray => {
           setIteratedByte()
           _result.value = parseInt(iteratedByte, 16) === 1 // if 1 => true, else => false
         } else {
+          setIteratedByte()
           // Integer = bigInt aka hexstring
-          _result.value += setIteratedByte()
+          _result.value += iteratedByte
         }
       }
     }
+
+    return _result
   }
 
   const intIterator = () => {
     const baseLength = setIteratedByte()
-    if (baseLength === 'FD' || baseLength === 'FE' || baseLength === 'FF') {
+    baseLength.toLowerCase()
+    if (baseLength === 'fd' || baseLength === 'fe' || baseLength === 'ff') {
       let length = 0
       const byteLength = determineByteLength(baseLength)
       for (let i = 0; i < byteLength; i++) {
@@ -54,9 +59,9 @@ const Deserialize = serializedArray => {
 }
 
 const determineByteLength = baseLength => {
-  if (baseLength === 'FD') return 2
-  else if (baseLength === 'FE') return 4
-  else if (baseLength === 'FF') return 8
+  if (baseLength === 'fd') return 2
+  else if (baseLength === 'fe') return 4
+  else if (baseLength === 'ff') return 8
 }
 
 // StackItemType getter
@@ -76,10 +81,8 @@ const setResultBase = byte => {
 
   if (type === 'Array' || type === 'Struct') {
     value = []
-  } else if (type === 'ByteArray') {
-    value = ''
-  } else if (type === 'Integer') {
-    value = 0
+  } else if (type === 'ByteArray' || type === 'Integer') {
+    value = '' // Integer = bigInt aka hexstring
   } else {
     // Initializing boolean to undefined, because we'd never use a push or += equivalent with booleans
     value = undefined
