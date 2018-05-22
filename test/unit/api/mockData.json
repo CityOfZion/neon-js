@@ -389,72 +389,140 @@
       }
     },
     "historyA": {
-      "url": "https://neoscan-testnet.io/api/test_net/v1/get_address_neon/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
-      "response": {
-        "txids": [
-          {
-            "txid": "b547578b13e0497def584ef3f3e37537114b53235e070bf1617aab597fa0e278",
-            "block_height": 1015666,
-            "balance": [
-              {
-                "asset": "GAS",
-                "amount": 20.04428929
-              },
-              {
-                "asset": "NEO",
-                "amount": 227
-              }
-            ],
-            "asset_moved": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-            "amount_moved": 20
-          },
-          {
-            "txid": "d9ef8a7db9ff2205853a6ac303673c1c17ba8064a584e1cce0a76f892306de06",
-            "block_height": 1015633,
-            "balance": [
-              {
-                "asset": "GAS",
-                "amount": 0.04428929
-              },
-              {
-                "asset": "NEO",
-                "amount": 227
-              }
-            ],
-            "asset_moved": "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-            "amount_moved": -1
-          }
-        ],
-        "tx_count": 2857,
-        "time": 1498983082,
-        "claimed": [
-          {
-            "txids": [
-              "f5648b71c5f50520920fad4fc704781fd8481b27b6b8899198e95bdc130b174d",
-              "70c432f737e22bdfd3b7716ab56c24c9f3bfb8adbd0143aa7d100ef65f0baf96"
-            ]
-          }
-        ],
-        "balance": [
-          {
-            "unspent": [
-              {
-                "value": 100,
-                "txid": "9a67d7d997f23cf2af13006cd4f626ee914be5056faf71ff289f8a73194d4985",
-                "n": 0
-              },
-              {
-                "value": 361.25574245,
-                "txid": "b5da25576457dc93cf3c832b114deda6718f4cf2dc58cac24f7476065dd9edef",
-                "n": 1
-              }
-            ],
-            "asset": "GAS",
-            "amount": 461.57312209
-          }
-        ],
-        "address": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+      "url": "https://neoscan-testnet.io/api/test_net/v1/get_last_transactions_by_address/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+      "response": [
+        {
+    "vouts": [
+      {
+        "value": 1e-8,
+        "transaction_id": 1004968,
+        "asset": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+        "address_hash": "Abaj1T8mN5TN2vEmcvZv828tTQe1LpXALv"
+      },
+      {
+        "value": 0.00215131,
+        "transaction_id": 1004968,
+        "asset": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+        "address_hash": "AV7rCk3YjxRGnyhAqpJXgp8GCe71rbWyrM"
       }
+    ],
+    "vin": [
+      {
+        "value": 0.00215132,
+        "txid": "e8c3aad2e0ac8c9b0e75414331b4924dc9b5a4afb9749bd852a4b4bf0834b157",
+        "n": 1,
+        "asset": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+        "address_hash": "AV7rCk3YjxRGnyhAqpJXgp8GCe71rbWyrM"
+      }
+    ],
+    "type": "InvocationTransaction",
+    "txid": "163ed0441ac207e73c1cbfc69c95ad0924c822903af7279d9237873123dc5827",
+    "transfers": [
+      {
+        "txid": "163ed0441ac207e73c1cbfc69c95ad0924c822903af7279d9237873123dc5827",
+        "time": 1512270331,
+        "contract": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+        "block_height": 837462,
+        "amount": 300000000,
+        "address_to": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+        "address_from": "AV7rCk3YjxRGnyhAqpJXgp8GCe71rbWyrM"
+      }
+    ],
+    "time": 1512270331,
+    "sys_fee": "0",
+    "size": 342,
+    "net_fee": "0",
+    "id": 1004968,
+    "claims": null,
+    "block_height": 837462,
+    "block_hash": "b3a841b7379e0d207bc844a7bd86985b03d539a2fa71d8649bed97e6be5ba3ce",
+    "asset": null
+  },
+  {
+    "vouts": [
+      {
+        "value": 1e-8,
+        "transaction_id": 1004789,
+        "asset": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+        "address_hash": "Abaj1T8mN5TN2vEmcvZv828tTQe1LpXALv"
+      },
+      {
+        "value": 0.00215132,
+        "transaction_id": 1004789,
+        "asset": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+        "address_hash": "AV7rCk3YjxRGnyhAqpJXgp8GCe71rbWyrM"
+      }
+    ],
+    "vin": [
+      {
+        "value": 0.00215133,
+        "txid": "25ae2f7486113b2ab461d4368f3fe0e48569074bc0b16a8e26068446ca912a69",
+        "n": 1,
+        "asset": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+        "address_hash": "AV7rCk3YjxRGnyhAqpJXgp8GCe71rbWyrM"
+      }
+    ],
+    "type": "InvocationTransaction",
+    "txid": "e8c3aad2e0ac8c9b0e75414331b4924dc9b5a4afb9749bd852a4b4bf0834b157",
+    "transfers": [
+      {
+        "txid": "e8c3aad2e0ac8c9b0e75414331b4924dc9b5a4afb9749bd852a4b4bf0834b157",
+        "time": 1512266670,
+        "contract": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+        "block_height": 837287,
+        "amount": 200000000,
+        "address_to": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+        "address_from": "AV7rCk3YjxRGnyhAqpJXgp8GCe71rbWyrM"
+      }
+    ],
+    "time": 1512266670,
+    "sys_fee": "0",
+    "size": 342,
+    "net_fee": "0",
+    "id": 1004789,
+    "claims": null,
+    "block_height": 837287,
+    "block_hash": "ae03fa625f875428c3f094422f43754fe73ba28ce37542bc716dbc56c1dcf3de",
+    "asset": null
+  },
+  {
+    "vouts": [
+      {
+        "value": 1,
+        "transaction_id": 1004776,
+        "asset": "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
+        "address_hash": "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+      },
+      {
+        "value": 3,
+        "transaction_id": 1004776,
+        "asset": "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
+        "address_hash": "AV7rCk3YjxRGnyhAqpJXgp8GCe71rbWyrM"
+      }
+    ],
+    "vin": [
+      {
+        "value": 4,
+        "txid": "ac3c5bccfe731736add8c34aa1743242dc917887029d3f751c8cb7c10f4dfa44",
+        "n": 0,
+        "asset": "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
+        "address_hash": "AV7rCk3YjxRGnyhAqpJXgp8GCe71rbWyrM"
+      }
+    ],
+    "type": "ContractTransaction",
+    "txid": "891f295a23485f3a9b01596990bd97ef3095c6997ce84ab786aff3585b59c3a2",
+    "transfers": [],
+    "time": 1512266421,
+    "sys_fee": "0",
+    "size": 262,
+    "net_fee": "0",
+    "id": 1004776,
+    "claims": null,
+    "block_height": 837275,
+    "block_hash": "4a462ffe3c3a16702544a78d39e9e9c8be39b88ffb0385776a4a4784a99d251b",
+    "asset": null
+  }
+      ]
     },
     "balanceA": {
       "url": "https://neoscan-testnet.io/api/test_net/v1/get_balance/ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",

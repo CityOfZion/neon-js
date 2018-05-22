@@ -29,7 +29,7 @@ describe('Integration: API Core', function () {
     if (mock) mock.restore()
   })
   describe('sendAsset', function () {
-    it('NeonDB', () => {
+    it.skip('NeonDB', () => {
       useNeonDB()
 
       const intent1 = core.makeIntent({ NEO: 1 }, testKeys.a.address)
@@ -54,7 +54,8 @@ describe('Integration: API Core', function () {
         net: NEO_NETWORK.TEST,
         address: testKeys.a.address,
         privateKey: testKeys.a.privateKey,
-        intents: intent2
+        intents: intent2,
+        fees: 0.00000001
       }
       return core.sendAsset(config2)
         .then((c) => {
@@ -65,7 +66,7 @@ describe('Integration: API Core', function () {
   })
 
   describe('claimGas', function () {
-    it('neonDB', () => {
+    it.skip('neonDB', () => {
       useNeonDB()
 
       const config = {
@@ -97,7 +98,7 @@ describe('Integration: API Core', function () {
   })
 
   describe('doInvoke', function () {
-    it('neonDB', () => {
+    it.skip('neonDB', () => {
       useNeonDB()
 
       const config = {
