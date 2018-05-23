@@ -1,3 +1,5 @@
+import { Account } from "./wallet"
+
 export const ADDR_VERSION = '17'
 
 export namespace ASSETS {

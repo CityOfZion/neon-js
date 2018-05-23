@@ -1,4 +1,4 @@
-import { Balance, Claims } from '../../wallet'
+import { Account, Balance, Claims } from '../../wallet'
 import { RPCResponse } from '../../rpc'
 import { Fixed8 } from '../../utils'
 import { Transaction, TransactionOutput } from '../../transactions'
