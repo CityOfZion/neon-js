@@ -37,7 +37,7 @@ const Deserialize = serializedArray => {
       } else if (!hasChildren) {
         if (_result.type === 'Boolean') {
           setIteratedByte()
-          _result.value = parseInt(iteratedByte, 16) === 1 // if 1 => true, else => false
+          _result.value = parseInt(iteratedByte, 16) > 0 // true if the byte is nonzero; otherwise, false.
         } else {
           setIteratedByte()
           // Integer = bigInt aka hexstring
