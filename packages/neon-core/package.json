@@ -1,14 +1,18 @@
 {
   "name": "@cityofzion/neon-core",
   "description": "Neon-JS Core functionality",
-  "version": "3.7.2",
+  "version": "4.0.0-next.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
   },
-  "keywords": ["neo", "antshares", "javascript", "libraries"],
-  "author":
-    "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
+  "keywords": [
+    "neo",
+    "antshares",
+    "javascript",
+    "libraries"
+  ],
+  "author": "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/browser.js",
@@ -19,12 +23,9 @@
     "test:unit": "mocha ./test/unit",
     "test:integration": "mocha ./test/integration",
     "test:typings": "tsc",
-    "cover":
-      "cross-env NODE_ENV=test nyc mocha ./test && nyc report --reporter=lcov",
-    "cover:unit":
-      "cross-env NODE_ENV=test nyc mocha ./test/unit && nyc report --reporter=lcov",
-    "cover:integration":
-      "cross-env NODE_ENV=test nyc mocha ./test/integration && nyc report --reporter=lcov",
+    "cover": "cross-env NODE_ENV=test nyc mocha ./test && nyc report --reporter=lcov",
+    "cover:unit": "cross-env NODE_ENV=test nyc mocha ./test/unit && nyc report --reporter=lcov",
+    "cover:integration": "cross-env NODE_ENV=test nyc mocha ./test/integration && nyc report --reporter=lcov",
     "lint": "eslint ./src/**/*.js ./test/**/*.js",
     "build:dev": "cross-env NODE_ENV=development webpack --mode development",
     "build:prod": "cross-env NODE_ENV=production webpack --mode production",
@@ -33,8 +34,7 @@
     "build:docs": "cd website && npm run build",
     "deploy:docs": "cd website && npm run publish-gh-pages",
     "rebuild": "rm -rf ./node_modules && npm install && webpack",
-    "prepublishOnly":
-      "npm run test:typings && npm run lint && npm run build:prod"
+    "prepublishOnly": "npm run test:typings && npm run lint && npm run build:prod"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -52,17 +52,24 @@
     "wif": "^2.0.6"
   },
   "devDependencies": {
-    "@types/loglevel": "^1.5.3",
     "@babel/core": "^7.0.0-beta.46",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.46",
     "@babel/polyfill": "^7.0.0-beta.46",
     "@babel/preset-env": "^7.0.0-beta.46",
-    "@babel/register": "^7.0.0-beta.46"
+    "@babel/register": "^7.0.0-beta.46",
+    "@types/loglevel": "^1.5.3"
   },
-  "files": ["lib/", "src/"],
+  "files": [
+    "lib/",
+    "src/"
+  ],
   "nyc": {
-    "require": ["babel-register"],
-    "exclude": ["test"],
+    "require": [
+      "babel-register"
+    ],
+    "exclude": [
+      "test"
+    ],
     "sourceMap": false,
     "instrument": false
   }
