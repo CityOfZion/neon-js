@@ -41,6 +41,17 @@ export class Fixed8 extends BigNumber {
   public toReverseHex(): string
   static fromHex(hex: string): Fixed8
   static fromReverseHex(hex: string): Fixed8
+  public ceil(): Fixed8
+  public floor(): Fixed8
+  public round(dp?:number, rm?:number): Fixed8
+  public div(n:string|number|Fixed8, base?:number):Fixed8
+  public dividedBy(n:string|number|Fixed8, base?:number):Fixed8
+  public mul(n:string|number|Fixed8, base?:number):Fixed8
+  public times(n:string|number|Fixed8, base?:number):Fixed8
+  public add(n:string|number|Fixed8, base?:number):Fixed8
+  public plus(n:string|number|Fixed8, base?:number):Fixed8
+  public sub(n:string|number|Fixed8, base?:number):Fixed8
+  public minus(n:string|number|Fixed8, base?:number):Fixed8
 }
 
 

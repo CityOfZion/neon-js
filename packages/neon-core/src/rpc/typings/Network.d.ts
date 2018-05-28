@@ -15,7 +15,7 @@ export class Network {
   name: string
   protocol: Protocol
   nodes: RPCClient[]
-  extra: object
+  extra: {[key: string]: string}
 
   constructor(config?: NetworkLike, name?: string)
 
