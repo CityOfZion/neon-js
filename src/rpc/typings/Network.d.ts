@@ -5,7 +5,7 @@ export interface NetworkLike {
   name?: string
   protocol?: object
   nodes?: string[]
-  extra?: object
+  extra?:  {[key: string]: string}
 }
 
 /**

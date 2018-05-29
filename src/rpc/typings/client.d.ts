@@ -4,8 +4,9 @@ import { RPCRequest } from './rpc'
 import { AxiosRequestConfig } from 'axios'
 
 export class RPCClient {
-  constructor(net: string, version: string)
+  constructor(net: string, version?: string)
 
+  net: string
   history: Query[]
   latency: number
   lastSeenHeight: number
