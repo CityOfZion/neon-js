@@ -36,7 +36,7 @@
     "typescript": "^2.8.3"
   },
   "peerDependencies": {
-    "@cityofzion/neon-core": "^3.7.2"
+    "@cityofzion/neon-core": "^4.0.0-next.0"
   },
   "files": [
     "lib/",
