@@ -3,6 +3,13 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.8.1
+=====
+
+- Fixes
+
+  - Typings update
+
 3.8.0
 =====
 
