@@ -7,4 +7,4 @@ export function VMParser(res: RPCResponse): Array<any>
 export function VMExtractor(res: RPCResponse): Array<any>
 
 /** Extracts the VM stack into an array and zips it with the provided array of parsing functions. */
-export function VMZip(args: any[]): (res: RPCResponse) => any[]
+export function VMZip(...args: any[]): (res: RPCResponse) => any[]

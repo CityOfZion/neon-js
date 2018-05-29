@@ -8,7 +8,7 @@ export * from './typings/exclusive';
 export * from './typings/Transaction';
 export * from './typings/txAttrUsage';
 
-type strategyFunction = (assetBalance: AssetBalance, requiredAmt: Fixed8) => Coin[]
+export type strategyFunction = (assetBalance: AssetBalance, requiredAmt: Fixed8) => Coin[]
 export interface calculationStrategy {
   smallestFirst: strategyFunction,
   biggestFirst: strategyFunction,

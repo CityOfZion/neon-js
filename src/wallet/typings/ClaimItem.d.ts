@@ -1,12 +1,12 @@
 import { Fixed8 } from '../../utils';
 
 export interface ClaimItemLike {
-  claim?: number;
+  claim?: number | Fixed8;
   txid?: string;
   index?: number;
   value?: number;
-  start?: number;
-  end?: number;
+  start?: number | Fixed8;
+  end?: number | Fixed8;
 }
 
 export interface ClaimItem {
@@ -18,6 +18,6 @@ export interface ClaimItem {
   end?: Fixed8;
 }
 
-export function ClaimItem(claimItem: ClaimItemLike): ClaimItem
+export function ClaimItem(claimItem: ClaimItemLike): ClaimItem;
 
-export function exportClaimItem(claimItem: ClaimItem): ClaimItemLike
+export function exportClaimItem(claimItem: ClaimItem): ClaimItemLike;
