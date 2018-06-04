@@ -2,7 +2,7 @@ import OpCode from './opCode'
 import ScriptBuilder from './ScriptBuilder'
 import ContractParam from './ContractParam'
 import * as core from './core'
-import Deserialize from './Deserialize'
+import deserialize from './deserialize'
 
 export default {
   create: {
@@ -13,4 +13,4 @@ export default {
   }
 }
 export * from './core'
-export { ContractParam, OpCode, ScriptBuilder, Deserialize }
+export { ContractParam, OpCode, ScriptBuilder, deserialize }
