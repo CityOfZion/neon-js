@@ -14,13 +14,19 @@ const StackItemType = {
   '82': 'Map'
 }
 
-// Determine if there's a nested set based on type
+/**
+ * Determine if there's a nested set based on type
+ * @function hasChildren
+ */
 export const hasChildren = type => {
   if (type === 'Array' || type === 'Struct' || type === 'Map') return true
   return false
 }
 
-// This sets the type and base value for _result
+/**
+ * This sets the type and base value for _result
+ * @function setResultBase
+ */
 export const setResultBase = byte => {
   const type = StackItemType[byte]
   let value
