@@ -1,7 +1,13 @@
-import StackItemType from './StackItemType'
+import { setResultBase, hasChildren } from './StackItemType'
 import { reverseHex } from './../utils'
 
-const Deserialize = serializedArray => {
+const determineByteLength = baseLength => {
+  if (baseLength === 'fd') return 2
+  else if (baseLength === 'fe') return 4
+  else if (baseLength === 'ff') return 8
+}
+
+const deserialize = serializedArray => {
   // Split into bytes of 2 characters
   const byteArray = serializedArray.match(/.{2}/g)
 
@@ -12,17 +18,15 @@ const Deserialize = serializedArray => {
   const setIteratedByte = () => {
     iterator++
     iteratedByte = byteArray[iterator]
-    return iteratedByte
   }
 
   const stackItemIterator = () => {
     setIteratedByte()
     const _result = setResultBase(iteratedByte)
-    const hasChildren = determineChildren(_result.type)
     const length = intIterator()
 
     for (let i = 0; i < length; i++) {
-      if (hasChildren) {
+      if (hasChildren(_result.type)) {
         if (_result.type === 'Array' || _result.type === 'Struct') {
           _result.value.push(stackItemIterator())
         } else if (_result.type === 'Map') {
@@ -34,7 +38,7 @@ const Deserialize = serializedArray => {
             value: stackItemIterator()
           })
         }
-      } else if (!hasChildren) {
+      } else {
         if (_result.type === 'Boolean') {
           setIteratedByte()
           _result.value = parseInt(iteratedByte, 16) > 0 // true if the byte is nonzero; otherwise, false.
@@ -51,12 +55,14 @@ const Deserialize = serializedArray => {
 
   const intIterator = () => {
     let length = ''
-    const base = setIteratedByte()
+    setIteratedByte()
+    const base = iteratedByte
     base.toLowerCase()
     if (base === 'fd' || base === 'fe' || base === 'ff') {
       const byteLength = determineByteLength(base)
       for (let i = 0; i < byteLength; i++) {
-        length += setIteratedByte()
+        setIteratedByte()
+        length += iteratedByte
       }
       length = reverseHex(length)
     } else {
@@ -69,40 +75,4 @@ const Deserialize = serializedArray => {
   return stackItemIterator()
 }
 
-const determineByteLength = baseLength => {
-  if (baseLength === 'fd') return 2
-  else if (baseLength === 'fe') return 4
-  else if (baseLength === 'ff') return 8
-}
-
-// StackItemType getter
-const determineType = byte => StackItemType[byte]
-
-// Determine if there's a nested set based on type
-const determineChildren = type => {
-  if (type === 'Array' || type === 'Struct' || type === 'Map') return true
-  // TODO: map
-  return false
-}
-
-// This sets the type and base value for _result
-const setResultBase = byte => {
-  const type = determineType(byte)
-  let value
-
-  if (type === 'Array' || type === 'Struct' || type === 'Map') {
-    value = []
-  } else if (type === 'Boolean') {
-    // Initializing boolean to undefined, because we'd never use a push or += equivalent with booleans
-    value = undefined
-  } else {
-    // if (type === 'ByteArray' || type === 'Integer') {
-    value = '' // Integer = bigInt aka hexstring
-  }
-
-  // TODO: Map
-
-  return { type, value }
-}
-
-export default Deserialize
+export default deserialize

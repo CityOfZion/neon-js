@@ -4,7 +4,7 @@
  * @enum {string}
  */
 
-const StackItemtype = {
+const StackItemType = {
   '00': 'ByteArray',
   '01': 'Boolean',
   '02': 'Integer',
@@ -14,4 +14,27 @@ const StackItemtype = {
   '82': 'Map'
 }
 
-export default StackItemtype
+// Determine if there's a nested set based on type
+export const hasChildren = type => {
+  if (type === 'Array' || type === 'Struct' || type === 'Map') return true
+  return false
+}
+
+// This sets the type and base value for _result
+export const setResultBase = byte => {
+  const type = StackItemType[byte]
+  let value
+
+  if (type === 'Array' || type === 'Struct' || type === 'Map') {
+    value = []
+  } else if (type === 'Boolean') {
+    // Initializing boolean to undefined, because we'd never use a push or += equivalent with booleans
+    value = undefined
+  } else {
+    value = ''
+  }
+
+  return { type, value }
+}
+
+export default StackItemType

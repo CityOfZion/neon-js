@@ -1,6 +1,6 @@
-interface DeserializedResult {
+interface StackItem {
   type: string
-  value: string | DeserializedResult[]
+  value: string | StackItem[]
 }
 
-export function Deserialize(d: string): DeserializedResult
+export function deserialize(d: string): StackItem
