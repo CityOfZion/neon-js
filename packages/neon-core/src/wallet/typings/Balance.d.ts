@@ -4,12 +4,12 @@ import { AssetBalance } from './AssetBalance';
 import { net } from '../../api/typings/core'
 
 export interface BalanceLike {
-  net: net;
-  address: string;
-  assetSymbols:  string[];
-  assets: { [index: string]: AssetBalance };
-  tokenSymbols: string[];
-  tokens: { [index: string]: number };
+  net?: net;
+  address?: string;
+  assetSymbols?:  string[];
+  assets?: { [index: string]: AssetBalance };
+  tokenSymbols?: string[];
+  tokens?: { [index: string]: number };
 }
 
 /** Describes the coins found within an Account. Look up various balances through its symbol. For example, NEO or GAS. */

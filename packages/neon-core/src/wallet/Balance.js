@@ -22,20 +22,25 @@ class Balance {
     /** The network for this Balance */
     this.net = bal.net || 'NoNet'
     /** The symbols of assets found in this Balance. Use this symbol to find the corresponding key in the assets object. */
-    this.assetSymbols = bal.assetSymbols ? bal.assetSymbols : []
+    this.assetSymbols = []
     /** The object containing the balances for each asset keyed by its symbol. */
     this.assets = {}
     if (bal.assets) {
-      Object.keys(bal.assets).map((key) => {
+      Object.keys(bal.assets).map(key => {
         if (typeof bal.assets[key] === 'object') {
           this.addAsset(key, bal.assets[key])
         }
       })
     }
     /** The symbols of the NEP5 tokens in this Balance. Use this symbol to find the corresponding key in the tokens object. */
-    this.tokenSymbols = bal.tokenSymbols ? bal.tokenSymbols : []
+    this.tokenSymbols = []
     /** The token balances in this Balance for each token keyed by its symbol. */
-    this.tokens = bal.tokens ? bal.tokens : {}
+    this.tokens = {}
+    if (bal.tokens && Object.keys(bal.tokens)) {
+      Object.keys(bal.tokens).map(key => {
+        this.addToken(key, bal.tokens[key])
+      })
+    }
   }
 
   get [Symbol.toStringTag] () {
@@ -90,7 +95,8 @@ class Balance {
     const symbols = this.assetSymbols
     // Spend coins
     for (const input of tx.inputs) {
-      const findFunc = (el) => el.txid === input.prevHash && el.index === input.prevIndex
+      const findFunc = el =>
+        el.txid === input.prevHash && el.index === input.prevIndex
       for (const sym of symbols) {
         let assetBalance = this.assets[sym]
         let ind = assetBalance.unspent.findIndex(findFunc)
@@ -111,7 +117,9 @@ class Balance {
       if (!assetBalance) this.addAsset(sym)
       const coin = { index: i, txid: hash, value: output.value }
       if (confirmed) {
-        let unconfirmedIndex = assetBalance.unconfirmed.findIndex((el) => el.txid === coin.txid && el.index === coin.index)
+        let unconfirmedIndex = assetBalance.unconfirmed.findIndex(
+          el => el.txid === coin.txid && el.index === coin.index
+        )
         if (unconfirmedIndex >= 0) {
           assetBalance.unconfirmed.splice(unconfirmedIndex, 1)
         }
@@ -135,7 +143,9 @@ class Balance {
   confirm () {
     for (const sym of this.assetSymbols) {
       let assetBalance = this.assets[sym]
-      assetBalance.unspent = assetBalance.unspent.concat(assetBalance.unconfirmed)
+      assetBalance.unspent = assetBalance.unspent.concat(
+        assetBalance.unconfirmed
+      )
       assetBalance.unconfirmed = []
     }
     return this
@@ -164,17 +174,16 @@ class Balance {
   verifyAssets (url) {
     const promises = []
     const symbols = this.assetSymbols
-    symbols.map((key) => {
+    symbols.map(key => {
       const assetBalance = this.assets[key]
       promises.push(verifyAssetBalance(url, assetBalance))
     })
-    return Promise.all(promises)
-      .then((newBalances) => {
-        symbols.map((sym, i) => {
-          this.assets[sym] = newBalances[i]
-        })
-        return this
+    return Promise.all(promises).then(newBalances => {
+      symbols.map((sym, i) => {
+        this.assets[sym] = newBalances[i]
       })
+      return this
+    })
   }
 }
 
@@ -185,21 +194,25 @@ class Balance {
  * @return {Promise<AssetBalance>} Returns a new AssetBalance
  */
 const verifyAssetBalance = (url, assetBalance) => {
-  let newAssetBalance = { balance: new Fixed8(0), spent: [], unspent: [], unconfirmed: [] }
-  return verifyCoins(url, assetBalance.unspent)
-    .then((values) => {
-      values.map((v, i) => {
-        let coin = assetBalance.unspent[i]
-        if (v) {
-          if (v.value.cmp(coin.value) !== 0) coin.value = v.value
-          newAssetBalance.unspent.push(coin)
-          newAssetBalance.balance = newAssetBalance.balance.add(coin.value)
-        } else {
-          newAssetBalance.spent.push(coin)
-        }
-      })
-      return newAssetBalance
+  let newAssetBalance = {
+    balance: new Fixed8(0),
+    spent: [],
+    unspent: [],
+    unconfirmed: []
+  }
+  return verifyCoins(url, assetBalance.unspent).then(values => {
+    values.map((v, i) => {
+      let coin = assetBalance.unspent[i]
+      if (v) {
+        if (v.value.cmp(coin.value) !== 0) coin.value = v.value
+        newAssetBalance.unspent.push(coin)
+        newAssetBalance.balance = newAssetBalance.balance.add(coin.value)
+      } else {
+        newAssetBalance.spent.push(coin)
+      }
     })
+    return newAssetBalance
+  })
 }
 
 /**
@@ -229,7 +242,7 @@ const verifyCoins = (url, coinArr) => {
 
 export default Balance
 
-const exportAssets = (assets) => {
+const exportAssets = assets => {
   const exported = {}
   Object.keys(assets).map(key => {
     const assetBalance = assets[key]
@@ -244,7 +257,7 @@ const exportAssets = (assets) => {
   return exported
 }
 
-const exportCoin = (coin) => {
+const exportCoin = coin => {
   return {
     index: coin.index,
     txid: coin.txid,

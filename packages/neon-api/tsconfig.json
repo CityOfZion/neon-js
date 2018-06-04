@@ -3,5 +3,8 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "lib"
-  }
+  },
+  "exclude": [
+    "__tests__/*", "__integration__/*", "lib/*"
+  ]
 }

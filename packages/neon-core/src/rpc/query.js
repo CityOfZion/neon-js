@@ -61,19 +61,18 @@ class Query {
    */
   execute (url, config = {}) {
     if (this.completed) throw new Error('This request has been sent')
-    return queryRPC(url, this.req, config)
-      .then((res) => {
-        this.res = res
-        this.completed = true
-        if (res.error) {
-          throw new Error(res.error.message)
-        }
-        if (this.parse) {
-          log.info(`Query[${this.req.method}] successful`)
-          return this.parse(res)
-        }
-        return res
-      })
+    return queryRPC(url, this.req, config).then(res => {
+      this.res = res
+      this.completed = true
+      if (res.error) {
+        throw new Error(res.error.message)
+      }
+      if (this.parse) {
+        log.info(`Query[${this.req.method}] successful`)
+        return this.parse(res)
+      }
+      return res
+    })
   }
 
   /**
@@ -272,7 +271,10 @@ class Query {
    * @return {Query}
    */
   static sendRawTransaction (transaction) {
-    const serialized = typeof (transaction) === 'object' ? serializeTransaction(transaction) : transaction
+    const serialized =
+      typeof transaction === 'object'
+        ? serializeTransaction(transaction)
+        : transaction
     return new Query({
       method: 'sendrawtransaction',
       params: [serialized]
@@ -315,14 +317,12 @@ export default Query
  * @returns {Promise<Response>} RPC Response
  */
 export const queryRPC = (url, req, config = {}) => {
-  const jsonRequest = axios.create({
-    headers: {
-      'Content-Type': 'application/json'
-    },
+  const body = Object.assign({}, DEFAULT_REQ, req)
+  const conf = Object.assign({
+    headers: { 'Content-Type': 'application/json' },
     timeout: timeout.rpc
-  })
-  const jsonRpcData = Object.assign({}, DEFAULT_REQ, req)
-  return jsonRequest.post(url, jsonRpcData, config).then((response) => {
+  }, config)
+  return axios.post(url, body, conf).then(response => {
     return response.data
   })
 }

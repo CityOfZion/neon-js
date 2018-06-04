@@ -10,20 +10,26 @@ import axios from "axios";
 import {
   filterHttpsOnly,
   findGoodNodesFromHeight,
-  RpcCache,
+  getBestUrl,
+  isCachedRPCAcceptable,
+  PastTransaction,
   RpcNode
-} from "./helper";
+} from "./common";
 const log = logging.default("api");
 export const name = "neoscan";
 
-const rpcCache = new RpcCache();
+let cachedUrl = "";
 /**
  * Returns the appropriate NeoScan endpoint.
  * @param net Name of network to retrieve the endpoint from. Alternatively, provide a custom url.
  */
 export function getAPIEndpoint(net: string): string {
   if (settings.networks[net]) {
-    return settings.networks[net].extra.neoscan;
+    const url = settings.networks[net].extra.neoscan;
+    if (!url) {
+      throw new Error(`No neonDB url found for ${net}`);
+    }
+    return url;
   }
   return net;
 }
@@ -41,11 +47,14 @@ export async function getRPCEndpoint(net: string): Promise<string> {
     nodes = filterHttpsOnly(nodes);
   }
   const goodNodes = findGoodNodesFromHeight(nodes);
-  if (goodNodes.length === 0) {
-    throw new Error("No eligible nodes found!");
+  if (cachedUrl) {
+    const useCachedUrl = isCachedRPCAcceptable(cachedUrl, goodNodes);
+    if (useCachedUrl) {
+      return cachedUrl;
+    }
   }
-  const urls = goodNodes.map(n => n.url);
-  const bestRPC = rpcCache.findBestRPC(urls);
+  const bestRPC = await getBestUrl(goodNodes);
+  cachedUrl = bestRPC;
   return bestRPC;
 }
 
@@ -64,19 +73,25 @@ export async function getBalance(
   const data = response.data as NeoscanV1GetBalanceResponse;
   if (data.address === "not found" && data.balance === null) {
     return new wallet.Balance({
-      address: data.address
+      net,
+      address
     } as wallet.BalanceLike);
   }
   const bal = new wallet.Balance({
+    net,
     address: data.address
   } as wallet.BalanceLike);
   const neoscanBalances = data.balance as NeoscanBalance[];
-  neoscanBalances.map(b => {
-    bal.addAsset(b.asset, {
-      balance: b.amount,
-      unspent: parseUnspent(b.unspent)
-    } as wallet.AssetBalance);
-  });
+  for (const b of neoscanBalances) {
+    if (b.amount > 0 && b.unspent.length > 0) {
+      bal.addAsset(b.asset, {
+        balance: b.amount,
+        unspent: parseUnspent(b.unspent)
+      } as wallet.AssetBalance);
+    } else {
+      bal.addToken(b.asset, b.amount);
+    }
+  }
   log.info(`Retrieved Balance for ${address} from neoscan ${net}`);
   return bal;
 }
@@ -154,11 +169,11 @@ export async function getMaxClaimAmount(
  * @param net 'MainNet' or 'TestNet'.
  * @return  Current height as reported by provider
  */
-export async function getHeight(net: string): Promise<u.Fixed8> {
+export async function getHeight(net: string): Promise<number> {
   const apiEndpoint = getAPIEndpoint(net);
   const response = await axios.get(apiEndpoint + "/v1/get_height");
   const data = response.data as NeoscanV1GetHeightResponse;
-  return new u.Fixed8(data.height);
+  return data.height;
 }
 
 /**
@@ -167,7 +182,10 @@ export async function getHeight(net: string): Promise<u.Fixed8> {
  * @param {string} address - Address to check.
  * @return {Promise<PastTransaction[]>} A listof PastTransactionPastTransaction[]
  */
-export async function getTransactionHistory(net: string, address: string) {
+export async function getTransactionHistory(
+  net: string,
+  address: string
+): Promise<PastTransaction[]> {
   const apiEndpoint = getAPIEndpoint(net);
   const response = await axios.get(
     apiEndpoint + "/v1/get_last_transactions_by_address/" + address
@@ -191,7 +209,7 @@ function parseTxHistory(rawTxs: NeoscanPastTx[], address: string) {
     };
     return {
       txid: tx.txid,
-      blockHeight: new u.Fixed8(tx.block_height),
+      blockHeight: tx.block_height,
       change
     };
   });

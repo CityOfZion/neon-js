@@ -6,13 +6,9 @@
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
   },
-  "keywords": [
-    "neo",
-    "antshares",
-    "javascript",
-    "libraries"
-  ],
-  "author": "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
+  "keywords": ["neo", "antshares", "javascript", "libraries"],
+  "author":
+    "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
   "license": "MIT",
   "main": "lib/index.js",
   "module": "src/index.js",
@@ -35,26 +31,21 @@
     "tslint": "^5.10.0",
     "typescript": "^2.8.3"
   },
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
   "peerDependencies": {
     "@cityofzion/neon-core": "^4.0.0-next.0"
   },
-  "files": [
-    "lib/",
-    "src/"
-  ],
+  "files": ["lib/", "src/"],
   "jest": {
+    "testEnvironment": "node",
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-    "testRegex": "(/__(tests|integration)__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testRegex":
+      "(/__(tests|integration)__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "collectCoverage": true,
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
   }
 }

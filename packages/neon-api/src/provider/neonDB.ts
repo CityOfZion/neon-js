@@ -8,15 +8,23 @@ import {
 } from "@cityofzion/neon-core";
 import axios from "axios";
 import {
+  NeonDbBalance,
+  NeonDbClaims,
+  NeonDbHistory,
+  NeonDbNode
+} from "../../types/neonDB";
+import {
   filterHttpsOnly,
   findGoodNodesFromHeight,
-  RpcCache,
+  getBestUrl,
+  isCachedRPCAcceptable,
+  PastTransaction,
   RpcNode
-} from "./helper";
+} from "./common";
 const log = logging.default("api");
 export const name = "neonDB";
 
-const rpcCache = new RpcCache();
+let cachedUrl = "";
 /**
  * Returns the appropriate neonDB endpoint.
  * @param net Name of network to retrieve the endpoint from. Alternatively, provide a custom url.
@@ -24,7 +32,11 @@ const rpcCache = new RpcCache();
  */
 export function getAPIEndpoint(net: string): string {
   if (settings.networks[net]) {
-    return settings.networks[net].extra.neonDB;
+    const url = settings.networks[net].extra.neonDB;
+    if (!url) {
+      throw new Error(`No neonDB url found for ${net}`);
+    }
+    return url;
   }
   return net;
 }
@@ -37,7 +49,7 @@ export function getAPIEndpoint(net: string): string {
 export async function getRPCEndpoint(net: string) {
   const apiEndpoint = getAPIEndpoint(net);
   const response = await axios.get(apiEndpoint + "/v2/network/nodes");
-  const data = response.data as NeonDbNode[];
+  const data = response.data.nodes as NeonDbNode[];
   let nodes = data
     .filter(d => d.status)
     .map(d => ({ height: d.block_height, url: d.url } as RpcNode));
@@ -46,109 +58,131 @@ export async function getRPCEndpoint(net: string) {
     nodes = filterHttpsOnly(nodes);
   }
   const goodNodes = findGoodNodesFromHeight(nodes);
-  if (goodNodes.length === 0) {
-    throw new Error("No eligible nodes found!");
+  if (cachedUrl) {
+    const useCachedUrl = isCachedRPCAcceptable(cachedUrl, goodNodes);
+    if (useCachedUrl) {
+      return cachedUrl;
+    }
   }
-  const urls = goodNodes.map(n => n.url);
-  const bestRPC = rpcCache.findBestRPC(urls);
+  const bestRPC = await getBestUrl(goodNodes);
+  cachedUrl = bestRPC;
   return bestRPC;
 }
 
 /**
  * Get balances of NEO and GAS for an address
- * @param {string} net - 'MainNet' or 'TestNet'.
- * @param {string} address - Address to check.
- * @return {Promise<Balance>} Balance of address
+ * @param net - 'MainNet' or 'TestNet'.
+ * @param address - Address to check.
+ * @return  Balance of address
  */
-export async function getBalance(net: string, address: string) {
+export async function getBalance(
+  net: string,
+  address: string
+): Promise<wallet.Balance> {
   const apiEndpoint = getAPIEndpoint(net);
   const response = await axios.get(
     apiEndpoint + "/v2/address/balance/" + address
   );
-  const data = response.data as NeonDBV2AddressBalanceResponse;
+  const data = response.data as NeonDbBalance;
   const bal = new wallet.Balance({ net, address } as wallet.BalanceLike);
-  bal.addAsset("NEO", data.NEO);
-  bal.addAsset("GAS", data.GAS);
+  if (data.NEO.balance !== 0) {
+    bal.addAsset("NEO", data.NEO);
+  }
+  if (data.GAS.balance !== 0) {
+    bal.addAsset("GAS", data.GAS);
+  }
   log.info(`Retrieved Balance for ${address} from neonDB ${net}`);
   return bal;
 }
 
 /**
  * Get amounts of available (spent) and unavailable claims.
- * @param {string} net - 'MainNet' or 'TestNet'.
- * @param {string} address - Address to check.
- * @return {Promise<Claim>} An object with available and unavailable GAS amounts.
+ * @param net - 'MainNet' or 'TestNet'.
+ * @param address - Address to check.
+ * @return An object with available and unavailable GAS amounts.
  */
-export async function getClaims (net:string, address:string) {
+export async function getClaims(
+  net: string,
+  address: string
+): Promise<wallet.Claims> {
   const apiEndpoint = getAPIEndpoint(net);
-  const response = await axios.get(apiEndpoint + "/v2/address/claims/" + address);
-  const data = response.data as neonDBV2AddressClaimsResponse;
+  const response = await axios.get(
+    apiEndpoint + "/v2/address/claims/" + address
+  );
+  const data = response.data as NeonDbClaims;
   const claims = data.claims.map(c => {
     return {
-      claim: new u.Fixed8(c.claim).div(100000000),
+      claim: new u.Fixed8(c.claim || 0).div(100000000),
       index: c.index,
       txid: c.txid,
-      start: new u.Fixed8(c.start),
-      end: new u.Fixed8(c.end),
+      start: new u.Fixed8(c.start || 0),
+      end: new u.Fixed8(c.end || 0),
       value: c.value
     };
   });
   log.info(`Retrieved Claims for ${address} from neonDB ${net}`);
-  return new wallet.Claims({net, address, claims} as wallet.ClaimsLike);
-
-};
+  return new wallet.Claims({ net, address, claims } as wallet.ClaimsLike);
+}
 
 /**
  * Gets the maximum amount of gas claimable after spending all NEO.
- * @param {string} net - 'MainNet' or 'TestNet'.
- * @param {string} address - Address to check.
- * @return {Promise<Fixed8>} An object with available and unavailable GAS amounts.
+ * @param net - 'MainNet' or 'TestNet'.
+ * @param address - Address to check.
+ * @return An object with available and unavailable GAS amounts.
  */
-export const getMaxClaimAmount = (net, address) => {
+export async function getMaxClaimAmount(
+  net: string,
+  address: string
+): Promise<u.Fixed8> {
   const apiEndpoint = getAPIEndpoint(net);
-  return axios.get(apiEndpoint + "/v2/address/claims/" + address).then(res => {
-    log.info(
-      `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neonDB ${net}`
-    );
-    return new Fixed8(res.data.total_claim + res.data.total_unspent_claim).div(
-      100000000
-    );
-  });
-};
+  const response = await axios.get(
+    apiEndpoint + "/v2/address/claims/" + address
+  );
+  const data = response.data as NeonDbClaims;
+  log.info(
+    `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neonDB ${net}`
+  );
+  return new u.Fixed8(data.total_claim + data.total_unspent_claim).div(
+    100000000
+  );
+}
 
 /**
  * Get transaction history for an account
- * @param {string} net - 'MainNet' or 'TestNet'.
- * @param {string} address - Address to check.
- * @return {Promise<PastTransaction[]>} a list of PastTransaction
+ * @param net - 'MainNet' or 'TestNet'.
+ * @param address - Address to check.
+ * @return a list of PastTransaction
  */
-export const getTransactionHistory = (net, address) => {
+export async function getTransactionHistory(
+  net: string,
+  address: string
+): Promise<PastTransaction[]> {
   const apiEndpoint = getAPIEndpoint(net);
-  return axios
-    .get(apiEndpoint + "/v2/address/history/" + address)
-    .then(response => {
-      log.info(`Retrieved History for ${address} from neonDB ${net}`);
-      return response.data.history.map(rawTx => {
-        return {
-          change: {
-            NEO: new Fixed8(rawTx.NEO || 0),
-            GAS: new Fixed8(rawTx.GAS || 0)
-          },
-          blockHeight: new Fixed8(rawTx.block_index),
-          txid: rawTx.txid
-        };
-      });
-    });
-};
+  const response = await axios.get(
+    apiEndpoint + "/v2/address/history/" + address
+  );
+  const data = response.data as NeonDbHistory;
+  log.info(`Retrieved History for ${address} from neonDB ${net}`);
+  return data.history.map(rawTx => {
+    return {
+      change: {
+        NEO: new u.Fixed8(rawTx.NEO || 0),
+        GAS: new u.Fixed8(rawTx.GAS || 0)
+      },
+      blockHeight: rawTx.block_index,
+      txid: rawTx.txid
+    };
+  });
+}
 
 /**
  * Get the current height of the light wallet DB
- * @param {string} net - 'MainNet' or 'TestNet'.
- * @return {Promise<number>} Current height.
+ * @param net - 'MainNet' or 'TestNet'.
+ * @return Current height.
  */
-export const getWalletDBHeight = net => {
+export const getHeight = (net: string): Promise<number> => {
   const apiEndpoint = getAPIEndpoint(net);
   return axios.get(apiEndpoint + "/v2/block/height").then(response => {
-    return parseInt(response.data.block_height);
+    return parseInt(response.data.block_height, 10);
   });
 };
