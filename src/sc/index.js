@@ -2,7 +2,7 @@ import OpCode from './opCode'
 import ScriptBuilder from './ScriptBuilder'
 import ContractParam from './ContractParam'
 import * as core from './core'
-import deserialize from './fDeserialize'
+import deserialize from './deserialize'
 
 export default {
   create: {

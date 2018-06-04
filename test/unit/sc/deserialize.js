@@ -1,4 +1,4 @@
-import deserialize from '../../../src/sc/fDeserialize'
+import deserialize from '../../../src/sc/deserialize'
 import { hexstring2str, reverseHex } from '../../../src/utils'
 
 import serializedData from './serializedData.json'
