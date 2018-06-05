@@ -7,7 +7,7 @@ export interface PastTransaction {
 }
 
 export interface Provider {
-  getApiEndpoint(net: string): string;
+  name: string;
   getRPCEndpoint(net: string): Promise<string>;
   getBalance(net: string, address: string): Promise<wallet.Balance>;
   getClaims(net: string, address: string): Promise<wallet.Claims>;
@@ -17,6 +17,9 @@ export interface Provider {
     net: string,
     address: string
   ): Promise<PastTransaction[]>;
+}
+export interface DataProvider extends Provider {
+  getAPIEndpoint(net: string): string;
 }
 
 export interface RpcNode {
