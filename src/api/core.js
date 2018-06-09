@@ -43,7 +43,8 @@ export const sendAsset = config => {
         address: config.address,
         intents: config.intents,
         balance: config.balance,
-        tx: config.tx
+        tx: config.tx,
+        fees: config.fees
       }
       log.error(`sendAsset failed with: ${err.message}. Dumping config`, dump)
       throw err
@@ -69,7 +70,12 @@ export const claimGas = config => {
     .then(c => sendTx(c))
     .catch(err => {
       const dump = {
-        net: config.net, address: config.address, intents: config.intents, claims: config.claims, tx: config.tx
+        net: config.net,
+        address: config.address,
+        intents: config.intents,
+        balance: config.balance,
+        tx: config.tx,
+        claims: config.claims
       }
       log.error(`claimGas failed with ${err.message}. Dumping config`, dump)
       throw err
@@ -104,7 +110,14 @@ export const doInvoke = config => {
     .then(c => sendTx(c))
     .catch(err => {
       const dump = {
-        net: config.net, address: config.address, intents: config.intents, balance: config.balance, script: config.script, gas: config.gas, tx: config.tx
+        net: config.net,
+        address: config.address,
+        intents: config.intents,
+        balance: config.balance,
+        tx: config.tx,
+        script: config.script,
+        gas: config.gas,
+        fees: config.fees
       }
       log.error(`doInvoke failed with ${err.message}. Dumping config`, dump)
       throw err
