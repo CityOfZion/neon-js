@@ -73,7 +73,6 @@ export const claimGas = config => {
         net: config.net,
         address: config.address,
         intents: config.intents,
-        balance: config.balance,
         tx: config.tx,
         claims: config.claims
       }
