@@ -17,7 +17,7 @@ const log = logger('wallet')
  * @param {string|object} str - WIF/ Private Key / Public Key / Address or a Wallet Account object.
  */
 class Account {
-  constructor (str) {
+  constructor (str = null) {
     this.extra = null
     this.isDefault = false
     this.lock = false

@@ -17,7 +17,7 @@ export interface AccountLike {
  * NEP2 <=> WIF <=> Private => Public => ScriptHash <=> Address
  */
 export class Account {
-  constructor(str: string|object)
+  constructor(str?: string|object)
 
   encrypted: string
   WIF: string

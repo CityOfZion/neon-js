@@ -20,7 +20,7 @@ export class Transaction {
   public outputs: TransactionOutput[]
   public scripts: Witness[]
 
-  constructor(tx: Transaction)
+  constructor(tx?: Transaction)
 
   /** Exclusive Data */
   exclusiveData(): object
