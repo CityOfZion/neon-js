@@ -17,7 +17,7 @@ export class Protocol {
   seedList: string[]
   systemFee: object
 
-  constructor(config: ProtocolLike)
+  constructor(config?: ProtocolLike)
 
   /** Imports a ProtocolConfiguration object */
   static import(jsonLike: string | object, name?: string): Protocol

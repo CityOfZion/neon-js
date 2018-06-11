@@ -20,7 +20,7 @@ export class Wallet {
   accounts: Account[]
   extra: object
 
-  constructor(file: WalletLike)
+  constructor(file?: WalletLike)
 
   /** Imports a Wallet through a JSON string */
   static import(jsonString: string): Wallet
