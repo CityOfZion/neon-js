@@ -3,6 +3,23 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.9.0
+=====
+
+- Smart Contract
+
+  - Add Runtime.Deserialize logic. This is the deserialization logic found in the VM.
+
+  ```js
+  import {sc} from '@cityofzion/neon-js'
+  sc.deserialize('800200126d65737361676520746f206d7973656c66210204438ffc5a')
+  ```
+
+- Fixes
+
+  - All class constructors now accept optional parameters. This means that all classes should be easily instantiated with defaults if required.
+  - Update dump logic for managed methods to dump fees.
+
 3.8.1
 =====
 
