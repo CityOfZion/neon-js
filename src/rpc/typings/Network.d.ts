@@ -17,7 +17,7 @@ export class Network {
   nodes: RPCClient[]
   extra: object
 
-  constructor(config: NetworkLike, name?: string)
+  constructor(config?: NetworkLike, name?: string)
 
   /** Imports a Network from a jsonString */
   static import(jsonLike: object, name?: string): Network
