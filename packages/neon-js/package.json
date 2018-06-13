@@ -6,9 +6,13 @@
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
   },
-  "keywords": ["neo", "antshares", "javascript", "libraries"],
-  "author":
-    "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
+  "keywords": [
+    "neo",
+    "antshares",
+    "javascript",
+    "libraries"
+  ],
+  "author": "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
   "license": "MIT",
   "main": "dist/index.js",
   "browser": "dist/browser.js",
@@ -27,16 +31,18 @@
     "@cityofzion/neon-nep5": "^4.0.0-next.0"
   },
   "devDependencies": {
-    "ts-loader": "^4.3.0",
-    "webpack": "^4.8.3",
-    "webpack-cli": "^2.1.3",
-    "@types/jest": "^22.2.3",
-    "jest": "^22.4.4",
-    "ts-jest": "^22.4.6",
+    "@types/jest": "^23.0.2",
+    "jest": "^23.1.0",
     "prettier": "^1.12.1",
+    "ts-jest": "^22.4.6",
+    "ts-loader": "^4.3.0",
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.12.0",
-    "typescript": "^2.8.3"
+    "typescript": "^2.8.3",
+    "webpack": "^4.8.3",
+    "webpack-cli": "^3.0.4"
   },
-  "files": ["dist/"]
+  "files": [
+    "dist/"
+  ]
 }
