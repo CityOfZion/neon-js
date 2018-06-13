@@ -7,17 +7,12 @@ export namespace ASSETS {
   export const GAS: string
 }
 
-export namespace ASSET_ID {
-  export const NEO: string
-  export const GAS: string
+export const ASSET_ID: {
+  [key:string]: string
 }
 
-export namespace CONTRACTS {
-  export const RPX: string
-  export const TEST_RPX: string
-  export const TEST_LWTF: string
-  export const TEST_NXT: string
-  export const TEST_RHTT4: string
+export const CONTRACTS: {
+  [key:string]: string
 }
 
 export namespace DEFAULT_RPC {

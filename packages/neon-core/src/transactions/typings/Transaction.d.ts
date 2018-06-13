@@ -1,10 +1,11 @@
-import { Account, Balance, Claims } from '../../wallet';
+import { Account, Balance, Claims } from "../../wallet";
 import {
   TransactionInput,
   TransactionAttribute,
   TransactionOutput,
-  Witness,
-} from './components';
+  Witness
+} from "./components";
+import { u } from "../..";
 
 /**
  * Transactions are what you use to interact with the blockchain.
@@ -13,50 +14,70 @@ import {
  * This class is a wrapper around the various transaction building methods found in this folder.
  */
 export class Transaction {
-  public type: number
-  public version: number
-  public attributes: TransactionAttribute[]
-  public inputs: TransactionInput[]
-  public outputs: TransactionOutput[]
-  public scripts: Witness[]
+  public type: number;
+  public version: number;
+  public attributes: TransactionAttribute[];
+  public inputs: TransactionInput[];
+  public outputs: TransactionOutput[];
+  public scripts: Witness[];
 
   constructor(tx?: Transaction)
 
   /** Exclusive Data */
-  exclusiveData(): object
+  exclusiveData(): object;
 
   /** Transaction hash. */
-  hash(): string
+  hash(): string;
 
   /** Creates a ClaimTransaction with the given parameters. */
-  static createClaimTx(publicKeyOrAddress: string, claimData: Claims, override: object): Transaction
+  static createClaimTx(
+    publicKeyOrAddress: string,
+    claimData: Claims,
+    override: object
+  ): Transaction;
 
   /** Creates a ContractTransaction with the given parameters. */
-  static createContractTx(balances: Balance, intents: TransactionOutput[], override: object): Transaction
+  static createContractTx(
+    balances: Balance,
+    intents: TransactionOutput[],
+    override: object,
+    fees: number | u.Fixed8
+  ): Transaction;
 
   /** Creates an InvocationTransaction with the given parameters. */
-  static createInvocationTx(balance: Balance, intents: TransactionOutput[], invoke: object | string, gasCost: number, override: object): Transaction
+  static createInvocationTx(
+    balance: Balance,
+    intents: TransactionOutput[],
+    invoke: object | string,
+    gasCost: number | u.Fixed8,
+    override: object,
+    fees: number | u.Fixed8
+  ): Transaction;
 
-  static deserialize(hexstring: string): Transaction
+  static deserialize(hexstring: string): Transaction;
 
   /** Adds a TransactionOutput. TransactionOutput can be given as a TransactionOutput object or as human-friendly values. This is detected by the number of arguments provided. */
-  addOutput (assetSymOrTxOut: string|object, value: number, address: string): Transaction
+  addOutput(
+    assetSymOrTxOut: string | object,
+    value: number,
+    address: string
+  ): Transaction;
 
   /** Add an attribute. */
-  addAttribute (usage: number, data: string): Transaction
+  addAttribute(usage: number, data: string): Transaction;
 
   /** Add a remark. */
-  addRemark (remark: string): Transaction
+  addRemark(remark: string): Transaction;
 
   /** Calculate the inputs required based on existing outputs provided. Also takes into account the fees required through the gas property. */
-  calculate (balance: Balance): Transaction
+  calculate(balance: Balance): Transaction;
 
   /** Serialize the transaction and return it as a hexstring. */
-  serialize (signed?: boolean): string
+  serialize(signed?: boolean): string;
 
   /** Serializes the exclusive data in this transaction */
-  serializeExclusiveData (): string
+  serializeExclusiveData(): string;
 
   /** Signs a transaction. */
-  sign (signer: Account|string): Transaction
+  sign(signer: Account | string): Transaction;
 }

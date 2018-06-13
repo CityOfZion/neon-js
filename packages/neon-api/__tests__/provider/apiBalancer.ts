@@ -56,7 +56,6 @@ describe("loadBalance", () => {
 
   test("calls rightProvider when preference = 1", async () => {
     balancer.preference = 1;
-    const f = jest.fn();
     const result = await balancer.getRPCEndpoint("UnitTestNet");
     expect(neonDB.getRPCEndpoint).toBeCalledWith("UnitTestNet");
   })

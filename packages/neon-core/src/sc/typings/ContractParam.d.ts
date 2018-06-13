@@ -21,5 +21,5 @@ export class ContractParam {
   static byteArray(value: any, format: string): ContractParam
 
   /** Creates an Array ContractParam. */
-  static array(param: any[]): ContractParam
+  static array(...param: any[]): ContractParam
 }

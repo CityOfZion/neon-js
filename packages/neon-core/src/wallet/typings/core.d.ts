@@ -29,4 +29,4 @@ export function generateSignature(tx: string, privateKey: string): string
 export function generatePrivateKey(): string
 
 /** Generates a arrayBuffer filled with random bits. */
-export function generateRandomArray(length: number): string
+export function generateRandomArray(length: number): ArrayBuffer
