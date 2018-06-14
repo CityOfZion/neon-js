@@ -1,7 +1,11 @@
+import * as api from "@cityofzion/neon-api";
 import { CONST, rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 import * as nep5 from "@cityofzion/neon-nep5";
 
 export default {
+  sendAsset: api.sendAsset,
+  claimGas: api.claimGas,
+  doInvoke: api.doInvoke,
   create: {
     account: (k: string) => new wallet.Account(k),
     privateKey: wallet.generatePrivateKey,
@@ -71,4 +75,4 @@ export default {
 };
 
 export * from "@cityofzion/neon-core";
-export { nep5 };
+export { api, nep5 };
