@@ -13,9 +13,9 @@ describe('Account', function () {
   }
 
   const scryptParams = {
-    cost: 256,
-    blockSize: 1,
-    parallel: 1
+    n: 256,
+    r: 1,
+    p: 1
   }
 
   const keyphrase = 'thisisakeyphrase'
@@ -82,14 +82,18 @@ describe('Account', function () {
 
   it('encrypts the key', () => {
     const a = new Account(acct.WIF)
-    a.encrypt(keyphrase, scryptParams)
-    a.encrypted.should.equal(acct.encrypted)
+    return a.encrypt(keyphrase, scryptParams)
+      .then(_ => {
+        a.encrypted.should.equal(acct.encrypted)
+      })
   })
 
   it('decrypts the key', () => {
     const a = new Account(acct.encrypted)
-    a.decrypt(keyphrase, scryptParams)
-    a.WIF.should.equal(acct.WIF)
+    return a.decrypt(keyphrase, scryptParams)
+      .then(_ => {
+        a.WIF.should.equal(acct.WIF)
+      })
   })
 
   it('throws error when insufficient information given', () => {

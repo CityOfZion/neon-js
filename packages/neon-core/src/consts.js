@@ -29,9 +29,9 @@ export const DEFAULT_RPC = {
 export const DEFAULT_REQ = { jsonrpc: '2.0', method: 'getblockcount', params: [], id: 1234 }
 
 export const DEFAULT_SCRYPT = {
-  cost: 16384,
-  blockSize: 8,
-  parallel: 8,
+  n: 16384,
+  r: 8,
+  p: 8,
   size: 64
 }
 

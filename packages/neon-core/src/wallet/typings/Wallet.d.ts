@@ -32,16 +32,16 @@ export class Wallet {
   addAccount(acct: Account | object): number
 
   /** Attempts to decrypt Account at index in array. */
-  decrypt(index: number, keyphrase: string): boolean
+  decrypt(index: number, keyphrase: string): Promise<boolean>
 
   /** Attempts to decrypt all accounts with keyphrase. */
-  decryptAll(keyphrase: string): boolean[]
+  decryptAll(keyphrase: string): Promise<boolean[]>
 
   /** Attempts to encrypt Account at index in array. */
-  encrypt(index: number, keyphrase: string): boolean
+  encrypt(index: number, keyphrase: string): Promise<boolean>
 
   /** Attempts to encrypt all accounts with keyphrase. */
-  encryptAll(keyphrase: string): boolean[]
+  encryptAll(keyphrase: string): Promise<boolean[]>
 
   /** Export this class as a object */
   export(): WalletLike

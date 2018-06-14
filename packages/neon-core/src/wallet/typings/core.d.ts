@@ -1,7 +1,7 @@
 export interface ScryptParams {
-  cost: number
-  blockSize: number
-  parallel: number
+  n: number
+  r: number
+  p: number
 }
 
 export function getPublicKeyEncoded(publicKey: string): string

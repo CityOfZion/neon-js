@@ -30,10 +30,10 @@ export class Account {
   getPublicKey(encoded: boolean): string
 
   /** Encrypts the current privateKey and return the Account object. */
-  encrypt(keyphrase: string, scryptParams?: ScryptParams): Account
+  encrypt(keyphrase: string, scryptParams?: ScryptParams): Promise<Account>
 
   /** Decrypts the encrypted key and return the Account object. */
-  decrypt(keyphrase: string, scryptParams?: ScryptParams): Account
+  decrypt(keyphrase: string, scryptParams?: ScryptParams): Promise<Account>
 
   /** Export Account as a AccountLike object. */
   export(): AccountLike

@@ -17,7 +17,7 @@ describe('Wallet file', function () {
       w.should.not.equal(undefined)
       w.name.should.equal('NamedWallet')
       const scryptParams = [w.scrypt.n, w.scrypt.r, w.scrypt.p]
-      scryptParams.should.eql([DEFAULT_SCRYPT.cost, DEFAULT_SCRYPT.blockSize, DEFAULT_SCRYPT.parallel])
+      scryptParams.should.eql([DEFAULT_SCRYPT.n, DEFAULT_SCRYPT.r, DEFAULT_SCRYPT.p])
       w.accounts.should.eql([])
     })
 
@@ -106,14 +106,18 @@ describe('Wallet file', function () {
   describe('decrypt/encrypt', function () {
     const w = new Wallet(simpleWallet)
     it('decryptAll', () => {
-      const decrypted = w.decryptAll(simpleWallet.accounts[1].label)
-      decrypted.should.eql([false, true, false, false, false])
-      w.accounts[1].privateKey.should.not.equal(undefined)
+      return w.decryptAll(simpleWallet.accounts[1].label)
+        .then(decrypted => {
+          decrypted.should.eql([false, true, false, false, false])
+          w.accounts[1].privateKey.should.not.equal(undefined)
+        })
     })
 
     it('encryptAll', () => {
-      const encrypted = w.encryptAll(simpleWallet.accounts[1].label)
-      encrypted.should.eql([false, true, false, false, false])
+      return w.encryptAll(simpleWallet.accounts[1].label)
+        .then(encrypted => {
+          encrypted.should.eql([false, true, false, false, false])
+        })
     })
   })
 })
