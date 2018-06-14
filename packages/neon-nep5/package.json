@@ -29,13 +29,13 @@
   },
   "devDependencies": {
     "@cityofzion/neon-core": "^4.0.0-next.0",
-    "@types/jest": "^23.0.2",
+    "@types/jest": "^23.1.0",
     "jest": "^23.1.0",
     "prettier": "^1.12.1",
     "ts-jest": "^22.4.6",
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.12.0",
-    "typescript": "^2.8.3"
+    "typescript": "^2.9.2"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "^4.0.0-next.0"
