@@ -3,6 +3,13 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.9.1
+=====
+
+- Fixes
+
+  - Added `sendingFromSmartContract` for claimGas.
+
 3.9.0
 =====
 
