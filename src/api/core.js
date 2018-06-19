@@ -59,6 +59,7 @@ export const sendAsset = config => {
  * @param {string} [config.privateKey] - private key to sign with. Either this or signingFunction and publicKey is required.
  * @param {function} [config.signingFunction] - An external signing function to sign with. Either this or privateKey is required.
  * @param {string} [config.publicKey] - A public key for the singing function. Either this or privateKey is required.
+ * @param {bool} [config.sendingFromSmartContract] - Optionally specify that the source address is a smart contract that doesn't correspond to the private key.
  * @return {Promise<object>} Configuration object.
  */
 export const claimGas = config => {
@@ -66,7 +67,9 @@ export const claimGas = config => {
     .then(fillKeys)
     .then(fillClaims)
     .then(c => createTx(c, 'claim'))
+    .then(c => addAttributesIfExecutingAsSmartContract(c))
     .then(c => signTx(c))
+    .then(c => attachContractIfExecutingAsSmartContract(c))
     .then(c => sendTx(c))
     .catch(err => {
       const dump = {
