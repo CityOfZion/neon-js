@@ -210,6 +210,15 @@ describe('Query', function () {
       })
     })
 
+    it('getValidators', () => {
+      Query.getValidators().req.should.eql({
+        id: 1234,
+        jsonrpc: '2.0',
+        method: 'getvalidators',
+        params: []
+      })
+    })
+
     describe('invoke', () => {
       it('simple', () => {
         return Query.invoke(CONTRACTS.TEST_RPX, ContractParam.string('name'), ContractParam.boolean(false)).req.should.eql({

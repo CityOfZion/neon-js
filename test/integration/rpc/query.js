@@ -6,7 +6,7 @@ import testKeys from '../../unit/testKeys.json'
 describe('Query', function () {
   this.timeout(10000)
 
-  describe('RPC Queries', function () {
+  describe.only('RPC Queries', function () {
     it('getAccountState', () => {
       return Query.getAccountState(testKeys.a.address)
         .execute(DEFAULT_RPC.TEST)
@@ -224,6 +224,14 @@ describe('Query', function () {
         .then((res) => {
           res.result.should.have.all.keys(['port', 'nonce', 'useragent'])
           res.result.useragent.should.match(/NEO:(\d+\.\d+\.\d+)/)
+        })
+    })
+
+    it('fails getValidators', () => {
+      return Query.getValidators()
+        .execute(DEFAULT_RPC.TEST)
+        .then((res) => {
+          res.result[0].should.have.all.keys(['publickey', 'votes', 'active'])
         })
     })
 
