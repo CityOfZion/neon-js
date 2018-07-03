@@ -6,7 +6,7 @@ import testKeys from '../../unit/testKeys.json'
 describe('Query', function () {
   this.timeout(10000)
 
-  describe.only('RPC Queries', function () {
+  describe('RPC Queries', function () {
     it('getAccountState', () => {
       return Query.getAccountState(testKeys.a.address)
         .execute(DEFAULT_RPC.TEST)
@@ -227,7 +227,7 @@ describe('Query', function () {
         })
     })
 
-    it('fails getValidators', () => {
+    it('getValidators', () => {
       return Query.getValidators()
         .execute(DEFAULT_RPC.TEST)
         .then((res) => {
