@@ -188,7 +188,7 @@
             "url": "http://seed1.neo.org:20332"
           },
           {
-            "block_height": 1180515,
+            "block_height": 1180516,
             "status": true,
             "time": 2.4572107791900635,
             "url": "https://seed2.neo.org:20331"
@@ -212,7 +212,7 @@
             "url": "http://seed5.neo.org:20332"
           },
           {
-            "block_height": 1180516,
+            "block_height": 1180517,
             "status": true,
             "time": 0.04218435287475586,
             "url": "http://seed8.antshares.org:20332"
