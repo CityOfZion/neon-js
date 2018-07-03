@@ -373,7 +373,7 @@ class RPCClient {
   }
 
   getValidators () {
-    return this.execute(Query.getValidators)
+    return this.execute(Query.getValidators())
       .then((res) => {
         return res.result
       })
