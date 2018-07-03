@@ -97,6 +97,12 @@ declare const semantic: {
       gasCost: number
     ) => Promise<RPCResponse>
   }
+  add: {
+    network: (network: rpc.Network, override?: boolean) => boolean
+  }
+  remove: {
+    network: (name: string) => boolean
+  }
   sendAsset: (config: apiConfig) => Promise<apiConfig>
   claimGas: (config: apiConfig) => Promise<apiConfig>
   doInvoke: (config: apiConfig) => Promise<apiConfig>
