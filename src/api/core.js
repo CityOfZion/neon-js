@@ -114,12 +114,38 @@ export const doInvoke = config => {
       const dump = {
         net: config.net,
         address: config.address,
-        intents: config.intents,
-        balance: config.balance,
         tx: config.tx,
         script: config.script,
         gas: config.gas,
         fees: config.fees
+      }
+      log.error(`doInvoke failed with ${err.message}. Dumping config`, dump)
+      throw err
+    })
+}
+
+/**
+ * Setup votes for an account using StateTransaction.
+ * @param {object} config
+ * @param {string[]} config.candidateKeys - List of public keys to vote for
+ */
+export const setupVote = config => {
+  return fillUrl(config)
+    .then(fillKeys)
+    .then(fillBalance)
+    .then(c => createTx(c, 'state'))
+    .then(c => addAttributesIfExecutingAsSmartContract(c))
+    .then(attachAttributesForEmptyTransaction)
+    .then(c => signTx(c))
+    .then(c => attachContractIfExecutingAsSmartContract(c))
+    .then(c => sendTx(c))
+    .catch(err => {
+      const dump = {
+        net: config.net,
+        address: config.address,
+        intents: config.intents,
+        balance: config.balance,
+        candidateKeys: config.candidateKeys
       }
       log.error(`doInvoke failed with ${err.message}. Dumping config`, dump)
       throw err
@@ -200,6 +226,11 @@ export const createTx = (config, txType) => {
       checkProperty(config, 'balance', 'gas', 'script')
       if (!config.intents) config.intents = []
       tx = Transaction.createInvocationTx(config.balance, config.intents, config.script, config.gas, config.override, config.fees)
+      break
+    case 'state':
+    case 144:
+      checkProperty(config, 'candidateKeys')
+      tx = Transaction.createStateTx(config.address, config.candidateKeys, config.override)
       break
     default:
       return Promise.reject(new Error(`Tx Type not found: ${txType}`))
