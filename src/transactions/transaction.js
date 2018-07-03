@@ -7,6 +7,7 @@ import * as comp from './components'
 import * as core from './core'
 import * as exc from './exclusive'
 import logger from '../logging'
+import { StateType, StateDescriptor } from './StateDescriptor'
 
 const log = logger('tx')
 
@@ -142,6 +143,28 @@ class Transaction {
     }, override)
     const tx = new Transaction(txConfig).calculate(balances, null, fees)
     log.info(`New InvocationTransaction for ${balances.address}`)
+    return tx
+  }
+
+  /**
+   * Creates an StateTransaction with the given parameters
+   * @param {string} votingPublicKeyOrAddress
+   * @param {string[]} candidateKeys
+   * @param {object} [override]
+   */
+  static createStateTx (votingPublicKeyOrAddress, candidateKeys, override = {}) {
+    const descriptor = new StateDescriptor({
+      type: StateType.Account,
+      key: new Account(votingPublicKeyOrAddress).scriptHash,
+      field: 'Votes',
+      value: candidateKeys.join('')
+    })
+    const txConfig = Object.assign({
+      type: 0x90,
+      version: 0,
+      descriptors: [descriptor]
+    }, override)
+    const tx = new Transaction(txConfig)
     return tx
   }
 

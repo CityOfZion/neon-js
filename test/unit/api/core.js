@@ -103,7 +103,8 @@ describe('Core API', function () {
           scriptHash: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537'
         }],
         script: '001234567890',
-        gas: 0.1
+        gas: 0.1,
+        candidateKeys: ['02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef', '031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9']
       })
     })
     it('claims', () => {
@@ -130,6 +131,14 @@ describe('Core API', function () {
         .then((conf) => {
           conf.should.have.any.keys(['balance', 'claims', 'intents', 'script', 'gas', 'tx'])
           conf.tx.type.should.equal(209)
+        })
+    })
+
+    it('state', () => {
+      return core.createTx(config, 'state')
+        .then((conf) => {
+          conf.should.have.any.keys(['tx', 'descriptors'])
+          conf.tx.type.should.equal(144)
         })
     })
 
