@@ -29,19 +29,13 @@ export const getAPIEndpoint = net => {
 export const getRPCEndpoint = net => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v1/get_all_nodes').then(({ data }) => {
-    let bestHeight = 0
-    let nodes = []
-    for (const node of data) {
-      if (httpsOnly && !node.url.includes('https://')) continue
-      if (node.height > bestHeight) {
-        bestHeight = node.height
-        nodes = [node]
-      } else if (node.height + 1 >= bestHeight) {
-        nodes.push(node)
-      }
-    }
+    let nodes = data.sort((a, b) => b.height - a.height)
+    if (httpsOnly) nodes = nodes.filter(n => n.url.includes('https://'))
     if (nodes.length === 0) throw new Error('No eligible nodes found!')
-    var urls = nodes.map(n => n.url)
+
+    const heightThreshold = nodes[0].height - 1
+    const goodNodes = nodes.filter(n => n.height >= heightThreshold)
+    const urls = goodNodes.map(n => n.url)
     if (urls.includes(cachedRPC)) {
       return new RPCClient(cachedRPC).ping().then(num => {
         if (num <= timeout.ping) return cachedRPC
@@ -49,7 +43,7 @@ export const getRPCEndpoint = net => {
         return getRPCEndpoint(net)
       })
     }
-    var clients = urls.map(u => new RPCClient(u))
+    const clients = urls.map(u => new RPCClient(u))
     return Promise.race(clients.map(c => c.ping().then(_ => c.net)))
   })
     .then(fastestUrl => {
