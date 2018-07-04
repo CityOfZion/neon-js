@@ -227,6 +227,14 @@ describe('Query', function () {
         })
     })
 
+    it('getValidators', () => {
+      return Query.getValidators()
+        .execute(DEFAULT_RPC.TEST)
+        .then((res) => {
+          res.result[0].should.have.all.keys(['publickey', 'votes', 'active'])
+        })
+    })
+
     describe('invoke', () => {
       it('simple', () => {
         return Query.invoke(CONTRACTS.TEST_RPX, ContractParam.string('name'), ContractParam.boolean(false))
