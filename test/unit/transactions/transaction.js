@@ -77,17 +77,16 @@ describe('Transaction', function () {
   })
 
   it('create StateTx', () => {
-    const candidateKeys = ['f1', 'f2', 'f3']
-    const address = 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW'
-    const tx = Tx.createStateTx(address, candidateKeys)
+    const descriptors = [{
+      type: 0x40,
+      key: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537',
+      field: 'Votes',
+      value: 'abcd'
+    }]
+    const tx = Tx.createStateTx(descriptors)
     tx.type.should.equal(144)
     tx.exclusiveData.should.eql({
-      descriptors: [{
-        type: 0x40,
-        key: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537',
-        field: 'Votes',
-        value: 'f1f2f3'
-      }]
+      descriptors
     })
   })
 
