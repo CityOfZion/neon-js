@@ -108,7 +108,11 @@ const serializeStateExclusive = tx => {
   if (tx.type !== 0x90) throw new Error()
   let out = num2VarInt(tx.descriptors.length)
   for (const desc of tx.descriptors) {
-    out += desc.serialize()
+    if (desc instanceof StateDescriptor) {
+      out += desc.serialize()
+    } else {
+      out += new StateDescriptor(desc).serialize()
+    }
   }
   return out
 }

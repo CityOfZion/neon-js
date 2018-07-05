@@ -2,9 +2,10 @@ import { Account, getScriptHashFromAddress, generateRandomArray } from '../walle
 import { ASSET_ID } from '../consts'
 import { Query } from '../rpc'
 import { Transaction, TransactionOutput, TxAttrUsage } from '../transactions'
-import { reverseHex, ab2hexstring } from '../utils'
+import { int2hex, reverseHex, ab2hexstring } from '../utils'
 import { loadBalance } from './switch'
 import logger from '../logging'
+import { StateType, StateDescriptor } from '../transactions/StateDescriptor'
 
 const log = logger('api')
 
@@ -133,6 +134,7 @@ export const setupVote = config => {
   return fillUrl(config)
     .then(fillKeys)
     .then(fillBalance)
+    .then(buildDescriptors)
     .then(c => createTx(c, 'state'))
     .then(c => addAttributesIfExecutingAsSmartContract(c))
     .then(attachAttributesForEmptyTransaction)
@@ -199,6 +201,16 @@ export const fillClaims = config => {
   return loadBalance(getClaimsFrom, config)
 }
 
+export const buildDescriptors = config => {
+  if (config.descriptors) return Promise.resolve(config)
+  config.descriptors = [new StateDescriptor({
+    type: StateType.Account,
+    key: reverseHex(new Account(config.address).scriptHash),
+    field: 'Votes',
+    value: int2hex(config.candidateKeys.length) + config.candidateKeys.join('')
+  })]
+  return Promise.resolve(config)
+}
 /**
  * Creates a transaction with the given config and txType.
  * @param {object} config - Configuration object.
@@ -229,8 +241,8 @@ export const createTx = (config, txType) => {
       break
     case 'state':
     case 144:
-      checkProperty(config, 'candidateKeys')
-      tx = Transaction.createStateTx(config.address, config.candidateKeys, config.override)
+      checkProperty(config, 'descriptors')
+      tx = Transaction.createStateTx(config.descriptors, config.override)
       break
     default:
       return Promise.reject(new Error(`Tx Type not found: ${txType}`))

@@ -1,7 +1,7 @@
 import { Account } from '../wallet'
 import { TX_VERSION, ASSET_ID } from '../consts'
 import { createScript } from '../sc'
-import { Fixed8, str2hexstring } from '../utils'
+import { Fixed8, str2hexstring, reverseHex, int2hex } from '../utils'
 import TxAttrUsage from './txAttrUsage'
 import * as comp from './components'
 import * as core from './core'
@@ -148,21 +148,14 @@ class Transaction {
 
   /**
    * Creates an StateTransaction with the given parameters
-   * @param {string} votingPublicKeyOrAddress
-   * @param {string[]} candidateKeys
+   * @param {StateDescriptor[]} descriptors
    * @param {object} [override]
    */
-  static createStateTx (votingPublicKeyOrAddress, candidateKeys, override = {}) {
-    const descriptor = new StateDescriptor({
-      type: StateType.Account,
-      key: new Account(votingPublicKeyOrAddress).scriptHash,
-      field: 'Votes',
-      value: candidateKeys.join('')
-    })
+  static createStateTx (descriptors, override = {}) {
     const txConfig = Object.assign({
       type: 0x90,
       version: 0,
-      descriptors: [descriptor]
+      descriptors: descriptors.map(d => new StateDescriptor(d))
     }, override)
     const tx = new Transaction(txConfig)
     return tx
