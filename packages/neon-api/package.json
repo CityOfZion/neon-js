@@ -25,13 +25,15 @@
     "pretty": "prettier",
     "test": "jest --coverage",
     "test:unit": "jest ./__tests__/.*",
-    "test:integration": "jest ./__integration__/.*"
+    "test:integration": "jest ./__integration__/.*",
+    "clean": "rimraf ./lib ./dist"
   },
   "devDependencies": {
     "@cityofzion/neon-core": "^4.0.0-next.0",
     "@types/jest": "^23.1.0",
     "jest": "^23.1.0",
-    "ts-jest": "^22.4.6",
+    "rimraf": "^2.6.2",
+    "ts-jest": "^23.0.0",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2"
   },

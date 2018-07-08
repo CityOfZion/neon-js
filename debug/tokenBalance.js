@@ -1,17 +1,17 @@
-const Neon = require('../lib/index.js')
-const testKeys = require('../test/unit/testKeys.json')
+const Neon = require('../packages/neon-js/dist/index')
+const testKeys = require('../packages/neon-core/__tests__/testKeys.json')
 
 const url = 'http://test1.cityofzion.io:8880'
-
+console.log(Neon.nep5)
 const printTokenBalances = function (scriptHash) {
-  return Neon.api.nep5.getTokenInfo(url, scriptHash)
+  return Neon.nep5.getToken(url, scriptHash)
     .then(({ symbol }) => {
       console.log(`=== ${symbol} ===`)
     })
     .then(() => {
       const balances = Object.keys(testKeys).map((key) => {
         const addr = testKeys[key].address
-        return Neon.api.nep5.getToken(url, scriptHash, addr)
+        return Neon.nep5.getToken(url, scriptHash, addr)
           .then((res) => console.log(`${key}: ${res.balance}`))
       })
       return Promise.all(balances)

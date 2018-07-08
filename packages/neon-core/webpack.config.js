@@ -1,53 +1,49 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
+let env = process.env.NODE_ENV || 'development'
+
 let common = {
-  entry: './src/index.js',
+  mode: env,
+  devtool: env === 'development' ? 'inline-source-map' : false,
+  entry: './src/index.ts',
+  resolve: {
+    // Add `.ts` and `.tsx` as a resolvable extension.
+    extensions: ['.ts', '.tsx', '.js']
+  },
   module: {
     rules: [
+      // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
       {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-proposal-object-rest-spread']
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        options: {
+          compilerOptions: {
+            declarationDir: 'dist',
+            sourceMap: env === 'development'
           }
         }
       }
     ]
   },
-  node: {
-    fs: 'empty',
-    'child_process': 'empty'
-  },
-  plugins: [
-    new CleanWebpackPlugin(['lib'])
-  ]
+  plugins: [new CleanWebpackPlugin(['dist'])]
 }
 
-if (process.env.NODE_ENV === 'development') {
-  common.devtool = 'source-map'
-}
-
-module.exports = function (mode) {
-  return [
-    Object.assign({}, common, {
-      target: 'node',
-      output: {
-        path: __dirname,
-        filename: './lib/index.js',
-        libraryTarget: 'umd'
-      }
-    }),
-    Object.assign({}, common, {
-      target: 'web',
-      output: {
-        path: __dirname,
-        filename: './lib/browser.js',
-        libraryTarget: 'umd',
-        library: 'Neon' // This is the var name in browser
-      }
-    })
-  ]
-}
+module.exports = [
+  Object.assign({}, common, {
+    target: 'node',
+    output: {
+      path: __dirname,
+      filename: './dist/index.js',
+      libraryTarget: 'umd'
+    }
+  }),
+  Object.assign({}, common, {
+    target: 'web',
+    output: {
+      path: __dirname,
+      filename: './dist/browser.js',
+      libraryTarget: 'umd',
+      library: 'Neon' // This is the var name in browser
+    }
+  })
+]

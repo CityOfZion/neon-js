@@ -3,7 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 let env = process.env.NODE_ENV || 'development'
 
 let common = {
-  mode: 'development',
+  mode: env,
   devtool: env === 'development' ? 'inline-source-map' : false,
   entry: './src/index.ts',
   resolve: {

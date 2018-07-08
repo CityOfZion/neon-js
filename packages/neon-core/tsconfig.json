@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib"
+    "outDir": "lib",
+    "typeRoots": ["./node_modules/@types", "./typings"]
   },
   "exclude": ["__tests__/*", "__integration__/*", "lib/*"]
 }

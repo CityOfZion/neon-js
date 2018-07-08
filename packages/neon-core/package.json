@@ -28,7 +28,8 @@
     "test:unit": "jest ./__tests__/.*",
     "test:integration": "jest ./__integration__/.*",
     "dist": "cross-env NODE_ENV=production webpack --mode production",
-    "dist:dev": "cross-env NODE_ENV=development webpack --mode development"
+    "dist:dev": "cross-env NODE_ENV=development webpack --mode development",
+    "clean": "rimraf ./lib ./dist"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -55,7 +56,8 @@
     "@types/bs58": "^3.0.30",
     "@types/crypto-js": "^3.1.40",
     "@types/loglevel": "^1.5.3",
-    "@types/node": "^10.3.3"
+    "@types/node": "^10.3.3",
+    "rimraf": "^2.6.2"
   },
   "files": [
     "lib/",
