@@ -5,6 +5,7 @@
     "@babel/polyfill": "^7.0.0-beta.46",
     "@babel/preset-env": "^7.0.0-beta.46",
     "@babel/register": "^7.0.0-beta.46",
+    "@types/jest": "^23.1.0",
     "axios-mock-adapter": "^1.15.0",
     "babel-loader": "^8.0.0-beta.0",
     "babel-plugin-istanbul": "^4.1.6",

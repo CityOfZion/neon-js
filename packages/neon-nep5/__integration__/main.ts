@@ -1,4 +1,4 @@
-import { CONST } from "@cityofzion/neon-core";
+import { u, CONST } from "@cityofzion/neon-core";
 import { getToken, getTokenBalance } from "../src/main";
 
 const TESTNET_URL = "http://test5.cityofzion.io:8880";
@@ -11,8 +11,8 @@ describe("getTokenBalance", () => {
       RPX,
       "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
     ).then(balance => {
-      expect(typeof balance).toBe("number");
-      expect(balance).toBeGreaterThan(0);
+      expect(balance instanceof u.Fixed8).toBe(true);
+      expect(balance.toNumber()).toBeGreaterThan(0);
     });
   });
 
@@ -22,8 +22,8 @@ describe("getTokenBalance", () => {
       CONST.CONTRACTS.TEST_RHTT4,
       "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
     ).then(balance => {
-      expect(balance).toBeGreaterThan(0);
-      expect(balance % 1).toBe(0);
+      expect(balance.toNumber()).toBeGreaterThan(0);
+      expect(balance.toNumber() % 1).toBe(0);
     });
   });
 });
@@ -46,7 +46,9 @@ describe("getToken", () => {
         expect(info.symbol).toMatch(/[A-Z]+/);
         expect(typeof info.decimals).toBe("number");
         expect(typeof info.totalSupply).toBe("number");
-        expect(typeof info.balance).toBe("number");
+        expect(info.balance).toBeDefined();
+        const balanceNum = info.balance.toNumber();
+        expect(balanceNum).toBeGreaterThan(0);
       }
     );
   });

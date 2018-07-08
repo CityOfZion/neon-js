@@ -28,7 +28,6 @@
     "test:integration": "jest ./__integration__/.*"
   },
   "devDependencies": {
-    "@cityofzion/neon-core": "^4.0.0-next.0",
     "@types/jest": "^23.1.0",
     "jest": "^23.1.0",
     "prettier": "^1.12.1",

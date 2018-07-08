@@ -24,7 +24,7 @@
     "prepublishOnly": "yarn lint && yarn build",
     "pretty": "prettier",
     "test": "jest --coverage",
-    "test:unit": "jest ./__tests/.*",
+    "test:unit": "jest ./__tests__/.*",
     "test:integration": "jest ./__integration__/.*"
   },
   "devDependencies": {

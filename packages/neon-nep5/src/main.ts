@@ -1,4 +1,4 @@
-import { logging, rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
+import { logging, rpc, sc, u, wallet } from "@cityofzion/neon-core";
 
 const log = logging.default("nep5");
 
@@ -7,40 +7,29 @@ export interface TokenInfo {
   symbol: string;
   decimals: number;
   totalSupply: number;
-  balance?: number;
+  balance?: u.Fixed8;
 }
 
-function parseDecimals(VMOutput: string): number {
-  if (VMOutput === "") {
-    return 0;
-  }
-  return parseInt(VMOutput, 10);
-}
-
-function parseHexNum(hex: string): number {
-  return hex ? parseInt(u.reverseHex(hex), 16) : 0;
-}
-
-const parseTokenInfo = rpc.VMZip(
-  u.hexstring2str,
-  u.hexstring2str,
-  parseDecimals,
-  parseHexNum
+const parseTokenInfo = rpc.buildParser(
+  rpc.StringParser,
+  rpc.StringParser,
+  rpc.IntegerParser,
+  rpc.Fixed8Parser
 );
 
-const parseTokenInfoAndBalance = rpc.VMZip(
-  u.hexstring2str,
-  u.hexstring2str,
-  parseDecimals,
-  parseHexNum,
-  parseHexNum
+const parseTokenInfoAndBalance = rpc.buildParser(
+  rpc.StringParser,
+  rpc.StringParser,
+  rpc.IntegerParser,
+  rpc.Fixed8Parser,
+  rpc.Fixed8Parser
 );
 
 export const getTokenBalance = async (
   url: string,
   scriptHash: string,
   address: string
-): Promise<number> => {
+): Promise<u.Fixed8> => {
   const addrScriptHash = u.reverseHex(wallet.getScriptHashFromAddress(address));
   const sb = new sc.ScriptBuilder();
   const script = sb
@@ -49,8 +38,10 @@ export const getTokenBalance = async (
 
   try {
     const res = await rpc.Query.invokeScript(script).execute(url);
-    const decimals = parseDecimals(res.result.stack[0].value);
-    return parseHexNum(res.result.stack[1].value) / Math.pow(10, decimals);
+    const decimals = rpc.IntegerParser(res.result.stack[0]);
+    return rpc
+      .Fixed8Parser(res.result.stack[1])
+      .mul(Math.pow(10, 8 - decimals));
   } catch (err) {
     log.error(`getTokenBalance failed with : ${err.message}`);
     throw err;
@@ -64,8 +55,7 @@ export const getToken = async (
 ): Promise<TokenInfo> => {
   const parser = address ? parseTokenInfoAndBalance : parseTokenInfo;
   const sb = new sc.ScriptBuilder();
-  sb
-    .emitAppCall(scriptHash, "name")
+  sb.emitAppCall(scriptHash, "name")
     .emitAppCall(scriptHash, "symbol")
     .emitAppCall(scriptHash, "decimals")
     .emitAppCall(scriptHash, "totalSupply");
@@ -84,10 +74,10 @@ export const getToken = async (
       name: res[0],
       symbol: res[1],
       decimals: res[2],
-      totalSupply: res[3] / Math.pow(10, res[2])
+      totalSupply: res[3].div(Math.pow(10, 8 - res[2])).toNumber()
     };
     if (address) {
-      result.balance = res.length === 5 ? res[4] / Math.pow(10, res[2]) : 0;
+      result.balance = res[4].div(Math.pow(10, 8 - res[2]));
     }
     return result;
   } catch (err) {

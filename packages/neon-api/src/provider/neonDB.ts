@@ -8,12 +8,6 @@ import {
 } from "@cityofzion/neon-core";
 import axios from "axios";
 import {
-  NeonDbBalance,
-  NeonDbClaims,
-  NeonDbHistory,
-  NeonDbNode
-} from "../../types/neonDB";
-import {
   filterHttpsOnly,
   findGoodNodesFromHeight,
   getBestUrl,
@@ -21,6 +15,7 @@ import {
   PastTransaction,
   RpcNode
 } from "./common";
+import { NeonDbNode, NeonDbBalance, NeonDbClaims, NeonDbHistory } from "../types/neonDB";
 const log = logging.default("api");
 export const name = "neonDB";
 
