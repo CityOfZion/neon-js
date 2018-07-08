@@ -1,8 +1,8 @@
+import { httpsOnly } from "./provider/common";
 import * as neonDB from "./provider/neonDB";
 import * as neoscan from "./provider/neoscan";
-
 const settings = {
-  httpsOnly: false
+  httpsOnly
 };
 
 export const internalSettings = {

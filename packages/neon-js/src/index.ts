@@ -1,6 +1,11 @@
 import * as api from "@cityofzion/neon-api";
-import { CONST, rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
+import { CONST, rpc, sc, settings, tx, u, wallet } from "@cityofzion/neon-core";
 import * as nep5 from "@cityofzion/neon-nep5";
+import defaultNetworks from "./networks";
+const bootstrap: { [net: string]: Partial<rpc.NetworkJSON> } = defaultNetworks;
+Object.keys(bootstrap).map(key => {
+  settings.networks[key] = new rpc.Network(bootstrap[key] as rpc.NetworkJSON);
+});
 
 export default {
   sendAsset: api.sendAsset,
@@ -10,12 +15,11 @@ export default {
     account: (k: string) => new wallet.Account(k),
     privateKey: wallet.generatePrivateKey,
     signature: wallet.generateSignature,
-    wallet: (k: wallet.WalletLike) => new wallet.Wallet(k),
-    tx: (args: tx.Transaction) => new tx.Transaction(args),
-    claimTx: tx.Transaction.createClaimTx,
-    contractTx: tx.Transaction.createContractTx,
-    invocationTx: tx.Transaction.createInvocationTx,
-    contractParam: (type: string, value: any) =>
+    wallet: (k: wallet.WalletJSON) => new wallet.Wallet(k),
+    claimTx: () => new tx.ClaimTransaction,
+    contractTx:() => new tx.ContractTransaction,
+    invocationTx: () => new tx.InvocationTransaction,
+    contractParam: (type: keyof typeof sc.ContractParamType, value: any) =>
       new sc.ContractParam(type, value),
     script: sc.createScript,
     scriptBuilder: () => new sc.ScriptBuilder(),
@@ -25,12 +29,11 @@ export default {
     query: (req: rpc.RPCRequest) => new rpc.Query(req)
   },
   deserialize: {
-    attribute: tx.deserializeTransactionAttribute,
-    input: tx.deserializeTransactionInput,
-    output: tx.deserializeTransactionOutput,
-    script: tx.deserializeWitness,
-    exclusiveData: tx.deserializeExclusive,
-    tx: tx.deserializeTransaction
+    attribute: tx.TransactionAttribute.deserialize,
+    input: tx.TransactionInput.deserialize,
+    output: tx.TransactionOutput.deserialize,
+    script: tx.Witness.deserialize,
+    tx: tx.Transaction.deserialize
   },
   is: {
     address: wallet.isAddress,
@@ -52,27 +55,17 @@ export default {
     publicKeyFromPrivateKey: wallet.getPublicKeyFromPrivateKey,
     scriptHashFromPublicKey: wallet.getScriptHashFromPublicKey,
     addressFromScriptHash: wallet.getAddressFromScriptHash,
-    scriptHashFromAddress: wallet.getScriptHashFromAddress,
-    transactionHash: tx.getTransactionHash
-  },
-  serialize: {
-    attribute: tx.serializeTransactionAttribute,
-    input: tx.serializeTransactionInput,
-    output: tx.serializeTransactionOutput,
-    script: tx.serializeWitness,
-    exclusiveData: tx.serializeExclusive,
-    tx: tx.serializeTransaction
+    scriptHashFromAddress: wallet.getScriptHashFromAddress
   },
   sign: {
-    message: wallet.signMessage,
-    transaction: tx.signTransaction
+    message: wallet.sign
   },
   verify: {
-    message: wallet.verifyMessage
+    message: wallet.verify
   },
   u,
   CONST
 };
 
 export * from "@cityofzion/neon-core";
-export { api, nep5 };
+export { settings, api, nep5 };

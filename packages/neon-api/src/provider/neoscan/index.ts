@@ -1,20 +1,24 @@
-import {
-  CONST,
-  logging,
-  rpc,
-  settings,
-  u,
-  wallet
-} from "@cityofzion/neon-core";
+import { CONST, logging, settings, u, wallet } from "@cityofzion/neon-core";
 import axios from "axios";
 import {
   filterHttpsOnly,
   findGoodNodesFromHeight,
   getBestUrl,
+  httpsOnly,
   isCachedRPCAcceptable,
   PastTransaction,
   RpcNode
-} from "./common";
+} from "../common";
+import {
+  NeoscanBalance,
+  NeoscanClaim,
+  NeoscanPastTx,
+  NeoscanTx,
+  NeoscanV1GetBalanceResponse,
+  NeoscanV1GetClaimableResponse,
+  NeoscanV1GetHeightResponse,
+  NeoscanV1GetUnclaimedResponse
+} from "./responses";
 const log = logging.default("api");
 export const name = "neoscan";
 
@@ -43,7 +47,7 @@ export async function getRPCEndpoint(net: string): Promise<string> {
   const apiEndpoint = getAPIEndpoint(net);
   const response = await axios.get(apiEndpoint + "/v1/get_all_nodes");
   let nodes = response.data as RpcNode[];
-  if (settings.httpsOnly) {
+  if (httpsOnly) {
     nodes = filterHttpsOnly(nodes);
   }
   const goodNodes = findGoodNodesFromHeight(nodes);
@@ -85,9 +89,8 @@ export async function getBalance(
   for (const b of neoscanBalances) {
     if (b.amount > 0 && b.unspent.length > 0) {
       bal.addAsset(b.asset, {
-        balance: b.amount,
         unspent: parseUnspent(b.unspent)
-      } as wallet.AssetBalance);
+      } as Partial<wallet.AssetBalanceLike>);
     } else {
       bal.addToken(b.asset, b.amount);
     }
@@ -96,7 +99,7 @@ export async function getBalance(
   return bal;
 }
 
-function parseUnspent(unspentArr: NeoscanTx[]) {
+function parseUnspent(unspentArr: NeoscanTx[]): wallet.CoinLike[] {
   return unspentArr.map(coin => {
     return {
       index: coin.n,

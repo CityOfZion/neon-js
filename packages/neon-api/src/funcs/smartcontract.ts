@@ -1,4 +1,4 @@
-import { rpc, tx, u, wallet } from "@cityofzion/neon-core";
+import { tx, u } from "@cityofzion/neon-core";
 import { getVerificationSignatureForSmartContract } from "./common";
 import { ManagedApiBasicConfig } from "./types";
 
@@ -8,7 +8,7 @@ import { ManagedApiBasicConfig } from "./types";
  * @return Configuration object.
  */
 export async function addAttributeIfExecutingAsSmartContract<
-  T extends ManagedApiBasicConfig
+  T extends ManagedApiBasicConfig<tx.BaseTransaction>
 >(config: T): Promise<T> {
   if (!config.sendingFromSmartContract) {
     return config;
@@ -26,7 +26,7 @@ export async function addAttributeIfExecutingAsSmartContract<
  * @return Configuration object.
  */
 export async function addSignatureIfExecutingAsSmartContract<
-  T extends ManagedApiBasicConfig
+  T extends ManagedApiBasicConfig<tx.BaseTransaction>
 >(config: T): Promise<T> {
   if (!config.sendingFromSmartContract) {
     return config;

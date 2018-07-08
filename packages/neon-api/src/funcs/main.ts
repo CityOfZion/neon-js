@@ -18,7 +18,6 @@ import {
 import {
   ClaimGasConfig,
   DoInvokeConfig,
-  ManagedApiBasicConfig,
   SendAssetConfig
 } from "./types";
 
@@ -115,7 +114,7 @@ export function makeIntent(
 ): tx.TransactionOutput[] {
   const acct = new wallet.Account(address);
   return Object.keys(assetAmts).map(key => {
-    return tx.TransactionOutput({
+    return new tx.TransactionOutput({
       assetId: CONST.ASSET_ID[key],
       value: assetAmts[key],
       scriptHash: acct.scriptHash

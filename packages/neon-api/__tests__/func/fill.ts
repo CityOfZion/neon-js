@@ -1,10 +1,8 @@
-import { Wallet } from "../../../neon-core/src/wallet";
 import { wallet } from "../../../neon-js/src";
 import { SendAssetConfig } from "../../lib/funcs/types";
 import * as fill from "../../src/funcs/fill";
 import { signWithPrivateKey } from "../../src/funcs/sign";
 import { ClaimGasConfig, ManagedApiBasicConfig } from "../../src/funcs/types";
-import { Provider } from "../../src/provider/common";
 
 jest.mock("../../src/funcs/sign");
 

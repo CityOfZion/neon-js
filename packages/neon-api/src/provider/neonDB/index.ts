@@ -1,21 +1,20 @@
-import {
-  CONST,
-  logging,
-  rpc,
-  settings,
-  u,
-  wallet
-} from "@cityofzion/neon-core";
+import { logging, settings, u, wallet } from "@cityofzion/neon-core";
 import axios from "axios";
 import {
   filterHttpsOnly,
   findGoodNodesFromHeight,
   getBestUrl,
+  httpsOnly,
   isCachedRPCAcceptable,
   PastTransaction,
   RpcNode
-} from "./common";
-import { NeonDbNode, NeonDbBalance, NeonDbClaims, NeonDbHistory } from "../types/neonDB";
+} from "../common";
+import {
+  NeonDbBalance,
+  NeonDbClaims,
+  NeonDbHistory,
+  NeonDbNode
+} from "./responses";
 const log = logging.default("api");
 export const name = "neonDB";
 
@@ -49,7 +48,7 @@ export async function getRPCEndpoint(net: string) {
     .filter(d => d.status)
     .map(d => ({ height: d.block_height, url: d.url } as RpcNode));
 
-  if (settings.httpsOnly) {
+  if (httpsOnly) {
     nodes = filterHttpsOnly(nodes);
   }
   const goodNodes = findGoodNodesFromHeight(nodes);
@@ -80,10 +79,10 @@ export async function getBalance(
   );
   const data = response.data as NeonDbBalance;
   const bal = new wallet.Balance({ net, address } as wallet.BalanceLike);
-  if (data.NEO.balance !== 0) {
+  if (data.NEO.balance.gt(0)) {
     bal.addAsset("NEO", data.NEO);
   }
-  if (data.GAS.balance !== 0) {
+  if (data.GAS.balance.gt(0)) {
     bal.addAsset("GAS", data.GAS);
   }
   log.info(`Retrieved Balance for ${address} from neonDB ${net}`);
@@ -110,8 +109,8 @@ export async function getClaims(
       claim: new u.Fixed8(c.claim || 0).div(100000000),
       index: c.index,
       txid: c.txid,
-      start: new u.Fixed8(c.start || 0),
-      end: new u.Fixed8(c.end || 0),
+      start: c.start || 0,
+      end: c.end || 0,
       value: c.value
     };
   });

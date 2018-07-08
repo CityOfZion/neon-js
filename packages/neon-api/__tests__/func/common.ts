@@ -24,7 +24,7 @@ describe("modifyTransactionForEmptyTransaction", () => {
   test("performs operation on empty tx", async () => {
     const config = {
       address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
-      tx: new tx.Transaction({} as tx.Transaction)
+      tx: new tx.ContractTransaction()
     } as DoInvokeConfig;
 
     const result = await common.modifyTransactionForEmptyTransaction(config);
@@ -34,7 +34,7 @@ describe("modifyTransactionForEmptyTransaction", () => {
   test("Ignore transactions with inputs", async () => {
     const config = {
       address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
-      tx: new tx.Transaction({
+      tx: new tx.ContractTransaction({
         inputs: [{} as any]
       } as tx.Transaction)
     } as DoInvokeConfig;

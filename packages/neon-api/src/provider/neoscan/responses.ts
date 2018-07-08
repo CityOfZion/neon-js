@@ -1,27 +1,27 @@
-declare interface NeoscanV1GetBalanceResponse {
+export interface NeoscanV1GetBalanceResponse {
   balance: NeoscanBalance[] | null;
   address: string;
 }
 
-declare interface NeoscanBalance {
+export interface NeoscanBalance {
   asset: string;
   amount: number;
   unspent: NeoscanTx[];
 }
 
-declare interface NeoscanTx {
+export interface NeoscanTx {
   txid: string;
   value: number;
   n: number;
 }
 
-declare interface NeoscanV1GetClaimableResponse {
+export interface NeoscanV1GetClaimableResponse {
   unclaimed: number;
   claimable: NeoscanClaim[] | null;
   address: string;
 }
 
-declare interface NeoscanClaim {
+export interface NeoscanClaim {
   txid: string;
   n: number;
   value: number;
@@ -30,16 +30,16 @@ declare interface NeoscanClaim {
   end_height: number;
 }
 
-declare interface NeoscanV1GetUnclaimedResponse {
+export interface NeoscanV1GetUnclaimedResponse {
   unclaimed: number;
   address: string;
 }
 
-declare interface NeoscanV1GetHeightResponse {
+export interface NeoscanV1GetHeightResponse {
   height: number;
 }
 
-declare interface NeoscanPastTx {
+export interface NeoscanPastTx {
   vouts: [
     {
       value: number;

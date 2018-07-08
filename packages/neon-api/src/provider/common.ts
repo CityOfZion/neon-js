@@ -1,5 +1,6 @@
 import { rpc, u, wallet } from "@cityofzion/neon-core";
 
+export let httpsOnly = false;
 export interface PastTransaction {
   txid: string;
   blockHeight: number;

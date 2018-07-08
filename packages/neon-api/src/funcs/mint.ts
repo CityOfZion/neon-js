@@ -1,4 +1,4 @@
-import { rpc, tx, u, wallet } from "@cityofzion/neon-core";
+import { tx, u } from "@cityofzion/neon-core";
 import { getVerificationSignatureForSmartContract } from "./common";
 import { DoInvokeConfig } from "./types";
 
@@ -41,7 +41,8 @@ export async function addSignatureForMintToken(
       config.script.scriptHash
     );
     if (
-      parseInt(config.script.scriptHash, 16) > parseInt(config.account!.scriptHash, 16)
+      parseInt(config.script.scriptHash, 16) >
+      parseInt(config.account!.scriptHash, 16)
     ) {
       config.tx!.scripts.push(verificationSignature);
     } else {

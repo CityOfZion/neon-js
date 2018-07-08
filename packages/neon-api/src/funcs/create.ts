@@ -1,21 +1,13 @@
 import { tx, wallet } from "@cityofzion/neon-core";
 import { checkProperty } from "./common";
-import {
-  ClaimGasConfig,
-  DoInvokeConfig,
-  ManagedApiBasicConfig,
-  SendAssetConfig
-} from "./types";
+import { ClaimGasConfig, DoInvokeConfig, SendAssetConfig } from "./types";
 
 export async function createClaimTx(
   config: ClaimGasConfig
 ): Promise<ClaimGasConfig> {
   checkProperty(config, "claims");
-  config.tx = tx.Transaction.createClaimTx(
-    config.account!.address,
-    config.claims,
-    config.override!
-  );
+  config.tx = new tx.ClaimTransaction(config.override);
+  config.tx.addClaims(config.claims);
   return config as ClaimGasConfig;
 }
 
@@ -23,12 +15,10 @@ export async function createContractTx(
   config: SendAssetConfig
 ): Promise<SendAssetConfig> {
   checkProperty(config, "balance", "intents");
-  config.tx = tx.Transaction.createContractTx(
-    config.balance!,
-    config.intents,
-    config.override!,
-    config.fees!
+  config.tx = new tx.ContractTransaction(
+    Object.assign({ outputs: config.intents }, config.override)
   );
+  config.tx.calculate(config.balance!, undefined, config.fees!);
   return config;
 }
 
@@ -36,13 +26,20 @@ export async function createInvocationTx(
   config: DoInvokeConfig
 ): Promise<DoInvokeConfig> {
   checkProperty(config, "script");
-  config.tx = tx.Transaction.createInvocationTx(
+  config.tx = new tx.InvocationTransaction(
+    Object.assign(
+      {
+        intents: config.intents || [],
+        script: config.script,
+        gas: config.gas || 0
+      },
+      config.override
+    )
+  );
+  config.tx.calculate(
     config.balance || new wallet.Balance(),
-    config.intents,
-    config.script,
-    config.gas || 0,
-    config.override!,
-    config.fees!
+    undefined,
+    config.fees
   );
   return config;
 }

@@ -1,7 +1,6 @@
-import { logging, rpc } from "@cityofzion/neon-core";
+import { logging, rpc, tx } from "@cityofzion/neon-core";
 import { checkProperty } from "./common";
 import {
-  ClaimGasConfig,
   DoInvokeConfig,
   ManagedApiBasicConfig,
   SendAssetConfig
@@ -13,9 +12,9 @@ const log = logging.default("api");
  * @param {object} config - Configuration object.
  * @return {Promise<object>} Configuration object + response
  */
-export async function sendTx<T extends ManagedApiBasicConfig>(
-  config: T
-): Promise<T> {
+export async function sendTx<
+  T extends ManagedApiBasicConfig<tx.BaseTransaction>
+>(config: T): Promise<T> {
   checkProperty(config, "tx", "url");
   const response = await rpc.Query.sendRawTransaction(config.tx!).execute(
     config.url!

@@ -33,7 +33,7 @@ export async function modifyTransactionForEmptyTransaction(
     );
     // This adds some random bits to the transaction to prevent any hash collision.
     config.tx!.addRemark(
-      Date.now().toString() + u.ab2hexstring(wallet.generateRandomArray(4))
+      Date.now().toString() + u.ab2hexstring(u.generateRandomArray(4))
     );
   }
   return config;
