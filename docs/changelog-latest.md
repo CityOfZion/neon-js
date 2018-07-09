@@ -3,6 +3,16 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.9.2
+=====
+
+- Fixes
+
+  - Change default return value of contract in deployContract to ff00
+  - Fix bug in `getRPCEndpoint` where we drop the list when finding a new best height
+  - Fix bug in `getRPCEndpoint` where a rejected promise was ending the Promise.race
+  - Remove neonDB tests
+
 3.9.1
 =====
 
