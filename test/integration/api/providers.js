@@ -1,12 +1,11 @@
 import * as neoscan from '../../../src/api/neoscan'
-import * as neonDB from '../../../src/api/neonDB'
 import { Balance, Claims } from '../../../src/wallet'
 import { Fixed8 } from '../../../src/utils'
 
 describe('Integration: Providers', function () {
   this.timeout(20000)
   const addr = 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW'
-  const apis = [neoscan, neonDB]
+  const apis = [neoscan]
 
   apis.map(api => {
     describe(api.name, function () {
