@@ -48,7 +48,7 @@ describe('Switch API', function () {
         core.getRPCEndpointFrom,
         baseConfig
       )
-      return response.should.equal('http://test5.cityofzion.io:8880')
+      return response.should.equal('http://test3.cityofzion.io:8880')
     })
 
     it('calls getMaxClaimAmount', async () => {

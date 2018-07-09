@@ -5,6 +5,7 @@ import { Fixed8 } from '../utils'
 import { networks, httpsOnly, timeout } from '../settings'
 import logger from '../logging'
 import RPCClient from '../rpc/client'
+import { raceToSuccess } from './common'
 
 const log = logger('api')
 export const name = 'neoscan'
@@ -44,7 +45,7 @@ export const getRPCEndpoint = net => {
       })
     }
     const clients = urls.map(u => new RPCClient(u))
-    return Promise.race(clients.map(c => c.ping().then(_ => c.net)))
+    return raceToSuccess(clients.map(c => c.ping().then(_ => c.net)))
   })
     .then(fastestUrl => {
       cachedRPC = fastestUrl

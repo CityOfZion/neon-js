@@ -22,11 +22,16 @@ describe('Neoscan', function () {
     neoscan.getAPIEndpoint('CozNet').should.equal(settings.networks['CozNet'].extra.neoscan)
   })
 
-  it('geRPCEndpoint returns https only', () => {
+  it('getRPCEndpoint returns https only', () => {
     settings.httpsOnly = true
-    neoscan.getRPCEndpoint('TestNet')
+    return neoscan.getRPCEndpoint('TestNet')
       .then(res => res.should.have.string('https://'))
       .then(() => { settings.httpsOnly = false })
+  })
+
+  it('getPRCEndpoint chooses from height of best-1', () => {
+    return neoscan.getRPCEndpoint('TestNet')
+      .then(res => res.should.equal('http://test3.cityofzion.io:8880'))
   })
 
   it('getBalance returns Balance object', () => {
