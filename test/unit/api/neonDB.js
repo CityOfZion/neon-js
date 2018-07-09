@@ -20,11 +20,16 @@ describe('NeonDB', function () {
     neonDB.getAPIEndpoint('TestNet').should.equal(settings.networks['TestNet'].extra.neonDB)
   })
 
-  it('geRPCEndpoint returns https only', () => {
+  it('getRPCEndpoint returns https only', () => {
     settings.httpsOnly = true
-    neonDB.getRPCEndpoint('TestNet')
+    return neonDB.getRPCEndpoint('TestNet')
       .then(res => res.should.have.string('https://'))
       .then(() => { settings.httpsOnly = false })
+  })
+
+  it('getPRCEndpoint chooses from height of best-1', () => {
+    return neonDB.getRPCEndpoint('TestNet')
+      .then(res => res.should.be.oneOf(['https://seed2.neo.org:20331', 'http://seed8.antshares.org:20332']))
   })
 
   it('getBalance returns Balance object', () => {

@@ -6,6 +6,7 @@ import { ASSET_ID } from '../consts'
 import { Fixed8, reverseHex } from '../utils'
 import { networks, httpsOnly, timeout } from '../settings'
 import logger from '../logging'
+import {raceToSuccess} from './common'
 
 const log = logger('api')
 export const name = 'neonDB'
@@ -91,21 +92,15 @@ export const getRPCEndpoint = net => {
   const apiEndpoint = getAPIEndpoint(net)
   return axios.get(apiEndpoint + '/v2/network/nodes')
     .then((response) => {
-      const goodNodes = response.data.nodes.filter(n => n.status)
-      let bestHeight = 0
-      let nodes = []
-      for (const node of goodNodes) {
-        if (httpsOnly && !node.url.includes('https://')) continue
-        if (node.block_height > bestHeight) {
-          bestHeight = node.block_height
-          nodes = [node]
-          // Tolerance of 1 blocks to increase our choices and not spam down the best node
-        } else if (node.block_height + 1 >= bestHeight) {
-          nodes.push(node)
-        }
-      }
+      const healthyNodes = response.data.nodes.filter(n => n.status)
+      let nodes = healthyNodes.sort((a, b) => b.block_height - a.block_height)
+      if (httpsOnly) nodes = nodes.filter(n => n.url.includes('https://'))
       if (nodes.length === 0) throw new Error('No eligible nodes found!')
-      var urls = nodes.map(n => n.url)
+
+      const heightThreshold = nodes[0].block_height - 1
+      const goodNodes = nodes.filter(n => n.block_height >= heightThreshold)
+
+      const urls = goodNodes.map(n => n.url)
       if (urls.includes(cachedRPC)) {
         return new RPCClient(cachedRPC).ping().then(num => {
           if (num <= timeout.ping) return cachedRPC
@@ -113,8 +108,8 @@ export const getRPCEndpoint = net => {
           return getRPCEndpoint(net)
         })
       }
-      var clients = urls.map(u => new RPCClient(u))
-      return Promise.race(clients.map(c => c.ping().then(_ => c.net)))
+      const clients = urls.map(u => new RPCClient(u))
+      return raceToSuccess(clients.map(c => c.ping().then(_ => c.net)))
     })
     .then(fastestUrl => {
       cachedRPC = fastestUrl
