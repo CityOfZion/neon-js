@@ -6,6 +6,7 @@ import mockData from './mockData.json'
 describe('NEP5', function () {
   const url = DEFAULT_RPC.TEST
   const scriptHash = CONTRACTS.TEST_LWTF
+  const secondScriptHash = CONTRACTS.TEST_NXT
   let mock
 
   before(() => {
@@ -30,6 +31,18 @@ describe('NEP5', function () {
     return NEP5.getTokenBalance(url, scriptHash, testKeys.c.address)
       .then(result => {
         result.should.be.above(0)
+      })
+      .catch((e) => {
+        console.log(e)
+        throw e
+      })
+  })
+
+  it('get balances', () => {
+    return NEP5.getTokenBalances(url, [scriptHash, secondScriptHash], testKeys.b.address)
+      .then(result => {
+        result.LWTF.should.equal(0.0001333)
+        result.NXT.should.equal(0.00030806)
       })
       .catch((e) => {
         console.log(e)

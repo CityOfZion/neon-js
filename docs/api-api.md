@@ -127,6 +127,11 @@ Neon.get.tokenBalance('http://seed1.neo.org:20332', rpxScriptHash, address)
 import { api } from '@cityofzion/neon-js'
 api.nep5.getTokenInfo('http://seed1.neo.org:20332', rpxScriptHash)
 api.nep5.getTokenBalance('http://seed1.neo.org:20332', rpxScriptHash)
+api.nep5.getTokenBalances(
+  'http://seed1.neo.org:20332',
+  [rpxScriptHash],
+  address
+)
 // This is a combination of both info and balance within a single call
 api.nep5.getToken('http://seed1.neo.org:20332', rpxScriptHash, address)
 ```

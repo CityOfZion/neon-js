@@ -78,3 +78,5 @@ export const TX_VERSION = {
   'CONTRACT': 0,
   'INVOCATION': 1
 }
+
+export const MAX_TOKEN_BALANCES_PER_CALL = 6

@@ -29,6 +29,7 @@ export default {
     claims: neonDB.getClaims,
     transactionHistory: neonDB.getTransactionHistory,
     tokenBalance: nep5.getTokenBalance,
+    tokenBalances: nep5.getTokenBalances,
     tokenInfo: nep5.getTokenInfo,
     token: nep5.getToken
   },

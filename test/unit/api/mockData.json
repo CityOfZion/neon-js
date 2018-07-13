@@ -671,6 +671,51 @@
         }
       }
     },
+    "getTokenBalances": {
+      "url": "https://seed1.neo.org:20331",
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "invokescript",
+        "params": [
+          "000673796d626f6c6754a64cac1b1073e662933ef3e30b007cd98d67d70008646563696d616c736754a64cac1b1073e662933ef3e30b007cd98d67d71435b20010db73bf86371075ddfba4e6596f1ff35d51c10962616c616e63654f666754a64cac1b1073e662933ef3e30b007cd98d67d7000673796d626f6c6714223ada4fafbfae12767ac161fe959e911f6c0b0008646563696d616c736714223ada4fafbfae12767ac161fe959e911f6c0b1435b20010db73bf86371075ddfba4e6596f1ff35d51c10962616c616e63654f666714223ada4fafbfae12767ac161fe959e911f6c0b"
+        ],
+        "id": 1234
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {
+          "state": "HALT, BREAK",
+          "gas_consumed": "0.384",
+          "stack": [
+            {
+              "type": "ByteArray",
+              "value": "4c575446"
+            },
+            {
+              "type": "Integer",
+              "value": "8"
+            },
+            {
+              "type": "ByteArray",
+              "value": "1234"
+            },
+            {
+              "type": "ByteArray",
+              "value": "4e5854"
+            },
+            {
+              "type": "Integer",
+              "value": "8"
+            },
+            {
+              "type": "ByteArray",
+              "value": "5678"
+            }
+          ]
+        }
+      }
+    },
     "getToken": {
       "url": "https://seed1.neo.org:20331",
       "body": {
