@@ -1,5 +1,5 @@
 import { logging, rpc, sc, u, wallet } from "@cityofzion/neon-core";
-
+import * as abi from "./abi";
 const log = logging.default("nep5");
 
 export interface TokenInfo {
@@ -30,12 +30,10 @@ export const getTokenBalance = async (
   scriptHash: string,
   address: string
 ): Promise<u.Fixed8> => {
-  const addrScriptHash = u.reverseHex(wallet.getScriptHashFromAddress(address));
   const sb = new sc.ScriptBuilder();
-  const script = sb
-    .emitAppCall(scriptHash, "decimals")
-    .emitAppCall(scriptHash, "balanceOf", [addrScriptHash]).str;
-
+  abi.decimals(scriptHash)(sb);
+  abi.balanceOf(scriptHash, address)(sb);
+  const script = sb.str;
   try {
     const res = await rpc.Query.invokeScript(script).execute(url);
     const decimals = rpc.IntegerParser(res.result.stack[0]);
@@ -55,15 +53,12 @@ export const getToken = async (
 ): Promise<TokenInfo> => {
   const parser = address ? parseTokenInfoAndBalance : parseTokenInfo;
   const sb = new sc.ScriptBuilder();
-  sb.emitAppCall(scriptHash, "name")
-    .emitAppCall(scriptHash, "symbol")
-    .emitAppCall(scriptHash, "decimals")
-    .emitAppCall(scriptHash, "totalSupply");
+  abi.name(scriptHash)(sb);
+  abi.symbol(scriptHash)(sb);
+  abi.decimals(scriptHash)(sb);
+  abi.totalSupply(scriptHash)(sb);
   if (address) {
-    const addrScriptHash = u.reverseHex(
-      wallet.getScriptHashFromAddress(address)
-    );
-    sb.emitAppCall(scriptHash, "balanceOf", [addrScriptHash]);
+    abi.balanceOf(scriptHash, address)(sb);
   }
   const script = sb.str;
   try {

@@ -1,48 +1,47 @@
 import { sc, u, wallet } from "@cityofzion/neon-core";
 
 export function name(scriptHash: string) {
-  return () => {
-    return new sc.ScriptBuilder().emitAppCall(scriptHash, "name").str;
+  return (sb = new sc.ScriptBuilder()) => {
+    return sb.emitAppCall(scriptHash, "name");
   };
 }
 
 export function symbol(scriptHash: string) {
-  return () => {
-    return new sc.ScriptBuilder().emitAppCall(scriptHash, "symbol").str;
+  return (sb = new sc.ScriptBuilder()) => {
+    return sb.emitAppCall(scriptHash, "symbol");
   };
 }
 
 export function decimals(scriptHash: string) {
-  return () => {
-    return new sc.ScriptBuilder().emitAppCall(scriptHash, "decimals").str;
+  return (sb = new sc.ScriptBuilder()) => {
+    return sb.emitAppCall(scriptHash, "decimals");
   };
 }
 
 export function totalSupply(scriptHash: string) {
-  return () => {
-    return new sc.ScriptBuilder().emitAppCall(scriptHash, "totalSupply").str;
+  return (sb = new sc.ScriptBuilder()) => {
+    return sb.emitAppCall(scriptHash, "totalSupply");
   };
 }
 
-export function balanceOf(scriptHash: string) {
-  return (addr: string) => {
+export function balanceOf(scriptHash: string, addr: string) {
+  return (sb = new sc.ScriptBuilder()) => {
     const addressHash = addressToScriptHash(addr);
-    return new sc.ScriptBuilder().emitAppCall(scriptHash, "balanceOf", [
-      addressHash
-    ]).str;
+    return sb.emitAppCall(scriptHash, "balanceOf", [addressHash]);
   };
 }
 
-export function transfer(scriptHash: string) {
-  return (fromAddr: string, toAddr: string, amt: u.Fixed8 | number) => {
+export function transfer(
+  scriptHash: string,
+  fromAddr: string,
+  toAddr: string,
+  amt: u.Fixed8 | number
+) {
+  return (sb = new sc.ScriptBuilder()) => {
     const fromHash = addressToScriptHash(fromAddr);
     const toHash = addressToScriptHash(toAddr);
     const amtBytes = new u.Fixed8(amt).toReverseHex();
-    return new sc.ScriptBuilder().emitAppCall(scriptHash, "transfer", [
-      fromHash,
-      toHash,
-      amtBytes
-    ]).str;
+    return sb.emitAppCall(scriptHash, "transfer", [fromHash, toHash, amtBytes]);
   };
 }
 

@@ -1,4 +1,4 @@
-import { u, wallet } from "@cityofzion/neon-core";
+import { sc, u, wallet } from "@cityofzion/neon-core";
 import * as abi from "../src/abi";
 
 function randomScriptHash() {
@@ -19,13 +19,13 @@ const toAddr = randomAddress();
 
 test("name", () => {
   const resultFunction = abi.name(scriptHash);
-  const resultScript = resultFunction();
+  const resultScript = resultFunction().str;
   expect(resultScript).toBe(`00046e616d6567${u.reverseHex(scriptHash)}`);
 });
 
 test("decimals", () => {
   const resultFunction = abi.decimals(scriptHash);
-  const resultScript = resultFunction();
+  const resultScript = resultFunction().str;
   expect(resultScript).toBe(
     `0008646563696d616c7367${u.reverseHex(scriptHash)}`
   );
@@ -33,15 +33,15 @@ test("decimals", () => {
 
 test("totalSupply", () => {
   const resultFunction = abi.totalSupply(scriptHash);
-  const resultScript = resultFunction();
+  const resultScript = resultFunction().str;
   expect(resultScript).toBe(
     `000b746f74616c537570706c7967${u.reverseHex(scriptHash)}`
   );
 });
 
 test("balanceOf", () => {
-  const resultFunction = abi.balanceOf(scriptHash);
-  const resultScript = resultFunction(fromAddr);
+  const resultFunction = abi.balanceOf(scriptHash, fromAddr);
+  const resultScript = resultFunction().str;
   expect(resultScript).toBe(
     `14${u.reverseHex(
       wallet.getScriptHashFromAddress(fromAddr)
