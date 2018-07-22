@@ -1,4 +1,4 @@
-import { wallet } from "@cityofzion/neon-core";
+import { tx, wallet } from "@cityofzion/neon-core";
 import { signWithPrivateKey } from "./sign";
 import {
   ClaimGasConfig,
@@ -12,9 +12,10 @@ import {
  * @param config
  * @return Configuration object with url field.
  */
-export async function fillUrl<T extends ManagedApiBasicConfig>(
-  config: T
-): Promise<T> {
+export async function fillUrl<
+  U extends tx.BaseTransaction,
+  T extends ManagedApiBasicConfig<U>
+>(config: T): Promise<T> {
   if (config.url) {
     return config;
   }
@@ -44,9 +45,10 @@ export async function fillBalance<T extends DoInvokeConfig | SendAssetConfig>(
  * @param config
  * @return Configuration object.
  */
-export async function fillAccount<T extends ManagedApiBasicConfig>(
-  config: T
-): Promise<T> {
+export async function fillAccount<
+  U extends tx.BaseTransaction,
+  T extends ManagedApiBasicConfig<U>
+>(config: T): Promise<T> {
   if (!config.account) {
     if (config.privateKey) {
       config.account = new wallet.Account(config.privateKey);
@@ -68,9 +70,10 @@ export async function fillAccount<T extends ManagedApiBasicConfig>(
  * @param config
  * @return Configuration object.
  */
-export async function fillSigningFunction<T extends ManagedApiBasicConfig>(
-  config: T
-): Promise<T> {
+export async function fillSigningFunction<
+  U extends tx.BaseTransaction,
+  T extends ManagedApiBasicConfig<U>
+>(config: T): Promise<T> {
   if (!config.signingFunction) {
     if (config.account) {
       config.signingFunction = signWithPrivateKey(config.account.privateKey);
