@@ -1,0 +1,1 @@
+{"version":3,"file":"signing.d.ts","sourceRoot":"","sources":["../../src/wallet/signing.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,EAAE,IAAI,EAAE,EAAa,MAAM,UAAU,CAAC;AAK/C,eAAO,MAAM,KAAK,IAAiB,CAAC;AAEpC,6BAAqB,GAAG,EAAE,MAAM,EAAE,UAAU,EAAE,MAAM,UASnD;AAED,+BAAuB,GAAG,EAAE,MAAM,EAAE,GAAG,EAAE,MAAM,EAAE,SAAS,EAAE,MAAM,WAUjE"}

@@ -12,3 +12,4 @@ exports.abi = abi;
 const main_1 = require("./main");
 exports.getToken = main_1.getToken;
 exports.getTokenBalance = main_1.getTokenBalance;
+//# sourceMappingURL=index.js.map
