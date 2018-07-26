@@ -40,7 +40,6 @@ describe.each([
   });
 });
 
-
 describe("functions", () => {
   test("ceil", () => {
     const input = new Fixed8(1.23);
@@ -50,10 +49,16 @@ describe("functions", () => {
   });
 
   test("floor", () => {
-    const input = new Fixed8(1.23);
+    const input = new Fixed8(1.53);
     const result = input.floor();
     expect(result instanceof Fixed8).toBeTruthy();
     expect(result.toNumber()).toBe(1);
+  });
+
+  test("equals", () => {
+    const input = new Fixed8(1.234);
+    const result = input.equals("1.234");
+    expect(result).toBeTruthy();
   });
 
   test("round", () => {
@@ -90,4 +95,4 @@ describe("functions", () => {
     expect(result instanceof Fixed8).toBeTruthy();
     expect(result.toNumber()).toBe(2);
   });
-})
+});

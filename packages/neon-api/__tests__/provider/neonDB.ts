@@ -91,7 +91,7 @@ describe("getRPCEndpoint", () => {
       Promise.resolve("https://url2")
     );
 
-    settings.httpsOnly = true;
+    common.httpsOnly = true;
 
     const result = await neonDB.getRPCEndpoint("UnitTestNet");
 

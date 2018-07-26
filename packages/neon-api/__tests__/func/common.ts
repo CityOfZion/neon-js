@@ -23,7 +23,7 @@ describe("checkProperty", () => {
 describe("modifyTransactionForEmptyTransaction", () => {
   test("performs operation on empty tx", async () => {
     const config = {
-      address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+      account: { address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW" },
       tx: new tx.ContractTransaction()
     } as DoInvokeConfig;
 
@@ -35,7 +35,7 @@ describe("modifyTransactionForEmptyTransaction", () => {
     const config = {
       address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
       tx: new tx.ContractTransaction({
-        inputs: [{} as any]
+        inputs: [{ prevHash: "", prevIndex: 0 } as any]
       } as tx.Transaction)
     } as DoInvokeConfig;
 

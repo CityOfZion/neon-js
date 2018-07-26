@@ -18,6 +18,12 @@ beforeEach(() => {
 
 describe("getAPIEndpoint", () => {
   test("returns URL based on network", () => {
+    settings.addNetwork(
+      new rpc.Network({
+        name: "MainNet",
+        extra: { neoscan: "http://mainnet.com" }
+      })
+    );
     expect(neoscan.getAPIEndpoint("MainNet")).toBe(
       settings.networks.MainNet.extra.neoscan
     );

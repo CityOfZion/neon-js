@@ -2,7 +2,7 @@ import { wallet } from "../../../neon-js/src";
 import { SendAssetConfig } from "../../lib/funcs/types";
 import * as fill from "../../src/funcs/fill";
 import { signWithPrivateKey } from "../../src/funcs/sign";
-import { ClaimGasConfig, ManagedApiBasicConfig } from "../../src/funcs/types";
+import { ClaimGasConfig } from "../../src/funcs/types";
 
 jest.mock("../../src/funcs/sign");
 
@@ -16,7 +16,7 @@ describe("fillUrl", () => {
       } as any,
       address: "",
       url: expectedUrl
-    } as ManagedApiBasicConfig;
+    };
 
     const result = await fill.fillUrl(config);
 
@@ -32,7 +32,7 @@ describe("fillUrl", () => {
         getRPCEndpoint: jest.fn().mockImplementationOnce(() => expectedUrl)
       } as any,
       address: ""
-    } as ManagedApiBasicConfig;
+    };
 
     const result = await fill.fillUrl(config);
 

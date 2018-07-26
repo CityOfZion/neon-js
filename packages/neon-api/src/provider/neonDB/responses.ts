@@ -8,8 +8,8 @@ export interface NeonDbNode {
 }
 
 export interface NeonDbBalance {
-  GAS: wallet.AssetBalance;
-  NEO: wallet.AssetBalance;
+  GAS: wallet.AssetBalanceLike;
+  NEO: wallet.AssetBalanceLike;
   address: string;
   net: string;
 }

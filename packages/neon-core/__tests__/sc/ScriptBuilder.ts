@@ -1,4 +1,4 @@
-import OpCode from "../../src/sc/opCodes";
+import OpCode from "../../src/sc/opCode";
 import ScriptBuilder from "../../src/sc/ScriptBuilder";
 
 

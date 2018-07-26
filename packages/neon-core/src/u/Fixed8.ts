@@ -36,14 +36,21 @@ export class Fixed8 extends BN {
    * Returns a Fixed8 whose value is rounded upwards to the next whole number.
    */
   public ceil(): Fixed8 {
-    return new Fixed8(super.ceil());
+    return new Fixed8(super.decimalPlaces(0, BN.ROUND_CEIL));
   }
 
   /**
    * Returns a Fixed8 whose value is rounded downwards to the previous whole number.
    */
   public floor(): Fixed8 {
-    return new Fixed8(super.floor());
+    return new Fixed8(super.decimalPlaces(0, BN.ROUND_FLOOR));
+  }
+
+  /**
+   * Returns true if the value is equivalent.
+   */
+  public equals(other: string | number | Fixed8 | BN): boolean {
+    return super.eq(other);
   }
 
   /**
@@ -54,8 +61,8 @@ export class Fixed8 extends BN {
    * @param rm
    * @return {Fixed8}
    */
-  public round(dp?: number, rm?: number): Fixed8 {
-    return new Fixed8(super.round(dp, rm));
+  public round(dp: number = 0, rm?: BN.RoundingMode): Fixed8 {
+    return new Fixed8(super.decimalPlaces(dp, rm));
   }
 
   /**

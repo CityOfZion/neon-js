@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@types/jest": "^23.1.0",
+    "clean-webpack-plugin": "^0.1.19",
     "cross-env": "^5.2.0",
     "jest": "^23.1.0",
     "prettier": "^1.12.1",

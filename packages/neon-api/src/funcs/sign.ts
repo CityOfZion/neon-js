@@ -36,9 +36,9 @@ export function signWithPrivateKey(
   privateKey: string
 ): (tx: string, publicKey: string) => Promise<string | string[]> {
   const pubKey = new wallet.Account(privateKey).publicKey;
-  return async (txString: string, publicKey: string) => {
+  return async (txString: string, publicKey?: string) => {
     const sig = wallet.sign(txString, privateKey);
-    const witness = tx.Witness.fromSignature(sig, pubKey);
+    const witness = tx.Witness.fromSignature(sig, publicKey || pubKey);
     return witness.serialize();
   };
 }

@@ -8,7 +8,7 @@ jest.mock("../../src/funcs/common");
 describe("addAttributeForMintToken", () => {
   test("skips if no script object present", async () => {
     const config = {
-      tx: new tx.Transaction({} as any)
+      tx: new tx.ContractTransaction({} as any)
     } as DoInvokeConfig;
 
     const result = await mint.addAttributeForMintToken(config);
@@ -22,23 +22,23 @@ describe("addAttributeForMintToken", () => {
         operation: "mintTokens",
         scriptHash: "abcd"
       },
-      tx: new tx.Transaction({} as any)
+      tx: new tx.ContractTransaction({} as any)
     } as DoInvokeConfig;
 
     const result = await mint.addAttributeForMintToken(config);
 
     expect(result.tx!.attributes.length).toBe(1);
-    expect(result.tx!.attributes[0]).toEqual({
+    expect(result.tx!.attributes[0].equals({
       usage: tx.TxAttrUsage.Script,
       data: "cdab"
-    } as tx.TransactionAttribute);
+    })).toBeTruthy();
   });
 });
 
 describe("addSignatureForMintToken", () => {
   test("skips if no script object present", async () => {
     const config = {
-      tx: new tx.Transaction({} as any)
+      tx: new tx.ContractTransaction({} as any)
     } as DoInvokeConfig;
 
     const result = await mint.addSignatureForMintToken(config);
@@ -57,7 +57,7 @@ describe("addSignatureForMintToken", () => {
         operation: "mintTokens",
         scriptHash: "abcd"
       },
-      tx: new tx.Transaction({} as any)
+      tx: new tx.ContractTransaction({} as any)
     } as DoInvokeConfig;
 
     getVerificationSignatureForSmartContract.mockImplementationOnce(

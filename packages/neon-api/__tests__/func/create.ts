@@ -17,13 +17,14 @@ describe("createClaimTx", () => {
       claims: new wallet.Claims(),
       override: {}
     } as ClaimGasConfig;
+    const addClaimsFunc = jest.fn();
+    const claimTx = {
+      addClaims: addClaimsFunc
+    };
+    tx.ClaimTransaction.mockImplementationOnce(() => claimTx);
     const result = await create.createClaimTx(config);
-    expect(result.tx).not.toBeNull();
-    expect(tx.Transaction.createClaimTx).toBeCalledWith(
-      config.account!.address,
-      config.claims,
-      config.override
-    );
+    expect(result.tx).toBe(claimTx);
+    expect(addClaimsFunc).toBeCalledWith(config.claims);
   });
 });
 
@@ -37,14 +38,14 @@ describe("createContractTx", () => {
       override: {},
       fees: 0
     } as SendAssetConfig;
+    const calculateFunc = jest.fn();
+    const contractTx = {
+      calculate: calculateFunc
+    }
+    tx.ContractTransaction.mockImplementationOnce(() => contractTx);
     const result = await create.createContractTx(config);
-    expect(result.tx).not.toBeNull();
-    expect(tx.Transaction.createContractTx).toBeCalledWith(
-      config.balance,
-      config.intents,
-      config.override,
-      config.fees
-    );
+    expect(result.tx).toBe(contractTx);
+    expect(calculateFunc).toBeCalledWith(config.balance, undefined, config.fees);
   });
 });
 
@@ -60,15 +61,13 @@ describe("createInvocationTx", () => {
       gas: 0,
       fees: 0
     } as DoInvokeConfig;
+    const calculateFunc = jest.fn();
+    const invocationTx = {
+      calculate: calculateFunc
+    }
+    tx.InvocationTransaction.mockImplementationOnce(() => invocationTx);
     const result = await create.createInvocationTx(config);
-    expect(result.tx).not.toBeNull();
-    expect(tx.Transaction.createInvocationTx).toBeCalledWith(
-      config.balance,
-      config.intents,
-      config.script,
-      config.gas,
-      config.override,
-      config.fees
-    );
+    expect(result.tx).toBe(invocationTx);
+    expect(calculateFunc).toBeCalledWith(config.balance, undefined, config.fees);
   });
 });

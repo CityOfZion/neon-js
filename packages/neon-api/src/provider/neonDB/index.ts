@@ -79,10 +79,10 @@ export async function getBalance(
   );
   const data = response.data as NeonDbBalance;
   const bal = new wallet.Balance({ net, address } as wallet.BalanceLike);
-  if (data.NEO.balance.gt(0)) {
+  if (data.NEO.balance > 0) {
     bal.addAsset("NEO", data.NEO);
   }
-  if (data.GAS.balance.gt(0)) {
+  if (data.GAS.balance > 0) {
     bal.addAsset("GAS", data.GAS);
   }
   log.info(`Retrieved Balance for ${address} from neonDB ${net}`);
