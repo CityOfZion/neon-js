@@ -1,6 +1,10 @@
-import { CONST, sc } from "@cityofzion/neon-core";
+import { CONST, rpc, sc, settings } from "@cityofzion/neon-core";
 import * as main from "../../src/funcs/main";
-import { ClaimGasConfig, DoInvokeConfig, SendAssetConfig } from "../../src/funcs/types";
+import {
+  ClaimGasConfig,
+  DoInvokeConfig,
+  SendAssetConfig
+} from "../../src/funcs/types";
 import { Provider } from "../../src/provider/common";
 import * as neoscan from "../../src/provider/neoscan";
 
@@ -22,7 +26,14 @@ const testKeys = {
       "3edee7036b8fd9cef91de47386b191dd76db2888a553e7736bb02808932a915b"
   }
 };
-
+settings.addNetwork(
+  new rpc.Network({
+    Name: "TestNet",
+    ExtraConfiguration: {
+      neoscan: "https://neoscan-testnet.io/api/test_net"
+    }
+  })
+);
 const api = neoscan as Provider;
 
 describe("sendAsset", () => {
@@ -42,7 +53,6 @@ describe("sendAsset", () => {
       } as SendAssetConfig;
 
       const result = await main.sendAsset(config);
-
       expect(result.response!.result).toBe(true);
       expect(result.response!.txid).not.toBeNull();
     },
@@ -111,7 +121,7 @@ describe("doInvoke", () => {
     20000
   );
 
-  test.only(
+  test(
     "send LWTF tokens with empty tx from a to b",
     async () => {
       const fromAddrScriptHash = sc.ContractParam.byteArray(

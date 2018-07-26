@@ -1,4 +1,4 @@
-import { tx, wallet } from "@cityofzion/neon-core";
+import { sc, tx, wallet } from "@cityofzion/neon-core";
 import { checkProperty } from "./common";
 import { ClaimGasConfig, DoInvokeConfig, SendAssetConfig } from "./types";
 
@@ -26,11 +26,15 @@ export async function createInvocationTx(
   config: DoInvokeConfig
 ): Promise<DoInvokeConfig> {
   checkProperty(config, "script");
+  const processedScript =
+    typeof config.script === "object"
+      ? sc.createScript(config.script)
+      : config.script;
   config.tx = new tx.InvocationTransaction(
     Object.assign(
       {
         intents: config.intents || [],
-        script: config.script,
+        script: processedScript,
         gas: config.gas || 0
       },
       config.override

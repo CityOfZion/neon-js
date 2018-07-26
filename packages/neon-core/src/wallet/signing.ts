@@ -13,8 +13,7 @@ export function sign(hex: string, privateKey: string) {
   const msgHash = sha256(hex);
   const msgHashHex = Buffer.from(msgHash, "hex");
 
-  const elliptic = new EC("p256");
-  const sig = elliptic.sign(msgHashHex, privateKey);
+  const sig = curve.sign(msgHashHex, privateKey);
   return sig.r.toString("hex",32) + sig.s.toString("hex",32);
 }
 

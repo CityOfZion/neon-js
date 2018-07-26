@@ -2,6 +2,7 @@ import { rpc, settings, u, wallet } from "@cityofzion/neon-core";
 import axios from "axios";
 import * as common from "../../src/provider/common";
 import * as neoscan from "../../src/provider/neoscan";
+import { set } from "../../src/settings";
 jest.mock("axios");
 jest.mock("../../src/provider/common");
 
@@ -90,7 +91,7 @@ describe("getRPCEndpoint", () => {
     common.getBestUrl.mockImplementationOnce(() =>
       Promise.resolve("https://url2")
     );
-    settings.httpsOnly = true;
+    set({ httpsOnly: true });
 
     const result = await neoscan.getRPCEndpoint("UnitTestNet");
 
@@ -377,12 +378,13 @@ describe("getTransactionHistory", () => {
           },
           {
             vouts: [
-                {
-                    value: 0.789,
-                    transaction_id: 12243317,
-                    asset: "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-                    address_hash: "address"
-                }
+              {
+                value: 0.789,
+                transaction_id: 12243317,
+                asset:
+                  "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+                address_hash: "address"
+              }
             ],
             vin: [],
             type: "ClaimTransaction",
@@ -394,32 +396,36 @@ describe("getTransactionHistory", () => {
             net_fee: "0",
             id: 12846317,
             claims: [
-                {
-                    value: 16,
-                    txid: "11",
-                    n: 0,
-                    asset: "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-                    address_hash: "address"
-                },
-                {
-                    value: 546,
-                    txid: "12",
-                    n: 4,
-                    asset: "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-                    address_hash: "address"
-                },
-                {
-                    value: 654,
-                    txid: "13",
-                    n: 0,
-                    asset: "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-                    address_hash: "address"
-                }
+              {
+                value: 16,
+                txid: "11",
+                n: 0,
+                asset:
+                  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
+                address_hash: "address"
+              },
+              {
+                value: 546,
+                txid: "12",
+                n: 4,
+                asset:
+                  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
+                address_hash: "address"
+              },
+              {
+                value: 654,
+                txid: "13",
+                n: 0,
+                asset:
+                  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
+                address_hash: "address"
+              }
             ],
             block_height: 13,
-            block_hash: "9c63a314dbb2584deca9361cf4d4be79232694cffc075a78eeae38d2a20a2bd5",
+            block_hash:
+              "9c63a314dbb2584deca9361cf4d4be79232694cffc075a78eeae38d2a20a2bd5",
             asset: null
-        }
+          }
         ]
       })
     );
@@ -441,8 +447,7 @@ describe("getTransactionHistory", () => {
         txid: "3",
         blockHeight: 13,
         change: { GAS: new u.Fixed8(0.789), NEO: new u.Fixed8(0) }
-      },
-
+      }
     ]);
     expect(httpCall).toBeCalledWith(
       UnitTestNetUrl + "/v1/get_last_transactions_by_address/address"

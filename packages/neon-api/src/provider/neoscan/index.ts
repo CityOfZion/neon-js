@@ -4,11 +4,11 @@ import {
   filterHttpsOnly,
   findGoodNodesFromHeight,
   getBestUrl,
-  httpsOnly,
   isCachedRPCAcceptable,
   PastTransaction,
   RpcNode
 } from "../common";
+import {settings as internalSettings} from "../../settings";
 import {
   NeoscanBalance,
   NeoscanClaim,
@@ -47,7 +47,7 @@ export async function getRPCEndpoint(net: string): Promise<string> {
   const apiEndpoint = getAPIEndpoint(net);
   const response = await axios.get(apiEndpoint + "/v1/get_all_nodes");
   let nodes = response.data as RpcNode[];
-  if (httpsOnly) {
+  if (internalSettings.httpsOnly) {
     nodes = filterHttpsOnly(nodes);
   }
   const goodNodes = findGoodNodesFromHeight(nodes);

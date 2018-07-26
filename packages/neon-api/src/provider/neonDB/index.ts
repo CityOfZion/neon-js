@@ -4,11 +4,11 @@ import {
   filterHttpsOnly,
   findGoodNodesFromHeight,
   getBestUrl,
-  httpsOnly,
   isCachedRPCAcceptable,
   PastTransaction,
   RpcNode
 } from "../common";
+import {settings as internalSettings} from "../../settings";
 import {
   NeonDbBalance,
   NeonDbClaims,
@@ -48,7 +48,7 @@ export async function getRPCEndpoint(net: string) {
     .filter(d => d.status)
     .map(d => ({ height: d.block_height, url: d.url } as RpcNode));
 
-  if (httpsOnly) {
+  if (internalSettings.httpsOnly) {
     nodes = filterHttpsOnly(nodes);
   }
   const goodNodes = findGoodNodesFromHeight(nodes);

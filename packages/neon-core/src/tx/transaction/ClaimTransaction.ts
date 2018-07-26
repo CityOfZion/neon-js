@@ -1,4 +1,4 @@
-import { ASSET_ID } from "../../consts";
+import { ASSET_ID, TX_VERSION } from "../../consts";
 import { Fixed8, StringStream } from "../../u";
 import { Claims, getScriptHashFromAddress } from "../../wallet";
 import {
@@ -65,7 +65,7 @@ export class ClaimTransaction extends BaseTransaction {
   }
 
   constructor(obj: Partial<ClaimTransactionLike> = {}) {
-    super(obj);
+    super(Object.assign({ version: TX_VERSION.CLAIM }, obj));
     this.claims = Array.isArray(obj.claims)
       ? obj.claims.slice(0, MAX_CLAIMS_LENGTH).map(c => new TransactionInput(c))
       : [];

@@ -12,7 +12,7 @@ export async function signTx<T extends ManagedApiBasicConfig<tx.BaseTransaction>
 ): Promise<T> {
   checkProperty(config, "signingFunction", "tx");
   const signatures = await config.signingFunction!(
-    config.tx!.serialize(),
+    config.tx!.serialize(false),
     config.account!.publicKey
   );
   if (signatures instanceof Array) {

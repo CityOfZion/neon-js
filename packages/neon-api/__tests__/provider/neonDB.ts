@@ -2,6 +2,7 @@ import { rpc, settings, u, wallet } from "@cityofzion/neon-core";
 import axios from "axios";
 import * as common from "../../src/provider/common";
 import * as neonDB from "../../src/provider/neonDB";
+import { set } from "../../src/settings";
 
 jest.mock("axios");
 jest.mock("../../src/provider/common");
@@ -91,7 +92,7 @@ describe("getRPCEndpoint", () => {
       Promise.resolve("https://url2")
     );
 
-    common.httpsOnly = true;
+    set({ httpsOnly: true });
 
     const result = await neonDB.getRPCEndpoint("UnitTestNet");
 
@@ -271,27 +272,75 @@ describe("getHeight", () => {
 describe("getTransactionHistory", () => {
   test("returns successful TransactionHistory", async () => {
     const httpCall = jest.fn().mockImplementationOnce(() =>
-    Promise.resolve({
-      data: {
-address: "address",
-        net: "UnitTestNet",
-        history: [
-          {GAS: 0.123, NEO: 5, block_index: 11, gas_sent: true, neo_sent: true, txid: "1"},
-          {GAS: 0.456, NEO: 0, block_index: 12, gas_sent: true, neo_sent: false, txid: "2"},
-          {GAS: 0.789, NEO: -1, block_index: 13, gas_sent: true, neo_sent: true, txid: "3"},
-          {GAS: 0, NEO: 6, block_index: 14, gas_sent: false, neo_sent: true, txid: "4"}
-        ],
-        name: "transaction_history"
+      Promise.resolve({
+        data: {
+          address: "address",
+          net: "UnitTestNet",
+          history: [
+            {
+              GAS: 0.123,
+              NEO: 5,
+              block_index: 11,
+              gas_sent: true,
+              neo_sent: true,
+              txid: "1"
+            },
+            {
+              GAS: 0.456,
+              NEO: 0,
+              block_index: 12,
+              gas_sent: true,
+              neo_sent: false,
+              txid: "2"
+            },
+            {
+              GAS: 0.789,
+              NEO: -1,
+              block_index: 13,
+              gas_sent: true,
+              neo_sent: true,
+              txid: "3"
+            },
+            {
+              GAS: 0,
+              NEO: 6,
+              block_index: 14,
+              gas_sent: false,
+              neo_sent: true,
+              txid: "4"
+            }
+          ],
+          name: "transaction_history"
+        }
+      })
+    );
+    axios.get = httpCall;
+    expect(
+      await neonDB.getTransactionHistory("UnitTestNet", "address")
+    ).toEqual([
+      {
+        txid: "1",
+        blockHeight: 11,
+        change: { GAS: new u.Fixed8(0.123), NEO: new u.Fixed8(5) }
+      },
+      {
+        txid: "2",
+        blockHeight: 12,
+        change: { GAS: new u.Fixed8(0.456), NEO: new u.Fixed8(0) }
+      },
+      {
+        txid: "3",
+        blockHeight: 13,
+        change: { GAS: new u.Fixed8(0.789), NEO: new u.Fixed8(-1) }
+      },
+      {
+        txid: "4",
+        blockHeight: 14,
+        change: { GAS: new u.Fixed8(0), NEO: new u.Fixed8(6) }
       }
-    })
-  );
-  axios.get = httpCall;
-  expect(await neonDB.getTransactionHistory("UnitTestNet", "address")).toEqual([
-    {txid: "1", blockHeight: 11, change: {GAS: new u.Fixed8(0.123), NEO: new u.Fixed8(5)}},
-    {txid: "2", blockHeight: 12, change: {GAS: new u.Fixed8(0.456), NEO: new u.Fixed8(0)}},
-    {txid: "3", blockHeight: 13, change: {GAS: new u.Fixed8(0.789), NEO: new u.Fixed8(-1)}},
-    {txid: "4", blockHeight: 14, change: {GAS: new u.Fixed8(0), NEO: new u.Fixed8(6)}},
-  ]);
-  expect(httpCall).toBeCalledWith(UnitTestNetUrl + "/v2/address/history/address");
+    ]);
+    expect(httpCall).toBeCalledWith(
+      UnitTestNetUrl + "/v2/address/history/address"
+    );
   });
 });

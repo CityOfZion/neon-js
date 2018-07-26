@@ -1,3 +1,4 @@
+import { TX_VERSION } from "../../consts";
 import { Fixed8, fixed82num, num2VarInt, StringStream } from "../../u";
 import { BaseTransaction, TransactionLike } from "./BaseTransaction";
 import TransactionType from "./TransactionType";
@@ -31,7 +32,7 @@ export class InvocationTransaction extends BaseTransaction {
   }
 
   constructor(obj: Partial<InvocationTransactionLike> = {}) {
-    super(obj);
+    super(Object.assign({ version: TX_VERSION.INVOCATION }, obj));
     this.script = obj.script || "";
     this.gas = new Fixed8(obj.gas);
   }

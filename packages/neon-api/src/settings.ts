@@ -1,13 +1,13 @@
-import { httpsOnly } from "./provider/common";
-import * as neonDB from "./provider/neonDB";
-import * as neoscan from "./provider/neoscan";
-const settings = {
-  httpsOnly
+export const settings: { [key: string]: any } = {
+  httpsOnly: false
 };
 
-export const internalSettings = {
-  apiSwitch: 0,
-  switchFrozen: false,
-  providers: [neonDB, neoscan]
-};
+export function set(newSettings: { [key: string]: any }) {
+  Object.keys(settings).forEach(key => {
+    if (newSettings.hasOwnProperty(key)) {
+      settings[key] = !!newSettings[key];
+    }
+  });
+}
+
 export default settings;
