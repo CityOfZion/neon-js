@@ -21,12 +21,13 @@ const siteConfig = {
   url: 'http://cityofzion.io' /* your website url */,
   baseUrl: '/neon-js/' /* base url for your project */,
   projectName: 'neon-js',
+  onPageNav: 'separate',
+  scrollToTop: 'true',
   headerLinks: [
     { doc: 'installation', label: 'Docs' },
-    { doc: 'api-index', label: 'API' },
-    { doc: 'changelog-latest', label: 'Changelog' },
-    { page: 'help', label: 'Help' },
-    { languages: true }
+    { doc: 'api/index', label: 'API' },
+    { doc: 'changelog/latest', label: 'Changelog' },
+    { page: 'help', label: 'Help' }
   ],
   users,
   /* path to images for header/footer */
@@ -46,7 +47,8 @@ const siteConfig = {
   organizationName: 'cityofzion', // or set an env variable ORGANIZATION_NAME
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks
-    theme: 'dracula'
+    theme: 'dracula',
+    defaultLang:'typescript'
   },
   scripts: ['https://buttons.github.io/buttons.js', '/neon-js/browser.js'],
   // You may provide arbitrary config keys to be used as needed by your template.

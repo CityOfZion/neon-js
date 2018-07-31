@@ -1,37 +1,32 @@
 {
   "docs": {
-    "Getting Started": [
-      "overview",
-      "installation"
-    ],
+    "Getting Started": ["overview", "installation"],
     "Guides": [
-      "basic_sendasset",
-      "basic_claimgas",
-      "basic_createscript",
-      "basic_invoke",
-      "basic_privnet",
-      "adv_multitx",
-      "adv_apicore"
+      "guides/basic/sendasset",
+      "guides/basic/claimgas",
+      "guides/basic/createscript",
+      "guides/basic/invoke",
+      "guides/basic/privnet",
+      "guides/adv/multitx",
+      "guides/adv/apicore"
     ]
   },
   "api": {
-    "Overview": [
-      "api-index"
+    "Overview": ["api/index"],
+    "Core Modules": [
+      "api/core/wallet",
+      "api/core/tx",
+      "api/core/rpc",
+      "api/core/sc",
+      "api/core/u",
+      "api/core/const",
+      "api/core/settings",
+      "api/core/logging"
     ],
-    "Modules": [
-      "api-wallet",
-      "api-transactions",
-      "api-rpc",
-      "api-sc",
-      "api-api",
-      "api-u",
-      "api-CONST",
-      "api-settings",
-      "api-logging"
-    ]
+    "Modules": ["api/api"]
   },
   "changelog": {
-    "Latest": ["changelog-latest"],
-    "Past Versions": ["changelog-2", "changelog-1"]
+    "Latest": ["changelog/latest"],
+    "Past Versions": ["changelog/v3", "changelog/v2", "changelog/v1"]
   }
 }
