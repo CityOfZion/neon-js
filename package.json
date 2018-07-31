@@ -1,4 +1,10 @@
 {
+  "scripts": {
+    "clean": "lerna run clean",
+    "build": "tsc -b",
+    "dist": "lerna run dist",
+    "prepublishOnly": "yarn clean && yarn build && yarn dist"
+  },
   "devDependencies": {
     "@types/jest": "^23.3.1",
     "cross-env": "^5.2.0",

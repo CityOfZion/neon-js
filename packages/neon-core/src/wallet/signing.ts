@@ -1,3 +1,5 @@
+// tslint:disable-next-line:no-reference
+/// <reference path="../../typings/elliptic.d.ts" />
 import BN from "bn.js";
 import { ec as EC, Signature } from "elliptic";
 import { sha256 } from "../u";
