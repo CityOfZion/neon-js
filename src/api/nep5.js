@@ -4,7 +4,7 @@ import { Query, VMZip } from '../rpc'
 import { reverseHex, hexstring2str } from '../utils'
 import { getRPCEndpoint, getBalance } from './neonDB'
 import { Transaction } from '../transactions'
-import { ASSET_ID, MAX_TOKEN_BALANCES_PER_CALL } from '../consts'
+import { ASSET_ID } from '../consts'
 import logger from '../logging'
 
 const log = logger('api')
@@ -90,50 +90,37 @@ export const getTokenBalance = (url, scriptHash, address) => {
  */
 export const getTokenBalances = (url, scriptHashArray, address) => {
   const addrScriptHash = reverseHex(getScriptHashFromAddress(address))
-  const scriptArray = []
   let sb = new ScriptBuilder()
   scriptHashArray.forEach((scriptHash, index) => {
     sb
       .emitAppCall(scriptHash, 'symbol')
       .emitAppCall(scriptHash, 'decimals')
       .emitAppCall(scriptHash, 'balanceOf', [addrScriptHash])
-    if (
-      !scriptHashArray[index + 1] ||
-      (index > 0 && index % (MAX_TOKEN_BALANCES_PER_CALL - 1) === 0)
-    ) {
-      scriptArray.push(sb.str)
-      sb = new ScriptBuilder()
-    }
   })
-  return scriptArray.reduce((acc, script) => {
-    return Query.invokeScript(script, false)
-      .execute(url)
-      .then(res => {
+  return Query.invokeScript(sb.str, false)
+    .execute(url)
+    .then(res => {
+      const tokenList = {}
+      if (res && res.result && res.result.stack && res.result.stack.length >= 3) {
         for (let i = 0; i < res.result.stack.length; i += 3) {
           try {
             const symbol = hexstring2str(res.result.stack[i].value)
-            try {
-              const decimals = parseDecimals(res.result.stack[i + 1].value)
-              acc[symbol] =
-                parseHexNum(res.result.stack[i + 2].value) /
-                Math.pow(10, decimals)
-            } catch (error) {
-              log.error(
-                `single call for ${symbol} in getTokenBalances failed with : ${error}`
-              )
-              acc[symbol] = -1
-            }
+            const decimals = parseDecimals(res.result.stack[i + 1].value)
+            tokenList[symbol] =
+              parseHexNum(res.result.stack[i + 2].value) /
+              Math.pow(10, decimals)
           } catch (e) {
-            log.error(`single call in getTokenBalances failed with : ${e}`)
+            log.error(`single call in getTokenBalances failed with : ${e.message}`)
+            throw e
           }
         }
-        return acc
-      })
-      .catch(err => {
-        log.error(`getTokenBalances failed with : ${err.message}`)
-        throw err
-      })
-  }, {})
+      }
+      return tokenList
+    })
+    .catch(err => {
+      log.error(`getTokenBalances failed with : ${err.message}`)
+      throw err
+    })
 }
 
 /**

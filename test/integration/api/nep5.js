@@ -60,7 +60,7 @@ describe('Integration: API NEP5', function () {
     ).then(result => {
       result.RPX.should.equal(0)
       result.RHTT4.should.equal(2)
-      result.LWTF.should.equal(0.00000786)
+      result.LWTF.should.equal(0.00000746)
       result.NXT.should.equal(0)
     })
   })
