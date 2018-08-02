@@ -27,7 +27,7 @@ export const createScript = (...scriptIntents) => {
 /**
  * Generates script for deploying contract
  */
-export const generateDeployScript = ({ script, name, version, author, email, description, needsStorage = false, returnType = 'ff', parameterList = undefined }) => {
+export const generateDeployScript = ({ script, name, version, author, email, description, needsStorage = false, returnType = 'ff00', parameterList = undefined }) => {
   const sb = new ScriptBuilder()
   sb
     .emitPush(str2hexstring(description))

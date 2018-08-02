@@ -188,7 +188,7 @@
             "url": "http://seed1.neo.org:20332"
           },
           {
-            "block_height": 1180515,
+            "block_height": 1180516,
             "status": true,
             "time": 2.4572107791900635,
             "url": "https://seed2.neo.org:20331"
@@ -212,7 +212,7 @@
             "url": "http://seed5.neo.org:20332"
           },
           {
-            "block_height": 1180516,
+            "block_height": 1180517,
             "status": true,
             "time": 0.04218435287475586,
             "url": "http://seed8.antshares.org:20332"
@@ -254,6 +254,34 @@
             "url": "http://test5.cityofzion.io:8880"
           }
         ]
+      }
+    },
+    "getNodes_Node1": {
+      "url": "http://seed8.antshares.org:20332",
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "getblockcount",
+        "params": [],
+        "id": 1234
+      },
+      "response": {
+          "jsonrpc": "2.0",
+          "id": 3,
+          "result": 1180517
+      }
+    },
+    "getNodes_Node2": {
+      "url": "http://seed8.antshares.org:20332",
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "getblockcount",
+        "params": [],
+        "id": 1234
+      },
+      "response": {
+          "jsonrpc": "2.0",
+          "id": 3,
+          "result": 1180516
       }
     },
     "getWalletDBHeight": {
@@ -370,7 +398,7 @@
         },
         {
           "url": "http://test3.cityofzion.io:8880",
-          "height": 850300
+          "height": 850305
         },
         {
           "url": "http://test4.cityofzion.io:8880",
@@ -381,6 +409,20 @@
           "height": 850306
         }
       ]
+    },
+    "getNodes_Node1": {
+      "url": "http://test3.cityofzion.io:8880",
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "getblockcount",
+        "params": [],
+        "id": 1234
+      },
+      "response": {
+          "jsonrpc": "2.0",
+          "id": 3,
+          "result": 1180517
+      }
     },
     "getWalletDBHeight": {
       "url": "https://neoscan-testnet.io/api/test_net/v1/get_height",

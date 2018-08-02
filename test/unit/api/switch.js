@@ -48,7 +48,7 @@ describe('Switch API', function () {
         core.getRPCEndpointFrom,
         baseConfig
       )
-      return response.should.equal('http://test5.cityofzion.io:8880')
+      return response.should.equal('http://test3.cityofzion.io:8880')
     })
 
     it('calls getMaxClaimAmount', async () => {
@@ -120,7 +120,7 @@ describe('Switch API', function () {
         core.getRPCEndpointFrom,
         baseConfig
       )
-      return response.should.equal('http://seed8.antshares.org:20332')
+      return response.should.be.oneOf(['http://seed8.antshares.org:20332', 'https://seed2.neo.org:20331'])
     })
 
     it('calls getMaxClaimAmount', async () => {
