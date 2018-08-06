@@ -4,7 +4,7 @@ let env = process.env.NODE_ENV || 'development'
 
 let common = {
   mode: env,
-  devtool: env === 'development' ? 'inline-source-map' : false,
+  devtool: env === 'development' ? 'source-map' : false,
   entry: './src/index.ts',
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.

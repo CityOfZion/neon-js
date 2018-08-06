@@ -44,14 +44,18 @@
     "axios": "^0.18.0"
   },
   "peerDependencies": {
-    "@cityofzion/neon-core": "^4.0.0-next.0"
+    "@cityofzion/neon-core": "^4.0.0-next.1"
   },
   "files": [
-    "lib/",
-    "src/"
+    "lib/"
   ],
   "jest": {
     "testEnvironment": "node",
+    "globals":{
+      "ts-jest": {
+        "tsConfigFile":"../../tsconfig-test.json"
+      }
+    },
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },

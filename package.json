@@ -20,9 +20,15 @@
     "packages/*"
   ],
   "jest": {
+    "globals":{
+      "ts-jest": {
+        "tsConfigFile":"../../tsconfig-test.json"
+      }
+    },
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
+
     "testRegex": "(/packages/.*/__(tests|integration)__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "collectCoverage": true,
     "moduleFileExtensions": [
