@@ -1,6 +1,6 @@
-import * as api from "@cityofzion/neon-api";
-import { CONST, rpc, sc, settings, tx, u, wallet } from "@cityofzion/neon-core";
-import * as nep5 from "@cityofzion/neon-nep5";
+import neonJs from "./package";
+
+const { api, nep5, settings, sc, rpc, wallet, CONST, u, tx } = neonJs;
 import defaultNetworks from "./networks";
 const bootstrap: { [net: string]: Partial<rpc.NetworkJSON> } = defaultNetworks;
 Object.keys(bootstrap).map(key => {
@@ -16,9 +16,9 @@ export default {
     privateKey: wallet.generatePrivateKey,
     signature: wallet.generateSignature,
     wallet: (k: wallet.WalletJSON) => new wallet.Wallet(k),
-    claimTx: () => new tx.ClaimTransaction,
-    contractTx:() => new tx.ContractTransaction,
-    invocationTx: () => new tx.InvocationTransaction,
+    claimTx: () => new tx.ClaimTransaction(),
+    contractTx: () => new tx.ContractTransaction(),
+    invocationTx: () => new tx.InvocationTransaction(),
     contractParam: (type: keyof typeof sc.ContractParamType, value: any) =>
       new sc.ContractParam(type, value),
     script: sc.createScript,

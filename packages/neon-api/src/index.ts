@@ -1,5 +1,9 @@
-import * as neonDB from "./provider/neonDB";
-import * as neoscan from "./provider/neoscan";
-export { neoscan, neonDB };
+import * as plugin from "./plugin";
+import { default as apiSettings } from "./settings";
 
-export * from "./funcs";
+
+
+export default function(neonCore: typeof import("@cityofzion/neon-core")) {
+  neonCore.settings = Object.assign(neonCore.settings, apiSettings);
+  return { ...neonCore, api: plugin };
+}

@@ -7,16 +7,14 @@ export interface PastTransaction {
 
 export interface Provider {
   name: string;
-  getRPCEndpoint(net: string): Promise<string>;
-  getBalance(net: string, address: string): Promise<wallet.Balance>;
-  getClaims(net: string, address: string): Promise<wallet.Claims>;
-  getMaxClaimAmount(net: string, address: string): Promise<u.Fixed8>;
-  getHeight(net: string): Promise<number>;
-  getTransactionHistory(
-    net: string,
-    address: string
-  ): Promise<PastTransaction[]>;
+  getRPCEndpoint(noCache?: boolean): Promise<string>;
+  getBalance(address: string): Promise<wallet.Balance>;
+  getClaims(address: string): Promise<wallet.Claims>;
+  getMaxClaimAmount(address: string): Promise<u.Fixed8>;
+  getHeight(): Promise<number>;
+  getTransactionHistory(address: string): Promise<PastTransaction[]>;
 }
+
 export interface DataProvider extends Provider {
   getAPIEndpoint(net: string): string;
 }
@@ -28,22 +26,6 @@ export interface RpcNode {
 
 export function filterHttpsOnly(nodes: RpcNode[]): RpcNode[] {
   return nodes.filter(n => n.url.includes("https://"));
-}
-
-export async function isCachedRPCAcceptable(
-  cachedUrl: string,
-  rpcs: RpcNode[],
-  acceptablePing: number = 2000
-) {
-  const urls = rpcs.map(r => r.url);
-  if (urls.indexOf(cachedUrl) >= 0) {
-    const client = new rpc.RPCClient(cachedUrl);
-    const ping = await client.ping();
-    if (ping <= acceptablePing) {
-      return true;
-    }
-  }
-  return false;
 }
 
 export async function getBestUrl(rpcs: RpcNode[]): Promise<string> {

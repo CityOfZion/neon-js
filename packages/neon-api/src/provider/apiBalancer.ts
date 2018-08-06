@@ -1,16 +1,13 @@
 import { logging, u, wallet } from "@cityofzion/neon-core";
-import { DataProvider, PastTransaction, Provider } from "./common";
+import { PastTransaction, Provider } from "./common";
 const log = logging.default("api");
 
-const maxPreference = 1;
-const minPreference = 0;
-
 export default class ApiBalancer implements Provider {
-  public leftProvider: DataProvider;
-  public rightProvider: DataProvider;
+  public leftProvider: Provider;
+  public rightProvider: Provider;
 
   public get name() {
-    return `ApiBalancer[${this.leftProvider.name}][${this.rightProvider.name}]`;
+    return `${this.leftProvider.name}ApiBalancer${this.rightProvider.name}`;
   }
 
   // tslint:disable-next-line:variable-name
@@ -41,8 +38,8 @@ export default class ApiBalancer implements Provider {
   }
 
   constructor(
-    leftProvider: DataProvider,
-    rightProvider: DataProvider,
+    leftProvider: Provider,
+    rightProvider: Provider,
     preference: number = 0,
     frozen = false
   ) {
@@ -52,44 +49,35 @@ export default class ApiBalancer implements Provider {
     this.frozen = frozen;
   }
 
-  public async getRPCEndpoint(net: string): Promise<string> {
-    const f = async (p: DataProvider) => await p.getRPCEndpoint(net);
+  public async getRPCEndpoint(): Promise<string> {
+    const f = async (p: Provider) => await p.getRPCEndpoint();
     return await this.loadBalance(f);
   }
 
-  public async getBalance(
-    net: string,
-    address: string
-  ): Promise<wallet.Balance> {
-    const f = async (p: DataProvider) => await p.getBalance(net, address);
+  public async getBalance(address: string): Promise<wallet.Balance> {
+    const f = async (p: Provider) => await p.getBalance(address);
     return await this.loadBalance(f);
   }
 
-  public async getClaims(net: string, address: string): Promise<wallet.Claims> {
-    const f = async (p: DataProvider) => await p.getClaims(net, address);
+  public async getClaims(address: string): Promise<wallet.Claims> {
+    const f = async (p: Provider) => await p.getClaims(address);
     return await this.loadBalance(f);
   }
 
-  public async getMaxClaimAmount(
-    net: string,
-    address: string
-  ): Promise<u.Fixed8> {
-    const f = async (p: DataProvider) =>
-      await p.getMaxClaimAmount(net, address);
+  public async getMaxClaimAmount(address: string): Promise<u.Fixed8> {
+    const f = async (p: Provider) => await p.getMaxClaimAmount(address);
     return await this.loadBalance(f);
   }
 
-  public async getHeight(net: string): Promise<number> {
-    const f = async (p: DataProvider) => await p.getHeight(net);
+  public async getHeight(): Promise<number> {
+    const f = async (p: Provider) => await p.getHeight();
     return await this.loadBalance(f);
   }
 
   public async getTransactionHistory(
-    net: string,
     address: string
   ): Promise<PastTransaction[]> {
-    const f = async (p: DataProvider) =>
-      await p.getTransactionHistory(net, address);
+    const f = async (p: Provider) => await p.getTransactionHistory(address);
     return await this.loadBalance(f);
   }
 
@@ -97,9 +85,7 @@ export default class ApiBalancer implements Provider {
    * Load balances a API call according to the API switch. Selects the appropriate provider and sends the call towards it.
    * @param func - The API call to load balance function
    */
-  private async loadBalance<T>(
-    func: (provider: DataProvider) => T
-  ): Promise<T> {
+  private async loadBalance<T>(func: (provider: Provider) => T): Promise<T> {
     const i = Math.random() > this._preference ? 0 : 1;
     const primary = i === 0 ? this.leftProvider : this.rightProvider;
     const primaryShift = i === 0;

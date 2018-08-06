@@ -19,7 +19,7 @@ export async function fillUrl<
   if (config.url) {
     return config;
   }
-  config.url = await config.api.getRPCEndpoint(config.net);
+  config.url = await config.api.getRPCEndpoint();
   return config;
 }
 
@@ -32,10 +32,7 @@ export async function fillBalance<T extends DoInvokeConfig | SendAssetConfig>(
   config: T
 ): Promise<T> {
   if (!(config.balance instanceof wallet.Balance)) {
-    config.balance = await config.api.getBalance(
-      config.net,
-      config.account!.address
-    );
+    config.balance = await config.api.getBalance(config.account!.address);
   }
   return config;
 }
@@ -89,14 +86,12 @@ export async function fillSigningFunction<
  * @param config
  * @return Configuration object.
  */
-export async function fillClaims(
-  config: ClaimGasConfig
-): Promise<ClaimGasConfig> {
+export async function fillClaims<
+U extends tx.BaseTransaction,
+T extends ManagedApiBasicConfig<U>
+>(config: ClaimGasConfig): Promise<ClaimGasConfig> {
   if (!(config.claims instanceof wallet.Claims)) {
-    config.claims = await config.api.getClaims(
-      config.net,
-      config.account!.address
-    );
+    config.claims = await config.api.getClaims(config.account!.address);
   }
   return config;
 }

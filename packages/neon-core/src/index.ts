@@ -7,4 +7,5 @@ import * as tx from "./tx";
 import * as u from "./u";
 import * as wallet from "./wallet";
 
+export default { rpc, sc, tx, wallet, u, CONST, settings, logging };
 export { rpc, sc, tx, wallet, u, CONST, settings, logging };

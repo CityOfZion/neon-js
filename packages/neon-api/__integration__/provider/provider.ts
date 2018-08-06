@@ -1,9 +1,13 @@
-import { rpc, settings, u, wallet } from "@cityofzion/neon-core";
-import { neoscan } from "../../src";
+import * as neonCore from "@cityofzion/neon-core";
+import apiPlugin from "../../src/index";
+
+const neonJs = apiPlugin(neonCore);
+
+const { rpc, wallet, u } = neonJs;
 
 const net = "MainNet";
 const addr = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
-settings.addNetwork(
+neonJs.settings.addNetwork(
   new rpc.Network({
     Name: "MainNet",
     ExtraConfiguration: {
@@ -11,7 +15,7 @@ settings.addNetwork(
     }
   })
 );
-const providers = [neoscan];
+const providers = [new neonJs.api.neoscan.instance("MainNet")];
 providers.forEach(api => {
   describe(`Valid Address: ${api.name}`, () => {
     test("getBalance", async () => {

@@ -1,40 +1,13 @@
-import { rpc, settings, u, wallet } from "@cityofzion/neon-core";
+import { u, wallet } from "@cityofzion/neon-core";
 import axios from "axios";
-import * as common from "../../src/provider/common";
-import * as neonDB from "../../src/provider/neonDB";
-import { set } from "../../src/settings";
+import * as common from "../../../src/provider/common";
+import * as neonDB from "../../../src/provider/neonDB/core";
+import { set } from "../../../src/settings";
 
 jest.mock("axios");
-jest.mock("../../src/provider/common");
+jest.mock("../../../src/provider/common");
 
-const UnitTestNetUrl = "http://testurl.com";
-beforeEach(() => {
-  jest.resetModules();
-  settings.addNetwork(
-    new rpc.Network({
-      name: "UnitTestNet",
-      extra: { neonDB: UnitTestNetUrl }
-    })
-  );
-});
-
-describe("getAPIEndpoint", () => {
-  test("returns URL based on network", () => {
-    expect(neonDB.getAPIEndpoint("UnitTestNet")).toBe(
-      settings.networks.UnitTestNet.extra.neonDB
-    );
-  });
-
-  test("returns input when cannot match network", () => {
-    const url = "http://localhost:1234";
-    expect(neonDB.getAPIEndpoint(url)).toBe(url);
-  });
-
-  test("errors when matched network does not have neonDB url", () => {
-    settings.addNetwork(new rpc.Network({ name: "WeirdNet" }));
-    expect(() => neonDB.getAPIEndpoint("WeirdNet")).toThrow();
-  });
-});
+const testUrl = "http://testurl.com";
 
 describe("getRPCEndpoint", () => {
   test("returns good RPC endpoint", async () => {
@@ -60,9 +33,9 @@ describe("getRPCEndpoint", () => {
       Promise.resolve("http://url2")
     );
 
-    const result = await neonDB.getRPCEndpoint("UnitTestNet");
+    const result = await neonDB.getRPCEndpoint(testUrl);
 
-    expect(getCall).toBeCalledWith(UnitTestNetUrl + "/v2/network/nodes");
+    expect(getCall).toBeCalledWith(testUrl + "/v2/network/nodes");
     expect(common.findGoodNodesFromHeight).toBeCalledWith(filteredNodes);
     expect(common.getBestUrl).toBeCalledWith(goodNodes);
     expect(common.filterHttpsOnly).not.toBeCalled();
@@ -94,9 +67,9 @@ describe("getRPCEndpoint", () => {
 
     set({ httpsOnly: true });
 
-    const result = await neonDB.getRPCEndpoint("UnitTestNet");
+    const result = await neonDB.getRPCEndpoint(testUrl);
 
-    expect(getCall).toBeCalledWith(UnitTestNetUrl + "/v2/network/nodes");
+    expect(getCall).toBeCalledWith(testUrl + "/v2/network/nodes");
     expect(common.filterHttpsOnly).toBeCalledWith(transformedNodes);
     expect(common.findGoodNodesFromHeight).toBeCalledWith(filteredNodes);
     expect(common.getBestUrl).toBeCalledWith(goodNodes);
@@ -118,27 +91,28 @@ describe("getBalance", () => {
             unspent: [{ index: 1, txid: "1", value: 5 }]
           },
           address: "address",
-          net: "UnitTestNet"
+          net: testUrl
         }
       })
     );
     axios.get = httpCall;
-    expect(await neonDB.getBalance("UnitTestNet", "address")).toEqual(
+    expect(await neonDB.getBalance(testUrl, "address")).toEqual(
       new wallet.Balance({
-        net: "UnitTestNet",
+        net: testUrl,
         address: "address",
         assetSymbols: ["NEO", "GAS"],
         assets: {
           NEO: {
+            spent: [],
             unspent: [{ value: 5, txid: "1", index: 1 }],
             balance: 5
-          } as wallet.AssetBalance,
+          },
           GAS: {
             unspent: [{ value: 1.234, txid: "2", index: 1 }],
             balance: 1.234
-          } as wallet.AssetBalance
+          } as any
         }
-      } as wallet.BalanceLike)
+      } as any)
     );
   });
 
@@ -155,15 +129,15 @@ describe("getBalance", () => {
             unspent: []
           },
           address: "address",
-          net: "UnitTestNet"
+          net: testUrl
         }
       })
     );
     axios.get = httpCall;
 
-    expect(await neonDB.getBalance("UnitTestNet", "address")).toEqual(
+    expect(await neonDB.getBalance(testUrl, "address")).toEqual(
       new wallet.Balance({
-        net: "UnitTestNet",
+        net: testUrl,
         address: "address"
       } as wallet.BalanceLike)
     );
@@ -187,25 +161,23 @@ describe("getClaims", () => {
               value: 10
             }
           ],
-          net: "UnitTestNet",
+          net: testUrl,
           total_claim: 10,
           total_unspent_claim: 14
         }
       })
     );
     axios.get = httpCall;
-    expect(await neonDB.getClaims("UnitTestNet", "address")).toEqual(
+    expect(await neonDB.getClaims(testUrl, "address")).toEqual(
       new wallet.Claims({
-        net: "UnitTestNet",
+        net: testUrl,
         address: "address",
         claims: [
           { claim: 1, txid: "1", index: 2, value: 10, start: 5, end: 11 }
         ]
       } as wallet.ClaimsLike)
     );
-    expect(httpCall).toBeCalledWith(
-      UnitTestNetUrl + "/v2/address/claims/address"
-    );
+    expect(httpCall).toBeCalledWith(testUrl + "/v2/address/claims/address");
   });
 
   test("returns empty claims", async () => {
@@ -214,16 +186,16 @@ describe("getClaims", () => {
         data: {
           address: "address",
           claims: [],
-          net: "UnitTestNet",
+          net: testUrl,
           total_claim: 0,
           total_unspent_claim: 0
         }
       })
     );
     axios.get = httpCall;
-    expect(await neonDB.getClaims("UnitTestNet", "address")).toEqual(
+    expect(await neonDB.getClaims(testUrl, "address")).toEqual(
       new wallet.Claims({
-        net: "UnitTestNet",
+        net: testUrl,
         address: "address"
       } as wallet.ClaimsLike)
     );
@@ -244,12 +216,10 @@ describe("getMaxClaimAmount", () => {
       })
     );
     axios.get = httpCall;
-    expect(await neonDB.getMaxClaimAmount("UnitTestNet", "address")).toEqual(
+    expect(await neonDB.getMaxClaimAmount(testUrl, "address")).toEqual(
       new u.Fixed8(1)
     );
-    expect(httpCall).toBeCalledWith(
-      UnitTestNetUrl + "/v2/address/claims/address"
-    );
+    expect(httpCall).toBeCalledWith(testUrl + "/v2/address/claims/address");
   });
 });
 
@@ -264,8 +234,8 @@ describe("getHeight", () => {
       })
     );
     axios.get = httpCall;
-    expect(await neonDB.getHeight("UnitTestNet")).toEqual(123);
-    expect(httpCall).toBeCalledWith(UnitTestNetUrl + "/v2/block/height");
+    expect(await neonDB.getHeight(testUrl)).toEqual(123);
+    expect(httpCall).toBeCalledWith(testUrl + "/v2/block/height");
   });
 });
 
@@ -315,9 +285,7 @@ describe("getTransactionHistory", () => {
       })
     );
     axios.get = httpCall;
-    expect(
-      await neonDB.getTransactionHistory("UnitTestNet", "address")
-    ).toEqual([
+    expect(await neonDB.getTransactionHistory(testUrl, "address")).toEqual([
       {
         txid: "1",
         blockHeight: 11,
@@ -339,8 +307,6 @@ describe("getTransactionHistory", () => {
         change: { GAS: new u.Fixed8(0), NEO: new u.Fixed8(6) }
       }
     ]);
-    expect(httpCall).toBeCalledWith(
-      UnitTestNetUrl + "/v2/address/history/address"
-    );
+    expect(httpCall).toBeCalledWith(testUrl + "/v2/address/history/address");
   });
 });

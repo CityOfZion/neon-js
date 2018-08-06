@@ -1,12 +1,12 @@
 import { rpc, settings, u, wallet } from "@cityofzion/neon-core";
 import axios from "axios";
-import * as common from "../../src/provider/common";
-import * as neoscan from "../../src/provider/neoscan";
-import { set } from "../../src/settings";
+import * as common from "../../../src/provider/common";
+import * as neoscan from "../../../src/provider/neoscan/core";
+import { set } from "../../../src/settings";
 jest.mock("axios");
-jest.mock("../../src/provider/common");
+jest.mock("../../../src/provider/common");
 
-const UnitTestNetUrl = "http://testurl.com";
+const testUrl = "http://testurl.com";
 beforeEach(() => {
   jest.resetModules();
   settings.addNetwork(
@@ -15,33 +15,6 @@ beforeEach(() => {
       extra: { neoscan: "http://testurl.com" }
     })
   );
-});
-
-describe("getAPIEndpoint", () => {
-  test("returns URL based on network", () => {
-    settings.addNetwork(
-      new rpc.Network({
-        name: "MainNet",
-        extra: { neoscan: "http://mainnet.com" }
-      })
-    );
-    expect(neoscan.getAPIEndpoint("MainNet")).toBe(
-      settings.networks.MainNet.extra.neoscan
-    );
-    expect(neoscan.getAPIEndpoint("UnitTestNet")).toBe(
-      settings.networks.UnitTestNet.extra.neoscan
-    );
-  });
-
-  test("returns input when cannot match network", () => {
-    const url = "http://localhost:1234";
-    expect(neoscan.getAPIEndpoint(url)).toBe(url);
-  });
-
-  test("errors when network does not have neoscan url", () => {
-    settings.addNetwork(new rpc.Network({ name: "NoNet" }));
-    expect(() => neoscan.getAPIEndpoint("NoNet")).toThrow();
-  });
 });
 
 describe("getRPCEndpoint", () => {
@@ -63,7 +36,7 @@ describe("getRPCEndpoint", () => {
       Promise.resolve("http://url2")
     );
 
-    const result = await neoscan.getRPCEndpoint("UnitTestNet");
+    const result = await neoscan.getRPCEndpoint(testUrl);
 
     expect(getCall).toHaveBeenCalledTimes(1);
     expect(common.findGoodNodesFromHeight).toBeCalledWith(allNodes);
@@ -93,7 +66,7 @@ describe("getRPCEndpoint", () => {
     );
     set({ httpsOnly: true });
 
-    const result = await neoscan.getRPCEndpoint("UnitTestNet");
+    const result = await neoscan.getRPCEndpoint(testUrl);
 
     expect(getCall).toHaveBeenCalledTimes(1);
     expect(common.filterHttpsOnly).toBeCalledWith(allNodes);
@@ -128,20 +101,20 @@ describe("getBalance", () => {
       })
     );
     axios.get = httpCall;
-    expect(await neoscan.getBalance("UnitTestNet", "address")).toEqual(
+    expect(await neoscan.getBalance(testUrl, "address")).toEqual(
       new wallet.Balance({
-        net: "UnitTestNet",
+        net: testUrl,
         address: "address",
         assetSymbols: ["NEO", "GAS"],
         assets: {
           NEO: {
             unspent: [{ value: 2, txid: "1", index: 1 }],
             balance: 2
-          } as wallet.AssetBalance,
+          } as wallet.AssetBalanceLike,
           GAS: {
             unspent: [{ value: 5, txid: "1", index: 1 }],
             balance: 5
-          } as wallet.AssetBalance
+          } as wallet.AssetBalanceLike
         },
         tokenSymbols: ["TEST"],
         tokens: {
@@ -149,7 +122,7 @@ describe("getBalance", () => {
         }
       } as wallet.BalanceLike)
     );
-    expect(httpCall).toBeCalledWith(UnitTestNetUrl + "/v1/get_balance/address");
+    expect(httpCall).toBeCalledWith(testUrl + "/v1/get_balance/address");
   });
 
   test("returns empty balance for new address", async () => {
@@ -164,9 +137,9 @@ describe("getBalance", () => {
       })
     );
     axios.get = httpCall;
-    expect(await neoscan.getBalance("UnitTestNet", "address")).toEqual(
+    expect(await neoscan.getBalance(testUrl, "address")).toEqual(
       new wallet.Balance({
-        net: "UnitTestNet",
+        net: testUrl,
         address: "address"
       } as wallet.BalanceLike)
     );
@@ -196,9 +169,9 @@ describe("getClaims", () => {
       })
     );
     axios.get = httpCall;
-    expect(await neoscan.getClaims("UnitTestNet", "address")).toEqual(
+    expect(await neoscan.getClaims(testUrl, "address")).toEqual(
       new wallet.Claims({
-        net: "UnitTestNet",
+        net: testUrl,
         address: "address",
         claims: [
           { claim: 1, txid: "1", index: 2, value: 10, start: 5, end: 11 }
@@ -206,7 +179,7 @@ describe("getClaims", () => {
       } as wallet.ClaimsLike)
     );
     expect(httpCall).toBeCalledWith(
-      UnitTestNetUrl + "/v1/get_claimable/address"
+      testUrl + "/v1/get_claimable/address"
     );
   });
 
@@ -221,9 +194,9 @@ describe("getClaims", () => {
       })
     );
     axios.get = httpCall;
-    expect(await neoscan.getClaims("UnitTestNet", "address")).toEqual(
+    expect(await neoscan.getClaims(testUrl, "address")).toEqual(
       new wallet.Claims({
-        net: "UnitTestNet",
+        net: testUrl,
         address: "address"
       } as wallet.ClaimsLike)
     );
@@ -241,11 +214,11 @@ describe("getMaxClaimAmount", () => {
       })
     );
     axios.get = httpCall;
-    expect(await neoscan.getMaxClaimAmount("UnitTestNet", "address")).toEqual(
+    expect(await neoscan.getMaxClaimAmount(testUrl, "address")).toEqual(
       new u.Fixed8(1)
     );
     expect(httpCall).toBeCalledWith(
-      UnitTestNetUrl + "/v1/get_unclaimed/address"
+      testUrl + "/v1/get_unclaimed/address"
     );
   });
 });
@@ -260,8 +233,8 @@ describe("getHeight", () => {
       })
     );
     axios.get = httpCall;
-    expect(await neoscan.getHeight("UnitTestNet")).toEqual(123);
-    expect(httpCall).toBeCalledWith(UnitTestNetUrl + "/v1/get_height");
+    expect(await neoscan.getHeight(testUrl)).toEqual(123);
+    expect(httpCall).toBeCalledWith(testUrl + "/v1/get_height");
   });
 });
 
@@ -431,7 +404,7 @@ describe("getTransactionHistory", () => {
     );
     axios.get = httpCall;
     expect(
-      await neoscan.getTransactionHistory("UnitTestNet", "address")
+      await neoscan.getTransactionHistory(testUrl, "address")
     ).toEqual([
       {
         txid: "1",
@@ -450,7 +423,7 @@ describe("getTransactionHistory", () => {
       }
     ]);
     expect(httpCall).toBeCalledWith(
-      UnitTestNetUrl + "/v1/get_last_transactions_by_address/address"
+      testUrl + "/v1/get_last_transactions_by_address/address"
     );
   });
 });

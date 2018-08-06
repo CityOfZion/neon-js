@@ -1,5 +1,5 @@
 import { rpc, tx, u, wallet } from "@cityofzion/neon-core";
-import { DoInvokeConfig, ManagedApiBasicConfig } from "./types";
+import { DoInvokeConfig } from "./types";
 
 /**
  * Check that properties are defined in obj.
@@ -46,9 +46,9 @@ const sensitiveFields = ["privateKey"];
  * @return object safe for logging
  */
 export function extractDump<T>(config: T): Partial<T> {
-  const dump= Object.assign({}, config);
+  const dump = Object.assign({}, config);
   for (const key of Object.keys(config)) {
-    if (sensitiveFields.indexOf(key) >=0) {
+    if (sensitiveFields.indexOf(key) >= 0) {
       delete (dump as any)[key];
     }
   }

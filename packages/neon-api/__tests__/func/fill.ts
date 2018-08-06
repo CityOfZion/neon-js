@@ -10,7 +10,6 @@ describe("fillUrl", () => {
   test("skips if url present", async () => {
     const expectedUrl = "http://localhost.com";
     const config = {
-      net: "UnitTestNet",
       api: {
         getRPCEndpoint: jest.fn()
       } as any,
@@ -27,17 +26,16 @@ describe("fillUrl", () => {
   test("fills if url not present", async () => {
     const expectedUrl = "http://localhost.com";
     const config = {
-      net: "UnitTestNet",
       api: {
         getRPCEndpoint: jest.fn().mockImplementationOnce(() => expectedUrl)
       } as any,
       address: ""
-    };
+    } as SendAssetConfig;
 
     const result = await fill.fillUrl(config);
 
     expect(result.url).toBe(expectedUrl);
-    expect(config.api.getRPCEndpoint).toBeCalledWith(config.net);
+    expect(config.api.getRPCEndpoint).toBeCalledWith();
   });
 });
 
@@ -45,7 +43,6 @@ describe("fillBalance", () => {
   test("skips if balance present", async () => {
     const expectedBalance = new wallet.Balance();
     const config = {
-      net: "UnitTestNet",
       api: {
         getBalance: jest.fn()
       } as any,
@@ -61,7 +58,6 @@ describe("fillBalance", () => {
   test("fills if balance not present", async () => {
     const expectedBalance = new wallet.Balance();
     const config = {
-      net: "UnitTestNet",
       api: {
         getBalance: jest.fn().mockImplementationOnce(() => expectedBalance)
       } as any,
@@ -73,10 +69,7 @@ describe("fillBalance", () => {
     const result = await fill.fillBalance(config);
 
     expect(result.balance).toBe(expectedBalance);
-    expect(config.api.getBalance).toBeCalledWith(
-      config.net,
-      config.account.address
-    );
+    expect(config.api.getBalance).toBeCalledWith(config.account.address);
   });
 });
 
@@ -199,7 +192,7 @@ describe("fillClaims", () => {
       net: "UnitTestNet",
       account: {
         address: "address"
-      },
+      } as any,
       api: {
         getClaims: jest.fn().mockImplementationOnce(() => expectedClaims)
       } as any
@@ -207,9 +200,6 @@ describe("fillClaims", () => {
 
     const result = await fill.fillClaims(config);
     expect(result.claims).toBe(expectedClaims);
-    expect(config.api.getClaims).toBeCalledWith(
-      config.net,
-      config.account.address
-    );
+    expect(config.api.getClaims).toBeCalledWith(config.account.address);
   });
 });

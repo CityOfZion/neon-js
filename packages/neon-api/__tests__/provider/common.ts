@@ -26,22 +26,6 @@ describe("filterHttpsOnly", () => {
   });
 });
 
-describe("isCachedRPCAcceptable", () => {
-  test("returns false when cachedUrl is not in list of rpcs", async () => {
-    const result = await common.isCachedRPCAcceptable("http://url10", nodes);
-    expect(result).toBe(false);
-  });
-
-  // test("returns false when cachedUrl does not return acceptable ping", async () => {
-  //   const result = await common.isCachedRPCAcceptable("http://url1", nodes);
-  //   expect(result).toBe(false);
-  // });
-  // test("returns true when cachedUrl is in list and has good ping", async () => {
-  //   const result = await common.isCachedRPCAcceptable("http://url1", nodes);
-  //   expect(result).toBe(true);
-  // });
-});
-
 describe("findGoodNodesFromHeight", () => {
   test("returns list of good nodes within tolerance", () => {
     const result = common.findGoodNodesFromHeight(nodes);

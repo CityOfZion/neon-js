@@ -1,4 +1,5 @@
-import * as abi from "./abi";
-import { getToken, getTokenBalance } from "./main";
+import * as nep5 from "./plugin";
 
-export { abi, getToken, getTokenBalance };
+export default function(neonCore: typeof import("@cityofzion/neon-core")) {
+  return { ...neonCore, nep5 };
+}

@@ -1,14 +1,12 @@
-import { CONST, rpc, sc, settings } from "@cityofzion/neon-core";
-import * as main from "../../src/funcs/main";
-import {
-  ClaimGasConfig,
-  DoInvokeConfig,
-  SendAssetConfig
-} from "../../src/funcs/types";
-import { Provider } from "../../src/provider/common";
-import * as neoscan from "../../src/provider/neoscan";
+import * as neonCore from "@cityofzion/neon-core";
+import apiPlugin from "../../src/index";
+
+const neonJs = apiPlugin(neonCore);
+
+const { api, CONST, rpc, sc } = neonJs;
 
 const net = "TestNet";
+const url = "https://neoscan-testnet.io/api/test_net";
 const testKeys = {
   a: {
     address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
@@ -26,33 +24,39 @@ const testKeys = {
       "3edee7036b8fd9cef91de47386b191dd76db2888a553e7736bb02808932a915b"
   }
 };
-settings.addNetwork(
+
+neonCore.settings.addNetwork(
   new rpc.Network({
-    Name: "TestNet",
+    Name: net,
     ExtraConfiguration: {
-      neoscan: "https://neoscan-testnet.io/api/test_net"
+      neoscan: url
     }
   })
 );
-const api = neoscan as Provider;
+
+const provider = new api.neoscan.instance("TestNet");
+
+beforeAll(() => {
+  expect(provider.name).toMatch(url);
+});
 
 describe("sendAsset", () => {
   test(
     "send some NEO with network fee from a to b",
     async () => {
-      const intents = main.makeIntent(
+      const intents = api.makeIntent(
         { NEO: 1, GAS: 0.00000001 },
         testKeys.b.address
       );
       const config = {
         net,
         intents,
-        api,
+        api: provider,
         privateKey: testKeys.a.privateKey,
         fees: 0.00000001
-      } as SendAssetConfig;
+      };
 
-      const result = await main.sendAsset(config);
+      const result = await api.sendAsset(config);
       expect(result.response!.result).toBe(true);
       expect(result.response!.txid).not.toBeNull();
     },
@@ -66,11 +70,11 @@ describe("claimGas", () => {
     async () => {
       const config = {
         net,
-        api,
+        api: provider,
         privateKey: testKeys.a.privateKey
-      } as ClaimGasConfig;
+      };
 
-      const result = await main.claimGas(config);
+      const result = await api.claimGas(config);
 
       expect(result.response!.result).toBe(true);
       expect(result.response!.txid).not.toBeNull();
@@ -101,20 +105,20 @@ describe("doInvoke", () => {
           transferAmount
         )
       };
-      const intents = main.makeIntent(
+      const intents = api.makeIntent(
         { NEO: 1, GAS: 0.00000001 },
         testKeys.a.address
       );
       const config = {
         net,
-        api,
+        api: provider,
         intents,
         privateKey: testKeys.b.privateKey,
         script,
         gas: 0
-      } as DoInvokeConfig;
+      };
 
-      const result = await main.doInvoke(config);
+      const result = await api.doInvoke(config);
       expect(result.response!.result).toBe(true);
       expect(result.response!.txid).not.toBeNull();
     },
@@ -144,13 +148,13 @@ describe("doInvoke", () => {
       };
       const config = {
         net,
-        api,
+        api: provider,
         privateKey: testKeys.a.privateKey,
         script,
         gas: 0
-      } as DoInvokeConfig;
+      };
 
-      const result = await main.doInvoke(config);
+      const result = await api.doInvoke(config);
       expect(result.response!.result).toBe(true);
       expect(result.response!.txid).not.toBeNull();
     },
