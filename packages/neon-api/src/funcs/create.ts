@@ -7,7 +7,7 @@ export async function createClaimTx(
 ): Promise<ClaimGasConfig> {
   checkProperty(config, "claims");
   config.tx = new tx.ClaimTransaction(config.override);
-  config.tx.addClaims(config.claims);
+  config.tx.addClaims(config.claims!);
   return config as ClaimGasConfig;
 }
 

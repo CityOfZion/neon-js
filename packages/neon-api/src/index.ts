@@ -1,9 +1,13 @@
+import * as _Neon from "@cityofzion/neon-core";
 import * as plugin from "./plugin";
 import { default as apiSettings } from "./settings";
 
-
-
-export default function(neonCore: typeof import("@cityofzion/neon-core")) {
+function bundle<T extends typeof _Neon>(
+  neonCore: T
+): T & { api: typeof plugin } {
   neonCore.settings = Object.assign(neonCore.settings, apiSettings);
-  return { ...neonCore, api: plugin };
+  return { ...(neonCore as any), api: plugin };
 }
+
+export default bundle;
+export * from "./plugin";

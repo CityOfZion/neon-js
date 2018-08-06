@@ -1,10 +1,19 @@
-import neonJs from "./package";
+import apiPlugin from "@cityofzion/neon-api";
+import * as neonCore from "@cityofzion/neon-core";
+import nepPlugin from "@cityofzion/neon-nep5";
 
-const { api, nep5, settings, sc, rpc, wallet, CONST, u, tx } = neonJs;
+const neonWithApi = apiPlugin(neonCore);
+const neonJs = nepPlugin(neonWithApi);
+
+export const { api, nep5, settings, sc, rpc, wallet, CONST, u, tx } = neonJs;
 import defaultNetworks from "./networks";
-const bootstrap: { [net: string]: Partial<rpc.NetworkJSON> } = defaultNetworks;
+const bootstrap: {
+  [net: string]: Partial<neonCore.rpc.NetworkJSON>;
+} = defaultNetworks;
 Object.keys(bootstrap).map(key => {
-  settings.networks[key] = new rpc.Network(bootstrap[key] as rpc.NetworkJSON);
+  settings.networks[key] = new rpc.Network(bootstrap[
+    key
+  ] as neonCore.rpc.NetworkJSON);
 });
 
 export default {
@@ -15,7 +24,7 @@ export default {
     account: (k: string) => new wallet.Account(k),
     privateKey: wallet.generatePrivateKey,
     signature: wallet.generateSignature,
-    wallet: (k: wallet.WalletJSON) => new wallet.Wallet(k),
+    wallet: (k: neonCore.wallet.WalletJSON) => new wallet.Wallet(k),
     claimTx: () => new tx.ClaimTransaction(),
     contractTx: () => new tx.ContractTransaction(),
     invocationTx: () => new tx.InvocationTransaction(),
@@ -26,7 +35,7 @@ export default {
     deployScript: (args: any) => sc.generateDeployScript(args),
     rpcClient: (net: string, version: string) =>
       new rpc.RPCClient(net, version),
-    query: (req: rpc.RPCRequest) => new rpc.Query(req)
+    query: (req: neonCore.rpc.RPCRequest) => new rpc.Query(req)
   },
   deserialize: {
     attribute: tx.TransactionAttribute.deserialize,
@@ -66,6 +75,3 @@ export default {
   u,
   CONST
 };
-
-export * from "@cityofzion/neon-core";
-export { settings, api, nep5 };
