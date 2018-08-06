@@ -1,1 +1,0 @@
-{"version":3,"file":"create.d.ts","sourceRoot":"","sources":["../../src/funcs/create.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,cAAc,EAAE,cAAc,EAAE,eAAe,EAAE,MAAM,SAAS,CAAC;AAE1E,sCACE,MAAM,EAAE,cAAc,GACrB,OAAO,CAAC,cAAc,CAAC,CAKzB;AAED,yCACE,MAAM,EAAE,eAAe,GACtB,OAAO,CAAC,eAAe,CAAC,CAO1B;AAED,2CACE,MAAM,EAAE,cAAc,GACrB,OAAO,CAAC,cAAc,CAAC,CAsBzB"}
