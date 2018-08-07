@@ -89,6 +89,6 @@ A high-level example of a response:
 
 ## About asset-less transactions
 
-Currently, the fees for transactions are zero, making it possible for us to send transactions that are without any assets attached to them. This is done through attching an extra `Script` attribute. The value of this attribute is the scripthash of your address. This ties the transaction to an address so that the node knows who the signature came from.
+Currently, the fees for transactions are zero, making it possible for us to send transactions that are without any assets attached to them. This is done through attaching an extra `Script` attribute. The value of this attribute is the scripthash of your address. This ties the transaction to an address so that the node knows who the signature came from.
 
 However, you will realise that without transaction inputs, it results in the possibility of collisions for transactions hashes. This is solved by attaching a nonce in the form of a remark. In `neon-js`, the `doInvoke` method detects if there are no assets attached and inserts the nonce. This nonce is crafted using a random hexstring with the current timestamp.
