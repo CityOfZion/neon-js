@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-api",
   "description": "Neon-API module: High level API for neon-js",
-  "version": "4.0.0-next.1",
+  "version": "4.0.0-next.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
@@ -29,7 +29,7 @@
     "clean": "rimraf ./lib ./dist"
   },
   "devDependencies": {
-    "@cityofzion/neon-core": "^4.0.0-next.1",
+    "@cityofzion/neon-core": "^4.0.0-next.2",
     "@types/jest": "^23.1.0",
     "cross-env": "^5.2.0",
     "jest": "^23.1.0",
@@ -51,9 +51,9 @@
   ],
   "jest": {
     "testEnvironment": "node",
-    "globals":{
+    "globals": {
       "ts-jest": {
-        "tsConfigFile":"<rootDir>/tsconfig-test.json"
+        "tsConfigFile": "<rootDir>/tsconfig-test.json"
       }
     },
     "transform": {
