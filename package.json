@@ -3,6 +3,7 @@
     "clean": "lerna run clean",
     "build": "tsc -b",
     "dist": "lerna run dist",
+    "test:unit": "jest /packages/.*/__tests__/.* --coverage",
     "prepublishOnly": "yarn clean && yarn build && yarn dist"
   },
   "devDependencies": {
@@ -20,15 +21,15 @@
     "packages/*"
   ],
   "jest": {
-    "globals":{
+    "testEnvironment": "node",
+    "globals": {
       "ts-jest": {
-        "tsConfigFile":"../../tsconfig-test.json"
+        "tsConfigFile": "<rootDir>/tsconfig-test.json"
       }
     },
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-
     "testRegex": "(/packages/.*/__(tests|integration)__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "collectCoverage": true,
     "moduleFileExtensions": [

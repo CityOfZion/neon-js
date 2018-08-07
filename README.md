@@ -32,19 +32,24 @@ Install the package using:
 npm i @cityofzion/neon-js
 ```
 
-### Build
+## Contributing
 
-```js
-npm run build:dev
+### Setup
+
+This repository is a javascript mono-repo using Lerna and Yarn workspaces. Please ensure the following is installed:
+
+- Yarn (a version that support workspaces)
+- Lerna(version found in `lerna.json`)
+- Node (latest LTS)
+
+```sh
+git clone https://github.com/CityOfZion/neon-js.git
+cd neon-js
+yarn
+lerna bootstrap
 ```
 
-### Tests
-
-```js
-npm run test
-```
-
-### Docs
+## Docs
 
 We use Docusaurus for our docs website. The docs are stores in `./docs` while the main website and its configuration is in `./website`.
 
@@ -53,10 +58,6 @@ cd website
 npm install
 npm run start
 ```
-
-### Typescript
-
-The typescript declaration files are included _(no need of any @types/...)_.
 
 ## License
 

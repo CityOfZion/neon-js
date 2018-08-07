@@ -72,7 +72,7 @@
     "testEnvironment": "node",
     "globals":{
       "ts-jest": {
-        "tsConfigFile":"../../tsconfig-test.json"
+        "tsConfigFile":"<rootDir>/tsconfig-test.json"
       }
     },
     "transform": {

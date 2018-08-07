@@ -68,7 +68,7 @@ describe("getters", () => {
 
   test("serializeExclusive", () => {
     const tx = new InvocationTransaction({ script: "1234", gas: 5 });
-    expect(tx.serializeExclusive()).toEqual("021234");
+    expect(tx.serializeExclusive()).toEqual("0212340065cd1d00000000");
   });
 });
 

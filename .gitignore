@@ -1,5 +1,6 @@
 # Globally ignored folder names
 node_modules
+coverage
 .nyc_output
 build
 
@@ -11,6 +12,5 @@ build
 .idea
 
 # Package stuff
-packages/**/coverage
 packages/**/lib
 packages/**/dist
