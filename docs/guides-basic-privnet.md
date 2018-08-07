@@ -44,7 +44,7 @@ const config = {
 ```
 For this example, we have a neoscan service setup serving our private net. The `name` field will be the name which we reference this in `neon-js`.
 
-Now, we contruct the `Network` object and add it to our `networks`:
+Now, we construct the `Network` object and add it to our `networks`:
 
 ```js
 const privateNet = new rpc.Network(config)
