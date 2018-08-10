@@ -24,8 +24,8 @@ export interface ManagedApiBasicConfig<T extends tx.BaseTransaction> {
 
 export interface SendAssetConfig
   extends ManagedApiBasicConfig<tx.ContractTransaction> {
-  balance: wallet.Balance;
-  intents: tx.TransactionOutput[];
+  balance?: wallet.Balance;
+  intents?: tx.TransactionOutput[];
 }
 
 export interface ClaimGasConfig
@@ -36,7 +36,7 @@ export interface ClaimGasConfig
 export interface DoInvokeConfig
   extends ManagedApiBasicConfig<tx.InvocationTransaction> {
   balance?: wallet.Balance;
-  intents: tx.TransactionOutput[];
+  intents?: tx.TransactionOutput[];
   gas?: number | u.Fixed8;
   script: any;
 }
