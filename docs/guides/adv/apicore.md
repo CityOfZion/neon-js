@@ -19,30 +19,31 @@ These are the available properties for a configuration object:
 
 ```ts
 export interface apiConfig {
-  net: string // Network name or a url for 3rd party provider
-  account?: Account // This can replace address and privateKey
-  address?: string
-  privateKey?: string
-  publicKey?: string
-  signingFunction?: signingFunction // Optional signing function.
-  url?: string // Optional. If present, overrides the url of the NEO node used
-  balance?: Balance // Optional. If present, this balance is used instead of retrieving a new one
-  intents?: TransactionOutput[]
-  sendingFromSmartContract?: boolean // This is used only if you are sending as a smart contract
-  claims?: Claims // Only used for claimGas
-  script?: string // Only used for doInvoke
-  gas?: number // Only used for doInvoke
-  override?: object // Transaction overrides
+  api: Provider; // The Provider to request UTXO and node information from
+  account: wallet.Account; // An account.
+  url?: string; // Optional override for RPC node.
+  fees?: number; // Any priority fees
+  override?: object; // Any overrides for transaction
+  signingFunction?: (
+    tx: string,
+    publicKey: string
+  ) => Promise<string | string[]>; // A signing function if the account does not contain the private key
+  tx?: T;
+  response?: {
+    result: boolean;
+    txid?: string;
+  };
+  sendingFromSmartContract?: string; // The smart contract script hash if using assets from it
 }
 ```
 
 ## Information Retrieval
 
-This is the first step of every method. Based on the properties `net` and `address` provided, `neon-js` will attempt to retrieve the required information in order to construct the transaction.
+This is the first step of every method. Based on the properties `api` and `account` provided, `neon-js` will attempt to retrieve the required information in order to construct the transaction.
 
-`net` represents the network which `neon-js` will attempt to work on. Usual terms provided are `MainNet` or `TestNet` which are networks hard-coded within the SDK itself. If you are using a private network, you will need to add a new network in settings or provide the direct url of your 3rd party provider here (NeonDB or neoscan).
+`api` is a Provider client that will request the necessary information such as UTXO and node information.
 
-`address` is the address of the account that you wish to send from. This is the address from which the assets originate from. This field is used to query your balance or claims from the 3rd party provider.
+`account` is the account that you wish to send from. This is the address from which the assets originate from. This field is used to query your balance or claims from the 3rd party provider.
 
 Once the information is retrieved, it is appended to the configuration object under properties like `url`, `balance`, etc. and passed onto the next step.
 
@@ -58,7 +59,7 @@ The information in the object is passed into the transaction building call and t
 
 ## Transaction Signing
 
-For signing, the property `privateKey` from the configuration object is used to sign the object. An alternative to this is to provide a signing function under the property `signingFunction`.
+For signing, a private key in `account` from the configuration object is used to sign the object. An alternative to this is to provide a signing function under the property `signingFunction`.
 
 Instead of sending a user's private key to the config object, we can send the public key and a function that will sign the transaction.
 This function, the signingFunction, will receive the transaction and public key as parameters. Now, we can provide logic that retrieves the private key from our user - using the public key to do so - and signs the transaction when we retrieve the key.
@@ -68,7 +69,7 @@ This the current way `neon-js` interacts with the Ledger Nano S for signing tran
 > Do note that the signing function has to return a Promise!
 
 ```js
-import Neon from '@cityofzion/neon-js';
+import Neon , {api} from '@cityofzion/neon-js';
 
 function signTx(tx, publicKey) {
   // Sign tx and attach signature onto tx
@@ -80,7 +81,7 @@ function signTx(tx, publicKey) {
 }
 
 const config = {
-  net: "http://localhost:5000",
+  api: new api.neoscan.instance('TestNet'),
   script: Neon.create.script({
     scriptHash: '5b7074e873973a6ed3708862f219a6fbf4d1c411',
     operation: 'balanceOf',

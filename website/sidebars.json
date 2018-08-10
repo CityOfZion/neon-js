@@ -1,6 +1,6 @@
 {
   "docs": {
-    "Getting Started": ["overview", "installation"],
+    "Getting Started": ["overview", "installation", "structure"],
     "Guides": [
       "guides/basic/sendasset",
       "guides/basic/claimgas",
@@ -23,7 +23,7 @@
       "api/core/settings",
       "api/core/logging"
     ],
-    "Modules": ["api/api"]
+    "Plugin Modules": ["api/plugin/api", "api/plugin/nep5"]
   },
   "changelog": {
     "Latest": ["changelog/latest"],

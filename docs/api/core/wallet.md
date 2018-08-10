@@ -5,65 +5,70 @@ title: Wallet
 
 The `wallet` module is exposed as:
 
-```js
-import Neon from '@cityofzion/neon-js'
-const account = Neon.create.account(privateKey)
-Neon.is.address(string)
+```ts
+import Neon from "@cityofzion/neon-js";
+const account = Neon.create.account(privateKey);
+Neon.is.address(string);
 
-import {wallet} from '@cityofzion/neon-js'
-const account = new wallet.Account(privateKey)
-wallet.isAddress(string)
+import { wallet } from "@cityofzion/neon-js";
+const account = new wallet.Account(privateKey);
+wallet.isAddress(string);
 ```
 
-The `wallet` module contains the core methods for manipulating keys, creating signatures and verifying keys.
+The `wallet` module contains methods for manipulating keys, creating signatures and verifying keys.
+
+---
 
 ## Classes
+
 ### Account
 
 ```ts
 class Account {
-  constructor(str: string)
+  constructor(str: string);
 
-  WIF: string
-  privateKey: string
-  publicKey: string
-  scriptHash: string
-  address: string
+  WIF: string;
+  privateKey: string;
+  publicKey: string;
+  scriptHash: string;
+  address: string;
 
-  getPublicKey(encoded: boolean): string
-  encrypt(keyphrase: string, scryptParams?: ScryptParams): Account
-  decrypt(keyphrase: string, scryptParams?: ScryptParams): Account
-  export(): WalletAccount
+  getPublicKey(encoded: boolean): string;
+  encrypt(keyphrase: string, scryptParams?: ScryptParams): Account;
+  decrypt(keyphrase: string, scryptParams?: ScryptParams): Account;
+  export(): WalletAccount;
 }
 ```
 
 The `Account` class is used to store and transform keys to its various formats. It can be instantiated with any key format and is smart enough to recognise the format and store it appropriately.
 
-```js
-  import Neon, {wallet} from '@cityofzion/neon-js'
+```ts
+import Neon, { wallet } from "@cityofzion/neon-js";
 
-  const a = Neon.create.Account('ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s')
-  console.log(a.address) // ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s
+const a = Neon.create.Account("ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s");
+console.log(a.address); // ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s
 
-  const b = new wallet.Account('9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69')
-  console.log(b.privateKey) // 9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69
+const b = new wallet.Account(
+  "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69"
+);
+console.log(b.privateKey); // 9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69
 ```
 
 The class enables us to easily retrieve keys in any derivable format without needing to remember any methods. However, we can only retrieve formats that can be derived from our input. For example, we cannot retrieve any formats other than address and scripthash from `a` because we instantiated it with an address. However, we can get any format from `b` because it was instantiated with a private key, which is the lowest level key available.
 
-```js
-  console.log(a.publicKey) // throws an error
-  console.log(b.publicKey) // prints the public key
-  console.log(b.address) // prints the address
+```ts
+console.log(a.publicKey); // throws an error
+console.log(b.publicKey); // prints the public key
+console.log(b.address); // prints the address
 ```
 
 The order of the keys are:
 
 0. encrypted (NEP2)
 1. privateKey / WIF
-2. publicKey
-3. scriptHash
-4. address
+1. publicKey
+1. scriptHash
+1. address
 
 When you instantiate an `Account` with a key, you can retrieve any format that is below it in the list. For example, if we instantiate with a public key, we can get the publc key, scriptHash and address but not the private key.
 
@@ -71,18 +76,20 @@ The Account class can be instantiated from encrypted key, private key, public ke
 
 The `encryptedKey` is special as it is the lowest level key but requires the user to unlock it first before we can derive anything from it. This can be done through the `decrypt` method.
 
-```js
-  const c = new wallet.Account('6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF')
-  console.log(c.encrypted) // encrypted key
-  console.log(c.address) // throws error
-  c.decrypt('city of zion')
-  console.log(c.address) // ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW
+```ts
+const c = new wallet.Account(
+  "6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF"
+);
+console.log(c.encrypted); // encrypted key
+console.log(c.address); // throws error
+c.decrypt("city of zion");
+console.log(c.address); // ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW
 ```
 
 You can encrypt the key by using the `encrypt` method. This is necessary if you want to export this key to a JSON file.
 
-```js
-  c.encrypt('new password')
+```ts
+c.encrypt("new password");
 ```
 
 This action will encrypt the private key with the provided password and replace any old NEP2 key.
@@ -91,43 +98,52 @@ This action will encrypt the private key with the provided password and replace 
 
 ```ts
 class Balance {
-  constructor(bal?: Balance)
+  constructor(bal?: Balance);
 
-  address: string
-  net: 'MainNet' | 'TestNet'
-  assetSymbols: string[]
-  assets: { [index: string]: AssetBalance }
-  tokenSymbols: string[]
-  tokens: { [index: string]: number }
+  address: string;
+  net: "MainNet" | "TestNet";
+  assetSymbols: string[];
+  assets: { [index: string]: AssetBalance };
+  tokenSymbols: string[];
+  tokens: { [index: string]: number };
 
-  static import(jsonString: string): Balance
+  static import(jsonString: string): Balance;
 
-  addAsset(sym: string, assetBalance?: AssetBalance): this
-  addToken(sym: string, tokenBalance?: number | Fixed8): this
-  applyTx(tx: Transaction, confirmed?: boolean): this
-  export(): string
-  verifyAssets(url: string): Promise<Balance>
+  addAsset(sym: string, assetBalance?: AssetBalance): this;
+  addToken(sym: string, tokenBalance?: number | Fixed8): this;
+  applyTx(tx: Transaction, confirmed?: boolean): this;
+  export(): string;
+  verifyAssets(url: string): Promise<Balance>;
 }
 ```
 
 The Balance class stores the balance of the account. It is usually retrieved using a 3rd party API as NEO nodes do not have a RPC call to easily retrieve this information with a single call.
 
-```js
-import Neon from '@cityofzion/neon-js'
+```ts
+import Neon from "@cityofzion/neon-js";
 // This creates a balance object but it is empty and not really useful
-Neon.create.balance({net: 'TestNet', address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW'})
+Neon.create.balance({
+  net: "TestNet",
+  address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+});
 
-import {wallet, api} from '@cityofzion/neon-js'
+import { wallet, api } from "@cityofzion/neon-js";
 // This form is useless as it is an empty balance.
-const balance = new wallet.Balance({net: 'TestNet', address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW'})
+const balance = new wallet.Balance({
+  net: "TestNet",
+  address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+});
 // We get a useful balance that can be used to fill a transaction through api.neonDB
-const filledBalance = api.neonDB.getBalance('MainNet','ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW')
+const filledBalance = api.neonDB.getBalance(
+  "MainNet",
+  "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+);
 // This contains all symbols of assets available in this balance
-const symbols = filledBalance.assetSymbols
+const symbols = filledBalance.assetSymbols;
 // We retrieve the unspent coins from the assets object using the symbol
-const neoCoins = filledBalance.assets['NEO'].unspent
+const neoCoins = filledBalance.assets["NEO"].unspent;
 // We can verify the information retrieved using verifyAssets
-filledBalance.verifyAssets('https://seed1.neo.org:20332')
+filledBalance.verifyAssets("https://seed1.neo.org:20332");
 ```
 
 The class is used to track the unspent coins available to construct transactions with. `verifyAssets` is a handy method to make sure the unspent coins provided by the 3rd party API is really unspent by verifying them against a NEO node. However, this is an expensive operation so use sparingly.
@@ -138,11 +154,11 @@ The constructor is a handy method to convert a Balance-like javascript object in
 
 ```ts
 class Claims {
-  constructor(claims?: Claims)
+  constructor(claims?: Claims);
 
-  address: string
-  net: string
-  claims: ClaimItem[]
+  address: string;
+  net: string;
+  claims: ClaimItem[];
 }
 ```
 
@@ -160,35 +176,39 @@ The `Wallet` class implements the NEP-6 convention which is a standard way set b
 
 The `Wallet` class is essentially a collection of encrypted keys as well as the parameters used to encrypt them.
 
-```js
-import Neon, {wallet} from 'cityofzion/neon-js'
+```ts
+import Neon, { wallet } from "cityofzion/neon-js";
 
-const a = new wallet.Account('6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF')
-const b = new wallet.Account('9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69')
+const a = new wallet.Account(
+  "6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF"
+);
+const b = new wallet.Account(
+  "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69"
+);
 
 // We create a wallet with name 'myWallet'. This is optional. The constructor is fine with no arguments.
-const w1 = Neon.create.wallet({name: 'myWallet'})
+const w1 = Neon.create.wallet({ name: "myWallet" });
 
 // We generate a new Account and add it to the wallet
-w1.addAccount()
+w1.addAccount();
 // We add Account a to the wallet.
-w1.addAccount(a)
+w1.addAccount(a);
 // We add Account b to the wallet.
 // Note that Account b is unencrypted and we can add this Account.
 // The wallet will only error when trying to export an unencrypted key but does not prevent you from adding it.
-w1.addAccount(b)
+w1.addAccount(b);
 ```
 
 If your Account is not encrypted, it is still possible to add it to the Wallet. However, you will be unable to export the wallet until you encrypt it. The Wallet class provides some helper methods to quickly encrypt or decrypt all accounts.
 
-```js
+```ts
 // encrypting Account a will fail as it has not been unlocked.
-w1.encryptAll('lousypassword') // returns [false, true]
+w1.encryptAll("lousypassword"); // returns [false, true]
 
 // we will decrypt a (account at array position 0)
-w1.decrypt(0, 'city of zion')  // returns true
+w1.decrypt(0, "city of zion"); // returns true
 // so we can encrypt everything with the same password
-w1.encrypt(0, 'lousypassword') // returns true
+w1.encrypt(0, "lousypassword"); // returns true
 ```
 
 Similar methods for decryption (`wallet.decrypt`, `wallet.decryptAll`) is available. Encryption and decryption methods will return booleans which corresponds to the success or failure of the action.
@@ -199,18 +219,18 @@ Once encrypted, you can proceed to export your wallet through `writeFile` or `ex
 
 The static method `readFile` is available to construct a wallet through reading a JSON file.
 
-```js
+```ts
 // writes to a file on cwd
-w1.writeFile('mywallet.json')
+w1.writeFile("mywallet.json");
 
 // exports as JSON string
-const walletString = w1.export()
+const walletString = w1.export();
 
 // read wallet from file
-const w2 = wallet.Wallet.readFile('mywallet.json')
+const w2 = wallet.Wallet.readFile("mywallet.json");
 
 // Decryption failed for account[0]
-w2.decryptAll('lousypassword') // returns [true, true]
+w2.decryptAll("lousypassword"); // returns [true, true]
 ```
 
 ## Methods
@@ -221,18 +241,18 @@ The core methods available are methods to convert key formats and generate new p
 
 Do note that the methods available is not the full set but only the minimum required. Generally, there is a method to retrieve the lower key from the higher key. For example, `getPublicKeyFromPrivateKey` exists but not `getAddressFromPrivatKey` or `getPrivateKeyFromPublicKey`. For conversions across all formats, you are encouraged to use the `Account` class.
 
-```js
-import Neon from '@cityofzion/neon-js'
-const privateKey = Neon.create.privateKey()
-const publicKey = Neon.get.publicKeyFromPrivateKey(publicKey)
-const scriptHash = Neon.get.scriptHashFromPublicKey(publicKey)
-const address = Neon.get.addressFromScriptHash(scriptHash)
+```ts
+import Neon from "@cityofzion/neon-js";
+const privateKey = Neon.create.privateKey();
+const publicKey = Neon.get.publicKeyFromPrivateKey(publicKey);
+const scriptHash = Neon.get.scriptHashFromPublicKey(publicKey);
+const address = Neon.get.addressFromScriptHash(scriptHash);
 
-import { wallet } from '@cityofzion/neon-js'
-const privateKey = wallet.generatePrivateKey()
-const publicKey = wallet.getPublicKeyFromPrivateKey(privateKey)
-const scriptHash = wallet.getScriptHashFromPublicKey(publicKey)
-const address = wallet.getAddressFromScriptHash(scriptHash)
+import { wallet } from "@cityofzion/neon-js";
+const privateKey = wallet.generatePrivateKey();
+const publicKey = wallet.getPublicKeyFromPrivateKey(privateKey);
+const scriptHash = wallet.getScriptHashFromPublicKey(publicKey);
+const address = wallet.getAddressFromScriptHash(scriptHash);
 ```
 
 There are no checks in place for this set of methods to ensure the inputs are proper. Errors may be thrown when conversion fails for certain methods.
@@ -249,7 +269,7 @@ The NEP2 standard describes the procedure to encrypt or decrypt a private key. T
 
 Do note that the encryption/decryption takes a long time and might not work very nicely in browsers.
 
-```js
+```ts
 import Neon from '@cityofzion/neon-js'
 const privateKey = Neon.create.privateKey()
 const WIF = Neon.get.WIFFromPrivateKey(privateKey)
@@ -265,26 +285,26 @@ const decryptedKey = wallet.decrypt(nep2Key, 'myPassword')
 WIF === decryptedKey // true
 ```
 
-## Verify
+### Verify
 
 Verification methods for the various key formats are available::
 
-```js
-import Neon from '@cityofzion/neon-js'
-Neon.is.address(addrStr)
-Neon.is.privateKey(keyStr)
-Neon.is.encryptedKey(encryptedStr)
-Neon.is.publicKey(publicKeyStr)
-Neon.is.wif(wifStr)
-Neon.is.scriptHash(scriptHashStr)
+```ts
+import Neon from "@cityofzion/neon-js";
+Neon.is.address(addrStr);
+Neon.is.privateKey(keyStr);
+Neon.is.encryptedKey(encryptedStr);
+Neon.is.publicKey(publicKeyStr);
+Neon.is.wif(wifStr);
+Neon.is.scriptHash(scriptHashStr);
 
-import {wallet} from '@cityofzion/neon-js'
-wallet.isAddress(addrStr)
-wallet.isPrivateKey(keyStr)
-wallet.isNEP2(keyStr)
-wallet.isPublicKey(publicKeyStr)
-wallet.isWIF(wifStr)
-wallet.isScriptHash(scriptHashStr)
+import { wallet } from "@cityofzion/neon-js";
+wallet.isAddress(addrStr);
+wallet.isPrivateKey(keyStr);
+wallet.isNEP2(keyStr);
+wallet.isPublicKey(publicKeyStr);
+wallet.isWIF(wifStr);
+wallet.isScriptHash(scriptHashStr);
 ```
 
 These methods will return a boolean regarding the key format. No errors will be thrown.

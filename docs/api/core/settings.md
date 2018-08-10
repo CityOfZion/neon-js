@@ -3,22 +3,22 @@ id: settings
 title: Settings
 ---
 
-```js
-import Neon, {settings} from '@cityofzion/neon-js'
+The `settings` module is exposed as:
+
+```ts
+import Neon, { settings } from "@cityofzion/neon-js";
 
 // Semantic access
-const newNet = new Neon.rpc.Network({name:'NewNet'})
-Neon.add.network(newNet)
+const newNet = new Neon.rpc.Network({ name: "NewNet" });
+Neon.add.network(newNet);
 
 // Direct access
-Neon.settings.httpsOnly = true
+console.log(Neon.settings.networks);
 ```
 
-## httpsOnly
+This module contains all the adjustable settings available in the package. This module can be augmented by plugins to include their own respective settings. Thus, this list is not exhaustive and only represent the settings available in the core package.
 
-`boolean`
-
-Affects the results of `getRPCEndpoint` from neonDB and neoscan. If set to `true`, `getRPCEndpoint` will only return https nodes. If there are no available nodes, it will cause the method to throw an error instead.
+---
 
 ## networks
 
@@ -28,12 +28,12 @@ This contains all the networks avaiable for use in `neon-js`. The default networ
 
 There are 2 helper functions that aids in adding or removing networks
 
-```js
-const customMainNet = new Network('MainNet')
+```ts
+const customMainNet = new Network("MainNet");
 // This overrides the existing MainNet with your custom configuration
-settings.addNetwork(customMainNet, true)
+settings.addNetwork(customMainNet, true);
 
-settings.removeNetwork('TestNet')
+settings.removeNetwork("TestNet");
 ```
 
 ## timeout

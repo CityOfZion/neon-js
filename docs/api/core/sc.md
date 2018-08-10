@@ -2,8 +2,7 @@
 id: sc
 title: Smart Contract
 ---
-
-The Smart Contract module is exposed as:
+The `sc` module is exposed as:
 
 ```js
 import Neon from '@cityofzion/neon-js'
@@ -26,6 +25,8 @@ These are implemented in v2.3.3. These RPC calls execute the provided script and
 For example, in the NEP5 token standard, we do not require an actual transaction to retrieve the name or symbol of the token. Thus, it is better to use a `invoke` RPC call instead of a real invocationTransaction.
 
 We will use a transaction when we want to effect a state change. For example, we want to transfer tokens from address A to B. We will use invoke to ensure the script is valid before sending the actual transaction.
+
+---
 
 ## Classes
 

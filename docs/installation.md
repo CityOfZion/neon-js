@@ -26,19 +26,19 @@ neon-js supports 2 kinds of imports.
 A default import will import the semantic version of neon. Use this if you are new or just want the whole package to use.
 
 ```js
-import Neon from '@cityofzion/neon-js'
+import Neon from "@cityofzion/neon-js";
 
-Neon.create.claimTx(...args)
-const query = Neon.create.query()
+Neon.create.claimTx(...args);
+const query = Neon.create.query();
 ```
 
 Modules are exposed through named imports. This allows more fine grained control and access to individual modules.
 
 ```js
-import {rpc, tx} from '@cityofzion/neon-js'
+import { rpc, tx } from "@cityofzion/neon-js";
 
-Neon.tx.createClaimTx(...args)
-const query = new rpc.Query()
+Neon.tx.createClaimTx(...args);
+const query = new rpc.Query();
 ```
 
 ## Require

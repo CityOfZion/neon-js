@@ -5,7 +5,7 @@ title: Constants
 
 Constants are defined and exposed as:
 
-```js
+```ts
 import Neon from '@cityofzion/neon-js'
 const assets = Neon.CONST.ASSETS
 const defaultRPC = Neon.CONST.DEFAULT_RPC

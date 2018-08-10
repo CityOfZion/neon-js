@@ -5,7 +5,7 @@ title: Logging
 
 The logging module is exposed only as a named import :
 
-```js
+```ts
 import {logging} from '@cityofzion/neon-js'
 logging.logger.setAll('info') // sets logging level of neon-js to 'info'
 const apiLogger = logging.logger.getLogger('api') // gets the logger for the api package

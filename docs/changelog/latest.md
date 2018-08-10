@@ -1,6 +1,6 @@
 ---
 id: latest
-title: Changelog (v3)
+title: Changelog (v4)
 ---
 
 4.0.0
