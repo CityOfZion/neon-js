@@ -39,7 +39,8 @@ export default {
   },
   sendAsset: (config) => core.sendAsset(config),
   claimGas: (config) => core.claimGas(config),
-  doInvoke: (config) => core.doInvoke(config)
+  doInvoke: (config) => core.doInvoke(config),
+  setupVote: (config) => core.setupVote(config)
 }
 
 export * from './core'
