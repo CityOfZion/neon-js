@@ -139,27 +139,23 @@ describe('Integration: API Core', function () {
           log.info(`doInvoke(neoscan): ${c.response.txid}`)
         })
     })
+  })
 
-    it.skip('mints tokens', () => {
-      // This does a mint tokens call
+  describe('setupVote', function () {
+    it('neoscan', () => {
       useNeoscan()
-      const script = {
-        scriptHash: CONTRACTS.TEST_NXT,
-        operation: 'mintTokens',
-        args: []
+      const stateConfig = {
+        net: 'TestNet',
+        account: new Account(testKeys.a.privateKey),
+        candidateKeys: [
+          '030ef96257401b803da5dd201233e2be828795672b775dd674d69df83f7aec1e36',
+          '0327da12b5c40200e9f65569476bbff2218da4f32548ff43b6387ec1416a231ee8'
+        ]
       }
-      const config2 = {
-        net: NEO_NETWORK.TEST,
-        address: testKeys.a.address,
-        privateKey: testKeys.a.privateKey,
-        intents: core.makeIntent({ NEO: 1 }, 'AHcLAfnvzzHyuPPULeXrXZ6RK3Hkdvi1qi'),
-        script,
-        gas: 0
-      }
-      return core.doInvoke(config2)
+      return core.setupVote(stateConfig)
         .then((c) => {
           c.response.result.should.equal(true)
-          log.info(`doInvoke(neoscan mint tokens): ${c.response.txid}`)
+          log.info(`setupVote(neoscan): ${c.response.txid}`)
         })
     })
   })
