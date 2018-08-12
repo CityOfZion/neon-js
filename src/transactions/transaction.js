@@ -1,13 +1,13 @@
 import { Account } from '../wallet'
 import { TX_VERSION, ASSET_ID } from '../consts'
 import { createScript } from '../sc'
-import { Fixed8, str2hexstring, reverseHex, int2hex } from '../utils'
+import { Fixed8, str2hexstring } from '../utils'
 import TxAttrUsage from './txAttrUsage'
 import * as comp from './components'
 import * as core from './core'
 import * as exc from './exclusive'
 import logger from '../logging'
-import { StateType, StateDescriptor } from './StateDescriptor'
+import { StateDescriptor } from './StateDescriptor'
 
 const log = logger('tx')
 
