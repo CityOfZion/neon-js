@@ -28,7 +28,8 @@ export const signMessage = (message, privateKey) => {
   if (!isPrivateKey(privateKey) && !isWIF(privateKey)) throw new Error('Invalid private key or WIF')
   if (isWIF(privateKey)) privateKey = getPrivateKeyFromWIF(privateKey)
 
-  const messageHex = str2hexstring(message)
+  var messageHex = message
+  if (!isHex(messageHex)) messageHex = str2hexstring(message)
   return generateSignature(messageHex, privateKey)
 }
 
@@ -46,7 +47,8 @@ export const verifyMessage = (message, signature, publicKey) => {
 
   const ecdsa = new EC('p256')
   const sig = getSignatureFromHex(signature)
-  const messageHex = str2hexstring(message)
+  var messageHex = message
+  if (!isHex(messageHex)) messageHex = str2hexstring(message)
   const messageHash = sha256(messageHex)
   return ecdsa.verify(messageHash, sig, publicKey, 'hex')
 }
