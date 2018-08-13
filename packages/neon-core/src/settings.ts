@@ -11,8 +11,8 @@ export let timeout = {
 };
 /**
  * Attempts to add a new Network to settings. This will fail if attempting to add a Network with the same name unless override is set to true.
- * @param network
- * @param override - Whether to override if network with same name is found.
+ * @param network The Network object to add.
+ * @param override Whether to override if network with same name is found.
  * @return Whether the add was successful.
  */
 export function addNetwork(network: Network, override = false) {
@@ -25,7 +25,7 @@ export function addNetwork(network: Network, override = false) {
 
 /**
  * Deletes a Network from settings. Returns false if network is not found.
- * @param name
+ * @param name Name of the network to remove.
  * @return Whether a network was removed.
  */
 export function removeNetwork(name: string): boolean {

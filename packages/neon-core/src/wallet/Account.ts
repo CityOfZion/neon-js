@@ -29,13 +29,17 @@ export interface AccountJSON {
 }
 
 /**
- * @class Account
- * @classdesc
  * This allows for simple utilisation and manipulating of keys without need the long access methods.
+ *
  * Key formats are derived from each other lazily and stored for future access.
  * If the previous key (one level higher) is not found, it will attempt to generate it or throw an Error if insufficient information was provided (eg. trying to generate private key when only address was given.)
+ *
  * NEP2 <=> WIF <=> Private => Public => ScriptHash <=> Address
- * @param {string|object} str - WIF/ Private Key / Public Key / Address or a Wallet Account object.
+ *
+ * @param str WIF/ Private Key / Public Key / Address or a Wallet Account object.
+ * @example
+ * const acct = new Account("L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g");
+ * acct.address; // "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
  */
 export class Account {
   public extra: { [key: string]: any };
@@ -114,7 +118,6 @@ export class Account {
 
   /**
    * Key encrypted according to NEP2 standard.
-   * @type {string}
    */
   get encrypted() {
     if (this._encrypted) {
@@ -126,7 +129,6 @@ export class Account {
 
   /**
    * Case sensitive key of 52 characters long.
-   * @type {string}
    */
   get WIF() {
     if (this._WIF) {
@@ -139,7 +141,6 @@ export class Account {
 
   /**
    * Key of 64 hex characters.
-   * @type {string}
    */
   get privateKey() {
     if (this._privateKey) {
@@ -156,7 +157,6 @@ export class Account {
 
   /**
    * Returns the public key in encoded form. This is the form that is the short version (starts with 02 or 03). If you require the unencoded form, do use the publicKey method instead of this getter.
-   * @type {string}
    */
   get publicKey() {
     if (this._publicKey) {
@@ -168,8 +168,7 @@ export class Account {
   }
 
   /** Retrieves the Public Key in encoded / unencoded form.
-   * @param {boolean} encoded - Encoded or unencoded.
-   * @return {string}
+   * @param encoded Encoded or unencoded.
    */
   public getPublicKey(encoded: boolean = true): string {
     return encoded
@@ -178,8 +177,7 @@ export class Account {
   }
 
   /**
-   * Script hash of the key. This format is usually used in the code instead of address as this is a non case sensitive version.
-   * @type {string}
+   * Script hash of the key. This format is usually used in the code instead of address as this is a hexstring.
    */
   get scriptHash() {
     if (this._scriptHash) {
@@ -197,7 +195,6 @@ export class Account {
 
   /**
    * Public address used to receive transactions. Case sensitive.
-   * @type {string}
    */
   get address() {
     if (this._address) {
@@ -238,14 +235,11 @@ export class Account {
 
   /**
    * Encrypts the current privateKey and return the Account object.
-   * @param {string} keyphrase
-   * @param {object} [scryptParams]
-   * @return {Promise<Account>} this
    */
   public encrypt(
     keyphrase: string,
     scryptParams: ScryptParams = DEFAULT_SCRYPT
-  ): Promise<Account> {
+  ): Promise<this> {
     return Promise.resolve()
       .then(_ => encrypt(this.privateKey, keyphrase, scryptParams))
       .then(encrypted => {
@@ -256,14 +250,11 @@ export class Account {
 
   /**
    * Decrypts the encrypted key and return the Account object.
-   * @param {string} keyphrase
-   * @param {object} [scryptParams]
-   * @return {Promise<Account>} this
    */
   public decrypt(
     keyphrase: string,
     scryptParams: ScryptParams = DEFAULT_SCRYPT
-  ): Promise<Account> {
+  ): Promise<this> {
     return Promise.resolve()
       .then(_ => decrypt(this.encrypted, keyphrase, scryptParams))
       .then(wif => {

@@ -17,8 +17,10 @@ export interface NetworkJSON {
   Nodes: string[];
   ExtraConfiguration: { [key: string]: string };
 }
+
 /**
  * Network interface representing a NEO blockchain network.
+ * This inherits from the network.protocol file used in the C# implementation and adds in additional configurations.
  * @param config NetworkLike JS object
  */
 export class Network {

@@ -26,10 +26,7 @@ export interface RPCErrorResponse {
 }
 
 /**
- * @class Query
- * @classdesc
  * A Query object helps us to construct and record requests
- * @param req
  */
 export class Query {
   /**

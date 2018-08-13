@@ -110,7 +110,7 @@ export function isPublicKey(key: string, encoded?: boolean): boolean {
 }
 
 /**
- * Verifies if string is a scripthash.
+ * Verifies if string is a scripthash. Any 20 byte hexstring is a valid scriptHash.
  */
 export function isScriptHash(scriptHash: string): boolean {
   return isHex(scriptHash) && scriptHash.length === 40;

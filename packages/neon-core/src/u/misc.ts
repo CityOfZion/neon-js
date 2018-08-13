@@ -24,6 +24,8 @@ export function hexXor(str1: string, str2: string): string {
 
 /**
  * Reverses an array.
+ * @example
+ * reverseArray('abcd') = 'cdba'
  */
 export function reverseArray<T>(arr: ArrayLike<T>): T[] {
   if (typeof arr !== "object" || !arr.length) {

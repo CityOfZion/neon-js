@@ -25,6 +25,9 @@ export interface StackItemMap {
   value: StackItem;
 }
 
+/**
+ * Object returned as a result of executing a script in the VM.
+ */
 export class StackItem {
   public static deserialize(hex: string): StackItem {
     const ss = new StringStream(hex);

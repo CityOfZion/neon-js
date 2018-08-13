@@ -20,6 +20,9 @@ export interface ProtocolJSON {
   SystemFee: { [key: string]: number };
 }
 
+/**
+ * Model of the protocol configuration file used by the C# implementation.
+ */
 export class Protocol {
   public magic: number;
   public addressVersion: number;

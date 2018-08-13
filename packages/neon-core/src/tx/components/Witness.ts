@@ -6,6 +6,11 @@ export interface WitnessLike {
   verificationScript: string;
 }
 
+/**
+ * A Witness is a a section of VM code that is ran during the verification of the transaction.
+ *
+ * For example, the most common witness is the VM Script that pushes the ECDSA signature into the VM and calling CHECKSIG to prove the authority to spend the TransactionInputs in the transaction.
+ */
 export class Witness {
   public static deserialize(hex: string): Witness {
     const ss = new StringStream(hex);

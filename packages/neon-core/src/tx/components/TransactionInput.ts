@@ -5,6 +5,10 @@ export interface TransactionInputLike {
   prevIndex: number;
 }
 
+/**
+ * A reference to a TransactionOutput in another confirmed transaction.
+ * This is used to denote UTXO that will be spent in this transaction.
+ */
 export class TransactionInput {
   public static deserialize(hex: string): TransactionInput {
     const ss = new StringStream(hex);

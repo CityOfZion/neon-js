@@ -1,6 +1,9 @@
 import { StringStream } from "../../u";
 import BaseTransaction, { TransactionLike } from "./BaseTransaction";
 
+/**
+ * Transaction used for transferring UTXO assets.
+ */
 export class ContractTransaction extends BaseTransaction {
   public static deserializeExclusive(
     ss: StringStream,

@@ -8,6 +8,12 @@ export interface TransactionAttributeLike {
   data: string;
 }
 
+/**
+ * An attribute that is used to decorate the transaction.
+ * Used for appending additional information to the transaction.
+ *
+ * For example, a remark is attached as an attribute.
+ */
 export class TransactionAttribute {
   public static deserialize(hex: string): TransactionAttribute {
     const ss = new StringStream(hex);
@@ -28,7 +34,7 @@ export class TransactionAttribute {
     } else if (usage === 0x90 || usage >= 0xf0) {
       data = ss.readVarBytes();
     } else {
-      throw new Error();
+      throw new Error(`Unknown usage type: ${usage}. Context: ${ss.context()}`);
     }
     return new TransactionAttribute({ usage, data });
   }
@@ -50,7 +56,7 @@ export class TransactionAttribute {
 
   public serialize(): string {
     if (this.data.length > maxTransactionAttributeSize) {
-      throw new Error();
+      throw new Error(`Data size too big!`);
     }
     let out = num2hexstring(this.usage);
     if (this.usage === 0x81) {

@@ -20,6 +20,10 @@ export interface ClaimExclusive {
   claims: TransactionInput[];
 }
 
+/**
+ * Transaction used for claiming GAS. Do note that GAS Claims can only occur for spent coins.
+ * Constructed with a list of claims and a TransactionOutput representing the GAS claimed.
+ */
 export class ClaimTransaction extends BaseTransaction {
   public static deserializeExclusive(
     ss: StringStream,

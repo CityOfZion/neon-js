@@ -7,25 +7,19 @@ export interface ClaimsLike {
   claims: ClaimItemLike[];
 }
 /**
- * @class Claims
- * @classdesc
  * Claims object used for claiming GAS.
- * @param {Claims} config - Claims-like object
- * @param {string} config.net - Network
- * @param {string}  config.address - The address for this Claims
- * @param {ClaimItem[]} config.claims - The list of claims to be made.
  */
 export class Claims {
+  /** The address for this Claims */
   public address: string;
+  /** Network which this Claims is using */
   public net: string;
+  /** The list of claimable transactions */
   public claims: ClaimItem[];
 
   constructor(config: Partial<ClaimsLike> = {}) {
-    /** The address for this Claims */
     this.address = config.address || "";
-    /** Network which this Claims is using */
     this.net = config.net || "NoNet";
-    /** The list of claimable transactions */
     this.claims = config.claims ? config.claims.map(c => new ClaimItem(c)) : [];
   }
 
@@ -53,7 +47,7 @@ export class Claims {
   }
 
   /**
-   * Returns a Claims object that contains part of the total claims starting at start, ending at end.
+   * Returns new Claims object that contains part of the total claims starting at start, ending at end.
    */
   public slice(start: number, end?: number): Claims {
     return new Claims({

@@ -10,11 +10,7 @@ const log = logger("rpc");
 
 const versionRegex = /NEO:(\d+\.\d+\.\d+)/;
 /**
- * @class RPCClient
- * @classdesc
  * RPC Client model to query a NEO node. Contains built-in methods to query using RPC calls.
- * @param {string} net - 'MainNet' or 'TestNet' will query the default RPC address found in consts. You may provide a custom URL.
- * @param {string} version - Version of NEO node. Used to check if RPC methods have been implemented. it will default to DEFAULT_RPC found in CONST
  */
 export class RPCClient {
   public net: string;
@@ -24,6 +20,10 @@ export class RPCClient {
   // tslint:disable-next-line:variable-name
   private _latencies: number[];
 
+  /**
+   * @param net 'MainNet' or 'TestNet' will query the default RPC address found in consts. You may provide a custom URL.
+   * @param version Version of NEO node. Used to check if RPC methods have been implemented. it will default to DEFAULT_RPC found in CONST
+   */
   constructor(net: string, version = RPC_VERSION) {
     if (net === NEO_NETWORK.MAIN) {
       this.net = DEFAULT_RPC.MAIN;

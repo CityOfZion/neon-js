@@ -8,6 +8,10 @@ export interface TransactionOutputLike {
   scriptHash: string;
 }
 
+/**
+ * UTXO that is constructed in this transaction.
+ * This represents a spendable coin in the system.
+ */
 export class TransactionOutput {
   public static deserialize(hex: string): TransactionOutput {
     const ss = new StringStream(hex);

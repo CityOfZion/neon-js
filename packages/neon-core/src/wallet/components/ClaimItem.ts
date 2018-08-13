@@ -9,6 +9,10 @@ export interface ClaimItemLike {
   end?: number;
 }
 
+/**
+ * Contains the information necessary to validate a GAS Claim.
+ * It is a reference to a spent coin.
+ */
 export class ClaimItem {
   public claim: Fixed8;
   public txid: string;

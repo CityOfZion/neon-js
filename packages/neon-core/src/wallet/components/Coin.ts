@@ -6,6 +6,9 @@ export interface CoinLike {
   value: Fixed8 | number | string;
 }
 
+/**
+ * An alternative form of a TransactionOutput.
+ */
 export class Coin {
   public index: number;
   public txid: string;

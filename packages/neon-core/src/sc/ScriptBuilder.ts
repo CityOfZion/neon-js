@@ -20,9 +20,8 @@ export interface ScriptIntent {
 }
 
 /**
- * @class ScriptBuilder
+ * Builds a VM script in hexstring. Used for constructing smart contract method calls.
  * @extends StringStream
- * @classdesc Builds a VM script in hexstring. Used for constructing smart contract method calls.
  */
 export class ScriptBuilder extends StringStream {
   /**
@@ -38,11 +37,11 @@ export class ScriptBuilder extends StringStream {
 
   /**
    * Appends args, operation and scriptHash
-   * @param {string} scriptHash - Hexstring(BE)
-   * @param {string|null} operation - ASCII, defaults to null
-   * @param {Array|string|number|boolean} args - any
-   * @param {boolean} useTailCall - Use TailCall instead of AppCall
-   * @return {ScriptBuilder} this
+   * @param scriptHash Hexstring(BE)
+   * @param operation ASCII, defaults to null
+   * @param args any
+   * @param useTailCall Use TailCall instead of AppCall
+   * @return this
    */
   public emitAppCall(
     scriptHash: string,
@@ -64,8 +63,8 @@ export class ScriptBuilder extends StringStream {
 
   /**
    * Appends a SysCall
-   * @param {string} api - api of SysCall
-   * @return {ScriptBuilder} this
+   * @param api api of SysCall
+   * @return this
    */
   public emitSysCall(api: string): this {
     if (!api) {
@@ -82,8 +81,8 @@ export class ScriptBuilder extends StringStream {
 
   /**
    * Appends data depending on type. Used to append params/array lengths.
-   * @param {Array|string|number|boolean} data
-   * @return {ScriptBuilder} this
+   * @param data
+   * @return this
    */
   public emitPush(data?: any): this {
     switch (typeof data) {
@@ -111,7 +110,8 @@ export class ScriptBuilder extends StringStream {
 
   /**
    * Reverse engineer a script back to its params.
-   * @return {scriptParams[]}
+   * A script may have multiple invocations so a list is always returned.
+   * @return A list of ScriptIntents[].
    */
   public toScriptParams(): ScriptIntent[] {
     this.reset();
@@ -155,8 +155,8 @@ export class ScriptBuilder extends StringStream {
   /**
    * Private method to append a hexstring.
    * @private
-   * @param {string} hexstring - Hexstring(BE)
-   * @return {ScriptBuilder} this
+   * @param hexstring Hexstring(BE)
+   * @return this
    */
   private _emitString(hexstring: string): this {
     ensureHex(hexstring);
@@ -185,8 +185,8 @@ export class ScriptBuilder extends StringStream {
   /**
    * Private method to append a number.
    * @private
-   * @param {number} num
-   * @return {ScriptBuilder} this
+   * @param num
+   * @return this
    */
   private _emitNum(num: number): this {
     if (num === -1) {
@@ -247,7 +247,10 @@ function isValidValue(value: any) {
 
 /**
  * Retrieves a single AppCall from a ScriptBuilder object.
+ * Returns ScriptIntents starting from the beginning of the script.
+ * This is based off the pointer in the stream.
  * @param sb
+ * @returns A single ScriptIntent if available.
  */
 function retrieveAppCall(sb: ScriptBuilder): ScriptIntent {
   const output: ScriptIntent = {
@@ -294,7 +297,7 @@ function retrieveAppCall(sb: ScriptBuilder): ScriptIntent {
     }
   }
   if (output.scriptHash === "") {
-    throw new Error("No Scripthash found!")
+    throw new Error("No Scripthash found!");
   }
   return output;
 }

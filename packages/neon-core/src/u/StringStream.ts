@@ -1,28 +1,39 @@
 import { reverseHex } from "./misc";
 
 /**
- * @class StringStream
- * @classdesc A simple string stream that allows user to read a string byte by byte using read().
- * @param {string} str - The string to read as a stream.
+ * A simple string stream that allows user to read a string byte by byte using read().
+ * @param str - The string to read as a stream.
  */
 export class StringStream {
   public str: string;
   public pter: number;
 
+  /**
+   * Initializes the stream with given string and pointer at position 0.
+   */
   constructor(str = "") {
     this.str = str;
     this.pter = 0;
   }
 
   /**
-   * Checks if reached the end of the stream. Does not mean stream is actually empty (this.str is not empty)
+   * Checks if reached the end of the stream. Does not mean stream is actually empty (this.str is not empty).
+   * @example
+   * const ss = new StringStream("01020304");
+   * ss.isEmpty(); // false
+   * ss.pter = 3;
+   * ss.isEmpty(); // true
    */
   public isEmpty(): boolean {
     return this.pter >= this.str.length;
   }
 
   /**
-   * Peek at the next bytes  on the string. May return less than intended bytes if reaching end of stream.
+   * Peek at the next bytes on the string. May return less than intended bytes if reaching end of stream.
+   * @example
+   * const ss = new StringStream("0102");
+   * ss.peek();  // "01"
+   * ss.peek(5); // "0102"
    */
   public peek(bytes: number = 1): string {
     if (this.isEmpty()) {
@@ -34,6 +45,10 @@ export class StringStream {
   /**
    * Reads some bytes off the stream.
    * @param bytes Number of bytes to read
+   * @example
+   * const ss = new StringStream("01020304");
+   * ss.read(); // "01"
+   * ss.read(2); // "0203"
    */
   public read(bytes: number = 1): string {
     if (this.isEmpty()) {
@@ -45,14 +60,16 @@ export class StringStream {
   }
 
   /**
-   * Reads some bytes off the stream using the first byte as the length indicator.
+   * Reads some bytes off the stream.
+   * A variable-length integer is first read off the stream and then bytes equal to the integer is read off and returned.
    */
   public readVarBytes(): string {
     return this.read(this.readVarInt());
   }
 
   /**
-   * Reads a variable Int.
+   * Reads an integer of variable bytelength. May consume up to 9 bytes.
+   * The first byte read indicates if more bytes need to be read off.
    */
   public readVarInt(): number {
     let len = parseInt(this.read(1), 16);
@@ -68,9 +85,29 @@ export class StringStream {
 
   /**
    * Resets the pointer to start of string.
+   * @example
+   * const ss = new StringStream("010203");
+   * ss.read(); //"01"
+   * ss.reset();
+   * ss.read(); // "01"
    */
   public reset() {
     this.pter = 0;
+  }
+
+  /**
+   * Returns a printable string of the characters around the pointer.
+   * Used for debugging.
+   */
+  public context() {
+    const before =
+      this.pter > 10
+        ? this.str.slice(this.pter - 10, this.pter)
+        : this.str.slice(0, this.pter);
+    const current = this.read(1);
+    const after = this.peek(5);
+    this.pter -= 2;
+    return `${before}|${current}|${after}`;
   }
 }
 

@@ -33,10 +33,10 @@ const log = logging("wallet");
 
 /**
  * Encrypts a WIF key using a given keyphrase under NEP-2 Standard.
- * @param {string} wifKey - WIF key to encrypt (52 chars long).
- * @param {string} keyphrase - The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
- * @param {scryptParams} [scryptParams] - Parameters for Scrypt. Defaults to NEP2 specified parameters.
- * @returns {Promise<string>} The encrypted key in Base58 (Case sensitive).
+ * @param wifKey WIF key to encrypt (52 chars long).
+ * @param keyphrase The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
+ * @param scryptParams Optional parameters for Scrypt. Defaults to NEP2 specified parameters.
+ * @returns The encrypted key in Base58 (Case sensitive).
  */
 export function encrypt(
   wifKey: string,
@@ -119,9 +119,9 @@ export function decrypt(
           const derived2 = derived.slice(64);
           const ciphertext = {
             ciphertext: enc.Hex.parse(encrypted),
-             salt: "",
-             iv: ""
-            };
+            salt: "",
+            iv: ""
+          };
           const decrypted = AES.decrypt(
             ciphertext,
             enc.Hex.parse(derived2),
@@ -129,9 +129,9 @@ export function decrypt(
           );
           const privateKey = hexXor(decrypted.toString(), derived1);
           const account = new Account(privateKey);
-          const newAddressHash = SHA256(
-            SHA256(enc.Latin1.parse(account.address)) as any
-          )
+          const newAddressHash = SHA256(SHA256(
+            enc.Latin1.parse(account.address)
+          ) as any)
             .toString()
             .slice(0, 8);
           if (addressHash !== newAddressHash) {

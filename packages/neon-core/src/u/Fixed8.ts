@@ -1,6 +1,12 @@
 import BN from "bignumber.js";
 import { reverseHex } from "./misc";
 
+/**
+ * A fixed point notation used widely in the NEO system for representing decimals.
+ * It is basically a hexideciaml integer that is divided by the 10^8.
+ * Supports up to 8 decimals and is 8 bytes long.
+ * @extends BN
+ */
 export class Fixed8 extends BN {
   public static fromHex(hex: string): Fixed8 {
     return new Fixed8(hex, 16).div(100000000);

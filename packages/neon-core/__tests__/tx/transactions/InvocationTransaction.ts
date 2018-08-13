@@ -3,8 +3,8 @@ import InvocationTransaction, {
   InvocationTransactionLike
 } from "../../../src/tx/transaction/InvocationTransaction";
 
-import samples from "./InvocationTx.json";
 import { Fixed8 } from "../../../src/u";
+import samples from "./invocationTx.json";
 
 describe("constructor", () => {
   test("empty", () => {

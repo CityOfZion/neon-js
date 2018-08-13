@@ -15,22 +15,28 @@ export interface BalanceLike {
   tokens: { [sym: string]: number | string | Fixed8 };
 }
 
+/**
+ * Represents a balance available for an Account.
+ * Contains balances for both UTXO assets and NEP5 tokens.
+ */
 export class Balance {
+  /** The address for this Balance */
   public address: string;
+  /** The network for this Balance */
   public net: string;
+  /** The symbols of assets found in this Balance. Use this symbol to find the corresponding key in the assets object. */
   public assetSymbols: string[];
+  /** The object containing the balances for each asset keyed by its symbol. */
   public assets: { [sym: string]: AssetBalance };
+  /** The symbols of NEP5 tokens found in this Balance. Use this symbol to find the corresponding balance in the tokens object. */
   public tokenSymbols: string[];
+  /** The token balances in this Balance for each token keyed by its symbol. */
   public tokens: { [sym: string]: Fixed8 };
 
   constructor(bal: Partial<BalanceLike> = {}) {
-    /** The address for this Balance */
     this.address = bal.address || "";
-    /** The network for this Balance */
     this.net = bal.net || "NoNet";
-    /** The symbols of assets found in this Balance. Use this symbol to find the corresponding key in the assets object. */
     this.assetSymbols = [];
-    /** The object containing the balances for each asset keyed by its symbol. */
     this.assets = {};
     if (typeof bal.assets === "object") {
       const keys = Object.keys(bal.assets);
@@ -40,9 +46,7 @@ export class Balance {
         }
       }
     }
-    /** The symbols of the NEP5 tokens in this Balance. Use this symbol to find the corresponding key in the tokens object. */
     this.tokenSymbols = [];
-    /** The token balances in this Balance for each token keyed by its symbol. */
     this.tokens = {};
     if (typeof bal.tokens === "object") {
       const keys = Object.keys(bal.tokens);
@@ -60,9 +64,8 @@ export class Balance {
    * Adds a new asset to this Balance.
    * @param  sym The symbol to refer by. This function will force it to upper-case.
    * @param assetBalance The assetBalance if initialized. Default is a zero balance object.
-   * @return this
    */
-  public addAsset(sym: string, assetBalance?: Partial<AssetBalanceLike>) {
+  public addAsset(sym: string, assetBalance?: Partial<AssetBalanceLike>): this {
     sym = sym.toUpperCase();
     this.assetSymbols.push(sym);
     const cleanedAssetBalance = new AssetBalance(assetBalance);
@@ -74,9 +77,11 @@ export class Balance {
    * Adds a new NEP-5 Token to this Balance.
    * @param sym - The NEP-5 Token Symbol to refer by.
    * @param tokenBalance - The amount of tokens this account holds.
-   * @return this
    */
-  public addToken(sym: string, tokenBalance: string | number | Fixed8 = 0) {
+  public addToken(
+    sym: string,
+    tokenBalance: string | number | Fixed8 = 0
+  ): this {
     sym = sym.toUpperCase();
     this.tokenSymbols.push(sym);
     this.tokens[sym] = new Fixed8(tokenBalance);
@@ -85,9 +90,8 @@ export class Balance {
 
   /**
    * Applies a Transaction to a Balance, removing spent coins and adding new coins. This currently applies only to Assets.
-   * @param {BaseTransaction|string} tx - Transaction that has been sent and accepted by Node.
-   * @param {boolean} confirmed - If confirmed, new coins will be added to unspent. Else, new coins will be added to unconfirmed property first.
-   * @return {Balance} this
+   * @param tx Transaction that has been sent and accepted by Node.
+   * @param confirmed If confirmed, new coins will be added to unspent. Else, new coins will be added to unconfirmed property first.
    */
   public applyTx(
     tx: BaseTransaction | string,
@@ -145,7 +149,6 @@ export class Balance {
 
   /**
    * Informs the Balance that the next block is confirmed, thus moving all unconfirmed transaction to unspent.
-   * @return {Balance}
    */
   public confirm(): Balance {
     for (const sym of this.assetSymbols) {
@@ -174,10 +177,11 @@ export class Balance {
 
   /**
    * Verifies the coins in balance are unspent. This is an expensive call.
-   * @param {string} url - NEO Node to check against.
-   * @return {Promise<Balance>} Returns this
+   *
+   * Any coins categorised incorrectly are moved to their correct arrays.
+   * @param url NEO Node to check against.
    */
-  public verifyAssets(url: string): Promise<Balance> {
+  public verifyAssets(url: string): Promise<this> {
     const promises: Array<Promise<AssetBalance>> = [];
     const symbols = this.assetSymbols;
     symbols.map(key => {
@@ -197,9 +201,8 @@ export default Balance;
 
 /**
  * Verifies an AssetBalance
- * @param {string} url
- * @param {AssetBalance} assetBalance
- * @return {Promise<AssetBalance>} Returns a new AssetBalance
+ * @param url RPC Node to verify against.
+ * @param assetBalance AssetBalance to verify.
  */
 async function verifyAssetBalance(
   url: string,
@@ -226,6 +229,8 @@ async function verifyAssetBalance(
 
 /**
  * Verifies a list of Coins
+ * @param url RPC Node to verify against.
+ * @param coinArr Coins to verify.
  */
 async function verifyCoins(url: string, coinArr: Coin[]): Promise<boolean[]> {
   const promises = coinArr.map(c => verifyCoin(url, c));

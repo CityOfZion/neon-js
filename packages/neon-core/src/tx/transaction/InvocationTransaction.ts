@@ -8,6 +8,10 @@ export interface InvocationTransactionLike extends TransactionLike {
   gas: number | Fixed8;
 }
 
+/**
+ * Transaction used for invoking smart contracts through a VM script.
+ * Can also be used to transfer UTXO assets.
+ */
 export class InvocationTransaction extends BaseTransaction {
   public static deserializeExclusive(
     ss: StringStream,

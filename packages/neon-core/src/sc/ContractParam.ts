@@ -20,6 +20,10 @@ export interface ContractParamLike {
   value: any;
 }
 
+/**
+ * Contract input parameters.
+ * These are mainly used as parameters to pass in for RPC test invokes.
+ */
 export class ContractParam {
   /**
    * Creates a String ContractParam.

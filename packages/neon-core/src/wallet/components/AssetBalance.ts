@@ -9,6 +9,13 @@ export interface AssetBalanceLike {
   unconfirmed: CoinLike[];
 }
 
+/**
+ * Balance of an UTXO asset.
+ * We keep track of 3 states: unspent, spent and unconfirmed.
+ * Unspent coins are ready to be constructed into transactions.
+ * Spent coins have been used once in confirmed transactions and cannot be used anymore. They are kept here for tracking purposes.
+ * Unconfirmed coins have been used in transactions but are not confirmed yet. This is a holding state until we confirm that the transactions are mined into blocks.
+ */
 export class AssetBalance implements NeonObject {
   public unspent: Coin[];
   public spent: Coin[];

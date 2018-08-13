@@ -61,7 +61,7 @@ export function ab2hexstring(arr: ArrayBuffer | ArrayLike<number>): string {
 }
 
 /**
- * @param str - ASCII string
+ * @param str ASCII string
  * @returns HEX string
  */
 export function str2hexstring(str: string): string {
@@ -91,8 +91,8 @@ export function int2hex(num: number): string {
 /**
  * Converts a number to a big endian hexstring of a suitable size, optionally little endian
  * @param num
- * @param size - The required size in bytes, eg 1 for Uint8, 2 for Uint16. Defaults to 1.
- * @param littleEndian - Encode the hex in little endian form
+ * @param size The required size in bytes, eg 1 for Uint8, 2 for Uint16. Defaults to 1.
+ * @param littleEndian Encode the hex in little endian form
  */
 export function num2hexstring(
   num: any,

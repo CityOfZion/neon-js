@@ -13,6 +13,9 @@ export interface WalletJSON {
   extra: { [key: string]: any } | null;
 }
 
+/**
+ * File to store private keys according to the NEP-2 specification.
+ */
 export class Wallet {
   public name: string;
   public version: string;
@@ -71,8 +74,8 @@ export class Wallet {
 
   /**
    * Adds an account.
-   * @param {Account|AccountJSON} acct - Account or WalletAccount object.
-   * @return {number} Index position of Account in array.
+   * @param acct Account or WalletAccount object.
+   * @return Index position of Account in array.
    */
   public addAccount(acct: Account | AccountJSON): number {
     const index = this.accounts.length;
@@ -95,9 +98,9 @@ export class Wallet {
 
   /**
    * Attempts to decrypt Account at index in array.
-   * @param {number} index - Index of Account in array.
-   * @param {string} keyphrase - keyphrase
-   * @return {boolean} Decryption success/failure
+   * @param index Index of Account in array.
+   * @param keyphrase keyphrase
+   * @return Decryption success/failure
    */
   public decrypt(index: number, keyphrase: string): boolean {
     if (index < 0) {
@@ -116,8 +119,8 @@ export class Wallet {
 
   /**
    * Attempts to decrypt all accounts with keyphrase.
-   * @param {string} keyphrase
-   * @return {boolean[]} Each boolean represents if that Account has been decrypted successfully.
+   * @param keyphrase
+   * @return Each boolean represents if that Account has been decrypted successfully.
    */
   public decryptAll(keyphrase: string): boolean[] {
     const results: boolean[] = [];
@@ -134,9 +137,9 @@ export class Wallet {
 
   /**
    * Attempts to encrypt Account at index in array.
-   * @param {number} index - Index of Account in array.
-   * @param {string} keyphrase
-   * @return {boolean} Encryption success/failure
+   * @param index Index of Account in array.
+   * @param keyphrase
+   * @return Encryption success/failure
    */
   public encrypt(index: number, keyphrase: string): boolean {
     if (index < 0) {
@@ -155,8 +158,8 @@ export class Wallet {
 
   /**
    * Attempts to encrypt all accounts with keyphrase.
-   * @param {string} keyphrase
-   * @return {boolean[]} Each boolean represents if that Account has been encrypted successfully.
+   * @param keyphrase
+   * @return Each boolean represents if that Account has been encrypted successfully.
    */
   public encryptAll(keyphrase: string): boolean[] {
     const results: boolean[] = [];
@@ -172,7 +175,7 @@ export class Wallet {
   }
 
   /**
-   * Export this class as a object
+   * Export this class as a JS object.
    */
   public export(): WalletJSON {
     return {
@@ -186,7 +189,7 @@ export class Wallet {
 
   /**
    * Set Account at index in array to be default account.
-   * @param {number} index - The index of the Account in accounts array.
+   * @param index The index of the Account in accounts array.
    * @return this
    */
   public setDefault(index: number) {
