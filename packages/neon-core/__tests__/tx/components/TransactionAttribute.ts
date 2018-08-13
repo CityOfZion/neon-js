@@ -20,7 +20,7 @@ describe("constructor", () => {
     expect(result.data).toEqual(testObject.data);
   });
 
-  test("TransactionAttributeLike (int usage)", () => {
+  test("TransactionAttributeLike (str usage)", () => {
     const testObject = {
       usage: "Remark",
       data: "test"

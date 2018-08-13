@@ -79,5 +79,6 @@ export const RPC_VERSION = "2.3.2";
 export const TX_VERSION: { [key: string]: number } = {
   CLAIM: 0,
   CONTRACT: 0,
-  INVOCATION: 1
+  INVOCATION: 1,
+  STATE: 0
 };

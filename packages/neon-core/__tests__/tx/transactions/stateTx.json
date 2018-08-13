@@ -1,0 +1,36 @@
+{
+  "1": {
+    "txid": "10b3aac46b7509c60bb389566670d5a9f403810216c6dc4e7e8ed2998acedea9",
+    "serialized": "90000140143775292229eccdf904f16fff8e83e7cffdc0f0ce05566f7465734302030ef96257401b803da5dd201233e2be828795672b775dd674d69df83f7aec1e360327da12b5c40200e9f65569476bbff2218da4f32548ff43b6387ec1416a231ee802203775292229eccdf904f16fff8e83e7cffdc0f0cef01531353334313135343739313133313035663032626300000141407d51ad76c77a1dcdf258db4c4c28fa815473e327594b82d7c5d84186e8f45c35051cfb6b1d26320621a31f20e0377ed2cc8afaaedf39ab58945738ed1795d088232102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699efac",
+    "deserialized": {
+      "type": 144,
+      "version": 0,
+      "attributes": [
+        {
+          "usage": 32,
+          "data": "3775292229eccdf904f16fff8e83e7cffdc0f0ce"
+        },
+        {
+          "usage": 240,
+          "data": "313533343131353437393131333130356630326263"
+        }
+      ],
+      "inputs": [],
+      "outputs": [],
+      "scripts": [
+        {
+          "invocationScript": "407d51ad76c77a1dcdf258db4c4c28fa815473e327594b82d7c5d84186e8f45c35051cfb6b1d26320621a31f20e0377ed2cc8afaaedf39ab58945738ed1795d088",
+          "verificationScript": "2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699efac"
+        }
+      ],
+      "descriptors": [
+        {
+          "type": 64,
+          "key": "3775292229eccdf904f16fff8e83e7cffdc0f0ce",
+          "field": "Votes",
+          "value": "02030ef96257401b803da5dd201233e2be828795672b775dd674d69df83f7aec1e360327da12b5c40200e9f65569476bbff2218da4f32548ff43b6387ec1416a231ee8"
+        }
+      ]
+    }
+  }
+}

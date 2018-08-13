@@ -11,6 +11,7 @@ import {
   deserializeVersion,
   deserializeWitnesses
 } from "./main";
+import { StateTransaction } from "./StateTransaction";
 
 /**
  * @class Transaction
@@ -79,6 +80,8 @@ function getType<T>(type: number): any {
       return ContractTransaction;
     case 0xd1:
       return InvocationTransaction;
+    case 0x90:
+      return StateTransaction;
     default:
       throw new Error("Unknown TransactionType");
   }
