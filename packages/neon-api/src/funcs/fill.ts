@@ -38,29 +38,6 @@ export async function fillBalance<T extends DoInvokeConfig | SendAssetConfig>(
 }
 
 /**
- * Fills the relevant key fields if account has been attached.
- * @param config
- * @return Configuration object.
- */
-export async function fillAccount<
-  U extends tx.BaseTransaction,
-  T extends ManagedApiBasicConfig<U>
->(config: T): Promise<T> {
-  if (!config.account) {
-    if (config.privateKey) {
-      config.account = new wallet.Account(config.privateKey);
-    } else if (config.publicKey) {
-      config.account = new wallet.Account(config.publicKey);
-    } else if (config.address) {
-      config.account = new wallet.Account(config.address);
-    } else {
-      throw new Error("No identifying key found!");
-    }
-  }
-  return config;
-}
-
-/**
  * Fills the signingFunction if no signingFunction provided.
  * The signingFunction filled is a privateKey signing function using the private key from the account field.
  * Throws an error if unable to find signingFunction and account.
@@ -87,8 +64,8 @@ export async function fillSigningFunction<
  * @return Configuration object.
  */
 export async function fillClaims<
-U extends tx.BaseTransaction,
-T extends ManagedApiBasicConfig<U>
+  U extends tx.BaseTransaction,
+  T extends ManagedApiBasicConfig<U>
 >(config: ClaimGasConfig): Promise<ClaimGasConfig> {
   if (!(config.claims instanceof wallet.Claims)) {
     config.claims = await config.api.getClaims(config.account!.address);

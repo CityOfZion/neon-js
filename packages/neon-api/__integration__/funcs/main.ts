@@ -49,10 +49,9 @@ describe("sendAsset", () => {
         testKeys.b.address
       );
       const config = {
-        net,
         intents,
         api: provider,
-        privateKey: testKeys.a.privateKey,
+        account: new neonJs.wallet.Account(testKeys.a.privateKey),
         fees: 0.00000001
       };
 
@@ -69,9 +68,8 @@ describe("claimGas", () => {
     "claimGas for a",
     async () => {
       const config = {
-        net,
         api: provider,
-        privateKey: testKeys.a.privateKey
+        account: new neonJs.wallet.Account(testKeys.a.privateKey)
       };
 
       const result = await api.claimGas(config);
@@ -110,10 +108,9 @@ describe("doInvoke", () => {
         testKeys.a.address
       );
       const config = {
-        net,
         api: provider,
         intents,
-        privateKey: testKeys.b.privateKey,
+        account: new neonJs.wallet.Account(testKeys.a.privateKey),
         script,
         gas: 0
       };
@@ -147,9 +144,8 @@ describe("doInvoke", () => {
         )
       };
       const config = {
-        net,
         api: provider,
-        privateKey: testKeys.a.privateKey,
+        account: new neonJs.wallet.Account(testKeys.a.privateKey),
         script,
         gas: 0
       };

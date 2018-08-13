@@ -23,7 +23,7 @@ export async function sendTx<
     response.txid = config.tx!.hash;
   } else {
     log.error(
-      `Transaction failed for ${config.address}: ${config.tx!.serialize()}`
+      `Transaction failed for ${config.account.address}: ${config.tx!.serialize()}`
     );
   }
   return Object.assign(config, { response });

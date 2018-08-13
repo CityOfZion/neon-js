@@ -2,7 +2,6 @@ import { CONST, logging, tx, wallet } from "@cityofzion/neon-core";
 import { extractDump, modifyTransactionForEmptyTransaction } from "./common";
 import { createClaimTx, createContractTx, createInvocationTx } from "./create";
 import {
-  fillAccount,
   fillBalance,
   fillClaims,
   fillSigningFunction,
@@ -39,8 +38,7 @@ const log = logging.default("api");
 export async function sendAsset(
   config: SendAssetConfig
 ): Promise<SendAssetConfig> {
-  return fillAccount(config)
-    .then(fillSigningFunction)
+  return fillSigningFunction(config)
     .then(fillUrl)
     .then(fillBalance)
     .then(createContractTx)
@@ -64,8 +62,7 @@ export async function sendAsset(
 export async function claimGas(
   config: ClaimGasConfig
 ): Promise<ClaimGasConfig> {
-  return fillAccount(config)
-    .then(fillSigningFunction)
+  return fillSigningFunction(config)
     .then(fillUrl)
     .then(fillClaims)
     .then(createClaimTx)
@@ -88,8 +85,7 @@ export async function claimGas(
 export async function doInvoke(
   config: DoInvokeConfig
 ): Promise<DoInvokeConfig> {
-  return fillAccount(config)
-    .then(fillSigningFunction)
+  return fillSigningFunction(config)
     .then(fillUrl)
     .then(fillBalance)
     .then(createInvocationTx)

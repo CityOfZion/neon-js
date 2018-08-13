@@ -4,10 +4,7 @@ import { Provider } from "../provider/common";
 export interface ManagedApiBasicConfig<T extends tx.BaseTransaction> {
   api: Provider;
   url?: string;
-  account?: wallet.Account;
-  address?: string;
-  publicKey?: string;
-  privateKey?: string;
+  account: wallet.Account;
   fees?: number;
   override?: object;
   signingFunction?: (
