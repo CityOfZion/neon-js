@@ -47,6 +47,29 @@ describe('Integration: API NEP5', function () {
       })
   })
 
+  it('getTokenBalances', () => {
+    return NEP5.getTokenBalances(
+      DEFAULT_RPC.TEST,
+      [
+        CONTRACTS.TEST_RPX,
+        CONTRACTS.TEST_RHTT4,
+        CONTRACTS.TEST_LWTF,
+        CONTRACTS.TEST_NXT,
+        CONTRACTS.TEST_RPX,
+        CONTRACTS.TEST_RHTT4,
+        CONTRACTS.TEST_LWTF,
+        CONTRACTS.TEST_NXT
+      ],
+      testKeys.b.address
+    ).then(result => {
+      result.length.should.equal(8)
+      result[0].should.equal(result[4])
+      result[1].should.equal(result[5])
+      result[2].should.equal(result[6])
+      result[3].should.equal(result[7])
+    })
+  })
+
   it.skip('doTransferToken', () => {
     const transferAmount = 1
     const gasCost = 0
