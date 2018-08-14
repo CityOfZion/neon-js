@@ -371,6 +371,13 @@ class RPCClient {
         return res.result.isvalid
       })
   }
+
+  getValidators () {
+    return this.execute(Query.getValidators())
+      .then((res) => {
+        return res.result
+      })
+  }
 }
 
 export default RPCClient

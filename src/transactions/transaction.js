@@ -7,6 +7,7 @@ import * as comp from './components'
 import * as core from './core'
 import * as exc from './exclusive'
 import logger from '../logging'
+import { StateDescriptor } from './StateDescriptor'
 
 const log = logger('tx')
 
@@ -142,6 +143,21 @@ class Transaction {
     }, override)
     const tx = new Transaction(txConfig).calculate(balances, null, fees)
     log.info(`New InvocationTransaction for ${balances.address}`)
+    return tx
+  }
+
+  /**
+   * Creates an StateTransaction with the given parameters
+   * @param {StateDescriptor[]} descriptors
+   * @param {object} [override]
+   */
+  static createStateTx (descriptors, override = {}) {
+    const txConfig = Object.assign({
+      type: 0x90,
+      version: 0,
+      descriptors: descriptors.map(d => new StateDescriptor(d))
+    }, override)
+    const tx = new Transaction(txConfig)
     return tx
   }
 

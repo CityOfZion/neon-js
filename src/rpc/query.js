@@ -300,6 +300,15 @@ class Query {
       params: [addr]
     })
   }
+
+  /**
+   * @return {Query}
+   */
+  static getValidators () {
+    return new Query({
+      method: 'getvalidators'
+    })
+  }
 }
 
 export default Query

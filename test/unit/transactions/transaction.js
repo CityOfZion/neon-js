@@ -76,6 +76,20 @@ describe('Transaction', function () {
     balance.assets.GAS.unconfirmed.length.should.equal(1)
   })
 
+  it('create StateTx', () => {
+    const descriptors = [{
+      type: 0x40,
+      key: 'cef0c0fdcfe7838eff6ff104f9cdec2922297537',
+      field: 'Votes',
+      value: 'abcd'
+    }]
+    const tx = Tx.createStateTx(descriptors)
+    tx.type.should.equal(144)
+    tx.exclusiveData.should.eql({
+      descriptors
+    })
+  })
+
   it('deserialize', () => {
     Object.keys(data).map((k) => {
       const tx = Tx.deserialize(data[k].serialized.stream)

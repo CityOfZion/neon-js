@@ -5,7 +5,7 @@ title: Basic - Sending assets
 
 This is a basic tutorial to send assets using the `sendAsset` method.
 
-`neon-js` provides out-of-the-box functionality for sending assets, claiming gas and invoking smart contracts. In this tutorial, I will be demostrating how to use the high level functions to send some native assets.
+`neon-js` provides out-of-the-box functionality for sending assets, claiming gas and invoking smart contracts. In this tutorial, I will be demonstrating how to use the high level functions to send some native assets.
 
 For clarification, when we talk about assets, we are referring to native assets such as NEO or GAS. NEP5 tokens are not considered assets as they are records within smart contracts. Thus, this is not applicable for sending those tokens.
 

@@ -29,6 +29,7 @@ export default {
     claims: neonDB.getClaims,
     transactionHistory: neonDB.getTransactionHistory,
     tokenBalance: nep5.getTokenBalance,
+    tokenBalances: nep5.getTokenBalances,
     tokenInfo: nep5.getTokenInfo,
     token: nep5.getToken
   },
@@ -39,7 +40,8 @@ export default {
   },
   sendAsset: (config) => core.sendAsset(config),
   claimGas: (config) => core.claimGas(config),
-  doInvoke: (config) => core.doInvoke(config)
+  doInvoke: (config) => core.doInvoke(config),
+  setupVote: (config) => core.setupVote(config)
 }
 
 export * from './core'

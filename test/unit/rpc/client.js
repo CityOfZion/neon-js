@@ -73,6 +73,15 @@ describe('RPC Client', function () {
         })
     })
 
+    it('getValidators returns list of validators', () => {
+      return client.getValidators()
+        .should.eventually.be.fulfilled
+        .then((validators) => {
+          validators.length.should.equal(2)
+          validators[0].votes.should.equal('46632421')
+        })
+    })
+
     it('latency', () => {
       client.latency.should.equal(99999)
       const latencies = [Math.floor(Math.random() * 101), Math.floor(Math.random() * 101)]

@@ -82,6 +82,48 @@ export const getTokenBalance = (url, scriptHash, address) => {
 }
 
 /**
+ * Get the token balance of Address from Contract
+ * @param {string} url - URL of the NEO node to query.
+ * @param {Array<string>} scriptHashArray - Array of contract scriptHashes.
+ * @param {string} address - Address to query for balance of tokens.
+ * @return {Promise<{symbol: number}>}
+ */
+export const getTokenBalances = (url, scriptHashArray, address) => {
+  const addrScriptHash = reverseHex(getScriptHashFromAddress(address))
+  let sb = new ScriptBuilder()
+  scriptHashArray.forEach((scriptHash, index) => {
+    sb
+      .emitAppCall(scriptHash, 'symbol')
+      .emitAppCall(scriptHash, 'decimals')
+      .emitAppCall(scriptHash, 'balanceOf', [addrScriptHash])
+  })
+  return Query.invokeScript(sb.str, false)
+    .execute(url)
+    .then(res => {
+      const tokenList = {}
+      if (res && res.result && res.result.stack && res.result.stack.length >= 3) {
+        for (let i = 0; i < res.result.stack.length; i += 3) {
+          try {
+            const symbol = hexstring2str(res.result.stack[i].value)
+            const decimals = parseDecimals(res.result.stack[i + 1].value)
+            tokenList[symbol] =
+              parseHexNum(res.result.stack[i + 2].value) /
+              Math.pow(10, decimals)
+          } catch (e) {
+            log.error(`single call in getTokenBalances failed with : ${e.message}`)
+            throw e
+          }
+        }
+      }
+      return tokenList
+    })
+    .catch(err => {
+      log.error(`getTokenBalances failed with : ${err.message}`)
+      throw err
+    })
+}
+
+/**
  * Get the token info and also balance if address is provided.
  * @param {string} url - URL of the NEO node to query.
  * @param {string} scriptHash - Contract scriptHash.

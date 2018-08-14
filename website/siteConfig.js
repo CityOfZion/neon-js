@@ -48,7 +48,7 @@ const siteConfig = {
     // Highlight.js theme to use for syntax highlighting in code blocks
     theme: 'dracula'
   },
-  scripts: ['https://buttons.github.io/buttons.js', '/neon-js/browser.js'],
+  scripts: ['https://buttons.github.io/buttons.js', 'https://unpkg.com/@cityofzion/neon-js'],
   // You may provide arbitrary config keys to be used as needed by your template.
   repoUrl: 'https://github.com/cityofzion/neon-js'
 }
