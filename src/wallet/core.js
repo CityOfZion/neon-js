@@ -8,6 +8,7 @@
  * All methods take in Big-Endian strings and return Big-Endian strings.
  */
 import WIF from 'wif'
+import BN from 'bn.js'
 import { ec as EC } from 'elliptic'
 import base58 from 'bs58'
 import { hexstring2ab, ab2hexstring, reverseHex, sha256, hash160, hash256 } from '../utils'
@@ -119,12 +120,12 @@ export const getScriptHashFromAddress = (address) => {
 
 /**
  * Generates a signature of the transaction based on given private key.
- * @param {string} tx - Serialized unsigned transaction.
+ * @param {string} hex - Serialized unsigned transaction. or hexstring.
  * @param {string} privateKey - Private Key.
  * @return {string} Signature. Does not include tx.
  */
-export const generateSignature = (tx, privateKey) => {
-  const msgHash = sha256(tx)
+export const generateSignature = (hex, privateKey) => {
+  const msgHash = sha256(hex)
   const msgHashHex = Buffer.from(msgHash, 'hex')
 
   let elliptic = new EC('p256')
@@ -135,6 +136,34 @@ export const generateSignature = (tx, privateKey) => {
   ])
 
   return signature.toString('hex')
+}
+
+/**
+ * Verifies a hexstring is signed by public key.
+ * @param {string} hex - Original message in HEX.
+ * @param {string} signature - HEX signature.
+ * @param {string} publicKey - public key.
+ * @return {bool} Validity of signature.
+ */
+export const verifySignature = (hex, signature, publicKey) => {
+  const sig = getSignatureFromHex(signature)
+
+  const messageHash = sha256(hex)
+  return curve.verify(messageHash, sig, publicKey, 'hex')
+}
+
+/**
+ * Converts signatureHex to a signature object with r & s.
+ * @param {string} signatureHex
+ */
+const getSignatureFromHex = signatureHex => {
+  const signatureBuffer = Buffer.from(signatureHex, 'hex')
+  const r = new BN(signatureBuffer.slice(0, 32).toString('hex'), 16, 'be')
+  const s = new BN(signatureBuffer.slice(32).toString('hex'), 16, 'be')
+  return {
+    r: r,
+    s: s
+  }
 }
 
 /**
