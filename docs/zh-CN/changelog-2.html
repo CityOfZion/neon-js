@@ -1,20 +1,39 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Changelog (v2) · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Changelog (v2) · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="2.3.4"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/neon-js/browser.js"></script><link rel="stylesheet" href="/neon-js/css/main.css"/></head><body class="sideNavVisible doc"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/neon-js/zh-CN"><img class="logo" src="/neon-js/img/logo.svg" alt="neon-js"/><h2 class="headerTitleWithLogo">neon-js</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/neon-js/docs/zh-CN/installation.html" target="_self">文档</a></li><li class=""><a href="/neon-js/docs/zh-CN/api-index.html" target="_self">API</a></li><li class="siteNavGroupActive"><a href="/neon-js/docs/zh-CN/changelog-latest.html" target="_self">Changelog</a></li><li class=""><a href="/neon-js/zh-CN/help.html" target="_self">Help</a></li><span><li><a id="languages-menu" href="#"><img class="languages-icon" src="/neon-js/img/language.svg"/>中文</a><div id="languages-dropdown" class="hide"><ul id="languages-dropdown-items"><li><a href="/neon-js/en">English</a></li></ul></div></li><script>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Changelog (v2) · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="2.3.4"/><meta name="docsearch:language" content="zh-CN"/><meta property="og:title" content="Changelog (v2) · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="2.3.4"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><link rel="stylesheet" href="/neon-js/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/neon-js/zh-CN"><img class="logo" src="/neon-js/img/logo.svg" alt="neon-js"/><h2 class="headerTitleWithLogo">neon-js</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/neon-js/docs/zh-CN/installation.html" target="_self">文档</a></li><li class=""><a href="/neon-js/docs/zh-CN/api-index.html" target="_self">API</a></li><li class="siteNavGroupActive"><a href="/neon-js/docs/zh-CN/changelog-latest.html" target="_self">Changelog</a></li><li class=""><a href="/neon-js/zh-CN/help.html" target="_self">Help</a></li><span><li><a id="languages-menu" href="#"><img class="languages-icon" src="/neon-js/img/language.svg"/>中文</a><div id="languages-dropdown" class="hide"><ul id="languages-dropdown-items"><li><a href="/neon-js/docs/en/changelog-2.html">English</a></li></ul></div></li><script>
         const languagesMenuItem = document.getElementById("languages-menu");
         const languagesDropDown = document.getElementById("languages-dropdown");
-        languagesMenuItem.addEventListener("click", function(){
-          if(languagesDropDown.className == "hide") {
+        languagesMenuItem.addEventListener("click", function(event) {
+          event.preventDefault();
+
+          if (languagesDropDown.className == "hide") {
             languagesDropDown.className = "visible";
           } else {
             languagesDropDown.className = "hide";
           }
         });
-      </script></span></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Past Versions</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Latest</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/changelog-latest.html">Changelog (v3)</a></li></ul></div><div class="navGroup navGroupActive"><h3>Past Versions</h3><ul><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/neon-js/docs/zh-CN/changelog-2.html">Changelog (v2)</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/changelog-1.html">Changelog (v1)</a></li></ul></div></div></section></div><script>
-          var toggler = document.getElementById('navToggler');
-          var nav = document.getElementById('docsNav');
-          toggler.onclick = function() {
-            nav.classList.toggle('docsSliderActive');
-          };
-        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Changelog (v2)</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="234"></a><a href="#234" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2.3.4</h2>
+      </script></span></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Past Versions</span></h2></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Latest</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/changelog-latest.html">Changelog (v3)</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Past Versions</h3><ul><li class="navListItem navListItemActive"><a class="navItem" href="/neon-js/docs/zh-CN/changelog-2.html">Changelog (v2)</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/zh-CN/changelog-1.html">Changelog (v1)</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Changelog (v2)</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="234"></a><a href="#234" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2.3.4</h2>
 <ul>
 <li><p>Docs moved to <code>docs</code> folder</p></li>
 <li><p>Fixes</p>
@@ -49,7 +68,7 @@
 <li>Switch will dynamically choose whichever server that respond better. A failure will start tilting the switch towards the other server. Freezing the switch will prevent this dynamic behavior.</li>
 <li>This is currently not fully exposed but will be in the future.</li>
 </ul>
-<pre><code class="hljs css js"><span class="hljs-keyword">import</span> {api} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> {api} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
 api.setApiSwitch(<span class="hljs-number">0</span>)
 api.sendAsset(config) <span class="hljs-comment">// sendAsset, claimGas and doInvoke will default to use neoscan first</span>
 api.setApiSwitch(<span class="hljs-number">1</span>)
@@ -86,7 +105,7 @@ api.setSwitchFreeze(<span class="hljs-literal">true</span>)
 <li>encrypt/decrypt has an extra optional scrypt argument</li>
 <li>Deprecate wallet.encryptWifAccount, wallet.generateEncryptedWif, wallet.encryptWIF, wallet.decryptWIF</li>
 </ul>
-<pre><code class="hljs css js"><span class="hljs-keyword">import</span> Neon, {wallet} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> Neon, {wallet} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
 <span class="hljs-keyword">const</span> w1 = Neon.create.wallet()
 <span class="hljs-keyword">const</span> w2 = <span class="hljs-keyword">new</span> wallet.Wallet()
 </code></pre></li>
@@ -113,7 +132,7 @@ api.setSwitchFreeze(<span class="hljs-literal">true</span>)
 <li>Add <code>VMZip</code> method. This allows for individual parsing of VM results. Do note that this method produces a parsing function. It is not to be used directly.</li>
 </ul></li>
 </ul>
-<pre><code class="hljs css js"><span class="hljs-keyword">import</span> {rpc, u} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> {rpc, u} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
 <span class="hljs-keyword">const</span> parsingFunc = rpc.VMZip(u.hexstring2ab, u.fixed82num)
 rpc.Query.invoke(script).parseWith(parsingFunc)
 </code></pre>
@@ -131,7 +150,7 @@ rpc.Query.invoke(script).parseWith(parsingFunc)
 <li><code>applyTx</code> to apply a spending of a Transaction to the Balance. Allows a Balance to be used to build another Transaction without waiting for sync.</li>
 <li>Data structure reworked. AssetBalances are now tucked under <code>assets</code>. Use <code>assetSymbols</code> to discover the keys for lookup.</li>
 </ul>
-<pre><code class="hljs css js"><span class="hljs-comment">// This array contains all the symbols of the assets available in this Balance</span>
+<pre><code class="hljs css languages- js"><span class="hljs-comment">// This array contains all the symbols of the assets available in this Balance</span>
 balance.assetSymbols = [<span class="hljs-string">'NEO'</span>, <span class="hljs-string">'GAS'</span>]
 <span class="hljs-comment">// Lookup assets using their symbols</span>
 balance.assets = {
@@ -152,7 +171,7 @@ balance.assets = {
 <li>Modules are individually available as named exports. If you just need account methods, <code>import { wallet } from '@cityofzion/neon-js'</code></li>
 </ul></li>
 <li><p>Constants and util methods are now exported as</p>
-<pre><code class="hljs css js"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
 Neon.CONST.DEFAULT_RPC
 Neon.u.reverseHex
 
@@ -195,4 +214,4 @@ u.reverseHex
 <li>ContractParam added to support <code>invoke</code> and <code>invokefunction</code> RPC calls.</li>
 </ul></li>
 </ul>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="changelog-latest.html">← Changelog (v3)</a><a class="docs-next button" href="changelog-1.html">Changelog (v1) →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/zh-CN/installation.html">Getting Started</a><a href="/neon-js/docs/zh-CN/tutorial.html">Guides</a><a href="/neon-js/docs/zh-CN/api.html">API Reference</a></div><div><h5>Community</h5><a href="/neon-js/zh-CN/users.html">User Showcase</a><a href="https://neo.stackexchange.com/" target="_blank">Stack Overflow</a><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/zh-CN/changelog-latest.html">← Changelog (v3)</a><a class="docs-next button" href="/neon-js/docs/zh-CN/changelog-1.html">Changelog (v1) →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/zh-CN/installation.html">Getting Started</a><a href="/neon-js/docs/zh-CN/tutorial.html">Guides</a><a href="/neon-js/docs/zh-CN/api.html">API Reference</a></div><div><h5>Community</h5><a href="/neon-js/zh-CN/users.html">User Showcase</a><a href="https://neo.stackexchange.com/" target="_blank">Stack Overflow</a><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>
