@@ -62,11 +62,11 @@ describe('Integration: API NEP5', function () {
       ],
       testKeys.b.address
     ).then(result => {
-      result.length.should.equal(8)
-      result[0].should.equal(result[4])
-      result[1].should.equal(result[5])
-      result[2].should.equal(result[6])
-      result[3].should.equal(result[7])
+      const keys = Object.keys(result)
+      keys.length.should.equal(4)
+      keys.forEach(k => {
+        result[k].should.be.a('number')
+      })
     })
   })
 

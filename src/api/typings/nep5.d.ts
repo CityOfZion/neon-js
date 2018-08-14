@@ -7,6 +7,9 @@ export function getTokenInfo(url: string, scriptHash: string): Promise<{ name: s
 /** Get the token balance of Address from Contract */
 export function getTokenBalance(url: string, scriptHash: string, address: string): Promise<number>
 
+/** Get token balances of a list of tokens for an address */
+export function getTokenBalances(url:string, scriptHashArray: string[], address: string): Promise<{[key: string]: number}>
+
 /** Get the token info and also balance if address is provided. */
 export function getToken(url: string, scriptHash: string, address?: string): Promise<object>
 
