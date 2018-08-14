@@ -54,14 +54,19 @@ describe('Integration: API NEP5', function () {
         CONTRACTS.TEST_RPX,
         CONTRACTS.TEST_RHTT4,
         CONTRACTS.TEST_LWTF,
+        CONTRACTS.TEST_NXT,
+        CONTRACTS.TEST_RPX,
+        CONTRACTS.TEST_RHTT4,
+        CONTRACTS.TEST_LWTF,
         CONTRACTS.TEST_NXT
       ],
       testKeys.b.address
     ).then(result => {
-      result.RPX.should.equal(0)
-      result.RHTT4.should.equal(2)
-      result.LWTF.should.equal(0.00000746)
-      result.NXT.should.equal(0)
+      result.length.should.equal(8)
+      result[0].should.equal(result[4])
+      result[1].should.equal(result[5])
+      result[2].should.equal(result[6])
+      result[3].should.equal(result[7])
     })
   })
 
