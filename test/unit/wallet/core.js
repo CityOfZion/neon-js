@@ -92,4 +92,13 @@ describe('Core Wallet Methods', function () {
     privateKey.should.have.length(64)
     done()
   })
+
+  it('generateSignature and verifySignature', () => {
+    keys.map(acct => {
+      const hexstring = 'abcd'
+      const signature = C.generateSignature(hexstring, acct.privateKey)
+      const result = C.verifySignature(hexstring, signature, acct.publicKey)
+      result.should.equal(true)
+    })
+  })
 })
