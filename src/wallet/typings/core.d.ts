@@ -23,7 +23,10 @@ export function getAddressFromScriptHash(scriptHash: string): string
 export function getScriptHashFromAddress(address: string): string
 
 /** Generates a signature of the transaction based on given private key. */
-export function generateSignature(tx: string, privateKey: string): string
+export function generateSignature(hex: string, privateKey: string): string
+
+/** Verifies a hexstring is signed by public key. */
+export function verifySignature(hex: string, signature: string, publicKey: string): boolean
 
 /** Generates a random private key */
 export function generatePrivateKey(): string
