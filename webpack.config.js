@@ -1,8 +1,8 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const ZopfliWebpackPlugin = require('zopfli-webpack-plugin')
 
 let common = {
   entry: './src/index.js',
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -27,38 +27,26 @@ let common = {
   ]
 }
 
-if (process.env.NODE_ENV === 'development') {
-  common.devtool = 'source-map'
-}
-
-if (process.env.NODE_ENV === 'production') {
-  common.plugins.push(new ZopfliWebpackPlugin({
-    asset: '[path].gz[query]',
-    algorithm: 'zopfli',
-    test: /\.(js|html)$/,
-    threshold: 10240,
-    minRatio: 0.8
-  }))
-}
-
 module.exports = function (mode) {
-  return [
-    Object.assign({}, common, {
-      target: 'node',
-      output: {
-        path: __dirname,
-        filename: './lib/index.js',
-        libraryTarget: 'umd'
-      }
-    }),
-    Object.assign({}, common, {
-      target: 'web',
-      output: {
-        path: __dirname,
-        filename: './lib/browser.js',
-        libraryTarget: 'umd',
-        library: 'Neon' // This is the var name in browser
-      }
-    })
-  ]
+  const nodeOutput = Object.assign({}, common, {
+    target: 'node',
+    output: {
+      path: __dirname,
+      filename: './lib/index.js',
+      libraryTarget: 'umd'
+    }
+  })
+
+  nodeOutput.optimization = Object.assign({}, nodeOutput.optimization, {minimize: false})
+
+  const webOutput = Object.assign({}, common, {
+    target: 'web',
+    output: {
+      path: __dirname,
+      filename: './lib/browser.js',
+      libraryTarget: 'umd',
+      library: 'Neon' // This is the var name in browser
+    }
+  })
+  return [nodeOutput, webOutput]
 }
