@@ -328,7 +328,7 @@ export const queryRPC = (url, req, config = {}) => {
     headers: {
       'Content-Type': 'application/json'
     },
-    timeout: timeout.rpc
+    timeout: config.timeout || timeout.rpc
   })
   const jsonRpcData = Object.assign({}, DEFAULT_REQ, req)
   return jsonRequest.post(url, jsonRpcData, config).then((response) => {

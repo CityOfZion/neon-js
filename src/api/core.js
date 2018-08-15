@@ -297,8 +297,11 @@ export const signTx = config => {
  */
 export const sendTx = config => {
   checkProperty(config, 'tx', 'url')
+  const rpcConfig = config && config.timeout && {
+    timeout: config.timeout,
+  };
   return Query.sendRawTransaction(config.tx)
-    .execute(config.url)
+    .execute(config.url, rpcConfig)
     .then(res => {
       // Parse result
       if (res.result === true) {
