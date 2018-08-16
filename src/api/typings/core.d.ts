@@ -36,7 +36,6 @@ export interface apiConfig {
   gas?: number
   account?: Account
   override?: object
-  timeout?: number
 }
 
 /** Function to construct and execute a ContractTransaction. */
