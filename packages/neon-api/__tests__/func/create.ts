@@ -1,4 +1,4 @@
-import { tx, wallet } from "@cityofzion/neon-core";
+import { tx, u, wallet } from "@cityofzion/neon-core";
 import * as create from "../../src/funcs/create";
 import {
   ClaimGasConfig,
@@ -12,7 +12,6 @@ describe("createClaimTx", () => {
   test("create with the correct args", async () => {
     const config = {
       api: {} as any,
-      net: "",
       account: { address: "address" },
       claims: new wallet.Claims(),
       override: {}
@@ -32,7 +31,6 @@ describe("createContractTx", () => {
   test("create with the correct args", async () => {
     const config = {
       api: {} as any,
-      net: "",
       balance: new wallet.Balance(),
       intents: [],
       override: {},
@@ -41,11 +39,15 @@ describe("createContractTx", () => {
     const calculateFunc = jest.fn();
     const contractTx = {
       calculate: calculateFunc
-    }
+    };
     tx.ContractTransaction.mockImplementationOnce(() => contractTx);
     const result = await create.createContractTx(config);
     expect(result.tx).toBe(contractTx);
-    expect(calculateFunc).toBeCalledWith(config.balance, undefined, config.fees);
+    expect(calculateFunc).toBeCalledWith(
+      config.balance,
+      undefined,
+      config.fees
+    );
   });
 });
 
@@ -53,7 +55,6 @@ describe("createInvocationTx", () => {
   test("create with the correct args", async () => {
     const config = {
       api: {} as any,
-      net: "",
       balance: new wallet.Balance(),
       override: {},
       intents: [],
@@ -64,10 +65,49 @@ describe("createInvocationTx", () => {
     const calculateFunc = jest.fn();
     const invocationTx = {
       calculate: calculateFunc
-    }
+    };
     tx.InvocationTransaction.mockImplementationOnce(() => invocationTx);
     const result = await create.createInvocationTx(config);
     expect(result.tx).toBe(invocationTx);
-    expect(calculateFunc).toBeCalledWith(config.balance, undefined, config.fees);
+    expect(calculateFunc).toBeCalledWith(
+      config.balance,
+      undefined,
+      config.fees
+    );
+  });
+});
+
+describe("createStateTx", () => {
+  test("create with the correct args", async () => {
+    const config = {
+      api: {} as any,
+      account: { scriptHash: "cef0c0fdcfe7838eff6ff104f9cdec2922297537" },
+      balance: new wallet.Balance(),
+      candidateKeys: [
+        "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
+        "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9"
+      ]
+    };
+    u.reverseHex.mockImplementation(
+      () => "3775292229eccdf904f16fff8e83e7cffdc0f0ce"
+    );
+    u.int2hex.mockImplementation(() => "02");
+    const expectedTx = jest.fn();
+    const expectedDescriptor = jest.fn();
+    tx.StateTransaction.mockImplementation(() => expectedTx);
+    tx.StateDescriptor.mockImplementation(() => expectedDescriptor);
+    const result = await create.createStateTx(config);
+    expect(result.tx).toBe(expectedTx);
+    expect(u.reverseHex).toBeCalledWith(config.account.scriptHash);
+    expect(u.int2hex).toBeCalledWith(2);
+    expect(tx.StateDescriptor).toBeCalledWith({
+      type: 0x40,
+      field: "Votes",
+      key: "3775292229eccdf904f16fff8e83e7cffdc0f0ce",
+      value: "02" + config.candidateKeys[0] + config.candidateKeys[1]
+    });
+    expect(tx.StateTransaction).toBeCalledWith({
+      descriptors: [expectedDescriptor]
+    });
   });
 });

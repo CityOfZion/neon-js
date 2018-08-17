@@ -1,6 +1,6 @@
 import { CONST, logging, tx, wallet } from "@cityofzion/neon-core";
 import { extractDump, modifyTransactionForEmptyTransaction } from "./common";
-import { createClaimTx, createContractTx, createInvocationTx } from "./create";
+import { createClaimTx, createContractTx, createInvocationTx, createStateTx } from "./create";
 import {
   fillBalance,
   fillClaims,
@@ -17,7 +17,8 @@ import {
 import {
   ClaimGasConfig,
   DoInvokeConfig,
-  SendAssetConfig
+  SendAssetConfig,
+  SetupVoteConfig
 } from "./types";
 
 const log = logging.default("api");
@@ -32,7 +33,7 @@ const log = logging.default("api");
 
 /**
  * Function to construct and execute a ContractTransaction.
- * @param config - Configuration object.
+ * @param config Configuration object.
  * @return Configuration object.
  */
 export async function sendAsset(
@@ -56,7 +57,7 @@ export async function sendAsset(
 
 /**
  * Perform a ClaimTransaction for all available GAS based on API
- * @param config - Configuration object.
+ * @param config Configuration object.
  * @return Configuration object.
  */
 export async function claimGas(
@@ -79,7 +80,7 @@ export async function claimGas(
 
 /**
  * Perform a InvocationTransaction based on config given.
- * @param config - Configuration object.
+ * @param config Configuration object.
  * @return Configuration object.
  */
 export async function doInvoke(
@@ -99,9 +100,34 @@ export async function doInvoke(
     .then(applyTxToBalance)
     .catch((err: Error) => {
       const dump = extractDump(config);
-      log.error(`claimGas failed with: ${err.message}. Dumping config`, dump);
+      log.error(`doinvoke failed with: ${err.message}. Dumping config`, dump);
       throw err;
     });
+}
+
+/**
+ * Perform a StateTransaction based on config given.
+ * @param config Configuration object.
+ * @return modified configuration object.
+ */
+export async function setupVote(
+  config: SetupVoteConfig
+):Promise<SetupVoteConfig> {
+  return fillSigningFunction(config)
+  .then(fillUrl)
+  .then(fillBalance)
+  .then(createStateTx)
+  .then(addAttributeIfExecutingAsSmartContract)
+  .then(modifyTransactionForEmptyTransaction)
+  .then(signTx)
+  .then(addSignatureIfExecutingAsSmartContract)
+  .then(sendTx)
+  .then(applyTxToBalance)
+  .catch((err: Error) => {
+    const dump = extractDump(config);
+    log.error(`setupVote failed with: ${err.message}. Dumping config`, dump);
+    throw err;
+  });
 }
 
 export function makeIntent(

@@ -1,6 +1,11 @@
-import { sc, tx, wallet } from "@cityofzion/neon-core";
+import { sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { checkProperty } from "./common";
-import { ClaimGasConfig, DoInvokeConfig, SendAssetConfig } from "./types";
+import {
+  ClaimGasConfig,
+  DoInvokeConfig,
+  SendAssetConfig,
+  SetupVoteConfig
+} from "./types";
 
 export async function createClaimTx(
   config: ClaimGasConfig
@@ -45,5 +50,21 @@ export async function createInvocationTx(
     undefined,
     config.fees
   );
+  return config;
+}
+
+export async function createStateTx(
+  config: SetupVoteConfig
+): Promise<SetupVoteConfig> {
+  const descriptors = [
+    new tx.StateDescriptor({
+      type: tx.StateType.Account,
+      key: u.reverseHex(config.account.scriptHash),
+      field: "Votes",
+      value:
+        u.int2hex(config.candidateKeys.length) + config.candidateKeys.join("")
+    })
+  ];
+  config.tx = new tx.StateTransaction({ descriptors });
   return config;
 }

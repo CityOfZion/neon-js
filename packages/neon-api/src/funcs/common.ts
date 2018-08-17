@@ -1,5 +1,5 @@
 import { rpc, tx, u, wallet } from "@cityofzion/neon-core";
-import { DoInvokeConfig } from "./types";
+import { ManagedApiBasicConfig } from "./types";
 
 /**
  * Check that properties are defined in obj.
@@ -23,9 +23,10 @@ export function checkProperty<T, K extends keyof T>(obj: T, ...props: K[]) {
  * @param config
  * @return
  */
-export async function modifyTransactionForEmptyTransaction(
-  config: DoInvokeConfig
-): Promise<DoInvokeConfig> {
+export async function modifyTransactionForEmptyTransaction<
+  U extends tx.BaseTransaction,
+  T extends ManagedApiBasicConfig<U>
+>(config: T): Promise<T> {
   if (config.tx!.inputs.length === 0 && config.tx!.outputs.length === 0) {
     config.tx!.addAttribute(
       tx.TxAttrUsage.Script,

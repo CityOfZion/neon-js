@@ -12,6 +12,7 @@ describe("sendTx", () => {
   test("node returns false", async () => {
     const config = {
       url: "mockUrl",
+      account: {address: "mockAddress"},
       tx: { serialize: jest.fn() } as any
     } as SendAssetConfig;
     const mockExecute = jest.fn().mockResolvedValueOnce({ result: false });

@@ -37,3 +37,8 @@ export interface DoInvokeConfig
   gas?: number | u.Fixed8;
   script: any;
 }
+
+export interface SetupVoteConfig
+  extends ManagedApiBasicConfig<tx.StateTransaction> {
+  candidateKeys: string[];
+}

@@ -1,5 +1,7 @@
 import * as neonCore from "@cityofzion/neon-core";
 import apiPlugin from "../../src/index";
+import { Validator } from "@cityofzion/neon-core/src/rpc";
+import { RPCClient } from "@cityofzion/neon-core/lib/rpc";
 
 const neonJs = apiPlugin(neonCore);
 
@@ -151,6 +153,32 @@ describe("doInvoke", () => {
       };
 
       const result = await api.doInvoke(config);
+      expect(result.response!.result).toBe(true);
+      expect(result.response!.txid).not.toBeNull();
+    },
+    20000
+  );
+});
+
+describe("setupVote", () => {
+  test(
+    "Vote for some candidates",
+    async () => {
+      const rpcUrl = await provider.getRPCEndpoint();
+      const client = new RPCClient(rpcUrl);
+      const validators = await client.getValidators();
+      const chosenOnes = validators
+        .filter(v => v.active)
+        .slice(0, 3)
+        .map(v => v.publickey);
+
+      const config = {
+        api: provider,
+        account: new neonJs.wallet.Account(testKeys.a.privateKey),
+        candidateKeys: chosenOnes
+      };
+
+      const result = await api.setupVote(config);
       expect(result.response!.result).toBe(true);
       expect(result.response!.txid).not.toBeNull();
     },
