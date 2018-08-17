@@ -9,6 +9,13 @@ import Query from "./Query";
 const log = logger("rpc");
 
 const versionRegex = /NEO:(\d+\.\d+\.\d+)/;
+
+export interface Validator {
+  publickey: string
+  votes: string
+  active: boolean
+}
+
 /**
  * RPC Client model to query a NEO node. Contains built-in methods to query using RPC calls.
  */
@@ -219,6 +226,13 @@ export class RPCClient {
     return response.result;
   }
 
+  /**
+   * Gets the list of validators available for voting.
+   */
+  public async getValidators():Promise<Validator[]> {
+    const response = await this.execute(Query.getValidators());
+    return response.result;
+}
   /**
    * Gets the version of the NEO node. This method will never be blocked by version. This method will also update the current Client's version to the one received.
    */

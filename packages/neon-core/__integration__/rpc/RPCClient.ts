@@ -183,6 +183,15 @@ describe("RPC Methods", () => {
     expect(result).toBe(null);
   });
 
+  test("getValidators", async() => {
+    const result = await client.getValidators();
+   result.map(v => expect(v).toMatchObject({
+    publickey: expect.any(String),
+    active: expect.any(Boolean),
+    votes: expect.any(String)
+   }))
+  })
+
   test("getVersion", async () => {
     const result = await client.getVersion();
     expect(result).toMatch(/\d+\.\d+\.\d+/);

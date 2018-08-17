@@ -178,6 +178,16 @@ export class Query {
   }
 
   /**
+   * Gets the list of candidates available for voting.
+   * @return List of validators
+   */
+  public static getValidators(): Query {
+    return new Query({
+      method: "getvalidators"
+    })
+  }
+
+  /**
    * This Query returns the node version.
    */
   public static getVersion(): Query {

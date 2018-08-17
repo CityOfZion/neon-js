@@ -262,6 +262,20 @@ describe("RPC Methods", () => {
     });
   });
 
+  describe("getValidators", () => {
+    test("success", async () => {
+      const expected = jest.fn();
+      Query.getValidators.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+      }));
+      const result = await client.getValidators();
+
+      expect(result).toEqual(expected);
+      expect(Query.getValidators).toBeCalled();
+    });
+  });
+
   describe("getVersion", () => {
     test("success", async () => {
       const versionString = "NEO:1.2.3";

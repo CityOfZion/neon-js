@@ -132,6 +132,12 @@ describe("static", () => {
     expect(result.params).toEqual(["hash", 1]);
   });
 
+  test("getValidators", () => {
+    const result = Query.getValidators();
+    expect(result.method).toEqual("getvalidators");
+    expect(result.params).toEqual([]);
+  });
+
   test("getVersion", () => {
     const result = Query.getVersion();
     expect(result.method).toEqual("getversion");
