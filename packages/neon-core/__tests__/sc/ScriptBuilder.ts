@@ -1,6 +1,5 @@
-import OpCode from "../../src/sc/opCode";
+import OpCode from "../../src/sc/OpCode";
 import ScriptBuilder from "../../src/sc/ScriptBuilder";
-
 
 describe("constructor", () => {
   test("empty", () => {
@@ -30,7 +29,7 @@ describe("emit", () => {
   });
 });
 
-describe.only("emitAppCall", () => {
+describe("emitAppCall", () => {
   test.each([
     [
       "simple emitAppCall",
@@ -128,8 +127,6 @@ describe.only("emitAppCall", () => {
     expect(sb.str).toBe(expected);
   });
 });
-
-describe("emitSysCall", () => {});
 
 describe("emitPush", () => {
   test.each([

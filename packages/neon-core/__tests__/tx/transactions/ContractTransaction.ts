@@ -1,4 +1,4 @@
-import { TransactionLike, TransactionType, Transaction } from "../../../src/tx";
+import { Transaction, TransactionLike, TransactionType } from "../../../src/tx";
 import ContractTransaction from "../../../src/tx/transaction/ContractTransaction";
 
 import samples from "./contractTx.json";

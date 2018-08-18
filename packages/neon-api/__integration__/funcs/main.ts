@@ -1,7 +1,6 @@
 import * as neonCore from "@cityofzion/neon-core";
-import apiPlugin from "../../src/index";
-import { Validator } from "@cityofzion/neon-core/src/rpc";
 import { RPCClient } from "@cityofzion/neon-core/lib/rpc";
+import apiPlugin from "../../src/index";
 
 const neonJs = apiPlugin(neonCore);
 
