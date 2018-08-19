@@ -16,50 +16,89 @@
   </a>
 </p>
 
-## Overview
+# Overview
 
-This the Neon Wallet's JS SDK for the NEO blockchain platform. It is currently in use by [Neon](https://github.com/CityOfZion/neon-wallet/).
+This is the JS SDK for the NEO blockchain platform. This project aims to be a lightweight library focused on providing blockchain interactions in the browser.
+
+It is currently in use by [Neon](https://github.com/CityOfZion/neon-wallet/).
 
 Visit the [docs](https://cityofzion.io/neon-js) to learn how to use this library!
 
-## Getting started
+# Getting started
 
-### Installation
+## Installation
 
-Install the package using:
+### Nodejs
 
 ```js
 npm i @cityofzion/neon-js
 ```
 
-## Contributing
+### Browser through CDN
 
-### Setup
+```html
+<script src="https://unpkg.com/@cityofzion/neon-js" />
+```
 
-This repository is a javascript mono-repo using Lerna and Yarn workspaces. Please ensure the following is installed:
+## Usage
+
+### Nodejs
+
+```js
+const Neon = require("@cityofzion/neon-js");
+const acct = Neon.create.Account("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW");
+```
+
+### Browser
+
+Once imported using the script tag, the module is available as a global object `Neon`.
+
+```js
+console.log(Neon);
+var acct = Neon.create.Account("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW");
+```
+
+> Find more guides on our [documentation website](http://cityofzion.io/neon-js/docs/en/basic_sendasset.html)
+
+# Contributing
+
+## Setup
+
+This repository is a typescript mono-repo using Lerna and Yarn workspaces. Please ensure the following is installed:
 
 - Yarn (a version that support workspaces)
-- Lerna(version found in `lerna.json`)
-- Node (latest LTS)
+- Node (latest LTS aka v8 at time of writing)
+
+> `lerna` is optional and only required for advanced operations.
 
 ```sh
 git clone https://github.com/CityOfZion/neon-js.git
 cd neon-js
 yarn
-lerna bootstrap
+yarn bootstrap
+yarn build
 ```
 
-## Docs
+## Testing
+
+```sh
+yarn lint
+yarn build
+yarn test:unit
+yarn test:integration
+```
+
+# Docs
 
 We use Docusaurus for our docs website. The docs are stores in `./docs` while the main website and its configuration is in `./website`.
 
-```bash
+```sh
 cd website
-npm install
-npm run start
+yarn
+yarn start
 ```
 
-## License
+# License
 
 - Open-source [MIT](https://github.com/CityOfZion/neon-js/blob/master/LICENSE.md).
 - Main author is [Ethan Fast](https://github.com/Ejhfast).
