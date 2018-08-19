@@ -6,12 +6,10 @@ jest.mock("../../../src/provider/neoscan/core");
 const UnitTestNetUrl = "http://testurl.com";
 beforeEach(() => {
   jest.resetModules();
-  settings.addNetwork(
-    new rpc.Network({
-      name: "UnitTestNet",
-      extra: { neoscan: UnitTestNetUrl, neonDB: "http://wrongurl.com" }
-    })
-  );
+  settings.networks.UnitTestNet = new rpc.Network({
+    name: "UnitTestNet",
+    extra: { neoscan: UnitTestNetUrl, neonDB: "http://wrongurl.com" }
+  });
 });
 
 describe("constructor", () => {

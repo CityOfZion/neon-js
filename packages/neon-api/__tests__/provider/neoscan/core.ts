@@ -9,12 +9,10 @@ jest.mock("../../../src/provider/common");
 const testUrl = "http://testurl.com";
 beforeEach(() => {
   jest.resetModules();
-  settings.addNetwork(
-    new rpc.Network({
-      name: "UnitTestNet",
-      extra: { neoscan: "http://testurl.com" }
-    })
-  );
+  settings.networks.UnitTestNet = new rpc.Network({
+    name: "UnitTestNet",
+    extra: { neonDB: testUrl, neoscan: "http://wrongurl.com" }
+  });
 });
 
 describe("getRPCEndpoint", () => {
