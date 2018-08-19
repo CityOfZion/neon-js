@@ -26,14 +26,12 @@ const testKeys = {
   }
 };
 
-neonCore.settings.addNetwork(
-  new rpc.Network({
-    Name: net,
-    ExtraConfiguration: {
-      neoscan: url
-    }
-  })
-);
+neonCore.settings.networks[net] = new rpc.Network({
+  Name: net,
+  ExtraConfiguration: {
+    neoscan: url
+  }
+});
 
 const provider = new api.neoscan.instance("TestNet");
 
