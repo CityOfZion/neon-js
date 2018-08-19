@@ -3,6 +3,13 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.10.1
+======
+
+- Fixes
+
+  - Adjust default timeout for rpc calls to 30s from 5s.
+
 3.10.0
 ======
 
