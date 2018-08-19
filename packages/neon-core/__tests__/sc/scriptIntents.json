@@ -1,0 +1,134 @@
+{
+  "1": {
+    "script": "00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc",
+    "scriptIntent": {
+      "scriptHash": "dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f",
+      "operation": "name",
+      "args": []
+    },
+    "toScriptParams": [
+      {
+        "scriptHash": "dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f",
+        "args": ["6e616d65", []],
+        "useTailCall": false
+      }
+    ]
+  },
+  "2": {
+    "script": "000673796d626f6c6711c4d1f4fba619f2628870d36e3a9773e874705b",
+    "scriptIntent": {
+      "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+      "operation": "symbol",
+      "args": null
+    },
+    "toScriptParams": [
+      {
+        "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+        "args": ["73796d626f6c", 0],
+        "useTailCall": false
+      }
+    ]
+  },
+  "3": {
+    "script": "0008646563696d616c736711c4d1f4fba619f2628870d36e3a9773e874705b",
+    "scriptIntent": {
+      "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+      "operation": "decimals",
+      "args": false
+    },
+    "toScriptParams": [
+      {
+        "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+        "args": ["646563696d616c73", 0],
+        "useTailCall": false
+      }
+    ]
+  },
+  "4": {
+    "script":
+      "205fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b",
+    "scriptIntent": {
+      "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+      "operation": "balanceOf",
+      "args": [
+        "5fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b"
+      ]
+    },
+    "toScriptParams": [
+      {
+        "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+        "args": [
+          "62616c616e63654f66",
+          ["5fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b"]
+        ],
+        "useTailCall": false
+      }
+    ]
+  },
+  "5": {
+    "script": "5767b7040c106561763ce38c0ce658a946e5d1b381db",
+    "scriptIntent": {
+      "scriptHash": "db81b3d1e546a958e60c8ce33c766165100c04b7",
+      "operation": null,
+      "args": 7
+    },
+    "toScriptParams": [
+      {
+        "scriptHash": "db81b3d1e546a958e60c8ce33c766165100c04b7",
+        "args": [7],
+        "useTailCall": false
+      }
+    ]
+  },
+  "6": {
+    "script":
+      "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b",
+    "scriptIntent": {
+      "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+      "operation": "balanceOf",
+      "args": [
+        {
+          "type": "Hash160",
+          "value": "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+        }
+      ]
+    },
+    "toScriptParams": [
+      {
+        "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+        "args": [
+          "62616c616e63654f66",
+          ["3775292229eccdf904f16fff8e83e7cffdc0f0ce"]
+        ],
+        "useTailCall": false
+      }
+    ]
+  },
+  "7": {
+    "script":
+      "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b",
+    "scriptIntent": {
+      "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+      "operation": "balanceOf",
+      "args": {
+        "type": "Array",
+        "value": [
+          {
+            "type": "Hash160",
+            "value": "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+          }
+        ]
+      }
+    },
+    "toScriptParams": [
+      {
+        "scriptHash": "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+        "args": [
+          "62616c616e63654f66",
+          ["3775292229eccdf904f16fff8e83e7cffdc0f0ce"]
+        ],
+        "useTailCall": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "1": {
+    "serialized":
+      "020003add3f535fefe1dbf7ff899c4ed35919988d8fc237e56f48f2290b58b79da2530000082544e8784d51dc9103c83c123688830b9be6290911a34d71d4a4b361dce918501004b4497ed1b71beca9ea56901e0d863430aec17e9519601181914e17e81bfab770000000001e72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c602f921d000000000035b20010db73bf86371075ddfba4e6596f1ff35d0141406c4883c0c74f8bfa5a6dc408209c963015918701046b3124d25e9edf4181c52ff1390cd2e64a82b43b8a4b3acd653b5fdea7f74fa733947fa7f23208cf0179182321031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9ac",
+    "deserialized": {
+      "type": 2,
+      "version": 0,
+      "attributes": [],
+      "inputs": [],
+      "outputs": [
+        {
+          "assetId":
+            "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+          "value": 0.01937967,
+          "scriptHash": "5df31f6f59e6a4fbdd75103786bf73db1000b235"
+        }
+      ],
+      "scripts": [
+        {
+          "invocationScript":
+            "406c4883c0c74f8bfa5a6dc408209c963015918701046b3124d25e9edf4181c52ff1390cd2e64a82b43b8a4b3acd653b5fdea7f74fa733947fa7f23208cf017918",
+          "verificationScript":
+            "21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9ac"
+        }
+      ],
+      "claims": [
+        {
+          "prevHash":
+            "3025da798bb590228ff4567e23fcd888999135edc499f87fbf1dfefe35f5d3ad",
+          "prevIndex": 0
+        },
+        {
+          "prevHash":
+            "8591ce1d364b4a1dd7341a919062beb930886823c1833c10c91dd584874e5482",
+          "prevIndex": 1
+        },
+        {
+          "prevHash":
+            "77abbf817ee1141918019651e917ec0a4363d8e00169a59ecabe711bed97444b",
+          "prevIndex": 0
+        }
+      ]
+    },
+    "txid": "02c61ff426850cda4e151abadaa2ac85e5515a1d791e3e2ce16c5f3926c9bb26"
+  },
+  "2": {
+    "txid": "605d46dfa7e205a2992fd1e4b951866451cdb02fec817a6240ce3cc4d95d5774",
+    "serialized":
+      "02000629e5d854f8893d038ce7c8b77fabc8274b36c1378feb3de569afecf27f1705f10000a8d4718418317618104d0fd571cf26270f4f146e5cbf37797d5253451307c724000087a1d117e23e665bf083bf7d5c9a2b158524ccd92943d8cdfd07a29162ebeffb0100ac44d5103bfd5c5aee263a620ff6ab48cdb909cf385611c0ed68a3134764aa130100a3417a2cc48df089cc5c79a6089be8323e2d7cd97e8dcb9f206a5b901d1e292000006d1717c73d473d96275f053df8619e727cac80e720f142972b5de32ac5c63eb40000000001e72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c60b831a801000000003775292229eccdf904f16fff8e83e7cffdc0f0ce0141402464f9f113170a438e813d18f4c1ede36ce8de29d0b0b3ca722c2bd7f1cb1ca0847046e72b88ab3f4d2e05a2401ea8c6ac7fee1898bdab6efdd1c53e1fd1bc20232102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699efac",
+    "deserialized": {
+      "type": 2,
+      "version": 0,
+      "claims": [
+        {
+          "prevHash":
+            "f105177ff2ecaf69e53deb8f37c1364b27c8ab7fb7c8e78c033d89f854d8e529",
+          "prevIndex": 0
+        },
+        {
+          "prevHash":
+            "24c707134553527d7937bf5c6e144f0f2726cf71d50f4d10187631188471d4a8",
+          "prevIndex": 0
+        },
+        {
+          "prevHash":
+            "fbefeb6291a207fdcdd84329d9cc2485152b9a5c7dbf83f05b663ee217d1a187",
+          "prevIndex": 1
+        },
+        {
+          "prevHash":
+            "13aa644713a368edc0115638cf09b9cd48abf60f623a26ee5a5cfd3b10d544ac",
+          "prevIndex": 1
+        },
+        {
+          "prevHash":
+            "20291e1d905b6a209fcb8d7ed97c2d3e32e89b08a6795ccc89f08dc42c7a41a3",
+          "prevIndex": 0
+        },
+        {
+          "prevHash":
+            "b43ec6c52ae35d2b9742f120e780ac7c729e61f83d055f27963d473dc717176d",
+          "prevIndex": 0
+        }
+      ],
+      "attributes": [],
+      "inputs": [],
+      "outputs": [
+        {
+          "assetId":
+            "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+          "value": 0.27799992,
+          "scriptHash": "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+        }
+      ],
+      "scripts": [
+        {
+          "invocationScript":
+            "402464f9f113170a438e813d18f4c1ede36ce8de29d0b0b3ca722c2bd7f1cb1ca0847046e72b88ab3f4d2e05a2401ea8c6ac7fee1898bdab6efdd1c53e1fd1bc20",
+          "verificationScript":
+            "2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699efac"
+        }
+      ]
+    }
+  }
+}

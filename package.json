@@ -1,98 +1,53 @@
 {
-  "devDependencies": {
-    "@babel/core": "^7.0.0-beta.46",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.46",
-    "@babel/polyfill": "^7.0.0-beta.46",
-    "@babel/preset-env": "^7.0.0-beta.46",
-    "@babel/register": "^7.0.0-beta.46",
-    "@types/loglevel": "^1.5.3",
-    "axios-mock-adapter": "^1.15.0",
-    "babel-loader": "^8.0.0-beta.0",
-    "babel-plugin-istanbul": "^4.1.6",
-    "chai": "^4.0.2",
-    "chai-as-promised": "^7.1.0",
-    "clean-webpack-plugin": "^0.1.19",
-    "cross-env": "^5.1.4",
-    "eslint": "^4.19.1",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.1.0",
-    "mocha": "^5.1.1",
-    "nyc": "^11.7.2",
-    "typescript": "^2.8.3",
-    "webpack": "^4.8.1",
-    "webpack-cli": "^2.1.3"
-  },
-  "name": "@cityofzion/neon-js",
-  "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
-  "version": "3.10.1",
-  "main": "lib/index.js",
-  "browser": "lib/browser.js",
-  "module": "src/index.js",
-  "types": "src/index.d.ts",
-  "dependencies": {
-    "axios": "^0.18.0",
-    "bignumber.js": "5.0.0",
-    "bs58": "^4.0.1",
-    "bs58check": "^2.1.1",
-    "crypto-js": "^3.1.9-1",
-    "elliptic": "^6.4.0",
-    "js-scrypt": "^0.2.0",
-    "loglevel": "^1.6.1",
-    "loglevel-plugin-prefix": "^0.8.3",
-    "scrypt-js": "^2.0.3",
-    "secure-random": "^1.1.1",
-    "semver": "^5.5.0",
-    "wif": "^2.0.6"
-  },
   "scripts": {
-    "test": "./node_modules/.bin/mocha ./test && npm run test:typings",
-    "test:unit": "./node_modules/.bin/mocha ./test/unit",
-    "test:integration": "./node_modules/.bin/mocha ./test/integration",
-    "test:typings": "./node_modules/.bin/tsc",
-    "cover": "cross-env NODE_ENV=test ./node_modules/.bin/nyc ./node_modules/.bin/mocha ./test && ./node_modules/.bin/nyc report --reporter=lcov",
-    "cover:unit": "cross-env NODE_ENV=test ./node_modules/.bin/nyc ./node_modules/.bin/mocha ./test/unit  && ./node_modules/.bin/nyc report --reporter=lcov",
-    "cover:integration": "cross-env NODE_ENV=test ./node_modules/.bin/nyc ./node_modules/.bin/mocha ./test/integration && ./node_modules/.bin/nyc report --reporter=lcov",
-    "lint": "./node_modules/.bin/eslint ./src/**/*.js ./test/**/*.js",
-    "build:dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --mode development",
-    "build:prod": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --mode production",
-    "watch:test": "./node_modules/.bin/mocha ./test/unit --bail --watch --reporter=min",
-    "watch:docs": "cd website && npm run start",
-    "build:docs": "cd website && npm run build",
-    "deploy:docs": "cd website && npm run publish-gh-pages",
-    "rebuild": "rm -rf ./node_modules && npm install && ./node_modules/.bin/webpack",
-    "prepublishOnly": "npm run test:typings && npm run lint && npm run build:prod"
+    "bootstrap": "lerna bootstrap",
+    "clean": "lerna run clean",
+    "build": "tsc -b",
+    "dist": "lerna run dist",
+    "lint": "tslint packages/**/src/**/*.ts packages/**/__tests__/**/*.ts packages/**/__integration__/**/*.ts",
+    "test": "jest",
+    "test:unit": "jest /packages/.*/__tests__/.*",
+    "test:integration": "jest /packages/.*/__integration__/.*",
+    "prepublishOnly": "yarn clean && yarn build && yarn dist"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CityOfZion/neon-js.git"
+  "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "cross-env": "^5.2.0",
+    "jest-junit": "^5.1.0",
+    "jest-watch-typeahead": "^0.2.0",
+    "lerna": "^3.1.1",
+    "prettier": "^1.14.0",
+    "ts-jest": "^23.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.14.0",
+    "typescript": "^3.0.1"
   },
-  "keywords": [
-    "neo",
-    "antshares",
-    "javascript",
-    "libraries"
+  "private": true,
+  "workspaces": [
+    "packages/*"
   ],
-  "author": "Ethan Fast <ejhfast@gmail.com> (https://github.com/Ejhfast)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/CityOfZion/neon-js/issues"
-  },
-  "homepage": "https://github.com/CityOfZion/neon-js#readme",
-  "files": [
-    "lib/",
-    "src/"
-  ],
-  "nyc": {
-    "require": [
-      "@babel/register"
+  "jest": {
+    "testEnvironment": "node",
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "<rootDir>/tsconfig-test.json"
+      }
+    },
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
     ],
-    "exclude": [
-      "test"
-    ],
-    "sourceMap": false,
-    "instrument": false
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/packages/.*/__(tests|integration)__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }

@@ -38,23 +38,15 @@ class Footer extends React.Component {
             <a href={this.docUrl('installation.html', this.props.language)}>
               Getting Started
             </a>
-            <a href={this.docUrl('tutorial.html', this.props.language)}>
+            <a href={this.docUrl('guides/basic/sendasset.html', this.props.language)}>
               Guides
             </a>
-            <a href={this.docUrl('api.html', this.props.language)}>
+            <a href={this.docUrl('api/index.html', this.props.language)}>
               API Reference
             </a>
           </div>
           <div>
             <h5>Community</h5>
-            <a href={this.pageUrl('users.html', this.props.language)}>
-              User Showcase
-            </a>
-            <a
-              href="https://neo.stackexchange.com/"
-              target="_blank">
-              Stack Overflow
-            </a>
             <a href="https://discord.gg/wczVXTN">Discord Chat</a>
             <a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a>
           </div>

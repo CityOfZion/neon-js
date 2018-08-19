@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib"
+  },
+  "references": [
+    { "path": "../neon-core" },
+    { "path": "../neon-api" },
+    { "path": "../neon-nep5" }
+  ],
+  "include": ["src/**/*"]
+}
