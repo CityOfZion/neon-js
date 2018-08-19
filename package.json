@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "bootstrap":"lerna bootstrap",
+    "bootstrap": "lerna bootstrap",
     "clean": "lerna run clean",
     "build": "tsc -b",
     "dist": "lerna run dist",

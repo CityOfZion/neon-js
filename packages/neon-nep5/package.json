@@ -18,7 +18,7 @@
   "module": "src/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b",
     "lint": "tslint src/**/*.ts __tests__/**/*.ts __integration__/**/*.ts",
     "lint:fix": "tslint src/**/*.ts --fix",
     "prepublishOnly": "yarn lint && yarn build",
