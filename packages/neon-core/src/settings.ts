@@ -7,5 +7,5 @@ export { defaultCalculationStrategy };
 
 export let timeout = {
   ping: 2000,
-  rpc: 5000
+  rpc: 30000
 };

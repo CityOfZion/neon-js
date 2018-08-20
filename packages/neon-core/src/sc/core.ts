@@ -46,7 +46,7 @@ export function generateDeployScript(params: DeployParams) {
     .emitPush(str2hexstring(params.version))
     .emitPush(str2hexstring(params.name))
     .emitPush(params.needsStorage || false)
-    .emitPush(params.returnType || "ff")
+    .emitPush(params.returnType || "ff00")
     .emitPush(params.parameterList)
     .emitPush(params.script)
     .emitSysCall("Neo.Contract.Create");

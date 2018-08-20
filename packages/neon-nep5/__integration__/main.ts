@@ -1,5 +1,5 @@
 import { CONST, u } from "@cityofzion/neon-core";
-import { getToken, getTokenBalance } from "../src/main";
+import { getToken, getTokenBalance, getTokenBalances } from "../src/main";
 
 const TESTNET_URL = "http://test5.cityofzion.io:8880";
 const RPX = CONST.CONTRACTS.TEST_RPX;
@@ -24,6 +24,28 @@ describe("getTokenBalance", () => {
 
     expect(balance.toNumber()).toBeGreaterThan(0);
     expect(balance.toNumber() % 1).toBe(0);
+  });
+});
+
+describe("getTokenBalances", () => {
+  test("multiple repeated contracts", async () => {
+    const balances = await getTokenBalances(
+      TESTNET_URL,
+      [
+        CONST.CONTRACTS.TEST_RPX,
+        CONST.CONTRACTS.TEST_RHTT4,
+        CONST.CONTRACTS.TEST_LWTF,
+        CONST.CONTRACTS.TEST_NXT,
+        CONST.CONTRACTS.TEST_RPX,
+        CONST.CONTRACTS.TEST_RHTT4,
+        CONST.CONTRACTS.TEST_LWTF,
+        CONST.CONTRACTS.TEST_NXT
+      ],
+      "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+    );
+    expect(Object.keys(balances)).toEqual(
+      expect.arrayContaining(["RPX", "RHTT4", "LWTF", "NXT"])
+    );
   });
 });
 

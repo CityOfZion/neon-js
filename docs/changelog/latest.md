@@ -14,22 +14,24 @@ title: Changelog (v4)
 
   > API is now extracted into its own package under `neon-api`. The core functionalities offered by this package are high level API methods and 3rd party endpoint calls.
   - Managed API methods now require an API provider under the property `api`. This API provider will be used as the main source for data retrieval.
+  - The properties `net`, `address` and `privateKey` is now deprecated. Please use `api` to denote the specific network and provider you wish to use and `account` to replace `address` and `privateKey`.
   - The `Provider` interface is now a wrapper for each API provider.
   - `sendFromSmartContract` is now a string property that is the scripthash of the smart contract that you are manipulating.
-  - Removed NEP5 methods from API.
+  - Removed NEP5 methods from API. They now live in the `neon-nep5` package.
   - Removed `cmc` from API.
 
 - NEP5
 
   > NEP5 is now extracted into its own package under `neon-nep5`. The core functionalities offered by this package are high level common functions and ABI script functions.
   - ABI functions are available to easily create scripts for each documented NEP5 function.
+  - Change output of `getTokenBalances` to output a dictionary of symbols to Fixed8 instead of symbols to numbers.
 
 - Core
 
   > `neon-core` forms the base package and contains all the modules required for interaction with the blockchain.
   - Utility
     - Methods outputting arrayBuffers are now standardised to output UInt8Arrays.
-    - bignumber.js package is updated to 7.2 which contains breaking changes. Fixed8 now implements some of the common aliases (ceil, floor, equals, round) but not all changes are covered.
+    - bignumber.js package is updated to **7.2** which contains breaking changes. Fixed8 now implements some of the common aliases (ceil, floor, equals, round) but not all changes are covered.
 
   - Wallet
     - All components are now ES6 classes (AssetBalance, ClaimItem, Coin).

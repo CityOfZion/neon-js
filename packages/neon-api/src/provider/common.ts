@@ -30,7 +30,23 @@ export function filterHttpsOnly(nodes: RpcNode[]): RpcNode[] {
 
 export async function getBestUrl(rpcs: RpcNode[]): Promise<string> {
   const clients = rpcs.map(r => new rpc.RPCClient(r.url));
-  return await Promise.race(clients.map(c => c.ping().then(_ => c.net)));
+  return await raceToSuccess(clients.map(c => c.ping().then(_ => c.net)));
+}
+
+export function raceToSuccess<T>(promises: Array<Promise<T>>) {
+  return Promise.all(
+    promises.map(p =>
+      // If a request fails, count that as a resolution so it will keep
+      // waiting for other possible successes. If a request succeeds,
+      // treat it as a rejection so Promise.all immediately bails out.
+      p.then(val => Promise.reject(val), err => err)
+    )
+  ).then(
+    // If '.all' resolved, we've just got an array of errors.
+    errors => Promise.reject(errors),
+    // If '.all' rejected, we've got the result we wanted.
+    val => val
+  )
 }
 
 export function findGoodNodesFromHeight(
@@ -43,10 +59,5 @@ export function findGoodNodesFromHeight(
   const sortedNodes = nodes.slice().sort((n1, n2) => n2.height - n1.height);
   const bestHeight = sortedNodes[0].height;
   const threshold = bestHeight - tolerance;
-  for (let i = 1; i < sortedNodes.length; i++) {
-    if (sortedNodes[i].height < threshold) {
-      return sortedNodes.slice(0, i);
-    }
-  }
-  return sortedNodes;
+  return sortedNodes.filter(n => n.height >= threshold);
 }
