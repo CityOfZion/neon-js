@@ -1,4 +1,5 @@
 import Witness, { WitnessLike } from "../../../src/tx/components/Witness";
+import { Account } from "../../../src/wallet";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -99,4 +100,110 @@ describe("deserialize", () => {
       expect(result.export()).toEqual(expected);
     }
   );
+});
+
+describe("buildMultiSig", () => {
+  const msg = "1234";
+  const signatures = [
+    "e634f503454fc99d72aa3ab6048cb0cf33ed2afec8c9f38a6c4b87126f0da6c62e39205c86178d95a191ec76fb09b2380b8df1074ea62e02cb9d4a5e1c6372a2",
+    "f81e7b0ac2e415dac37bf189827f2e716c53e383faf973d9e222bbb44bb0c55d181726460397a90e9f26013ac3eb17019f0667d78915d5d7ded4d9f87ef785ac",
+    "9ed10d60df8d8ac2fe719448ea732638963649f41c44bdbe6eb10e7dd7d6c5c71d82738f1d33c58fe8350f5c4c51b388a41c32768b598afb978f08a56eef72d7"
+  ];
+
+  const witnesses = [
+    new Witness({
+      invocationScript:
+        "40e634f503454fc99d72aa3ab6048cb0cf33ed2afec8c9f38a6c4b87126f0da6c62e39205c86178d95a191ec76fb09b2380b8df1074ea62e02cb9d4a5e1c6372a2",
+      verificationScript:
+        "2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699efac"
+    }),
+    new Witness({
+      invocationScript:
+        "40f81e7b0ac2e415dac37bf189827f2e716c53e383faf973d9e222bbb44bb0c55d181726460397a90e9f26013ac3eb17019f0667d78915d5d7ded4d9f87ef785ac",
+      verificationScript:
+        "21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9ac"
+    }),
+    new Witness({
+      invocationScript:
+        "409ed10d60df8d8ac2fe719448ea732638963649f41c44bdbe6eb10e7dd7d6c5c71d82738f1d33c58fe8350f5c4c51b388a41c32768b598afb978f08a56eef72d7",
+      verificationScript:
+        "2102232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462faac"
+    })
+  ];
+  const orderedSigExpectedInvocationScript = [signatures[0], signatures[1]]
+    .map(s => "40" + s)
+    .join("");
+  const verificationScript =
+    "522102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c92102232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa53ae";
+
+  const account = new Account({
+    address: "ASo1RcNVLiV3yQ8j3ZyZv5EWfqBBT8s2Yd",
+    contract: {
+      script:
+        "522102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c92102232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa53ae",
+      parameters: [
+        { name: "parameter0", type: "Signature" },
+        { name: "parameter1", type: "Signature" }
+      ],
+      deployed: false
+    }
+  });
+  test.each([
+    [
+      "constructs Witness given correctly ordered signatures",
+      msg,
+      signatures,
+      verificationScript,
+      orderedSigExpectedInvocationScript
+    ],
+    [
+      "constructs Witness given unordered signatures",
+      msg,
+      [signatures[1], signatures[2], signatures[0]],
+      verificationScript,
+      orderedSigExpectedInvocationScript
+    ],
+    [
+      "constructs Witness given unordered individual witnesses",
+      msg,
+      [witnesses[1], witnesses[2], witnesses[0]],
+      verificationScript,
+      orderedSigExpectedInvocationScript
+    ],
+    [
+      "constructs Witness given random signatures/witnesses and Account",
+      msg,
+      [signatures[1], signatures[2], witnesses[0]],
+      account,
+      orderedSigExpectedInvocationScript
+    ]
+  ])(
+    "%s",
+    (
+      _: string,
+      tx: string,
+      sigs: any,
+      vScript: any,
+      expectedInvocationScript: string
+    ) => {
+      const result = Witness.buildMultiSig(tx, sigs, vScript);
+
+      expect(result.verificationScript).toEqual(verificationScript);
+      expect(result.invocationScript).toEqual(expectedInvocationScript);
+    }
+  );
+
+  test("throws if invalid signature given", () => {
+    const wrongSigs = [signatures[0].replace("1", "0"), signatures[1]];
+    const throwingFunc = () =>
+      Witness.buildMultiSig(msg, wrongSigs, verificationScript);
+    expect(throwingFunc).toThrowError("Invalid signature given");
+  });
+
+  test("throws if insufficient signatures", () => {
+    const oneSig = [signatures[1]];
+    const throwingFunc = () =>
+      Witness.buildMultiSig(msg, oneSig, verificationScript);
+    expect(throwingFunc).toThrowError("Insufficient signatures");
+  });
 });

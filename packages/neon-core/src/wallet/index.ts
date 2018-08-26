@@ -7,3 +7,4 @@ export * from "./verify";
 export * from "./signing";
 export * from "./components";
 export * from "./Wallet";
+export * from "./multisig";

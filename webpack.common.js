@@ -7,7 +7,7 @@ module.exports = function(rootDir) {
   return {
     mode: env,
     devtool: env === "development" ? "inline-source-map" : "source-map",
-    entry: "./src/index.ts",
+    entry: path.resolve(rootDir, "src", "index.ts"),
     resolve: {
       // Add `.ts` and `.tsx` as a resolvable extension.
       extensions: [".ts", ".tsx", ".js"]

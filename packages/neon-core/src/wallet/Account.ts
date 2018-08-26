@@ -1,7 +1,9 @@
 import util from "util";
 import { DEFAULT_ACCOUNT_CONTRACT, DEFAULT_SCRYPT } from "../consts";
 import logger from "../logging";
+import { hash160, reverseHex } from "../u";
 import * as core from "./core";
+import { constructMultiSigVerificationScript } from "./multisig";
 import { decrypt, encrypt, ScryptParams } from "./nep2";
 import {
   isAddress,
@@ -42,6 +44,36 @@ export interface AccountJSON {
  * acct.address; // "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
  */
 export class Account {
+  /**
+   * Create a multi-sig account from a list of public keys
+   * @param signingThreshold Minimum number of signatures required for verification. Must be larger than 0 and less than number of keys provided.
+   * @param publicKeys List of public keys to form the account. 2-16 keys allowed. Order is important.
+   * @example
+   * const threshold = 2;
+   * const publicKeys = [
+   * "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
+   * "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
+   * "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa"
+   * ];
+   * const acct = Account.createMultiSig(threshold, publicKeys);
+   */
+  public static createMultiSig(signingThreshold: number, publicKeys: string[]) {
+    const verificationScript = constructMultiSigVerificationScript(
+      signingThreshold,
+      publicKeys
+    );
+    return new Account({
+      contract: {
+        script: verificationScript,
+        parameters: Array(signingThreshold).map((_, i) => ({
+          name: `signature${i}`,
+          type: "Signature"
+        })),
+        deployed: false
+      }
+    });
+  }
+
   public extra: { [key: string]: any };
   public isDefault: boolean;
   public lock: boolean;
@@ -61,7 +93,7 @@ export class Account {
   private _WIF?: string;
   // tslint:enables:variable-name
 
-  constructor(str: string | AccountJSON = "") {
+  constructor(str: string | Partial<AccountJSON> = "") {
     this.extra = {};
     this.label = "";
     this.isDefault = false;
@@ -97,6 +129,7 @@ export class Account {
       throw new ReferenceError(`Invalid input: ${str}`);
     }
 
+    this._updateContractScript();
     // Attempts to make address the default label of the Account.
     if (!this.label) {
       try {
@@ -105,7 +138,6 @@ export class Account {
         this.label = "";
       }
     }
-    this._updateContractScript();
   }
 
   get [Symbol.toStringTag]() {
@@ -116,8 +148,17 @@ export class Account {
     return `[Account: ${this.label}]`;
   }
 
+  public get isMultiSig() {
+    return (
+      this.contract &&
+      this.contract.script &&
+      this.contract.script.slice(this.contract.script.length - 2) === "ae"
+    );
+  }
+
   /**
    * Key encrypted according to NEP2 standard.
+   * @example 6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF
    */
   get encrypted() {
     if (this._encrypted) {
@@ -129,6 +170,7 @@ export class Account {
 
   /**
    * Case sensitive key of 52 characters long.
+   * @example L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g
    */
   get WIF() {
     if (this._WIF) {
@@ -141,6 +183,7 @@ export class Account {
 
   /**
    * Key of 64 hex characters.
+   * @example 7d128a6d096f0c14c3a25a2b0c41cf79661bfcb4a8cc95aaaea28bde4d732344
    */
   get privateKey() {
     if (this._privateKey) {
@@ -157,6 +200,7 @@ export class Account {
 
   /**
    * Returns the public key in encoded form. This is the form that is the short version (starts with 02 or 03). If you require the unencoded form, do use the publicKey method instead of this getter.
+   * @example 02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef
    */
   get publicKey() {
     if (this._publicKey) {
@@ -186,6 +230,9 @@ export class Account {
       if (this._address) {
         this._scriptHash = core.getScriptHashFromAddress(this.address);
         return this._scriptHash;
+      } else if (this.contract.script) {
+        this._scriptHash = this._getScriptHashFromVerificationScript();
+        return this._scriptHash;
       } else {
         this._scriptHash = core.getScriptHashFromPublicKey(this.publicKey);
         return this._scriptHash;
@@ -195,6 +242,7 @@ export class Account {
 
   /**
    * Public address used to receive transactions. Case sensitive.
+   * @example ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW
    */
   get address() {
     if (this._address) {
@@ -300,11 +348,16 @@ export class Account {
         this.contract.script = core.getVerificationScriptFromPublicKey(
           publicKey
         );
-        log.debug(`Updated ContractScript for Account: ${this.label}`);
+        this._scriptHash = this._getScriptHashFromVerificationScript();
+        log.debug(`Updated ContractScript for Account: ${this.address}`);
       }
     } catch (e) {
       return;
     }
+  }
+
+  private _getScriptHashFromVerificationScript(): string {
+    return reverseHex(hash160(this.contract.script));
   }
 }
 
