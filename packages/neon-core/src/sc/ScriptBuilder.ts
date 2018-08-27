@@ -200,7 +200,7 @@ export class ScriptBuilder extends StringStream {
     }
     const hexstring = int2hex(num);
     return this.emitPush(
-      reverseHex("0".repeat(16 - hexstring.length) + hexstring)
+      reverseHex(hexstring)
     );
   }
 

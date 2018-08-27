@@ -138,7 +138,7 @@ describe("generateDeployScript", () => {
       params.version,
       params.name,
       false,
-      "ff",
+      "ff00",
       params.parameterList,
       params.script,
       "Neo.Contract.Create"

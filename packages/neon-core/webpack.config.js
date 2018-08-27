@@ -1,7 +1,7 @@
 const common = require("../../webpack.common");
-
+const base = common(__dirname);
 module.exports = function() {
-  const nodeOutput = Object.assign({}, common, {
+  const nodeOutput = Object.assign({}, base, {
     target: "node",
     output: {
       path: __dirname,
@@ -13,7 +13,7 @@ module.exports = function() {
     minimize: false
   });
 
-  const webOutput = Object.assign({}, common, {
+  const webOutput = Object.assign({}, base, {
     target: "web",
     output: {
       path: __dirname,

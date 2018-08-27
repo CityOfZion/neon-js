@@ -1,9 +1,33 @@
 import { rpc } from "../../src/index";
 import { ContractParam } from "../../src/sc";
 
-const client = new rpc.RPCClient("http://test3.cityofzion.io:8880");
+const TESTNET_URLS = [
+  "https://test1.cityofzion.io:443",
+  "https://test2.cityofzion.io:443",
+  "https://test3.cityofzion.io:443",
+  "http://seed3.neo.org:20332",
+  "http://seed4.neo.org:20332",
+  "http://seed5.neo.org:20332"
+];
+
+let client = null;
 const address = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
 const contractHash = "5b7074e873973a6ed3708862f219a6fbf4d1c411";
+
+beforeAll(async () => {
+  for (let i = 0; i < TESTNET_URLS.length; i++) {
+    try {
+      await rpc.Query.getBlockCount().execute(TESTNET_URLS[i]);
+      client = new rpc.RPCClient(TESTNET_URLS[i]);
+      break;
+    } catch (e) {
+      if (i === TESTNET_URLS.length) {
+        throw new Error("Exhausted all urls but found no available RPC");
+      }
+      continue;
+    }
+  }
+});
 
 describe("RPC Methods", () => {
   test("getAccountState", async () => {
@@ -183,14 +207,16 @@ describe("RPC Methods", () => {
     expect(result).toBe(null);
   });
 
-  test("getValidators", async() => {
+  test("getValidators", async () => {
     const result = await client.getValidators();
-   result.map(v => expect(v).toMatchObject({
-    publickey: expect.any(String),
-    active: expect.any(Boolean),
-    votes: expect.any(String)
-   }))
-  })
+    result.map(v =>
+      expect(v).toMatchObject({
+        publickey: expect.any(String),
+        active: expect.any(Boolean),
+        votes: expect.any(String)
+      })
+    );
+  });
 
   test("getVersion", async () => {
     const result = await client.getVersion();

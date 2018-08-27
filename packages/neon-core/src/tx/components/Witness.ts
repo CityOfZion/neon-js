@@ -1,5 +1,14 @@
 import { num2VarInt, StringStream } from "../../u";
-import { getVerificationScriptFromPublicKey } from "../../wallet";
+import {
+  Account,
+  getSigningThresholdFromVerificationScript,
+  getVerificationScriptFromPublicKey,
+  verify
+} from "../../wallet";
+import {
+  getPublicKeysFromVerificationScript,
+  getSignaturesFromInvocationScript
+} from "../../wallet";
 
 export interface WitnessLike {
   invocationScript: string;
@@ -27,6 +36,66 @@ export class Witness {
     const invocationScript = "40" + sig;
     const verificationScript = getVerificationScriptFromPublicKey(publicKey);
     return new Witness({ invocationScript, verificationScript });
+  }
+
+  /**
+   * Builds a multi-sig Witness object.
+   * @param tx Hexstring to be signed.
+   * @param sigs Unordered list of signatures.
+   * @param acctOrVerificationScript Account or verification script. Account needs to be the multi-sig account and not one of the public keys.
+   */
+  public static buildMultiSig(
+    tx: string,
+    sigs: Array<string | Witness>,
+    acctOrVerificationScript: Account | string
+  ): Witness {
+    const verificationScript =
+      typeof acctOrVerificationScript === "string"
+        ? acctOrVerificationScript
+        : acctOrVerificationScript.contract.script;
+
+    const publicKeys = getPublicKeysFromVerificationScript(verificationScript);
+    const orderedSigs = Array(publicKeys.length).fill("");
+    sigs.forEach(element => {
+      if (typeof element === "string") {
+        const position = publicKeys.findIndex(key => verify(tx, element, key));
+        if (position === -1) {
+          throw new Error(`Invalid signature given: ${element}`);
+        }
+        orderedSigs[position] = element;
+      } else if (element instanceof Witness) {
+        const keys = getPublicKeysFromVerificationScript(
+          element.verificationScript
+        );
+        if (keys.length !== 1) {
+          throw new Error("Given witness contains more than 1 public key!");
+        }
+        const position = publicKeys.indexOf(keys[0]);
+        orderedSigs[position] = getSignaturesFromInvocationScript(
+          element.invocationScript
+        )[0];
+      } else {
+        throw new Error("Unable to process given signature");
+      }
+    });
+    const signingThreshold = getSigningThresholdFromVerificationScript(
+      verificationScript
+    );
+    const validSigs = orderedSigs.filter(s => s !== "");
+    if (validSigs.length < signingThreshold) {
+      throw new Error(
+        `Insufficient signatures: expected ${signingThreshold} but got ${
+          validSigs.length
+        } instead`
+      );
+    }
+    return new Witness({
+      invocationScript: validSigs
+        .slice(0, signingThreshold)
+        .map(s => "40" + s)
+        .join(""),
+      verificationScript
+    });
   }
 
   public invocationScript: string;
