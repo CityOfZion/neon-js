@@ -28,10 +28,12 @@ describe("addAttributeForMintToken", () => {
     const result = await mint.addAttributeForMintToken(config);
 
     expect(result.tx!.attributes.length).toBe(1);
-    expect(result.tx!.attributes[0].equals({
-      usage: tx.TxAttrUsage.Script,
-      data: "cdab"
-    })).toBeTruthy();
+    expect(
+      result.tx!.attributes[0].equals({
+        usage: tx.TxAttrUsage.Script,
+        data: "cdab"
+      })
+    ).toBeTruthy();
   });
 });
 

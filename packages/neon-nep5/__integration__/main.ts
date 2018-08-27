@@ -1,4 +1,4 @@
-import { CONST, u, rpc } from "@cityofzion/neon-core";
+import { CONST, rpc, u } from "@cityofzion/neon-core";
 import { getToken, getTokenBalance, getTokenBalances } from "../src/main";
 
 const TESTNET_URLS = [

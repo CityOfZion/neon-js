@@ -76,9 +76,9 @@ describe("readVarBytes", () => {
     ["uint32", "fe05000000"],
     ["uint64", "ff0500000000000000"]
   ])("%s", (msg: string, data: string) => {
-    const expected = "0102030405"
+    const expected = "0102030405";
     const ss = new StringStream(data + expected);
     const result = ss.readVarBytes();
     expect(result).toBe(expected);
-  })
-})
+  });
+});

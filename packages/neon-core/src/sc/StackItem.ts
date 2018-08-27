@@ -35,7 +35,7 @@ export class StackItem {
   }
 
   private static _deserialize(ss: StringStream): StackItem {
-    const item = new StackItem({type: parseInt(ss.read(), 16)});
+    const item = new StackItem({ type: parseInt(ss.read(), 16) });
     const length = ss.readVarInt();
     switch (item.type) {
       case StackItemType.Array:
@@ -66,7 +66,7 @@ export class StackItem {
 
   constructor(obj: Partial<StackItemLike>) {
     if (obj.type === undefined) {
-      throw new Error(`Invalid type provided: ${obj.type}`)
+      throw new Error(`Invalid type provided: ${obj.type}`);
     }
     this.type = toStackItemType(obj.type);
     if (obj.value === undefined) {
@@ -80,7 +80,7 @@ export class StackItem {
           value: new StackItem(v.value)
         }));
       }
-      throw new Error(`Encountered array for value but invalid type`)
+      throw new Error(`Encountered array for value but invalid type`);
     } else {
       this.value = obj.value;
     }

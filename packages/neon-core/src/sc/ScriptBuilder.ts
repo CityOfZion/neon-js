@@ -199,9 +199,7 @@ export class ScriptBuilder extends StringStream {
       return this.emit(OpCode.PUSH1 - 1 + num);
     }
     const hexstring = int2hex(num);
-    return this.emitPush(
-      reverseHex(hexstring)
-    );
+    return this.emitPush(reverseHex(hexstring));
   }
 
   /**

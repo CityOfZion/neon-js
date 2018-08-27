@@ -1,15 +1,18 @@
 {
   "scripts": {
-    "bootstrap": "lerna bootstrap",
     "clean": "lerna run clean",
+    "bootstrap": "lerna bootstrap",
     "build": "tsc -b",
     "dist": "lerna run dist",
     "lint": "tslint packages/**/src/**/*.ts packages/**/__tests__/**/*.ts packages/**/__integration__/**/*.ts",
+    "precommit": "yarn lint && yarn pretty",
+    "prepublishOnly": "yarn clean && yarn build && yarn dist",
+    "prestart": "yarn build && yarn dist",
+    "pretty": "prettier --write --loglevel=warn \"**/{src,__{tests,integration}__}/**/*.ts\"",
+    "start": "jest --watch",
     "test": "jest",
-    "test:cover": "jest --coverage",
-    "test:unit": "jest /packages/.*/__tests__/.*",
     "test:integration": "jest /packages/.*/__integration__/.*",
-    "prepublishOnly": "yarn clean && yarn build && yarn dist"
+    "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
@@ -26,30 +29,5 @@
   "private": true,
   "workspaces": [
     "packages/*"
-  ],
-  "jest": {
-    "testEnvironment": "node",
-    "globals": {
-      "ts-jest": {
-        "tsConfigFile": "<rootDir>/tsconfig-test.json"
-      }
-    },
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "coveragePathIgnorePatterns":["<rootDir>/packages/.*/lib/", "<rootDir>/packages/.*/dist/"],
-    "testRegex": "(/packages/.*/__(tests|integration)__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
-  }
+  ]
 }

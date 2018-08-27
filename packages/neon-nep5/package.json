@@ -19,14 +19,14 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc -b",
+    "clean": "rimraf ./lib ./dist",
+    "prepublishOnly": "yarn clean && yarn build",
     "lint": "tslint src/**/*.ts __tests__/**/*.ts __integration__/**/*.ts",
-    "lint:fix": "tslint src/**/*.ts --fix",
-    "prepublishOnly": "yarn lint && yarn build",
-    "pretty": "prettier",
-    "test": "jest --coverage",
-    "test:unit": "jest ./__tests__/.*",
-    "test:integration": "jest ./__integration__/.*",
-    "clean": "rimraf ./lib ./dist"
+    "pretty": "prettier --write --loglevel=warn \"./{src,__{tests,integration}__}/**/*.ts\"",
+    "start": "jest --watch",
+    "test": "jest",
+    "test:integration": "jest /packages/.*/__integration__/.*",
+    "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "devDependencies": {
     "@types/jest": "^23.1.0",
@@ -44,26 +44,5 @@
   },
   "files": [
     "lib/"
-  ],
-  "jest": {
-    "testEnvironment": "node",
-    "globals": {
-      "ts-jest": {
-        "tsConfigFile": "<rootDir>/tsconfig-test.json"
-      }
-    },
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__(tests|integration)__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "collectCoverage": true,
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
-  }
+  ]
 }

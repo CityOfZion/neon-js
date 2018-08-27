@@ -46,7 +46,7 @@ export function raceToSuccess<T>(promises: Array<Promise<T>>) {
     errors => Promise.reject(errors),
     // If '.all' rejected, we've got the result we wanted.
     val => val
-  )
+  );
 }
 
 export function findGoodNodesFromHeight(

@@ -7,9 +7,9 @@ import { ManagedApiBasicConfig } from "./types";
  * @param config - Configuration object.
  * @return Configuration object.
  */
-export async function signTx<T extends ManagedApiBasicConfig<tx.BaseTransaction>>(
-  config: T
-): Promise<T> {
+export async function signTx<
+  T extends ManagedApiBasicConfig<tx.BaseTransaction>
+>(config: T): Promise<T> {
   checkProperty(config, "signingFunction", "tx");
   const signatures = await config.signingFunction!(
     config.tx!.serialize(false),
@@ -27,9 +27,7 @@ export async function signTx<T extends ManagedApiBasicConfig<tx.BaseTransaction>
 }
 
 function addSignature(transaction: tx.Transaction, signature: string): void {
-  transaction.scripts.push(
-    tx.Witness.deserialize(signature)
-  );
+  transaction.scripts.push(tx.Witness.deserialize(signature));
 }
 
 export function signWithPrivateKey(

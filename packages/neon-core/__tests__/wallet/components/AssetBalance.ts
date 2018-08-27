@@ -4,7 +4,6 @@ import AssetBalance, {
 } from "../../../src/wallet/components/AssetBalance";
 import Coin from "../../../src/wallet/components/Coin";
 
-
 const dataSet = [
   {
     balance: 1,
@@ -21,7 +20,7 @@ const dataSet = [
     spent: [{ index: 1, txid: "coin2", value: 1.2 }],
     unconfirmed: [{ index: 3, txid: "coin3", value: 0.1 }]
   }
-]
+];
 describe("constructor", () => {
   test("empty", () => {
     const result = new AssetBalance();
@@ -73,8 +72,8 @@ describe("getter", () => {
 
     const result = new AssetBalance(testObject);
     expect(result.balance.toNumber()).toBe(7);
-  })
-})
+  });
+});
 
 describe("export", () => {
   test("export to basic JS types", () => {

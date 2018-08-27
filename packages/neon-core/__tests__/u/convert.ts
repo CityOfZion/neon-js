@@ -113,7 +113,10 @@ describe("num2hexstring", () => {
 
       test(`${msg}(LE) `, () => {
         const result = convert.num2hexstring(num, size, true);
-        const reversedHex = hex.match(/.{1,2}/g)!.reverse().join("");
+        const reversedHex = hex
+          .match(/.{1,2}/g)!
+          .reverse()
+          .join("");
         expect(result).toBe(reversedHex);
       });
     }
@@ -129,9 +132,9 @@ describe.each([
   [0xffffffff, "feffffffff", "uint32(max)"],
   [0x0100000000, "ff0000000001000000", "uint64"],
   [Number.MAX_SAFE_INTEGER, "ffffffffffffff1f00", "uint64(max)"]
-])("(%d)INT -> VARINT(%s)", (num:number, varint: string, msg:string) => {
+])("(%d)INT -> VARINT(%s)", (num: number, varint: string, msg: string) => {
   test(msg, () => {
     const result = convert.num2VarInt(num);
     expect(result).toBe(varint);
-  })
-})
+  });
+});

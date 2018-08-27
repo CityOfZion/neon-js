@@ -45,7 +45,7 @@ describe("calculateInputs", () => {
           unspent: [{ value: 1.5, txid: "cd", index: 0 }]
         },
         TEST: {
-          unspent:[{value: 1, txid: "ef", index:0}]
+          unspent: [{ value: 1, txid: "ef", index: 0 }]
         }
       },
       address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
@@ -68,8 +68,8 @@ describe("calculateInputs", () => {
 
     expect(result.inputs).toEqual(
       expect.arrayContaining([
-        {prevHash:"ab", prevIndex:0},
-        {prevHash: "cd", prevIndex:0}
+        { prevHash: "ab", prevIndex: 0 },
+        { prevHash: "cd", prevIndex: 0 }
       ])
     );
 

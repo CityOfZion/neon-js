@@ -1,5 +1,5 @@
 import hexEncoding from "crypto-js/enc-hex";
-import utfEncoding from"crypto-js/enc-utf8";
+import utfEncoding from "crypto-js/enc-utf8";
 import RIPEMD160 from "crypto-js/ripemd160";
 import SHA256 from "crypto-js/sha256";
 
@@ -18,7 +18,7 @@ export function hash160(hex: string): string {
  * Performs 2 SHA256.
  */
 export function hash256(hex: string): string {
-  const firstSha = sha256(hex)
+  const firstSha = sha256(hex);
   return sha256(firstSha);
   // const hexEncoded = safeParseHex(hex);
   // const ProgramSha256 = SHA256(hexEncoded);
@@ -39,7 +39,7 @@ export function ripemd160(hex: string): string {
   return hash(hex, RIPEMD160);
 }
 
-function hash(hex:string, hashingFunction:(i:any) => CryptoJS.WordArray ) {
+function hash(hex: string, hashingFunction: (i: any) => CryptoJS.WordArray) {
   const hexEncoded = hexEncoding.parse(hex);
   const result = hashingFunction(hexEncoded);
   return result.toString(hexEncoding);

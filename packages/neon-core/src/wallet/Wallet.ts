@@ -89,7 +89,7 @@ export class Wallet {
     } catch (err) {
       log.warn(
         `Encrypted account added to Wallet ${
-        this.name
+          this.name
         }. You will not be able to export this wallet without first decrypting this account`
       );
     }
