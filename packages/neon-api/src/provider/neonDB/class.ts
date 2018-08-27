@@ -30,7 +30,12 @@ export class NeonDB implements Provider {
   }
 
   public async getRPCEndpoint(noCache = false): Promise<string> {
-    if (!noCache && this.rpc && this.cacheExpiry && this.cacheExpiry < new Date()) {
+    if (
+      !noCache &&
+      this.rpc &&
+      this.cacheExpiry &&
+      this.cacheExpiry < new Date()
+    ) {
       const ping = await this.rpc.ping();
       if (ping <= 1000) {
         return this.rpc.net;

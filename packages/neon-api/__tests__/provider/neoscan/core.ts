@@ -176,9 +176,7 @@ describe("getClaims", () => {
         ]
       } as wallet.ClaimsLike)
     );
-    expect(httpCall).toBeCalledWith(
-      testUrl + "/v1/get_claimable/address"
-    );
+    expect(httpCall).toBeCalledWith(testUrl + "/v1/get_claimable/address");
   });
 
   test("returns empty claims", async () => {
@@ -215,9 +213,7 @@ describe("getMaxClaimAmount", () => {
     expect(await neoscan.getMaxClaimAmount(testUrl, "address")).toEqual(
       new u.Fixed8(1)
     );
-    expect(httpCall).toBeCalledWith(
-      testUrl + "/v1/get_unclaimed/address"
-    );
+    expect(httpCall).toBeCalledWith(testUrl + "/v1/get_unclaimed/address");
   });
 });
 
@@ -401,9 +397,7 @@ describe("getTransactionHistory", () => {
       })
     );
     axios.get = httpCall;
-    expect(
-      await neoscan.getTransactionHistory(testUrl, "address")
-    ).toEqual([
+    expect(await neoscan.getTransactionHistory(testUrl, "address")).toEqual([
       {
         txid: "1",
         blockHeight: 11,

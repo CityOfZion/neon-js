@@ -129,10 +129,7 @@ export function num2hexstring(
  * @param size output size in bytes
  * @return number in Fixed8 representation.
  */
-export function num2fixed8(
-  num: number,
-  size: number = 8
-): string {
+export function num2fixed8(num: number, size: number = 8): string {
   if (typeof num !== "number") {
     throw new Error("num must be numeric");
   }

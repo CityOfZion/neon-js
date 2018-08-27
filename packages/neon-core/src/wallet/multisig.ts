@@ -75,14 +75,16 @@ export function getSigningThresholdFromVerificationScript(
  * Extract signatures from invocationScript
  * @param invocationScript InvocationScript of a Witness.
  */
-export function getSignaturesFromInvocationScript(invocationScript: string): string[] {
+export function getSignaturesFromInvocationScript(
+  invocationScript: string
+): string[] {
   const ss = new StringStream(invocationScript);
   const sigs = [];
-  while(!ss.isEmpty()) {
-    const byte = parseInt(ss.peek(),16);
+  while (!ss.isEmpty()) {
+    const byte = parseInt(ss.peek(), 16);
     if (byte > 80) {
       continue;
-    } else if (byte === 4*16) {
+    } else if (byte === 4 * 16) {
       sigs.push(ss.readVarBytes());
     }
   }

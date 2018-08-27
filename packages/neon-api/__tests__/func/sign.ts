@@ -59,7 +59,9 @@ describe("signWithPrivateKey", () => {
   test("produces signingFunction", async () => {
     const expected = jest.fn();
     const mockSignature = jest.fn();
-    const mockWitness = { serialize: jest.fn().mockImplementationOnce(() => expected) };
+    const mockWitness = {
+      serialize: jest.fn().mockImplementationOnce(() => expected)
+    };
     const mockTx = jest.fn();
     const mockPublicKey = jest.fn();
     wallet.sign.mockImplementationOnce(() => mockSignature);
@@ -71,6 +73,9 @@ describe("signWithPrivateKey", () => {
     const result = await signingFunction(mockTx as any, mockPublicKey as any);
     expect(result).toBe(expected);
     expect(wallet.sign).toBeCalledWith(mockTx, "key");
-    expect(tx.Witness.fromSignature).toBeCalledWith(mockSignature, mockPublicKey);
+    expect(tx.Witness.fromSignature).toBeCalledWith(
+      mockSignature,
+      mockPublicKey
+    );
   });
 });

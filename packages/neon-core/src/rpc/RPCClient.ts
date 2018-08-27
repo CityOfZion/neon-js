@@ -11,9 +11,9 @@ const log = logger("rpc");
 const versionRegex = /NEO:(\d+\.\d+\.\d+)/;
 
 export interface Validator {
-  publickey: string
-  votes: string
-  active: boolean
+  publickey: string;
+  votes: string;
+  active: boolean;
 }
 
 /**
@@ -229,10 +229,10 @@ export class RPCClient {
   /**
    * Gets the list of validators available for voting.
    */
-  public async getValidators():Promise<Validator[]> {
+  public async getValidators(): Promise<Validator[]> {
     const response = await this.execute(Query.getValidators());
     return response.result;
-}
+  }
   /**
    * Gets the version of the NEO node. This method will never be blocked by version. This method will also update the current Client's version to the one received.
    */

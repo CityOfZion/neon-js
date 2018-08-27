@@ -33,8 +33,15 @@ export function compareObject(
   return true;
 }
 
-export function compareUnsortedPlainArrays(current: any[], other: any[]):boolean {
-  if (!Array.isArray(current) || !Array.isArray(other) ||current.length !== other.length) {
+export function compareUnsortedPlainArrays(
+  current: any[],
+  other: any[]
+): boolean {
+  if (
+    !Array.isArray(current) ||
+    !Array.isArray(other) ||
+    current.length !== other.length
+  ) {
     return false;
   }
   for (let i = 0; i < current.length; i++) {
@@ -45,12 +52,12 @@ export function compareUnsortedPlainArrays(current: any[], other: any[]):boolean
   return true;
 }
 
-export function compareArray(current: any[], other: any[]):boolean {
+export function compareArray(current: any[], other: any[]): boolean {
   if (current.length !== other.length) {
     return false;
   }
   for (let i = 0; i < current.length; i++) {
-    if (typeof (current[i]) === "object" && typeof (other[i]) === "object") {
+    if (typeof current[i] === "object" && typeof other[i] === "object") {
       const objectEquality = compareObject(current[i], other[i]);
       if (!objectEquality) {
         return false;

@@ -184,7 +184,7 @@ export class Query {
   public static getValidators(): Query {
     return new Query({
       method: "getvalidators"
-    })
+    });
   }
 
   /**
@@ -303,7 +303,7 @@ export class Query {
   /**
    * Attaches a parser method to the Query. This method will be used to parse the response.
    */
-  public parseWith(parser: (res:any) => any) {
+  public parseWith(parser: (res: any) => any) {
     this.parse = parser;
     return this;
   }

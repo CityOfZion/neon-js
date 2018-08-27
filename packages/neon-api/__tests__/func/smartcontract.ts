@@ -58,7 +58,9 @@ describe("addSignatureIfExecutingAsSmartContract", () => {
       sendingFromSmartContract: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
       tx: { addAttribute: jest.fn(), scripts: [] }
     } as any;
-    getVerificationSignatureForSmartContract.mockResolvedValueOnce(mockSignature);
+    getVerificationSignatureForSmartContract.mockResolvedValueOnce(
+      mockSignature
+    );
     const result = await smartcontract.addSignatureIfExecutingAsSmartContract(
       config
     );

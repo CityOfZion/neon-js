@@ -11,13 +11,7 @@ import base58 from "bs58";
 import { Buffer } from "buffer";
 import WIF from "wif";
 import { ADDR_VERSION } from "../consts";
-import {
-  ab2hexstring,
-  hash160,
-  hash256,
-  hexstring2ab,
-  reverseHex
-} from "../u";
+import { ab2hexstring, hash160, hash256, hexstring2ab, reverseHex } from "../u";
 import { generateRandomArray } from "../u/random";
 import { curve, sign } from "./signing";
 
@@ -132,7 +126,7 @@ export const getScriptHashFromAddress = (address: string): string => {
  * @return Signature. Does not include tx.
  */
 export const generateSignature = (tx: string, privateKey: string): string => {
-  return sign(tx,privateKey);
+  return sign(tx, privateKey);
 };
 
 /**

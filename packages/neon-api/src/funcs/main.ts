@@ -1,12 +1,12 @@
 import { CONST, logging, tx, wallet } from "@cityofzion/neon-core";
 import { extractDump, modifyTransactionForEmptyTransaction } from "./common";
-import { createClaimTx, createContractTx, createInvocationTx, createStateTx } from "./create";
 import {
-  fillBalance,
-  fillClaims,
-  fillSigningFunction,
-  fillUrl
-} from "./fill";
+  createClaimTx,
+  createContractTx,
+  createInvocationTx,
+  createStateTx
+} from "./create";
+import { fillBalance, fillClaims, fillSigningFunction, fillUrl } from "./fill";
 import { addAttributeForMintToken, addSignatureForMintToken } from "./mint";
 import { applyTxToBalance, sendTx } from "./send";
 import { signTx } from "./sign";
@@ -112,22 +112,22 @@ export async function doInvoke(
  */
 export async function setupVote(
   config: SetupVoteConfig
-):Promise<SetupVoteConfig> {
+): Promise<SetupVoteConfig> {
   return fillSigningFunction(config)
-  .then(fillUrl)
-  .then(fillBalance)
-  .then(createStateTx)
-  .then(addAttributeIfExecutingAsSmartContract)
-  .then(modifyTransactionForEmptyTransaction)
-  .then(signTx)
-  .then(addSignatureIfExecutingAsSmartContract)
-  .then(sendTx)
-  .then(applyTxToBalance)
-  .catch((err: Error) => {
-    const dump = extractDump(config);
-    log.error(`setupVote failed with: ${err.message}. Dumping config`, dump);
-    throw err;
-  });
+    .then(fillUrl)
+    .then(fillBalance)
+    .then(createStateTx)
+    .then(addAttributeIfExecutingAsSmartContract)
+    .then(modifyTransactionForEmptyTransaction)
+    .then(signTx)
+    .then(addSignatureIfExecutingAsSmartContract)
+    .then(sendTx)
+    .then(applyTxToBalance)
+    .catch((err: Error) => {
+      const dump = extractDump(config);
+      log.error(`setupVote failed with: ${err.message}. Dumping config`, dump);
+      throw err;
+    });
 }
 
 export function makeIntent(
