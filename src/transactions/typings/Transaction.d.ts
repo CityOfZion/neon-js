@@ -35,7 +35,7 @@ export class Transaction {
   static createContractTx(balances: Balance, intents: TransactionOutput[], override?: object, fee?: number): Transaction
 
   /** Creates an InvocationTransaction with the given parameters. */
-  static createInvocationTx(balance: Balance, intents: TransactionOutput[], invoke: object | string, gasCost: number, override: object): Transaction
+  static createInvocationTx(balance: Balance, intents: TransactionOutput[], invoke: object | string, gasCost?: number, override?: object, fee?: number): Transaction
 
   static deserialize(hexstring: string): Transaction
 
