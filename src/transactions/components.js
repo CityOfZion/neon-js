@@ -1,5 +1,5 @@
 import { num2hexstring, num2VarInt, reverseHex, Fixed8 } from '../utils'
-import { getScriptHashFromAddress } from '../wallet'
+import { getScriptHashFromAddress, getPublicKeysFromVerificationScript, getSignaturesFromInvocationScript, getSigningThresholdFromVerificationScript, verifySignature } from '../wallet'
 import { ASSET_ID } from '../consts'
 
 /**
@@ -157,4 +157,56 @@ export const deserializeWitness = (stream) => {
   const invocationScript = stream.readVarBytes()
   const verificationScript = stream.readVarBytes()
   return { invocationScript, verificationScript }
+}
+
+export const Witness = {
+  buildMultiSig: function (tx, sigs, acctOrVerificationScript) {
+    const verificationScript =
+    typeof acctOrVerificationScript === 'string'
+      ? acctOrVerificationScript
+      : acctOrVerificationScript.contract.script
+
+    const publicKeys = getPublicKeysFromVerificationScript(verificationScript)
+    const orderedSigs = Array(publicKeys.length).fill('')
+    sigs.forEach(element => {
+      if (typeof element === 'string') {
+        const position = publicKeys.findIndex(key => verifySignature(tx, element, key))
+        if (position === -1) {
+          throw new Error(`Invalid signature given: ${element}`)
+        }
+        orderedSigs[position] = element
+      } else if (typeof element === 'object') {
+        const keys = getPublicKeysFromVerificationScript(
+          element.verificationScript
+        )
+        if (keys.length !== 1) {
+          throw new Error('Given witness contains more than 1 public key!')
+        }
+        const position = publicKeys.indexOf(keys[0])
+        orderedSigs[position] = getSignaturesFromInvocationScript(
+          element.invocationScript
+        )[0]
+      } else {
+        throw new Error('Unable to process given signature')
+      }
+    })
+    const signingThreshold = getSigningThresholdFromVerificationScript(
+      verificationScript
+    )
+    const validSigs = orderedSigs.filter(s => s !== '')
+    if (validSigs.length < signingThreshold) {
+      throw new Error(
+        `Insufficient signatures: expected ${signingThreshold} but got ${
+          validSigs.length
+        } instead`
+      )
+    }
+    return {
+      invocationScript: validSigs
+        .slice(0, signingThreshold)
+        .map(s => '40' + s)
+        .join(''),
+      verificationScript
+    }
+  }
 }

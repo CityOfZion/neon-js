@@ -247,7 +247,7 @@ export class StringStream {
    */
   peek (bytes = 1) {
     if (this.isEmpty()) return ''
-    return this.substr(this.ptr, bytes * 2)
+    return this.str.substr(this.ptr, bytes * 2)
   }
 
   /**

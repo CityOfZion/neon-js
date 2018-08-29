@@ -9,3 +9,4 @@ export * from './typings/message';
 export * from './typings/nep2';
 export * from './typings/verify';
 export * from './typings/Wallet';
+export * from './typings/multisig';

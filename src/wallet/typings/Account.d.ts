@@ -26,6 +26,9 @@ export class Account {
   scriptHash: string
   address: string
 
+  /** Create a multi-sig account from a list of public keys */
+  static createMultiSig(signingThreshold: number, publicKeys: string[]): Account
+
   /** Retrieves the Public Key in encoded / unencoded form. */
   getPublicKey(encoded: boolean): string
 

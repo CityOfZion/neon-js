@@ -51,3 +51,7 @@ export function serializeWitness(witness: Witness): string
 
 /** Deserializes a stream into a Witness */
 export function deserializeWitness(stream: StringStream): Witness
+
+export const Witness :{
+  buildMultiSig: (tx: string, sigs:Array<string | Witness>, acctOrVerificationScript: Account|Witness) => Witness
+}
