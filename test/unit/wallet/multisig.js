@@ -1,4 +1,4 @@
-import {getSigningThresholdFromVerificationScript, getPublicKeysFromVerificationScript, getSignaturesFromInvocationScript} from '../../../src/wallet/multisig'
+import { getSigningThresholdFromVerificationScript, getPublicKeysFromVerificationScript, getSignaturesFromInvocationScript } from '../../../src/wallet/multisig'
 
 describe('getSigningThresholdFromVerificationScript', () => {
   it('returns correct value(1)', () => {

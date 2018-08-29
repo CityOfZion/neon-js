@@ -6,7 +6,7 @@ import { ASSET_ID } from '../consts'
 import { Fixed8, reverseHex } from '../utils'
 import { networks, httpsOnly, timeout } from '../settings'
 import logger from '../logging'
-import {raceToSuccess} from './common'
+import { raceToSuccess } from './common'
 
 const log = logger('api')
 export const name = 'neonDB'
