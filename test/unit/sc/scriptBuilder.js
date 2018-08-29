@@ -27,11 +27,11 @@ describe('ScriptBuilder', function () {
       },
       {
         int: 500,
-        result: '08f401000000000000'
+        result: '02f401'
       },
       {
         int: 65536,
-        result: '080000010000000000'
+        result: '03000001'
       }
     ]
 

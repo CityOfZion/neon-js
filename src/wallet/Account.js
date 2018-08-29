@@ -2,6 +2,8 @@ import * as core from './core'
 import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2, isScriptHash } from './verify'
 import { encrypt, decrypt } from './nep2'
 import { DEFAULT_ACCOUNT_CONTRACT } from '../consts'
+import {constructMultiSigVerificationScript} from './multisig'
+import {hash160, reverseHex} from '../utils'
 import util from 'util'
 import logger from '../logging'
 
@@ -17,6 +19,28 @@ const log = logger('wallet')
  * @param {string|object} str - WIF/ Private Key / Public Key / Address or a Wallet Account object.
  */
 class Account {
+  /**
+   * Create a multi-sig account from a list of public keys
+   * @param {number} signingThreshold Minimum number of signatures required for verification. Must be larger than 0 and less than number of keys provided.
+   * @param {string[]} publicKeys List of public keys to form the account. 2-16 keys allowed. Order is important.
+   */
+  static createMultiSig (signingThreshold, publicKeys) {
+    const verificationScript = constructMultiSigVerificationScript(
+      signingThreshold,
+      publicKeys
+    )
+    return new Account({
+      contract: {
+        script: verificationScript,
+        parameters: Array(signingThreshold).map((_, i) => ({
+          name: `signature${i}`,
+          type: 'Signature'
+        })),
+        deployed: false
+      }
+    })
+  }
+
   constructor (str = null) {
     this.extra = null
     this.isDefault = false
@@ -51,11 +75,11 @@ class Account {
       throw new ReferenceError(`Invalid input: ${str}`)
     }
 
+    this._updateContractScript()
     // Attempts to make address the default label of the Account.
     if (!this.label) {
       try { this.label = this.address } catch (err) { this.label = '' }
     }
-    this._updateContractScript()
   }
 
   get [Symbol.toStringTag] () {
@@ -73,9 +97,20 @@ class Account {
       if (this.contract.script === '') {
         const publicKey = this.publicKey
         this.contract.script = core.getVerificationScriptFromPublicKey(publicKey)
+        this._scriptHash = this._getScriptHashFromVerificationScript()
         log.debug(`Updated ContractScript for Account: ${this.label}`)
       }
     } catch (e) { }
+  }
+
+  _getScriptHashFromVerificationScript () {
+    return reverseHex(hash160(this.contract.script))
+  }
+
+  get isMultiSig () {
+    return !!(this.contract &&
+      this.contract.script &&
+      this.contract.script.slice(this.contract.script.length - 2) === 'ae')
   }
 
   /**
@@ -155,6 +190,9 @@ class Account {
     } else {
       if (this._address) {
         this._scriptHash = core.getScriptHashFromAddress(this.address)
+        return this._scriptHash
+      } else if (this.contract.script) {
+        this._scriptHash = this._getScriptHashFromVerificationScript()
         return this._scriptHash
       } else {
         this._scriptHash = core.getScriptHashFromPublicKey(this.publicKey)

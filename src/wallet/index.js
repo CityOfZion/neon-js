@@ -53,6 +53,7 @@ export * from './core'
 export * from './verify'
 export * from './nep2'
 export * from './message'
+export * from './multisig'
 export {
   Account,
   Balance,
