@@ -93,7 +93,7 @@ describe('Core API', function () {
 
   describe('buildDescriptors', function () {
     it('converts candidateKeys to descriptors', () => {
-      const config = Object.assign({}, baseConfig, {candidateKeys: ['02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef', '031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9']})
+      const config = Object.assign({}, baseConfig, { candidateKeys: ['02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef', '031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9'] })
 
       return core.buildDescriptors(config)
         .then(conf => {

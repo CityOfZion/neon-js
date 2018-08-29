@@ -191,7 +191,7 @@ describe('Components', function () {
       })
 
       it('constructs Witness given random signatures/witnesses and Account', () => {
-        const result = c.Witness.buildMultiSig(msg, [signatures[1], signatures[2], witnesses[0]], verificationScript)
+        const result = c.Witness.buildMultiSig(msg, [signatures[1], signatures[2], witnesses[0]], account)
         result.verificationScript.should.equal(verificationScript)
         result.invocationScript.should.equal(orderedSigExpectedInvocationScript)
       })
