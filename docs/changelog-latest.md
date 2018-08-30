@@ -3,6 +3,17 @@ id: changelog-latest
 title: Changelog (v3)
 ---
 
+3.11.0
+======
+
+- Wallet
+
+  - Add multi-sig support through `Account.createMultiSig`.
+
+- Transaction
+
+  - Add multi-sig support through `Witness.buildMultiSig`.
+
 3.10.1
 ======
 
