@@ -63,7 +63,8 @@
     "build:docs": "cd website && npm run build",
     "deploy:docs": "cd website && npm run publish-gh-pages",
     "rebuild": "rm -rf ./node_modules && npm install && ./node_modules/.bin/webpack",
-    "prepublishOnly": "npm run test:typings && npm run lint && npm run build:prod"
+    "prepublishOnly": "npm run test:typings && npm run lint",
+    "prepare": "npm run build:prod"
   },
   "repository": {
     "type": "git",
