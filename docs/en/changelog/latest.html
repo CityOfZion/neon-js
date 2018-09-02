@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Changelog (v4) · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="4.0.0"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Changelog (v4) · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="4.0.0"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
+        document.addEventListener("DOMContentLoaded", function(){
+          addBackToTop(
+            {"zIndex":100}
+          )
+        });
+        </script><link rel="stylesheet" href="/neon-js/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/neon-js/en"><img class="logo" src="/neon-js/img/logo.svg" alt="neon-js"/><h2 class="headerTitleWithLogo">neon-js</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/neon-js/docs/en/installation.html" target="_self">Docs</a></li><li class=""><a href="/neon-js/docs/en/api/index.html" target="_self">API</a></li><li class="siteNavGroupActive siteNavItemActive"><a href="/neon-js/docs/en/changelog/latest.html" target="_self">Changelog</a></li><li class=""><a href="/neon-js/en/help.html" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Latest</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Latest</h3><ul><li class="navListItem navListItemActive"><a class="navItem" href="/neon-js/docs/en/changelog/latest.html">Changelog (v4)</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Past Versions</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/changelog/v3.html">Changelog (v3)</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/changelog/v2.html">Changelog (v2)</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/changelog/v1.html">Changelog (v1)</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Changelog (v4)</h1></header><article><div><span><h1><a class="anchor" aria-hidden="true" id="400"></a><a href="#400" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>4.0.0</h1>
+<ul>
+<li><p>Publishing</p>
+<blockquote>
+<p>Version 4 will mark the start of the mono-repository for neon-js. This means that there will be multiple packages being published from this repository. <code>neon-js</code> will still fulfil the role of the package for browser based interaction with the NEO blockchain. <code>neon-core</code> is the core package that contains most of the code from the old <code>neon-js</code>. However, the semantic API is moved to <code>neon-js</code> and will not be included in the core package. <code>neon-api</code> and <code>neon-nep5</code> are extracted plugin packages that relies on the <code>neon-core</code> package. They contain functionality that is not integral to the workings of the blockchain but are useful in many situations.</p>
+</blockquote></li>
+<li><p>API</p>
+<blockquote>
+<p>API is now extracted into its own package under <code>neon-api</code>. The core functionalities offered by this package are high level API methods and 3rd party endpoint calls.</p>
+</blockquote>
+<ul>
+<li>Managed API methods now require an API provider under the property <code>api</code>. This API provider will be used as the main source for data retrieval.</li>
+<li>The properties <code>net</code>, <code>address</code> and <code>privateKey</code> is now deprecated. Please use <code>api</code> to denote the specific network and provider you wish to use and <code>account</code> to replace <code>address</code> and <code>privateKey</code>.</li>
+<li>The <code>Provider</code> interface is now a wrapper for each API provider.</li>
+<li><code>sendFromSmartContract</code> is now a string property that is the scripthash of the smart contract that you are manipulating.</li>
+<li>Removed NEP5 methods from API. They now live in the <code>neon-nep5</code> package.</li>
+<li>Removed <code>cmc</code> from API.</li>
+</ul></li>
+<li><p>NEP5</p>
+<blockquote>
+<p>NEP5 is now extracted into its own package under <code>neon-nep5</code>. The core functionalities offered by this package are high level common functions and ABI script functions.</p>
+</blockquote>
+<ul>
+<li>ABI functions are available to easily create scripts for each documented NEP5 function.</li>
+<li>Change output of <code>getTokenBalances</code> to output a dictionary of symbols to Fixed8 instead of symbols to numbers.</li>
+</ul></li>
+<li><p>Core</p>
+<blockquote>
+<p><code>neon-core</code> forms the base package and contains all the modules required for interaction with the blockchain.</p>
+</blockquote>
+<ul>
+<li><p>Utility</p>
+<ul>
+<li>Methods outputting arrayBuffers are now standardised to output UInt8Arrays.</li>
+<li>bignumber.js package is updated to <strong>7.2</strong> which contains breaking changes. Fixed8 now implements some of the common aliases (ceil, floor, equals, round) but not all changes are covered.</li>
+</ul></li>
+<li><p>Wallet</p>
+<ul>
+<li>All components are now ES6 classes (AssetBalance, ClaimItem, Coin).</li>
+<li>Changed message signing API to not perform any message transformation (previously it assumed input was ASCII and converted it to hex). This was done so all signing methods can rely on the same underlying methods (be it message or transaction signing).</li>
+<li>Encryption and decryption is now fully async.</li>
+<li>Add support for multi-sig Account creation through <code>Account.createMultiSig</code>.</li>
+</ul></li>
+<li><p>Transaction</p>
+<ul>
+<li>All components are now ES6 classes (TransactionAttribute, TransactionInput, TransactionOutput, Witness).</li>
+<li>Individual transaction types are now ES6 classes.</li>
+<li><code>Transaction</code> class is now a static class helper.</li>
+<li>Add support for multi-sig signature through <code>Witness.buildMultiSig</code>.</li>
+</ul></li>
+<li><p>Smart Contract</p>
+<ul>
+<li>Add <code>StackItem</code> class.</li>
+</ul></li>
+<li><p>RPC</p>
+<ul>
+<li>Overhaul parsers. Use <code>BuildParser</code> (replaces VMZip) to build a list of parsers to parse the results.</li>
+<li>Included several common parsers to use.</li>
+</ul></li>
+</ul></li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-next button" href="/neon-js/docs/en/changelog/v3.html">Changelog (v3) →</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>

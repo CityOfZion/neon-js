@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>NEP5 · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="The `nep5` module is available as the plugin `@cityofzion/neon-nep5`."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="NEP5 · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="The `nep5` module is available as the plugin `@cityofzion/neon-nep5`."/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
+        document.addEventListener("DOMContentLoaded", function(){
+          addBackToTop(
+            {"zIndex":100}
+          )
+        });
+        </script><link rel="stylesheet" href="/neon-js/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/neon-js/en"><img class="logo" src="/neon-js/img/logo.svg" alt="neon-js"/><h2 class="headerTitleWithLogo">neon-js</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/neon-js/docs/en/installation.html" target="_self">Docs</a></li><li class="siteNavGroupActive"><a href="/neon-js/docs/en/api/index.html" target="_self">API</a></li><li class=""><a href="/neon-js/docs/en/changelog/latest.html" target="_self">Changelog</a></li><li class=""><a href="/neon-js/en/help.html" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Plugin Modules</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Overview</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api/index.html">API</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Core Modules</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api/core/wallet.html">Wallet</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api/core/tx.html">Transactions</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api/core/rpc.html">RPC</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api/core/sc.html">Smart Contract</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api/core/u.html">Utility</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api/core/const.html">Constants</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api/core/settings.html">Settings</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api/core/logging.html">Logging</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Plugin Modules</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/api/plugin/api.html">api</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/neon-js/docs/en/api/plugin/nep5.html">NEP5</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">NEP5</h1></header><article><div><span><p>The <code>nep5</code> module is available as the plugin <code>@cityofzion/neon-nep5</code>.</p>
+<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
+<span class="hljs-keyword">const</span> rpxScriptHash = Neon.CONST.CONTRACTS.TEST_RPX;
+Neon.get.tokenInfo(<span class="hljs-string">"http://seed1.neo.org:20332"</span>, rpxScriptHash);
+Neon.get.tokenBalance(<span class="hljs-string">"http://seed1.neo.org:20332"</span>, rpxScriptHash, address);
+
+<span class="hljs-keyword">import</span> { api } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
+api.nep5.getTokenInfo(<span class="hljs-string">"http://seed1.neo.org:20332"</span>, rpxScriptHash);
+api.nep5.getTokenBalance(<span class="hljs-string">"http://seed1.neo.org:20332"</span>, rpxScriptHash);
+<span class="hljs-comment">// This is a combination of both info and balance within a single call</span>
+api.nep5.getToken(<span class="hljs-string">"http://seed1.neo.org:20332"</span>, rpxScriptHash, address);
+</code></pre>
+<p>The NEP5 Standard describes a set of methods to implement as a token in a smart contract. This is the NEO equivalent of the ERC-20 token standard in Ethereum.</p>
+<p>This package offers 2 sets of methods:</p>
+<ol>
+<li>The ABI as functions to easily generate scripts for the functions.</li>
+<li>High level API that offer common functionality. (This set of methods rely on the NEO node having version &gt;= 2.3.3.)</li>
+</ol>
+<hr>
+<h2><a class="anchor" aria-hidden="true" id="abi"></a><a href="#abi" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>ABI</h2>
+<p>The ABI functions follow the standard as proposed in the NEP-5 document. Each function is named after its respective contract method and is initialized with the scripthash of the NEP-5 contract followed by any arguments necessary.</p>
+<p>The initialization function returns a function that is primed to generate the script. This function takes an optional ScriptBuilder to attach the script to.</p>
+<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> { nep5, sc } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
+<span class="hljs-keyword">const</span> nameScript: <span class="hljs-built_in">string</span> = nep5.name(scriptHash)().str;
+
+<span class="hljs-keyword">const</span> balanceOfFunc = nep5.balanceOf(scriptHash, addr);
+<span class="hljs-keyword">const</span> sb = <span class="hljs-keyword">new</span> sc.ScriptBuilder();
+<span class="hljs-built_in">console</span>.log(sb.str); <span class="hljs-comment">// empty string</span>
+balanceOfFunc(sb);
+<span class="hljs-built_in">console</span>.log(sb.str); <span class="hljs-comment">// script for getting balance of &lt;addr&gt; from contract &lt;scriptHash&gt;</span>
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="methods"></a><a href="#methods" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
+<p>The 2 main methods available are <code>getToken</code> and <code>getTokenBalance</code>.</p>
+<p><code>getToken</code> returns an object containing the various information about the token such as name, symbol, etc. You may put in an optional address and the balance of the address is also returned in the object.</p>
+<p><code>getTokenBalance</code> returns only the balance of the address for the specified smart contract.</p>
+<p>Do note that both methods are adjusted for the number of decimals available for the token in question.</p>
+<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> { nep5 } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
+
+<span class="hljs-keyword">const</span> tokenInfo = <span class="hljs-keyword">await</span> nep5.getToken(rpcAddr, scriptHash);
+<span class="hljs-keyword">const</span> balance = <span class="hljs-keyword">await</span> nep5.getTokenBalance(rpcAddr, scriptHash, addr);
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/en/api/plugin/api.html">← api</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#abi">ABI</a></li><li><a href="#methods">Methods</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>

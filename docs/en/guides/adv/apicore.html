@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Advanced - API Core Components · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="In this guide, we will discuss the features of the 3 managed functions, the processes and the features used at each step."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Advanced - API Core Components · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="In this guide, we will discuss the features of the 3 managed functions, the processes and the features used at each step."/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
+        document.addEventListener("DOMContentLoaded", function(){
+          addBackToTop(
+            {"zIndex":100}
+          )
+        });
+        </script><link rel="stylesheet" href="/neon-js/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/neon-js/en"><img class="logo" src="/neon-js/img/logo.svg" alt="neon-js"/><h2 class="headerTitleWithLogo">neon-js</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/neon-js/docs/en/installation.html" target="_self">Docs</a></li><li class=""><a href="/neon-js/docs/en/api/index.html" target="_self">API</a></li><li class=""><a href="/neon-js/docs/en/changelog/latest.html" target="_self">Changelog</a></li><li class=""><a href="/neon-js/en/help.html" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Guides</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/overview.html">Overview</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/installation.html">Installation</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/structure.html">Structure</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/basic/sendasset.html">Basic - Sending assets</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/basic/claimgas.html">Basic - Claiming Gas</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/basic/createscript.html">Basic - Create Smart Contract Script</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/basic/invoke.html">Basic - Invoking a Smart Contract</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/basic/privnet.html">Basic - Using a Private Net</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/adv/multitx.html">Advanced - Sending multiple transactions in a block</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/neon-js/docs/en/guides/adv/apicore.html">Advanced - API Core Components</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/adv/multisig.html">Advanced - Working with multi-sig contracts</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Advanced - API Core Components</h1></header><article><div><span><p>In this guide, we will discuss the features of the 3 managed functions, the processes and the features used at each step.</p>
+<p>The 3 managed methods are:</p>
+<ul>
+<li>sendAsset</li>
+<li>claimGas</li>
+<li>doInvoke</li>
+</ul>
+<p>They represent the 3 major functions available to the NEO network at the moment. Each method basically takes in a configuration object and attempts to create and send a transaction based on the configuration provided. These methods are maintained by <code>neon-js</code> and act as a simple beginner template for people to start sending transactions.</p>
+<p>All 3 methods follow a similar flow with minor differences based on their requirements. The methods accept a configuration object and return the same configuration object at the end. Do note that the methods mutate the configuration object passed in and thus the objects are not reusable.</p>
+<p>These are the available properties for a configuration object:</p>
+<pre><code class="hljs css languages- ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> apiConfig {
+  api: Provider; <span class="hljs-comment">// The Provider to request UTXO and node information from</span>
+  account: wallet.Account; <span class="hljs-comment">// An account.</span>
+  url?: <span class="hljs-built_in">string</span>; <span class="hljs-comment">// Optional override for RPC node.</span>
+  fees?: <span class="hljs-built_in">number</span>; <span class="hljs-comment">// Any priority fees</span>
+  override?: object; <span class="hljs-comment">// Any overrides for transaction</span>
+  signingFunction?: (
+    tx: <span class="hljs-built_in">string</span>,
+    publicKey: <span class="hljs-built_in">string</span>
+  ) =&gt; <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">string</span> | <span class="hljs-built_in">string</span>[]&gt;; <span class="hljs-comment">// A signing function if the account does not contain the private key</span>
+  tx?: T;
+  response?: {
+    result: <span class="hljs-built_in">boolean</span>;
+    txid?: <span class="hljs-built_in">string</span>;
+  };
+  sendingFromSmartContract?: <span class="hljs-built_in">string</span>; <span class="hljs-comment">// The smart contract script hash if using assets from it</span>
+}
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="information-retrieval"></a><a href="#information-retrieval" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Information Retrieval</h2>
+<p>This is the first step of every method. Based on the properties <code>api</code> and <code>account</code> provided, <code>neon-js</code> will attempt to retrieve the required information in order to construct the transaction.</p>
+<p><code>api</code> is a Provider client that will request the necessary information such as UTXO and node information.</p>
+<p><code>account</code> is the account that you wish to send from. This is the address from which the assets originate from. This field is used to query your balance or claims from the 3rd party provider.</p>
+<p>Once the information is retrieved, it is appended to the configuration object under properties like <code>url</code>, <code>balance</code>, etc. and passed onto the next step.</p>
+<p>You may override any of these retrievals by populating the properties first. For example, if you wish to direct your calls to a specific NEO node, you should populate <code>url</code> with your intended url.</p>
+<h2><a class="anchor" aria-hidden="true" id="transaction-building"></a><a href="#transaction-building" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Transaction Building</h2>
+<p>The <code>intents</code> property is used to specify the outputs of the transaction. Do note that the actual outputs will be a superset of the <code>intents</code> object due to leftover change when calculating.</p>
+<p>The <code>override</code> object is passed in to override any transaction properties after building the transaction.</p>
+<p>The information in the object is passed into the transaction building call and the built transaction is appended to the configuration under the property <code>tx</code>.</p>
+<h2><a class="anchor" aria-hidden="true" id="transaction-signing"></a><a href="#transaction-signing" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Transaction Signing</h2>
+<p>For signing, a private key in <code>account</code> from the configuration object is used to sign the object. An alternative to this is to provide a signing function under the property <code>signingFunction</code>.</p>
+<p>Instead of sending a user's private key to the config object, we can send the public key and a function that will sign the transaction.
+This function, the signingFunction, will receive the transaction and public key as parameters. Now, we can provide logic that retrieves the private key from our user - using the public key to do so - and signs the transaction when we retrieve the key.</p>
+<p>This the current way <code>neon-js</code> interacts with the Ledger Nano S for signing transactions.</p>
+<blockquote>
+<p>Do note that the signing function has to return a Promise!</p>
+</blockquote>
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> Neon , {api} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">signTx</span>(<span class="hljs-params">tx, publicKey</span>) </span>{
+  <span class="hljs-comment">// Sign tx and attach signature onto tx</span>
+  <span class="hljs-comment">// The publicKey passed in is used as a check to ensure that the private and public keys match.</span>
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span>
+    resolve(Neon.sign(tx, privateKey))
+  );
+}
+
+<span class="hljs-keyword">const</span> config = {
+  <span class="hljs-attr">api</span>: <span class="hljs-keyword">new</span> api.neoscan.instance(<span class="hljs-string">'TestNet'</span>),
+  <span class="hljs-attr">script</span>: Neon.create.script({
+    <span class="hljs-attr">scriptHash</span>: <span class="hljs-string">'5b7074e873973a6ed3708862f219a6fbf4d1c411'</span>,
+    <span class="hljs-attr">operation</span>: <span class="hljs-string">'balanceOf'</span>,
+    <span class="hljs-attr">args</span>: [Neon.u.reverseHex(<span class="hljs-string">'cef0c0fdcfe7838eff6ff104f9cdec2922297537'</span>)]
+  }),
+  <span class="hljs-attr">address</span>: account.address,
+  <span class="hljs-attr">publicKey</span>: account.publicKey,
+  <span class="hljs-attr">signingFunction</span>: signTx
+  gas: <span class="hljs-number">1</span>
+}
+
+Neon.doInvoke(config).then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(res);
+});
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="broadcasting"></a><a href="#broadcasting" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Broadcasting</h2>
+<p>In the information retrieval step, the configuration object is populated with the property <code>url</code>. This is the url of the NEO node that is used in this step. A RPC call is constructed at this step and sent to the <code>url</code> and the result appended to the configuration object as <code>response</code>.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/en/guides/adv/multitx.html">← Advanced - Sending multiple transactions in a block</a><a class="docs-next button" href="/neon-js/docs/en/guides/adv/multisig.html">Advanced - Working with multi-sig contracts →</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#information-retrieval">Information Retrieval</a></li><li><a href="#transaction-building">Transaction Building</a></li><li><a href="#transaction-signing">Transaction Signing</a></li><li><a href="#broadcasting">Broadcasting</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>
