@@ -48,7 +48,7 @@ const siteConfig = {
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks
     theme: 'dracula',
-    defaultLang:'typescript'
+    defaultLang:'javascript'
   },
   scripts: ['https://buttons.github.io/buttons.js', 'https://unpkg.com/@cityofzion/neon-js'],
   // You may provide arbitrary config keys to be used as needed by your template.

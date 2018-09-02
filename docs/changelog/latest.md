@@ -37,11 +37,13 @@ title: Changelog (v4)
     - All components are now ES6 classes (AssetBalance, ClaimItem, Coin).
     - Changed message signing API to not perform any message transformation (previously it assumed input was ASCII and converted it to hex). This was done so all signing methods can rely on the same underlying methods (be it message or transaction signing).
     - Encryption and decryption is now fully async.
+    - Add support for multi-sig Account creation through `Account.createMultiSig`.
 
   - Transaction
     - All components are now ES6 classes (TransactionAttribute, TransactionInput, TransactionOutput, Witness).
     - Individual transaction types are now ES6 classes.
     - `Transaction` class is now a static class helper.
+    - Add support for multi-sig signature through `Witness.buildMultiSig`.
 
   - Smart Contract
     - Add `StackItem` class.
