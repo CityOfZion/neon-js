@@ -1,8 +1,10 @@
 {
-  "compilerOptions": {
-    "strict": true
-  },
-    "include": [
-        "src/**/*.d.ts"
-    ]
+  "files": [],
+  "include": [],
+  "references": [
+    { "path": "./packages/neon-core" },
+    { "path": "./packages/neon-api" },
+    { "path": "./packages/neon-nep5" },
+    { "path": "./packages/neon-js" }
+  ]
 }
