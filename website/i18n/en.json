@@ -20,6 +20,7 @@
     "changelog/v2": "Changelog (v2)",
     "changelog/v3": "Changelog (v3)",
     "guides/adv/apicore": "Advanced - API Core Components",
+    "guides/adv/multisig": "Advanced - Working with multi-sig contracts",
     "guides/adv/multitx": "Advanced - Sending multiple transactions in a block",
     "guides/basic/claimgas": "Basic - Claiming Gas",
     "guides/basic/createscript": "Basic - Create Smart Contract Script",

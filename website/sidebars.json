@@ -8,7 +8,8 @@
       "guides/basic/invoke",
       "guides/basic/privnet",
       "guides/adv/multitx",
-      "guides/adv/apicore"
+      "guides/adv/apicore",
+      "guides/adv/multisig"
     ]
   },
   "api": {
