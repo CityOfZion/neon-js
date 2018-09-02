@@ -6,6 +6,9 @@
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "neo",
     "antshares",
@@ -44,7 +47,7 @@
     "axios": "^0.18.0"
   },
   "peerDependencies": {
-    "@cityofzion/neon-core": "^4.0.0-next.1"
+    "@cityofzion/neon-core": "^4.0.0"
   },
   "files": [
     "lib/"

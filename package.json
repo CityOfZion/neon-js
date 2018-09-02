@@ -6,7 +6,6 @@
     "dist": "lerna run dist",
     "lint": "tslint packages/**/src/**/*.ts packages/**/__tests__/**/*.ts packages/**/__integration__/**/*.ts",
     "precommit": "yarn lint && yarn pretty",
-    "prepublishOnly": "yarn clean && yarn build && yarn dist",
     "prestart": "yarn build && yarn dist",
     "pretty": "prettier --write --loglevel=warn \"**/{src,__{tests,integration}__}/**/*.ts\"",
     "start": "jest --watch",
