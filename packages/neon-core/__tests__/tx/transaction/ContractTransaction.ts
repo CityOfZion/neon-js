@@ -2,13 +2,11 @@ import {
   Transaction,
   TransactionLike,
   TransactionType,
-  Witness,
-  TxAttrUsage
+  Witness
 } from "../../../src/tx";
 import ContractTransaction from "../../../src/tx/transaction/ContractTransaction";
 
 import samples from "./contractTx.json";
-import { AssertionError } from "assert";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -156,8 +154,7 @@ describe("AddWitness", () => {
   test("Add empty Witness for smart contract", () => {
     const expected = new Witness({
       invocationScript: "0000",
-      verificationScript:
-        ""
+      verificationScript: ""
     });
     expected.scriptHash = "5b7074e873973a6ed3708862f219a6fbf4d1c411";
     const tx = new ContractTransaction();
@@ -165,18 +162,20 @@ describe("AddWitness", () => {
 
     expect(tx.scripts.length).toEqual(1);
     expect(tx.scripts[0]).toEqual(expected);
-    expect(tx.scripts[0].scriptHash).toEqual("5b7074e873973a6ed3708862f219a6fbf4d1c411");
-  })
+    expect(tx.scripts[0].scriptHash).toEqual(
+      "5b7074e873973a6ed3708862f219a6fbf4d1c411"
+    );
+  });
 
   test("arrange witnesses according to scriptHash", () => {
     const witness1 = new Witness({
-      invocationScript:"0000",
-      verificationScript:""
+      invocationScript: "0000",
+      verificationScript: ""
     });
     witness1.scriptHash = "01";
     const witness2 = new Witness({
-      invocationScript:"0000",
-      verificationScript:""
+      invocationScript: "0000",
+      verificationScript: ""
     });
     witness2.scriptHash = "02";
 
@@ -184,6 +183,6 @@ describe("AddWitness", () => {
     tx.addWitness(witness2);
     tx.addWitness(witness1);
     expect(tx.scripts.length).toEqual(2);
-    expect(tx.scripts).toEqual([witness1, witness2])
-  })
+    expect(tx.scripts).toEqual([witness1, witness2]);
+  });
 });
