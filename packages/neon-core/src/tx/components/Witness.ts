@@ -1,13 +1,11 @@
-import { num2VarInt, StringStream } from "../../u";
+import { hash160, num2VarInt, reverseHex, StringStream } from "../../u";
 import {
   Account,
+  getPublicKeysFromVerificationScript,
+  getSignaturesFromInvocationScript,
   getSigningThresholdFromVerificationScript,
   getVerificationScriptFromPublicKey,
   verify
-} from "../../wallet";
-import {
-  getPublicKeysFromVerificationScript,
-  getSignaturesFromInvocationScript
 } from "../../wallet";
 
 export interface WitnessLike {
@@ -16,7 +14,7 @@ export interface WitnessLike {
 }
 
 /**
- * A Witness is a a section of VM code that is ran during the verification of the transaction.
+ * A Witness is a section of VM code that is ran during the verification of the transaction.
  *
  * For example, the most common witness is the VM Script that pushes the ECDSA signature into the VM and calling CHECKSIG to prove the authority to spend the TransactionInputs in the transaction.
  */
@@ -101,6 +99,9 @@ export class Witness {
   public invocationScript: string;
   public verificationScript: string;
 
+  // tslint:disable-next-line:variable-name
+  private _scriptHash: string = "";
+
   constructor(obj: WitnessLike) {
     if (
       !obj ||
@@ -113,6 +114,28 @@ export class Witness {
     }
     this.invocationScript = obj.invocationScript;
     this.verificationScript = obj.verificationScript;
+  }
+
+  public get scriptHash() {
+    if (this._scriptHash) {
+      return this._scriptHash;
+    } else if (this.verificationScript) {
+      this._scriptHash = reverseHex(hash160(this.verificationScript));
+      return this._scriptHash;
+    } else {
+      throw new Error(
+        "Unable to produce scriptHash from empty verificationScript"
+      );
+    }
+  }
+
+  public set scriptHash(value) {
+    if (this.verificationScript) {
+      throw new Error(
+        "Unable to set scriptHash when verificationScript is not empty"
+      );
+    }
+    this._scriptHash = value;
   }
 
   public serialize(): string {
@@ -135,6 +158,10 @@ export class Witness {
       this.invocationScript === other.invocationScript &&
       this.verificationScript === other.verificationScript
     );
+  }
+
+  private generateScriptHash() {
+    this._scriptHash = reverseHex(hash160(this.verificationScript));
   }
 }
 
