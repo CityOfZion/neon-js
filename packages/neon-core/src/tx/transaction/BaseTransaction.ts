@@ -23,7 +23,6 @@ import { calculationStrategyFunction } from "../strategy";
 import TxAttrUsage from "../txAttrUsage";
 import { serializeArrayOf } from "./main";
 import TransactionType from "./TransactionType";
-
 const log = logger("tx");
 
 export interface TransactionLike {
@@ -117,8 +116,18 @@ export abstract class BaseTransaction {
     return this.addAttribute(TxAttrUsage.Remark, hexRemark);
   }
 
+  /**
+   * Adds an Witness to the Transaction and automatically sorts the witnesses according to scripthash.
+   * @param witness The Witness object to add.
+   */
   public addWitness(witness: Witness): this {
+    if (witness.scriptHash === "") {
+      throw new Error("Please define the scriptHash for this Witness!");
+    }
     this.scripts.push(witness);
+    this.scripts = this.scripts.sort(
+      (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
+    );
     return this;
   }
 

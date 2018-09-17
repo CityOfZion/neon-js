@@ -42,7 +42,7 @@
     "prettier": "^1.14.0",
     "rimraf": "^2.6.2",
     "ts-jest": "^23.0.1",
-    "ts-loader": "^4.4.2",
+    "ts-loader": "^5.1.1",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.14.0",
     "typescript": "^3.0.1",

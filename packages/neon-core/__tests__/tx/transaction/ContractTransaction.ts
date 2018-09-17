@@ -1,7 +1,14 @@
-import { Transaction, TransactionLike, TransactionType } from "../../../src/tx";
+import {
+  Transaction,
+  TransactionLike,
+  TransactionType,
+  Witness,
+  TxAttrUsage
+} from "../../../src/tx";
 import ContractTransaction from "../../../src/tx/transaction/ContractTransaction";
 
 import samples from "./contractTx.json";
+import { AssertionError } from "assert";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -113,7 +120,7 @@ describe.each(dataSet)(
   (
     txid: string,
     serialized: string,
-    deserialized: Partial<InvocationTransactionLike>
+    deserialized: Partial<TransactionLike>
   ) => {
     let tx: ContractTransaction;
     test("Deserialize properly", () => {
@@ -131,3 +138,52 @@ describe.each(dataSet)(
     });
   }
 );
+
+describe("AddWitness", () => {
+  test("Add basic signature", () => {
+    const expected = new Witness({
+      invocationScript: "",
+      verificationScript:
+        "21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9ac"
+    });
+    const tx = new ContractTransaction();
+    tx.addWitness(expected);
+
+    expect(tx.scripts.length).toEqual(1);
+    expect(tx.scripts[0]).toEqual(expected);
+  });
+
+  test("Add empty Witness for smart contract", () => {
+    const expected = new Witness({
+      invocationScript: "0000",
+      verificationScript:
+        ""
+    });
+    expected.scriptHash = "5b7074e873973a6ed3708862f219a6fbf4d1c411";
+    const tx = new ContractTransaction();
+    tx.addWitness(expected);
+
+    expect(tx.scripts.length).toEqual(1);
+    expect(tx.scripts[0]).toEqual(expected);
+    expect(tx.scripts[0].scriptHash).toEqual("5b7074e873973a6ed3708862f219a6fbf4d1c411");
+  })
+
+  test("arrange witnesses according to scriptHash", () => {
+    const witness1 = new Witness({
+      invocationScript:"0000",
+      verificationScript:""
+    });
+    witness1.scriptHash = "01";
+    const witness2 = new Witness({
+      invocationScript:"0000",
+      verificationScript:""
+    });
+    witness2.scriptHash = "02";
+
+    const tx = new ContractTransaction();
+    tx.addWitness(witness2);
+    tx.addWitness(witness1);
+    expect(tx.scripts.length).toEqual(2);
+    expect(tx.scripts).toEqual([witness1, witness2])
+  })
+});

@@ -12,7 +12,7 @@ describe("constructor", () => {
   test("WitnessLike", () => {
     const testObject = {
       invocationScript: "ab",
-      verificationScript: "cd"
+      verificationScript: ""
     } as WitnessLike;
 
     const result = new Witness(testObject);
@@ -31,6 +31,32 @@ describe("constructor", () => {
     expect(result instanceof Witness).toBeTruthy();
     expect(result).not.toBe(testObject);
     expect(result).toEqual(testObject);
+  });
+});
+
+describe("ScriptHash property", () => {
+  it("getter", () => {
+    const testObject = new Witness({
+      invocationScript:
+        "4051c2e6e2993c6feb43383131ed2091f4953747d3e16ecad752cdd90203a992dea0273e98c8cd09e9bfcf2dab22ce843429cdf0fcb9ba4ac93ef1aeef40b20783",
+      verificationScript:
+        "21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9ac"
+    });
+
+    expect(testObject.scriptHash).toEqual(
+      "5df31f6f59e6a4fbdd75103786bf73db1000b235"
+    );
+  });
+
+  it("setter", () => {
+    const expected = "1234";
+    const testObject = new Witness({
+      invocationScript: "",
+      verificationScript: ""
+    });
+    testObject.scriptHash = expected;
+
+    expect(testObject.scriptHash).toEqual(expected);
   });
 });
 
