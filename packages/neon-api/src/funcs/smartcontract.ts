@@ -31,21 +31,12 @@ export async function addSignatureIfExecutingAsSmartContract<
   if (!config.sendingFromSmartContract) {
     return config;
   }
-  const verificationSignature = await getVerificationSignatureForSmartContract(
+  const witness = await getVerificationSignatureForSmartContract(
     config.url!,
     config.sendingFromSmartContract
   );
 
-  // We need to order this for the VM.
-  const acct = config.account!;
-  if (
-    parseInt(config.sendingFromSmartContract, 16) >
-    parseInt(acct.scriptHash, 16)
-  ) {
-    config.tx!.scripts.push(verificationSignature);
-  } else {
-    config.tx!.scripts.unshift(verificationSignature);
-  }
+  config.tx!.addWitness(witness);
 
   return config;
 }

@@ -56,7 +56,7 @@ describe("addSignatureIfExecutingAsSmartContract", () => {
         scriptHash: "abcd"
       },
       sendingFromSmartContract: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
-      tx: { addAttribute: jest.fn(), scripts: [] }
+      tx: { addWitness: jest.fn(), addAttribute: jest.fn(), scripts: [] }
     } as any;
     getVerificationSignatureForSmartContract.mockResolvedValueOnce(
       mockSignature
@@ -68,7 +68,6 @@ describe("addSignatureIfExecutingAsSmartContract", () => {
       config.url,
       config.sendingFromSmartContract
     );
-    expect(config.tx.scripts.length).toBe(1);
-    expect(config.tx.scripts[0]).toBe(mockSignature);
+    expect(config.tx.addWitness).toBeCalled();
   });
 });

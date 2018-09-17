@@ -72,8 +72,11 @@ export async function getVerificationSignatureForSmartContract(
     smartContractScriptHash
   ).execute(url);
   const { parameters } = contractState.result;
-  return {
+  const witness = new tx.Witness({
     invocationScript: "00".repeat(parameters.length),
     verificationScript: ""
-  } as tx.Witness;
+  });
+
+  witness.scriptHash = smartContractScriptHash;
+  return witness;
 }

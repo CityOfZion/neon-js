@@ -37,7 +37,7 @@ describe("modifyTransactionForEmptyTransaction", () => {
       tx: new tx.ContractTransaction({
         inputs: [{ prevHash: "", prevIndex: 0 } as any]
       } as tx.Transaction)
-    } as DoInvokeConfig;
+    } as any;
 
     const result = await common.modifyTransactionForEmptyTransaction(config);
 
@@ -66,10 +66,12 @@ describe("getVerificationSignatureForSmartContract", () => {
       smartContractScriptHash
     );
 
-    expect(result).toEqual({
-      invocationScript: "0000",
-      verificationScript: ""
-    });
+    expect(result).toEqual(
+      expect.objectContaining({
+        invocationScript: "0000",
+        verificationScript: ""
+      })
+    );
     expect(mockGetContractState).toBeCalledWith(smartContractScriptHash);
     expect(mockExecute).toBeCalledWith(url);
   });
