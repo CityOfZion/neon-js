@@ -10,7 +10,7 @@ Neon-NEP5 plugin. Provides the package `nep5` within `neon-js`.
 ## Installation
 
 ```sh
-yarn i @cityofzion/neon-api
+yarn i @cityofzion/neon-nep5 @cityofzion/neon-core
 ```
 
 ```js
