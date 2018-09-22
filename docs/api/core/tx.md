@@ -6,17 +6,16 @@ title: Transactions
 The `tx` module is exposed as:
 
 ```ts
-import Neon from "@cityofzion/neon-js";
-let transaction1 = Neon.create.claimTx(...args);
-transaction1 = Neon.sign.transaction(transaction1, privateKey);
-let serialized1 = Neon.serialize.tx(transaction1);
-let txid1 = Neon.get.transactionHash(transaction1);
+import Neon, { tx } from "@cityofzion/neon-js";
+let transaction = Neon.create.claimTx(...args);
+transaction
+  .addIntent(intent)
+  .addRemark("hi")
+  .sign(privateKey);
+console.log(transaction.hash);
 
-import { tx } from "@cityofzion/neon-js";
-let transaction2 = tx.createClaimTx(...args);
-transaction2 = tx.signTransaction(transaction2, privateKey);
-let serialized2 = tx.serializeTransaction(transaction2);
-let txid2 = tx.getTransactionHash(transaction2);
+let claimTx = new tx.ClaimTransaction(...args);
+let invokeTx = new tx.InvocationTransaction();
 ```
 
 Transactions form the core of the interaction with the blockchain. In order to effect any state changes on the chain, a transaction is required to be sent and processed into a block by the consensus nodes.
@@ -27,12 +26,19 @@ Transactions form the core of the interaction with the blockchain. In order to e
 
 ### Transaction
 
-The Transaction class is a wrapper class that contains all the tools required to manipulate and build transactions. This allows us to dynamically add intents, remarks at will instead of cramming everything into a single method.
+The family of Transaction classes are wrappers to easily manipulate and build transactions. The base abstract class is `BaseTransaction`. Each supported transaction type has its own class which allows retrieval of specific data through property fields.
 
-```ts
+The current supported transaction types are:
+
+1. ContractTransaction (used for transferring UTXO assets)
+2. ClaimTransaction (used for claiming GAS from NEO transfers)
+3. InvocationTransaction (used for smart contract invocation)
+4. StateTransaction (used for voting)
+
+```js
 import Neon from "@cityofzion/neon-js";
 // Let us create a ContractTransaction
-let tx = Neon.create.tx({ type: 128 });
+let tx = Neon.create.contractTx();
 // Now let us add an intention to send 1 NEO to someone
 tx.addOutput("NEO", 1, someAddress)
   .addRemark("I am sending 1 NEO to someAddress") // Add an remark
@@ -45,6 +51,13 @@ const hash = tx.hash; // Store the hash so we can use it to query a block explor
 const serializedTx = tx.serialize();
 ```
 
+For deserialization, we have the `Transaction` static class:
+
+```js
+const contractTx = Neon.tx.Transaction.deserialize(hexstring);
+console.log(contractTx instanceof Neon.tx.ContractTransaction); // true
+```
+
 ## Methods
 
 ### Components
@@ -53,11 +66,7 @@ Transactions are composed of the following parts:
 
 1. Type
 
-This determines the transaction type. This determines how the transaction is serialized or deserialized. Currently, the library only support the following types:
-
-- Contract
-- Claim
-- Invocation
+This determines the transaction type. This determines how the transaction is serialized or deserialized.
 
 2. Version
 
@@ -97,7 +106,7 @@ There are 3 strategies to choose from. They are:
 
 3. `smallestFirst`. We fill the intent starting with the smallest input available. We will choose the inputs 1 and 2 NEO to fill the intent fo 3 NEO.
 
-```ts
+```js
 import { settings, tx } from "@cityofzion/neon-js";
 
 settings.defaultCalculationStrategy = tx.calculationStrategy.smallestFirst;
@@ -109,13 +118,8 @@ Attaching fees is supported as the last argument in both creating transactions a
 
 In the case of InvocationTransactions, the fees paid for running the smart contract is indicated by a separate field. So there are 3 fees available in InvocationTransactions: smart contract execution fees, system fees and network fees. Do note they are separate so any excess fees paid towards running the smart contract will not spill into system or network fees.
 
-```ts
-import { tx } from "@cityofzion/neon-js";
-
+```js
 // This attaches a fee of 1 GAS.
-tx.Transaction.createContractTx(balances, intents, {}, 1);
-
-// Another way is to attach fees on calculation
-var newTx = new tx.Transaction();
+var newTx = new tx.ContractTransaction();
 newTx.addIntent({}).calculate(balance, null, 1);
 ```
