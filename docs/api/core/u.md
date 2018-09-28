@@ -5,12 +5,11 @@ title: Utility
 
 The `u` module is exposed as:
 
-```ts
-import Neon from "@cityofzion/neon-js";
+```js
+import Neon, { u } from "@cityofzion/neon-js";
 Neon.u.reverseHex(hexstring);
 
-import { u } from "@cityofzion/neon-js";
-u.reverseHex(hexstring);
+const fixed8 = new Neon.u.Fixed8(123.456)
 ```
 
 The utility module contains:
@@ -29,8 +28,7 @@ StringStream is a simple stream object that allows us to read a hexstring byte b
 
 It is used in serializing and deserializing a transaction object. The ScriptBuilder class for smart contracts inherits from StringStream.
 
-```ts
-import Neon from "@cityofzion/neon-js";
+```js
 const ss = new Neon.u.StringStream("abcdefgh");
 ss.read(1); // 'ab'
 ss.read(2); // 'cdef'
@@ -44,15 +42,12 @@ ss.str; // 'abcdefgh'
 
 Fixed8 is a class based off bignumber.js for storage and accurate calculations of values. It is extended to have helper methods for converting between decimal and hex representation.
 
-```ts
-import Neon from "@cityofzion/neon-js";
+```js
 const a = new Neon.u.Fixed8(1);
 a.toHex(); // '0000000005f5e100'
 a.toReverseHex(); // '00e1f50500000000'
 
 const b = Neon.u.Fixed8.fromHex("0000000005f5e100"); // 1
-
-import { u } from "@cityofzion/neon-js";
 const c = new u.Fixed8("2");
 const d = u.Fixed8.fromReverseHex("00e1f50500000000");
 ```
@@ -63,8 +58,7 @@ const d = u.Fixed8.fromReverseHex("00e1f50500000000");
 
 While most of the methods in Neon takes in strings and outputs strings, the underlying logic requires a lot of format conversions.
 
-```ts
-import Neon from "@cityofzion/neon-js";
+```js
 Neon.u.reverseHex(hexstring);
 Neon.u.num2fixed8(1);
 Neon.u.ab2str(arrayBuffer);
@@ -88,7 +82,7 @@ A special format used in NEO is the fixed8 number format. It is a fixed point fl
 
 These methods are convenient wrappers around the CryptoJS functions. They take in strings and return strings.
 
-```ts
+```js
 import Neon from "@cityofzion/neon-js";
 // Performs a single SHA
 Neon.u.sha256(item);
