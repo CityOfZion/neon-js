@@ -1,5 +1,10 @@
 import { CONST, rpc, u } from "@cityofzion/neon-core";
-import { getToken, getTokenBalance, getTokenBalances, getTokens } from "../src/main";
+import {
+  getToken,
+  getTokenBalance,
+  getTokenBalances,
+  getTokens
+} from "../src/main";
 
 const TESTNET_URLS = [
   "https://test1.cityofzion.io:443",
@@ -98,42 +103,38 @@ describe("getToken", () => {
   });
 });
 
-
 describe("getTokens", () => {
   test("without balance", async () => {
     const info = await getTokens(TESTNET_URL, [
       CONST.CONTRACTS.TEST_RPX,
       // CONST.CONTRACTS.TEST_RHTT4,
       CONST.CONTRACTS.TEST_LWTF,
-      CONST.CONTRACTS.TEST_NXT,
+      CONST.CONTRACTS.TEST_NXT
       // CONST.CONTRACTS.TEST_RPX,
       // CONST.CONTRACTS.TEST_RHTT4,
       // CONST.CONTRACTS.TEST_LWTF,
       // CONST.CONTRACTS.TEST_NXT
     ]);
 
-    expect(Object.keys(info).map(key=>info[key])).toEqual(
+    expect(Object.keys(info).map(key => info[key])).toEqual(
       expect.arrayContaining([
         {
-          "balance": 0,
-          "decimals": 8,
-          "name": "Red Pulse Token 3.1.4",
-          "symbol": "RPX",
-          "totalSupply": 43467000,
+          decimals: 8,
+          name: "Red Pulse Token 3.1.4",
+          symbol: "RPX",
+          totalSupply: 43467000
         },
         {
-          "balance": 0,
-          "decimals": 8,
-          "name": "LOCALTOKEN",
-          "symbol": "LWTF",
-          "totalSupply": 2270000,
+          decimals: 8,
+          name: "LOCALTOKEN",
+          symbol: "LWTF",
+          totalSupply: 2270000
         },
         {
-          "balance": 0,
-          "decimals": 8,
-          "name": "NEX Template",
-          "symbol": "NXT",
-          "totalSupply": 2508560,
+          decimals: 8,
+          name: "NEX Template",
+          symbol: "NXT",
+          totalSupply: 2508560
         }
       ])
     );
@@ -141,11 +142,12 @@ describe("getTokens", () => {
 
   test("with balance", async () => {
     const info = await getTokens(
-      TESTNET_URL, [
+      TESTNET_URL,
+      [
         CONST.CONTRACTS.TEST_RPX,
         // CONST.CONTRACTS.TEST_RHTT4,
         CONST.CONTRACTS.TEST_LWTF,
-        CONST.CONTRACTS.TEST_NXT,
+        CONST.CONTRACTS.TEST_NXT
         // CONST.CONTRACTS.TEST_RPX,
         // CONST.CONTRACTS.TEST_RHTT4,
         // CONST.CONTRACTS.TEST_LWTF,
@@ -154,28 +156,28 @@ describe("getTokens", () => {
       "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
     );
 
-    expect(Object.keys(info).map(key=>info[key])).toEqual(
+    expect(Object.keys(info).map(key => info[key])).toEqual(
       expect.arrayContaining([
         {
-          "balance": 1032.011,
-          "decimals": 8,
-          "name": "Red Pulse Token 3.1.4",
-          "symbol": "RPX",
-          "totalSupply": 43467000,
+          balance: "1032.011",
+          decimals: 8,
+          name: "Red Pulse Token 3.1.4",
+          symbol: "RPX",
+          totalSupply: 43467000
         },
         {
-          "balance": 0.00015721,
-          "decimals": 8,
-          "name": "LOCALTOKEN",
-          "symbol": "LWTF",
-          "totalSupply": 2270000,
+          balance: "0.00015718",
+          decimals: 8,
+          name: "LOCALTOKEN",
+          symbol: "LWTF",
+          totalSupply: 2270000
         },
         {
-          "balance": 1861,
-          "decimals": 8,
-          "name": "NEX Template",
-          "symbol": "NXT",
-          "totalSupply": 2508560,
+          balance: "1861",
+          decimals: 8,
+          name: "NEX Template",
+          symbol: "NXT",
+          totalSupply: 2508560
         }
       ])
     );

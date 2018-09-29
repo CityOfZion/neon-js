@@ -155,8 +155,10 @@ export async function getTokens(
 ): Promise<TokenInfo[]> {
   const sb = new sc.ScriptBuilder();
   scriptHashArray.forEach(scriptHash => {
-    if(address) {
-      const addrScriptHash = u.reverseHex(wallet.getScriptHashFromAddress(address));
+    if (address) {
+      const addrScriptHash = u.reverseHex(
+        wallet.getScriptHashFromAddress(address)
+      );
       sb.emitAppCall(scriptHash, "name")
         .emitAppCall(scriptHash, "symbol")
         .emitAppCall(scriptHash, "decimals")
@@ -166,13 +168,12 @@ export async function getTokens(
       sb.emitAppCall(scriptHash, "name")
         .emitAppCall(scriptHash, "symbol")
         .emitAppCall(scriptHash, "decimals")
-        .emitAppCall(scriptHash, "totalSupply")
+        .emitAppCall(scriptHash, "totalSupply");
     }
   });
 
   try {
-    const res = await rpc.Query.invokeScript(sb.str)
-      .execute(url);
+    const res = await rpc.Query.invokeScript(sb.str).execute(url);
 
     const result: TokenInfo[] = [];
     const step = address ? 5 : 4;
@@ -182,25 +183,32 @@ export async function getTokens(
       const decimals = rpc.IntegerParser(res.result.stack[i + 2]);
       const totalSupply = rpc
         .Fixed8Parser(res.result.stack[i + 3])
-        .dividedBy(Math.pow(10, decimals - rpc.IntegerParser(res.result.stack[i + 2]))).toNumber() //div(Math.pow(10, 8 - res[2])).toNumber()
-      const balance = address ? rpc
-        .Fixed8Parser(res.result.stack[i + 4])
-        .dividedBy(Math.pow(10, decimals - rpc.IntegerParser(res.result.stack[i + 2]))).toNumber()
-        : 0;
+        .dividedBy(
+          Math.pow(10, decimals - rpc.IntegerParser(res.result.stack[i + 2]))
+        )
+        .toNumber();
+      const balance = address
+        ? rpc
+            .Fixed8Parser(res.result.stack[i + 4])
+            .dividedBy(
+              Math.pow(
+                10,
+                decimals - rpc.IntegerParser(res.result.stack[i + 2])
+              )
+            )
+        : undefined;
 
-      console.log("==");
-      console.log(`name: ${name} \\n symbol: ${symbol} \\n decimals: ${decimals} \\n totalSupply: ${totalSupply} \\n balances ${balance}`);
-      console.log(`name: ${typeof name} \\n symbol: ${typeof symbol} \\n decimals: ${typeof decimals} \\n totalSupply: ${typeof totalSupply} \\n balances ${typeof balance}`);
-      console.log("==");
-
-      result.push({
+      const obj = {
         name,
         symbol,
         decimals,
         totalSupply,
         balance
-      });
+      };
+      
+      if(!obj.balance) delete obj.balance;
 
+      result.push(obj);
     }
     return result;
   } catch (err) {

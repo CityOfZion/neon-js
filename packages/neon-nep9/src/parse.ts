@@ -51,11 +51,14 @@ function validatePath(path: string) {
 
 function reduceParamsToDict(params: string): { [k: string]: string } {
   const keyvalues = params ? params.split("&") : [];
-  return keyvalues.reduce((obj, keyValuePair) => {
-    const [key, val] = keyValuePair.split("=", 2);
-    obj[key] = val;
-    return obj;
-  }, {} as { [k: string]: string });
+  return keyvalues.reduce(
+    (obj, keyValuePair) => {
+      const [key, val] = keyValuePair.split("=", 2);
+      obj[key] = val;
+      return obj;
+    },
+    {} as { [k: string]: string }
+  );
 }
 
 export default parse;
