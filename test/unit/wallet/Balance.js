@@ -80,11 +80,20 @@ describe('Balance', function () {
     })
   })
 
-  it('confirm', () => {
-    bal.assets.NEO.unconfirmed = [{ txid: 'abc', index: 0, value: 1 }]
-    const unspentLength = bal.assets.NEO.unspent.length
-    bal.confirm()
-    bal.assets.NEO.unspent.length.should.equal(unspentLength + 1)
+  describe('confirm', function () {
+    it('moves unconfirmed coins to unspent', () => {
+      bal.assets.NEO.unconfirmed = [{ txid: 'abc', index: 0, value: 1 }]
+      const unspentLength = bal.assets.NEO.unspent.length
+      bal.confirm()
+      bal.assets.NEO.unspent.length.should.equal(unspentLength + 1)
+    })
+
+    it('recalculates balance', () => {
+      bal.assets.NEO.unconfirmed = [{ txid: 'abc', index: 0, value: 1 }]
+      const expectedBalance = bal.assets.NEO.balance.add(1)
+      bal.confirm()
+      bal.assets.NEO.balance.eq(expectedBalance).should.equal(true)
+    })
   })
 
   describe('verifyAssets', function () {
