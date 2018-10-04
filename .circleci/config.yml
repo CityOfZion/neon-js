@@ -1,15 +1,11 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
-
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:8.9.3
+    - image: circleci/node:8-stretch
+
 version: 2
 jobs:
-  build:
+  setup:
     <<: *defaults
     steps:
       - run:
@@ -21,41 +17,97 @@ jobs:
       - checkout
       # Download and cache dependencies
       - restore_cache:
-          key: neon-{{ checksum "package.json" }}
-      - run: npm install
+          keys:
+            - neon-{{ checksum "yarn.lock" }}
+            - neon-fallback
+      - run: yarn install --cache-folder .cache/yarn
       - save_cache:
-          key: neon-{{ checksum "package.json" }}
+          key: neon-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
-  integration-test:
+            - .cache/yarn
+      - run:
+          name: Bootstrap
+          command: yarn bootstrap
+      - run:
+          name: Build
+          command: yarn build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+            - packages
+
+  lint:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          key: neon-{{ checksum "package.json" }}
-      - run: npm run test:integration
+      - attach_workspace:
+          at: .
+      - run: mkdir reports && mkdir reports/lint
+      - run:
+          name: Lint
+          command: yarn lint --format junit -o reports/lint/lint.xml
+      - store_test_results:
+          path: reports
+      - store_artifacts:
+          path: reports
+
   unit-test:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          key: neon-{{ checksum "package.json" }}
-      - run: npm run test:unit
+      - attach_workspace:
+          at: .
+      - run: mkdir reports
+      - run:
+          name: Unit Tests
+          environment:
+            JEST_JUNIT_OUTPUT: reports/unit/results.xml
+          command: yarn test:unit --ci --runInBand --reporters="jest-junit" --reporters="default"
+      - store_test_results:
+          path: reports
+      - store_artifacts:
+          path: reports
+
+  integration-test:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: mkdir reports
+      - run:
+          name: Integration Tests
+          environment:
+            JEST_JUNIT_OUTPUT: reports/integration/results.xml
+          command: yarn test:integration --ci --runInBand --reporters="jest-junit" --reporters="default"
+      - store_test_results:
+          path: reports
+      - store_artifacts:
+          path: reports
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
-      - integration-test:
+      - setup
+      - lint:
           requires:
-            - build
+            - setup
           filters:
             branches:
-              only: master
+              ignore: gh-pages
       - unit-test:
           requires:
-            - build
+            - setup
+          filters:
+            branches:
+              ignore: gh-pages
+      - integration-test:
+          requires:
+            - lint
+            - unit-test
           filters:
             branches:
               ignore: gh-pages

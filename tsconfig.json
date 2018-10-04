@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "include": [],
+  "references": [
+    { "path": "./packages/neon-core" },
+    { "path": "./packages/neon-api" },
+    { "path": "./packages/neon-nep5" },
+    { "path": "./packages/neon-js" }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "docs": {
+    "Getting Started": ["overview", "installation", "structure"],
+    "Guides": [
+      "guides/basic/sendasset",
+      "guides/basic/claimgas",
+      "guides/basic/createscript",
+      "guides/basic/invoke",
+      "guides/basic/privnet",
+      "guides/adv/multitx",
+      "guides/adv/apicore",
+      "guides/adv/multisig"
+    ]
+  },
+  "api": {
+    "Overview": ["api/index"],
+    "Core Modules": [
+      "api/core/wallet",
+      "api/core/tx",
+      "api/core/rpc",
+      "api/core/sc",
+      "api/core/u",
+      "api/core/const",
+      "api/core/settings",
+      "api/core/logging"
+    ],
+    "Plugin Modules": ["api/plugin/api", "api/plugin/nep5"]
+  },
+  "changelog": {
+    "Latest": ["changelog/latest"],
+    "Past Versions": ["changelog/v3", "changelog/v2", "changelog/v1"]
+  }
+}

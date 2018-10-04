@@ -1,0 +1,55 @@
+{
+  "name": "@cityofzion/neon-api",
+  "description": "Neon-API module: High level API for neon-js",
+  "version": "4.0.2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CityOfZion/neon-js.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "neo",
+    "antshares",
+    "javascript",
+    "libraries"
+  ],
+  "author": "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "src/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rimraf ./lib ./dist",
+    "prepublishOnly": "yarn clean && yarn build",
+    "lint": "tslint src/**/*.ts __tests__/**/*.ts __integration__/**/*.ts",
+    "pretty": "prettier --write --loglevel=warn \"./{src,__{tests,integration}__}/**/*.ts\"",
+    "start": "jest --watch",
+    "test": "jest",
+    "test:integration": "jest /packages/.*/__integration__/.*",
+    "test:unit": "jest /packages/.*/__tests__/.*"
+  },
+  "devDependencies": {
+    "@cityofzion/neon-core": "^4.0.2",
+    "@types/jest": "^23.1.0",
+    "cross-env": "^5.2.0",
+    "jest": "^23.1.0",
+    "prettier": "^1.13.7",
+    "rimraf": "^2.6.2",
+    "ts-jest": "^23.0.0",
+    "tslint": "^5.10.0",
+    "tslint-config-prettier": "^1.14.0",
+    "typescript": "^3.0.1"
+  },
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
+  "peerDependencies": {
+    "@cityofzion/neon-core": "^4.0.0"
+  },
+  "files": [
+    "lib/"
+  ]
+}
