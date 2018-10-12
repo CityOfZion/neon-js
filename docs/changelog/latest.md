@@ -38,6 +38,7 @@ title: Changelog (v4)
     - Changed message signing API to not perform any message transformation (previously it assumed input was ASCII and converted it to hex). This was done so all signing methods can rely on the same underlying methods (be it message or transaction signing).
     - Encryption and decryption is now fully async.
     - Add support for multi-sig Account creation through `Account.createMultiSig`.
+    - Removal of `fs`. `Wallet.readFile` is removed.
 
   - Transaction
     - All components are now ES6 classes (TransactionAttribute, TransactionInput, TransactionOutput, Witness).

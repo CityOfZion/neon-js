@@ -6,12 +6,11 @@ title: api
 The `api` module is available as the plugin `@cityofzion/neon-api`.
 
 ```js
-import Neon from "@cityofzion/neon-js";
+import Neon, { api } from "@cityofzion/neon-js";
 Neon.sendAsset(config);
 Neon.claimGas(config);
 Neon.doinvoke(config);
 
-import { api } from "@cityofzion/neon-js";
 api.neoscan.getBalance("http://www.neoscan-testnet.io/test_net/v1/", address);
 api.sendAsset(config);
 ```
@@ -37,7 +36,6 @@ There are 3 core methods that covers majority of the functionality that is requi
 They operate by taking in a configuration object which contains all the information necessary to request, construct and send a transaction. At the end, the same configuration object is returned and you may inspect the `response` property to check for the success of your transaction.
 
 ```js
-import Neon from '@cityofzion/neon-js'
 const provider = Neon.api.neoscan.instance('TestNet')
 const config = {
   provider: 'TestNet'
@@ -61,7 +59,6 @@ api.claimGas(config)
 Under the hood, the core methods are actually a chain of functions strung together. These methods are also available in the package for your consumption if you have special needs outside of the 3 conventional methods.
 
 ```js
-import { api } from "@cityofzion/neon-js";
 // This chain is basically api.claimGas
 api
   .getClaimsFrom(config, api.neonDB)
@@ -77,8 +74,6 @@ Providers are external services that provide information that is not easily gath
 The two available providers are `neoscan` and `neonDB`. They are interfaces that translates the different REST responses into uniform data structures that is used by other `neon-js` modules.
 
 ```js
-import { api } from "@cityofzion/neon-js";
-
 const mainNetNeoscan = api.neocan.instance("MainNet");
 const mainNetNeonDB = api.neonDB.instance("MainNet");
 

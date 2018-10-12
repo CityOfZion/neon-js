@@ -36,18 +36,11 @@ export async function addSignatureForMintToken(
     config.script.operation === "mintTokens" &&
     config.script.scriptHash
   ) {
-    const verificationSignature = await getVerificationSignatureForSmartContract(
+    const witness = await getVerificationSignatureForSmartContract(
       config.url!,
       config.script.scriptHash
     );
-    if (
-      parseInt(config.script.scriptHash, 16) >
-      parseInt(config.account!.scriptHash, 16)
-    ) {
-      config.tx!.scripts.push(verificationSignature);
-    } else {
-      config.tx!.scripts.unshift(verificationSignature);
-    }
+    config.tx!.addWitness(witness);
   }
   return config;
 }

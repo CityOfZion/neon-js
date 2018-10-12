@@ -2,14 +2,13 @@
 id: sc
 title: Smart Contract
 ---
+
 The `sc` module is exposed as:
 
 ```js
-import Neon from '@cityofzion/neon-js'
-const sb = Neon.create.scriptBuilder()
-
-import {sc} from '@cityofzion/neon-js'
-const sb = new sc.scriptBuilder()
+import Neon, { sc } from "@cityofzion/neon-js";
+const sb = Neon.create.scriptBuilder();
+const alternative = new sc.scriptBuilder();
 ```
 
 In NEO, users interact with smart contracts through InvocationTransactions. These transactions carry the hex output from scriptBuilder and assets involved to the network for processing.
@@ -35,65 +34,65 @@ We will use a transaction when we want to effect a state change. For example, we
 The `ScriptBuilder` is an object that converts a smart contract method call into a hexstring that can be sent to the network with a InvocationTransaction.
 
 ```js
-import Neon, {rpc} from '@cityofzion/neon-js'
-const sb = Neon.create.scriptBuilder()
+const sb = Neon.create.scriptBuilder();
 // Build script to call 'name' from contract at 5b7074e873973a6ed3708862f219a6fbf4d1c411
-sb.emitAppCall('5b7074e873973a6ed3708862f219a6fbf4d1c411', 'name')
+sb.emitAppCall("5b7074e873973a6ed3708862f219a6fbf4d1c411", "name");
 
 // Test the script with invokescript
-rpc.Query.invokeScript(sb.str).execute(nodeURL)
+rpc.Query.invokeScript(sb.str).execute(nodeURL);
 
 // Create InvocationTransaction for real execution
-const tx = Neon.create.invocationTx(publicKey, {}, {}, sb.str, 0)
+const tx = Neon.create.invocationTx(publicKey, {}, {}, sb.str, 0);
 ```
 
 You may chain multiple calls together in a single VM script. The results will be returned in order.
 
 ```js
-import Neon, {rpc} from '@cityofzion/neon-js'
-const sb = Neon.create.scriptBuilder()
-sb.emitAppCall(scriptHash, 'name')
-.emitAppCall(scriptHash, 'symbol')
+const sb = Neon.create.scriptBuilder();
+sb.emitAppCall(scriptHash, "name").emitAppCall(scriptHash, "symbol");
 
 // Returns name, symbol
 rpc.Query.invokeScript(sb.str)
   .execute(Neon.CONST.DEFAULT_RPC.MAIN)
-  .then((res) => {
-    console.log(res)
-  })
+  .then(res => {
+    console.log(res);
+  });
 ```
 
 A simple wrapper method is provided for convenience.
 
 ```js
-import Neon from '@cityofzion/neon-js'
 const props = {
   scriptHash: Neon.CONST.CONTRACTS.TEST_RPX,
-  operation: 'name',
+  operation: "name",
   args: []
-}
+};
 // Returns a hexstring
-const vmScript = Neon.create.script(props)
+const vmScript = Neon.create.script(props);
 ```
 
 The ScriptBuilder can also reverse scripts back to its arguments. However, this process is not a complete reverse engineer due to the varied nature of arguments. The arguments are returned as hexstrings and it is left to the developer to parse them meaningfully.
 
 ```js
-const sb = new sb.ScriptBuilder('00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc')
-const params = sb.toScriptParams()
-params = [{
-      "scriptHash": "dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f",
-      "args": [
-        "6e616d65", // 'name' in hexstring
-        []
-      ],
-      "useTailCall": false
-    }]
+const sb = new sb.ScriptBuilder(
+  "00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc"
+);
+const params = sb.toScriptParams();
+params = [
+  {
+    scriptHash: "dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f",
+    args: [
+      "6e616d65", // 'name' in hexstring
+      []
+    ],
+    useTailCall: false
+  }
+];
 ```
 
 ### ContractParam
 
-ContractParam objects provide a convenient way to construct calls for `invoke` and ``invokefunction``. These RPC calls utilise a JSON struct for arguments and can be messy to create by hand:
+ContractParam objects provide a convenient way to construct calls for `invoke` and `invokefunction`. These RPC calls utilise a JSON struct for arguments and can be messy to create by hand:
 
 ```js
   {
@@ -105,15 +104,20 @@ ContractParam objects provide a convenient way to construct calls for `invoke` a
 ContractParam currently supports creating string, boolean, integer, bytearray and array.
 
 ```js
-import Neon, {sc, rpc, CONST} from '@cityofzion/neon-js'
-const param1 = Neon.create.contractParam('String', 'balanceOf')
+const param1 = Neon.create.contractParam("String", "balanceOf");
 // This is a convenient way to convert an address to a reversed scriptHash that smart contracts use.
-const param2 = sc.ContractParam.byteArray('AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx', 'address')
+const param2 = sc.ContractParam.byteArray(
+  "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
+  "address"
+);
 
-rpc.Query.invoke(CONST.CONTRACTS.TEST_RPX, param1, sc.ContractParam.array(param2))
-  .then((res) => {
-    console.log(res)
-  })
+rpc.Query.invoke(
+  CONST.CONTRACTS.TEST_RPX,
+  param1,
+  sc.ContractParam.array(param2)
+).then(res => {
+  console.log(res);
+});
 ```
 
 ContractParams are compatible with ScriptBuilder so it is fine to pass them in as arguments directly.
