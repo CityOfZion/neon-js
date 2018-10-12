@@ -3,6 +3,22 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.1.0
+=====
+
+- Neon-NEP9
+
+  - Ability to parse NEP9 QR codes. Do note that this does not come with a QR parser and you require another package to actually scan and decipher the QR code.
+
+- Neon-core
+
+  - Transaction.AddWitness orders the witness as best as it can. Witnesses are required to be in order for the transaction to process properly. AddWitness is the proper API call to append a witness to the transaction as opposed to directly calling append on the array. Do note that serializing the witness results in loss of meta data and thus the ordering of the deserialized transaction may not be optimal.
+
+- Neon-API
+
+  - API to depend on AddWitness for ordering.
+
+
 4.0.0
 =====
 
