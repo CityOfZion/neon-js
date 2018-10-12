@@ -28,26 +28,32 @@
               }
             });
         </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Transactions</h1></header><article><div><span><p>The <code>tx</code> module is exposed as:</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
-<span class="hljs-keyword">let</span> transaction1 = Neon.create.claimTx(...args);
-transaction1 = Neon.sign.transaction(transaction1, privateKey);
-<span class="hljs-keyword">let</span> serialized1 = Neon.serialize.tx(transaction1);
-<span class="hljs-keyword">let</span> txid1 = Neon.get.transactionHash(transaction1);
+<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> Neon, { tx } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
+<span class="hljs-keyword">let</span> transaction = Neon.create.claimTx(...args);
+transaction
+  .addIntent(intent)
+  .addRemark(<span class="hljs-string">"hi"</span>)
+  .sign(privateKey);
+<span class="hljs-built_in">console</span>.log(transaction.hash);
 
-<span class="hljs-keyword">import</span> { tx } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
-<span class="hljs-keyword">let</span> transaction2 = tx.createClaimTx(...args);
-transaction2 = tx.signTransaction(transaction2, privateKey);
-<span class="hljs-keyword">let</span> serialized2 = tx.serializeTransaction(transaction2);
-<span class="hljs-keyword">let</span> txid2 = tx.getTransactionHash(transaction2);
+<span class="hljs-keyword">let</span> claimTx = <span class="hljs-keyword">new</span> tx.ClaimTransaction(...args);
+<span class="hljs-keyword">let</span> invokeTx = <span class="hljs-keyword">new</span> tx.InvocationTransaction();
 </code></pre>
 <p>Transactions form the core of the interaction with the blockchain. In order to effect any state changes on the chain, a transaction is required to be sent and processed into a block by the consensus nodes.</p>
 <hr>
 <h2><a class="anchor" aria-hidden="true" id="classes"></a><a href="#classes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Classes</h2>
 <h3><a class="anchor" aria-hidden="true" id="transaction"></a><a href="#transaction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Transaction</h3>
-<p>The Transaction class is a wrapper class that contains all the tools required to manipulate and build transactions. This allows us to dynamically add intents, remarks at will instead of cramming everything into a single method.</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
+<p>The family of Transaction classes are wrappers to easily manipulate and build transactions. The base abstract class is <code>BaseTransaction</code>. Each supported transaction type has its own class which allows retrieval of specific data through property fields.</p>
+<p>The current supported transaction types are:</p>
+<ol>
+<li>ContractTransaction (used for transferring UTXO assets)</li>
+<li>ClaimTransaction (used for claiming GAS from NEO transfers)</li>
+<li>InvocationTransaction (used for smart contract invocation)</li>
+<li>StateTransaction (used for voting)</li>
+</ol>
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
 <span class="hljs-comment">// Let us create a ContractTransaction</span>
-<span class="hljs-keyword">let</span> tx = Neon.create.tx({ <span class="hljs-keyword">type</span>: <span class="hljs-number">128</span> });
+<span class="hljs-keyword">let</span> tx = Neon.create.contractTx();
 <span class="hljs-comment">// Now let us add an intention to send 1 NEO to someone</span>
 tx.addOutput(<span class="hljs-string">"NEO"</span>, <span class="hljs-number">1</span>, someAddress)
   .addRemark(<span class="hljs-string">"I am sending 1 NEO to someAddress"</span>) <span class="hljs-comment">// Add an remark</span>
@@ -59,18 +65,17 @@ tx.addOutput(<span class="hljs-string">"NEO"</span>, <span class="hljs-number">1
 <span class="hljs-comment">// Now we can use this serializedTx string and send it through sendrawtransaction RPC call.</span>
 <span class="hljs-keyword">const</span> serializedTx = tx.serialize();
 </code></pre>
+<p>For deserialization, we have the <code>Transaction</code> static class:</p>
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> contractTx = Neon.tx.Transaction.deserialize(hexstring);
+<span class="hljs-built_in">console</span>.log(contractTx <span class="hljs-keyword">instanceof</span> Neon.tx.ContractTransaction); <span class="hljs-comment">// true</span>
+</code></pre>
 <h2><a class="anchor" aria-hidden="true" id="methods"></a><a href="#methods" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
 <h3><a class="anchor" aria-hidden="true" id="components"></a><a href="#components" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Components</h3>
 <p>Transactions are composed of the following parts:</p>
 <ol>
 <li>Type</li>
 </ol>
-<p>This determines the transaction type. This determines how the transaction is serialized or deserialized. Currently, the library only support the following types:</p>
-<ul>
-<li>Contract</li>
-<li>Claim</li>
-<li>Invocation</li>
-</ul>
+<p>This determines the transaction type. This determines how the transaction is serialized or deserialized.</p>
 <ol start="2">
 <li>Version</li>
 </ol>
@@ -104,20 +109,15 @@ tx.addOutput(<span class="hljs-string">"NEO"</span>, <span class="hljs-number">1
 <li><p><code>largestFirst</code>. As the name suggests, the intent is filled starting with the largest input available. Here, we will choose the 5 NEO coin, constructing a change output of 2 NEO.</p></li>
 <li><p><code>smallestFirst</code>. We fill the intent starting with the smallest input available. We will choose the inputs 1 and 2 NEO to fill the intent fo 3 NEO.</p></li>
 </ol>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> { settings, tx } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> { settings, tx } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
 
 settings.defaultCalculationStrategy = tx.calculationStrategy.smallestFirst;
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" id="fees"></a><a href="#fees" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Fees</h2>
 <p>Attaching fees is supported as the last argument in both creating transactions and also calculating. Fees work by having more GAS inputs than outputs. The difference between the inputs and the outputs are taken as fees. Fees first contribute towards system fees (eg. transaction costs, etc). Any excess will be considered as network fees and are used to prioritise transactions.</p>
 <p>In the case of InvocationTransactions, the fees paid for running the smart contract is indicated by a separate field. So there are 3 fees available in InvocationTransactions: smart contract execution fees, system fees and network fees. Do note they are separate so any excess fees paid towards running the smart contract will not spill into system or network fees.</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> { tx } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
-
-<span class="hljs-comment">// This attaches a fee of 1 GAS.</span>
-tx.Transaction.createContractTx(balances, intents, {}, <span class="hljs-number">1</span>);
-
-<span class="hljs-comment">// Another way is to attach fees on calculation</span>
-<span class="hljs-keyword">var</span> newTx = <span class="hljs-keyword">new</span> tx.Transaction();
+<pre><code class="hljs css languages- js"><span class="hljs-comment">// This attaches a fee of 1 GAS.</span>
+<span class="hljs-keyword">var</span> newTx = <span class="hljs-keyword">new</span> tx.ContractTransaction();
 newTx.addIntent({}).calculate(balance, <span class="hljs-literal">null</span>, <span class="hljs-number">1</span>);
 </code></pre>
 </span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/en/api/core/wallet.html">← Wallet</a><a class="docs-next button" href="/neon-js/docs/en/api/core/rpc.html">RPC →</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#classes">Classes</a><ul class="toc-headings"><li><a href="#transaction">Transaction</a></li></ul></li><li><a href="#methods">Methods</a><ul class="toc-headings"><li><a href="#components">Components</a></li></ul></li><li><a href="#calculation-strategies">Calculation Strategies</a></li><li><a href="#fees">Fees</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>

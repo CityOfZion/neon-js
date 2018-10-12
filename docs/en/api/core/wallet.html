@@ -28,13 +28,12 @@
               }
             });
         </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Wallet</h1></header><article><div><span><p>The <code>wallet</code> module is exposed as:</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> Neon, { wallet } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
 <span class="hljs-keyword">const</span> account = Neon.create.account(privateKey);
-Neon.is.address(<span class="hljs-built_in">string</span>);
+<span class="hljs-keyword">const</span> alternative = <span class="hljs-keyword">new</span> wallet.Account(privateKey);
 
-<span class="hljs-keyword">import</span> { wallet } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
-<span class="hljs-keyword">const</span> account = <span class="hljs-keyword">new</span> wallet.Account(privateKey);
-wallet.isAddress(<span class="hljs-built_in">string</span>);
+Neon.is.address(string);
+wallet.isAddress(string);
 </code></pre>
 <p>The <code>wallet</code> module contains methods for manipulating keys, creating signatures and verifying keys.</p>
 <hr>
@@ -50,15 +49,13 @@ wallet.isAddress(<span class="hljs-built_in">string</span>);
   address: string;
 
   getPublicKey(<span class="hljs-params">encoded: <span class="hljs-built_in">boolean</span></span>): string;
-  encrypt(<span class="hljs-params">keyphrase: <span class="hljs-built_in">string</span>, scryptParams?: ScryptParams</span>): Account;
-  decrypt(<span class="hljs-params">keyphrase: <span class="hljs-built_in">string</span>, scryptParams?: ScryptParams</span>): Account;
+  encrypt(<span class="hljs-params">keyphrase: <span class="hljs-built_in">string</span>, scryptParams?: ScryptParams</span>): Promise&lt;this&gt;;
+  decrypt(<span class="hljs-params">keyphrase: <span class="hljs-built_in">string</span>, scryptParams?: ScryptParams</span>): Promise&lt;this&gt;;
   export(<span class="hljs-params"></span>): WalletAccount;
 }
 </code></pre>
 <p>The <code>Account</code> class is used to store and transform keys to its various formats. It can be instantiated with any key format and is smart enough to recognise the format and store it appropriately.</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> Neon, { wallet } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
-
-<span class="hljs-keyword">const</span> a = Neon.create.Account(<span class="hljs-string">"ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s"</span>);
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> a = Neon.create.Account(<span class="hljs-string">"ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s"</span>);
 <span class="hljs-built_in">console</span>.log(a.address); <span class="hljs-comment">// ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s</span>
 
 <span class="hljs-keyword">const</span> b = <span class="hljs-keyword">new</span> wallet.Account(
@@ -67,7 +64,7 @@ wallet.isAddress(<span class="hljs-built_in">string</span>);
 <span class="hljs-built_in">console</span>.log(b.privateKey); <span class="hljs-comment">// 9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69</span>
 </code></pre>
 <p>The class enables us to easily retrieve keys in any derivable format without needing to remember any methods. However, we can only retrieve formats that can be derived from our input. For example, we cannot retrieve any formats other than address and scripthash from <code>a</code> because we instantiated it with an address. However, we can get any format from <code>b</code> because it was instantiated with a private key, which is the lowest level key available.</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-built_in">console</span>.log(a.publicKey); <span class="hljs-comment">// throws an error</span>
+<pre><code class="hljs css languages- js"><span class="hljs-built_in">console</span>.log(a.publicKey); <span class="hljs-comment">// throws an error</span>
 <span class="hljs-built_in">console</span>.log(b.publicKey); <span class="hljs-comment">// prints the public key</span>
 <span class="hljs-built_in">console</span>.log(b.address); <span class="hljs-comment">// prints the address</span>
 </code></pre>
@@ -82,16 +79,15 @@ wallet.isAddress(<span class="hljs-built_in">string</span>);
 <p>When you instantiate an <code>Account</code> with a key, you can retrieve any format that is below it in the list. For example, if we instantiate with a public key, we can get the publc key, scriptHash and address but not the private key.</p>
 <p>The Account class can be instantiated from encrypted key, private key, public key, address or ScriptHash.</p>
 <p>The <code>encryptedKey</code> is special as it is the lowest level key but requires the user to unlock it first before we can derive anything from it. This can be done through the <code>decrypt</code> method.</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">const</span> c = <span class="hljs-keyword">new</span> wallet.Account(
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> c = <span class="hljs-keyword">new</span> wallet.Account(
   <span class="hljs-string">"6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF"</span>
 );
 <span class="hljs-built_in">console</span>.log(c.encrypted); <span class="hljs-comment">// encrypted key</span>
 <span class="hljs-built_in">console</span>.log(c.address); <span class="hljs-comment">// throws error</span>
-c.decrypt(<span class="hljs-string">"city of zion"</span>);
-<span class="hljs-built_in">console</span>.log(c.address); <span class="hljs-comment">// ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW</span>
+c.decrypt(<span class="hljs-string">"city of zion"</span>).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(c.address)); <span class="hljs-comment">// ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW</span>
 </code></pre>
 <p>You can encrypt the key by using the <code>encrypt</code> method. This is necessary if you want to export this key to a JSON file.</p>
-<pre><code class="hljs css languages- ts">c.encrypt(<span class="hljs-string">"new password"</span>);
+<pre><code class="hljs css languages- ts">c.encrypt(<span class="hljs-string">"new password"</span>).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> c.export());
 </code></pre>
 <p>This action will encrypt the private key with the provided password and replace any old NEP2 key.</p>
 <h3><a class="anchor" aria-hidden="true" id="balance"></a><a href="#balance" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Balance</h3>
@@ -115,24 +111,19 @@ c.decrypt(<span class="hljs-string">"city of zion"</span>);
 }
 </code></pre>
 <p>The Balance class stores the balance of the account. It is usually retrieved using a 3rd party API as NEO nodes do not have a RPC call to easily retrieve this information with a single call.</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
-<span class="hljs-comment">// This creates a balance object but it is empty and not really useful</span>
+<pre><code class="hljs css languages- js"><span class="hljs-comment">// This creates a balance object but it is empty and not really useful</span>
 Neon.create.balance({
-  net: <span class="hljs-string">"TestNet"</span>,
-  address: <span class="hljs-string">"ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"</span>
+  <span class="hljs-attr">net</span>: <span class="hljs-string">"TestNet"</span>,
+  <span class="hljs-attr">address</span>: <span class="hljs-string">"ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"</span>
 });
 
-<span class="hljs-keyword">import</span> { wallet, api } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
+<span class="hljs-keyword">import</span> { wallet } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
 <span class="hljs-comment">// This form is useless as it is an empty balance.</span>
 <span class="hljs-keyword">const</span> balance = <span class="hljs-keyword">new</span> wallet.Balance({
-  net: <span class="hljs-string">"TestNet"</span>,
-  address: <span class="hljs-string">"ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"</span>
+  <span class="hljs-attr">net</span>: <span class="hljs-string">"TestNet"</span>,
+  <span class="hljs-attr">address</span>: <span class="hljs-string">"ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"</span>
 });
-<span class="hljs-comment">// We get a useful balance that can be used to fill a transaction through api.neonDB</span>
-<span class="hljs-keyword">const</span> filledBalance = api.neonDB.getBalance(
-  <span class="hljs-string">"MainNet"</span>,
-  <span class="hljs-string">"ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"</span>
-);
+
 <span class="hljs-comment">// This contains all symbols of assets available in this balance</span>
 <span class="hljs-keyword">const</span> symbols = filledBalance.assetSymbols;
 <span class="hljs-comment">// We retrieve the unspent coins from the assets object using the symbol</span>
@@ -159,7 +150,7 @@ filledBalance.verifyAssets(<span class="hljs-string">"https://seed1.neo.org:2033
 <h3><a class="anchor" aria-hidden="true" id="wallet"></a><a href="#wallet" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Wallet</h3>
 <p>The <code>Wallet</code> class implements the NEP-6 convention which is a standard way set by NEO council on how to export keys in a JSON file. By doing this, we can move keys across different software providers without worry.</p>
 <p>The <code>Wallet</code> class is essentially a collection of encrypted keys as well as the parameters used to encrypt them.</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> Neon, { wallet } <span class="hljs-keyword">from</span> <span class="hljs-string">"cityofzion/neon-js"</span>;
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> Neon, { wallet } <span class="hljs-keyword">from</span> <span class="hljs-string">"cityofzion/neon-js"</span>;
 
 <span class="hljs-keyword">const</span> a = <span class="hljs-keyword">new</span> wallet.Account(
   <span class="hljs-string">"6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF"</span>
@@ -169,7 +160,7 @@ filledBalance.verifyAssets(<span class="hljs-string">"https://seed1.neo.org:2033
 );
 
 <span class="hljs-comment">// We create a wallet with name 'myWallet'. This is optional. The constructor is fine with no arguments.</span>
-<span class="hljs-keyword">const</span> w1 = Neon.create.wallet({ name: <span class="hljs-string">"myWallet"</span> });
+<span class="hljs-keyword">const</span> w1 = Neon.create.wallet({ <span class="hljs-attr">name</span>: <span class="hljs-string">"myWallet"</span> });
 
 <span class="hljs-comment">// We generate a new Account and add it to the wallet</span>
 w1.addAccount();
@@ -181,41 +172,32 @@ w1.addAccount(a);
 w1.addAccount(b);
 </code></pre>
 <p>If your Account is not encrypted, it is still possible to add it to the Wallet. However, you will be unable to export the wallet until you encrypt it. The Wallet class provides some helper methods to quickly encrypt or decrypt all accounts.</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-comment">// encrypting Account a will fail as it has not been unlocked.</span>
-w1.encryptAll(<span class="hljs-string">"lousypassword"</span>); <span class="hljs-comment">// returns [false, true]</span>
+<pre><code class="hljs css languages- js"><span class="hljs-comment">// encrypting Account a will fail as it has not been unlocked.</span>
+w1.encryptAll(<span class="hljs-string">"lousypassword"</span>).then(<span class="hljs-function"><span class="hljs-params">results</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(results)); <span class="hljs-comment">// returns [false, true]</span>
 
 <span class="hljs-comment">// we will decrypt a (account at array position 0)</span>
-w1.decrypt(<span class="hljs-number">0</span>, <span class="hljs-string">"city of zion"</span>); <span class="hljs-comment">// returns true</span>
+w1.decrypt(<span class="hljs-number">0</span>, <span class="hljs-string">"city of zion"</span>).then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(result)); <span class="hljs-comment">// returns true</span>
 <span class="hljs-comment">// so we can encrypt everything with the same password</span>
-w1.encrypt(<span class="hljs-number">0</span>, <span class="hljs-string">"lousypassword"</span>); <span class="hljs-comment">// returns true</span>
+w1.encrypt(<span class="hljs-number">0</span>, <span class="hljs-string">"lousypassword"</span>).then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(result)); <span class="hljs-comment">// returns true</span>
 </code></pre>
 <p>Similar methods for decryption (<code>wallet.decrypt</code>, <code>wallet.decryptAll</code>) is available. Encryption and decryption methods will return booleans which corresponds to the success or failure of the action.</p>
 <p>Do note that decrypting does not mean that you cannot export the wallet. Decryption does not erase the old encryption but merely exposes your keys.</p>
-<p>Once encrypted, you can proceed to export your wallet through <code>writeFile</code> or <code>export</code>.</p>
-<p>The static method <code>readFile</code> is available to construct a wallet through reading a JSON file.</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-comment">// writes to a file on cwd</span>
-w1.writeFile(<span class="hljs-string">"mywallet.json"</span>);
-
-<span class="hljs-comment">// exports as JSON string</span>
+<p>Once encrypted, you can proceed to export your wallet through <code>export</code>.</p>
+<pre><code class="hljs css languages- js"><span class="hljs-comment">// exports as JSON string</span>
 <span class="hljs-keyword">const</span> walletString = w1.export();
 
-<span class="hljs-comment">// read wallet from file</span>
-<span class="hljs-keyword">const</span> w2 = wallet.Wallet.readFile(<span class="hljs-string">"mywallet.json"</span>);
-
 <span class="hljs-comment">// Decryption failed for account[0]</span>
-w2.decryptAll(<span class="hljs-string">"lousypassword"</span>); <span class="hljs-comment">// returns [true, true]</span>
+w2.decryptAll(<span class="hljs-string">"lousypassword"</span>).then(<span class="hljs-function"><span class="hljs-params">results</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(results)); <span class="hljs-comment">// returns [true, true]</span>
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" id="methods"></a><a href="#methods" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
 <h3><a class="anchor" aria-hidden="true" id="core"></a><a href="#core" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Core</h3>
 <p>The core methods available are methods to convert key formats and generate new private keys.</p>
 <p>Do note that the methods available is not the full set but only the minimum required. Generally, there is a method to retrieve the lower key from the higher key. For example, <code>getPublicKeyFromPrivateKey</code> exists but not <code>getAddressFromPrivatKey</code> or <code>getPrivateKeyFromPublicKey</code>. For conversions across all formats, you are encouraged to use the <code>Account</code> class.</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
-<span class="hljs-keyword">const</span> privateKey = Neon.create.privateKey();
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> privateKey = Neon.create.privateKey();
 <span class="hljs-keyword">const</span> publicKey = Neon.get.publicKeyFromPrivateKey(publicKey);
 <span class="hljs-keyword">const</span> scriptHash = Neon.get.scriptHashFromPublicKey(publicKey);
 <span class="hljs-keyword">const</span> address = Neon.get.addressFromScriptHash(scriptHash);
 
-<span class="hljs-keyword">import</span> { wallet } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
 <span class="hljs-keyword">const</span> privateKey = wallet.generatePrivateKey();
 <span class="hljs-keyword">const</span> publicKey = wallet.getPublicKeyFromPrivateKey(privateKey);
 <span class="hljs-keyword">const</span> scriptHash = wallet.getScriptHashFromPublicKey(publicKey);
@@ -228,31 +210,27 @@ w2.decryptAll(<span class="hljs-string">"lousypassword"</span>); <span class="hl
 <h3><a class="anchor" aria-hidden="true" id="nep2"></a><a href="#nep2" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>NEP2</h3>
 <p>The NEP2 standard describes the procedure to encrypt or decrypt a private key. The encryption method accepts either a WIF or HEX private key. However, the decryption method will always return a WIF for consistency.</p>
 <p>Do note that the encryption/decryption takes a long time and might not work very nicely in browsers.</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
-<span class="hljs-keyword">const</span> privateKey = Neon.create.privateKey()
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> privateKey = Neon.create.privateKey()
 <span class="hljs-keyword">const</span> WIF = Neon.get.WIFFromPrivateKey(privateKey)
-<span class="hljs-keyword">const</span> nep2Key = Neon.encrypt(privateKey, <span class="hljs-string">'myPassword'</span>)
-<span class="hljs-keyword">const</span> decryptedKey = Neon.decrypt(nep2Key, <span class="hljs-string">'myPassword'</span>)
+<span class="hljs-keyword">const</span> nep2Key = <span class="hljs-keyword">await</span> Neon.encrypt(privateKey, <span class="hljs-string">'myPassword'</span>)
+<span class="hljs-keyword">const</span> decryptedKey = <span class="hljs-keyword">await</span> Neon.decrypt(nep2Key, <span class="hljs-string">'myPassword'</span>)
 WIF === decryptedKey <span class="hljs-comment">// true</span>
 
-<span class="hljs-keyword">import</span> { wallet }
 <span class="hljs-keyword">const</span> privateKey = wallet.generatePrivateKey()
 <span class="hljs-keyword">const</span> WIF = <span class="hljs-keyword">new</span> wallet.Account(privateKey).WIF
-<span class="hljs-keyword">const</span> nep2Key = wallet.encrypt(WIF, <span class="hljs-string">'myPassword'</span>)
-<span class="hljs-keyword">const</span> decryptedKey = wallet.decrypt(nep2Key, <span class="hljs-string">'myPassword'</span>)
+<span class="hljs-keyword">const</span> nep2Key = <span class="hljs-keyword">await</span> wallet.encrypt(WIF, <span class="hljs-string">'myPassword'</span>)
+<span class="hljs-keyword">const</span> decryptedKey = <span class="hljs-keyword">await</span> wallet.decrypt(nep2Key, <span class="hljs-string">'myPassword'</span>)
 WIF === decryptedKey <span class="hljs-comment">// true</span>
 </code></pre>
 <h3><a class="anchor" aria-hidden="true" id="verify"></a><a href="#verify" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Verify</h3>
 <p>Verification methods for the various key formats are available::</p>
-<pre><code class="hljs css languages- ts"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
-Neon.is.address(addrStr);
+<pre><code class="hljs css languages- js">Neon.is.address(addrStr);
 Neon.is.privateKey(keyStr);
 Neon.is.encryptedKey(encryptedStr);
 Neon.is.publicKey(publicKeyStr);
 Neon.is.wif(wifStr);
 Neon.is.scriptHash(scriptHashStr);
 
-<span class="hljs-keyword">import</span> { wallet } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
 wallet.isAddress(addrStr);
 wallet.isPrivateKey(keyStr);
 wallet.isNEP2(keyStr);
