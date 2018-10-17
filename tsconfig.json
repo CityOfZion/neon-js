@@ -6,6 +6,7 @@
     { "path": "./packages/neon-api" },
     { "path": "./packages/neon-nep5" },
     { "path": "./packages/neon-nep9" },
+    { "path": "./packages/neon-nns" },
     { "path": "./packages/neon-js" }
   ]
 }
