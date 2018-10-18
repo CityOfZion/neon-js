@@ -4,7 +4,7 @@
 
 Neon-NEP9 plugin. Adds the package `nep9` into `neon-core`.
 
-- Ability to parse an NEP9 compliant string into an easily comsumable intent object
+- Ability to parse an NEP9 compliant string into an easily consumable intent object
 
 ## Installation
 

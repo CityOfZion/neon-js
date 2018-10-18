@@ -5,7 +5,7 @@ title: Settings
 
 The `settings` module is exposed as:
 
-```ts
+```js
 import Neon, { settings } from "@cityofzion/neon-js";
 
 // Semantic access
@@ -25,16 +25,6 @@ This module contains all the adjustable settings available in the package. This 
 `{[network:string]: Network}`
 
 This contains all the networks avaiable for use in `neon-js`. The default networks included are `MainNet`, `TestNet` and `CozNet`.
-
-There are 2 helper functions that aids in adding or removing networks
-
-```ts
-const customMainNet = new Network("MainNet");
-// This overrides the existing MainNet with your custom configuration
-settings.addNetwork(customMainNet, true);
-
-settings.removeNetwork("TestNet");
-```
 
 ## timeout
 

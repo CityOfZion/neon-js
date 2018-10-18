@@ -20,6 +20,7 @@ curl \
 -d '{"jsonrpc":"2.0","id":"123","method":"getversion","params":[]}' \
 http://localhost:10332
 ```
+
 If the NEO node is listening to that port, you should get something like:
 
 ```sh
@@ -36,22 +37,25 @@ Now that all this is done, we will prepare our `Network` class that will configu
 
 ```js
 const config = {
-  name: 'PrivateNet',
+  name: "PrivateNet",
   extra: {
-    neoscan: 'http://localhost:4000/api/main_net'
+    neoscan: "http://localhost:4000/api/main_net"
   }
-}
+};
 ```
+
 For this example, we have a neoscan service setup serving our private net. The `name` field will be the name which we reference this in `neon-js`.
 
 Now, we construct the `Network` object and add it to our `networks`:
 
 ```js
-const privateNet = new rpc.Network(config)
-Neon.add.network(privateNet)
+const privateNet = new rpc.Network(config);
+Neon.add.network(privateNet);
 
-Neon.api.neoscan.getBalance('PrivateNet', address)
-.then(res => console.log(res))
+// You will be able to lookup an instance of PrivateNet neoscan
+var privateNetNeoscan = new Neon.api.neoscan.instance("PrivateNet");
+
+privateNetNeoscan.getBalance(address).then(res => console.log(res));
 ```
 
 We should be able to see a printout of the balance of the address if it is successful.

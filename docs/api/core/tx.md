@@ -40,7 +40,7 @@ import Neon from "@cityofzion/neon-js";
 // Let us create a ContractTransaction
 let tx = Neon.create.contractTx();
 // Now let us add an intention to send 1 NEO to someone
-tx.addOutput("NEO", 1, someAddress)
+tx.addIntent("NEO", 1, someAddress)
   .addRemark("I am sending 1 NEO to someAddress") // Add an remark
   .calculate(balance) // Now we add in the balance we retrieve from an external API and calculate the required inputs.
   .sign(privateKey); // Sign with the private key of the balance
