@@ -56,8 +56,6 @@ describe('Transaction', function () {
     tx.exclusiveData.should.eql({})
     tx.inputs.length.should.equal(1)
     tx.outputs.length.should.equal(1)
-    balance.assets.NEO.unconfirmed.length.should.equal(1)
-    balance.assets.NEO.spent.length.should.equal(1)
   })
 
   it('create InvocationTx', () => {
@@ -73,7 +71,6 @@ describe('Transaction', function () {
       script: '00046e616d656711c4d1f4fba619f2628870d36e3a9773e874705b'
     })
     tx.inputs.length.should.be.at.least(1)
-    balance.assets.GAS.unconfirmed.length.should.equal(1)
   })
 
   it('create StateTx', () => {

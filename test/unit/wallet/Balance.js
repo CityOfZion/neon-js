@@ -59,7 +59,8 @@ describe('Balance', function () {
     ]
 
     it('unconfirmed', () => {
-      Transaction.createContractTx(bal, intents)
+      const tx = Transaction.createContractTx(bal, intents)
+      bal.applyTx(tx, false)
       bal.assets.GAS.spent.length.should.equal(1)
       bal.assets.GAS.unspent.length.should.equal(1)
       bal.assets.GAS.unconfirmed.length.should.equal(2)
