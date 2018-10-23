@@ -135,9 +135,8 @@ class Balance {
   confirm () {
     for (const sym of this.assetSymbols) {
       const assetBalance = this.assets[sym]
-      const difference = assetBalance.unconfirmed.reduce((sum, coin) => sum.add(coin.value), new Fixed8(0))
-      assetBalance.balance = assetBalance.balance.add(difference)
       assetBalance.unspent = assetBalance.unspent.concat(assetBalance.unconfirmed)
+      assetBalance.balance = assetBalance.unspent.reduce((sum, coin) => sum.add(coin.value), new Fixed8(0))
       assetBalance.unconfirmed = []
     }
     return this
