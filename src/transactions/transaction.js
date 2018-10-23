@@ -223,7 +223,6 @@ class Transaction {
     const { inputs, change } = core.calculateInputs(balance, this.outputs, this.gas, strategy, fees)
     this.inputs = inputs
     this.outputs = this.outputs.concat(change)
-    balance.applyTx(this)
     log.info(`Calculated the inputs required for Transaction with Balance: ${balance.address}`)
     return this
   }
