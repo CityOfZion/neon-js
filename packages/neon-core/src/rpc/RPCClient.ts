@@ -239,8 +239,12 @@ export class RPCClient {
   public async getVersion(): Promise<string> {
     try {
       const response = await this.execute(Query.getVersion());
-      const newVersion = response.result.useragent.match(versionRegex)[1];
-      this.version = newVersion;
+      if (response && response.result && response.result.useragent) {
+        const newVersion = response.result.useragent.match(versionRegex)[1];
+        this.version = newVersion;
+      } else {
+        this.version = RPC_VERSION;
+      }
       return this.version;
     } catch (err) {
       if (err.message.includes("Method not found")) {
