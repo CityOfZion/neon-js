@@ -63,6 +63,16 @@ describe("sendAsset", () => {
 });
 
 describe("claimGas", () => {
+  test("claimGas throws if no claims found", async () => {
+    const config = {
+      api: provider,
+      account: new neonJs.wallet.Account(testKeys.a.privateKey),
+      claims: new neonJs.wallet.Claims()
+    };
+
+    expect(api.claimGas(config)).rejects.toThrow("No Claims found");
+  });
+
   test(
     "claimGas for a",
     async () => {
