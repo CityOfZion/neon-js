@@ -28,9 +28,8 @@ describe("fillUrl", () => {
     const config = {
       api: {
         getRPCEndpoint: jest.fn().mockImplementationOnce(() => expectedUrl)
-      } as any,
-      address: ""
-    } as SendAssetConfig;
+      } as any
+    } as any;
 
     const result = await fill.fillUrl(config);
 
@@ -112,7 +111,9 @@ describe("fillSigningFunction", () => {
 
 describe("fillClaims", () => {
   test("skips if claims present", async () => {
-    const expectedClaims = new wallet.Claims();
+    const expectedClaims = new wallet.Claims({
+      claims: [new wallet.ClaimItem()]
+    });
     const config = {
       claims: expectedClaims
     } as ClaimGasConfig;
@@ -122,7 +123,9 @@ describe("fillClaims", () => {
   });
 
   test("fills if claims not present", async () => {
-    const expectedClaims = new wallet.Claims();
+    const expectedClaims = new wallet.Claims({
+      claims: [new wallet.ClaimItem()]
+    });
     const config = {
       net: "UnitTestNet",
       account: {
@@ -136,5 +139,20 @@ describe("fillClaims", () => {
     const result = await fill.fillClaims(config);
     expect(result.claims).toBe(expectedClaims);
     expect(config.api.getClaims).toBeCalledWith(config.account.address);
+  });
+
+  test("throws if claims not present and api returned no claims", async () => {
+    const expectedClaims = new wallet.Claims();
+    const config = {
+      net: "UnitTestNet",
+      account: {
+        address: jest.fn()
+      },
+      api: {
+        getClaims: jest.fn().mockImplementationOnce(() => expectedClaims)
+      } as any
+    } as any;
+
+    expect(fill.fillClaims(config)).rejects.toThrow("No Claims found");
   });
 });
