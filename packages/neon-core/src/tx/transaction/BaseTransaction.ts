@@ -150,7 +150,6 @@ export abstract class BaseTransaction {
     );
     this.inputs = inputs;
     this.outputs = this.outputs.concat(change);
-    balance.applyTx(this);
     log.info(
       `Calculated the inputs required for Transaction with Balance: ${
         balance.address
