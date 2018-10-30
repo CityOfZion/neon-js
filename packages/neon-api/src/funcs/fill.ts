@@ -70,5 +70,8 @@ export async function fillClaims<
   if (!(config.claims instanceof wallet.Claims)) {
     config.claims = await config.api.getClaims(config.account!.address);
   }
+  if (!config.claims.claims || config.claims.claims.length === 0) {
+    throw new Error(`No Claims found`);
+  }
   return config;
 }
