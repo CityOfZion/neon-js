@@ -91,7 +91,7 @@ There are many fields that we want to know about in an NEP5 token: name, decimal
   const getSymbol = { scriptHash, operation: 'symbol', args: [] }
   const getTotalSupply = { scriptHash, operation: 'totalSupply', args: [] }
 
-  const script = Neon.create.script([getName, getDecimals, getSymbol, getTotalSupply])
+  const script = Neon.create.script(getName, getDecimals, getSymbol, getTotalSupply)
 ```
 
 Similar to the previous example, our `script` is now ready to be used in a `invokescript` RPC call or an invocationTransaction.
