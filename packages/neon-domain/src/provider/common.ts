@@ -1,4 +1,4 @@
-import { logging, sc, rpc, u } from "@cityofzion/neon-core";
+import { logging, rpc, sc, u } from "@cityofzion/neon-core";
 
 export interface DomainProvider {
   name: string;

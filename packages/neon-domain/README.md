@@ -1,4 +1,4 @@
-# neon-api
+# neon-domain
 
 ## Overview
 
