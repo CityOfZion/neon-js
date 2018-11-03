@@ -58,7 +58,7 @@ console.log(Neon);
 var acct = Neon.create.Account("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW");
 ```
 
-> Find more guides on our [documentation website](http://cityofzion.io/neon-js/docs/en/basic_sendasset.html)
+> Find more guides on our [documentation website](https://cityofzion.io/neon-js/docs/en/guides/basic/sendasset.html)
 
 # Contributing
 
