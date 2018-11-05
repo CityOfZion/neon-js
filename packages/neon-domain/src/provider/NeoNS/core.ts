@@ -1,7 +1,5 @@
 import { logging, u, sc, wallet } from "@cityofzion/neon-core";
-import {
-   resolve,
-} from "../common";
+import { resolve } from "./main";
 
 const log = logging.default("neon-domain");
 
@@ -9,17 +7,17 @@ const operation = "resolve";
 
 /**
  * Get balances of NEO and GAS for an address
- * @param url - URL of a neonDB service.
- * @param address - Address to check.
- * @return  Balance of address
+ * @param url - URL of an NEO RPC service.
+ * @param contract - the contract used to resolve
+ * @param domain - the domain to resolve.
+ * @return public address as string
  */
+
 export async function resolveDomain(
   url: string,
   contract: string,
-  domain: string,
-  tld: string
+  domain: string
 ): Promise<string> {
-
   const protocol = {
     type: "String",
     value: "addr"
@@ -30,8 +28,8 @@ export async function resolveDomain(
     value: ""
   };
 
-  const tldRegEx = ".".concat(tld).concat("$"); 
-  const regExp = new RegExp(tldRegEx);
+  const tld = domain.split(".").reverse()[0];
+  const regExp = new RegExp(`.${tld}$`);
 
   const subdomain = domain.replace(regExp, "");
   const hashSubdomain = u.sha256(u.str2hexstring(subdomain));
@@ -46,4 +44,3 @@ export async function resolveDomain(
 
   return response;
 }
-

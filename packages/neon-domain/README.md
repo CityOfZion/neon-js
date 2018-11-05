@@ -14,12 +14,9 @@ yarn i @cityofzion/neon-domain
 
 ```js
 const neonCore = require("@cityofzion/neon-core");
-const apiPlugin = require("@cityofzion/neon-api");
-const doaminPlugin = require("@cityofzion/neon-api");
+const domainPlugin = require("@cityofzion/neon-api");
 
-const neonWithDomain = apiPlugin(neonCore);
-
-const neonJs = domainPlugin(neonWithDomain);
+const neonJs = domainPlugin(neonCore);
 
 module.exports = neonJs;
 ```

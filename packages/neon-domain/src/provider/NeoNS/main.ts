@@ -2,18 +2,17 @@ import { logging, rpc, sc, u } from "@cityofzion/neon-core";
 
 export interface DomainProvider {
   name: string;
-  resolveDomain(url: string, domain: string, tld: string): Promise<string>;
+  resolveDomain(url: string, domain: string): Promise<string>;
 }
 const log = logging.default("neon-domain");
 
 export async function resolve(
-    url: string,
-    domain: string,
-    scriptHash: string, // = "348387116c4a75e420663277d9c02049907128c7", // default for now nns jump contract
-    operation: string, // = "resolve"
-    args: any[]
+  url: string,
+  domain: string,
+  scriptHash: string, // = "348387116c4a75e420663277d9c02049907128c7", // default for now nns jump contract
+  operation: string, // = "resolve"
+  args: any[]
 ) {
-
   const sb = new sc.ScriptBuilder();
   const script = sb.emitAppCall(scriptHash, operation, args).str;
   try {
@@ -24,4 +23,3 @@ export async function resolve(
     throw err;
   }
 }
-

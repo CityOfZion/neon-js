@@ -14,9 +14,16 @@
     "antshares",
     "javascript",
     "libraries",
-    "neon-ns"
+    "neon-domain"
   ],
   "author": "Mathias Enzensberger <merl111@protonmail.com> (https://github.com/merl111)",
+  "contributors": [
+    {
+      "name": "Nick Fujita",
+      "email": "nickfujita@gmail.com",
+      "url": "https://github.com/nickfujita"
+    }
+  ],
   "license": "MIT",
   "main": "lib/index.js",
   "module": "src/index.js",
@@ -48,9 +55,5 @@
   },
   "files": [
     "lib/"
-  ],
-  "dependencies": {
-    "jest": "^23.6.0",
-    "jest-cli": "^23.6.0"
-  }
+  ]
 }
