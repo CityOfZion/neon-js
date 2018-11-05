@@ -9,8 +9,8 @@ const log = logging.default("neon-domain");
 export async function resolve(
   url: string,
   domain: string,
-  scriptHash: string, // = "348387116c4a75e420663277d9c02049907128c7", // default for now nns jump contract
-  operation: string, // = "resolve"
+  scriptHash: string, 
+  operation: string, 
   args: any[]
 ) {
   const sb = new sc.ScriptBuilder();
