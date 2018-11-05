@@ -236,21 +236,33 @@ export class RPCClient {
   /**
    * Gets the version of the NEO node. This method will never be blocked by version. This method will also update the current Client's version to the one received.
    */
-  public async getVersion(): Promise<string> {
-    try {
-      const response = await this.execute(Query.getVersion());
-      const newVersion = response.result.useragent.match(versionRegex)[1];
-      this.version = newVersion;
-      return this.version;
-    } catch (err) {
-      if (err.message.includes("Method not found")) {
-        this.version = RPC_VERSION;
-        return this.version;
-      } else {
-        throw err;
-      }
-    }
-  }
+   getVersion() {
+       return __awaiter(this, void 0, void 0, function* () {
+           try {
+               const response = yield this.execute(Query_1.default.getVersion());
+               if (response && response.result && response.result.useragent) {
+                 var version = response.result.useragent.split(':');
+                 version[0] = version[0].substring(1);
+                 version[1] = version[1].substring(0, version[1].length-1);
+                 const newVersion = version[1];
+                 this.version = newVersion;
+               }
+               else {
+                 throw new Error('Empty or unexpected version pattern');
+               }
+               return this.version;
+           }
+           catch (err) {
+               if (err.message.includes("Method not found")) {
+                   this.version = consts_1.RPC_VERSION;
+                   return this.version;
+               }
+               else {
+                   throw err;
+               }
+           }
+       });
+   }
 
   /**
    * Calls a smart contract with the given parameters. This method is a local invoke, results are not reflected on the blockchain.
