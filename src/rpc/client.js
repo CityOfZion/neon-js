@@ -7,7 +7,6 @@ import { timeout } from '../settings'
 
 const log = logger('rpc')
 
-const versionRegex = /NEO:(\d+\.\d+\.\d+)/
 /**
  * @class RPCClient
  * @classdesc
@@ -280,9 +279,15 @@ class RPCClient {
   getVersion () {
     return this.execute(Query.getVersion())
       .then((res) => {
-        const version = res.result.useragent.match(versionRegex)[1]
-        this.version = semver.clean(version)
-        return this.version
+        if (res && res.result && res.result.useragent) {
+          const responseLength = res.result.useragent.length
+          const strippedResponse = res.result.useragent.substring(1, responseLength - 1)
+          const version = strippedResponse.split(':')[1]
+          this.version = version
+          return version
+        } else {
+          throw new Error('Empty or unexpected version pattern')
+        }
       })
       .catch((err) => {
         if (err.message.includes('Method not found')) {
