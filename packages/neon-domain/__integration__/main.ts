@@ -8,9 +8,9 @@ let MAINNET_URL = "";
 let provider;
 
 const MAINNET_URLS = [
-  "http://seed3.neo.org:10332",
-  "http://seed4.neo.org:10332",
-  "http://seed5.neo.org:10332"
+  "http://seed9.ngd.network:10332",
+  "https://seed7.cityofzion.io:443",
+  "http://seed8.ngd.network:10332"
 ];
 
 beforeAll(async () => {
