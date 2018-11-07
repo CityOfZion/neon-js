@@ -1,16 +1,13 @@
-import apiPlugin from "@cityofzion/neon-api";
 import * as neonCore from "@cityofzion/neon-core";
 import domainPlugin from "../src/index";
 
-const neonWithDomain = apiPlugin(neonCore);
-const neonJs = domainPlugin(neonWithDomain);
+const neonJs = domainPlugin(neonCore);
 const { CONST, rpc, u, api, wallet } = neonJs;
 
 let MAINNET_URL = "";
 let provider;
 
 const MAINNET_URLS = [
-  "http://seed1.cryptoholics.cc:10332",
   "http://seed3.neo.org:10332",
   "http://seed4.neo.org:10332",
   "http://seed5.neo.org:10332"
