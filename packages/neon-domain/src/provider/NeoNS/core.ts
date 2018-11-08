@@ -6,7 +6,7 @@ const log = logging.default("neon-domain");
 const operation = "resolve";
 
 /**
- * Get balances of NEO and GAS for an address
+ * Resolve a domain to a public address. 
  * @param url - URL of an NEO RPC service.
  * @param contract - the contract used to resolve
  * @param domain - the domain to resolve.

@@ -1,5 +1,6 @@
 import * as neonCore from "@cityofzion/neon-core";
 import domainPlugin from "../src/index";
+import { getMainnetUrls } from "./urls";
 
 const neonJs = domainPlugin(neonCore);
 const { CONST, rpc, u, api, wallet } = neonJs;
@@ -7,11 +8,13 @@ const { CONST, rpc, u, api, wallet } = neonJs;
 let MAINNET_URL = "";
 let provider;
 
-const MAINNET_URLS = [
-  "http://seed9.ngd.network:10332",
-  "https://seed7.cityofzion.io:443",
-  "http://seed8.ngd.network:10332"
-];
+//const MAINNET_URLS = [
+//  "http://seed9.ngd.network:10332",
+//  "https://seed7.cityofzion.io:443",
+//  "http://seed8.ngd.network:10332"
+//];
+
+const MAINNET_URLS = getMainnetUrls();
 
 beforeAll(async () => {
   provider = new neonJs.domain.nns.instance(
