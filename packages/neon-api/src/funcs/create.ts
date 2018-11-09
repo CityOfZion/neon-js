@@ -38,7 +38,7 @@ export async function createInvocationTx(
   config.tx = new tx.InvocationTransaction(
     Object.assign(
       {
-        intents: config.intents || [],
+        outputs: config.intents || [],
         script: processedScript,
         gas: config.gas || 0
       },

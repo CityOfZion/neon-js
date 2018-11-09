@@ -55,6 +55,9 @@ describe("sendAsset", () => {
       };
 
       const result = await api.sendAsset(config);
+
+      expect(result.tx.inputs.length).toBeGreaterThanOrEqual(2);
+      expect(result.tx.outputs.length).toBeGreaterThanOrEqual(2);
       expect(result.response!.result).toBe(true);
       expect(result.response!.txid).not.toBeNull();
     },
@@ -83,6 +86,8 @@ describe("claimGas", () => {
 
       const result = await api.claimGas(config);
 
+      expect(result.tx.inputs.length).toEqual(0);
+      expect(result.tx.outputs.length).toEqual(1);
       expect(result.response!.result).toBe(true);
       expect(result.response!.txid).not.toBeNull();
     },
@@ -119,12 +124,15 @@ describe("doInvoke", () => {
       const config = {
         api: provider,
         intents,
-        account: new neonJs.wallet.Account(testKeys.a.privateKey),
+        account: new neonJs.wallet.Account(testKeys.b.privateKey),
         script,
         gas: 0
       };
 
       const result = await api.doInvoke(config);
+      expect(result.tx.inputs.length).toBeGreaterThanOrEqual(2);
+      expect(result.tx.outputs.length).toBeGreaterThanOrEqual(2);
+      expect(result.tx.attributes.length).toEqual(0);
       expect(result.response!.result).toBe(true);
       expect(result.response!.txid).not.toBeNull();
     },
@@ -160,6 +168,9 @@ describe("doInvoke", () => {
       };
 
       const result = await api.doInvoke(config);
+      expect(result.tx.inputs.length).toEqual(0);
+      expect(result.tx.outputs.length).toEqual(0);
+      expect(result.tx.attributes.length).toEqual(2);
       expect(result.response!.result).toBe(true);
       expect(result.response!.txid).not.toBeNull();
     },
@@ -186,6 +197,8 @@ describe("setupVote", () => {
       };
 
       const result = await api.setupVote(config);
+      expect(result.tx.inputs.length).toEqual(0);
+      expect(result.tx.outputs.length).toEqual(0);
       expect(result.response!.result).toBe(true);
       expect(result.response!.txid).not.toBeNull();
     },
