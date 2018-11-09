@@ -3,7 +3,7 @@ id: latest
 title: Changelog (v4)
 ---
 
-4.1.2
+4.1.3
 =====
 
 - Fixes

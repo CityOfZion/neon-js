@@ -8,6 +8,7 @@
     "precommit": "yarn lint && yarn pretty",
     "prestart": "yarn build && yarn dist",
     "pretty": "prettier --write --loglevel=warn \"**/{src,__{tests,integration}__}/**/*.ts\"",
+    "release":"yarn clean && yarn build && yarn dist && lerna publish",
     "start": "jest --watch",
     "test": "jest",
     "test:integration": "jest /packages/.*/__integration__/.*",
