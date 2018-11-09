@@ -5,7 +5,7 @@ title: NEP5
 
 The `nep5` module is available as the plugin `@cityofzion/neon-nep5`.
 
-```ts
+```js
 import Neon from "@cityofzion/neon-js";
 const rpxScriptHash = Neon.CONST.CONTRACTS.TEST_RPX;
 Neon.get.tokenInfo("http://seed1.neo.org:20332", rpxScriptHash);

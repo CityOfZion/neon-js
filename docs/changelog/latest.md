@@ -3,6 +3,16 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.1.2
+=====
+
+- Fixes
+
+  - Remove `applyTx` from Balance.calculate. You are recommended to apply only after sending out the transaction as the constructed transaction may be rejected.
+  - Fix `doInvoke` not attaching intents properly, resulting in no assets sent.
+  - Add check for empty claims in `fillClaims`. This means that `claimGas` will throw earlier if there is no available gas to claim.
+  - Various documentation fixes
+
 4.1.0
 =====
 
