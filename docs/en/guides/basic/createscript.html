@@ -91,7 +91,7 @@ This will be covered in another tutorial or you can check out the source code un
   <span class="hljs-keyword">const</span> getSymbol = { scriptHash, <span class="hljs-attr">operation</span>: <span class="hljs-string">'symbol'</span>, <span class="hljs-attr">args</span>: [] }
   <span class="hljs-keyword">const</span> getTotalSupply = { scriptHash, <span class="hljs-attr">operation</span>: <span class="hljs-string">'totalSupply'</span>, <span class="hljs-attr">args</span>: [] }
 
-  <span class="hljs-keyword">const</span> script = Neon.create.script([getName, getDecimals, getSymbol, getTotalSupply])
+  <span class="hljs-keyword">const</span> script = Neon.create.script(getName, getDecimals, getSymbol, getTotalSupply)
 </code></pre>
 <p>Similar to the previous example, our <code>script</code> is now ready to be used in a <code>invokescript</code> RPC call or an invocationTransaction.</p>
 <p>Now our result would look like:</p>

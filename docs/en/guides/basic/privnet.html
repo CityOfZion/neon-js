@@ -46,19 +46,21 @@ http://localhost:10332
 <h2><a class="anchor" aria-hidden="true" id="adding-the-private-net"></a><a href="#adding-the-private-net" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding the private net</h2>
 <p>Now that all this is done, we will prepare our <code>Network</code> class that will configure and inform <code>neon-js</code> about our private net. First, we create the following javascript object:</p>
 <pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> config = {
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'PrivateNet'</span>,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">"PrivateNet"</span>,
   <span class="hljs-attr">extra</span>: {
-    <span class="hljs-attr">neoscan</span>: <span class="hljs-string">'http://localhost:4000/api/main_net'</span>
+    <span class="hljs-attr">neoscan</span>: <span class="hljs-string">"http://localhost:4000/api/main_net"</span>
   }
-}
+};
 </code></pre>
 <p>For this example, we have a neoscan service setup serving our private net. The <code>name</code> field will be the name which we reference this in <code>neon-js</code>.</p>
 <p>Now, we construct the <code>Network</code> object and add it to our <code>networks</code>:</p>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> privateNet = <span class="hljs-keyword">new</span> rpc.Network(config)
-Neon.add.network(privateNet)
+<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> privateNet = <span class="hljs-keyword">new</span> rpc.Network(config);
+Neon.add.network(privateNet);
 
-Neon.api.neoscan.getBalance(<span class="hljs-string">'PrivateNet'</span>, address)
-.then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(res))
+<span class="hljs-comment">// You will be able to lookup an instance of PrivateNet neoscan</span>
+<span class="hljs-keyword">var</span> privateNetNeoscan = <span class="hljs-keyword">new</span> Neon.api.neoscan.instance(<span class="hljs-string">"PrivateNet"</span>);
+
+privateNetNeoscan.getBalance(address).then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(res));
 </code></pre>
 <p>We should be able to see a printout of the balance of the address if it is successful.</p>
 <h2><a class="anchor" aria-hidden="true" id="notes"></a><a href="#notes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Notes</h2>

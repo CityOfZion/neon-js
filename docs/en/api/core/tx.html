@@ -55,7 +55,7 @@ transaction
 <span class="hljs-comment">// Let us create a ContractTransaction</span>
 <span class="hljs-keyword">let</span> tx = Neon.create.contractTx();
 <span class="hljs-comment">// Now let us add an intention to send 1 NEO to someone</span>
-tx.addOutput(<span class="hljs-string">"NEO"</span>, <span class="hljs-number">1</span>, someAddress)
+tx.addIntent(<span class="hljs-string">"NEO"</span>, <span class="hljs-number">1</span>, someAddress)
   .addRemark(<span class="hljs-string">"I am sending 1 NEO to someAddress"</span>) <span class="hljs-comment">// Add an remark</span>
   .calculate(balance) <span class="hljs-comment">// Now we add in the balance we retrieve from an external API and calculate the required inputs.</span>
   .sign(privateKey); <span class="hljs-comment">// Sign with the private key of the balance</span>
