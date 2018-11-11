@@ -107,13 +107,8 @@ describe("getTokens", () => {
   test("without balance", async () => {
     const info = await getTokens(TESTNET_URL, [
       CONST.CONTRACTS.TEST_RPX,
-      // CONST.CONTRACTS.TEST_RHTT4,
       CONST.CONTRACTS.TEST_LWTF,
       CONST.CONTRACTS.TEST_NXT
-      // CONST.CONTRACTS.TEST_RPX,
-      // CONST.CONTRACTS.TEST_RHTT4,
-      // CONST.CONTRACTS.TEST_LWTF,
-      // CONST.CONTRACTS.TEST_NXT
     ]);
 
     expect(Object.keys(info).map(key => info[key])).toEqual(
@@ -141,53 +136,28 @@ describe("getTokens", () => {
   });
 
   test("with balance", async () => {
-    const info = await getTokens(
+    const tokensInfo = await getTokens(
       TESTNET_URL,
       [
         CONST.CONTRACTS.TEST_RPX,
-        // CONST.CONTRACTS.TEST_RHTT4,
         CONST.CONTRACTS.TEST_LWTF,
         CONST.CONTRACTS.TEST_NXT
-        // CONST.CONTRACTS.TEST_RPX,
-        // CONST.CONTRACTS.TEST_RHTT4,
-        // CONST.CONTRACTS.TEST_LWTF,
-        // CONST.CONTRACTS.TEST_NXT
       ],
       "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
     );
 
-    expect(Object.keys(info).map(key => info[key])).toEqual(
-      expect.arrayContaining([
-        {
-          balance: "1032.011",
-          decimals: 8,
-          name: "Red Pulse Token 3.1.4",
-          symbol: "RPX",
-          totalSupply: 43467000
-        },
-        {
-          balance: "0.00015718",
-          decimals: 8,
-          name: "LOCALTOKEN",
-          symbol: "LWTF",
-          totalSupply: 2270000
-        },
-        {
-          balance: "1861",
-          decimals: 8,
-          name: "NEX Template",
-          symbol: "NXT",
-          totalSupply: 2508560
-        }
-      ])
-    );
+    expect(tokensInfo.length).toBe(3);
 
-    // expect(typeof info.name).toBe("string");
-    // expect(info.symbol).toMatch(/[A-Z]+/);
-    // expect(typeof info.decimals).toBe("number");
-    // expect(typeof info.totalSupply).toBe("number");
-    // expect(info.balance).toBeDefined();
-    // const balanceNum = info.balance.toNumber();
-    // expect(balanceNum).toBeGreaterThan(0);
+    Object.keys(tokensInfo).map(key => {
+      const info = tokensInfo[key];
+
+      expect(typeof info.name).toBe("string");
+      expect(info.symbol).toMatch(/[A-Z]+/);
+      expect(typeof info.decimals).toBe("number");
+      expect(typeof info.totalSupply).toBe("number");
+      expect(info.balance).toBeDefined();
+      const balanceNum = info.balance.toNumber();
+      expect(balanceNum).toBeGreaterThan(0);
+    });
   });
 });
