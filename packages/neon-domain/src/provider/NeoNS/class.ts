@@ -1,10 +1,9 @@
 import { logging } from "@cityofzion/neon-core";
-import { DomainProvider } from "./main";
 import { resolveDomain } from "./core";
 
 const log = logging.default("neon-domain");
 
-export class NeoNS implements DomainProvider {
+export class NeoNS {
   private contract: string;
 
   public get name() {
@@ -13,7 +12,7 @@ export class NeoNS implements DomainProvider {
 
   constructor(contract: string) {
     this.contract = contract;
-    log.info(`Created NeoNS DomainProvider: ${this.contract}`);
+    log.info(`Created NeoNS Provider: ${this.contract}`);
   }
 
   public resolveDomain(url: string, domain: string): Promise<string> {

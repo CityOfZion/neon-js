@@ -1,4 +1,4 @@
-import { logging, u, sc, wallet } from "@cityofzion/neon-core";
+import { logging, u, rpc, sc, wallet } from "@cityofzion/neon-core";
 import { resolve } from "./main";
 
 const log = logging.default("neon-domain");
@@ -40,7 +40,10 @@ export async function resolveDomain(
 
   const args = [protocol, parsedName, empty];
 
-  const response = await resolve(url, domain, contract, operation, args);
+  const sb = new sc.ScriptBuilder();
+  const script = sb.emitAppCall(contract, operation, args).str;
+  const res = await rpc.Query.invokeScript(script).execute(url);
 
-  return response;
+  return rpc.StringParser(res.result.stack[0]);
+
 }

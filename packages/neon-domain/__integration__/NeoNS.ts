@@ -8,12 +8,6 @@ const { CONST, rpc, u, api, wallet } = neonJs;
 let MAINNET_URL = "";
 let provider;
 
-//const MAINNET_URLS = [
-//  "http://seed9.ngd.network:10332",
-//  "https://seed7.cityofzion.io:443",
-//  "http://seed8.ngd.network:10332"
-//];
-
 const MAINNET_URLS = getMainnetUrls();
 
 beforeAll(async () => {
@@ -39,21 +33,16 @@ describe("domainResolve", () => {
   test("name found", async () => {
     const address = await provider.resolveDomain(
       MAINNET_URL,
-      "test.neo",
-      "neo"
+      "test.neo"
     );
     expect(wallet.isAddress(address)).toBe(true);
   });
 
   test("name not found", async () => {
-    try {
-      const address = await resolveDomain(
+      const address = await provider.resolveDomain(
         MAINNET_URL,
-        "alkdjfklasjdlfkjasdklf.neo",
-        "neo"
+        "alkdjfklasjdlfkjasdklf.neo"
       );
-    } catch (err) {
-      expect(true).toEqual(true);
-    }
+      expect(address).toMatch('');
   });
 });
