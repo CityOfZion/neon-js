@@ -278,7 +278,7 @@ describe("RPC Methods", () => {
 
   describe("getVersion", () => {
     test("success", async () => {
-      const versionString = "NEO:1.2.3";
+      const versionString = "/NEO:1.2.3/";
       const expected = "1.2.3";
       Query.getVersion.mockImplementationOnce(() => ({
         req: { method: "" },
