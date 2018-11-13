@@ -1,5 +1,4 @@
 import { logging, u, rpc, sc, wallet } from "@cityofzion/neon-core";
-import { resolve } from "./main";
 
 const log = logging.default("neon-domain");
 
