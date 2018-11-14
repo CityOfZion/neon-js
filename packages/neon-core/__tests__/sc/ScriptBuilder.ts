@@ -1,3 +1,4 @@
+import ContractParam from "../../src/sc/ContractParam";
 import OpCode from "../../src/sc/OpCode";
 import ScriptBuilder from "../../src/sc/ScriptBuilder";
 
@@ -153,7 +154,12 @@ describe("emitPush", () => {
     ["500", 500, "02f401"],
     ["65536", 65536, "03000001"],
     ["true", true, "51"],
-    ["false", false, "00"]
+    ["false", false, "00"],
+    ["ContractParam(integer) 1", ContractParam.integer(1), (0x50 + 1).toString(16)],
+    ["ContractParam(integer) 256", ContractParam.integer(256), "020001"],
+    ["ContractParam(integer) 14256661", ContractParam.integer(14256661), "04158ad900"],
+    ["ContractParam(integer) -1", ContractParam.integer(-1), "4f"],
+    ["ContractParam(integer) -12345", ContractParam.integer(-12345), "02c7cf"]
   ])("%s", (msg: string, data: any, expected: string) => {
     const sb = new ScriptBuilder();
     sb.emitPush(data);

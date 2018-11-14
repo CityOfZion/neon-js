@@ -1,3 +1,4 @@
+import { csBigInteger } from "csbiginteger";
 import {
   ensureHex,
   int2hex,
@@ -198,8 +199,8 @@ export class ScriptBuilder extends StringStream {
     if (num > 0 && num <= 16) {
       return this.emit(OpCode.PUSH1 - 1 + num);
     }
-    const hexstring = int2hex(num);
-    return this.emitPush(reverseHex(hexstring));
+    const bn = new csBigInteger(num);
+    return this.emitPush(bn.toHexString());
   }
 
   /**
