@@ -1,10 +1,14 @@
+import {mocked} from "ts-jest/utils";
 import { createScript, generateDeployScript } from "../../src/sc/core";
-import ScriptBuilder from "../../src/sc/ScriptBuilder";
-import * as u from "../../src/u";
+import _ScriptBuilder from "../../src/sc/ScriptBuilder";
+import * as _u from "../../src/u";
 import testIntents from "./scriptIntents.json";
 
 jest.mock("../../src/sc/ScriptBuilder");
 jest.mock("../../src/u");
+
+const ScriptBuilder = mocked(_ScriptBuilder, true);
+const u = mocked(_u, false);
 
 beforeEach(() => {
   jest.clearAllMocks();

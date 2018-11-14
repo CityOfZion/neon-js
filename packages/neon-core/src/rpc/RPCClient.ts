@@ -4,6 +4,7 @@ import logger from "../logging";
 import { timeout } from "../settings";
 import { BaseTransaction } from "../tx/transaction/BaseTransaction";
 import { isAddress } from "../wallet";
+import { RPCVMResponse } from "./parse";
 import Query from "./Query";
 
 const log = logger("rpc");
@@ -255,7 +256,7 @@ export class RPCClient {
   /**
    * Calls a smart contract with the given parameters. This method is a local invoke, results are not reflected on the blockchain.
    */
-  public async invoke(scriptHash: string, ...params: any[]): Promise<any> {
+  public async invoke(scriptHash: string, ...params: any[]): Promise<RPCVMResponse> {
     const response = await this.execute(Query.invoke(scriptHash, ...params));
     return response.result;
   }
@@ -267,7 +268,7 @@ export class RPCClient {
     scriptHash: string,
     operation: string,
     ...params: any[]
-  ): Promise<any> {
+  ): Promise<RPCVMResponse> {
     const response = await this.execute(
       Query.invokeFunction(scriptHash, operation, ...params)
     );
@@ -277,7 +278,7 @@ export class RPCClient {
   /**
    * Submits a script for the node to run. This method is a local invoke, results are not reflected on the blockchain.
    */
-  public async invokeScript(script: string): Promise<object> {
+  public async invokeScript(script: string): Promise<RPCVMResponse> {
     const response = await this.execute(Query.invokeScript(script));
     return response.result;
   }

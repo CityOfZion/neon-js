@@ -1,12 +1,18 @@
-import { tx, u, wallet } from "@cityofzion/neon-core";
+import { tx as _tx, u as _u, wallet } from "@cityofzion/neon-core";
+import { mocked } from "ts-jest/utils";
 import * as create from "../../src/funcs/create";
 import {
   ClaimGasConfig,
   DoInvokeConfig,
-  SendAssetConfig
+  SendAssetConfig,
+  SetupVoteConfig
 } from "../../src/funcs/types";
 
 jest.mock("@cityofzion/neon-core");
+
+const tx = mocked(_tx, true);
+const u = mocked(_u, true);
+// const wallet = mocked
 
 describe("createClaimTx", () => {
   test("create with the correct args", async () => {
@@ -81,13 +87,15 @@ describe("createStateTx", () => {
   test("create with the correct args", async () => {
     const config = {
       api: {} as any,
-      account: { scriptHash: "cef0c0fdcfe7838eff6ff104f9cdec2922297537" },
+      account: {
+        scriptHash: "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+      } as wallet.Account,
       balance: new wallet.Balance(),
       candidateKeys: [
         "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
         "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9"
       ]
-    };
+    } as SetupVoteConfig;
     u.reverseHex.mockImplementation(
       () => "3775292229eccdf904f16fff8e83e7cffdc0f0ce"
     );

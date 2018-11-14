@@ -1,4 +1,8 @@
-import StackItem, { hasChildren, StackItemType } from "../../src/sc/StackItem";
+import StackItem, {
+  hasChildren,
+  StackItemMap,
+  StackItemType
+} from "../../src/sc/StackItem";
 import data from "./serializedData.json";
 
 describe("hasChildren", () => {
@@ -39,11 +43,14 @@ describe("deserialize", () => {
 
     expect(result.type).toBe(StackItemType.Array);
     expect(Array.isArray(result.value)).toBeTruthy();
-    expect(result.value.length).toBe(2);
-    expect(result.value[0].type).toBe(StackItemType.ByteArray);
-    expect(result.value[0].value).toBe("6d65737361676520746f206d7973656c6621");
-    expect(result.value[1].type).toBe(StackItemType.Integer);
-    expect(result.value[1].value).toBe("438ffc5a");
+    const resultValueArray = result.value as StackItem[];
+    expect(resultValueArray.length).toBe(2);
+    expect(resultValueArray[0].type).toBe(StackItemType.ByteArray);
+    expect(resultValueArray[0].value).toBe(
+      "6d65737361676520746f206d7973656c6621"
+    );
+    expect(resultValueArray[1].type).toBe(StackItemType.Integer);
+    expect(resultValueArray[1].value).toBe("438ffc5a");
   });
 
   test("Map", () => {
@@ -51,19 +58,22 @@ describe("deserialize", () => {
 
     expect(result.type).toBe(StackItemType.Map);
     expect(Array.isArray(result.value)).toBeTruthy();
-    expect(result.value.length).toBe(5);
-    expect(result.value[0].key.type).toBe(StackItemType.ByteArray);
-    expect(result.value[0].key.value).toBe("61");
-    expect(result.value[0].value.type).toBe(StackItemType.Integer);
-    expect(result.value[0].value.value).toBe("01");
-    expect(result.value[4].value.type).toBe(StackItemType.Array);
-    expect(result.value[4].value.value.length).toBe(6);
+    const resultValueArray = result.value as StackItemMap[];
+    expect(resultValueArray.length).toBe(5);
+    expect(resultValueArray[0].key.type).toBe(StackItemType.ByteArray);
+    expect(resultValueArray[0].key.value).toBe("61");
+    expect(resultValueArray[0].value.type).toBe(StackItemType.Integer);
+    expect(resultValueArray[0].value.value).toBe("01");
+    expect(resultValueArray[4].value.type).toBe(StackItemType.Array);
+    const innerArray = resultValueArray[4].value.value as any[];
+    expect(innerArray.length).toBe(6);
   });
 
   test("ByteArray (long)", () => {
     const result = StackItem.deserialize(data.longString);
 
     expect(result.type).toBe(StackItemType.ByteArray);
-    expect(result.value.length).toBe(3000);
+    const resultValueArray = result.value as string;
+    expect(resultValueArray.length).toBe(3000);
   });
 });

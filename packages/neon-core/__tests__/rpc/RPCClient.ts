@@ -1,7 +1,10 @@
-import Query from "../../src/rpc/Query";
+import { mocked } from "ts-jest/utils";
+import _Query from "../../src/rpc/Query";
 import RPCClient from "../../src/rpc/RPCClient";
 
 jest.mock("../../src/rpc/Query");
+
+const Query = mocked(_Query, true);
 
 describe("constructor", () => {
   test("net", () => {

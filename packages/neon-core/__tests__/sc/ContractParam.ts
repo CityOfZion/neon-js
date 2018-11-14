@@ -4,12 +4,6 @@ import ContractParam, {
 } from "../../src/sc/ContractParam";
 
 describe("constructor", () => {
-  test("error on empty args", () => {
-    const thrower = () => new ContractParam();
-
-    expect(thrower).toThrow("No constructor arguments provided!");
-  });
-
   test("ContractParamLike", () => {
     const result = new ContractParam({ type: "String", value: "1" });
 
@@ -116,7 +110,7 @@ describe("Static constructors", () => {
       ["fixed8", [1000.12345678, "fixed8"], "4e49334917000000"],
       ["fixed8 (0 decimals)", [1, "fixed8", 0], "0100000000000000"],
       ["fixed8(4 decimals)", [222.1234, "fixed8", 4], "b2e4210000000000"]
-    ])("%s", (msg: string, data: any[], expected: boolean) => {
+    ])("%s", (msg: string, data: [number, string, any], expected: boolean) => {
       const result = ContractParam.byteArray(...data);
 
       expect(result instanceof ContractParam).toBeTruthy();

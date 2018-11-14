@@ -2,7 +2,8 @@ module.exports = {
   testEnvironment: "node",
   globals: {
     "ts-jest": {
-      tsConfigFile: "<rootDir>/tsconfig-test.json"
+      tsConfig: "<rootDir>/tsconfig-test.json",
+      diagnostics: false
     }
   },
   watchPlugins: [
