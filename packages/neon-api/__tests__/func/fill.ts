@@ -1,10 +1,13 @@
+import { mocked } from "ts-jest/utils";
 import { wallet } from "../../../neon-js/src";
 import { SendAssetConfig } from "../../lib/funcs/types";
 import * as fill from "../../src/funcs/fill";
-import { signWithPrivateKey } from "../../src/funcs/sign";
+import { signWithPrivateKey as _signWithPrivateKey } from "../../src/funcs/sign";
 import { ClaimGasConfig } from "../../src/funcs/types";
 
 jest.mock("../../src/funcs/sign");
+
+const signWithPrivateKey = mocked(_signWithPrivateKey, false);
 
 describe("fillUrl", () => {
   test("skips if url present", async () => {
@@ -13,9 +16,9 @@ describe("fillUrl", () => {
       api: {
         getRPCEndpoint: jest.fn()
       } as any,
-      address: "",
+      account: {},
       url: expectedUrl
-    };
+    } as SendAssetConfig;
 
     const result = await fill.fillUrl(config);
 

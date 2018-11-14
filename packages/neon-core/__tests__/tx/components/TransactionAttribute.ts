@@ -4,7 +4,7 @@ import TransactionAttribute, {
 
 describe("constructor", () => {
   test("empty", () => {
-    const f = () => new TransactionAttribute();
+    const f = () => new TransactionAttribute({} as TransactionAttributeLike);
     expect(f).toThrow("TransactionAttribute requires usage and data fields");
   });
 

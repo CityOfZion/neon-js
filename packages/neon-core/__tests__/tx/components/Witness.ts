@@ -3,7 +3,7 @@ import { Account } from "../../../src/wallet";
 
 describe("constructor", () => {
   test("empty", () => {
-    const f = () => new Witness();
+    const f = () => new Witness(undefined);
     expect(f).toThrow(
       "Witness requires invocationScript and verificationScript fields"
     );

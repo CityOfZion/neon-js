@@ -4,7 +4,7 @@ import TransactionOutput, {
 
 describe("constructor", () => {
   test("empty", () => {
-    const f = () => new TransactionOutput();
+    const f = () => new TransactionOutput({} as TransactionOutputLike);
     expect(f).toThrow(
       "TransactionOutput requires assetId, value and scriptHash fields"
     );

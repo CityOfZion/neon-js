@@ -1,9 +1,15 @@
 import { tx } from "@cityofzion/neon-core";
-import { getVerificationSignatureForSmartContract } from "../../src/funcs/common";
+import { mocked } from "ts-jest/utils";
+import { getVerificationSignatureForSmartContract as _getVerificationSignatureForSmartContract } from "../../src/funcs/common";
 import * as mint from "../../src/funcs/mint";
 import { DoInvokeConfig } from "../../src/funcs/types";
 
 jest.mock("../../src/funcs/common");
+
+const getVerificationSignatureForSmartContract = mocked(
+  _getVerificationSignatureForSmartContract,
+  false
+);
 
 describe("addAttributeForMintToken", () => {
   test("skips if no script object present", async () => {

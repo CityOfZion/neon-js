@@ -1,6 +1,9 @@
 jest.mock("@cityofzion/neon-core");
+import { logging as _logging, rpc as _rpc } from "@cityofzion/neon-core";
+import { mocked } from "ts-jest/utils";
 
-import { logging, rpc, tx, wallet } from "@cityofzion/neon-core";
+const logging = mocked(_logging, true);
+const rpc = mocked(_rpc, true);
 logging.default.mockImplementation(() => ({
   error: jest.fn()
 }));

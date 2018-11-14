@@ -4,7 +4,7 @@ import TransactionInput, {
 
 describe("constructor", () => {
   test("empty", () => {
-    const f = () => new TransactionInput();
+    const f = () => new TransactionInput({} as TransactionInputLike);
     expect(f).toThrow(
       "TransactionInput requires prevHash and prevIndex fields"
     );

@@ -8,6 +8,6 @@
     "strict": true,
     "esModuleInterop": true,
     "sourceMap":true,
-    // "resolveJsonModule": true
+    "resolveJsonModule": true
   }
 }

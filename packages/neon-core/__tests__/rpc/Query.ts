@@ -1,8 +1,11 @@
-import axios from "axios";
+import _axios from "axios";
+import { mocked } from "ts-jest/utils";
 import Query from "../../src/rpc/Query";
 import { ContractTransaction } from "../../src/tx";
 
 jest.mock("axios");
+
+const axios = mocked(_axios, true);
 
 describe("constructor", () => {
   test("RPCRequest", () => {

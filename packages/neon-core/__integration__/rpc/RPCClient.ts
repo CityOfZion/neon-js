@@ -10,7 +10,7 @@ const TESTNET_URLS = [
   "http://seed5.neo.org:20332"
 ];
 
-let client = null;
+let client: rpc.RPCClient;
 const address = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
 const contractHash = "5b7074e873973a6ed3708862f219a6fbf4d1c411";
 
