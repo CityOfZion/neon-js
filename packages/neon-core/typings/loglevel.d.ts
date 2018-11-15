@@ -1,7 +1,7 @@
-import loglevel from "loglevel";
-
+/// <reference types="loglevel" />
+import log from "loglevel";
 declare module "loglevel" {
   interface Logger {
-    getLoggers(): { [name: string]: Logger };
+    getLoggers(): { [name: string]: log.Logger };
   }
 }
