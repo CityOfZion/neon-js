@@ -1,4 +1,4 @@
-import loglevel, { Logger } from "loglevel";
+import loglevel from "loglevel";
 import prefix from "loglevel-plugin-prefix";
 
 prefix.reg(loglevel);

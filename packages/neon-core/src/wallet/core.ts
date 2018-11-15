@@ -35,7 +35,8 @@ export function getPublicKeyEncoded(unencodedKey: string): string {
  * @return decoded public key
  */
 export function getPublicKeyUnencoded(publicKey: string): string {
-  const keyPair = curve.keyFromPublic(publicKey, "hex");
+  const publicKeyBuffer = Buffer.from(publicKey, "hex");
+  const keyPair = curve.keyFromPublic(publicKeyBuffer, "hex");
   return keyPair.getPublic().encode("hex");
 }
 
@@ -62,7 +63,8 @@ export function getPublicKeyFromPrivateKey(
   privateKey: string,
   encode: boolean = true
 ): string {
-  const keypair = curve.keyFromPrivate(privateKey, "hex");
+  const privateKeyBuffer = Buffer.from(privateKey, "hex");
+  const keypair = curve.keyFromPrivate(privateKeyBuffer, "hex");
   const unencodedPubKey = keypair.getPublic().encode("hex");
   if (encode) {
     const tail = parseInt(unencodedPubKey.substr(64 * 2, 2), 16);

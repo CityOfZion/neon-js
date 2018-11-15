@@ -35,9 +35,10 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "@types/bn.js": "^4.11.1",
+    "@types/bn.js": "^4.11.3",
     "@types/bs58": "^3.0.30",
     "@types/crypto-js": "^3.1.43",
+    "@types/elliptic": "^6.4.0",
     "@types/loglevel": "^1.5.3",
     "@types/node": "^10.5.4",
     "axios": "^0.18.0",
@@ -54,9 +55,6 @@
     "wif": "^2.0.6"
   },
   "devDependencies": {
-    "@types/bn.js": "^4.11.1",
-    "@types/bs58": "^3.0.30",
-    "@types/crypto-js": "^3.1.43",
     "webpack": "^4.19.0",
     "webpack-cli": "^3.1.0"
   },

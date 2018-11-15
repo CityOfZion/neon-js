@@ -1,7 +1,5 @@
-// tslint:disable-next-line:no-reference
-/// <reference path="../../typings/elliptic.d.ts" />
 import BN from "bn.js";
-import { ec as EC, Signature } from "elliptic";
+import { ec as EC } from "elliptic";
 import { sha256 } from "../u";
 import { getPrivateKeyFromWIF, getPublicKeyUnencoded } from "./core";
 import { isPublicKey, isWIF } from "./verify";
@@ -19,8 +17,9 @@ export function sign(hex: string, privateKey: string) {
   }
   const msgHash = sha256(hex);
   const msgHashHex = Buffer.from(msgHash, "hex");
+  const privateKeyBuffer = Buffer.from(privateKey, "hex");
 
-  const sig = curve.sign(msgHashHex, privateKey);
+  const sig = curve.sign(msgHashHex, privateKeyBuffer);
   return sig.r.toString("hex", 32) + sig.s.toString("hex", 32);
 }
 
@@ -37,9 +36,10 @@ export function verify(hex: string, sig: string, publicKey: string) {
   if (!isPublicKey(publicKey, true)) {
     publicKey = getPublicKeyUnencoded(publicKey);
   }
-  const sigObj = getSignatureFromHex(sig) as Signature;
+  const sigObj = getSignatureFromHex(sig) as EC.Signature;
   const messageHash = sha256(hex);
-  return curve.verify(messageHash, sigObj, publicKey, "hex");
+  const publicKeyBuffer = Buffer.from(publicKey, "hex")
+  return curve.verify(messageHash, sigObj, publicKeyBuffer, "hex");
 }
 
 /**
