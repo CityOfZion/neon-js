@@ -1,4 +1,5 @@
 import { Fixed8, StringStream } from '../../utils';
+import { Account } from "../../wallet";
 
 export interface TransactionAttribute {
   data: string
