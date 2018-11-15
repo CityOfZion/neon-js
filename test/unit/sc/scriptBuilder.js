@@ -32,6 +32,14 @@ describe('ScriptBuilder', function () {
       {
         int: 65536,
         result: '03000001'
+      },
+      {
+        int: 14256661,
+        result: '04158ad900'
+      },
+      {
+        int: -12345,
+        result: '02c7cf'
       }
     ]
 
