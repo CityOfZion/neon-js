@@ -3,6 +3,23 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.2.0
+=====
+
+- Neon-domain
+
+  - Ability to resolve human-friendly addresses into blockchain addresses through the invocation of domain contracts.
+
+- Dependencies
+
+  - Dependencies are updated to latest. `bignumberjs` is not upgraded due to it being a major version jump.
+
+- Fixes
+
+  - Fix ScriptBuilder's integer not emitted as two's complement.
+  - Use typing packages available for `bn.js` and `elliptic`.
+  - Fix `getVersion` in RPC Client not parsing response properly.
+
 4.1.3
 =====
 

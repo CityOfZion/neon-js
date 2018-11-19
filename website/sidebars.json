@@ -24,7 +24,12 @@
       "api/core/settings",
       "api/core/logging"
     ],
-    "Plugin Modules": ["api/plugin/api", "api/plugin/nep5"]
+    "Plugin Modules": [
+      "api/plugin/api",
+      "api/plugin/nep5",
+      "api/plugin/nep9",
+      "api/plugin/domain"
+    ]
   },
   "changelog": {
     "Latest": ["changelog/latest"],
