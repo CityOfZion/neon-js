@@ -1,11 +1,11 @@
-import { logging, u, rpc, sc, wallet } from "@cityofzion/neon-core";
+import { logging, rpc, sc, u } from "@cityofzion/neon-core";
 
 const log = logging.default("neon-domain");
 
 const operation = "resolve";
 
 /**
- * Resolve a domain to a public address. 
+ * Resolve a domain to a public address.
  * @param url - URL of an NEO RPC service.
  * @param contract - the contract used to resolve
  * @param domain - the domain to resolve.
@@ -44,5 +44,4 @@ export async function resolveDomain(
   const res = await rpc.Query.invokeScript(script).execute(url);
 
   return rpc.StringParser(res.result.stack[0]);
-
 }
