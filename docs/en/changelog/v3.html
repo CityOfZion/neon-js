@@ -1,5 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Changelog (v3) · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="3.11.6"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Changelog (v3) · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="3.11.6"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
-        document.addEventListener("DOMContentLoaded", function(){
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Changelog (v3) · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;3.11.7&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Changelog (v3) · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="&lt;p&gt;3.11.7&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
           addBackToTop(
             {"zIndex":100}
           )
@@ -20,6 +22,10 @@
                 var toggler = document.querySelector(togglerSelector);
                 var target = document.querySelector(targetSelector);
 
+                if (!toggler) {
+                  return;
+                }
+
                 toggler.onclick = function(event) {
                   event.preventDefault();
 
@@ -27,13 +33,15 @@
                 };
               }
             });
-        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Changelog (v3)</h1></header><article><div><span><h1><a class="anchor" aria-hidden="true" id="3116"></a><a href="#3116" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3.11.6</h1>
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Changelog (v3)</h1></header><article><div><span><h1><a class="anchor" aria-hidden="true" id="3117"></a><a href="#3117" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3.11.7</h1>
 <ul>
 <li><p>Fixes</p>
 <ul>
 <li>Fix balance calculation after applying transaction.</li>
 <li>Remove applyTx call from Balance.calculate.</li>
 <li>fix getVersion parsing.</li>
+<li>Fix typings for <code>buildMultiSig</code>.</li>
+<li>Fix ScriptBuilder's integer not emitted as two's complement.</li>
 </ul></li>
 </ul>
 <h1><a class="anchor" aria-hidden="true" id="3110"></a><a href="#3110" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3.11.0</h1>
@@ -61,7 +69,7 @@
 <li><code>getTokenBalances</code> to retrieve multiple token balances for a single address within a single HTTP call.</li>
 <li><code>setupVote</code> is a new method that allows you to setup your voting status for your neo.</li>
 </ul>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> config = {
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> config = {
   <span class="hljs-attr">net</span>: <span class="hljs-string">'TestNet'</span>,
   <span class="hljs-attr">account</span>: <span class="hljs-keyword">new</span> wallet.Account(privateKey),
   <span class="hljs-attr">candidateKeys</span>: [key1, key2] <span class="hljs-comment">// Keys retrieved from a getValidators call.</span>
@@ -105,7 +113,7 @@ Neon.api.setupVote(config)
 <ul>
 <li>Add Runtime.Deserialize logic. This is the deserialization logic found in the VM.</li>
 </ul>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> {sc} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">import</span> {sc} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
 sc.deserialize(<span class="hljs-string">'800200126d65737361676520746f206d7973656c66210204438ffc5a'</span>)
 </code></pre></li>
 <li><p>Fixes</p>
@@ -153,7 +161,7 @@ sc.deserialize(<span class="hljs-string">'800200126d65737361676520746f206d797365
 <ul>
 <li>RPC Client now has the fields <code>latency</code> and <code>lastSeenHeight</code> and method <code>ping()</code>.</li>
 </ul>
-<pre><code class="hljs css languages- js">import {rpc} from '@cityofzion/neon-js
+<pre><code class="hljs css language-js">import {rpc} from '@cityofzion/neon-js
 
 var client = new rpc.RPCClient(url)
 client.ping()
@@ -198,7 +206,7 @@ client.ping()
 <ul>
 <li>Add calculation strategies to modify how inputs are selected. Current available strategies are <code>smallestFirst</code>, <code>biggestFirst</code> and <code>balancedApproach</code>. Currently only available as a global setting.</li>
 </ul>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> { tx, settings } <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">import</span> { tx, settings } <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
 
 <span class="hljs-comment">// Change the strategy to use the biggest valued output available.</span>
 settings.defaultCalculationStrategy = tx.calculationStrategy.biggestFirst
@@ -250,7 +258,7 @@ settings.defaultCalculationStrategy = tx.calculationStrategy.biggestFirst
 <ul>
 <li>ScriptBuilder.toScriptParams allows you to reverse engineer a VM script back to its arguments. Due to the varied nature of the arguments, it is not possible to reverse it completely. More work has to be done on the user side to parse it in a meaningful manner.</li>
 </ul>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> sb = <span class="hljs-keyword">new</span> sb.ScriptBuilder(<span class="hljs-string">'00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc'</span>)
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> sb = <span class="hljs-keyword">new</span> sb.ScriptBuilder(<span class="hljs-string">'00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc'</span>)
 <span class="hljs-keyword">const</span> params = sb.toScriptParams()
 params = [{
       <span class="hljs-string">"scriptHash"</span>: <span class="hljs-string">"dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f"</span>,
@@ -384,7 +392,7 @@ params = [{
 <li>Comes with helper methods such as <code>toHex</code> and <code>fromHex</code>.</li>
 </ul></li>
 </ul>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> {u} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">import</span> {u} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
 <span class="hljs-comment">// accepts numbers or string</span>
 <span class="hljs-keyword">const</span> num1 = <span class="hljs-keyword">new</span> u.Fixed8(<span class="hljs-number">123.4567</span>)
 <span class="hljs-keyword">const</span> num2 = u.Fixed8.fromHex(<span class="hljs-string">'0000000005f5e100'</span>) <span class="hljs-comment">// 1</span>
@@ -415,4 +423,4 @@ params = [{
 <li>fix transaction attribute being deserialized wrongly.</li>
 </ul></li>
 </ul>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/en/changelog/latest.html">← Changelog (v4)</a><a class="docs-next button" href="/neon-js/docs/en/changelog/v2.html">Changelog (v2) →</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/en/changelog/latest.html"><span class="arrow-prev">← </span><span>Changelog (v4)</span></a><a class="docs-next button" href="/neon-js/docs/en/changelog/v2.html"><span>Changelog (v2)</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Advanced - Working with multi-sig contracts · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="In this guide, we will show how to create a multi-sig Account and sign a transaction with it."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Advanced - Working with multi-sig contracts · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="In this guide, we will show how to create a multi-sig Account and sign a transaction with it."/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
-        document.addEventListener("DOMContentLoaded", function(){
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Advanced - Working with multi-sig contracts · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;In this guide, we will show how to create a multi-sig Account and sign a transaction with it.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Advanced - Working with multi-sig contracts · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="&lt;p&gt;In this guide, we will show how to create a multi-sig Account and sign a transaction with it.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
           addBackToTop(
             {"zIndex":100}
           )
@@ -20,6 +22,10 @@
                 var toggler = document.querySelector(togglerSelector);
                 var target = document.querySelector(targetSelector);
 
+                if (!toggler) {
+                  return;
+                }
+
                 toggler.onclick = function(event) {
                   event.preventDefault();
 
@@ -38,7 +44,7 @@
 <p>This is a list of all public keys that will be part of the contract. Due to the need for a public key, you cannot have a multi-sig contract participating as a member of another multi-sig contract.</p></li>
 </ul>
 <p>Once the requirements are gathered, just called the function:</p>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> { wallet } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
+<pre><code class="hljs css language-js"><span class="hljs-keyword">import</span> { wallet } <span class="hljs-keyword">from</span> <span class="hljs-string">"@cityofzion/neon-js"</span>;
 
 <span class="hljs-keyword">const</span> threshold = <span class="hljs-number">2</span>;
 <span class="hljs-keyword">const</span> publicKeys = [
@@ -54,10 +60,10 @@
 <p>Do note that the order of public keys play an important factor in the generation of the address. A multi-sig contract with keys 1,2,3 is different from a contract with keys 3,2,1. You cannot change the order after creation. Similarly, the threshold cannot be adjusted after creation.</p>
 <h2><a class="anchor" aria-hidden="true" id="inspecting-the-account"></a><a href="#inspecting-the-account" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Inspecting the Account</h2>
 <p>So now that you have created the multi-sig Account, we can take a look at the internals and know what is important.</p>
-<pre><code class="hljs css languages- js"><span class="hljs-built_in">console</span>.log(multiSigAcct.contract.script); <span class="hljs-comment">// VerificationScript</span>
+<pre><code class="hljs css language-js"><span class="hljs-built_in">console</span>.log(multiSigAcct.contract.script); <span class="hljs-comment">// VerificationScript</span>
 </code></pre>
 <p><strong>This is the most important part of this Account.</strong> This is the verification script of the contract and it is paramount that you maintain a copy of this somewhere. Without this, the system will not be able to generate the multi-sig signature required.</p>
-<pre><code class="hljs css languages- js"><span class="hljs-built_in">console</span>.log(multiSigAcct.contract.parameters); <span class="hljs-comment">// Parameters</span>
+<pre><code class="hljs css language-js"><span class="hljs-built_in">console</span>.log(multiSigAcct.contract.parameters); <span class="hljs-comment">// Parameters</span>
 </code></pre>
 <p>This is the parameters of the verification script. This just tells us what is the signing threshold as the number of parameters is the number of signatures required. You can think of the verification script as a function and these are the required arguments to the function.</p>
 <h2><a class="anchor" aria-hidden="true" id="signing-with-multi-sig"></a><a href="#signing-with-multi-sig" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Signing with multi-sig</h2>
@@ -65,14 +71,14 @@
 <p>We can go two ways here:</p>
 <h3><a class="anchor" aria-hidden="true" id="using-hexstrings"></a><a href="#using-hexstrings" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Using hexstrings</h3>
 <p>We can perform every step in hexstrings. First we deserialize the transaction into a hexstring:</p>
-<pre><code class="hljs css languages- js"><span class="hljs-comment">// Let us call the transaction unsignedTx</span>
+<pre><code class="hljs css language-js"><span class="hljs-comment">// Let us call the transaction unsignedTx</span>
 <span class="hljs-keyword">const</span> hex = unsignedTx.serialize();
 </code></pre>
 <p>Now, we send this hexstring to our respective owners of the public keys and request them to sign:</p>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> signature1 = wallet.sign(hex, privateKey1);
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> signature1 = wallet.sign(hex, privateKey1);
 </code></pre>
 <p>They will now send back the signatures. They should be just normal hexstrings of 64 characters long. Once we have collected enough signatures, we can assemble the witness:</p>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> witness = tx.Witness.buildMultiSig(
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> witness = tx.Witness.buildMultiSig(
   hex,
   [signature1, signature2],
   verificationScript
@@ -82,11 +88,11 @@ unsignedTx.scripts.push(witness);
 <p>Now, your transaction is signed and ready to be transmitted to the network.</p>
 <h3><a class="anchor" aria-hidden="true" id="using-objects"></a><a href="#using-objects" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Using objects</h3>
 <p>We can perform the steps using <code>neon-js</code> objects. We distribute the transaction and request the key holders to sign the transaction like how they will sign a normal transaction:</p>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> signedTx1 = unsignedTx.sign(account1);
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> signedTx1 = unsignedTx.sign(account1);
 <span class="hljs-keyword">const</span> signedTx2 = unsignedTx.sign(account2);
 </code></pre>
 <p>Once all the signed transactions are transmitted back, we extract the individual signatures and compile them using <code>Witness.buildMultiSig</code>:</p>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">const</span> individualWitnesses = [signedTx1, signedTx2].map(<span class="hljs-function"><span class="hljs-params">t</span> =&gt;</span> t.scripts[<span class="hljs-number">0</span>]);
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> individualWitnesses = [signedTx1, signedTx2].map(<span class="hljs-function"><span class="hljs-params">t</span> =&gt;</span> t.scripts[<span class="hljs-number">0</span>]);
 <span class="hljs-keyword">const</span> witness = tx.Witness.buildMultiSig(
   unsignedTx.serialize(),
   individualWitnesses,
@@ -101,4 +107,4 @@ unsignedTx.scripts.push(witness);
 <li>Order of public keys for creation matters but order of signatures for signing does not matter (because we order it within).</li>
 <li>There is no need to</li>
 </ul>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/en/guides/adv/apicore.html">← Advanced - API Core Components</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#creating-a-new-multi-sig-contract">Creating a new multi-sig contract</a></li><li><a href="#inspecting-the-account">Inspecting the Account</a></li><li><a href="#signing-with-multi-sig">Signing with multi-sig</a><ul class="toc-headings"><li><a href="#using-hexstrings">Using hexstrings</a></li><li><a href="#using-objects">Using objects</a></li></ul></li><li><a href="#notes">Notes</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/en/guides/adv/apicore.html"><span class="arrow-prev">← </span><span>Advanced - API Core Components</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#creating-a-new-multi-sig-contract">Creating a new multi-sig contract</a></li><li><a href="#inspecting-the-account">Inspecting the Account</a></li><li><a href="#signing-with-multi-sig">Signing with multi-sig</a><ul class="toc-headings"><li><a href="#using-hexstrings">Using hexstrings</a></li><li><a href="#using-objects">Using objects</a></li></ul></li><li><a href="#notes">Notes</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Changelog (v2) · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="2.3.4"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Changelog (v2) · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="2.3.4"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
-        document.addEventListener("DOMContentLoaded", function(){
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Changelog (v2) · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;2.3.4&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Changelog (v2) · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="&lt;p&gt;2.3.4&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
           addBackToTop(
             {"zIndex":100}
           )
@@ -19,6 +21,10 @@
               function createToggler(togglerSelector, targetSelector, className) {
                 var toggler = document.querySelector(togglerSelector);
                 var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
 
                 toggler.onclick = function(event) {
                   event.preventDefault();
@@ -62,7 +68,7 @@
 <li>Switch will dynamically choose whichever server that respond better. A failure will start tilting the switch towards the other server. Freezing the switch will prevent this dynamic behavior.</li>
 <li>This is currently not fully exposed but will be in the future.</li>
 </ul>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> {api} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">import</span> {api} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
 api.setApiSwitch(<span class="hljs-number">0</span>)
 api.sendAsset(config) <span class="hljs-comment">// sendAsset, claimGas and doInvoke will default to use neoscan first</span>
 api.setApiSwitch(<span class="hljs-number">1</span>)
@@ -99,7 +105,7 @@ api.setSwitchFreeze(<span class="hljs-literal">true</span>)
 <li>encrypt/decrypt has an extra optional scrypt argument</li>
 <li>Deprecate wallet.encryptWifAccount, wallet.generateEncryptedWif, wallet.encryptWIF, wallet.decryptWIF</li>
 </ul>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> Neon, {wallet} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">import</span> Neon, {wallet} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
 <span class="hljs-keyword">const</span> w1 = Neon.create.wallet()
 <span class="hljs-keyword">const</span> w2 = <span class="hljs-keyword">new</span> wallet.Wallet()
 </code></pre></li>
@@ -126,7 +132,7 @@ api.setSwitchFreeze(<span class="hljs-literal">true</span>)
 <li>Add <code>VMZip</code> method. This allows for individual parsing of VM results. Do note that this method produces a parsing function. It is not to be used directly.</li>
 </ul></li>
 </ul>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> {rpc, u} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">import</span> {rpc, u} <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
 <span class="hljs-keyword">const</span> parsingFunc = rpc.VMZip(u.hexstring2ab, u.fixed82num)
 rpc.Query.invoke(script).parseWith(parsingFunc)
 </code></pre>
@@ -144,7 +150,7 @@ rpc.Query.invoke(script).parseWith(parsingFunc)
 <li><code>applyTx</code> to apply a spending of a Transaction to the Balance. Allows a Balance to be used to build another Transaction without waiting for sync.</li>
 <li>Data structure reworked. AssetBalances are now tucked under <code>assets</code>. Use <code>assetSymbols</code> to discover the keys for lookup.</li>
 </ul>
-<pre><code class="hljs css languages- js"><span class="hljs-comment">// This array contains all the symbols of the assets available in this Balance</span>
+<pre><code class="hljs css language-js"><span class="hljs-comment">// This array contains all the symbols of the assets available in this Balance</span>
 balance.assetSymbols = [<span class="hljs-string">'NEO'</span>, <span class="hljs-string">'GAS'</span>]
 <span class="hljs-comment">// Lookup assets using their symbols</span>
 balance.assets = {
@@ -165,7 +171,7 @@ balance.assets = {
 <li>Modules are individually available as named exports. If you just need account methods, <code>import { wallet } from '@cityofzion/neon-js'</code></li>
 </ul></li>
 <li><p>Constants and util methods are now exported as</p>
-<pre><code class="hljs css languages- js"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">import</span> Neon <span class="hljs-keyword">from</span> <span class="hljs-string">'@cityofzion/neon-js'</span>
 Neon.CONST.DEFAULT_RPC
 Neon.u.reverseHex
 
@@ -208,4 +214,4 @@ u.reverseHex
 <li>ContractParam added to support <code>invoke</code> and <code>invokefunction</code> RPC calls.</li>
 </ul></li>
 </ul>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/en/changelog/v3.html">← Changelog (v3)</a><a class="docs-next button" href="/neon-js/docs/en/changelog/v1.html">Changelog (v1) →</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#234">2.3.4</a></li><li><a href="#230">2.3.0</a></li><li><a href="#222">2.2.2</a></li><li><a href="#221">2.2.1</a></li><li><a href="#220">2.2.0</a></li><li><a href="#210">2.1.0</a></li><li><a href="#200">2.0.0</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/en/changelog/v3.html"><span class="arrow-prev">← </span><span>Changelog (v3)</span></a><a class="docs-next button" href="/neon-js/docs/en/changelog/v1.html"><span>Changelog (v1)</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#234">2.3.4</a></li><li><a href="#230">2.3.0</a></li><li><a href="#222">2.2.2</a></li><li><a href="#221">2.2.1</a></li><li><a href="#220">2.2.0</a></li><li><a href="#210">2.1.0</a></li><li><a href="#200">2.0.0</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>
