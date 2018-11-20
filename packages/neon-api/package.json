@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-api",
   "description": "Neon-API module: High level API for neon-js",
-  "version": "4.1.3",
+  "version": "4.2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
@@ -32,8 +32,8 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "axios": "^0.18.0",
-    "@cityofzion/neon-core": "^4.1.3"
+    "@cityofzion/neon-core": "^4.2.0",
+    "axios": "^0.18.0"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "^4.0.0"
