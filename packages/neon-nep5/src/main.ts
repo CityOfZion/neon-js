@@ -143,7 +143,7 @@ export async function getToken(
 }
 
 /**
- * Retrieves the complete information about all (or a list of) tokens.
+ * Retrieves the complete information about a list of tokens.
  * @param url RPC Node url to query.
  * @param scriptHashArray Array of NEP5 contract scriptHashes.
  * @param address Optional address to query the balance for. If provided, the returned object will include the balance property.
@@ -153,26 +153,26 @@ export async function getTokens(
   scriptHashArray: string[],
   address?: string
 ): Promise<TokenInfo[]> {
-  const sb = new sc.ScriptBuilder();
-  scriptHashArray.forEach(scriptHash => {
-    if (address) {
-      const addrScriptHash = u.reverseHex(
-        wallet.getScriptHashFromAddress(address)
-      );
-      sb.emitAppCall(scriptHash, "name")
-        .emitAppCall(scriptHash, "symbol")
-        .emitAppCall(scriptHash, "decimals")
-        .emitAppCall(scriptHash, "totalSupply")
-        .emitAppCall(scriptHash, "balanceOf", [addrScriptHash]);
-    } else {
-      sb.emitAppCall(scriptHash, "name")
-        .emitAppCall(scriptHash, "symbol")
-        .emitAppCall(scriptHash, "decimals")
-        .emitAppCall(scriptHash, "totalSupply");
-    }
-  });
-
   try {
+    const sb = new sc.ScriptBuilder();
+    scriptHashArray.forEach(scriptHash => {
+      if (address) {
+        const addrScriptHash = u.reverseHex(
+          wallet.getScriptHashFromAddress(address)
+        );
+        sb.emitAppCall(scriptHash, "name")
+          .emitAppCall(scriptHash, "symbol")
+          .emitAppCall(scriptHash, "decimals")
+          .emitAppCall(scriptHash, "totalSupply")
+          .emitAppCall(scriptHash, "balanceOf", [addrScriptHash]);
+      } else {
+        sb.emitAppCall(scriptHash, "name")
+          .emitAppCall(scriptHash, "symbol")
+          .emitAppCall(scriptHash, "decimals")
+          .emitAppCall(scriptHash, "totalSupply");
+      }
+    });
+
     const res = await rpc.Query.invokeScript(sb.str).execute(url);
 
     const result: TokenInfo[] = [];
@@ -205,14 +205,16 @@ export async function getTokens(
         totalSupply,
         balance
       };
-      
-      if(!obj.balance) delete obj.balance;
+
+      if (!obj.balance) {
+        delete obj.balance;
+      }
 
       result.push(obj);
     }
     return result;
   } catch (err) {
-    log.error(`getToken failed with : ${err.message}`);
+    log.error(`getTokens failed with : ${err.message}`);
     throw err;
   }
 }

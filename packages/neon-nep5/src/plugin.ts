@@ -1,4 +1,4 @@
 import * as abi from "./abi";
-import { getToken, getTokenBalance, getTokens } from "./main";
+import { getToken, getTokenBalance, getTokenBalances, getTokens } from "./main";
 
-export { abi, getToken, getTokens, getTokenBalance };
+export { abi, getToken, getTokens, getTokenBalance, getTokenBalances };

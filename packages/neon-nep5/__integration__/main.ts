@@ -105,34 +105,22 @@ describe("getToken", () => {
 
 describe("getTokens", () => {
   test("without balance", async () => {
-    const info = await getTokens(TESTNET_URL, [
+    const tokensInfo = await getTokens(TESTNET_URL, [
       CONST.CONTRACTS.TEST_RPX,
       CONST.CONTRACTS.TEST_LWTF,
       CONST.CONTRACTS.TEST_NXT
     ]);
 
-    expect(Object.keys(info).map(key => info[key])).toEqual(
-      expect.arrayContaining([
-        {
-          decimals: 8,
-          name: "Red Pulse Token 3.1.4",
-          symbol: "RPX",
-          totalSupply: 43467000
-        },
-        {
-          decimals: 8,
-          name: "LOCALTOKEN",
-          symbol: "LWTF",
-          totalSupply: 2270000
-        },
-        {
-          decimals: 8,
-          name: "NEX Template",
-          symbol: "NXT",
-          totalSupply: 2508560
-        }
-      ])
-    );
+    Object.keys(tokensInfo).map(key => {
+      const info = tokensInfo[key];
+
+      expect(typeof info.name).toBe("string");
+      expect(info.symbol).toMatch(/[A-Z]+/);
+      expect(typeof info.decimals).toBe("number");
+      expect(typeof info.totalSupply).toBe("number");
+      expect(info.totalSupply).toBeGreaterThan(99999);
+      expect(info.balance).toBeUndefined();
+    });
   });
 
   test("with balance", async () => {
@@ -155,6 +143,7 @@ describe("getTokens", () => {
       expect(info.symbol).toMatch(/[A-Z]+/);
       expect(typeof info.decimals).toBe("number");
       expect(typeof info.totalSupply).toBe("number");
+      expect(info.totalSupply).toBeGreaterThan(99999);
       expect(info.balance).toBeDefined();
       const balanceNum = info.balance.toNumber();
       expect(balanceNum).toBeGreaterThan(0);
