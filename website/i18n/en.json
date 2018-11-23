@@ -4,43 +4,107 @@
     "next": "Next",
     "previous": "Previous",
     "tagline": "JS SDK for NEO blockchain",
-    "api/core/const": "Constants",
-    "api/core/logging": "Logging",
-    "api/core/rpc": "RPC",
-    "api/core/sc": "Smart Contract",
-    "api/core/settings": "Settings",
-    "api/core/tx": "Transactions",
-    "api/core/u": "Utility",
-    "api/core/wallet": "Wallet",
-    "api/index": "API",
-    "api/plugin/api": "api",
-    "api/plugin/nep5": "NEP5",
-    "changelog/latest": "Changelog (v4)",
-    "changelog/v1": "Changelog (v1)",
-    "changelog/v2": "Changelog (v2)",
-    "changelog/v3": "Changelog (v3)",
-    "guides/adv/apicore": "Advanced - API Core Components",
-    "guides/adv/multisig": "Advanced - Working with multi-sig contracts",
-    "guides/adv/multitx": "Advanced - Sending multiple transactions in a block",
-    "guides/basic/claimgas": "Basic - Claiming Gas",
-    "guides/basic/createscript": "Basic - Create Smart Contract Script",
-    "guides/basic/invoke": "Basic - Invoking a Smart Contract",
-    "guides/basic/privnet": "Basic - Using a Private Net",
-    "guides/basic/sendasset": "Basic - Sending assets",
-    "installation": "Installation",
-    "overview": "Overview",
-    "structure": "Structure",
-    "Docs": "Docs",
-    "API": "API",
-    "Changelog": "Changelog",
-    "Help": "Help",
-    "Getting Started": "Getting Started",
-    "Guides": "Guides",
-    "Overview": "Overview",
-    "Core Modules": "Core Modules",
-    "Plugin Modules": "Plugin Modules",
-    "Latest": "Latest",
-    "Past Versions": "Past Versions"
+    "docs": {
+      "api/core/const": {
+        "title": "Constants"
+      },
+      "api/core/logging": {
+        "title": "Logging"
+      },
+      "api/core/rpc": {
+        "title": "RPC"
+      },
+      "api/core/sc": {
+        "title": "Smart Contract"
+      },
+      "api/core/settings": {
+        "title": "Settings"
+      },
+      "api/core/tx": {
+        "title": "Transactions"
+      },
+      "api/core/u": {
+        "title": "Utility"
+      },
+      "api/core/wallet": {
+        "title": "Wallet"
+      },
+      "api/index": {
+        "title": "API"
+      },
+      "api/plugin/api": {
+        "title": "api"
+      },
+      "api/plugin/domain": {
+        "title": "neon-domain"
+      },
+      "api/plugin/nep5": {
+        "title": "NEP5"
+      },
+      "api/plugin/nep9": {
+        "title": "NEP9"
+      },
+      "changelog/latest": {
+        "title": "Changelog (v4)"
+      },
+      "changelog/v1": {
+        "title": "Changelog (v1)"
+      },
+      "changelog/v2": {
+        "title": "Changelog (v2)"
+      },
+      "changelog/v3": {
+        "title": "Changelog (v3)"
+      },
+      "guides/adv/apicore": {
+        "title": "Advanced - API Core Components"
+      },
+      "guides/adv/multisig": {
+        "title": "Advanced - Working with multi-sig contracts"
+      },
+      "guides/adv/multitx": {
+        "title": "Advanced - Sending multiple transactions in a block"
+      },
+      "guides/basic/claimgas": {
+        "title": "Basic - Claiming Gas"
+      },
+      "guides/basic/createscript": {
+        "title": "Basic - Create Smart Contract Script"
+      },
+      "guides/basic/invoke": {
+        "title": "Basic - Invoking a Smart Contract"
+      },
+      "guides/basic/privnet": {
+        "title": "Basic - Using a Private Net"
+      },
+      "guides/basic/sendasset": {
+        "title": "Basic - Sending assets"
+      },
+      "installation": {
+        "title": "Installation"
+      },
+      "overview": {
+        "title": "Overview"
+      },
+      "structure": {
+        "title": "Structure"
+      }
+    },
+    "links": {
+      "Docs": "Docs",
+      "API": "API",
+      "Changelog": "Changelog",
+      "Help": "Help"
+    },
+    "categories": {
+      "Getting Started": "Getting Started",
+      "Guides": "Guides",
+      "Overview": "Overview",
+      "Core Modules": "Core Modules",
+      "Plugin Modules": "Plugin Modules",
+      "Latest": "Latest",
+      "Past Versions": "Past Versions"
+    }
   },
   "pages-strings": {
     "Learn more using the [documentation on this site.](/test-site/docs/en/doc1.html)|no description given": "Learn more using the [documentation on this site.](/test-site/docs/en/doc1.html)",

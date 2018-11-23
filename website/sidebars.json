@@ -5,7 +5,7 @@
       "guides/basic/sendasset",
       "guides/basic/claimgas",
       "guides/basic/createscript",
-      "guides/basic/invoke",
+      "guides/basic/doinvoke",
       "guides/basic/privnet",
       "guides/adv/multitx",
       "guides/adv/apicore",
