@@ -58,12 +58,15 @@ export class ContractParam {
   }
 
   /**
-   * Creates an Integer ContractParam. Does basic parsing and rounding to convert value into an Integer.
-   * @param {any} value - A value that can be parsed to an Integer using parseInt.
+   * Creates an Integer ContractParam. This is converted into an BigInteger in NeoVM.
+   * @param {string | number } value - A value that can be parsed to an BigInteger. Numbers or numeric strings are accepted.
+   * @example
+   * ContractParam.integer(128)
+   * ContractParam.integer("128")
    */
   public static integer(value: string | number): ContractParam {
-    const num = typeof value === "string" ? parseInt(value, 10) : value;
-    return new ContractParam(ContractParamType.Integer, Math.round(num));
+    const num = typeof value === "string" ? value.split(".")[0] : Math.round(value).toString();
+    return new ContractParam(ContractParamType.Integer, num);
   }
 
   /**

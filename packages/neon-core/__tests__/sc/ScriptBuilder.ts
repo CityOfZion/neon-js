@@ -129,6 +129,15 @@ describe("emitAppCall", () => {
   });
 });
 
+const veryBigNumber =
+  "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215";
+const veryBigNumberBytes =
+  "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00";
+
+const verySmallNumber =
+  "-179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216";
+const verySmallNumberBytes =
+  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff";
 describe("emitPush", () => {
   test.each([
     ["short string", "a".repeat(75 * 2), "4b" + "a".repeat(75 * 2)],
@@ -155,11 +164,33 @@ describe("emitPush", () => {
     ["65536", 65536, "03000001"],
     ["true", true, "51"],
     ["false", false, "00"],
-    ["ContractParam(integer) 1", ContractParam.integer(1), (0x50 + 1).toString(16)],
+    [
+      "ContractParam(integer) 1",
+      ContractParam.integer(1),
+      (0x50 + 1).toString(16)
+    ],
     ["ContractParam(integer) 256", ContractParam.integer(256), "020001"],
-    ["ContractParam(integer) 14256661", ContractParam.integer(14256661), "04158ad900"],
+    [
+      "ContractParam(integer) 14256661",
+      ContractParam.integer(14256661),
+      "04158ad900"
+    ],
+    [
+      "ContractParam(integer) veryBigNumber",
+      ContractParam.integer(veryBigNumber),
+      OpCode.PUSHDATA1.toString(16) +
+        (veryBigNumberBytes.length / 2).toString(16) +
+        veryBigNumberBytes
+    ],
     ["ContractParam(integer) -1", ContractParam.integer(-1), "4f"],
-    ["ContractParam(integer) -12345", ContractParam.integer(-12345), "02c7cf"]
+    ["ContractParam(integer) -12345", ContractParam.integer(-12345), "02c7cf"],
+    [
+      "ContractParam(integer) verySmallNumber",
+      ContractParam.integer(verySmallNumber),
+      OpCode.PUSHDATA1.toString(16) +
+        (verySmallNumberBytes.length / 2).toString(16) +
+        verySmallNumberBytes
+    ]
   ])("%s", (msg: string, data: any, expected: string) => {
     const sb = new ScriptBuilder();
     sb.emitPush(data);

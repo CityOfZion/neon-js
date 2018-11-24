@@ -56,16 +56,22 @@ describe("Static constructors", () => {
   });
 
   describe("integer", () => {
-    test.each([["10", 10, 10], ["10(string)", "10", 10], ["1.01", 1.01, 1]])(
-      "%s",
-      (msg: string, data: any, expected: boolean) => {
-        const result = ContractParam.integer(data);
+    test.each([
+      ["10", 10, "10"],
+      ["10(string)", "10", "10"],
+      ["1.01", 1.01, "1"],
+      [
+        "very big number",
+        "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215",
+        "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215"
+      ]
+    ])("%s", (msg: string, data: any, expected: boolean) => {
+      const result = ContractParam.integer(data);
 
-        expect(result instanceof ContractParam).toBeTruthy();
-        expect(result.type).toBe(ContractParamType.Integer);
-        expect(result.value).toBe(expected);
-      }
-    );
+      expect(result instanceof ContractParam).toBeTruthy();
+      expect(result.type).toBe(ContractParamType.Integer);
+      expect(result.value).toBe(expected);
+    });
   });
 
   describe("hash160", () => {

@@ -1,4 +1,4 @@
-import { csBigInteger } from "csbiginteger";
+import BN from "bn.js";
 import {
   ensureHex,
   int2hex,
@@ -189,18 +189,25 @@ export class ScriptBuilder extends StringStream {
    * @param num
    * @return this
    */
-  private _emitNum(num: number): this {
-    if (num === -1) {
+  private _emitNum(num: number | string): this {
+    const bn = new BN(num);
+    if (bn.eqn(-1)) {
       return this.emit(OpCode.PUSHM1);
     }
-    if (num === 0) {
+    if (bn.eqn(0)) {
       return this.emit(OpCode.PUSH0);
     }
-    if (num > 0 && num <= 16) {
-      return this.emit(OpCode.PUSH1 - 1 + num);
+    if (bn.gtn(0) && bn.lten(16)) {
+      return this.emit(OpCode.PUSH1 - 1 + bn.toNumber());
     }
-    const bn = new csBigInteger(num);
-    return this.emitPush(bn.toHexString());
+    const msbSet = bn.testn(bn.byteLength() * 8 - 1);
+
+    const hex = bn
+      .toTwos(bn.byteLength() * 8)
+      .toString(16, bn.byteLength() * 2);
+    const paddedHex = !bn.isNeg() && msbSet ? "00" + hex : hex;
+
+    return this.emitPush(reverseHex(paddedHex));
   }
 
   /**
