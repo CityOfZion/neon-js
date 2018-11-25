@@ -1,0 +1,51 @@
+{
+  "name": "@cityofzion/neon-ledger",
+  "description": "Neon Ledger integration for Node.js",
+  "version": "4.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CityOfZion/neon-js.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "neo",
+    "antshares",
+    "javascript",
+    "libraries"
+  ],
+  "author": "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf ./lib ./dist",
+    "prepublishOnly": "yarn clean && yarn build",
+    "lint": "tslint src/**/*.ts __tests__/**/*.ts __integration__/**/*.ts",
+    "pretty": "prettier --write --loglevel=warn \"./{src,__{tests,integration}__}/**/*.ts\"",
+    "start": "jest --watch",
+    "test": "jest",
+    "test:integration": "jest /packages/.*/__integration__/.*",
+    "test:unit": "jest /packages/.*/__tests__/.*",
+    "test:node": "node test.node.js"
+  },
+  "dependencies": {
+    "@ledgerhq/hw-transport": "4.32.0",
+    "@types/ledgerhq__hw-transport": "4.21.0"
+  },
+  "peerDependencies": {
+    "@cityofzion/neon-core": "^4.0.0"
+  },
+  "files": [
+    "lib/",
+    "typings/"
+  ],
+  "devDependencies": {
+    "@cityofzion/neon-js": "^4.0.0",
+    "@ledgerhq/hw-transport-node-hid": "4.32.0",
+    "@ledgerhq/hw-transport-u2f": "4.32.0"
+  }
+}
