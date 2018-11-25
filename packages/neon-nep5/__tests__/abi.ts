@@ -48,3 +48,38 @@ test("balanceOf", () => {
     )}51c10962616c616e63654f6667${u.reverseHex(scriptHash)}`
   );
 });
+
+test.each([
+  [
+    "d7678dd97c000be3f33e9362e673101bac4ca654",
+    "ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s",
+    "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+    0.00000001,
+    "51143775292229eccdf904f16fff8e83e7cffdc0f0ce1435b20010db73bf86371075ddfba4e6596f1ff35d53c1087472616e736665726754a64cac1b1073e662933ef3e30b007cd98d67d7"
+  ],
+  [
+    "5b7074e873973a6ed3708862f219a6fbf4d1c411",
+    "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
+    "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+    42.93967296,
+    "05c0bdf0ff00143775292229eccdf904f16fff8e83e7cffdc0f0ce149847e26135152874355e324afd5cc99f002acb3353c1087472616e736665726711c4d1f4fba619f2628870d36e3a9773e874705b"
+  ]
+])(
+  "%s: %s -> %s %d",
+  (
+    scriptHash: string,
+    sendingAddr: string,
+    receivingAddr: string,
+    amt: number,
+    expected: string
+  ) => {
+    const resultFunction = abi.transfer(
+      scriptHash,
+      sendingAddr,
+      receivingAddr,
+      amt
+    );
+    const resultScript = resultFunction().str;
+    expect(resultScript).toBe(expected);
+  }
+);

@@ -11,16 +11,15 @@ An Invocation Transaction is the transaction used to invoke a smart contract. In
 In this example, we will use the most commonly invoked scenario: An NEP5 token transfer.
 */
 
-
 // import Neon, { api, wallet } from "@cityofzion/neon-js";
-const { default: Neon, api, wallet, sc, nep5 } = require("@cityofzion/neon-js");
+const { default: Neon, api, wallet, u, nep5 } = require("@cityofzion/neon-js");
 
 const sendingKey =
-  "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69";
+  "3edee7036b8fd9cef91de47386b191dd76db2888a553e7736bb02808932a915b";
 const receivingAddress = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
 const contractScriptHash = "5b7074e873973a6ed3708862f219a6fbf4d1c411";
 const numOfDecimals = 8;
-const amtToSend = 1;
+const amtToSend = 42.93967296;
 const network = "TestNet";
 const additionalInvocationGas = 0;
 const additionalIntents = [];
@@ -56,11 +55,18 @@ Our tooling will be built for such smart contracts.
 We will be making use of the `neon-nep5` package to help us generate the invocation script:
 */
 
-const generator = nep5.abi.transfer(contractScriptHash, account.address, receivingAddress, amtToSend * numOfDecimals)
+// We have to adjust the amount to send because this function bumps it up by 8 decimals places according to Fixed8 rules. For NEP5 tokens of 8 decimals places, no adjustments is needed.
+const generator = nep5.abi.transfer(
+  contractScriptHash,
+  account.address,
+  receivingAddress,
+  new u.Fixed8(amtToSend).div(Math.pow(10, 8 - numOfDecimals))
+);
 const builder = generator();
 const script = builder.str;
 
-
+console.log("\n\n--- Invocation Script ---");
+console.log(script);
 /**
 ## Attaching invocation fees
 Running the code of a smart contract takes up CPU cycles. Thus, there must be some form of payment for the time taken to run the smart contract.
