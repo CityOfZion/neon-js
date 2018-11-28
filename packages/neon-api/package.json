@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@cityofzion/neon-core": "^4.2.0",
-    "axios": "^0.18.0"
+    "axios": "0.18.0"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "^4.0.0"
