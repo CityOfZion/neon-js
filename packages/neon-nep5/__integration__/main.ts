@@ -1,5 +1,10 @@
 import { CONST, rpc, u } from "@cityofzion/neon-core";
-import { getToken, getTokenBalance, getTokenBalances } from "../src/main";
+import {
+  getToken,
+  getTokenBalance,
+  getTokenBalances,
+  getTokens
+} from "../src/main";
 
 const TESTNET_URLS = [
   "https://test1.cityofzion.io:443",
@@ -95,5 +100,53 @@ describe("getToken", () => {
     expect(info.balance).toBeDefined();
     const balanceNum = info.balance.toNumber();
     expect(balanceNum).toBeGreaterThan(0);
+  });
+});
+
+describe("getTokens", () => {
+  test("without balance", async () => {
+    const tokensInfo = await getTokens(TESTNET_URL, [
+      CONST.CONTRACTS.TEST_RPX,
+      CONST.CONTRACTS.TEST_LWTF,
+      CONST.CONTRACTS.TEST_NXT
+    ]);
+
+    Object.keys(tokensInfo).map(key => {
+      const info = tokensInfo[key];
+
+      expect(typeof info.name).toBe("string");
+      expect(info.symbol).toMatch(/[A-Z]+/);
+      expect(typeof info.decimals).toBe("number");
+      expect(typeof info.totalSupply).toBe("number");
+      expect(info.totalSupply).toBeGreaterThan(99999);
+      expect(info.balance).toBeUndefined();
+    });
+  });
+
+  test("with balance", async () => {
+    const tokensInfo = await getTokens(
+      TESTNET_URL,
+      [
+        CONST.CONTRACTS.TEST_RPX,
+        CONST.CONTRACTS.TEST_LWTF,
+        CONST.CONTRACTS.TEST_NXT
+      ],
+      "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+    );
+
+    expect(tokensInfo.length).toBe(3);
+
+    Object.keys(tokensInfo).map(key => {
+      const info = tokensInfo[key];
+
+      expect(typeof info.name).toBe("string");
+      expect(info.symbol).toMatch(/[A-Z]+/);
+      expect(typeof info.decimals).toBe("number");
+      expect(typeof info.totalSupply).toBe("number");
+      expect(info.totalSupply).toBeGreaterThan(99999);
+      expect(info.balance).toBeDefined();
+      const balanceNum = info.balance.toNumber();
+      expect(balanceNum).toBeGreaterThan(0);
+    });
   });
 });

@@ -141,3 +141,80 @@ export async function getToken(
     throw err;
   }
 }
+
+/**
+ * Retrieves the complete information about a list of tokens.
+ * @param url RPC Node url to query.
+ * @param scriptHashArray Array of NEP5 contract scriptHashes.
+ * @param address Optional address to query the balance for. If provided, the returned object will include the balance property.
+ */
+export async function getTokens(
+  url: string,
+  scriptHashArray: string[],
+  address?: string
+): Promise<TokenInfo[]> {
+  try {
+    const sb = new sc.ScriptBuilder();
+    scriptHashArray.forEach(scriptHash => {
+      if (address) {
+        const addrScriptHash = u.reverseHex(
+          wallet.getScriptHashFromAddress(address)
+        );
+        sb.emitAppCall(scriptHash, "name")
+          .emitAppCall(scriptHash, "symbol")
+          .emitAppCall(scriptHash, "decimals")
+          .emitAppCall(scriptHash, "totalSupply")
+          .emitAppCall(scriptHash, "balanceOf", [addrScriptHash]);
+      } else {
+        sb.emitAppCall(scriptHash, "name")
+          .emitAppCall(scriptHash, "symbol")
+          .emitAppCall(scriptHash, "decimals")
+          .emitAppCall(scriptHash, "totalSupply");
+      }
+    });
+
+    const res = await rpc.Query.invokeScript(sb.str).execute(url);
+
+    const result: TokenInfo[] = [];
+    const step = address ? 5 : 4;
+    for (let i = 0; i < res.result.stack.length; i += step) {
+      const name = rpc.StringParser(res.result.stack[i]);
+      const symbol = rpc.StringParser(res.result.stack[i + 1]);
+      const decimals = rpc.IntegerParser(res.result.stack[i + 2]);
+      const totalSupply = rpc
+        .Fixed8Parser(res.result.stack[i + 3])
+        .dividedBy(
+          Math.pow(10, decimals - rpc.IntegerParser(res.result.stack[i + 2]))
+        )
+        .toNumber();
+      const balance = address
+        ? rpc
+            .Fixed8Parser(res.result.stack[i + 4])
+            .dividedBy(
+              Math.pow(
+                10,
+                decimals - rpc.IntegerParser(res.result.stack[i + 2])
+              )
+            )
+        : undefined;
+
+      const obj = {
+        name,
+        symbol,
+        decimals,
+        totalSupply,
+        balance
+      };
+
+      if (!obj.balance) {
+        delete obj.balance;
+      }
+
+      result.push(obj);
+    }
+    return result;
+  } catch (err) {
+    log.error(`getTokens failed with : ${err.message}`);
+    throw err;
+  }
+}
