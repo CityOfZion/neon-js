@@ -46,15 +46,15 @@ const query = new rpc.Query();
 As neon-js package uses ES6 module conventions, `require` will need to specify which module do they want exactly:
 
 ```js
-var neon-js = require('@cityofzion/neon-js')
+var neonJs = require('@cityofzion/neon-js')
 
 // Semantic Style by using default import
-var Neon = neon-js.default
+var Neon = neonJs.default
 const query = Neon.create.query()
 
 // Named imports are available too
-var wallet = neon-js.wallet
-var tx = neon-js.tx
+var wallet = neonJs.wallet
+var tx = neonJs.tx
 
 const account = new wallet.Account(privateKey)
 ```
