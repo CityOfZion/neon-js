@@ -55,7 +55,8 @@ class ContractParam {
    * @return {ContractParam}
    */
   static integer (value) {
-    return new ContractParam('Integer', Math.round(parseInt(value, 10)))
+    const num = typeof value === 'string' ? value.split('.')[0] : Math.round(value).toString()
+    return new ContractParam('Integer', num)
   }
 
   /**

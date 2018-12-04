@@ -24,9 +24,9 @@ describe('ContractParam', function () {
 
   it('Integer', () => {
     const cp1 = ContractParam.integer(10)
-    cp1.should.eql({ type: 'Integer', value: 10 })
+    cp1.should.eql({ type: 'Integer', value: '10' })
     const cp2 = ContractParam.integer('10')
-    cp2.should.eql({ type: 'Integer', value: 10 })
+    cp2.should.eql({ type: 'Integer', value: '10' })
   })
 
   it('Hash160', () => {

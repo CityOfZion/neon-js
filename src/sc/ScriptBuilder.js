@@ -1,6 +1,6 @@
 import { StringStream, num2hexstring, reverseHex, ensureHex, int2hex, str2ab, ab2hexstring, str2hexstring } from '../utils.js'
 import OpCode from './opCode.js'
-import { csBigInteger as CsBigInteger } from 'csbiginteger'
+import BN from 'bn.js'
 
 /**
  * @class ScriptBuilder
@@ -70,11 +70,24 @@ class ScriptBuilder extends StringStream {
    * @return {ScriptBuilder} this
    */
   _emitNum (num) {
-    if (num === -1) return this.emit(OpCode.PUSHM1)
-    if (num === 0) return this.emit(OpCode.PUSH0)
-    if (num > 0 && num <= 16) return this.emit(OpCode.PUSH1 - 1 + num)
-    const biginteger = new CsBigInteger(num)
-    return this.emitPush(biginteger.toHexString())
+    const bn = new BN(num)
+    if (bn.eqn(-1)) {
+      return this.emit(OpCode.PUSHM1)
+    }
+    if (bn.eqn(0)) {
+      return this.emit(OpCode.PUSH0)
+    }
+    if (bn.gtn(0) && bn.lten(16)) {
+      return this.emit(OpCode.PUSH1 - 1 + bn.toNumber())
+    }
+    const msbSet = bn.testn(bn.byteLength() * 8 - 1)
+
+    const hex = bn
+      .toTwos(bn.byteLength() * 8)
+      .toString(16, bn.byteLength() * 2)
+    const paddedHex = !bn.isNeg() && msbSet ? '00' + hex : hex
+
+    return this.emitPush(reverseHex(paddedHex))
   }
 
   /**
