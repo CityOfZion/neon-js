@@ -28,7 +28,7 @@ const { default: Neon, api, wallet } = require("@cityofzion/neon-js");
 
 const sendingKey =
   "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69";
-const receivingAddress = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
+const receivingAddress = "ASo1RcNVLiV3yQ8j3ZyZv5EWfqBBT8s2Yd";
 const network = "TestNet";
 
 /**

@@ -59,9 +59,6 @@
       "guides/adv/apicore": {
         "title": "Advanced - API Core Components"
       },
-      "guides/adv/multisig": {
-        "title": "Advanced - Working with multi-sig contracts"
-      },
       "guides/adv/multitx": {
         "title": "Advanced - Sending multiple transactions in a block"
       },
@@ -71,8 +68,11 @@
       "guides/basic/createscript": {
         "title": "Basic - Create Smart Contract Script"
       },
-      "guides/basic/invoke": {
+      "guides/basic/doinvoke": {
         "title": "Basic - Invoking a Smart Contract"
+      },
+      "guides/basic/multi": {
+        "title": "Signing with a multi-sig account"
       },
       "guides/basic/privnet": {
         "title": "Basic - Using a Private Net"
