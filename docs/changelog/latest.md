@@ -3,6 +3,23 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.3.0
+=====
+
+- Neon-NEP5
+
+  - `getTokens` functionality is available. Similar to how `getTokenBalances` complement `getTokenBalance`, this new method will allow developers to quickly retrieve multiple token information by grouping up the call within a single HTTP call.
+
+- Guides
+
+  - Experimenting with generating guides from examples, literate programming style. The runnable examples can be found in the `examples` folder.
+
+- Fixes
+
+  - Further fix on ScriptBuilder's emission of integers.
+  - Fix exported files for neon-core. Previously, the `package.json` was pointing at a missing file.
+  - Lock dependencies to a fixed version following a major package vulnerability incident.
+
 4.2.0
 =====
 
