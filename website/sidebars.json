@@ -7,9 +7,9 @@
       "guides/basic/createscript",
       "guides/basic/doinvoke",
       "guides/basic/privnet",
+      "guides/basic/multi",
       "guides/adv/multitx",
-      "guides/adv/apicore",
-      "guides/adv/multisig"
+      "guides/adv/apicore"
     ]
   },
   "api": {
