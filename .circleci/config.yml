@@ -31,7 +31,7 @@ jobs:
           command: yarn bootstrap
       - run:
           name: Build
-          command: yarn build
+          command: yarn build && yarn dist
       - persist_to_workspace:
           root: .
           paths:
