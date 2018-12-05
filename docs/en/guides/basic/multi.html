@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Basic - Signing with a multi-sig account · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;This tutorial aims to show how to sign with a multi-sig account. This will be done by sending some assets from a multi-sig account.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Basic - Signing with a multi-sig account · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="&lt;p&gt;This tutorial aims to show how to sign with a multi-sig account. This will be done by sending some assets from a multi-sig account.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
+          addBackToTop(
+            {"zIndex":100}
+          )
+        });
+        </script><link rel="stylesheet" href="/neon-js/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/neon-js/en"><img class="logo" src="/neon-js/img/logo.svg" alt="neon-js"/><h2 class="headerTitleWithLogo">neon-js</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/neon-js/docs/en/installation.html" target="_self">Docs</a></li><li class=""><a href="/neon-js/docs/en/api/index.html" target="_self">API</a></li><li class=""><a href="/neon-js/docs/en/changelog/latest.html" target="_self">Changelog</a></li><li class=""><a href="/neon-js/en/help.html" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Guides</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/overview.html">Overview</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/installation.html">Installation</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/structure.html">Structure</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/basic/sendasset.html">Basic - Sending assets</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/basic/claimgas.html">Basic - Claiming Gas</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/basic/createscript.html">Basic - Create Smart Contract Script</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/basic/doinvoke.html">Basic - Invoking a Smart Contract</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/basic/privnet.html">Basic - Using a Private Net</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/neon-js/docs/en/guides/basic/multi.html">Basic - Signing with a multi-sig account</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/adv/multitx.html">Advanced - Sending multiple transactions in a block</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/guides/adv/apicore.html">Advanced - API Core Components</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Basic - Signing with a multi-sig account</h1></header><article><div><span><p>This tutorial aims to show how to sign with a multi-sig account. This will be done by sending some assets from a multi-sig account.</p>
+<p>A multi-sig Account can be identified by its verification script. It uses the <code>CHECKMULTISIG</code> OpCode (<code>ae</code> in hexstring). Thus, if you see any verification scripts ending with <code>ae</code>, it is likely to be a multi-sig Account.</p>
+<h2><a class="anchor" aria-hidden="true" id="setup"></a><a href="#setup" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Setup</h2>
+<p>Here I will assume that you have already sent some assets over to the multi-sig account.</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> { <span class="hljs-attr">default</span>: Neon, api, wallet, tx, rpc } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@cityofzion/neon-js"</span>);
+
+<span class="hljs-keyword">const</span> neoscan = <span class="hljs-keyword">new</span> api.neoscan.instance(
+  <span class="hljs-string">"https://neoscan-testnet.io/api/main_net"</span>
+);
+<span class="hljs-keyword">const</span> rpcNodeUrl = <span class="hljs-string">"http://seed2.neo.org:20332"</span>;
+</code></pre>
+<p>Our multi-sig account in this example is made up of 3 keys with a signing threshold of 2.
+Do note that the order of keys in the array matters. A different order will generate a totally different address.</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> keyA = <span class="hljs-keyword">new</span> wallet.Account(
+  <span class="hljs-string">"7d128a6d096f0c14c3a25a2b0c41cf79661bfcb4a8cc95aaaea28bde4d732344"</span>
+);
+<span class="hljs-keyword">const</span> keyB = <span class="hljs-keyword">new</span> wallet.Account(
+  <span class="hljs-string">"9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69"</span>
+);
+<span class="hljs-keyword">const</span> keyC = <span class="hljs-keyword">new</span> wallet.Account(
+  <span class="hljs-string">"3edee7036b8fd9cef91de47386b191dd76db2888a553e7736bb02808932a915b"</span>
+);
+
+<span class="hljs-keyword">const</span> multisigAcct = wallet.Account.createMultiSig(<span class="hljs-number">2</span>, [
+  keyA.publicKey,
+  keyB.publicKey,
+  keyC.publicKey
+]);
+
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"\n\n--- Multi-sig ---"</span>);
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">`My multi-sig address is <span class="hljs-subst">${multisigAcct.address}</span>`</span>);
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">`My multi-sig verificationScript is <span class="hljs-subst">${multisigAcct.contract.script}</span>`</span>);
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="construct-transaction"></a><a href="#construct-transaction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Construct Transaction</h2>
+<p>Similar to how we setup a transaction for a normal account transfer, we also do the same for our transfer from a multi-sig account.</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">var</span> constructTx = neoscan.getBalance(multisigAcct.address).then(<span class="hljs-function"><span class="hljs-params">balance</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> transaction = Neon.create
+    .contractTx()
+    .addIntent(<span class="hljs-string">"NEO"</span>, <span class="hljs-number">1</span>, keyA.address)
+    .addIntent(<span class="hljs-string">"GAS"</span>, <span class="hljs-number">0.00000001</span>, keyB.address)
+    .calculate(balance);
+
+  <span class="hljs-keyword">return</span> transaction;
+});
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="sign-transaction"></a><a href="#sign-transaction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Sign Transaction</h2>
+<p>The only difference is in the signing of transactions. We need to sign the transaction individually by each key first. Then, we combine the signatures together to form a multi-sig witness. We should only see 1 witness attached to the transaction.</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> signTx = constructTx.then(<span class="hljs-function"><span class="hljs-params">transaction</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> txHex = transaction.serialize(<span class="hljs-literal">false</span>);
+
+  <span class="hljs-comment">// This can be any 2 out of the 3 keys.</span>
+  <span class="hljs-keyword">const</span> sig1 = wallet.sign(txHex, keyB.privateKey);
+  <span class="hljs-keyword">const</span> sig2 = wallet.sign(txHex, keyC.privateKey);
+
+  <span class="hljs-keyword">const</span> multiSigWitness = tx.Witness.buildMultiSig(
+    txHex,
+    [sig1, sig2],
+    multisigAcct
+  );
+
+  transaction.addWitness(multiSigWitness);
+
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"\n\n--- Transaction ---"</span>);
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.stringify(transaction.export(), <span class="hljs-literal">undefined</span>, <span class="hljs-number">2</span>));
+
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"\n\n--- Transaction hash---"</span>);
+  <span class="hljs-built_in">console</span>.log(transaction.hash)
+
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"\n\n--- Transaction string ---"</span>)
+  <span class="hljs-built_in">console</span>.log(transaction.serialize(<span class="hljs-literal">true</span>));
+  <span class="hljs-keyword">return</span> transaction;
+});
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="send-transaction"></a><a href="#send-transaction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Send Transaction</h2>
+<p>We send off the transaction using sendrawtransaction RPC call like any other normal transaction.</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> sendTx = signTx
+  .then(<span class="hljs-function"><span class="hljs-params">transaction</span> =&gt;</span> {
+    <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> rpc.RPCClient(rpcNodeUrl);
+    <span class="hljs-keyword">return</span> client.sendRawTransaction(transaction.serialize(<span class="hljs-literal">true</span>));
+  })
+  .then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"\n\n--- Response ---"</span>);
+    <span class="hljs-built_in">console</span>.log(res);
+  })
+  .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(err));
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/en/guides/basic/privnet.html"><span class="arrow-prev">← </span><span>Basic - Using a Private Net</span></a><a class="docs-next button" href="/neon-js/docs/en/guides/adv/multitx.html"><span>Advanced - Sending multiple transactions in a block</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#setup">Setup</a></li><li><a href="#construct-transaction">Construct Transaction</a></li><li><a href="#sign-transaction">Sign Transaction</a></li><li><a href="#send-transaction">Send Transaction</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2018 City of Zion</section></footer></div></body></html>
