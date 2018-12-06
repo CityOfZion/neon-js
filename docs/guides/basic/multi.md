@@ -48,6 +48,7 @@ console.log(`My multi-sig verificationScript is ${multisigAcct.contract.script}`
 ## Construct Transaction
 Similar to how we setup a transaction for a normal account transfer, we also do the same for our transfer from a multi-sig account.
 
+### Construct for asset transfer
 
 ```js
 var constructTx = neoscan.getBalance(multisigAcct.address).then(balance => {
@@ -60,6 +61,19 @@ var constructTx = neoscan.getBalance(multisigAcct.address).then(balance => {
   return transaction;
 });
 ```
+
+### Construct for GAS claiming
+
+```js
+var constructTx = neoscan.getClaims(multisigAcct.address).then(claims => {
+  const transaction = Neon.create
+    .claimTx()
+    .addClaims(claims);
+
+  return transaction;
+});
+```
+
 
 ## Sign Transaction
 The only difference is in the signing of transactions. We need to sign the transaction individually by each key first. Then, we combine the signatures together to form a multi-sig witness. We should only see 1 witness attached to the transaction.
