@@ -35,7 +35,9 @@ export class Transaction extends BaseTransaction {
     txObj = deserializeAttributes(ss, txObj);
     txObj = deserializeInputs(ss, txObj);
     txObj = deserializeOutputs(ss, txObj);
-    txObj = deserializeWitnesses(ss, txObj);
+    if (!ss.isEmpty()) {
+      txObj = deserializeWitnesses(ss, txObj);
+    }
     return new txClass(txObj);
   }
 
