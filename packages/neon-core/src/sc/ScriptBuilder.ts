@@ -258,7 +258,7 @@ function isValidValue(value: any) {
  * @param sb
  * @returns A single ScriptIntent if available.
  */
-function retrieveAppCall(sb: ScriptBuilder): ScriptIntent {
+function retrieveAppCall(sb: ScriptBuilder): ScriptIntent | null {
   const output: ScriptIntent = {
     scriptHash: "",
     args: []
@@ -303,7 +303,7 @@ function retrieveAppCall(sb: ScriptBuilder): ScriptIntent {
     }
   }
   if (output.scriptHash === "") {
-    throw new Error("No Scripthash found!");
+    return null;
   }
   return output;
 }
