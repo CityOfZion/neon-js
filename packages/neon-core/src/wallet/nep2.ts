@@ -135,7 +135,7 @@ export function decrypt(
             .toString()
             .slice(0, 8);
           if (addressHash !== newAddressHash) {
-            reject(new Error("Wrong Password or scrypt parameters!"));
+            reject(new Error("Wrong password or scrypt parameters!"));
           }
           log.info(`Successfully decrypted ${encryptedKey}`);
           resolve(account.WIF);
