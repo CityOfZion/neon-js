@@ -262,7 +262,8 @@ const retrieveAppCall = (sb) => {
         throw new Error(`Encounter unknown byte: ${b}`)
     }
   }
-  if (output.scriptHash !== '') return output
+  if (output.scriptHash === '') return null
+  return output
 }
 
 export default ScriptBuilder
