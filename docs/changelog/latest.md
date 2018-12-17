@@ -3,6 +3,15 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.3.1
+=====
+
+- Fixes
+
+  - retrieveAppCall returns null for non-appcall operations. This allows non-essential instructions to be parsed and ignored.
+  - Fix transaction deserialization without signatures
+  - Correct error meesage in nep2.decrypt (Wrong capitalization of second word)
+
 4.3.0
 =====
 
