@@ -6,7 +6,7 @@ import { ensureHex, reverseHex } from "./misc";
  * @returns ASCII string
  */
 export function ab2str(buf: ArrayBuffer | ArrayLike<number>): string {
-  return String.fromCharCode.apply(null, new Uint8Array(buf));
+  return String.fromCharCode.apply(null, Array.from(new Uint8Array(buf)));
 }
 
 /**
