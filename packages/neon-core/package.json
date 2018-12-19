@@ -40,7 +40,7 @@
     "@types/crypto-js": "3.1.43",
     "@types/elliptic": "6.4.0",
     "@types/loglevel": "1.5.3",
-    "@types/node": "10.12.10",
+    "@types/node": "10.12.17",
     "axios": "0.18.0",
     "bignumber.js": "7.2.1",
     "bn.js": "4.11.8",
@@ -57,7 +57,7 @@
   "devDependencies": {
     "clean-webpack-plugin": "1.0.0",
     "ts-loader": "5.3.1",
-    "webpack": "4.26.1",
+    "webpack": "4.27.1",
     "webpack-cli": "3.1.2"
   },
   "files": [

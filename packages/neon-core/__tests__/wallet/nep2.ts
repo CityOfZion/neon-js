@@ -89,7 +89,7 @@ describe("NEP2", () => {
         "wrongpassword",
         simpleScrypt
       );
-      expect(thrower).rejects.toThrow("Wrong Password");
+      expect(thrower).rejects.toThrow("Wrong password");
     });
 
     test("Errors on wrong scrypt params", () => {
