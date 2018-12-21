@@ -46,13 +46,13 @@ export class ContractParam {
    */
   public static hash160(value: string): ContractParam {
     if (typeof value !== "string") {
-      throw new Error(`Input should be string!`);
+      throw new Error(`hash160 expected a string but got ${typeof value} instead.`);
     }
     if (isAddress(value)) {
       value = getScriptHashFromAddress(value);
     }
     if (value.length !== 40) {
-      throw new Error(`Input should be 40 characters long!`);
+      throw new Error(`hash160 expected a 40 character string but got ${value.length} chars instead.`);
     }
     return new ContractParam(ContractParamType.Hash160, value);
   }
