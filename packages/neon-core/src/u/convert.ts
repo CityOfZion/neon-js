@@ -15,7 +15,7 @@ export function ab2str(buf: ArrayBuffer | ArrayLike<number>): string {
  */
 export function str2ab(str: string): Uint8Array {
   if (typeof str !== "string") {
-    throw new Error("str2ab expects a string");
+    throw new Error(`str2ab expected a string but got ${typeof str} instead.`);
   }
   const result = new Uint8Array(str.length);
   for (let i = 0, strLen = str.length; i < strLen; i++) {
@@ -48,7 +48,7 @@ export function hexstring2ab(str: any): Uint8Array {
  */
 export function ab2hexstring(arr: ArrayBuffer | ArrayLike<number>): string {
   if (typeof arr !== "object") {
-    throw new Error("ab2hexstring expects an array");
+    throw new Error(`ab2hexstring expects an array. Input was ${arr}`);
   }
   let result = "";
   const intArray = new Uint8Array(arr);
@@ -82,7 +82,7 @@ export function hexstring2str(hexstring: string): string {
  */
 export function int2hex(num: number): string {
   if (typeof num !== "number") {
-    throw new Error("int2hex expects a number");
+    throw new Error(`int2hex expected a number but got ${typeof num} instead.`);
   }
   const h = num.toString(16);
   return h.length % 2 ? "0" + h : h;
@@ -90,7 +90,7 @@ export function int2hex(num: number): string {
 
 /**
  * Converts a number to a big endian hexstring of a suitable size, optionally little endian
- * @param num
+ * @param num A positive integer.
  * @param size The required size in bytes, eg 1 for Uint8, 2 for Uint16. Defaults to 1.
  * @param littleEndian Encode the hex in little endian form
  */
@@ -100,16 +100,16 @@ export function num2hexstring(
   littleEndian: boolean = false
 ): string {
   if (typeof num !== "number") {
-    throw new Error("num must be numeric");
+    throw new Error(`num2hexstring expected a number but got ${typeof num} instead.`);
   }
   if (num < 0) {
-    throw new RangeError("num is unsigned (>= 0)");
+    throw new RangeError(`num2hexstring expected a positive integer but got ${num} instead.`);
   }
   if (size % 1 !== 0) {
-    throw new Error("size must be a whole integer");
+    throw new Error(`num2hexstring expected a positive integer but got ${num} instead.`);
   }
   if (!Number.isSafeInteger(num)) {
-    throw new RangeError(`num (${num}) must be a safe integer`);
+    throw new RangeError(`num2hexstring expected a safe integer but got ${num} instead.`);
   }
   size = size * 2;
   let hexstring = num.toString(16);
@@ -131,10 +131,10 @@ export function num2hexstring(
  */
 export function num2fixed8(num: number, size: number = 8): string {
   if (typeof num !== "number") {
-    throw new Error("num must be numeric");
+    throw new Error(`num2fixed8 expected a number but got ${typeof num} instead.`);
   }
   if (size % 1 !== 0) {
-    throw new Error("size must be a whole integer");
+    throw new Error(`num2fixed expected an integer for argument size but got ${size} instead.`);
   }
   const i = new Fixed8(num);
   return new Fixed8(num).toReverseHex().slice(0, size * 2);

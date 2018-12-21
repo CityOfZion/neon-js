@@ -10,7 +10,7 @@ export function hexXor(str1: string, str2: string): string {
   ensureHex(str1);
   ensureHex(str2);
   if (str1.length !== str2.length) {
-    throw new Error("strings are disparate lengths");
+    throw new Error(`strings are disparate lengths. Inputs are of length ${str1.length} and ${str2.length}`);
   }
   const result = [];
   for (let i = 0; i < str1.length; i += 2) {

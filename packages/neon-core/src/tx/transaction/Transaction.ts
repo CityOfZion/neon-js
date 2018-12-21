@@ -85,6 +85,6 @@ function getType<T>(type: number): any {
     case 0x90:
       return StateTransaction;
     default:
-      throw new Error("Unknown TransactionType");
+      throw new Error(`Unknown TransactionType: ${type}`);
   }
 }
