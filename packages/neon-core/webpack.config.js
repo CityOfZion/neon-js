@@ -6,7 +6,7 @@ module.exports = function() {
     output: {
       path: __dirname,
       filename: "./dist/index.js",
-      libraryTarget: "umd"
+      libraryTarget: "commonjs2"
     }
   });
   nodeOutput.optimization = Object.assign({}, nodeOutput.optimization, {
@@ -19,7 +19,7 @@ module.exports = function() {
       path: __dirname,
       filename: "./dist/browser.js",
       libraryTarget: "umd",
-      library: "Neon" // This is the var name in browser
+      library: "NeonCore" // This is the var name in browser
     }
   });
 

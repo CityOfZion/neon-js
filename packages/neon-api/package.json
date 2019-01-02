@@ -17,13 +17,14 @@
   ],
   "author": "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
   "license": "MIT",
-  "main": "lib/index.js",
-  "module": "src/index.js",
+  "main": "dist/index.js",
+  "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc -b",
+    "dist:prod":"tsc -m commonjs --outDir dist",
     "clean": "rimraf ./lib ./dist",
-    "prepublishOnly": "yarn clean && yarn build",
+    "prepublishOnly": "yarn clean && yarn build && yarn dist:prod",
     "lint": "tslint src/**/*.ts __tests__/**/*.ts __integration__/**/*.ts",
     "pretty": "prettier --write --loglevel=warn \"./{src,__{tests,integration}__}/**/*.ts\"",
     "start": "jest --watch",
@@ -39,6 +40,7 @@
     "@cityofzion/neon-core": "^4.0.0"
   },
   "files": [
+    "dist/",
     "lib/"
   ]
 }
