@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-nep5",
   "description": "Neon-NEP5 Module",
-  "version": "4.3.1",
+  "version": "4.3.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
@@ -22,7 +22,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc -b",
-    "dist:prod":"tsc -m commonjs --outDir dist",
+    "dist:prod": "tsc -m commonjs --outDir dist",
     "clean": "rimraf ./lib ./dist",
     "prepublishOnly": "yarn clean && yarn build && yarn dist:prod",
     "lint": "tslint src/**/*.ts __tests__/**/*.ts __integration__/**/*.ts",
@@ -33,7 +33,7 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "@cityofzion/neon-core": "^4.3.1"
+    "@cityofzion/neon-core": "^4.3.2"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "^4.0.0"
