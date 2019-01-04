@@ -7,7 +7,7 @@ module.exports = function() {
     output: {
       path: __dirname,
       filename: "./dist/index.js",
-      libraryTarget: "umd"
+      libraryTarget: "commonjs2"
     }
   });
   nodeOutput.optimization = Object.assign({}, nodeOutput.optimization, {

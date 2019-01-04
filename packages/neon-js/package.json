@@ -21,7 +21,7 @@
   "browser": "dist/browser.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b",
     "clean": "rimraf ./lib ./dist",
     "dist": "cross-env NODE_ENV=development webpack --mode development",
     "dist:prod": "cross-env NODE_ENV=production webpack --mode production",

@@ -1,5 +1,4 @@
 import * as neonCore from "@cityofzion/neon-core";
-import { RPCClient } from "@cityofzion/neon-core/lib/rpc";
 import apiPlugin from "../../src/index";
 
 const neonJs = apiPlugin(neonCore);
@@ -183,7 +182,7 @@ describe("setupVote", () => {
     "Vote for some candidates",
     async () => {
       const rpcUrl = await provider.getRPCEndpoint();
-      const client = new RPCClient(rpcUrl);
+      const client = new neonCore.rpc.RPCClient(rpcUrl);
       const validators = await client.getValidators();
       const chosenOnes = validators
         .filter(v => v.active)

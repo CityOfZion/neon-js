@@ -21,7 +21,8 @@ module.exports = function(rootDir) {
           options: {
             compilerOptions: {
               declarationDir: path.resolve(rootDir, "dist"),
-              sourceMap: env === "development"
+              sourceMap: env === "development",
+              module: "commonjs"
             }
           }
         }
