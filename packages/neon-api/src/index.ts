@@ -5,7 +5,7 @@ import { default as apiSettings } from "./settings";
 function bundle<T extends typeof _Neon>(
   neonCore: T
 ): T & { api: typeof plugin } {
-  neonCore.settings = Object.assign(neonCore.settings, apiSettings);
+  Object.assign(neonCore.settings, apiSettings);
   return { ...(neonCore as any), api: plugin };
 }
 
