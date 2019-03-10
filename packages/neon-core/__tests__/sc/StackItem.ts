@@ -25,21 +25,21 @@ describe("hasChildren", () => {
 
 describe("deserialize", () => {
   test("ByteArray", () => {
-    const result = StackItem.deserialize(data.byteArray);
+    const result = StackItem.deserialize(data.byteArray.serialized);
 
     expect(result.type).toBe(StackItemType.ByteArray);
     expect(result.value).toBe("6d65737361676520746f206d7973656c6621");
   });
 
   test("Integer", () => {
-    const result = StackItem.deserialize(data.integer);
+    const result = StackItem.deserialize(data.integer.serialized);
 
     expect(result.type).toBe(StackItemType.Integer);
     expect(result.value).toBe("438ffc5a");
   });
 
   test("Array", () => {
-    const result = StackItem.deserialize(data.array);
+    const result = StackItem.deserialize(data.array.serialized);
 
     expect(result.type).toBe(StackItemType.Array);
     expect(Array.isArray(result.value)).toBeTruthy();
@@ -54,7 +54,7 @@ describe("deserialize", () => {
   });
 
   test("Map", () => {
-    const result = StackItem.deserialize(data.map);
+    const result = StackItem.deserialize(data.map.serialized);
 
     expect(result.type).toBe(StackItemType.Map);
     expect(Array.isArray(result.value)).toBeTruthy();
@@ -70,7 +70,7 @@ describe("deserialize", () => {
   });
 
   test("ByteArray (long)", () => {
-    const result = StackItem.deserialize(data.longString);
+    const result = StackItem.deserialize(data.longString.serialized);
 
     expect(result.type).toBe(StackItemType.ByteArray);
     const resultString = result.value as string;
@@ -78,7 +78,7 @@ describe("deserialize", () => {
   });
 
   test("complex array", () => {
-    const result = StackItem.deserialize(data.complexArray);
+    const result = StackItem.deserialize(data.complexArray.serialized);
 
     expect(result.type).toBe(StackItemType.Array);
     const resultValueArray = result.value as StackItem[];
