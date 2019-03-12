@@ -2,7 +2,7 @@ import * as neonCore from "@cityofzion/neon-core";
 import domainPlugin from "../src/index";
 
 const neonJs = domainPlugin(neonCore);
-const { CONST, rpc, u, api, wallet } = neonJs;
+const { rpc, wallet } = neonJs;
 
 export function getMainnetUrls(): string[] {
     return [

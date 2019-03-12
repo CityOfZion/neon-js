@@ -10,6 +10,8 @@ export enum StackItemType {
   "Map" = 0x82
 }
 
+export type StackItemValue = string | number | boolean | StackItem[] | StackItemMap[];
+
 export interface StackItemLike {
   type: StackItemType | keyof typeof StackItemType | number;
   value: string | number | boolean | StackItemLike[] | StackItemMapLike[];
@@ -36,17 +38,23 @@ export class StackItem {
 
   private static _deserialize(ss: StringStream): StackItem {
     const item = new StackItem({ type: parseInt(ss.read(), 16) });
-    const length = ss.readVarInt();
+    const l = ss.readVarInt();
+    if (l === 0) {
+      item.value = getDefaultValue(item.type);
+      return item;
+    }
     switch (item.type) {
       case StackItemType.Array:
       case StackItemType.Struct:
-        for (let i = 0; i < length; i++) {
-          (item.value as StackItem[]).push(this._deserialize(ss));
+        item.value = [] as StackItem[];
+        for (let i = 0; i < l; i++) {
+          item.value.push(this._deserialize(ss));
         }
         break;
       case StackItemType.Map:
-        for (let i = 0; i < length; i++) {
-          (item.value as StackItemMap[]).push({
+        item.value = [] as StackItemMap[];
+        for (let i = 0; i < l; i++) {
+          item.value.push({
             key: this._deserialize(ss),
             value: this._deserialize(ss)
           });
@@ -56,7 +64,7 @@ export class StackItem {
         item.value = parseInt(ss.read(), 16) > 0;
         break;
       default:
-        item.value = ss.read(length);
+        item.value = ss.read(l);
     }
     return item;
   }
@@ -133,14 +141,14 @@ export function hasChildren(type: StackItemType): boolean {
   return false;
 }
 
-function getDefaultValue(type: StackItemType): any {
+function getDefaultValue(type: StackItemType): StackItemValue {
   switch (type) {
     case StackItemType.Array:
     case StackItemType.Struct:
     case StackItemType.Map:
       return [];
     case StackItemType.Boolean:
-      return undefined;
+      return false;
     default:
       return "";
   }
