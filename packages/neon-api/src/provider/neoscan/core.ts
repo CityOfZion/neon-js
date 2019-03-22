@@ -75,14 +75,17 @@ export async function getBalance(
  * @param address - Address to check.
  * @return Claims retrieved from endpoint.
  */
-export async function getClaims(url: string, address: string) {
+export async function getClaims(
+  url: string,
+  address: string
+): Promise<wallet.Claims> {
   const response = await axios.get(url + "/v1/get_claimable/" + address);
   const data = response.data as NeoscanV1GetClaimableResponse;
   if (data.address === "not found" && data.claimable === null) {
     return new wallet.Claims({ address: data.address });
   }
   const claims = parseClaims(data.claimable as NeoscanClaim[]);
-  log.info(`Retrieved Balance for ${address} from neoscan ${url}`);
+  log.info(`Retrieved Claims for ${address} from neoscan ${url}`);
   return new wallet.Claims({
     net: url,
     address: data.address,
