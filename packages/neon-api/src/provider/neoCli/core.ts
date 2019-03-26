@@ -11,7 +11,7 @@ const log = logging.default("api");
 
 const BASE_REQ = CONST.DEFAULT_REQ;
 
-export function throwRpcError(err: rpc.RPCErrorResponse) {
+function throwRpcError(err: rpc.RPCErrorResponse) {
   throw new Error(`Encounter error code ${err.code}: ${err.message}`);
 }
 

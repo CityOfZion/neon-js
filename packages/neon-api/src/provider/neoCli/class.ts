@@ -36,3 +36,5 @@ export class NeoCli implements Provider {
     throw new Error("Method not implemented.");
   }
 }
+
+export default NeoCli

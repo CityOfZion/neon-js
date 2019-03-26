@@ -51,7 +51,7 @@ providers.forEach(api => {
 
 const emptyAddr = "address";
 providers.forEach(api => {
-  describe(`Empty Address: ${api.name}`, () => {
+  describe(`Invalid Address: ${api.name}`, () => {
     test("getBalance", async () => {
       const result = await api.getBalance(emptyAddr);
       expect(result).toBeInstanceOf(wallet.Balance);
