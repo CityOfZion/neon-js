@@ -35,11 +35,11 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "@types/bn.js": "4.11.3",
+    "@types/bn.js": "4.11.4",
     "@types/bs58": "4.0.0",
     "@types/crypto-js": "3.1.43",
-    "@types/elliptic": "6.4.1",
-    "@types/loglevel": "1.5.3",
+    "@types/elliptic": "6.4.5",
+    "@types/loglevel": "1.5.4",
     "@types/node": "10.12.18",
     "axios": "0.18.0",
     "bignumber.js": "7.2.1",
@@ -55,10 +55,10 @@
     "wif": "2.0.6"
   },
   "devDependencies": {
-    "clean-webpack-plugin": "1.0.0",
-    "ts-loader": "5.3.1",
-    "webpack": "4.27.1",
-    "webpack-cli": "3.1.2"
+    "clean-webpack-plugin": "2.0.1",
+    "ts-loader": "5.3.3",
+    "webpack": "4.29.6",
+    "webpack-cli": "3.3.0"
   },
   "files": [
     "dist/",
