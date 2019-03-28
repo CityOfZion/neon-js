@@ -26,7 +26,7 @@ export class Neoscan implements Provider {
     } else {
       this.url = url;
     }
-    log.info(`Created NeonDB Provider: ${this.url}`);
+    log.info(`Created Neoscan Provider: ${this.url}`);
   }
 
   public async getRPCEndpoint(): Promise<string> {

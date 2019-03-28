@@ -103,7 +103,7 @@ describe("getBalance", () => {
       new wallet.Balance({
         net: testUrl,
         address: "address",
-        assetSymbols: ["NEO", "GAS"],
+        assetSymbols: ["GAS", "NEO"],
         assets: {
           NEO: {
             unspent: [{ value: 2, txid: "1", index: 1 }],
