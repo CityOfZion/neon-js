@@ -3,7 +3,21 @@ id: latest
 title: Changelog (v4)
 ---
 
-4.3.2
+4.4.0
+=====
+
+- Neon-api
+
+  - Add neoCli API Client. Do not that not all endpoints are currently implemented and the user will have ensure the node is setup to use the plugin.
+
+- Misc
+  - Update dev dependencies
+
+- Fixes
+
+  - Fix StackItem serialization/deserialization of zero values.
+
+4.3.3
 =====
 
 - Fixes
@@ -13,6 +27,7 @@ title: Changelog (v4)
   - Correct error message in nep2.decrypt (Wrong capitalization of second word)
   - Fix `module` exports pointing at wrong files
   - Update utils error messages
+  - Fix es6 getter error
 
 4.3.0
 =====
