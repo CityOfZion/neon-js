@@ -31,7 +31,7 @@
   "scripts": {
     "build": "tsc -b",
     "dist:prod": "tsc -m commonjs --outDir dist",
-    "clean": "rimraf ./lib ./dist",
+    "clean": "rimraf ./lib ./dist tsconfig.tsbuildinfo",
     "prepublishOnly": "yarn clean && yarn build && yarn dist:prod",
     "lint": "tslint src/**/*.ts __tests__/**/*.ts __integration__/**/*.ts",
     "pretty": "prettier --write --loglevel=warn \"./{src,__{tests,integration}__}/**/*.ts\"",
@@ -46,5 +46,6 @@
   "files": [
     "dist/",
     "lib/"
-  ]
+  ],
+  "gitHead": "d21633d03deca1f4bc6c3a4f4e1d32a61aec2fe3"
 }

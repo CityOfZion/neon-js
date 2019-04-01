@@ -22,7 +22,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -b",
-    "clean": "rimraf ./lib ./dist",
+    "clean": "rimraf ./lib ./dist tsconfig.tsbuildinfo",
     "dist": "cross-env NODE_ENV=development webpack --mode development",
     "dist:prod": "cross-env NODE_ENV=production webpack --mode production",
     "prepublishOnly": "yarn clean && yarn build && yarn dist:prod",
@@ -30,9 +30,9 @@
     "pretty": "prettier --write --loglevel=warn \"./{src,__{tests,integration}__}/**/*.ts\""
   },
   "dependencies": {
-    "@cityofzion/neon-api": "^4.3.3",
-    "@cityofzion/neon-core": "^4.3.2",
-    "@cityofzion/neon-nep5": "^4.3.2"
+    "@cityofzion/neon-api": "^4.4.0",
+    "@cityofzion/neon-core": "^4.4.0",
+    "@cityofzion/neon-nep5": "^4.4.0"
   },
   "devDependencies": {
     "clean-webpack-plugin": "2.0.1",
@@ -42,5 +42,6 @@
   },
   "files": [
     "dist/"
-  ]
+  ],
+  "gitHead": "d21633d03deca1f4bc6c3a4f4e1d32a61aec2fe3"
 }
