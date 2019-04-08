@@ -35,12 +35,12 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "@types/bn.js": "4.11.4",
+    "@types/bn.js": "4.11.5",
     "@types/bs58": "4.0.0",
     "@types/crypto-js": "3.1.43",
-    "@types/elliptic": "6.4.5",
+    "@types/elliptic": "6.4.6",
     "@types/loglevel": "1.5.4",
-    "@types/node": "10.12.18",
+    "@types/node": "11.13.0",
     "axios": "0.18.0",
     "bignumber.js": "7.2.1",
     "bn.js": "4.11.8",
