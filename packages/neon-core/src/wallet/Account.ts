@@ -16,6 +16,7 @@ import {
 
 const log = logger("wallet");
 
+const inspect = util.inspect.custom;
 export interface AccountJSON {
   address: string;
   label: string;
@@ -144,7 +145,7 @@ export class Account {
     return "Account";
   }
 
-  public [util.inspect.custom]() {
+  public [inspect]() {
     return `[Account: ${this.label}]`;
   }
 

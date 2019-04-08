@@ -1,6 +1,7 @@
 import util from "util";
 import ClaimItem, { ClaimItemLike } from "./components/ClaimItem";
 
+const inspect = util.inspect.custom;
 export interface ClaimsLike {
   address: string;
   net: string;
@@ -27,7 +28,7 @@ export class Claims {
     return "Claims";
   }
 
-  public [util.inspect.custom]() {
+  public [inspect]() {
     const claimsDump = this.claims.map(c => {
       return `${c.txid} <${c.index}>: ${c.claim.toString()}`;
     });
