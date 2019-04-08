@@ -68,6 +68,7 @@ export class Balance {
   public addAsset(sym: string, assetBalance?: Partial<AssetBalanceLike>): this {
     sym = sym.toUpperCase();
     this.assetSymbols.push(sym);
+    this.assetSymbols.sort();
     const cleanedAssetBalance = new AssetBalance(assetBalance);
     this.assets[sym] = cleanedAssetBalance;
     return this;

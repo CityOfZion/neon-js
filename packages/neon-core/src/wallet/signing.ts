@@ -36,7 +36,7 @@ export function verify(hex: string, sig: string, publicKey: string) {
   if (!isPublicKey(publicKey, true)) {
     publicKey = getPublicKeyUnencoded(publicKey);
   }
-  const sigObj = getSignatureFromHex(sig) as EC.Signature;
+  const sigObj = getSignatureFromHex(sig) as unknown as EC.SignatureOptions;
   const messageHash = sha256(hex);
   const publicKeyBuffer = Buffer.from(publicKey, "hex")
   return curve.verify(messageHash, sigObj, publicKeyBuffer, "hex");

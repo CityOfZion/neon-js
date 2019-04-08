@@ -89,7 +89,10 @@ describe("Verify: Invalid", () => {
     expect(verify.isPublicKey(i, true)).toBeFalsy();
   });
 
-  test.each([])("UnencodedPublicKey: %s", (i: string) => {
+  test.each([
+    "02963fc761eb7135c4593bfc6a0af96d8588b70d8f6ef3af8549181e57772181f5ab872395851e9b1b0dbee1f46c11cc7928912ddb452964099931e05f7f9efd5c",
+    "04c467ba44afa8349f020eb9e8f9e1dc1c8e877b9d239e139af699049126e0f321869971106d82de8ffd0d424eea84a0d67294eecab7b89e861b3bb1fc37f8d907"
+  ])("UnencodedPublicKey: %s", (i: string) => {
     expect(verify.isPublicKey(i, false)).toBeFalsy();
   });
 
