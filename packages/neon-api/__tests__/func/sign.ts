@@ -1,7 +1,6 @@
-import * as tx from "../../../../neon-core/src/tx/";
-import * as wallet from "../../../../neon-core/src/wallet/";
-import * as tx from "../../../../neon-core/src/tx/";
+import { tx, wallet } from "@cityofzion/neon-core";
 import { Network } from "../../../../neon-core/src/rpc/index";
+
 import * as sign from "../../src/funcs/sign";
 
 jest.mock("../../../neon-core/src/");

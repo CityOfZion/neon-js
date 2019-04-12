@@ -1,4 +1,5 @@
-import { u, wallet } from "@cityofzion/neon-core";
+import { u, wallet } from "../../../../neon-core/src/";
+
 import axios from "axios";
 import * as neoCli from "../../../src/provider/neoCli/core";
 

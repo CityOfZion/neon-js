@@ -1,4 +1,5 @@
-import { CONST, logging, tx, wallet } from "@cityofzion/neon-core";
+import { CONST, logging, tx, wallet } from  "../../../neon-core/src/";
+
 import { extractDump, modifyTransactionForEmptyTransaction } from "./common";
 import {
   createClaimTx,

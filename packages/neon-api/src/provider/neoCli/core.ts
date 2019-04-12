@@ -1,4 +1,12 @@
-import { CONST, logging, rpc, u, wallet } from "@cityofzion/neon-core";
+// import { CONST, logging, rpc, u, wallet } from "@cityofzion/neon-core";
+import * as CONST from "../../../../neon-core/src/rpc/index";
+import * as rpc from "../../../../neon-core/src/rpc/";
+import { Network } from "../../../../neon-core/src/rpc/index";
+import { logging } from "../../../../neon-core/src/";
+import * as u from "../../../../neon-core/src/u/";
+import { Fixed8 } from "../../../../neon-core/src/u/index";
+import * as wallet from "../../../../neon-core/src/wallet/";
+
 import axios from "axios";
 import {
   NeoCliClaimable,

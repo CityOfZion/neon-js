@@ -1,4 +1,5 @@
-import { tx, u, wallet } from "@cityofzion/neon-core";
+import { tx, u, wallet } from  "../../../neon-core/src/";
+
 import { Provider } from "../provider/common";
 
 export interface ManagedApiBasicConfig<T extends tx.BaseTransaction> {

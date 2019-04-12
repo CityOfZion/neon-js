@@ -1,4 +1,5 @@
-import { tx, u } from "@cityofzion/neon-core";
+import { tx, u } from  "../../../neon-core/src/";
+
 import { getVerificationSignatureForSmartContract } from "./common";
 import { ManagedApiBasicConfig } from "./types";
 

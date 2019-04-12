@@ -1,4 +1,4 @@
-import { rpc, settings } from "@cityofzion/neon-core";
+import { rpc, settings } from "../../../../neon-core/src/";
 import neonDB from "../../../src/provider/neonDB/class";
 import * as core from "../../../src/provider/neonDB/core";
 jest.mock("../../../src/provider/neonDB/core");

@@ -1,4 +1,5 @@
-import { logging, u, wallet } from "@cityofzion/neon-core";
+import { logging, u, wallet } from  "../../../../neon-core/src/";
+
 import axios from "axios";
 import { settings as internalSettings } from "../../settings";
 import {

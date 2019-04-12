@@ -1,4 +1,5 @@
-import { tx, wallet } from "@cityofzion/neon-core";
+import { tx, wallet } from  "../../../neon-core/src/";
+
 import { checkProperty } from "./common";
 import { ManagedApiBasicConfig } from "./types";
 

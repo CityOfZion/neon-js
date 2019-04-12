@@ -1,4 +1,4 @@
-import { logging, u, wallet } from "@cityofzion/neon-core";
+import { logging, u, wallet } from "../../../neon-core/src/";
 import { PastTransaction, Provider } from "./common";
 const log = logging.default("api");
 

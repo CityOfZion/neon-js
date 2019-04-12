@@ -1,4 +1,5 @@
-import { rpc, tx, u, wallet } from "@cityofzion/neon-core";
+import { rpc, tx, u, wallet } from  "../../../neon-core/src/";
+
 import { ManagedApiBasicConfig } from "./types";
 
 /**

@@ -1,4 +1,5 @@
-import { logging, rpc, tx } from "@cityofzion/neon-core";
+import { logging, rpc, tx } from  "../../../neon-core/src/";
+
 import { checkProperty } from "./common";
 import {
   DoInvokeConfig,

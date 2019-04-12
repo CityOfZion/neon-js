@@ -1,4 +1,4 @@
-import { CONST, tx, u } from "@cityofzion/neon-core";
+import { CONST, tx, u } from "../../neon-core/src/";
 
 export function extractAsset(params: { [key: string]: string }) {
   if (!params.asset) {

@@ -8,6 +8,7 @@ import { Balance } from "../../../../neon-core/src/wallet/index";
 import axios from "axios";
 import * as common from "../../../src/provider/common";
 import * as neoscan from "../../../src/provider/neoscan/core";
+import * as util from "util"
 import { set } from "../../../src/settings";
 jest.mock("axios");
 jest.mock("../../../src/provider/common");
@@ -71,6 +72,8 @@ describe("getRPCEndpoint", () => {
     set({ httpsOnly: true });
 
     const result = await neoscan.getRPCEndpoint(testUrl);
+
+    console.log('result: '+util.inspect(result, {depth: null}))
 
     expect(getCall).toHaveBeenCalledTimes(1);
     expect(common.filterHttpsOnly).toBeCalledWith(allNodes);

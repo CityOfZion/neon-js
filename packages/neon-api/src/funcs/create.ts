@@ -1,4 +1,5 @@
-import { sc, tx, u, wallet } from "@cityofzion/neon-core";
+import { sc, tx, u, wallet } from  "../../../neon-core/src/";
+
 import { checkProperty } from "./common";
 import {
   ClaimGasConfig,

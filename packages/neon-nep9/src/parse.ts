@@ -1,4 +1,4 @@
-import { tx, wallet } from "@cityofzion/neon-core";
+import { tx, wallet } from "../../neon-core/src/";
 import { extractAmount, extractAsset, extractAttributes } from "./extract";
 
 /**

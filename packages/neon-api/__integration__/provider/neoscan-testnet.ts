@@ -8,16 +8,16 @@ const neonJs = apiPlugin(neonCore);
 
 const { rpc, wallet, u } = neonJs;
 
-const net = "MainNet";
-const addr = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
+const net = "TestNet";
+const addr = "APJnYRic9fYo1bLAdrqDbwrsnqoUD92dWo";
 neonJs.settings.networks[net] = new rpc.Network({
-  Name: "MainNet",
+  Name: "TestNet",
   ExtraConfiguration: {
-    neoscan: "https://api.neoscan.io/api/main_net"
+    neoscan: "https://neoscan-testnet.io/api/test_net"
   }
 });
 
-const provider = new neonJs.api.neoscan.instance("MainNet");
+const provider = new neonJs.api.neoscan.instance("TestNet");
 const invalidAddr = "address";
 describe(`Valid Address: ${provider.name}`, () => {
   test("getBalance", async () => {
