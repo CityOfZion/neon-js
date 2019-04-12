@@ -1,7 +1,11 @@
-import { tx, wallet } from "@cityofzion/neon-core";
+import * as tx from "../../../../neon-core/src/tx/";
+import * as wallet from "../../../../neon-core/src/wallet/";
+import * as tx from "../../../../neon-core/src/tx/";
+import { Network } from "../../../../neon-core/src/rpc/index";
 import * as sign from "../../src/funcs/sign";
 
-jest.mock("@cityofzion/neon-core");
+jest.mock("../../../neon-core/src/");
+jest.mock("../../../neon-core/src/tx/");
 
 describe("signTx", () => {
   test("single signature", async () => {

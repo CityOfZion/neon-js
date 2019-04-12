@@ -1,4 +1,10 @@
-import { rpc, settings, u, wallet } from "@cityofzion/neon-core";
+import * as rpc from "../../../../neon-core/src/rpc/";
+import { Network } from "../../../../neon-core/src/rpc/index";
+import { settings } from "../../../../neon-core/src/";
+import * as u from "../../../../neon-core/src/u/";
+import { Fixed8 } from "../../../../neon-core/src/u/index";
+import * as wallet from "../../../../neon-core/src/wallet/";
+import { Balance } from "../../../../neon-core/src/wallet/index";
 import axios from "axios";
 import * as common from "../../../src/provider/common";
 import * as neoscan from "../../../src/provider/neoscan/core";
@@ -20,7 +26,7 @@ describe("getRPCEndpoint", () => {
     const allNodes = [
       { height: 5, url: "http://url1" },
       { height: 5, url: "http://url2" },
-      { height: 1, url: "http://url3" }
+      { height: 5, url: "http://url3" }
     ];
     const goodNodes = [allNodes[0], allNodes[1]];
     const getCall = jest.fn().mockImplementationOnce(() =>

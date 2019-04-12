@@ -1,4 +1,7 @@
-import { CONST, logging, u, wallet } from "@cityofzion/neon-core";
+import * as CONST from "../../../../neon-core/src/consts"
+import * as logging from "../../../../neon-core/src/logging"
+import * as u from "../../../../neon-core/src/u/"
+import * as wallet from "../../../../neon-core/src/wallet/"
 import axios from "axios";
 import { settings as internalSettings } from "../../settings";
 import {
