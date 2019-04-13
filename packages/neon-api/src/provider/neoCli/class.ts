@@ -1,5 +1,5 @@
 // import { logging, rpc, u, wallet } from "@cityofzion/neon-core";
-import { CONST } from "../../../../neon-core/src/rpc/const.ts";
+import { CONST } from "../../../../neon-core/src/";
 import * as rpc from "../../../../neon-core/src/rpc/";
 import { Network } from "../../../../neon-core/src/rpc/index";
 import { logging } from "../../../../neon-core/src/";
