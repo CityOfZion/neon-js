@@ -4,8 +4,6 @@ import apiPlugin from "../../src/index";
 
 const neonJs = apiPlugin(neonCore);
 
-import * as util from "util"
-
 const { rpc, wallet, u } = neonJs;
 
 const net = "TestNet";
