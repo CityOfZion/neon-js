@@ -1,4 +1,4 @@
-import { sc, u, wallet } from "@cityofzion/neon-core";
+import { sc, u, wallet } from "../../neon-core/src";
 
 /**
  * Returns a function that applies a APPCALL for name to a ScriptBuilder.

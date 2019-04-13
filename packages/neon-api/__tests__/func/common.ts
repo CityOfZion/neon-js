@@ -1,4 +1,4 @@
-import { rpc, tx } from "@cityofzion/neon-core";
+import { rpc, tx } from "../../../neon-core/src/";
 import * as common from "../../src/funcs/common";
 import { DoInvokeConfig } from "../../src/funcs/types";
 

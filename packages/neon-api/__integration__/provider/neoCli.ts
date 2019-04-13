@@ -1,4 +1,4 @@
-import * as neonCore from "@cityofzion/neon-core";
+import * as neonCore from "../../../neon-core/src";
 import apiPlugin from "../../src/index";
 
 const neonJs = apiPlugin(neonCore);

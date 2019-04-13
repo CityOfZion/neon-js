@@ -1,5 +1,5 @@
-import { tx as _tx, u as _u, wallet } from "@cityofzion/neon-core";
 import { mocked } from "ts-jest/utils";
+import { tx as _tx, u as _u, wallet } from "../../../neon-core/src/";
 import * as create from "../../src/funcs/create";
 import {
   ClaimGasConfig,
@@ -8,7 +8,7 @@ import {
   SetupVoteConfig
 } from "../../src/funcs/types";
 
-jest.mock("@cityofzion/neon-core");
+jest.mock("../../../neon-core/src/");
 
 const tx = mocked(_tx, true);
 const u = mocked(_u, true);

@@ -1,4 +1,4 @@
-import { u, wallet } from "../../../neon-core/src/";
+import { u, wallet } from "../../../../neon-core/src/";
 import axios from "axios";
 import * as common from "../../../src/provider/common";
 import * as neonDB from "../../../src/provider/neonDB/core";

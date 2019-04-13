@@ -1,4 +1,4 @@
-import { rpc, settings } from "@cityofzion/neon-core";
+import { rpc, settings } from "../../../../neon-core/src/";
 import neoscan from "../../../src/provider/neoscan/class";
 import * as core from "../../../src/provider/neoscan/core";
 jest.mock("../../../src/provider/neoscan/core");

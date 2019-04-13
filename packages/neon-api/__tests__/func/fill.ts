@@ -1,5 +1,5 @@
-import { wallet } from "@cityofzion/neon-core";
 import { mocked } from "ts-jest/utils";
+import { wallet } from "../../../neon-core/src/";
 import { SendAssetConfig } from "../../lib/funcs/types";
 import * as fill from "../../src/funcs/fill";
 import { signWithPrivateKey as _signWithPrivateKey } from "../../src/funcs/sign";

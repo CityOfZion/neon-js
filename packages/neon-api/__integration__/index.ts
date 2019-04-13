@@ -1,11 +1,11 @@
-import { CONST } from "../../../../neon-core/src/rpc/index";
-import * as neonCore from "../../../../neon-core/src/";
-import * as rpc from "../../../../neon-core/src/rpc/";
-import { Network } from "../../../../neon-core/src/rpc/index";
-import { settings } from "../../../../neon-core/src/";
-import * as u from "../../../../neon-core/src/u/";
-import { Fixed8 } from "../../../../neon-core/src/u/index";
-import * as wallet from "../../../../neon-core/src/wallet/";
+import { CONST } from "../../../neon-core/src/rpc/index";
+import * as neonCore from "../../neon-core/src/";
+import * as rpc from "../../../neon-core/src/rpc/";
+import { Network } from "../../../neon-core/src/rpc/index";
+import { settings } from "../../../neon-core/src/";
+import * as u from "../../../neon-core/src/u/";
+import { Fixed8 } from "../../../neon-core/src/u/index";
+import * as wallet from "../../../neon-core/src/wallet/";
 import apiPlugin from "../src/index";
 
 test("Plugin", () => {

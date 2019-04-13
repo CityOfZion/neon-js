@@ -1,4 +1,4 @@
-import * as neonCore from "@cityofzion/neon-core";
+import * as neonCore from "../../neon-core/src";
 import domainPlugin from "../src/index";
 
 const neonJs = domainPlugin(neonCore);

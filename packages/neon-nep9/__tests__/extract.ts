@@ -1,4 +1,4 @@
-import { tx } from "@cityofzion/neon-core";
+import { tx } from "../../neon-core/src/";
 import { extractAmount, extractAsset, extractAttributes } from "../src/extract";
 
 describe("extractAsset", () => {

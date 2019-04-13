@@ -1,6 +1,6 @@
-jest.mock("@cityofzion/neon-core");
-import { logging as _logging, rpc as _rpc } from "@cityofzion/neon-core";
+jest.mock("../../../neon-core/src/");
 import { mocked } from "ts-jest/utils";
+import { logging as _logging, rpc as _rpc } from "../../../neon-core/src/";
 
 const logging = mocked(_logging, true);
 const rpc = mocked(_rpc, true);

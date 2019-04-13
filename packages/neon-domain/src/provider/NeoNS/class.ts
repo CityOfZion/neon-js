@@ -1,4 +1,4 @@
-import { logging } from "@cityofzion/neon-core";
+import { logging } from "../../../../neon-core/src";
 import { DomainProvider } from "../common";
 import { resolveDomain } from "./core";
 

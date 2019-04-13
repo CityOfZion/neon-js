@@ -1,4 +1,4 @@
-import { CONST, rpc, u } from "@cityofzion/neon-core";
+import { CONST, rpc, u } from "../../neon-core/src";
 import {
   getToken,
   getTokenBalance,

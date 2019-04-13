@@ -2,8 +2,6 @@ import * as neonCore from "../../../neon-core/src";
 
 import apiPlugin from "../../src/index";
 
-import util from "util"
-
 const neonJs = apiPlugin(neonCore);
 
 const { rpc, wallet, u } = neonJs;
@@ -38,7 +36,6 @@ describe(`Valid Address: ${provider.name}`, () => {
   test("getRPCEndpoint", async () => {
     neonJs.settings.httpsOnly = true;
     const result = await provider.getRPCEndpoint();
-    console.log("result: " + util.inspect(result, {depth:null}) )
     expect(typeof result === "string").toBeTruthy();
   });
 

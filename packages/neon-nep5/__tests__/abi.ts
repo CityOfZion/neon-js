@@ -1,4 +1,4 @@
-import { sc, u, wallet } from "@cityofzion/neon-core";
+import { sc, u, wallet } from "../../neon-core/src";
 import * as abi from "../src/abi";
 
 function randomScriptHash() {

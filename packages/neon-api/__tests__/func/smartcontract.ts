@@ -1,4 +1,4 @@
-import { tx } from "@cityofzion/neon-core";
+import { tx } from "../../../neon-core/src/";
 import { getVerificationSignatureForSmartContract } from "../../src/funcs/common";
 import * as smartcontract from "../../src/funcs/smartcontract";
 

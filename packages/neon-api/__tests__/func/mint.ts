@@ -1,5 +1,5 @@
-import { tx } from "@cityofzion/neon-core";
 import { mocked } from "ts-jest/utils";
+import { tx } from "../../../neon-core/src/";
 import { getVerificationSignatureForSmartContract as _getVerificationSignatureForSmartContract } from "../../src/funcs/common";
 import * as mint from "../../src/funcs/mint";
 import { DoInvokeConfig } from "../../src/funcs/types";

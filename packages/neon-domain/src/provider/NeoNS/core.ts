@@ -1,4 +1,4 @@
-import { logging, rpc, sc, u } from "@cityofzion/neon-core";
+import { logging, rpc, sc, u } from "../../../../neon-core/src";
 
 const log = logging.default("neon-domain");
 

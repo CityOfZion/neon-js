@@ -1,4 +1,4 @@
-import * as _Neon from "@cityofzion/neon-core";
+import * as _Neon from "../../../neon-core/src";
 import * as nep5 from "./plugin";
 
 function bundle<T extends typeof _Neon>(

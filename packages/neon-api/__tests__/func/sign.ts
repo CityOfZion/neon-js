@@ -1,5 +1,5 @@
-import { tx, wallet } from "@cityofzion/neon-core";
 import { Network } from "../../../../neon-core/src/rpc/index";
+import { tx, wallet } from "../../../neon-core/src/";
 
 import * as sign from "../../src/funcs/sign";
 
