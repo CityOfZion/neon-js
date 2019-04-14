@@ -1,5 +1,5 @@
 import { sc, tx, u, wallet } from "@cityofzion/neon-core";
-import { checkProperty, isNotNull } from "./common";
+import { checkProperty } from "./common";
 import {
   ClaimGasConfig,
   DoInvokeConfig,

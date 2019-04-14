@@ -13,7 +13,7 @@ const log = logging.default("api");
 export class Neoscan implements Provider {
   private url: string;
 
-  public get name() {
+  public get name(): string {
     return `Neoscan[${this.url}]`;
   }
 
