@@ -4,7 +4,7 @@ import ScriptBuilder, { ScriptIntent } from "./ScriptBuilder";
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
  */
-export function createScript(...intents: Array<ScriptIntent | string>): string {
+export function createScript(...intents: (ScriptIntent | string)[]): string {
   const sb = new ScriptBuilder();
   for (const scriptIntent of intents) {
     if (typeof scriptIntent === "string") {

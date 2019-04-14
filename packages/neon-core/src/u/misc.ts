@@ -1,5 +1,27 @@
 import { ab2hexstring } from "./convert";
 
+const hexRegex = /^([0-9A-Fa-f]{2})*$/;
+
+/**
+ * Checks if input is a hexstring. Empty string is considered a hexstring.
+ */
+export function isHex(str: string): boolean {
+  try {
+    return hexRegex.test(str);
+  } catch (err) {
+    return false;
+  }
+}
+
+/**
+ * Throws an error if input is not hexstring.
+ */
+export function ensureHex(str: string): void {
+  if (!isHex(str)) {
+    throw new Error(`Expected a hexstring but got ${str}`);
+  }
+}
+
 /**
  * XORs two hexstrings
  * @param str1 HEX string
@@ -10,7 +32,11 @@ export function hexXor(str1: string, str2: string): string {
   ensureHex(str1);
   ensureHex(str2);
   if (str1.length !== str2.length) {
-    throw new Error(`strings are disparate lengths. Inputs are of length ${str1.length} and ${str2.length}`);
+    throw new Error(
+      `strings are disparate lengths. Inputs are of length ${str1.length} and ${
+        str2.length
+      }`
+    );
   }
   const result = [];
   for (let i = 0; i < str1.length; i += 2) {
@@ -50,26 +76,4 @@ export function reverseHex(hex: string): string {
     out += hex.substr(i, 2);
   }
   return out;
-}
-
-const hexRegex = /^([0-9A-Fa-f]{2})*$/;
-
-/**
- * Checks if input is a hexstring. Empty string is considered a hexstring.
- */
-export function isHex(str: string): boolean {
-  try {
-    return hexRegex.test(str);
-  } catch (err) {
-    return false;
-  }
-}
-
-/**
- * Throws an error if input is not hexstring.
- */
-export function ensureHex(str: string): void {
-  if (!isHex(str)) {
-    throw new Error(`Expected a hexstring but got ${str}`);
-  }
 }

@@ -1,20 +1,33 @@
-import { rpc, tx } from "@cityofzion/neon-core";
+import { rpc, tx, wallet } from "@cityofzion/neon-core";
 import * as common from "../../src/funcs/common";
-import { DoInvokeConfig } from "../../src/funcs/types";
+import { DoInvokeConfig, SendAssetConfig } from "../../src/funcs/types";
+import { Provider } from "../../src/provider/common";
+
+const mockProvider: Provider = {
+  name: "mockProvider",
+  getBalance: jest.fn(),
+  getClaims: jest.fn(),
+  getHeight: jest.fn(),
+  getMaxClaimAmount: jest.fn(),
+  getRPCEndpoint: jest.fn(),
+  getTransactionHistory: jest.fn()
+};
 
 describe("checkProperty", () => {
   test("throws error if property not found", () => {
-    const testObject = { a: 1, b: 2 };
-    const f = () => {
-      common.checkProperty(testObject, "c" as any);
+    const testObject: { [key: string]: number | null } = { a: 1, b: 2 };
+    const f = (): boolean => {
+      common.checkProperty(testObject, "c");
+      return true;
     };
     expect(f).toThrow();
   });
 
   test("throws error if property is null", () => {
-    const testObject = { a: null, b: 2 };
-    const f = () => {
+    const testObject: { [key: string]: number | null } = { a: null, b: 2 };
+    const f = (): boolean => {
       common.checkProperty(testObject, "a");
+      return true;
     };
     expect(f).toThrow();
   });
@@ -22,26 +35,29 @@ describe("checkProperty", () => {
 
 describe("modifyTransactionForEmptyTransaction", () => {
   test("performs operation on empty tx", async () => {
-    const config = {
-      account: { address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW" },
-      tx: new tx.ContractTransaction()
-    } as DoInvokeConfig;
+    const config: DoInvokeConfig = {
+      api: mockProvider,
+      account: new wallet.Account("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"),
+      tx: new tx.InvocationTransaction(),
+      script: ""
+    };
 
     const result = await common.modifyTransactionForEmptyTransaction(config);
-    expect(result.tx!.attributes.length).toBe(2);
+    expect(result.tx.attributes.length).toBe(2);
   });
 
   test("Ignore transactions with inputs", async () => {
-    const config = {
-      address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
+    const config: SendAssetConfig = {
+      api: mockProvider,
+      account: new wallet.Account("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"),
       tx: new tx.ContractTransaction({
-        inputs: [{ prevHash: "", prevIndex: 0 } as any]
-      } as tx.Transaction)
-    } as any;
+        inputs: [{ prevHash: "", prevIndex: 0 }]
+      })
+    };
 
     const result = await common.modifyTransactionForEmptyTransaction(config);
 
-    expect(result.tx!.attributes.length).toBe(0);
+    expect(result.tx.attributes.length).toBe(0);
   });
 });
 

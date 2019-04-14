@@ -15,6 +15,71 @@ export interface BalanceLike {
   tokens: { [sym: string]: number | string | Fixed8 };
 }
 
+async function verifyCoin(url: string, c: Coin): Promise<boolean> {
+  const response = await Query.getTxOut(c.txid, c.index).execute(url);
+  if (!response.result) {
+    return false;
+  }
+  return c.index === response.result.n && c.value.equals(response.result.value);
+}
+
+/**
+ * Verifies a list of Coins
+ * @param url RPC Node to verify against.
+ * @param coinArr Coins to verify.
+ */
+async function verifyCoins(url: string, coinArr: Coin[]): Promise<boolean[]> {
+  const promises = coinArr.map(c => verifyCoin(url, c));
+  return await Promise.all(promises);
+}
+
+/**
+ * Verifies an AssetBalance
+ * @param url RPC Node to verify against.
+ * @param assetBalance AssetBalance to verify.
+ */
+async function verifyAssetBalance(
+  url: string,
+  assetBalance: AssetBalance
+): Promise<AssetBalance> {
+  const newAssetBalance = {
+    balance: new Fixed8(0),
+    spent: [] as Coin[],
+    unspent: [] as Coin[],
+    unconfirmed: [] as Coin[]
+  };
+  const validCoins = await verifyCoins(url, assetBalance.unspent);
+  validCoins.forEach((valid, i) => {
+    const coin = assetBalance.unspent[i];
+    if (valid) {
+      newAssetBalance.unspent.push(coin);
+      newAssetBalance.balance = newAssetBalance.balance.add(coin.value);
+    } else {
+      newAssetBalance.spent.push(coin);
+    }
+  });
+  return new AssetBalance(newAssetBalance);
+}
+
+function exportAssets(assets: {
+  [sym: string]: AssetBalance;
+}): { [sym: string]: AssetBalanceLike } {
+  const output: { [sym: string]: AssetBalanceLike } = {};
+  const keys = Object.keys(assets);
+  for (const key of keys) {
+    output[key] = assets[key].export();
+  }
+  return output;
+}
+
+function exportTokens(tokens: { [sym: string]: Fixed8 }) {
+  const out: { [sym: string]: number } = {};
+  Object.keys(tokens).forEach(symbol => {
+    out[symbol] = tokens[symbol].toNumber();
+  });
+  return out;
+}
+
 /**
  * Represents a balance available for an Account.
  * Contains balances for both UTXO assets and NEP5 tokens.
@@ -33,7 +98,7 @@ export class Balance {
   /** The token balances in this Balance for each token keyed by its symbol. */
   public tokens: { [sym: string]: Fixed8 };
 
-  constructor(bal: Partial<BalanceLike> = {}) {
+  public constructor(bal: Partial<BalanceLike> = {}) {
     this.address = bal.address || "";
     this.net = bal.net || "NoNet";
     this.assetSymbols = [];
@@ -56,7 +121,7 @@ export class Balance {
     }
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "Balance";
   }
 
@@ -183,7 +248,7 @@ export class Balance {
    * @param url NEO Node to check against.
    */
   public verifyAssets(url: string): Promise<this> {
-    const promises: Array<Promise<AssetBalance>> = [];
+    const promises: Promise<AssetBalance>[] = [];
     const symbols = this.assetSymbols;
     symbols.map(key => {
       const assetBalance = this.assets[key];
@@ -199,68 +264,3 @@ export class Balance {
 }
 
 export default Balance;
-
-/**
- * Verifies an AssetBalance
- * @param url RPC Node to verify against.
- * @param assetBalance AssetBalance to verify.
- */
-async function verifyAssetBalance(
-  url: string,
-  assetBalance: AssetBalance
-): Promise<AssetBalance> {
-  const newAssetBalance = {
-    balance: new Fixed8(0),
-    spent: [] as Coin[],
-    unspent: [] as Coin[],
-    unconfirmed: [] as Coin[]
-  };
-  const validCoins = await verifyCoins(url, assetBalance.unspent);
-  validCoins.forEach((valid, i) => {
-    const coin = assetBalance.unspent[i];
-    if (valid) {
-      newAssetBalance.unspent.push(coin);
-      newAssetBalance.balance = newAssetBalance.balance.add(coin.value);
-    } else {
-      newAssetBalance.spent.push(coin);
-    }
-  });
-  return new AssetBalance(newAssetBalance);
-}
-
-/**
- * Verifies a list of Coins
- * @param url RPC Node to verify against.
- * @param coinArr Coins to verify.
- */
-async function verifyCoins(url: string, coinArr: Coin[]): Promise<boolean[]> {
-  const promises = coinArr.map(c => verifyCoin(url, c));
-  return await Promise.all(promises);
-}
-
-async function verifyCoin(url: string, c: Coin) {
-  const response = await Query.getTxOut(c.txid, c.index).execute(url);
-  if (!response.result) {
-    return false;
-  }
-  return c.index === response.result.n && c.value.equals(response.result.value);
-}
-
-function exportAssets(assets: {
-  [sym: string]: AssetBalance;
-}): { [sym: string]: AssetBalanceLike } {
-  const output: { [sym: string]: AssetBalanceLike } = {};
-  const keys = Object.keys(assets);
-  for (const key of keys) {
-    output[key] = assets[key].export();
-  }
-  return output;
-}
-
-function exportTokens(tokens: { [sym: string]: Fixed8 }) {
-  const out: { [sym: string]: number } = {};
-  Object.keys(tokens).forEach(symbol => {
-    out[symbol] = tokens[symbol].toNumber();
-  });
-  return out;
-}

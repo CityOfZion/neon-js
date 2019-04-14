@@ -1,12 +1,18 @@
 import { sc, u, wallet } from "@cityofzion/neon-core";
 
+function addressToScriptHash(address: string): string {
+  return u.reverseHex(wallet.getScriptHashFromAddress(address));
+}
+
 /**
  * Returns a function that applies a APPCALL for name to a ScriptBuilder.
  * @example
  * var generator = name(contractScriptHash);
  * var script = generator().str;
  */
-export function name(scriptHash: string) {
+export function name(
+  scriptHash: string
+): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
     return sb.emitAppCall(scriptHash, "name");
   };
@@ -18,7 +24,9 @@ export function name(scriptHash: string) {
  * var generator = symbol(contractScriptHash);
  * var script = generator().str;
  */
-export function symbol(scriptHash: string) {
+export function symbol(
+  scriptHash: string
+): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
     return sb.emitAppCall(scriptHash, "symbol");
   };
@@ -30,7 +38,9 @@ export function symbol(scriptHash: string) {
  * var generator = decimals(contractScriptHash);
  * var script = generator().str;
  */
-export function decimals(scriptHash: string) {
+export function decimals(
+  scriptHash: string
+): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
     return sb.emitAppCall(scriptHash, "decimals");
   };
@@ -42,7 +52,9 @@ export function decimals(scriptHash: string) {
  * var generator = totalSupply(contractScriptHash);
  * var script = generator().str;
  */
-export function totalSupply(scriptHash: string) {
+export function totalSupply(
+  scriptHash: string
+): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
     return sb.emitAppCall(scriptHash, "totalSupply");
   };
@@ -54,7 +66,10 @@ export function totalSupply(scriptHash: string) {
  * var generator = balanceOf(contractScriptHash, address);
  * var script = generator().str;
  */
-export function balanceOf(scriptHash: string, addr: string) {
+export function balanceOf(
+  scriptHash: string,
+  addr: string
+): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
     const addressHash = addressToScriptHash(addr);
     return sb.emitAppCall(scriptHash, "balanceOf", [addressHash]);
@@ -73,7 +88,7 @@ export function transfer(
   fromAddr: string,
   toAddr: string,
   amt: u.Fixed8 | number
-) {
+): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
     const fromHash = addressToScriptHash(fromAddr);
     const toHash = addressToScriptHash(toAddr);
@@ -84,8 +99,4 @@ export function transfer(
       sc.ContractParam.integer(adjustedAmt.toString())
     ]);
   };
-}
-
-function addressToScriptHash(address: string) {
-  return u.reverseHex(wallet.getScriptHashFromAddress(address));
 }

@@ -21,7 +21,7 @@ export class ClaimItem {
   public start?: number;
   public end?: number;
 
-  constructor(claimItemLike: Partial<ClaimItemLike> = {}) {
+  public constructor(claimItemLike: Partial<ClaimItemLike> = {}) {
     this.claim = new Fixed8(claimItemLike.claim);
     this.txid = claimItemLike.txid || "";
     this.index = claimItemLike.index || 0;

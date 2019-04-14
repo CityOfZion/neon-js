@@ -7,6 +7,22 @@ import {
 } from "../components";
 import { TransactionLike } from "./BaseTransaction";
 
+export function deserializeArrayOf<T>(
+  type: (ss: StringStream) => T,
+  ss: StringStream
+): T[] {
+  const output = [];
+  const len = ss.readVarInt();
+  for (let i = 0; i < len; i++) {
+    output.push(type(ss));
+  }
+  return output;
+}
+
+export function serializeArrayOf(prop: any[]): string {
+  return num2VarInt(prop.length) + prop.map(p => p.serialize()).join("");
+}
+
 export function deserializeType(
   ss: StringStream,
   tx: Partial<TransactionLike> = {}
@@ -62,20 +78,4 @@ export function deserializeWitnesses(
     i.export()
   );
   return Object.assign(tx, { scripts });
-}
-
-export function deserializeArrayOf<T>(
-  type: (ss: StringStream) => T,
-  ss: StringStream
-): T[] {
-  const output = [];
-  const len = ss.readVarInt();
-  for (let i = 0; i < len; i++) {
-    output.push(type(ss));
-  }
-  return output;
-}
-
-export function serializeArrayOf(prop: any[]): string {
-  return num2VarInt(prop.length) + prop.map(p => p.serialize()).join("");
 }

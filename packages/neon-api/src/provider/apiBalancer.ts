@@ -37,7 +37,7 @@ export default class ApiBalancer implements Provider {
     this._frozen = val;
   }
 
-  constructor(
+  public constructor(
     leftProvider: Provider,
     rightProvider: Provider,
     preference: number = 0,

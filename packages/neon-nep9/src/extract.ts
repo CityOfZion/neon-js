@@ -1,35 +1,5 @@
 import { CONST, tx, u } from "@cityofzion/neon-core";
 
-export function extractAsset(params: { [key: string]: string }) {
-  if (!params.asset) {
-    return undefined;
-  }
-  switch (params.asset) {
-    case "neo":
-      return CONST.ASSET_ID.NEO;
-    case "gas":
-      return CONST.ASSET_ID.GAS;
-    default:
-      return params.asset;
-  }
-}
-
-export function extractAmount(params: { [key: string]: string }) {
-  if (!params.amount) {
-    return undefined;
-  }
-  return parseFloat(params.amount);
-}
-
-export function extractAttributes(params: {
-  [key: string]: string;
-}): tx.TransactionAttributeLike[] {
-  const attributes = Object.keys(params).map(key =>
-    matchAttribute(key, params[key])
-  );
-  return attributes.filter(a => a) as tx.TransactionAttributeLike[];
-}
-
 const requiresProcessing = [
   tx.TxAttrUsage.Description,
   tx.TxAttrUsage.DescriptionUrl,
@@ -49,6 +19,35 @@ const requiresProcessing = [
   tx.TxAttrUsage.Remark14,
   tx.TxAttrUsage.Remark15
 ];
+
+export function extractAsset(params: {
+  [key: string]: string;
+}): string | undefined {
+  if (!params.asset) {
+    return undefined;
+  }
+  switch (params.asset) {
+    case "neo":
+      return CONST.ASSET_ID.NEO;
+    case "gas":
+      return CONST.ASSET_ID.GAS;
+    default:
+      return params.asset;
+  }
+}
+
+export function extractAmount(params: {
+  [key: string]: string;
+}): number | undefined {
+  if (!params.amount) {
+    return undefined;
+  }
+  return parseFloat(params.amount);
+}
+
+function processAscii(data: string): string {
+  return u.str2hexstring(decodeURIComponent(data));
+}
 
 function matchAttribute(
   key: string,
@@ -78,6 +77,11 @@ function matchAttribute(
   }
 }
 
-function processAscii(data: string) {
-  return u.str2hexstring(decodeURIComponent(data));
+export function extractAttributes(params: {
+  [key: string]: string;
+}): tx.TransactionAttributeLike[] {
+  const attributes = Object.keys(params).map(key =>
+    matchAttribute(key, params[key])
+  );
+  return attributes.filter(a => a) as tx.TransactionAttributeLike[];
 }

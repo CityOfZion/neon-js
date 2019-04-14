@@ -27,15 +27,15 @@ export class InvocationTransaction extends BaseTransaction {
   public script: string;
   public gas: Fixed8;
 
-  get exclusiveData() {
+  public get exclusiveData() {
     return { gas: this.gas, script: this.script };
   }
 
-  get fees() {
+  public get fees(): number {
     return this.gas.toNumber();
   }
 
-  constructor(obj: Partial<InvocationTransactionLike> = {}) {
+  public constructor(obj: Partial<InvocationTransactionLike> = {}) {
     super(Object.assign({ version: TX_VERSION.INVOCATION }, obj));
     this.script = obj.script || "";
     this.gas = new Fixed8(obj.gas);

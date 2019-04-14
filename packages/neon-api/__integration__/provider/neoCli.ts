@@ -9,9 +9,7 @@ const addr = "AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y";
 const emptyAddr = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
 const invalidAddr = "address";
 
-const provider = new neonJs.api.neoCli.instance(
-  "https://node1.neocompiler.io"
-);
+const provider = new neonJs.api.neoCli.instance("https://node1.neocompiler.io");
 describe(`Valid Address: ${provider.name}`, () => {
   test("getBalance", async () => {
     const result = await provider.getBalance(addr);

@@ -20,6 +20,18 @@ export interface ContractParamLike {
   value: any;
 }
 
+function toContractParamType(
+  type: ContractParamType | string | number
+): ContractParamType {
+  if (typeof type === "string") {
+    if (type in ContractParamType) {
+      return ContractParamType[type as keyof typeof ContractParamType];
+    }
+    throw new Error(`${type} not found in ContractParamType!`);
+  }
+  return type;
+}
+
 /**
  * Contract input parameters.
  * These are mainly used as parameters to pass in for RPC test invokes.
@@ -46,13 +58,19 @@ export class ContractParam {
    */
   public static hash160(value: string): ContractParam {
     if (typeof value !== "string") {
-      throw new Error(`hash160 expected a string but got ${typeof value} instead.`);
+      throw new Error(
+        `hash160 expected a string but got ${typeof value} instead.`
+      );
     }
     if (isAddress(value)) {
       value = getScriptHashFromAddress(value);
     }
     if (value.length !== 40) {
-      throw new Error(`hash160 expected a 40 character string but got ${value.length} chars instead.`);
+      throw new Error(
+        `hash160 expected a 40 character string but got ${
+          value.length
+        } chars instead.`
+      );
     }
     return new ContractParam(ContractParamType.Hash160, value);
   }
@@ -65,7 +83,10 @@ export class ContractParam {
    * ContractParam.integer("128")
    */
   public static integer(value: string | number): ContractParam {
-    const num = typeof value === "string" ? value.split(".")[0] : Math.round(value).toString();
+    const num =
+      typeof value === "string"
+        ? value.split(".")[0]
+        : Math.round(value).toString();
     return new ContractParam(ContractParamType.Integer, num);
   }
 
@@ -124,7 +145,7 @@ export class ContractParam {
   public type: ContractParamType;
   public value: any;
 
-  constructor(
+  public constructor(
     type:
       | ContractParam
       | ContractParamLike
@@ -144,7 +165,7 @@ export class ContractParam {
     }
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "ContractParam:" + ContractParamType[this.type];
   }
 
@@ -168,6 +189,8 @@ export class ContractParam {
   }
 }
 
+export default ContractParam;
+
 export function likeContractParam(cp: Partial<ContractParam>): boolean {
   if (cp === null || cp === undefined) {
     return false;
@@ -181,17 +204,3 @@ export function likeContractParam(cp: Partial<ContractParam>): boolean {
     cp.value! !== undefined
   );
 }
-
-function toContractParamType(
-  type: ContractParamType | string | number
-): ContractParamType {
-  if (typeof type === "string") {
-    if (type in ContractParamType) {
-      return ContractParamType[type as keyof typeof ContractParamType];
-    }
-    throw new Error(`${type} not found in ContractParamType!`);
-  }
-  return type;
-}
-
-export default ContractParam;

@@ -11,7 +11,7 @@ export class StringStream {
   /**
    * Initializes the stream with given string and pointer at position 0.
    */
-  constructor(str = "") {
+  public constructor(str = "") {
     this.str = str;
     this.pter = 0;
   }

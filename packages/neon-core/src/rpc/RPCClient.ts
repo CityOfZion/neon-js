@@ -32,7 +32,7 @@ export class RPCClient {
    * @param net 'MainNet' or 'TestNet' will query the default RPC address found in consts. You may provide a custom URL.
    * @param version Version of NEO node. Used to check if RPC methods have been implemented. it will default to DEFAULT_RPC found in CONST
    */
-  constructor(net: string, version = RPC_VERSION) {
+  public constructor(net: string, version = RPC_VERSION) {
     if (net === NEO_NETWORK.MAIN) {
       this.net = DEFAULT_RPC.MAIN;
     } else if (net === NEO_NETWORK.TEST) {
@@ -48,11 +48,11 @@ export class RPCClient {
     this.version = version;
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "RPC Client";
   }
 
-  get latency() {
+  public get latency(): number {
     if (this._latencies.length === 0) {
       return 99999;
     }
@@ -61,7 +61,7 @@ export class RPCClient {
     );
   }
 
-  set latency(lat) {
+  public set latency(lat) {
     if (this._latencies.length > 4) {
       this._latencies.shift();
     }
@@ -241,23 +241,20 @@ export class RPCClient {
     try {
       const response = await this.execute(Query.getVersion());
       if (response && response.result && response.result.useragent) {
-        const useragent = response.result.useragent
+        const useragent = response.result.useragent;
         const responseLength = useragent.length;
-        const strippedResponse = useragent.substring(1, responseLength-1);
-        const [header, newVersion] = strippedResponse.split(':');
+        const strippedResponse = useragent.substring(1, responseLength - 1);
+        const [header, newVersion] = strippedResponse.split(":");
         this.version = newVersion;
-      }
-      else {
-        throw new Error('Empty or unexpected version pattern');
+      } else {
+        throw new Error("Empty or unexpected version pattern");
       }
       return this.version;
-    }
-    catch (err) {
+    } catch (err) {
       if (err.message.includes("Method not found")) {
         this.version = RPC_VERSION;
         return this.version;
-      }
-      else {
+      } else {
         throw err;
       }
     }
@@ -266,7 +263,10 @@ export class RPCClient {
   /**
    * Calls a smart contract with the given parameters. This method is a local invoke, results are not reflected on the blockchain.
    */
-  public async invoke(scriptHash: string, ...params: any[]): Promise<RPCVMResponse> {
+  public async invoke(
+    scriptHash: string,
+    ...params: any[]
+  ): Promise<RPCVMResponse> {
     const response = await this.execute(Query.invoke(scriptHash, ...params));
     return response.result;
   }

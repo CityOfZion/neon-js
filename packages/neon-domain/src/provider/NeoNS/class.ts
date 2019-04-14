@@ -11,7 +11,7 @@ export class NeoNS implements DomainProvider {
     return `NeoNs[${this.contract}]`;
   }
 
-  constructor(contract: string) {
+  public constructor(contract: string) {
     this.contract = contract;
     log.info(`Created NeoNS Provider: ${this.contract}`);
   }

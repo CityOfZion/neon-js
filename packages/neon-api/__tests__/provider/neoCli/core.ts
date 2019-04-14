@@ -141,13 +141,13 @@ describe("getClaims", () => {
     const testClaim = {
       end_height: 231,
       generated: 1464,
-      n:0,
+      n: 0,
       start_height: 48,
       sys_fee: 0,
-       txid: "dc44739e2f97743f2ed258988327560e2185ed13eec0097938eef4aea584bf04",
-       unclaimed: 1464,
-       value: 100000000
-    }
+      txid: "dc44739e2f97743f2ed258988327560e2185ed13eec0097938eef4aea584bf04",
+      unclaimed: 1464,
+      value: 100000000
+    };
     const httpCall = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
         data: {
@@ -155,9 +155,7 @@ describe("getClaims", () => {
           id: 5,
           result: {
             address: testAddress,
-            claimable: [
-              testClaim
-            ],
+            claimable: [testClaim],
             unclaimed: 1464
           }
         }
@@ -169,35 +167,44 @@ describe("getClaims", () => {
     expect(await neoCli.getClaims(testUrl, testAddress)).toEqual(
       new wallet.Claims({
         net: testUrl,
-        address:testAddress,
-        claims: [{claim: testClaim.unclaimed, txid:testClaim.txid, index: testClaim.n, value: testClaim.value, start: testClaim.start_height, end: testClaim.end_height}]
+        address: testAddress,
+        claims: [
+          {
+            claim: testClaim.unclaimed,
+            txid: testClaim.txid,
+            index: testClaim.n,
+            value: testClaim.value,
+            start: testClaim.start_height,
+            end: testClaim.end_height
+          }
+        ]
       })
     );
   });
   test("returns empty claims for new address", async () => {
     const httpCall = jest.fn().mockImplementationOnce(() =>
-    Promise.resolve({
-      data: {
-        jsonrpc: "2.0",
-        id: 5,
-        result: {
-          claimable: [],
-          address: testAddress,
-          unclaimed: 0
+      Promise.resolve({
+        data: {
+          jsonrpc: "2.0",
+          id: 5,
+          result: {
+            claimable: [],
+            address: testAddress,
+            unclaimed: 0
+          }
         }
-      }
-    })
-  );
+      })
+    );
 
-  axios.post = httpCall;
+    axios.post = httpCall;
 
-  expect(await neoCli.getClaims(testUrl, testAddress)).toEqual(
-    new wallet.Claims({
-      net: testUrl,
-      address: testAddress,
-      claims: []
-    })
-  );
+    expect(await neoCli.getClaims(testUrl, testAddress)).toEqual(
+      new wallet.Claims({
+        net: testUrl,
+        address: testAddress,
+        claims: []
+      })
+    );
   });
   test("throws when given invalid address", async () => {
     const httpCall = jest.fn().mockImplementationOnce(() =>
@@ -216,16 +223,15 @@ describe("getClaims", () => {
 
     expect(neoCli.getClaims(testUrl, testAddress)).rejects.toThrowError();
   });
-  });
 });
 
 describe("getMaxClaimAmount", () => {
   test("get successful max claims", async () => {
     const testValues = {
-      "available": 100,
-        "unavailable": 200,
-        "unclaimed": 300
-    }
+      available: 100,
+      unavailable: 200,
+      unclaimed: 300
+    };
     const httpCall = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
         data: {
@@ -238,24 +244,28 @@ describe("getMaxClaimAmount", () => {
 
     axios.post = httpCall;
 
-    expect(await neoCli.getMaxClaimAmount(testUrl, testAddress)).toEqual(new u.Fixed8(testValues.unclaimed).div(100000000));
+    expect(await neoCli.getMaxClaimAmount(testUrl, testAddress)).toEqual(
+      new u.Fixed8(testValues.unclaimed).div(100000000)
+    );
   });
 
   test("throws when given invalid address", async () => {
     const httpCall = jest.fn().mockImplementationOnce(() =>
-    Promise.resolve({
-      data: {
-        jsonrpc: "2.0",
-        id: 5,
-        error: {
-          code: -32602,
-          message: "Invalid params"
+      Promise.resolve({
+        data: {
+          jsonrpc: "2.0",
+          id: 5,
+          error: {
+            code: -32602,
+            message: "Invalid params"
+          }
         }
-      }
-    })
-  );
-  axios.post = httpCall;
+      })
+    );
+    axios.post = httpCall;
 
-  expect(neoCli.getMaxClaimAmount(testUrl, testAddress)).rejects.toThrowError();
+    expect(
+      neoCli.getMaxClaimAmount(testUrl, testAddress)
+    ).rejects.toThrowError();
   });
 });

@@ -20,7 +20,7 @@ export class Neoscan implements Provider {
   private rpc: rpc.RPCClient | null = null;
   private cacheExpiry: Date | null = null;
 
-  constructor(url: string) {
+  public constructor(url: string) {
     if (settings.networks[url] && settings.networks[url].extra.neoscan) {
       this.url = settings.networks[url].extra.neoscan;
     } else {

@@ -39,7 +39,7 @@ export class TransactionOutput {
   public value: Fixed8;
   public scriptHash: string;
 
-  constructor(obj: TransactionOutputLike) {
+  public constructor(obj: TransactionOutputLike) {
     if (!obj || !obj.assetId || !obj.value || !obj.scriptHash) {
       throw new Error(
         "TransactionOutput requires assetId, value and scriptHash fields"

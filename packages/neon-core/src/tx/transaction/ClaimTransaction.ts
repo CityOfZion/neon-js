@@ -60,15 +60,15 @@ export class ClaimTransaction extends BaseTransaction {
   public readonly type: TransactionType = 0x02;
   public claims: TransactionInput[];
 
-  get exclusiveData(): ClaimExclusive {
+  public get exclusiveData(): ClaimExclusive {
     return { claims: this.claims };
   }
 
-  get fees(): number {
+  public get fees(): number {
     return 0;
   }
 
-  constructor(obj: Partial<ClaimTransactionLike> = {}) {
+  public constructor(obj: Partial<ClaimTransactionLike> = {}) {
     super(Object.assign({ version: TX_VERSION.CLAIM }, obj));
     this.claims = Array.isArray(obj.claims)
       ? obj.claims.slice(0, MAX_CLAIMS_LENGTH).map(c => new TransactionInput(c))

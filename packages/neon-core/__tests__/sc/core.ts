@@ -1,4 +1,4 @@
-import {mocked} from "ts-jest/utils";
+import { mocked } from "ts-jest/utils";
 import { createScript, generateDeployScript } from "../../src/sc/core";
 import _ScriptBuilder from "../../src/sc/ScriptBuilder";
 import * as _u from "../../src/u";

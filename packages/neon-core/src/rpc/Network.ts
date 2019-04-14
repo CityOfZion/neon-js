@@ -29,7 +29,10 @@ export class Network {
   public nodes: string[];
   public extra: { [key: string]: string };
 
-  constructor(config: Partial<NetworkLike & NetworkJSON> = {}, name = null) {
+  public constructor(
+    config: Partial<NetworkLike & NetworkJSON> = {},
+    name = null
+  ) {
     this.name = config.Name || config.name || name || "RandomNet";
     const protocolLike = Object.assign(
       {},

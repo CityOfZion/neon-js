@@ -32,28 +32,20 @@ const testKey = {
 };
 describe("NEP2", () => {
   describe("Default", () => {
-    test(
-      "encrypt",
-      async () => {
-        const result = await NEP2.encrypt(testKey.wif, testKey.passphrase);
-        expect(isNEP2(result)).toBeTruthy();
-        expect(result).toBe(testKey.encryptedWif);
-      },
-      10000
-    );
+    test("encrypt", async () => {
+      const result = await NEP2.encrypt(testKey.wif, testKey.passphrase);
+      expect(isNEP2(result)).toBeTruthy();
+      expect(result).toBe(testKey.encryptedWif);
+    }, 10000);
 
-    test(
-      "decrypt",
-      async () => {
-        const result = await NEP2.decrypt(
-          testKey.encryptedWif,
-          testKey.passphrase
-        );
-        expect(isWIF(result)).toBeTruthy();
-        expect(result).toBe(testKey.wif);
-      },
-      10000
-    );
+    test("decrypt", async () => {
+      const result = await NEP2.decrypt(
+        testKey.encryptedWif,
+        testKey.passphrase
+      );
+      expect(isWIF(result)).toBeTruthy();
+      expect(result).toBe(testKey.wif);
+    }, 10000);
   });
 
   describe.each([

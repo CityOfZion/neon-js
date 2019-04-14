@@ -23,7 +23,7 @@ export class TransactionInput {
   public prevHash: string;
   public prevIndex: number;
 
-  constructor(obj: TransactionInputLike) {
+  public constructor(obj: TransactionInputLike) {
     if (!obj || obj.prevHash === undefined || obj.prevIndex === undefined) {
       throw new Error(
         "TransactionInput requires prevHash and prevIndex fields"
