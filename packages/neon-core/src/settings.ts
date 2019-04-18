@@ -10,4 +10,3 @@ export let timeout = {
   rpc: 30000
 };
 
-export let httpsOnly = false;

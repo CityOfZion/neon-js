@@ -1,5 +1,4 @@
-import { CONST, logging, u, wallet, settings } from "@cityofzion/neon-core";
-import * as _Neon from "@cityofzion/neon-core";
+import { CONST, logging, u, wallet } from "@cityofzion/neon-core";
 import * as internal from "../../settings"
 import axios from "axios";
 import {
@@ -29,8 +28,7 @@ const log = logging.default("api");
 export async function getRPCEndpoint(url: string): Promise<string> {
   const response = await axios.get(url + "/v1/get_all_nodes");
   let nodes = response.data as RpcNode[];
-
-  if (settings.httpsOnly) {
+  if (internal.settings.httpsOnly) {
     nodes = filterHttpsOnly(nodes);
   }
   const goodNodes = findGoodNodesFromHeight(nodes);
