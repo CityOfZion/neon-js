@@ -62,8 +62,8 @@ describe("getRPCEndpoint", () => {
     common.getBestUrl.mockImplementationOnce(() =>
       Promise.resolve("https://url2")
     );
-    set({ httpsOnly: true });
-
+    settings.httpsOnly = true;
+    
     const result = await neoscan.getRPCEndpoint(testUrl);
 
     expect(getCall).toHaveBeenCalledTimes(1);
