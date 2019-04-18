@@ -1,6 +1,5 @@
 import { logging, rpc, settings, u, wallet } from "@cityofzion/neon-core";
 import { PastTransaction, Provider, RpcNode } from "../common";
-import * as internal from "../../settings";
 import {
   getBalance,
   getClaims,
@@ -16,10 +15,6 @@ export class Neoscan implements Provider {
 
   public get name() {
     return `Neoscan[${this.url}]`;
-  }
-
-  public set(settings: object) {
-    internal.set(settings)
   }
 
   private rpc: rpc.RPCClient | null = null;
