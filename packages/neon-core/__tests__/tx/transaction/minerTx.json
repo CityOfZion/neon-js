@@ -1,0 +1,37 @@
+{
+  "1": {
+    "serialized": "0000fcd30e22000001e72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c60c8000000000000001f72e68b4e39602912106d53b229378a082784b200",
+    "deserialized": {
+      "type": 0,
+      "version": 0,
+      "attributes": [],
+      "inputs": [],
+      "outputs": [
+        {
+          "assetId": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+          "scriptHash": "b28427088a3729b2536d10122960394e8be6721f",
+          "value": 0.000002
+        }
+      ],
+      "scripts": [],
+      "nonce": 571397116
+    },
+
+    "txid": "a1f219dc6be4c35eca172e65e02d4591045220221b1543f1a4b67b9e9442c264"
+  },
+
+  "2": {
+    "serialized": "000003a95be100000000",
+    "deserialized": {
+      "type": 0,
+      "version": 0,
+      "attributes": [],
+      "inputs": [],
+      "outputs": [],
+      "scripts": [],
+      "nonce": 3780880643
+    },
+
+    "txid": "000089628629b1851682dd5605bb7dc2d3a595493ceff9549866aaf998ab64b1"
+  }
+}

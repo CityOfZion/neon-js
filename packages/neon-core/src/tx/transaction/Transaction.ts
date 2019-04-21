@@ -11,6 +11,7 @@ import {
   deserializeVersion,
   deserializeWitnesses
 } from "./main";
+import { MinerTransaction } from "./MinerTransaction";
 import { StateTransaction } from "./StateTransaction";
 
 /**
@@ -76,6 +77,8 @@ export default Transaction;
 
 function getType<T>(type: number): any {
   switch (type) {
+    case 0x00:
+      return MinerTransaction;
     case 0x02:
       return ClaimTransaction;
     case 0x80:
