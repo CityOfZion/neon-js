@@ -38,9 +38,9 @@ describe(`Valid Address: ${provider.name}`, () => {
   });
 
   test("httpsOnly getRPCEndpoint", async () => {
-    expect(neonCore.settings.httpsOnly).toBe(false);
-    neonCore.settings.httpsOnly = true
-    expect(neonCore.settings.httpsOnly).toBe(true);
+    expect(neonJs.settings.httpsOnly).toBe(false);
+    neonJs.settings.httpsOnly = true
+    expect(neonJs.settings.httpsOnly).toBe(true);
     const result = await provider.getRPCEndpoint();
     expect(typeof result === "string").toBeTruthy();
     expect(result).toEqual(expect.stringContaining("https://"));
