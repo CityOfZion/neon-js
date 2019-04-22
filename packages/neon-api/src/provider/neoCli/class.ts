@@ -12,7 +12,7 @@ export class NeoCli implements Provider {
 
   private rpc: rpc.RPCClient;
 
-  constructor(url: string) {
+  public constructor(url: string) {
     this.url = url;
     this.rpc = new rpc.RPCClient(url);
     log.info(`Created NeoCli Provider: ${this.url}`);
@@ -37,4 +37,4 @@ export class NeoCli implements Provider {
   }
 }
 
-export default NeoCli
+export default NeoCli;

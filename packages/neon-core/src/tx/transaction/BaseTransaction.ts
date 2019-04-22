@@ -42,7 +42,7 @@ export abstract class BaseTransaction {
   public outputs: TransactionOutput[];
   public scripts: Witness[];
 
-  constructor(tx: Partial<TransactionLike> = {}) {
+  public constructor(tx: Partial<TransactionLike> = {}) {
     this.version = tx.version || TX_VERSION.CONTRACT;
     this.attributes = Array.isArray(tx.attributes)
       ? tx.attributes.map(a => new TransactionAttribute(a))
@@ -58,13 +58,13 @@ export abstract class BaseTransaction {
       : [];
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "Transaction";
   }
   /**
    * Transaction hash.
    */
-  get hash(): string {
+  public get hash(): string {
     return reverseHex(hash256(this.serialize(false)));
   }
 

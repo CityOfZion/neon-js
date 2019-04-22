@@ -6,7 +6,6 @@ import { instance as Neoscan } from "../../src/provider/neoscan";
 jest.mock("../../src/provider/neonDB");
 jest.mock("../../src/provider/neoscan");
 
-
 const left = new Neoscan("neoscanUrl");
 const right = new NeonDB("neonDBUrl");
 

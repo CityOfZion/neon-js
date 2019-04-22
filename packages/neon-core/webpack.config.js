@@ -1,11 +1,12 @@
+const path = require("path");
 const common = require("../../webpack.common");
 const base = common(__dirname);
 module.exports = function() {
   const nodeOutput = Object.assign({}, base, {
     target: "node",
     output: {
-      path: __dirname,
-      filename: "./dist/index.js",
+      path: path.resolve(__dirname, "dist"),
+      filename: "index.js",
       libraryTarget: "commonjs2"
     }
   });
@@ -16,8 +17,8 @@ module.exports = function() {
   const webOutput = Object.assign({}, base, {
     target: "web",
     output: {
-      path: __dirname,
-      filename: "./dist/browser.js",
+      path: path.resolve(__dirname, "dist"),
+      filename: "browser.js",
       libraryTarget: "umd",
       library: "NeonCore" // This is the var name in browser
     }

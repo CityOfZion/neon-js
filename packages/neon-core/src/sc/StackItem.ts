@@ -10,7 +10,12 @@ export enum StackItemType {
   "Map" = 0x82
 }
 
-export type StackItemValue = string | number | boolean | StackItem[] | StackItemMap[];
+export type StackItemValue =
+  | string
+  | number
+  | boolean
+  | StackItem[]
+  | StackItemMap[];
 
 export interface StackItemLike {
   type: StackItemType | keyof typeof StackItemType | number;
@@ -25,6 +30,41 @@ export interface StackItemMapLike {
 export interface StackItemMap {
   key: StackItem;
   value: StackItem;
+}
+
+function toStackItemType(
+  type: StackItemType | keyof typeof StackItemType | number
+): StackItemType {
+  if (typeof type === "string") {
+    return StackItemType[type];
+  }
+  return type;
+}
+/**
+ * Determine if there's a nested set based on type
+ */
+export function hasChildren(type: StackItemType): boolean {
+  if (
+    type === StackItemType.Array ||
+    type === StackItemType.Struct ||
+    type === StackItemType.Map
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function getDefaultValue(type: StackItemType): StackItemValue {
+  switch (type) {
+    case StackItemType.Array:
+    case StackItemType.Struct:
+    case StackItemType.Map:
+      return [];
+    case StackItemType.Boolean:
+      return false;
+    default:
+      return "";
+  }
 }
 
 /**
@@ -72,7 +112,7 @@ export class StackItem {
   public type: StackItemType;
   public value: string | number | boolean | StackItem[] | StackItemMap[];
 
-  constructor(obj: Partial<StackItemLike>) {
+  public constructor(obj: Partial<StackItemLike>) {
     if (obj.type === undefined) {
       throw new Error(`Invalid type provided: ${obj.type}`);
     }
@@ -117,39 +157,4 @@ export class StackItem {
   }
 }
 
-function toStackItemType(
-  type: StackItemType | keyof typeof StackItemType | number
-): StackItemType {
-  if (typeof type === "string") {
-    return StackItemType[type];
-  }
-  return type;
-}
-
 export default StackItem;
-/**
- * Determine if there's a nested set based on type
- */
-export function hasChildren(type: StackItemType): boolean {
-  if (
-    type === StackItemType.Array ||
-    type === StackItemType.Struct ||
-    type === StackItemType.Map
-  ) {
-    return true;
-  }
-  return false;
-}
-
-function getDefaultValue(type: StackItemType): StackItemValue {
-  switch (type) {
-    case StackItemType.Array:
-    case StackItemType.Struct:
-    case StackItemType.Map:
-      return [];
-    case StackItemType.Boolean:
-      return false;
-    default:
-      return "";
-  }
-}

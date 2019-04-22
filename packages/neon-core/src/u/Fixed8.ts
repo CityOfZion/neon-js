@@ -16,7 +16,7 @@ export class Fixed8 extends BN {
     return this.fromHex(reverseHex(hex));
   }
 
-  constructor(input?: number | string | BN, base = 10) {
+  public constructor(input?: number | string | BN, base = 10) {
     if (!input) {
       input = "0";
     }

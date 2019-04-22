@@ -24,14 +24,14 @@ export interface NeonDbClaims {
 
 export interface NeonDbHistory {
   address: string;
-  history: Array<{
+  history: {
     GAS: number;
     NEO: number;
     block_index: number;
     gas_sent: boolean;
     neo_sent: boolean;
     txid: string;
-  }>;
+  }[];
   name: string;
   net: string;
 }

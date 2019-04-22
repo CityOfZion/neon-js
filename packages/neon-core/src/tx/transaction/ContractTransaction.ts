@@ -14,15 +14,15 @@ export class ContractTransaction extends BaseTransaction {
 
   public readonly type: number = 0x80;
 
-  get exclusiveData() {
+  public get exclusiveData() {
     return {};
   }
 
-  get fees(): number {
+  public get fees(): number {
     return 0;
   }
 
-  constructor(obj: Partial<TransactionLike> = {}) {
+  public constructor(obj: Partial<TransactionLike> = {}) {
     super(obj);
   }
 

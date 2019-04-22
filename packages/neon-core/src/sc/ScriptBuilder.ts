@@ -20,6 +20,74 @@ export interface ScriptIntent {
   useTailCall?: boolean;
 }
 
+function isValidValue(value: any): boolean {
+  if (value) {
+    return true;
+  } else if (value === 0) {
+    return true;
+  } else if (value === "") {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Retrieves a single AppCall from a ScriptBuilder object.
+ * Returns ScriptIntents starting from the beginning of the script.
+ * This is based off the pointer in the stream.
+ * @param sb
+ * @returns A single ScriptIntent if available.
+ */
+function retrieveAppCall(sb: ScriptBuilder): ScriptIntent | null {
+  const output: ScriptIntent = {
+    scriptHash: "",
+    args: []
+  };
+
+  while (!sb.isEmpty()) {
+    const b = sb.read();
+    const n = parseInt(b, 16);
+    switch (true) {
+      case n === 0:
+        output.args!.unshift(0);
+        break;
+      case n < 75:
+        output.args!.unshift(sb.read(n));
+        break;
+      case n >= 81 && n <= 96:
+        output.args!.unshift(n - 80);
+        break;
+      case n === 193:
+        const len = output.args!.shift();
+        const cache = [];
+        for (let i = 0; i < len; i++) {
+          cache.unshift(output.args!.shift());
+        }
+        output.args!.unshift(cache);
+        break;
+      case n === 102:
+        sb.pter = sb.str.length;
+        break;
+      case n === 103:
+        output.scriptHash = reverseHex(sb.read(20));
+        output.useTailCall = false;
+        return output;
+      case n === 105:
+        output.scriptHash = reverseHex(sb.read(20));
+        output.useTailCall = true;
+        return output;
+      case n === 241:
+        break;
+      default:
+        throw new Error(`Encounter unknown byte: ${b}`);
+    }
+  }
+  if (output.scriptHash === "") {
+    return null;
+  }
+  return output;
+}
+
 /**
  * Builds a VM script in hexstring. Used for constructing smart contract method calls.
  * @extends StringStream
@@ -238,74 +306,6 @@ export class ScriptBuilder extends StringStream {
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }
   }
-}
-
-function isValidValue(value: any) {
-  if (value) {
-    return true;
-  } else if (value === 0) {
-    return true;
-  } else if (value === "") {
-    return true;
-  }
-  return false;
-}
-
-/**
- * Retrieves a single AppCall from a ScriptBuilder object.
- * Returns ScriptIntents starting from the beginning of the script.
- * This is based off the pointer in the stream.
- * @param sb
- * @returns A single ScriptIntent if available.
- */
-function retrieveAppCall(sb: ScriptBuilder): ScriptIntent | null {
-  const output: ScriptIntent = {
-    scriptHash: "",
-    args: []
-  };
-
-  while (!sb.isEmpty()) {
-    const b = sb.read();
-    const n = parseInt(b, 16);
-    switch (true) {
-      case n === 0:
-        output.args!.unshift(0);
-        break;
-      case n < 75:
-        output.args!.unshift(sb.read(n));
-        break;
-      case n >= 81 && n <= 96:
-        output.args!.unshift(n - 80);
-        break;
-      case n === 193:
-        const len = output.args!.shift();
-        const cache = [];
-        for (let i = 0; i < len; i++) {
-          cache.unshift(output.args!.shift());
-        }
-        output.args!.unshift(cache);
-        break;
-      case n === 102:
-        sb.pter = sb.str.length;
-        break;
-      case n === 103:
-        output.scriptHash = reverseHex(sb.read(20));
-        output.useTailCall = false;
-        return output;
-      case n === 105:
-        output.scriptHash = reverseHex(sb.read(20));
-        output.useTailCall = true;
-        return output;
-      case n === 241:
-        break;
-      default:
-        throw new Error(`Encounter unknown byte: ${b}`);
-    }
-  }
-  if (output.scriptHash === "") {
-    return null;
-  }
-  return output;
 }
 
 export default ScriptBuilder;

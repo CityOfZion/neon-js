@@ -5,6 +5,57 @@ import { TransactionInput, TransactionOutput } from "./components";
 import { balancedApproach, calculationStrategyFunction } from "./strategy";
 
 export let defaultCalculationStrategy = balancedApproach;
+
+/**
+ * Helper function that reduces a list of TransactionOutputs to a object of assetSymbol: amount.
+ * This is useful during the calculations as we just need to know much of an asset we need.
+ * @param intents List of TransactionOutputs to reduce.
+ */
+export function combineIntents(intents: TransactionOutput[]) {
+  return intents.reduce(
+    (assets, intent) => {
+      assets[intent.assetId]
+        ? (assets[intent.assetId] = assets[intent.assetId].add(intent.value))
+        : (assets[intent.assetId] = intent.value);
+      return assets;
+    },
+    {} as { [assetId: string]: Fixed8 }
+  );
+}
+
+export function calculateInputsForAsset(
+  assetBalance: AssetBalance,
+  requiredAmt: Fixed8,
+  assetId: string,
+  address: string,
+  strategy: calculationStrategyFunction
+) {
+  const selectedInputs = strategy(assetBalance, requiredAmt);
+  const selectedAmt = selectedInputs.reduce(
+    (prev, curr) => prev.add(curr.value),
+    new Fixed8(0)
+  );
+  const change: TransactionOutput[] = [];
+  // Construct change output
+  if (selectedAmt.gt(requiredAmt)) {
+    change.push(
+      new TransactionOutput({
+        assetId,
+        value: selectedAmt.sub(requiredAmt),
+        scriptHash: getScriptHashFromAddress(address)
+      })
+    );
+  }
+  // Format inputs
+  const inputs = selectedInputs.map(input => {
+    return new TransactionInput({
+      prevHash: input.txid,
+      prevIndex: input.index
+    });
+  });
+  return { inputs, change };
+}
+
 /**
  * Calculate the inputs required given the intents and fees.
  * Fees are various GAS outputs that are not reflected as an TransactionOutput (absorbed by network).
@@ -69,54 +120,4 @@ export function calculateInputs(
     { inputs: [], change: [] }
   );
   return output;
-}
-
-/**
- * Helper function that reduces a list of TransactionOutputs to a object of assetSymbol: amount.
- * This is useful during the calculations as we just need to know much of an asset we need.
- * @param intents List of TransactionOutputs to reduce.
- */
-export function combineIntents(intents: TransactionOutput[]) {
-  return intents.reduce(
-    (assets, intent) => {
-      assets[intent.assetId]
-        ? (assets[intent.assetId] = assets[intent.assetId].add(intent.value))
-        : (assets[intent.assetId] = intent.value);
-      return assets;
-    },
-    {} as { [assetId: string]: Fixed8 }
-  );
-}
-
-export function calculateInputsForAsset(
-  assetBalance: AssetBalance,
-  requiredAmt: Fixed8,
-  assetId: string,
-  address: string,
-  strategy: calculationStrategyFunction
-) {
-  const selectedInputs = strategy(assetBalance, requiredAmt);
-  const selectedAmt = selectedInputs.reduce(
-    (prev, curr) => prev.add(curr.value),
-    new Fixed8(0)
-  );
-  const change: TransactionOutput[] = [];
-  // Construct change output
-  if (selectedAmt.gt(requiredAmt)) {
-    change.push(
-      new TransactionOutput({
-        assetId,
-        value: selectedAmt.sub(requiredAmt),
-        scriptHash: getScriptHashFromAddress(address)
-      })
-    );
-  }
-  // Format inputs
-  const inputs = selectedInputs.map(input => {
-    return new TransactionInput({
-      prevHash: input.txid,
-      prevIndex: input.index
-    });
-  });
-  return { inputs, change };
 }

@@ -23,7 +23,7 @@ export class Wallet {
   public accounts: Account[];
   public extra: { [key: string]: any };
 
-  constructor(obj: Partial<WalletJSON> = DEFAULT_WALLET) {
+  public constructor(obj: Partial<WalletJSON> = DEFAULT_WALLET) {
     this.name = obj.name || "myWallet";
     this.version = obj.version || DEFAULT_WALLET.version;
     this.scrypt = Object.assign({}, DEFAULT_SCRYPT, obj.scrypt);
@@ -38,7 +38,7 @@ export class Wallet {
     log.info(`New Wallet created: ${this.name}`);
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "Wallet";
   }
 
@@ -50,7 +50,7 @@ export class Wallet {
    * 4. First Account in the array.
    * Throws error if no accounts available.
    */
-  get defaultAccount(): Account {
+  public get defaultAccount(): Account {
     if (this.accounts.length === 0) {
       throw new Error("No accounts available in this Wallet!");
     }
@@ -192,13 +192,14 @@ export class Wallet {
    * @param index The index of the Account in accounts array.
    * @return this
    */
-  public setDefault(index: number) {
+  public setDefault(index: number): this {
     for (let i = 0; i < this.accounts.length; i++) {
       this.accounts[i].isDefault = i === index;
     }
     log.info(
       `Set Account: ${this.accounts[index]} as default for Wallet ${this.name}`
     );
+    return this;
   }
 }
 

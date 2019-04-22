@@ -11,12 +11,27 @@ const log = logging.default("api");
 
 const BASE_REQ = CONST.DEFAULT_REQ;
 
-function throwRpcError(err: rpc.RPCErrorResponse) {
+function throwRpcError(err: rpc.RPCErrorResponse): void {
   throw new Error(`Encounter error code ${err.code}: ${err.message}`);
 }
 
-export function getRPCEndpoint(url: string) {
+export function getRPCEndpoint(url: string): string {
   return url;
+}
+
+function convertNeoCliTx(tx: NeoCliTx): wallet.CoinLike {
+  return { index: tx.n, txid: tx.txid, value: tx.value };
+}
+
+function convertNeoCliClaimable(c: NeoCliClaimable): wallet.ClaimItemLike {
+  return {
+    claim: c.unclaimed,
+    txid: c.txid,
+    index: c.n,
+    value: c.value,
+    start: c.start_height,
+    end: c.end_height
+  };
 }
 
 /**
@@ -40,7 +55,7 @@ export async function getBalance(
   const bal = new wallet.Balance({
     net: url,
     address: data.result.address
-  } as wallet.BalanceLike);
+  });
   for (const assetBalance of data.result.balance) {
     if (assetBalance.amount === 0) {
       continue;
@@ -55,10 +70,6 @@ export async function getBalance(
   }
   log.info(`Retrieved Balance for ${address} from neonDB ${url}`);
   return bal;
-}
-
-function convertNeoCliTx(tx: NeoCliTx): wallet.CoinLike {
-  return { index: tx.n, txid: tx.txid, value: tx.value };
 }
 
 export async function getClaims(
@@ -78,17 +89,6 @@ export async function getClaims(
     address: data.result.address,
     claims: data.result.claimable.map(convertNeoCliClaimable)
   });
-}
-
-function convertNeoCliClaimable(c: NeoCliClaimable): wallet.ClaimItemLike {
-  return {
-    claim: c.unclaimed,
-    txid: c.txid,
-    index: c.n,
-    value: c.value,
-    start: c.start_height,
-    end: c.end_height
-  } as wallet.ClaimItemLike;
 }
 
 export async function getMaxClaimAmount(

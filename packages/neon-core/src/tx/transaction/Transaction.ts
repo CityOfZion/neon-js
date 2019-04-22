@@ -3,6 +3,7 @@ import { BaseTransaction, TransactionLike } from "./BaseTransaction";
 import { ClaimTransaction } from "./ClaimTransaction";
 import { ContractTransaction } from "./ContractTransaction";
 import { InvocationTransaction } from "./InvocationTransaction";
+import { StateTransaction } from "./StateTransaction";
 import {
   deserializeAttributes,
   deserializeInputs,
@@ -11,7 +12,21 @@ import {
   deserializeVersion,
   deserializeWitnesses
 } from "./main";
-import { StateTransaction } from "./StateTransaction";
+
+function getType<T>(type: number): any {
+  switch (type) {
+    case 0x02:
+      return ClaimTransaction;
+    case 0x80:
+      return ContractTransaction;
+    case 0xd1:
+      return InvocationTransaction;
+    case 0x90:
+      return StateTransaction;
+    default:
+      throw new Error(`Unknown TransactionType: ${type}`);
+  }
+}
 
 /**
  * @class Transaction
@@ -52,18 +67,18 @@ export class Transaction extends BaseTransaction {
     super(tx);
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "Transaction";
   }
 
   /**
    * Exclusive Data
    */
-  get exclusiveData(): { [key: string]: any } {
+  public get exclusiveData(): { [key: string]: any } {
     throw new Error("Not Implemented!");
   }
 
-  get fees(): number {
+  public get fees(): number {
     return 0;
   }
 
@@ -73,18 +88,3 @@ export class Transaction extends BaseTransaction {
 }
 
 export default Transaction;
-
-function getType<T>(type: number): any {
-  switch (type) {
-    case 0x02:
-      return ClaimTransaction;
-    case 0x80:
-      return ContractTransaction;
-    case 0xd1:
-      return InvocationTransaction;
-    case 0x90:
-      return StateTransaction;
-    default:
-      throw new Error(`Unknown TransactionType: ${type}`);
-  }
-}
