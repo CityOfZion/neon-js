@@ -83,10 +83,6 @@ export class StringStream {
     return len;
   }
 
-  public readUint32(): number {
-    return parseInt(reverseHex(this.read(4)), 16);
-  }
-
   /**
    * Resets the pointer to start of string.
    * @example
