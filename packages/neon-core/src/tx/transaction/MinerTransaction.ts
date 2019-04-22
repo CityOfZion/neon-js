@@ -1,7 +1,7 @@
-import { num2hexstring, num2VarInt, StringStream } from "../../u";
+import { TX_VERSION } from "../../consts";
+import { num2hexstring, num2VarInt, reverseHex, StringStream } from "../../u";
 import { BaseTransaction, TransactionLike } from "./BaseTransaction";
 import TransactionType from "./TransactionType";
-
 export interface MinerTransactionLike extends TransactionLike {
   nonce: number;
 }
@@ -11,7 +11,8 @@ export class MinerTransaction extends BaseTransaction {
     ss: StringStream,
     tx: Partial<MinerTransactionLike>
   ): Partial<MinerTransactionLike> {
-    const nonce = ss.readUint32();
+    // read Uint32 from StringStream
+    const nonce = parseInt(reverseHex(ss.read(4)), 16);
     return Object.assign(tx, { nonce });
   }
 
@@ -20,8 +21,7 @@ export class MinerTransaction extends BaseTransaction {
   public readonly type: TransactionType = 0x00;
 
   constructor(obj: Partial<MinerTransactionLike> = {}) {
-    super(obj);
-
+    super(Object.assign({ version: TX_VERSION.MINER }, obj));
     this.nonce = obj.nonce || 0;
   }
 
