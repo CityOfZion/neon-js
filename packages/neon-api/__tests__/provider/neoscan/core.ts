@@ -2,7 +2,7 @@ import { rpc, settings, u, wallet } from "@cityofzion/neon-core";
 import axios from "axios";
 import * as common from "../../../src/provider/common";
 import * as neoscan from "../../../src/provider/neoscan/core";
-import { set } from "../../../src/settings";
+import { default as internal } from "../../../src/settings";
 jest.mock("axios");
 jest.mock("../../../src/provider/common");
 
@@ -62,7 +62,7 @@ describe("getRPCEndpoint", () => {
     common.getBestUrl.mockImplementationOnce(() =>
       Promise.resolve("https://url2")
     );
-    set({ httpsOnly: true });
+    internal.httpsOnly = true;
 
     const result = await neoscan.getRPCEndpoint(testUrl);
 

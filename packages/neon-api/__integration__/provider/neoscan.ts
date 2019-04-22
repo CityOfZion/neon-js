@@ -37,6 +37,15 @@ describe(`Valid Address: ${provider.name}`, () => {
     expect(typeof result === "string").toBeTruthy();
   });
 
+  test("httpsOnly getRPCEndpoint", async () => {
+    expect(neonJs.settings.httpsOnly).toBe(false);
+    neonJs.settings.httpsOnly = true
+    expect(neonJs.settings.httpsOnly).toBe(true);
+    const result = await provider.getRPCEndpoint();
+    expect(typeof result === "string").toBeTruthy();
+    expect(result).toEqual(expect.stringContaining("https://"));
+  });
+
   test("getTransactionHistory", async () => {
     const result = await provider.getTransactionHistory(addr);
     expect(result).toBeInstanceOf(Array);
@@ -74,4 +83,3 @@ describe(`Valid Address: ${provider.name}`, () => {
       expect(result).toEqual([]);
     });
   });
-

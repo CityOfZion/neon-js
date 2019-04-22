@@ -84,6 +84,7 @@ yarn build
 ```sh
 yarn lint
 yarn build
+yarn dist
 yarn test:unit
 yarn test:integration
 ```
