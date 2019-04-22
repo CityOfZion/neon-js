@@ -2,6 +2,10 @@ import { tx, wallet } from "@cityofzion/neon-core";
 import { checkProperty } from "./common";
 import { ManagedApiBasicConfig } from "./types";
 
+function addSignature(transaction: tx.Transaction, signature: string): void {
+  transaction.scripts.push(tx.Witness.deserialize(signature));
+}
+
 /**
  * Signs a transaction within the config object.
  * @param config - Configuration object.
@@ -24,10 +28,6 @@ export async function signTx<
   }
 
   return config;
-}
-
-function addSignature(transaction: tx.Transaction, signature: string): void {
-  transaction.scripts.push(tx.Witness.deserialize(signature));
 }
 
 export function signWithPrivateKey(

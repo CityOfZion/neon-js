@@ -5,7 +5,7 @@ import nepPlugin from "@cityofzion/neon-nep5";
 const neonWithApi = apiPlugin(neonCore);
 const neonJs = nepPlugin(neonWithApi);
 
-export const { api, nep5, settings, sc, rpc, wallet, CONST, u, tx } = neonJs;
+export const { api, nep5, settings, sc, rpc, wallet, CONST, u, tx, logging } = neonJs;
 import defaultNetworks from "./networks";
 const bootstrap: {
   [net: string]: Partial<neonCore.rpc.NetworkJSON>;

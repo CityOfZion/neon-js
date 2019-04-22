@@ -1,5 +1,5 @@
 import { logging, rpc, settings, u, wallet } from "@cityofzion/neon-core";
-import { PastTransaction, Provider, RpcNode } from "../common";
+import { PastTransaction, Provider } from "../common";
 import {
   getBalance,
   getClaims,
@@ -13,14 +13,14 @@ const log = logging.default("api");
 export class Neoscan implements Provider {
   private url: string;
 
-  public get name() {
+  public get name(): string {
     return `Neoscan[${this.url}]`;
   }
 
   private rpc: rpc.RPCClient | null = null;
   private cacheExpiry: Date | null = null;
 
-  constructor(url: string) {
+  public constructor(url: string) {
     if (settings.networks[url] && settings.networks[url].extra.neoscan) {
       this.url = settings.networks[url].extra.neoscan;
     } else {

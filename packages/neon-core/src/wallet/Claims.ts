@@ -1,6 +1,7 @@
 import util from "util";
 import ClaimItem, { ClaimItemLike } from "./components/ClaimItem";
 
+const inspect = util.inspect.custom;
 export interface ClaimsLike {
   address: string;
   net: string;
@@ -17,17 +18,17 @@ export class Claims {
   /** The list of claimable transactions */
   public claims: ClaimItem[];
 
-  constructor(config: Partial<ClaimsLike> = {}) {
+  public constructor(config: Partial<ClaimsLike> = {}) {
     this.address = config.address || "";
     this.net = config.net || "NoNet";
     this.claims = config.claims ? config.claims.map(c => new ClaimItem(c)) : [];
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "Claims";
   }
 
-  public [util.inspect.custom]() {
+  public [inspect](): string {
     const claimsDump = this.claims.map(c => {
       return `${c.txid} <${c.index}>: ${c.claim.toString()}`;
     });
@@ -38,7 +39,7 @@ export class Claims {
     )}`;
   }
 
-  public export() {
+  public export(): ClaimsLike {
     return {
       address: this.address,
       net: this.net,

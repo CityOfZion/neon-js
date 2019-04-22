@@ -26,6 +26,30 @@ export interface RPCErrorResponse {
 }
 
 /**
+ * Wrapper for querying node RPC
+ * @param url Node URL.
+ * @param req RPC Request object.
+ * @param config Configuration to pass down to axios
+ * @returns RPC Response
+ */
+export async function queryRPC(
+  url: string,
+  req: Partial<RPCRequest>,
+  config: AxiosRequestConfig = {}
+): Promise<RPCResponse> {
+  const body = Object.assign({}, DEFAULT_REQ, req);
+  const conf = Object.assign(
+    {
+      headers: { "Content-Type": "application/json" },
+      timeout: timeout.rpc
+    },
+    config
+  );
+  const response = await axios.post(url, body, conf);
+  return response.data;
+}
+
+/**
  * A Query object helps us to construct and record requests
  */
 export class Query {
@@ -291,12 +315,12 @@ export class Query {
     return this.req.params;
   }
 
-  constructor(req: Partial<RPCRequest>) {
+  public constructor(req: Partial<RPCRequest>) {
     this.req = Object.assign({}, DEFAULT_REQ, req);
     this.completed = false;
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "Query";
   }
 
@@ -354,27 +378,3 @@ export class Query {
 }
 
 export default Query;
-
-/**
- * Wrapper for querying node RPC
- * @param url Node URL.
- * @param req RPC Request object.
- * @param config Configuration to pass down to axios
- * @returns RPC Response
- */
-export async function queryRPC(
-  url: string,
-  req: Partial<RPCRequest>,
-  config: AxiosRequestConfig = {}
-): Promise<RPCResponse> {
-  const body = Object.assign({}, DEFAULT_REQ, req);
-  const conf = Object.assign(
-    {
-      headers: { "Content-Type": "application/json" },
-      timeout: timeout.rpc
-    },
-    config
-  );
-  const response = await axios.post(url, body, conf);
-  return response.data;
-}

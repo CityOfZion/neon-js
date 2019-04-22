@@ -53,18 +53,18 @@ export class Transaction extends BaseTransaction {
     super(tx);
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "Transaction";
   }
 
   /**
    * Exclusive Data
    */
-  get exclusiveData(): { [key: string]: any } {
+  public get exclusiveData(): { [key: string]: any } {
     throw new Error("Not Implemented!");
   }
 
-  get fees(): number {
+  public get fees(): number {
     return 0;
   }
 
@@ -91,3 +91,4 @@ function getType<T>(type: number): any {
       throw new Error(`Unknown TransactionType: ${type}`);
   }
 }
+

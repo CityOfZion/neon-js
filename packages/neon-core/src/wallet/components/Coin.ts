@@ -14,7 +14,7 @@ export class Coin {
   public txid: string;
   public value: Fixed8;
 
-  constructor(coinLike: Partial<CoinLike> = {}) {
+  public constructor(coinLike: Partial<CoinLike> = {}) {
     this.index = coinLike.index || 0;
     this.txid = coinLike.txid || "";
     this.value = new Fixed8(coinLike.value);

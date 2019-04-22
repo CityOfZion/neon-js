@@ -21,7 +21,7 @@ export class AssetBalance implements NeonObject {
   public spent: Coin[];
   public unconfirmed: Coin[];
 
-  constructor(abLike: Partial<AssetBalanceLike> = {}) {
+  public constructor(abLike: Partial<AssetBalanceLike> = {}) {
     this.unspent = abLike.unspent
       ? abLike.unspent.map(coin => new Coin(coin))
       : [];

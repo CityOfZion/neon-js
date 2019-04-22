@@ -20,6 +20,18 @@ export interface ProtocolJSON {
   SystemFee: { [key: string]: number };
 }
 
+function compareArrays(current: any[], other: any[]): boolean {
+  if (current.length !== other.length) {
+    return false;
+  }
+  for (let i = 0; i < current.length; i++) {
+    if (current[i] !== other[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 /**
  * Model of the protocol configuration file used by the C# implementation.
  */
@@ -30,7 +42,7 @@ export class Protocol {
   public seedList: string[];
   public systemFee: { [key: string]: number };
 
-  constructor(config: Partial<ProtocolLike & ProtocolJSON> = {}) {
+  public constructor(config: Partial<ProtocolLike & ProtocolJSON> = {}) {
     this.magic = config.magic || config.Magic || 0;
     this.addressVersion = config.addressVersion || config.AddressVersion || 23;
     this.standbyValidators =
@@ -42,7 +54,7 @@ export class Protocol {
     );
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "Protocol";
   }
 
@@ -71,15 +83,3 @@ export class Protocol {
 }
 
 export default Protocol;
-
-function compareArrays(current: any[], other: any[]): boolean {
-  if (current.length !== other.length) {
-    return false;
-  }
-  for (let i = 0; i < current.length; i++) {
-    if (current[i] !== other[i]) {
-      return false;
-    }
-  }
-  return true;
-}

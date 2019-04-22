@@ -37,6 +37,15 @@ describe(`Valid Address: ${provider.name}`, () => {
     expect(typeof result === "string").toBeTruthy();
   });
 
+  test("httpsOnly getRPCEndpoint", async () => {
+    expect(neonJs.settings.httpsOnly).toBe(false);
+    neonJs.settings.httpsOnly = true;
+    expect(neonJs.settings.httpsOnly).toBe(true);
+    const result = await provider.getRPCEndpoint();
+    expect(typeof result === "string").toBeTruthy();
+    expect(result).toEqual(expect.stringContaining("https://"));
+  });
+
   test("getTransactionHistory", async () => {
     const result = await provider.getTransactionHistory(addr);
     expect(result).toBeInstanceOf(Array);
@@ -48,30 +57,28 @@ describe(`Valid Address: ${provider.name}`, () => {
   });
 });
 
-
-  describe(`Invalid Address: ${provider.name}`, () => {
-    test("getBalance", async () => {
-      const result = await provider.getBalance(invalidAddr);
-      expect(result).toBeInstanceOf(wallet.Balance);
-      expect(result.assetSymbols).toEqual([]);
-      expect(result.tokenSymbols).toEqual([]);
-    });
-
-    test("getClaims", async () => {
-      const result = await provider.getClaims(invalidAddr);
-      expect(result).toBeInstanceOf(wallet.Claims);
-      expect(result.claims).toEqual([]);
-    });
-
-    test("getMaxClaimAmount", async () => {
-      const result = await provider.getMaxClaimAmount(invalidAddr);
-      expect(result).toBeInstanceOf(u.Fixed8);
-      expect(result).toEqual(new u.Fixed8(0));
-    });
-
-    test("getTransactionHistory", async () => {
-      const result = await provider.getTransactionHistory(invalidAddr);
-      expect(result).toEqual([]);
-    });
+describe(`Invalid Address: ${provider.name}`, () => {
+  test("getBalance", async () => {
+    const result = await provider.getBalance(invalidAddr);
+    expect(result).toBeInstanceOf(wallet.Balance);
+    expect(result.assetSymbols).toEqual([]);
+    expect(result.tokenSymbols).toEqual([]);
   });
 
+  test("getClaims", async () => {
+    const result = await provider.getClaims(invalidAddr);
+    expect(result).toBeInstanceOf(wallet.Claims);
+    expect(result.claims).toEqual([]);
+  });
+
+  test("getMaxClaimAmount", async () => {
+    const result = await provider.getMaxClaimAmount(invalidAddr);
+    expect(result).toBeInstanceOf(u.Fixed8);
+    expect(result).toEqual(new u.Fixed8(0));
+  });
+
+  test("getTransactionHistory", async () => {
+    const result = await provider.getTransactionHistory(invalidAddr);
+    expect(result).toEqual([]);
+  });
+});

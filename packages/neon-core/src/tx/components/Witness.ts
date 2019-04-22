@@ -44,7 +44,7 @@ export class Witness {
    */
   public static buildMultiSig(
     tx: string,
-    sigs: Array<string | Witness>,
+    sigs: (string | Witness)[],
     acctOrVerificationScript: Account | string
   ): Witness {
     const verificationScript =
@@ -102,7 +102,7 @@ export class Witness {
   // tslint:disable-next-line:variable-name
   private _scriptHash: string = "";
 
-  constructor(obj: WitnessLike) {
+  public constructor(obj: WitnessLike) {
     if (
       !obj ||
       obj.invocationScript === undefined ||
@@ -116,7 +116,7 @@ export class Witness {
     this.verificationScript = obj.verificationScript;
   }
 
-  public get scriptHash() {
+  public get scriptHash(): string {
     if (this._scriptHash) {
       return this._scriptHash;
     } else if (this.verificationScript) {
@@ -160,7 +160,7 @@ export class Witness {
     );
   }
 
-  private generateScriptHash() {
+  private generateScriptHash(): void {
     this._scriptHash = reverseHex(hash160(this.verificationScript));
   }
 }

@@ -28,25 +28,20 @@ export function filterHttpsOnly(nodes: RpcNode[]): RpcNode[] {
   return nodes.filter(n => n.url.includes("https://"));
 }
 
+export async function raceToSuccess<T>(promises: Promise<T>[]): Promise<T> {
+  try {
+    const errors = await Promise.all(
+      promises.map(p => p.then(val => Promise.reject(val), err => err))
+    );
+    return await Promise.reject(errors);
+  } catch (success) {
+    return success;
+  }
+}
+
 export async function getBestUrl(rpcs: RpcNode[]): Promise<string> {
   const clients = rpcs.map(r => new rpc.RPCClient(r.url));
   return await raceToSuccess(clients.map(c => c.ping().then(_ => c.net)));
-}
-
-export function raceToSuccess<T>(promises: Array<Promise<T>>) {
-  return Promise.all(
-    promises.map(p =>
-      // If a request fails, count that as a resolution so it will keep
-      // waiting for other possible successes. If a request succeeds,
-      // treat it as a rejection so Promise.all immediately bails out.
-      p.then(val => Promise.reject(val), err => err)
-    )
-  ).then(
-    // If '.all' resolved, we've just got an array of errors.
-    errors => Promise.reject(errors),
-    // If '.all' rejected, we've got the result we wanted.
-    val => val
-  );
 }
 
 export function findGoodNodesFromHeight(

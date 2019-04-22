@@ -8,6 +8,17 @@ export interface TransactionAttributeLike {
   data: string;
 }
 
+function toTxAttrUsage(type: TxAttrUsage | string | number): TxAttrUsage {
+  if (typeof type === "string") {
+    if (type in TxAttrUsage) {
+      return TxAttrUsage[type as keyof typeof TxAttrUsage];
+    }
+    throw new Error(`${type} not found in TxAttrUsage!`);
+  }
+
+  return type;
+}
+
 /**
  * An attribute that is used to decorate the transaction.
  * Used for appending additional information to the transaction.
@@ -42,7 +53,7 @@ export class TransactionAttribute {
   public usage: TxAttrUsage;
   public data: string;
 
-  constructor(obj: TransactionAttributeLike) {
+  public constructor(obj: TransactionAttributeLike) {
     if (!obj || obj.usage === undefined || obj.data === undefined) {
       throw new Error("TransactionAttribute requires usage and data fields");
     }
@@ -50,7 +61,7 @@ export class TransactionAttribute {
     this.data = obj.data;
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "TransactionAttribute";
   }
 
@@ -87,14 +98,3 @@ export class TransactionAttribute {
 }
 
 export default TransactionAttribute;
-
-function toTxAttrUsage(type: TxAttrUsage | string | number): TxAttrUsage {
-  if (typeof type === "string") {
-    if (type in TxAttrUsage) {
-      return TxAttrUsage[type as keyof typeof TxAttrUsage];
-    }
-    throw new Error(`${type} not found in TxAttrUsage!`);
-  }
-
-  return type;
-}

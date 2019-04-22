@@ -18,6 +18,16 @@ export interface StateDescriptorLike {
   value: string;
 }
 
+function toStateType(type: StateType | string | number): StateType {
+  if (typeof type === "string") {
+    if (type in StateType) {
+      return StateType[type as keyof typeof StateType];
+    }
+    throw new Error(`${type} not found in StateType!`);
+  }
+  return type;
+}
+
 export class StateDescriptor {
   public static deserialize(hex: string): StateDescriptor {
     const ss = new StringStream(hex);
@@ -41,14 +51,14 @@ export class StateDescriptor {
   /** Data depending on field. For voting, this is the list of publickeys to vote for. */
   public value: string;
 
-  constructor(obj: Partial<StateDescriptorLike> = {}) {
+  public constructor(obj: Partial<StateDescriptorLike> = {}) {
     this.type = obj.type ? toStateType(obj.type) : StateType.Account;
     this.key = obj.key || "";
     this.field = obj.field || "";
     this.value = obj.value || "";
   }
 
-  get [Symbol.toStringTag]() {
+  public get [Symbol.toStringTag](): string {
     return "StateDescriptor";
   }
 
@@ -83,14 +93,3 @@ export class StateDescriptor {
   }
 }
 export default StateDescriptor;
-
-function toStateType(type: StateType | string | number): StateType {
-  if (typeof type === "string") {
-    if (type in StateType) {
-      return StateType[type as keyof typeof StateType];
-    }
-    throw new Error(`${type} not found in StateType!`);
-  }
-
-  return type;
-}

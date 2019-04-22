@@ -30,15 +30,15 @@ export class StateTransaction extends BaseTransaction {
   public readonly type: TransactionType = TransactionType.StateTransaction;
   public descriptors: StateDescriptor[];
 
-  get exclusiveData() {
+  public get exclusiveData() {
     return { descriptors: this.descriptors };
   }
 
-  get fees(): number {
+  public get fees(): number {
     return 0;
   }
 
-  constructor(obj: Partial<StateTransactionLike> = {}) {
+  public constructor(obj: Partial<StateTransactionLike> = {}) {
     super(Object.assign({ version: TX_VERSION.STATE }, obj));
     this.descriptors = obj.descriptors
       ? obj.descriptors.map(d => new StateDescriptor(d))
