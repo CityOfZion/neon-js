@@ -6,10 +6,9 @@ import { BaseTransaction } from "../tx/transaction/BaseTransaction";
 import { isAddress } from "../wallet";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
+import { AccountState, AssetState, RawVerboseTransaction, RawVerboseVOut } from "./responseModels";
 
 const log = logger("rpc");
-
-const versionRegex = /NEO:(\d+\.\d+\.\d+)/;
 
 export interface Validator {
   publickey: string;
@@ -106,7 +105,7 @@ export class RPCClient {
   /**
    * Gets the state of an account given an address.
    */
-  public async getAccountState(addr: string): Promise<any> {
+  public async getAccountState(addr: string): Promise<AccountState> {
     if (!isAddress(addr)) {
       throw new Error(`Invalid address given: ${addr}`);
     }
@@ -117,7 +116,7 @@ export class RPCClient {
   /**
    * Gets the state of an asset given an id.
    */
-  public async getAssetState(assetId: string): Promise<any> {
+  public async getAssetState(assetId: string): Promise<AssetState> {
     const response = await this.execute(Query.getAssetState(assetId));
     return response.result;
   }
@@ -206,7 +205,7 @@ export class RPCClient {
   public async getRawTransaction(
     txid: string,
     verbose: number = 1
-  ): Promise<any> {
+  ): Promise<string | RawVerboseTransaction> {
     const response = await this.execute(Query.getRawTransaction(txid, verbose));
     return response.result;
   }
@@ -222,7 +221,7 @@ export class RPCClient {
   /**
    * Gets the transaction output given a transaction id and index
    */
-  public async getTxOut(txid: string, index: number): Promise<any> {
+  public async getTxOut(txid: string, index: number): Promise<RawVerboseVOut> {
     const response = await this.execute(Query.getTxOut(txid, index));
     return response.result;
   }
@@ -244,7 +243,7 @@ export class RPCClient {
         const useragent = response.result.useragent;
         const responseLength = useragent.length;
         const strippedResponse = useragent.substring(1, responseLength - 1);
-        const [header, newVersion] = strippedResponse.split(":");
+        const [, newVersion] = strippedResponse.split(":");
         this.version = newVersion;
       } else {
         throw new Error("Empty or unexpected version pattern");

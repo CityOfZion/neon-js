@@ -87,10 +87,10 @@ export function balancedApproach(
   const bigCoins = assetBalance.unspent.slice(smallCoins.length);
   const selectedInputs: Coin[] = [];
   if (smallCoins.length > 0) {
-    selectedInputs.push(smallCoins.pop()!);
+    selectedInputs.push(smallCoins.pop()!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
   }
   const remainderAmt = requiredAmt.minus(
-    selectedInputs.length > 0 ? selectedInputs[0]!.value : 0
+    selectedInputs.length > 0 ? selectedInputs[0].value : 0
   );
   const remainderInputs = fillFromLeft(
     remainderAmt,

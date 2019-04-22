@@ -95,7 +95,7 @@ export function int2hex(num: number): string {
  * @param littleEndian Encode the hex in little endian form
  */
 export function num2hexstring(
-  num: any,
+  num: number,
   size: number = 1,
   littleEndian: boolean = false
 ): string {
@@ -148,7 +148,6 @@ export function num2fixed8(num: number, size: number = 8): string {
       `num2fixed expected an integer for argument size but got ${size} instead.`
     );
   }
-  const i = new Fixed8(num);
   return new Fixed8(num).toReverseHex().slice(0, size * 2);
 }
 

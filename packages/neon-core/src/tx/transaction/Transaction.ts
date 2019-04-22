@@ -13,7 +13,7 @@ import {
   deserializeWitnesses
 } from "./main";
 
-function getType<T>(type: number): any {
+function getType(type: number): any {
   switch (type) {
     case 0x02:
       return ClaimTransaction;
@@ -44,7 +44,7 @@ export class Transaction extends BaseTransaction {
   public static deserialize<T extends BaseTransaction>(hex: string): T {
     const ss = new StringStream(hex);
     let txObj = deserializeType(ss);
-    const txClass = getType(txObj.type!);
+    const txClass = getType(txObj.type!); //eslint-disable-line @typescript-eslint/no-non-null-assertion
     txObj = deserializeVersion(ss, txObj);
     txObj = txClass.deserializeExclusive(ss, txObj);
     txObj = deserializeAttributes(ss, txObj);
@@ -56,11 +56,8 @@ export class Transaction extends BaseTransaction {
     return new txClass(txObj);
   }
 
-  public static deserializeExclusive(
-    ss: StringStream,
-    tx: Partial<TransactionLike>
-  ): Partial<TransactionLike> {
-    throw new Error("Method not implemented.");
+  public static deserializeExclusive(): Partial<TransactionLike> {
+    throw new Error("Not implemented.");
   }
 
   private constructor(tx: Partial<TransactionLike> = {}) {
@@ -74,7 +71,7 @@ export class Transaction extends BaseTransaction {
   /**
    * Exclusive Data
    */
-  public get exclusiveData(): { [key: string]: any } {
+  public get exclusiveData(): {} {
     throw new Error("Not Implemented!");
   }
 
@@ -83,7 +80,7 @@ export class Transaction extends BaseTransaction {
   }
 
   public serializeExclusive(): string {
-    throw new Error("Method not implemented.");
+    throw new Error("Not implemented.");
   }
 }
 

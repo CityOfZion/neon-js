@@ -38,7 +38,7 @@ export interface DeployParams {
 /**
  * Generates script for deploying contract
  */
-export function generateDeployScript(params: DeployParams) {
+export function generateDeployScript(params: DeployParams): ScriptBuilder {
   const sb = new ScriptBuilder();
   sb.emitPush(str2hexstring(params.description))
     .emitPush(str2hexstring(params.email))

@@ -4,7 +4,7 @@ import SHA256 from "crypto-js/sha256";
 
 function hash(
   hex: string,
-  hashingFunction: (i: any) => CryptoJS.WordArray
+  hashingFunction: (i: string) => CryptoJS.WordArray
 ): string {
   const hexEncoded = hexEncoding.parse(hex);
   const result = hashingFunction(hexEncoded);
@@ -31,9 +31,6 @@ export function ripemd160(hex: string): string {
 export function hash160(hex: string): string {
   const sha = sha256(hex);
   return ripemd160(sha);
-  // const hexEncoded = safeParseHex(hex);
-  // const ProgramSha256 = SHA256(hexEncoded);
-  // return RIPEMD160(ProgramSha256.toString()).toString();
 }
 
 /**
@@ -42,7 +39,4 @@ export function hash160(hex: string): string {
 export function hash256(hex: string): string {
   const firstSha = sha256(hex);
   return sha256(firstSha);
-  // const hexEncoded = safeParseHex(hex);
-  // const ProgramSha256 = SHA256(hexEncoded);
-  // return SHA256(ProgramSha256).toString();
 }

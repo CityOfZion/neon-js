@@ -6,21 +6,25 @@ import { balancedApproach, calculationStrategyFunction } from "./strategy";
 
 export let defaultCalculationStrategy = balancedApproach;
 
+export interface UtxoCalculationResult {
+  inputs: TransactionInput[];
+  change: TransactionOutput[];
+}
 /**
  * Helper function that reduces a list of TransactionOutputs to a object of assetSymbol: amount.
  * This is useful during the calculations as we just need to know much of an asset we need.
  * @param intents List of TransactionOutputs to reduce.
  */
-export function combineIntents(intents: TransactionOutput[]) {
-  return intents.reduce(
-    (assets, intent) => {
-      assets[intent.assetId]
-        ? (assets[intent.assetId] = assets[intent.assetId].add(intent.value))
-        : (assets[intent.assetId] = intent.value);
-      return assets;
-    },
-    {} as { [assetId: string]: Fixed8 }
-  );
+export function combineIntents(
+  intents: TransactionOutput[]
+): Record<string, Fixed8> {
+  const out: Record<string, Fixed8> = {};
+  return intents.reduce((assets, intent) => {
+    assets[intent.assetId]
+      ? (assets[intent.assetId] = assets[intent.assetId].add(intent.value))
+      : (assets[intent.assetId] = intent.value);
+    return assets;
+  }, out);
 }
 
 export function calculateInputsForAsset(
@@ -29,7 +33,7 @@ export function calculateInputsForAsset(
   assetId: string,
   address: string,
   strategy: calculationStrategyFunction
-) {
+): UtxoCalculationResult {
   const selectedInputs = strategy(assetBalance, requiredAmt);
   const selectedAmt = selectedInputs.reduce(
     (prev, curr) => prev.add(curr.value),
@@ -72,7 +76,7 @@ export function calculateInputs(
   intents: TransactionOutput[] = [],
   fees: Fixed8 | number = 0,
   strategy?: calculationStrategyFunction
-): { inputs: TransactionInput[]; change: TransactionOutput[] } {
+): UtxoCalculationResult {
   const chosenStrategy = strategy || defaultCalculationStrategy;
   const fixed8Fees = new Fixed8(fees);
   if (fixed8Fees.gt(0)) {

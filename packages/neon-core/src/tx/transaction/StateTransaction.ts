@@ -30,7 +30,7 @@ export class StateTransaction extends BaseTransaction {
   public readonly type: TransactionType = TransactionType.StateTransaction;
   public descriptors: StateDescriptor[];
 
-  public get exclusiveData() {
+  public get exclusiveData(): { descriptors: StateDescriptor[] } {
     return { descriptors: this.descriptors };
   }
 

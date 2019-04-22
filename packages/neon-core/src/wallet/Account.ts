@@ -148,14 +148,15 @@ export class Account {
     return "Account";
   }
 
-  public [inspect]() {
+  public [inspect](): string {
     return `[Account: ${this.label}]`;
   }
 
-  public get isMultiSig() {
+  public get isMultiSig(): boolean {
     return (
       this.contract &&
-      this.contract.script &&
+      this.contract.script !== undefined &&
+      this.contract.script.length > 2 &&
       this.contract.script.slice(this.contract.script.length - 2) === "ae"
     );
   }
@@ -292,12 +293,10 @@ export class Account {
     keyphrase: string,
     scryptParams: ScryptParams = DEFAULT_SCRYPT
   ): Promise<this> {
-    return Promise.resolve()
-      .then(_ => encrypt(this.privateKey, keyphrase, scryptParams))
-      .then(encrypted => {
-        this._encrypted = encrypted;
-        return this;
-      });
+    return encrypt(this.privateKey, keyphrase, scryptParams).then(encrypted => {
+      this._encrypted = encrypted;
+      return this;
+    });
   }
 
   /**
@@ -307,13 +306,11 @@ export class Account {
     keyphrase: string,
     scryptParams: ScryptParams = DEFAULT_SCRYPT
   ): Promise<this> {
-    return Promise.resolve()
-      .then(_ => decrypt(this.encrypted, keyphrase, scryptParams))
-      .then(wif => {
-        this._WIF = wif;
-        this._updateContractScript();
-        return this;
-      });
+    return decrypt(this.encrypted, keyphrase, scryptParams).then(wif => {
+      this._WIF = wif;
+      this._updateContractScript();
+      return this;
+    });
   }
 
   /**

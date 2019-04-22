@@ -11,7 +11,7 @@ export interface RPCVMResponse {
   stack: StackItemLike[];
 }
 
-export type StackItemParser = (item: StackItemLike) => any;
+export type StackItemParser = (item: StackItemLike) => unknown;
 
 export type VMResultParser = (result: RPCVMResponse) => any[];
 
@@ -37,7 +37,7 @@ export function buildParser(...args: StackItemParser[]): VMResultParser {
 /**
  * This just returns the value of the StackItem.
  */
-export function NoOpParser(item: StackItemLike): any {
+export function NoOpParser(item: StackItemLike): unknown {
   return item.value;
 }
 

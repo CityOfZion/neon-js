@@ -39,9 +39,10 @@ function isValidValue(value: any): boolean {
  * @returns A single ScriptIntent if available.
  */
 function retrieveAppCall(sb: ScriptBuilder): ScriptIntent | null {
-  const output: ScriptIntent = {
+  const output = {
     scriptHash: "",
-    args: []
+    args: [] as any[],
+    useTailCall: false
   };
 
   while (!sb.isEmpty()) {
@@ -49,21 +50,21 @@ function retrieveAppCall(sb: ScriptBuilder): ScriptIntent | null {
     const n = parseInt(b, 16);
     switch (true) {
       case n === 0:
-        output.args!.unshift(0);
+        output.args.unshift(0);
         break;
       case n < 75:
-        output.args!.unshift(sb.read(n));
+        output.args.unshift(sb.read(n));
         break;
       case n >= 81 && n <= 96:
-        output.args!.unshift(n - 80);
+        output.args.unshift(n - 80);
         break;
       case n === 193:
-        const len = output.args!.shift();
+        const len = output.args.shift();
         const cache = [];
         for (let i = 0; i < len; i++) {
-          cache.unshift(output.args!.shift());
+          cache.unshift(output.args.shift());
         }
-        output.args!.unshift(cache);
+        output.args.unshift(cache);
         break;
       case n === 102:
         sb.pter = sb.str.length;
@@ -291,16 +292,41 @@ export class ScriptBuilder extends StringStream {
     }
     switch (param.type) {
       case ContractParamType.String:
+        if (typeof param.value !== "string") {
+          throw new Error(
+            "ContractParam indicated string but value was not string"
+          );
+        }
         return this._emitString(str2hexstring(param.value));
       case ContractParamType.Boolean:
         return this.emit(param.value ? OpCode.PUSHT : OpCode.PUSHF);
       case ContractParamType.Integer:
+        if (typeof param.value !== "number") {
+          throw new Error(
+            "value must be a number for emitting Integer ContractParam"
+          );
+        }
         return this._emitNum(param.value);
       case ContractParamType.ByteArray:
+        if (typeof param.value !== "string") {
+          throw new Error(
+            "value must be a string for emitting ByteArray ContractParam"
+          );
+        }
         return this._emitString(param.value);
       case ContractParamType.Array:
+        if (typeof param.value !== "object") {
+          throw new Error(
+            "value must be an object for emitting Array ContractParam"
+          );
+        }
         return this._emitArray(param.value);
       case ContractParamType.Hash160:
+        if (typeof param.value !== "string") {
+          throw new Error(
+            "value must be a string for emitting Hash160 ContractParam"
+          );
+        }
         return this._emitString(reverseHex(param.value));
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);

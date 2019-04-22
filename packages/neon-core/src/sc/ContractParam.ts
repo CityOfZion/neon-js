@@ -17,7 +17,7 @@ export enum ContractParamType {
 
 export interface ContractParamLike {
   type: string;
-  value: any;
+  value: string | number | boolean | ContractParamLike[];
 }
 
 function toContractParamType(
@@ -30,6 +30,17 @@ function toContractParamType(
     throw new Error(`${type} not found in ContractParamType!`);
   }
   return type;
+}
+
+/** Checks if given Fixed8 has maximum decimals places.
+ * For example, precision
+ */
+function checkNumberWithinPrecision(val: Fixed8, decimalPlaces: number): void {
+  const shiftedVal = val.times(Math.pow(10, decimalPlaces));
+  const modValue = shiftedVal.mod(1);
+  if (!modValue.isZero()) {
+    throw new Error(`wrong precision: expected ${decimalPlaces}`);
+  }
 }
 
 /**
@@ -47,7 +58,7 @@ export class ContractParam {
   /**
    * Creates a Boolean ContractParam. Does basic checks to convert value into a boolean.
    */
-  public static boolean(value: any): ContractParam {
+  public static boolean(value: string | number | boolean): ContractParam {
     return new ContractParam(ContractParamType.Boolean, !!value);
   }
 
@@ -97,19 +108,19 @@ export class ContractParam {
    * @param args Additional arguments such as decimal precision
    */
   public static byteArray(
-    value: any,
+    value: string | boolean | number,
     format: string,
     ...args: any[]
   ): ContractParam {
     if (format) {
       format = format.toLowerCase();
     }
-    if (format === "address") {
+    if (format === "address" && typeof value === "string") {
       return new ContractParam(
         ContractParamType.ByteArray,
         reverseHex(getScriptHashFromAddress(value))
       );
-    } else if (format === "fixed8") {
+    } else if (format === "fixed8" && typeof value === "number") {
       let decimals = 8;
       if (args.length === 1) {
         decimals = args[0];
@@ -119,15 +130,11 @@ export class ContractParam {
       }
       const divisor = new Fixed8(Math.pow(10, 8 - decimals));
       const fixed8Value = new Fixed8(value);
-      const adjustedValue = fixed8Value.times(Math.pow(10, decimals));
-      const modValue = adjustedValue.mod(1);
-      if (!modValue.isZero()) {
-        throw new Error(`wrong precision: expected ${decimals}`);
-      }
-      value = fixed8Value.div(divisor);
+      checkNumberWithinPrecision(fixed8Value, decimals);
+      const adjustedValue = fixed8Value.div(divisor);
       return new ContractParam(
         ContractParamType.ByteArray,
-        value.toReverseHex().slice(0, 16)
+        adjustedValue.toReverseHex().slice(0, 16)
       );
     } else {
       return new ContractParam(ContractParamType.ByteArray, value);
@@ -143,7 +150,7 @@ export class ContractParam {
   }
 
   public type: ContractParamType;
-  public value: any;
+  public value: string | number | boolean | ContractParam[];
 
   public constructor(
     type:
@@ -152,14 +159,27 @@ export class ContractParam {
       | ContractParamType
       | keyof typeof ContractParamType
       | number,
-    value?: any
+    value?: string | number | boolean | ContractParam[]
   ) {
     if (typeof type === "object") {
-      this.type = toContractParamType(type.type);
-      this.value = type.value;
+      const cpLike = type;
+      this.type = toContractParamType(cpLike.type);
+      if (typeof cpLike.value === "object") {
+        if (this.type !== ContractParamType.Array) {
+          throw new Error(
+            "Inconsistent data provided! The type field must be Array!"
+          );
+        }
+        this.value = [];
+        for (var i = 0; i < cpLike.value.length; i++) {
+          this.value.push(new ContractParam(cpLike.value[i]));
+        }
+      } else {
+        this.value = cpLike.value;
+      }
     } else if (type !== undefined) {
       this.type = toContractParamType(type);
-      this.value = value;
+      this.value = value || "";
     } else {
       throw new Error("No constructor arguments provided!");
     }
@@ -173,7 +193,7 @@ export class ContractParam {
     const exportedValue = Array.isArray(this.value)
       ? this.value.map(cp => cp.export())
       : this.value;
-    return { type: ContractParamType[this.type], value: this.value };
+    return { type: ContractParamType[this.type], value: exportedValue };
   }
 
   public equal(other: ContractParamLike): boolean {
@@ -183,7 +203,12 @@ export class ContractParam {
       Array.isArray(other.value) &&
       this.value.length === other.value.length
     ) {
-      return this.value.every((cp, i) => cp.equal(other.value[i]));
+      for (var i = 0; i < this.value.length; i++) {
+        if (!this.value[i].equal(other.value[i])) {
+          return false;
+        }
+      }
+      return true;
     }
     return false;
   }
@@ -199,8 +224,10 @@ export function likeContractParam(cp: Partial<ContractParam>): boolean {
     return true;
   }
   return (
-    cp.type! in ContractParamType &&
-    cp.value! !== null &&
-    cp.value! !== undefined
+    cp.type !== null &&
+    cp.type !== undefined &&
+    cp.type in ContractParamType &&
+    cp.value !== null &&
+    cp.value !== undefined
   );
 }

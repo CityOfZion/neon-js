@@ -1,8 +1,5 @@
 import { DEFAULT_SYSFEE } from "../consts";
 import { compareObject } from "../helper";
-import logger from "../logging";
-
-const log = logger("protocol");
 
 export interface ProtocolLike {
   magic: number;
@@ -20,7 +17,7 @@ export interface ProtocolJSON {
   SystemFee: { [key: string]: number };
 }
 
-function compareArrays(current: any[], other: any[]): boolean {
+function compareArrays<T>(current: T[], other: T[]): boolean {
   if (current.length !== other.length) {
     return false;
   }

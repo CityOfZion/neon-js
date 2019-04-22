@@ -36,7 +36,7 @@ export function deserializeVersion(
   tx: Partial<TransactionLike> = {}
 ): Partial<TransactionLike> {
   const byte = ss.read();
-  return Object.assign({ version: parseInt(byte, 16) });
+  return Object.assign(tx, { version: parseInt(byte, 16) });
 }
 
 export function deserializeAttributes(
