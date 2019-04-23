@@ -4,6 +4,7 @@ import { ClaimTransaction } from "./ClaimTransaction";
 import { ContractTransaction } from "./ContractTransaction";
 import { InvocationTransaction } from "./InvocationTransaction";
 import { StateTransaction } from "./StateTransaction";
+import { MinerTransaction } from "./MinerTransaction";
 import {
   deserializeAttributes,
   deserializeInputs,
@@ -15,6 +16,8 @@ import {
 
 function getType(type: number): any {
   switch (type) {
+    case 0x00:
+      return MinerTransaction;
     case 0x02:
       return ClaimTransaction;
     case 0x80:
@@ -44,7 +47,7 @@ export class Transaction extends BaseTransaction {
   public static deserialize<T extends BaseTransaction>(hex: string): T {
     const ss = new StringStream(hex);
     let txObj = deserializeType(ss);
-    const txClass = getType(txObj.type!); //eslint-disable-line @typescript-eslint/no-non-null-assertion
+    const txClass = getType(txObj.type!);
     txObj = deserializeVersion(ss, txObj);
     txObj = txClass.deserializeExclusive(ss, txObj);
     txObj = deserializeAttributes(ss, txObj);
@@ -57,7 +60,7 @@ export class Transaction extends BaseTransaction {
   }
 
   public static deserializeExclusive(): Partial<TransactionLike> {
-    throw new Error("Not implemented.");
+    throw new Error("Method not implemented.");
   }
 
   private constructor(tx: Partial<TransactionLike> = {}) {
@@ -71,7 +74,7 @@ export class Transaction extends BaseTransaction {
   /**
    * Exclusive Data
    */
-  public get exclusiveData(): {} {
+  public get exclusiveData(): { [key: string]: any } {
     throw new Error("Not Implemented!");
   }
 
@@ -80,7 +83,7 @@ export class Transaction extends BaseTransaction {
   }
 
   public serializeExclusive(): string {
-    throw new Error("Not implemented.");
+    throw new Error("Method not implemented.");
   }
 }
 
