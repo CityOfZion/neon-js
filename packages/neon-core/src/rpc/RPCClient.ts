@@ -6,7 +6,12 @@ import { BaseTransaction } from "../tx/transaction/BaseTransaction";
 import { isAddress } from "../wallet";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
-import { AccountState, AssetState, RawVerboseTransaction, RawVerboseVOut } from "./responseModels";
+import {
+  AccountState,
+  AssetState,
+  RawVerboseTransaction,
+  RawVerboseVOut
+} from "./responseModels";
 
 const log = logger("rpc");
 

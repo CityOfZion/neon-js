@@ -301,30 +301,33 @@ export class ScriptBuilder extends StringStream {
       case ContractParamType.Boolean:
         return this.emit(param.value ? OpCode.PUSHT : OpCode.PUSHF);
       case ContractParamType.Integer:
-        if (typeof param.value !== "number") {
+        if (
+          typeof param.value !== "number" &&
+          typeof param.value !== "string"
+        ) {
           throw new Error(
-            "value must be a number for emitting Integer ContractParam"
+            `Value must be a number or string for emitting Integer ContractParam. Got a ${typeof param.value}.`
           );
         }
         return this._emitNum(param.value);
       case ContractParamType.ByteArray:
         if (typeof param.value !== "string") {
           throw new Error(
-            "value must be a string for emitting ByteArray ContractParam"
+            `Value must be a string for emitting ByteArray ContractParam. Got a ${typeof param.value}.`
           );
         }
         return this._emitString(param.value);
       case ContractParamType.Array:
         if (typeof param.value !== "object") {
           throw new Error(
-            "value must be an object for emitting Array ContractParam"
+            `Value must be an object for emitting Array ContractParam.  Got a ${typeof param.value}.`
           );
         }
         return this._emitArray(param.value);
       case ContractParamType.Hash160:
         if (typeof param.value !== "string") {
           throw new Error(
-            "value must be a string for emitting Hash160 ContractParam"
+            `Value must be a string for emitting Hash160 ContractParam. Got a ${typeof param.value}.`
           );
         }
         return this._emitString(reverseHex(param.value));

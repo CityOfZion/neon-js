@@ -177,9 +177,9 @@ export class ContractParam {
       } else {
         this.value = cpLike.value;
       }
-    } else if (type !== undefined) {
+    } else if (type !== undefined && value !== undefined) {
       this.type = toContractParamType(type);
-      this.value = value || "";
+      this.value = value;
     } else {
       throw new Error("No constructor arguments provided!");
     }
