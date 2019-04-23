@@ -3,6 +3,8 @@ import { BaseTransaction, TransactionLike } from "./BaseTransaction";
 import { ClaimTransaction } from "./ClaimTransaction";
 import { ContractTransaction } from "./ContractTransaction";
 import { InvocationTransaction } from "./InvocationTransaction";
+import { StateTransaction } from "./StateTransaction";
+import { MinerTransaction } from "./MinerTransaction";
 import {
   deserializeAttributes,
   deserializeInputs,
@@ -11,8 +13,23 @@ import {
   deserializeVersion,
   deserializeWitnesses
 } from "./main";
-import { MinerTransaction } from "./MinerTransaction";
-import { StateTransaction } from "./StateTransaction";
+
+function getType(type: number): any {
+  switch (type) {
+    case 0x00:
+      return MinerTransaction;
+    case 0x02:
+      return ClaimTransaction;
+    case 0x80:
+      return ContractTransaction;
+    case 0xd1:
+      return InvocationTransaction;
+    case 0x90:
+      return StateTransaction;
+    default:
+      throw new Error(`Unknown TransactionType: ${type}`);
+  }
+}
 
 /**
  * @class Transaction
@@ -74,21 +91,3 @@ export class Transaction extends BaseTransaction {
 }
 
 export default Transaction;
-
-function getType<T>(type: number): any {
-  switch (type) {
-    case 0x00:
-      return MinerTransaction;
-    case 0x02:
-      return ClaimTransaction;
-    case 0x80:
-      return ContractTransaction;
-    case 0xd1:
-      return InvocationTransaction;
-    case 0x90:
-      return StateTransaction;
-    default:
-      throw new Error(`Unknown TransactionType: ${type}`);
-  }
-}
-
