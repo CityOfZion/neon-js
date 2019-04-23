@@ -4,6 +4,7 @@ import { ClaimTransaction } from "./ClaimTransaction";
 import { ContractTransaction } from "./ContractTransaction";
 import { InvocationTransaction } from "./InvocationTransaction";
 import { StateTransaction } from "./StateTransaction";
+import { MinerTransaction } from "./MinerTransaction";
 import {
   deserializeAttributes,
   deserializeInputs,
@@ -13,8 +14,10 @@ import {
   deserializeWitnesses
 } from "./main";
 
-function getType<T>(type: number): any {
+function getType(type: number): any {
   switch (type) {
+    case 0x00:
+      return MinerTransaction;
     case 0x02:
       return ClaimTransaction;
     case 0x80:
