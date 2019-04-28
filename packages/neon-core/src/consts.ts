@@ -81,5 +81,6 @@ export const TX_VERSION: { [key: string]: number } = {
   CONTRACT: 0,
   INVOCATION: 1,
   STATE: 0,
-  MINER: 0
+  MINER: 0,
+  ENROLLMENT: 0
 };

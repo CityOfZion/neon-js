@@ -5,6 +5,7 @@ import { ContractTransaction } from "./ContractTransaction";
 import { InvocationTransaction } from "./InvocationTransaction";
 import { StateTransaction } from "./StateTransaction";
 import { MinerTransaction } from "./MinerTransaction";
+import { EnrollmentTransaction } from "./EnrollmentTransaction";
 import {
   deserializeAttributes,
   deserializeInputs,
@@ -20,6 +21,8 @@ function getType(type: number): any {
       return MinerTransaction;
     case 0x02:
       return ClaimTransaction;
+    case 0x20:
+      return EnrollmentTransaction;
     case 0x80:
       return ContractTransaction;
     case 0xd1:

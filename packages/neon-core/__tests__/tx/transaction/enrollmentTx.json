@@ -1,0 +1,31 @@
+{
+  "1": {
+    "serialized": "200002df48f60e8f3e01c48ff40b9b7f1310d7a8b2a193188befe1c2e3df740e8950930001f2f5be8a2d2d3d62e1601646b1c8b4ab58b8ee1595caf3e4a0bbfefe029719e2010001e72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c6000e1f50500000000276ca91cdb003a2bf6e62d7b48ebd07d24f057990141400d50bcb42757a5c94729b4ced90ecaf1644f0de85608bf6c05f0169a30387b0dd459dccd8862ca523561ec00b9c89a28a46afed1c3ff9c6f8df30e25d724400d232102df48f60e8f3e01c48ff40b9b7f1310d7a8b2a193188befe1c2e3df740e895093ac",
+    "deserialized": {
+      "type": 32,
+      "version": 0,
+      "attributes": [],
+      "inputs": [
+        {
+          "prevHash": "e2199702fefebba0e4f3ca9515eeb858abb4c8b1461660e1623d2d2d8abef5f2",
+          "prevIndex": 1
+        }
+      ],
+      "outputs": [
+        {
+          "assetId": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+          "scriptHash": "9957f0247dd0eb487b2de6f62b3a00db1ca96c27",
+          "value": 1
+        }
+      ],
+      "scripts": [
+        {
+          "invocationScript": "400d50bcb42757a5c94729b4ced90ecaf1644f0de85608bf6c05f0169a30387b0dd459dccd8862ca523561ec00b9c89a28a46afed1c3ff9c6f8df30e25d724400d",
+          "verificationScript": "2102df48f60e8f3e01c48ff40b9b7f1310d7a8b2a193188befe1c2e3df740e895093ac"
+        }
+      ],
+      "publicKey": "04df48f60e8f3e01c48ff40b9b7f1310d7a8b2a193188befe1c2e3df740e895093fd82c4c9380e32f33e206ca2ca2c245e1846b116fabddebcfabda4ecf854d28c"
+    },
+    "txid": "0f1f3e1b3becc0ad835ba7f19a0290743ebc1773705f2c44f63cf6a89dd4c6aa"
+  }
+}
