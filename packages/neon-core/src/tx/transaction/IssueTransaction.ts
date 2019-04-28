@@ -1,3 +1,4 @@
+import { TX_VERSION } from "../../consts";
 import { ASSET_ID, DEFAULT_SYSFEE } from "../../consts";
 import { StringStream } from "../../u";
 import { BaseTransaction, TransactionLike } from "./BaseTransaction";
@@ -14,7 +15,7 @@ export class IssueTransaction extends BaseTransaction {
   public readonly type: TransactionType = TransactionType.IssueTransaction;
 
   public constructor(obj: Partial<TransactionLike> = {}) {
-    super(obj);
+    super(Object.assign({ version: TX_VERSION.ISSUE }, obj));
   }
   public get exclusiveData() {
     return {};
