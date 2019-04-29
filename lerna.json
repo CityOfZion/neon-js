@@ -8,5 +8,13 @@
   "useWorkspaces": true,
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "command": {
+    "version": {
+      "allowBranch": "master"
+    },
+    "publish": {
+      "allowBranch": "master"
+    }
+  }
 }
