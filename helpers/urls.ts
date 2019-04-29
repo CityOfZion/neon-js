@@ -4,10 +4,18 @@ const TESTNET_URLS = [
   "https://test1.cityofzion.io:443",
   "https://test2.cityofzion.io:443",
   "https://test3.cityofzion.io:443",
-  "http://seed3.neo.org:20332",
-  "http://seed4.neo.org:20332",
-  "http://seed5.neo.org:20332"
+  "http://seed1.ngd.network:20332",
+  "http://seed2.ngd.network:20332",
+  "http://seed3.ngd.network:20332",
+  "http://seed4.ngd.network:20332",
+  "http://seed5.ngd.network:20332",
+  "http://seed6.ngd.network:20332",
+  "http://seed7.ngd.network:20332",
+  "http://seed8.ngd.network:20332",
+  "http://seed9.ngd.network:20332",
+  "http://seed10.ngd.network:20332"
 ];
+
 
 const MAINNET_URLS = [
   "http://seed1.ngd.network:10332",
@@ -60,12 +68,10 @@ export async function getUrl(net: string): Promise<string> {
       if (currentBlockCount - previousBlockCount <= 5) {
         return slicedUrls[i];
       }
-      previousBlockCount = currentBlockCount;
+      previousBlockCount = Math.max(currentBlockCount, previousBlockCount);
     } catch (e) {
-      if (i === MAINNET_URLS.length) {
-        throw new Error("Exhausted all urls but found no available RPC");
-      }
       continue;
     }
   }
+  throw new Error("Exhausted all urls but found no available RPC");
 }
