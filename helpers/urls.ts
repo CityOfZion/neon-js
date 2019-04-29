@@ -68,12 +68,10 @@ export async function getUrl(net: string): Promise<string> {
       if (currentBlockCount - previousBlockCount <= 5) {
         return slicedUrls[i];
       }
-      previousBlockCount = currentBlockCount;
+      previousBlockCount = Math.max(currentBlockCount, previousBlockCount);
     } catch (e) {
-      if (i === MAINNET_URLS.length) {
-        throw new Error("Exhausted all urls but found no available RPC");
-      }
       continue;
     }
   }
+  throw new Error("Exhausted all urls but found no available RPC");
 }
