@@ -1,35 +1,17 @@
-import { CONST, rpc, u } from "@cityofzion/neon-core";
+import { CONST, u } from "@cityofzion/neon-core";
 import {
   getToken,
   getTokenBalance,
   getTokenBalances,
   getTokens
 } from "../src/main";
+import { getUrl } from "../../../helpers/urls";
 
-const TESTNET_URLS = [
-  "https://test1.cityofzion.io:443",
-  "https://test2.cityofzion.io:443",
-  "https://test3.cityofzion.io:443",
-  "http://seed3.neo.org:20332",
-  "http://seed4.neo.org:20332",
-  "http://seed5.neo.org:20332"
-];
 let TESTNET_URL = "";
 const RPX = CONST.CONTRACTS.TEST_RPX;
 
 beforeAll(async () => {
-  for (let i = 0; i < TESTNET_URLS.length; i++) {
-    try {
-      await rpc.Query.getBlockCount().execute(TESTNET_URLS[i]);
-      TESTNET_URL = TESTNET_URLS[i];
-      break;
-    } catch (e) {
-      if (i === TESTNET_URLS.length) {
-        throw new Error("Exhausted all urls but found no available RPC");
-      }
-      continue;
-    }
-  }
+  TESTNET_URL = await getUrl("TestNet");
 });
 
 describe("getTokenBalance", () => {
