@@ -3,6 +3,23 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.5.0
+=====
+
+- Neon-core
+
+  - Add parsing capabilities for IssueTransaction and MinerTransaction
+
+- Misc
+
+  - Updates to breaking dev dependencies. Major update to clean-webpack-plugin that required a webpack config update.
+  - Change linter from tslint (in midst of being deprecated) to eslint-typescript. This introduced a lot of linting warnings as the new ruleset is stricter.
+
+- Fixes
+
+  - Fix neon-api httpsOnly setting not being propagated correctly.
+  - Fix test being hung up on the first url and not working as intended. Test will now cut the array at a random point, effectively doing a shuffle. We also use a rough heuristic to determine if node is actually running and up to date with the rest of the network. This should reduce breakage due to single node being stuck on an old block.
+
 4.4.0
 =====
 

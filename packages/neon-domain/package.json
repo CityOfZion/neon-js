@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-domain",
   "description": "Neon-Domain Module",
-  "version": "4.4.0",
+  "version": "4.5.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"

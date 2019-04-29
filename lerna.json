@@ -3,10 +3,18 @@
   "packages": [
     "packages/*"
   ],
-  "version": "4.4.0",
+  "version": "4.5.2",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "command": {
+    "version": {
+      "allowBranch": "master"
+    },
+    "publish": {
+      "allowBranch": "master"
+    }
+  }
 }

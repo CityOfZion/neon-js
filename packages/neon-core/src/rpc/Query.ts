@@ -304,14 +304,14 @@ export class Query {
   public completed: boolean;
   public parse?: (res: any) => any;
 
-  public get id() {
+  public get id(): number {
     return this.req.id;
   }
-  public get method() {
+  public get method(): string {
     return this.req.method;
   }
 
-  public get params() {
+  public get params(): any[] {
     return this.req.params;
   }
 
@@ -327,7 +327,7 @@ export class Query {
   /**
    * Attaches a parser method to the Query. This method will be used to parse the response.
    */
-  public parseWith(parser: (res: any) => any) {
+  public parseWith(parser: (res: any) => any): this {
     this.parse = parser;
     return this;
   }
@@ -348,7 +348,7 @@ export class Query {
     this.res = response;
     this.completed = true;
     if (response.error) {
-      throw new Error(response.error.message);
+      throw new Error(`${url}: ${response.error.message}`);
     }
     if (this.parse) {
       log.info(`Query[${this.req.method}] successful`);
