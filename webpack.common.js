@@ -28,6 +28,6 @@ module.exports = function(rootDir) {
         }
       ]
     },
-    plugins: [new CleanWebpackPlugin()]
+    // plugins: [new CleanWebpackPlugin({verbose: true})]
   };
 };

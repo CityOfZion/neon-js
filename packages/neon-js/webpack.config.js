@@ -20,7 +20,7 @@ module.exports = function() {
       path: path.resolve(__dirname, "dist"),
       filename: "browser.js",
       libraryTarget: "umd",
-      library: "NeonCore" // This is the var name in browser
+      library: "Neon" // This is the var name in browser
     }
   });
 
