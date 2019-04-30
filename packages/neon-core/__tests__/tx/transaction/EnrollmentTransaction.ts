@@ -61,7 +61,7 @@ describe("getters", () => {
 
   test("serializeExclusive", () => {
     const tx = new EnrollmentTransaction();
-    expect(tx.serializeExclusive()).toEqual("");
+    expect(tx.serializeExclusive()).toEqual("00");
   });
 });
 
@@ -84,14 +84,14 @@ describe("export", () => {
 describe("equals", () => {
   const obj1 = {
     type: 0x20,
-    version: 1,
+    version: 0,
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "12", value: 1, scriptHash: "1234" }],
     scripts: [{ invocationScript: "ab", verificationScript: "" }]
   };
 
   const obj2 = {
-    version: 1,
+    version: 0,
     inputs: [{ prevHash: "12", prevIndex: 1 }]
   };
   const enrollment1 = new EnrollmentTransaction(obj1);

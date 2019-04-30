@@ -1,14 +1,15 @@
-import {
-  getPublicKeyEncoded,
-  getPublicKeyUnencoded
-} from "../../../src/wallet/core";
 import { TX_VERSION } from "../../consts";
 import { DEFAULT_SYSFEE } from "../../consts";
-import { num2hexstring, num2VarInt, reverseHex, StringStream } from "../../u";
+import { StringStream } from "../../u";
+import { getPublicKeyEncoded, getPublicKeyUnencoded } from "../../wallet/core";
 import { BaseTransaction, TransactionLike } from "./BaseTransaction";
 import TransactionType from "./TransactionType";
 
 export interface EnrollmentTransactionLike extends TransactionLike {
+  publicKey: string;
+}
+
+export interface EnrollementExclusive {
   publicKey: string;
 }
 
@@ -20,14 +21,15 @@ export class EnrollmentTransaction extends BaseTransaction {
     const hexStrPrefix = ss.read(1);
     const prefix = parseInt(hexStrPrefix, 16);
 
-    let pKey: string = "";
+    let pKey = "";
     // Compressed public keys.
     if (prefix === 0x02 || prefix === 0x03) {
       pKey = ss.read(32);
     } else if (prefix === 0x04) {
-      pKey = ss.read(65);
+      pKey = ss.read(64);
     } else if (prefix === 0x00) {
-      // do nothing, For infinity, the p.Key == 0x00, included in the prefix
+      // infinity case.
+      return Object.assign(tx, { publicKey: "" });
     } else {
       throw new Error("Prefix not recognised for public key");
     }
@@ -43,22 +45,22 @@ export class EnrollmentTransaction extends BaseTransaction {
 
   public readonly type: TransactionType = TransactionType.EnrollmentTransaction;
 
-  constructor(obj: Partial<EnrollmentTransactionLike> = {}) {
+  public constructor(obj: Partial<EnrollmentTransactionLike> = {}) {
     super(Object.assign({ version: TX_VERSION.ENROLLMENT }, obj));
     this.publicKey = obj.publicKey || "";
   }
 
-  get exclusiveData() {
+  public get exclusiveData(): EnrollementExclusive {
     return { publicKey: this.publicKey };
   }
 
-  get fees(): number {
+  public get fees(): number {
     return DEFAULT_SYSFEE.enrollmentTransaction;
   }
 
   public serializeExclusive(): string {
     if (this.publicKey === "") {
-      return "";
+      return "00";
     }
     return getPublicKeyEncoded(this.publicKey);
   }
