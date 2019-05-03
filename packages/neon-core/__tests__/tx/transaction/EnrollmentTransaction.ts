@@ -17,7 +17,7 @@ describe("constructor", () => {
 
   test("TransactionLike", () => {
     const testObject = {
-      version: 1,
+      version: 0,
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
       scripts: [{ invocationScript: "ab", verificationScript: "" }]
@@ -33,7 +33,7 @@ describe("constructor", () => {
 
   test("Transaction", () => {
     const testObject = new EnrollmentTransaction({
-      version: 1,
+      version: 0,
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
       scripts: [{ invocationScript: "ab", verificationScript: "" }]
