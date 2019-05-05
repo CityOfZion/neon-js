@@ -1,4 +1,7 @@
-import Fixed8 from "../../src/u/Fixed8";
+import Fixed8, {
+  MAX_POSITIVE_FIXED8,
+  MIN_NEGATIVE_FIXED8
+} from "../../src/u/Fixed8";
 import { reverseHex } from "../../src/u/misc";
 
 describe.each([
@@ -6,7 +9,8 @@ describe.each([
   ["00e1f50500000000", 1],
   ["0100000000000000", 0.00000001],
   ["0080c6a47e8d0300", 10000000],
-  ["5004fb711f010000", 12345.6789]
+  ["5004fb711f010000", 12345.6789],
+  ["ffffffffffffffff", -0.00000001]
 ])("from hexstring (%s)", (hex, num) => {
   test("fromHex", () => {
     const result = Fixed8.fromReverseHex(hex);
@@ -16,6 +20,31 @@ describe.each([
   test("fromReverseHex", () => {
     const result = Fixed8.fromHex(reverseHex(hex));
     expect(result.toNumber()).toBe(num);
+  });
+
+  test("toHex", () => {
+    const result = new Fixed8(num);
+    expect(result.toHex()).toBe(reverseHex(hex));
+  });
+
+  test("toReverseHex", () => {
+    const result = new Fixed8(num);
+    expect(result.toReverseHex()).toBe(hex);
+  });
+});
+
+describe.each([
+  ["ffffffffffffff7f", MAX_POSITIVE_FIXED8],
+  ["0000000000000080", MIN_NEGATIVE_FIXED8]
+])("from hexstring (%s)", (hex, num) => {
+  test("fromHex", () => {
+    const result = Fixed8.fromReverseHex(hex);
+    expect(result.toString()).toBe(num.toString());
+  });
+
+  test("fromReverseHex", () => {
+    const result = Fixed8.fromHex(reverseHex(hex));
+    expect(result.toString()).toBe(num.toString());
   });
 
   test("toHex", () => {

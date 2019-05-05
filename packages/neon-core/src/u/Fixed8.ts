@@ -1,6 +1,19 @@
 import BN from "bignumber.js";
 import { reverseHex } from "./misc";
 
+const DECIMALS = 100000000;
+
+// 0x7fffffffffffffff = 9223372036854775807 (maximum hex fixed8)
+const MAX_POSITIVE_FIXED8_HEX = new BN(2).pow(63).minus(1);
+export const MAX_POSITIVE_FIXED8 = MAX_POSITIVE_FIXED8_HEX.div(DECIMALS);
+
+// 0x8000000000000000 = -9223372036854775808 (minimum hex fixed8)
+const MIN_NEGATIVE_FIXED8_HEX = new BN(2).pow(63).negated();
+export const MIN_NEGATIVE_FIXED8 = MIN_NEGATIVE_FIXED8_HEX.div(DECIMALS);
+
+// Total hex fixed8 number. This inlude positve and negative number.
+// 0xffffffffffffffff = 18446744073709551615
+const TOTAL_FIXED8_HEX = new BN(2).pow(64);
 /**
  * A fixed point notation used widely in the NEO system for representing decimals.
  * It is basically a hexideciaml integer that is divided by the 10^8.
@@ -9,7 +22,23 @@ import { reverseHex } from "./misc";
  */
 export class Fixed8 extends BN {
   public static fromHex(hex: string): Fixed8 {
-    return new Fixed8(hex, 16).div(100000000);
+    if (hex.length < 16) {
+      hex = "0".repeat(16 - hex.length) + hex;
+    } else if (hex.length > 16) {
+      throw new Error(
+        `expected hex string to have lenght less or equal to 16. Got ${
+          hex.length
+        } for hex=${hex}`
+      );
+    }
+
+    let n = new BN(hex, 16);
+    if (n.isGreaterThan(MAX_POSITIVE_FIXED8_HEX)) {
+      // convert n to two complement
+      n = n.minus(TOTAL_FIXED8_HEX);
+    }
+
+    return new Fixed8(n, 10).div(DECIMALS);
   }
 
   public static fromReverseHex(hex: string): Fixed8 {
@@ -28,9 +57,20 @@ export class Fixed8 extends BN {
   }
 
   public toHex(): string {
-    const hexstring = this.times(100000000)
-      .round(0)
-      .toString(16);
+    let hexstring = "";
+    const num = this.times(DECIMALS).round(0);
+
+    hexstring = num.isLessThan(0)
+      ? TOTAL_FIXED8_HEX.plus(num).toString(16) // convert num to two complement
+      : num.toString(16);
+
+    if (hexstring.length > 16) {
+      throw new Error(
+        `expected len hex small or equal then 16: got ${
+          hexstring.length
+        } for hex = '${hexstring}' `
+      );
+    }
     return "0".repeat(16 - hexstring.length) + hexstring;
   }
 
