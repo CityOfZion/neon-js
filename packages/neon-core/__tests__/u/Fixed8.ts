@@ -1,7 +1,4 @@
-import Fixed8, {
-  MAX_POSITIVE_FIXED8,
-  MIN_NEGATIVE_FIXED8
-} from "../../src/u/Fixed8";
+import Fixed8, { MAX_FIXED8, MIN_FIXED8 } from "../../src/u/Fixed8";
 import { reverseHex } from "../../src/u/misc";
 
 describe.each([
@@ -34,8 +31,8 @@ describe.each([
 });
 
 describe.each([
-  ["ffffffffffffff7f", MAX_POSITIVE_FIXED8],
-  ["0000000000000080", MIN_NEGATIVE_FIXED8]
+  ["ffffffffffffff7f", MAX_FIXED8],
+  ["0000000000000080", MIN_FIXED8]
 ])("from hexstring (%s)", (hex, num) => {
   test("fromHex", () => {
     const result = Fixed8.fromReverseHex(hex);
@@ -56,6 +53,24 @@ describe.each([
     const result = new Fixed8(num);
     expect(result.toReverseHex()).toBe(hex);
   });
+});
+
+test("throws on toHex", () => {
+  expect(() => {
+    const result = new Fixed8("fffffffffff", 16);
+    result.toHex();
+  }).toThrowError(
+    "expected hex string to have length less or equal than 16: got 18 for hex = 5f5e0ffffffa0a1f00"
+  );
+});
+
+test("throws on fromReverseHex", () => {
+  expect(() => {
+    const hex = "11223344556677889900";
+    Fixed8.fromReverseHex(hex);
+  }).toThrowError(
+    "expected hex string to have length less or equal than 16: got 20 for hex = 00998877665544332211"
+  );
 });
 
 describe.each([

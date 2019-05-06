@@ -4,14 +4,14 @@ import { reverseHex } from "./misc";
 const DECIMALS = 100000000;
 
 // 0x7fffffffffffffff = 9223372036854775807 (maximum hex fixed8)
-const MAX_POSITIVE_FIXED8_HEX = new BN(2).pow(63).minus(1);
-export const MAX_POSITIVE_FIXED8 = MAX_POSITIVE_FIXED8_HEX.div(DECIMALS);
+const MAX_FIXED8_HEX = new BN(2).pow(63).minus(1);
+export const MAX_FIXED8 = MAX_FIXED8_HEX.div(DECIMALS);
 
 // 0x8000000000000000 = -9223372036854775808 (minimum hex fixed8)
-const MIN_NEGATIVE_FIXED8_HEX = new BN(2).pow(63).negated();
-export const MIN_NEGATIVE_FIXED8 = MIN_NEGATIVE_FIXED8_HEX.div(DECIMALS);
+const MIN_FIXED8_HEX = new BN(2).pow(63).negated();
+export const MIN_FIXED8 = MIN_FIXED8_HEX.div(DECIMALS);
 
-// Total hex fixed8 number. This inlude positve and negative number.
+// Total hex fixed8 number. This inludes positve and negative numbers.
 // 0xffffffffffffffff = 18446744073709551615
 const TOTAL_FIXED8_HEX = new BN(2).pow(64);
 /**
@@ -22,18 +22,16 @@ const TOTAL_FIXED8_HEX = new BN(2).pow(64);
  */
 export class Fixed8 extends BN {
   public static fromHex(hex: string): Fixed8 {
-    if (hex.length < 16) {
-      hex = "0".repeat(16 - hex.length) + hex;
-    } else if (hex.length > 16) {
+    if (hex.length > 16) {
       throw new Error(
-        `expected hex string to have lenght less or equal to 16. Got ${
+        `expected hex string to have length less or equal than 16: got ${
           hex.length
-        } for hex=${hex}`
+        } for hex = ${hex}`
       );
     }
 
     let n = new BN(hex, 16);
-    if (n.isGreaterThan(MAX_POSITIVE_FIXED8_HEX)) {
+    if (n.isGreaterThan(MAX_FIXED8_HEX)) {
       // convert n to two complement
       n = n.minus(TOTAL_FIXED8_HEX);
     }
@@ -66,9 +64,9 @@ export class Fixed8 extends BN {
 
     if (hexstring.length > 16) {
       throw new Error(
-        `expected len hex small or equal then 16: got ${
+        `expected hex string to have length less or equal than 16: got ${
           hexstring.length
-        } for hex = '${hexstring}' `
+        } for hex = ${hexstring} `
       );
     }
     return "0".repeat(16 - hexstring.length) + hexstring;
