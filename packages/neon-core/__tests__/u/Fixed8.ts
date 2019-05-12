@@ -1,4 +1,4 @@
-import Fixed8, { MAX_FIXED8, MIN_FIXED8 } from "../../src/u/Fixed8";
+import Fixed8 from "../../src/u/Fixed8";
 import { reverseHex } from "../../src/u/misc";
 
 describe.each([
@@ -31,8 +31,8 @@ describe.each([
 });
 
 describe.each([
-  ["ffffffffffffff7f", MAX_FIXED8],
-  ["0000000000000080", MIN_FIXED8]
+  ["ffffffffffffff7f", Fixed8.MAX_VALUE],
+  ["0000000000000080", Fixed8.MIN_VALUE]
 ])("from hexstring (%s)", (hex, num) => {
   test("fromHex", () => {
     const result = Fixed8.fromReverseHex(hex);
@@ -45,7 +45,7 @@ describe.each([
   });
 
   test("toHex", () => {
-    const result = new Fixed8(num);
+    const result = Fixed8.fromReverseHex(hex);
     expect(result.toHex()).toBe(reverseHex(hex));
   });
 
@@ -55,21 +55,25 @@ describe.each([
   });
 });
 
-test("throws on toHex", () => {
+test("throws on new Fixed8", () => {
   expect(() => {
     const result = new Fixed8("fffffffffff", 16);
-    result.toHex();
   }).toThrowError(
-    "expected hex string to have length less or equal than 16: got 18 for hex = 5f5e0ffffffa0a1f00"
+    "expected input to be less than 92233720368.54775807. Got input = 17592186044415"
+  );
+
+  expect(() => {
+    const result = new Fixed8(-92233720369);
+  }).toThrowError(
+    "expected input to be greater than -92233720368.54775808. Got input = -92233720369"
   );
 });
 
-test("throws on fromReverseHex", () => {
+test("throws on new fromHex", () => {
   expect(() => {
-    const hex = "11223344556677889900";
-    Fixed8.fromReverseHex(hex);
+    const result = Fixed8.fromHex("ffffffffffffffffff");
   }).toThrowError(
-    "expected hex string to have length less or equal than 16: got 20 for hex = 00998877665544332211"
+    "expected hex string to have length less or equal than 16: got 18 for hex = ffffffffffffffffff"
   );
 });
 
