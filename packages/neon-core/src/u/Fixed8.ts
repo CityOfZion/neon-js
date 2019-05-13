@@ -1,7 +1,20 @@
 import BN from "bignumber.js";
 import { reverseHex } from "./misc";
+import { const } from '../../../neon-js/src/index';
 
 const DECIMALS = 100000000;
+
+// This is the maximum hex integer 0x7fffffffffffffff (= 9223372036854775807)
+// that can be converted to Fixed8 by dividing by the 10^8.
+const MAX_FIXED8_HEX = new BN(2).pow(63).minus(1)
+
+// This is the minimum hex integer 0x8000000000000000 (= -9223372036854775808)
+// that can be converted to Fixed8 by dividing by the 10^8.
+const MIN_FIXED8_HEX = new BN(2).pow(63).negated()
+
+// Total number of Fixed8 available. This includes negative and positive 
+// Fixed8 numbers.
+const TOTAL_FIXED8_HEX = new  BN(2).pow(64)
 
 /**
  * A fixed point notation used widely in the NEO system for representing decimals.
@@ -10,21 +23,12 @@ const DECIMALS = 100000000;
  * @extends BN
  */
 export class Fixed8 extends BN {
+
   // The maximum Fixed8 is obtained by dividing 0x7fffffffffffffff (= 9223372036854775807) with 10^8.
-  public static MAX_VALUE = new BN(2)
-    .pow(63)
-    .minus(1)
-    .div(DECIMALS);
+  public static readonly MAX_VALUE = new Fixed8(MAX_FIXED8_HEX.div(DECIMALS));
 
   // The minimum Fixed8 is obtained by dividing 0x8000000000000000 (= -9223372036854775808) with 10^8.
-  public static MIN_VALUE = new BN(2)
-    .pow(63)
-    .negated()
-    .div(DECIMALS);
-
-  // TOTAL represents the total number of Fixed8 available. This inludes positve and negative fixed8 numbers.
-  // 2^64 = 0xffffffffffffffff = 18446744073709551615
-  public static TOTAL = new BN(2).pow(64);
+  public static readonly MIN_VALUE = new Fixed8(MIN_FIXED8_HEX.div(DECIMALS));
 
   public static fromHex(hex: string): Fixed8 {
     if (hex.length > 16) {
@@ -36,9 +40,9 @@ export class Fixed8 extends BN {
     }
 
     let n = new BN(hex, 16);
-    if (n.isGreaterThan(this.MAX_VALUE.times(DECIMALS))) {
+    if (n.isGreaterThan(MAX_FIXED8_HEX)) {
       // convert n to two complement
-      n = n.minus(Fixed8.TOTAL);
+      n = n.minus(TOTAL_FIXED8_HEX);
     }
     n = n.div(DECIMALS);
     return new Fixed8(n, 10);
@@ -80,7 +84,7 @@ export class Fixed8 extends BN {
     const num = super.times(DECIMALS);
 
     hexstring = num.isLessThan(0)
-      ? Fixed8.TOTAL.plus(num).toString(16) // convert num to two complement
+      ? TOTAL_FIXED8_HEX.plus(num).toString(16) // convert num to two complement
       : num.toString(16);
 
     return "0".repeat(16 - hexstring.length) + hexstring;
