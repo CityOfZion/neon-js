@@ -1,4 +1,6 @@
 import { TX_VERSION } from "../../consts";
+import { ContractParamType } from "../../sc/ContractParam";
+
 import {
   ab2hexstring,
   hexstring2str,
@@ -10,25 +12,10 @@ import {
 import { BaseTransaction, TransactionLike } from "./BaseTransaction";
 import TransactionType from "./TransactionType";
 
-export enum ContractParameterType {
-  Signature = 0x00,
-  Boolean = 0x01,
-  Integer = 0x02,
-  Hash160 = 0x03,
-  Hash256 = 0x04,
-  ByteArray = 0x05,
-  PublicKey = 0x06,
-  String = 0x07,
-  Array = 0x10,
-  Map = 0x12,
-  InteropInterface = 0xf0,
-  Void = 0xff
-}
-
 export interface PublishTransactionLike extends TransactionLike {
   script: string;
-  parameterList: ContractParameterType[];
-  returnType: ContractParameterType;
+  parameterList: ContractParamType[];
+  returnType: ContractParamType;
   needStorage: boolean;
   name: string;
   codeVersion: string;
@@ -39,8 +26,8 @@ export interface PublishTransactionLike extends TransactionLike {
 
 export interface PublishExclusive {
   script: string;
-  parameterList: ContractParameterType[];
-  returnType: ContractParameterType;
+  parameterList: ContractParamType[];
+  returnType: ContractParamType;
   needStorage: boolean;
   name: string;
   codeVersion: string;
@@ -51,7 +38,6 @@ export interface PublishExclusive {
 
 export class PublishTransaction extends BaseTransaction {
   public static version: number = 0;
-
   public static deserializeExclusive(
     ss: StringStream,
     tx: Partial<TransactionLike>
@@ -64,7 +50,7 @@ export class PublishTransaction extends BaseTransaction {
 
     const script = ss.readVarBytes();
     const paramList = ss.readVarBytes();
-    const parameterList: ContractParameterType[] = [];
+    const parameterList: ContractParamType[] = [];
 
     for (let i = 0; i + 2 <= paramList.length; i = i + 2) {
       parameterList.push(parseInt(paramList.substring(i, i + 2), 16));
@@ -104,8 +90,8 @@ export class PublishTransaction extends BaseTransaction {
   public readonly type: TransactionType = TransactionType.PublishTransaction;
 
   public script: string;
-  public parameterList: ContractParameterType[];
-  public returnType: ContractParameterType;
+  public parameterList: ContractParamType[];
+  public returnType: ContractParamType;
   public needStorage: boolean;
   public name: string;
   public codeVersion: string;
