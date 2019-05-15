@@ -1,20 +1,19 @@
 import BN from "bignumber.js";
 import { reverseHex } from "./misc";
-import { const } from '../../../neon-js/src/index';
 
 const DECIMALS = 100000000;
 
 // This is the maximum hex integer 0x7fffffffffffffff (= 9223372036854775807)
 // that can be converted to Fixed8 by dividing by the 10^8.
-const MAX_FIXED8_HEX = new BN(2).pow(63).minus(1)
+const MAX_FIXED8_HEX = new BN(2).pow(63).minus(1);
 
 // This is the minimum hex integer 0x8000000000000000 (= -9223372036854775808)
 // that can be converted to Fixed8 by dividing by the 10^8.
-const MIN_FIXED8_HEX = new BN(2).pow(63).negated()
+const MIN_FIXED8_HEX = new BN(2).pow(63).negated();
 
-// Total number of Fixed8 available. This includes negative and positive 
+// Total number of Fixed8 available. This includes negative and positive
 // Fixed8 numbers.
-const TOTAL_FIXED8_HEX = new  BN(2).pow(64)
+const TOTAL_FIXED8_HEX = new BN(2).pow(64);
 
 /**
  * A fixed point notation used widely in the NEO system for representing decimals.
@@ -23,7 +22,6 @@ const TOTAL_FIXED8_HEX = new  BN(2).pow(64)
  * @extends BN
  */
 export class Fixed8 extends BN {
-
   // The maximum Fixed8 is obtained by dividing 0x7fffffffffffffff (= 9223372036854775807) with 10^8.
   public static readonly MAX_VALUE = new Fixed8(MAX_FIXED8_HEX.div(DECIMALS));
 
