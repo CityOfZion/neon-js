@@ -37,14 +37,17 @@ export interface PublishExclusive {
 }
 
 export class PublishTransaction extends BaseTransaction {
-  public static version: number = 0;
   public static deserializeExclusive(
     ss: StringStream,
     tx: Partial<TransactionLike>
   ): Partial<PublishTransactionLike> {
-    if (this.version > 1) {
+    if (tx.version === undefined) {
+      tx.version = 0;
+    }
+
+    if (tx.version > 1) {
       throw new Error(
-        `version need to be less or equal than 1. Got ${this.version}`
+        `version need to be less or equal than 1. Got ${tx.version}`
       );
     }
 
@@ -58,13 +61,13 @@ export class PublishTransaction extends BaseTransaction {
 
     const returnType = parseInt(ss.read(1), 16);
 
-    if (this.version >= 1) {
+    if (tx.version >= 1) {
       throw new Error(
-        `version need to be less or equal than 1. Got ${this.version}`
+        `version need to be less or equal than 1. Got ${tx.version}`
       );
     }
     let NeedStorage = false;
-    if (this.version >= 1) {
+    if (tx.version >= 1) {
       NeedStorage = !!parseInt(ss.read(1), 16);
     }
 
