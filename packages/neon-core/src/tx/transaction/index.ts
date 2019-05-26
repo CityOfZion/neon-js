@@ -9,3 +9,4 @@ export * from "./IssueTransaction";
 export * from "./RegisterTransaction";
 export * from "./TransactionType";
 export * from "./EnrollmentTransaction";
+export * from "./PublishTransaction";
