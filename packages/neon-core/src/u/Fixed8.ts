@@ -1,6 +1,20 @@
 import BN from "bignumber.js";
 import { reverseHex } from "./misc";
 
+const DECIMALS = 100000000;
+
+// This is the maximum hex integer 0x7fffffffffffffff (= 9223372036854775807)
+// that can be converted to Fixed8 by dividing by the 10^8.
+const MAX_FIXED8_HEX = new BN(2).pow(63).minus(1);
+
+// This is the minimum hex integer 0x8000000000000000 (= -9223372036854775808)
+// that can be converted to Fixed8 by dividing by the 10^8.
+const MIN_FIXED8_HEX = new BN(2).pow(63).negated();
+
+// Total number of Fixed8 available. This includes negative and positive
+// Fixed8 numbers.
+const TOTAL_FIXED8_HEX = new BN(2).pow(64);
+
 /**
  * A fixed point notation used widely in the NEO system for representing decimals.
  * It is basically a hexideciaml integer that is divided by the 10^8.
@@ -8,8 +22,28 @@ import { reverseHex } from "./misc";
  * @extends BN
  */
 export class Fixed8 extends BN {
+  // The maximum Fixed8 is obtained by dividing 0x7fffffffffffffff (= 9223372036854775807) with 10^8.
+  public static readonly MAX_VALUE = new Fixed8(MAX_FIXED8_HEX.div(DECIMALS));
+
+  // The minimum Fixed8 is obtained by dividing 0x8000000000000000 (= -9223372036854775808) with 10^8.
+  public static readonly MIN_VALUE = new Fixed8(MIN_FIXED8_HEX.div(DECIMALS));
+
   public static fromHex(hex: string): Fixed8 {
-    return new Fixed8(hex, 16).div(100000000);
+    if (hex.length > 16) {
+      throw new Error(
+        `expected hex string to have length less or equal than 16: got ${
+          hex.length
+        } for hex = ${hex}`
+      );
+    }
+
+    let n = new BN(hex, 16);
+    if (n.isGreaterThan(MAX_FIXED8_HEX)) {
+      // convert n to two complement
+      n = n.minus(TOTAL_FIXED8_HEX);
+    }
+    n = n.div(DECIMALS);
+    return new Fixed8(n, 10);
   }
 
   public static fromReverseHex(hex: string): Fixed8 {
@@ -24,13 +58,33 @@ export class Fixed8 extends BN {
       input = input.toFixed(8);
     }
     super(input, base);
+
+    if (this.isGreaterThan(Fixed8.MAX_VALUE)) {
+      throw new Error(
+        `expected input to be less than ${
+          Fixed8.MAX_VALUE
+        }. Got input = ${this}`
+      );
+    }
+    if (this.isLessThan(Fixed8.MIN_VALUE)) {
+      throw new Error(
+        `expected input to be greater than ${
+          Fixed8.MIN_VALUE
+        }. Got input = ${this}`
+      );
+    }
+
     Object.setPrototypeOf(this, Fixed8.prototype);
   }
 
   public toHex(): string {
-    const hexstring = this.times(100000000)
-      .round(0)
-      .toString(16);
+    let hexstring = "";
+    const num = super.times(DECIMALS);
+
+    hexstring = num.isLessThan(0)
+      ? TOTAL_FIXED8_HEX.plus(num).toString(16) // convert num to two complement
+      : num.toString(16);
+
     return "0".repeat(16 - hexstring.length) + hexstring;
   }
 
