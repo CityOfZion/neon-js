@@ -88,7 +88,7 @@ export async function getTokenBalances(
         const decimals = rpc.IntegerParser(res.result.stack[i + 1]);
         tokenList[symbol] = rpc
           .Fixed8Parser(res.result.stack[i + 2])
-          .dividedBy(Math.pow(10, decimals));
+          .mul(Math.pow(10, 8 - decimals));
       } catch (e) {
         log.error(`single call in getTokenBalances failed with : ${e.message}`);
         throw e;
