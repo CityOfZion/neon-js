@@ -131,8 +131,8 @@ export const generateSignature = (hex, privateKey) => {
   let elliptic = new EC('p256')
   const sig = elliptic.sign(msgHashHex, privateKey, null)
   const signature = Buffer.concat([
-    sig.r.toArrayLike(Buffer, 'be', 32),
-    sig.s.toArrayLike(Buffer, 'be', 32)
+    sig.r.toArrayLike(Buffer, 'be', 64),
+    sig.s.toArrayLike(Buffer, 'be', 64)
   ])
 
   return signature.toString('hex')
