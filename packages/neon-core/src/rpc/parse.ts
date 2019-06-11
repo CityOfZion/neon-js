@@ -6,7 +6,7 @@ import { Fixed8, hexstring2str } from "../u";
  */
 export interface RPCVMResponse {
   script: string;
-  state: "HALT, BREAK" | "FAULT, BREAK";
+  state: "HALT, BREAK" | "FAULT, BREAK" | "HALT" | "FAULT";
   gas_consumed: string;
   stack: StackItemLike[];
 }
