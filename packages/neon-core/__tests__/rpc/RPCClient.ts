@@ -1,6 +1,7 @@
 import { mocked } from "ts-jest/utils";
 import _Query from "../../src/rpc/Query";
 import RPCClient from "../../src/rpc/RPCClient";
+import { DEFAULT_RPC } from "../../src/consts";
 
 jest.mock("../../src/rpc/Query");
 
@@ -9,7 +10,7 @@ const Query = mocked(_Query, true);
 describe("constructor", () => {
   test("net", () => {
     const result = new RPCClient("MainNet");
-    expect(result.net).toBe("https://seed1.neo.org:10331");
+    expect(result.net).toBe(DEFAULT_RPC.MAIN);
   });
   test("only url", () => {
     const url = "testUrl";

@@ -21,8 +21,8 @@ export const CONTRACTS: { [key: string]: string } = {
 };
 
 export const DEFAULT_RPC: { [key: string]: string } = {
-  MAIN: "https://seed1.neo.org:10331",
-  TEST: "https://seed1.neo.org:20331"
+  MAIN: "https://seed11.ngd.network:10331",
+  TEST: "https://seed11.ngd.network:20331"
 };
 
 export const DEFAULT_REQ = {
