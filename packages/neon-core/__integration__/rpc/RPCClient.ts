@@ -234,7 +234,7 @@ describe("RPC Methods", () => {
       expect(Object.keys(result)).toEqual(
         expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
       );
-      expect(result.state).toEqual("HALT, BREAK");
+      expect(result.state).toContain("HALT");
       expect(result.stack[0].value).toEqual(
         "5265642050756c736520546f6b656e20332e312e34"
       );
@@ -255,7 +255,7 @@ describe("RPC Methods", () => {
       expect(Object.keys(result)).toEqual(
         expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
       );
-      expect(result.state).toEqual("HALT, BREAK");
+      expect(result.state).toContain("HALT");
       expect(result.stack.length).toBe(1);
     });
 
@@ -265,7 +265,7 @@ describe("RPC Methods", () => {
       expect(Object.keys(result)).toEqual(
         expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
       );
-      expect(result.state).toEqual("HALT, BREAK");
+      expect(result.state).toContain("HALT");
       expect(result.stack[0].value).toEqual(
         "5265642050756c736520546f6b656e20332e312e34"
       );
@@ -278,7 +278,7 @@ describe("RPC Methods", () => {
       expect(Object.keys(result)).toEqual(
         expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
       );
-      expect(result.state).toEqual("HALT, BREAK");
+      expect(result.state).toContain("HALT");
       expect(result.stack[0].value).toEqual(
         "5265642050756c736520546f6b656e20332e312e34"
       );

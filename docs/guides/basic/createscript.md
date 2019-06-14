@@ -42,7 +42,7 @@ const script = Neon.create.script(props)
 Neon.rpc.Query.invokeScript(script)
   .execute('http://seed3.neo.org:20332')
   .then(res => {
-    console.log(res) // You should get a result with state: "HALT, BREAK"
+    console.log(res) // You should get a result with state: "HALT"
   })
 ```
 
@@ -54,7 +54,7 @@ Your console result should look something like this::
     "id": 1234,
     "result": {
         "script": "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b",
-        "state": "HALT, BREAK",
+        "state": "HALT",
         "gas_consumed": "0.338",
         "stack": [
             {
@@ -104,7 +104,7 @@ Now our result would look like:
     "id": 1234,
     "result": {
         "script": "00c1046e616d656711c4d1f4fba619f2628870d36e3a9773e874705b00c108646563696d616c736711c4d1f4fba619f2628870d36e3a9773e874705b00c10673796d626f6c6711c4d1f4fba619f2628870d36e3a9773e874705b00c10b746f74616c537570706c796711c4d1f4fba619f2628870d36e3a9773e874705b",
-        "state": "HALT, BREAK",
+        "state": "HALT",
         "gas_consumed": "0.646",
         "stack": [
             {

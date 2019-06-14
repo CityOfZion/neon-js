@@ -34,12 +34,6 @@
     "@cityofzion/neon-core": "^4.5.2",
     "@cityofzion/neon-nep5": "^4.5.2"
   },
-  "devDependencies": {
-    "clean-webpack-plugin": "2.0.1",
-    "ts-loader": "5.3.3",
-    "webpack": "4.29.6",
-    "webpack-cli": "3.3.0"
-  },
   "files": [
     "dist/"
   ],

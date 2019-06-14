@@ -6,7 +6,10 @@ import { ManagedApiBasicConfig } from "./types";
  * @param obj - Object to check.
  * @param props - List of properties to check.
  */
-export function checkProperty<T, K extends keyof T>(obj: T, ...props: K[]) {
+export function checkProperty<T extends object, K extends keyof T>(
+  obj: T,
+  ...props: K[]
+): void {
   for (const prop of props) {
     if (
       !obj.hasOwnProperty(prop) ||
