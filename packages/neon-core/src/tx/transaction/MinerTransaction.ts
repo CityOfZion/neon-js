@@ -1,8 +1,12 @@
 import { TX_VERSION } from "../../consts";
-import { num2hexstring, num2VarInt, reverseHex, StringStream } from "../../u";
+import { num2hexstring, reverseHex, StringStream } from "../../u";
 import { BaseTransaction, TransactionLike } from "./BaseTransaction";
 import TransactionType from "./TransactionType";
 export interface MinerTransactionLike extends TransactionLike {
+  nonce: number;
+}
+
+export interface MinerExclusive {
   nonce: number;
 }
 
@@ -20,16 +24,16 @@ export class MinerTransaction extends BaseTransaction {
 
   public readonly type: TransactionType = 0x00;
 
-  constructor(obj: Partial<MinerTransactionLike> = {}) {
+  public constructor(obj: Partial<MinerTransactionLike> = {}) {
     super(Object.assign({ version: TX_VERSION.MINER }, obj));
     this.nonce = obj.nonce || 0;
   }
 
-  get exclusiveData() {
+  public get exclusiveData(): MinerExclusive {
     return { nonce: this.nonce };
   }
 
-  get fees(): number {
+  public get fees(): number {
     return 0;
   }
 

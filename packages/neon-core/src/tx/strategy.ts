@@ -21,9 +21,7 @@ function fillFromLeft(requiredAmt: Fixed8, availableInputs: Coin[]): Coin[] {
     selectPointer += 1;
     if (selectPointer > availableInputs.length) {
       throw new Error(
-        `Insufficient assets! Reached end of unspent coins! ${
-          availableInputs.length
-        }`
+        `Insufficient assets! Reached end of unspent coins! ${availableInputs.length}`
       );
     }
     selectedAmt = selectedAmt.add(availableInputs[selectPointer - 1].value);

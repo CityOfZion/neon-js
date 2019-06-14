@@ -9,4 +9,3 @@ export let timeout = {
   ping: 2000,
   rpc: 30000
 };
-

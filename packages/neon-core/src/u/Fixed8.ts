@@ -31,9 +31,7 @@ export class Fixed8 extends BN {
   public static fromHex(hex: string): Fixed8 {
     if (hex.length > 16) {
       throw new Error(
-        `expected hex string to have length less or equal than 16: got ${
-          hex.length
-        } for hex = ${hex}`
+        `expected hex string to have length less or equal than 16: got ${hex.length} for hex = ${hex}`
       );
     }
 
@@ -61,16 +59,12 @@ export class Fixed8 extends BN {
 
     if (this.isGreaterThan(Fixed8.MAX_VALUE)) {
       throw new Error(
-        `expected input to be less than ${
-          Fixed8.MAX_VALUE
-        }. Got input = ${this}`
+        `expected input to be less than ${Fixed8.MAX_VALUE}. Got input = ${this}`
       );
     }
     if (this.isLessThan(Fixed8.MIN_VALUE)) {
       throw new Error(
-        `expected input to be greater than ${
-          Fixed8.MIN_VALUE
-        }. Got input = ${this}`
+        `expected input to be greater than ${Fixed8.MIN_VALUE}. Got input = ${this}`
       );
     }
 
