@@ -12,6 +12,16 @@ export const ASSET_ID: { [key: string]: string } = {
   GAS: "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"
 };
 
+export const ASSET_TYPE: { [key: string]: number } = {
+  CreditFlag: 0x40,
+  DutyFlag: 0x80,
+  GoverningToken: 0x00,
+  UtilityToken: 0x01,
+  Currency: 0x08,
+  Share: 0x90, // (= DutyFlag | 0x10)
+  Invoice: 0x98, // (= DutyFlag | 0x18)
+  Token: 0x60 // (= CreditFlag | 0x20)
+};
 export const CONTRACTS: { [key: string]: string } = {
   RPX: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
   TEST_RPX: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
@@ -84,5 +94,6 @@ export const TX_VERSION: { [key: string]: number } = {
   STATE: 0,
   MINER: 0,
   ENROLLMENT: 0,
-  PUBLISH: 0
+  PUBLISH: 0,
+  REGISTER: 0
 };

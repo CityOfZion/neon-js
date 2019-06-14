@@ -6,6 +6,7 @@ export * from "./InvocationTransaction";
 export * from "./StateTransaction";
 export * from "./MinerTransaction";
 export * from "./IssueTransaction";
+export * from "./RegisterTransaction";
 export * from "./TransactionType";
 export * from "./EnrollmentTransaction";
 export * from "./PublishTransaction";
