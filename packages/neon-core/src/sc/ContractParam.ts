@@ -67,9 +67,7 @@ export class ContractParam {
     }
     if (value.length !== 40) {
       throw new Error(
-        `hash160 expected a 40 character string but got ${
-          value.length
-        } chars instead.`
+        `hash160 expected a 40 character string but got ${value.length} chars instead.`
       );
     }
     return new ContractParam(ContractParamType.Hash160, value);
