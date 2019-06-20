@@ -14,7 +14,6 @@ function InvokeOperation()
   // Get an RPC Endpoint (Neo Node)
   provider.getRPCEndpoint().then(nodeUrl => {
     const client = Neon.default.create.rpcClient(nodeUrl);
-    // change 'hash' below to 'index' to use the index version of getblock
     client.getBlockSysFee(index).then(response => {
     	outputHtml('Block Data: ' + response);
     });
