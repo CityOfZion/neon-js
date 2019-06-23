@@ -24,9 +24,7 @@ export function buildParser(...args: StackItemParser[]): VMResultParser {
   return (result: RPCVMResponse) => {
     if (result.stack.length !== args.length) {
       throw new Error(
-        `Wrong number of items to parse! Expected ${args.length} but got ${
-          result.stack.length
-        }!`
+        `Wrong number of items to parse! Expected ${args.length} but got ${result.stack.length}!`
       );
     }
 
