@@ -59,7 +59,7 @@
 <pre><code class="hljs css language-js">Neon.rpc.Query.invokeScript(script)
   .execute(<span class="hljs-string">'http://seed3.neo.org:20332'</span>)
   .then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(res) <span class="hljs-comment">// You should get a result with state: "HALT, BREAK"</span>
+    <span class="hljs-built_in">console</span>.log(res) <span class="hljs-comment">// You should get a result with state: "HALT"</span>
   })
 </code></pre>
 <p>Your console result should look something like this::</p>
@@ -68,7 +68,7 @@
     <span class="hljs-string">"id"</span>: <span class="hljs-number">1234</span>,
     <span class="hljs-string">"result"</span>: {
         <span class="hljs-string">"script"</span>: <span class="hljs-string">"143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b"</span>,
-        <span class="hljs-string">"state"</span>: <span class="hljs-string">"HALT, BREAK"</span>,
+        <span class="hljs-string">"state"</span>: <span class="hljs-string">"HALT"</span>,
         <span class="hljs-string">"gas_consumed"</span>: <span class="hljs-string">"0.338"</span>,
         <span class="hljs-string">"stack"</span>: [
             {
@@ -106,7 +106,7 @@ This will be covered in another tutorial or you can check out the source code un
     <span class="hljs-string">"id"</span>: <span class="hljs-number">1234</span>,
     <span class="hljs-string">"result"</span>: {
         <span class="hljs-string">"script"</span>: <span class="hljs-string">"00c1046e616d656711c4d1f4fba619f2628870d36e3a9773e874705b00c108646563696d616c736711c4d1f4fba619f2628870d36e3a9773e874705b00c10673796d626f6c6711c4d1f4fba619f2628870d36e3a9773e874705b00c10b746f74616c537570706c796711c4d1f4fba619f2628870d36e3a9773e874705b"</span>,
-        <span class="hljs-string">"state"</span>: <span class="hljs-string">"HALT, BREAK"</span>,
+        <span class="hljs-string">"state"</span>: <span class="hljs-string">"HALT"</span>,
         <span class="hljs-string">"gas_consumed"</span>: <span class="hljs-string">"0.646"</span>,
         <span class="hljs-string">"stack"</span>: [
             {
