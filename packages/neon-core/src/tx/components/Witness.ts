@@ -82,9 +82,7 @@ export class Witness {
     const validSigs = orderedSigs.filter(s => s !== "");
     if (validSigs.length < signingThreshold) {
       throw new Error(
-        `Insufficient signatures: expected ${signingThreshold} but got ${
-          validSigs.length
-        } instead`
+        `Insufficient signatures: expected ${signingThreshold} but got ${validSigs.length} instead`
       );
     }
     return new Witness({

@@ -1,5 +1,5 @@
 import { CONST, logging, u, wallet } from "@cityofzion/neon-core";
-import * as internal from "../../settings"
+import * as internal from "../../settings";
 import axios from "axios";
 import {
   filterHttpsOnly,

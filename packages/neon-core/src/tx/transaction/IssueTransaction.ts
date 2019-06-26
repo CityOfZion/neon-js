@@ -17,10 +17,10 @@ export class IssueTransaction extends BaseTransaction {
   public constructor(obj: Partial<TransactionLike> = {}) {
     super(Object.assign({ version: TX_VERSION.ISSUE }, obj));
   }
-  public get exclusiveData() {
+  public get exclusiveData(): object {
     return {};
   }
-  get fees(): number {
+  public get fees(): number {
     if (this.version >= 1) {
       return 0;
     }
