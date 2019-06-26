@@ -198,7 +198,7 @@ Returns the corresponding transaction information based on the specified hash va
 
 JSFiddle: [getrawtransaction](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getrawtransaction/demo)
 
-API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getrawmempool.html
+API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getrawtransaction.html
 
 #### Get Storage
 
@@ -208,7 +208,7 @@ Returns the stored value, according to the contract script hash and the stored k
 
 JSFiddle: [getstorage](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getstorage/demo)
 
-API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getcontractstate.html
+API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getstorage.html
 
 #### Get Transaction Output
 
