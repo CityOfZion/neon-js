@@ -132,6 +132,9 @@ export async function execute(
         tx.TxAttrUsage.Script,
         u.reverseHex(wallet.getScriptHashFromAddress(account.address))
       )
+      .addRemark(
+        Date.now().toString() + u.ab2hexstring(u.generateRandomArray(4))
+      ) //to avoid hash collision
       .sign(account.privateKey);
     return rpc.Query.sendRawTransaction(transaction).execute(url);
   } else {
