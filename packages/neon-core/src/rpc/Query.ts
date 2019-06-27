@@ -300,23 +300,23 @@ export class Query {
   }
 
   /**
-   * This Query Returns information of the unspent UTXO assets at the specified address. 
+   * This Query Returns information of the unspent UTXO assets at the specified address.
    * @param addr Address to get the UTXO
    */
   public static getUnspents(addr: string): Query {
     return new Query({
-      method: 'getunspents',
+      method: "getunspents",
       params: [addr]
     });
   }
-  
+
   /**
    * This Query returns unclaimed GAS amount of the specified address.
    * @param addr Address to get the unclaimed gas
    */
   public static getUnclaimed(addr: string): Query {
     return new Query({
-      method: 'getunclaimed',
+      method: "getunclaimed",
       params: [addr]
     });
   }
@@ -327,7 +327,7 @@ export class Query {
    */
   public static getClaimable(addr: string): Query {
     return new Query({
-      method: 'getclaimable',
+      method: "getclaimable",
       params: [addr]
     });
   }
