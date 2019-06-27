@@ -1,0 +1,41 @@
+{
+  "1": {
+    "serialized": "400060245b7b226c616e67223a227a682d434e222c226e616d65223a2254657374436f696e227d5dffffffffffffffff08039f07df7861c216de3b78c647b77f8b01404b400a437302b651cdf206ec1af626f41cdd4b7ec41847443fa36bf8dde0009d7ecebc00022d1bf9acc0df7403785e1692bdf3094901c7574097c92e168b87e5e7307e9c1800006a07203e13986d326095c8bb86aa812b85ccf7f3ba6154f186a5ef0ad5333f37000001e72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c60a08140630a000000f41cdd4b7ec41847443fa36bf8dde0009d7ecebc014140cb8d82b9551be6628c94239f6fea4bbff128bd761550d8498acedc16bdeec184724e4fdc73af43bc80583994a6fd01479d21b8705dff09b46f87994178ef02892321039f07df7861c216de3b78c647b77f8b01404b400a437302b651cdf206ec1af626ac",
+    "deserialized": {
+      "type": 64,
+      "version": 0,
+      "attributes": [],
+      "inputs": [
+        {
+          "prevHash": "189c7e30e7e5878b162ec9974057c7014909f3bd92165e780374dfc0acf91b2d",
+          "prevIndex": 0
+        },
+        {
+          "prevHash": "373f33d50aefa586f15461baf3f7cc852b81aa86bbc89560326d98133e20076a",
+          "prevIndex": 0
+        }
+      ],
+      "outputs": [
+        {
+          "assetId": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+          "scriptHash": "bcce7e9d00e0ddf86ba33f444718c47e4bdd1cf4",
+          "value": 446.14844832
+        }
+      ],
+      "scripts": [
+        {
+          "invocationScript": "40cb8d82b9551be6628c94239f6fea4bbff128bd761550d8498acedc16bdeec184724e4fdc73af43bc80583994a6fd01479d21b8705dff09b46f87994178ef0289",
+          "verificationScript": "21039f07df7861c216de3b78c647b77f8b01404b400a437302b651cdf206ec1af626ac"
+        }
+      ],
+      "assetType": 96,
+      "name": "[{\"lang\":\"zh-CN\",\"name\":\"TestCoin\"}]",
+      "amount": -0.00000001,
+      "precision": 8,
+      "owner": "049f07df7861c216de3b78c647b77f8b01404b400a437302b651cdf206ec1af626b060895e2d69d56f71cabed9e523e43f9ba2b39df1e47faad2537d5490adb2a5",
+      "admin": "bcce7e9d00e0ddf86ba33f444718c47e4bdd1cf4"
+    },
+
+    "txid": "025d82f7b00a9ff1cfe709abe3c4741a105d067178e645bc3ebad9bc79af47d4"
+  }
+}

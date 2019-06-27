@@ -3,6 +3,34 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.6.0
+=====
+
+- Neon-core
+
+  - Add parsing capabilities for RegisterTransaction and EnrollmentTransaction. At this point, all transaction types in neo 2.x are now fully supported.
+  - Update axios dependency due to minor security concern.
+
+- Docs
+
+  - Add jsfiddle docs describing neo RPC.
+
+- Others
+
+  - Update all dev dependencies to latest due to various security warnings.
+
+- Fixes
+
+  - Fix decoding of negative Fixed8 hex string
+  - Update VM status output for neo v2.10.2
+  - Update default rpc endpoints to suggestions from NGD
+
+4.5.2
+=====
+
+- patch release to fix production distribution.
+
+
 4.5.0
 =====
 
