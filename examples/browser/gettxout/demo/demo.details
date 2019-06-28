@@ -1,8 +1,4 @@
 name: gettxout
 description: Returns the corresponding unspent transaction output information (returned change), based on the specified hash and index. If the transaction output is already spent, the result value will be null.
 resources:
-<<<<<<< HEAD
   - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js@4.6/dist/browser.min.js
-=======
-  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js@4.5.2/dist/browser.min.js
->>>>>>> upstream/master

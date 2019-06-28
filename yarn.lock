@@ -516,7 +516,6 @@
   version "3.14.2"
   resolved "https://registry.yarnpkg.com/@lerna/collect-uncommitted/-/collect-uncommitted-3.14.2.tgz#b5ed00d800bea26bb0d18404432b051eee8d030e"
   integrity sha512-4EkQu4jIOdNL2BMzy/N0ydHB8+Z6syu6xiiKXOoFl0WoWU9H1jEJCX4TH7CmVxXL1+jcs8FIS2pfQz4oew99Eg==
-<<<<<<< HEAD
   dependencies:
     "@lerna/child-process" "3.14.2"
     chalk "^2.3.1"
@@ -529,20 +528,6 @@
   integrity sha512-+zSQ2ZovH8Uc0do5dR+sk8VvRJc6Xl+ZnJJGESIl17KSpEw/lVjcOyt6f3BP+WHn+iSOjMWcGvUVA601FIEdZw==
   dependencies:
     "@lerna/child-process" "3.14.2"
-=======
-  dependencies:
-    "@lerna/child-process" "3.14.2"
-    chalk "^2.3.1"
-    figgy-pudding "^3.5.1"
-    npmlog "^4.1.2"
-
-"@lerna/collect-updates@3.14.2":
-  version "3.14.2"
-  resolved "https://registry.yarnpkg.com/@lerna/collect-updates/-/collect-updates-3.14.2.tgz#396201f6568ec5916bf2c11e7a29b0931fcd3e5b"
-  integrity sha512-+zSQ2ZovH8Uc0do5dR+sk8VvRJc6Xl+ZnJJGESIl17KSpEw/lVjcOyt6f3BP+WHn+iSOjMWcGvUVA601FIEdZw==
-  dependencies:
-    "@lerna/child-process" "3.14.2"
->>>>>>> upstream/master
     "@lerna/describe-ref" "3.14.2"
     minimatch "^3.0.4"
     npmlog "^4.1.2"

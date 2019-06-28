@@ -70,10 +70,6 @@ getaccountstate(address)
 
 Get the account state for a wallet address.
 
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/master
 JSFiddle: [getaccountstate](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getaccountstate/demo)
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getaccountstate.html
@@ -202,11 +198,7 @@ Returns the corresponding transaction information based on the specified hash va
 
 JSFiddle: [getrawtransaction](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getrawtransaction/demo)
 
-<<<<<<< HEAD
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getrawtransaction.html
-=======
-API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getrawmempool.html
->>>>>>> upstream/master
 
 #### Get Storage
 
@@ -216,11 +208,7 @@ Returns the stored value, according to the contract script hash and the stored k
 
 JSFiddle: [getstorage](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getstorage/demo)
 
-<<<<<<< HEAD
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getstorage.html
-=======
-API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getcontractstate.html
->>>>>>> upstream/master
 
 #### Get Transaction Output
 
