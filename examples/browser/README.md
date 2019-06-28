@@ -5,49 +5,6 @@
 	- [/Neo:v2.9.0/ API Reference](#neov290-api-reference)
 		- [Asset Identifiers](#asset-identifiers)
 		- [Get Account State](#get-account-state)
-<<<<<<< HEAD
-			- [getaccountstate](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getaccountstate/demo)
-		- [Get Asset State](#get-asset-state)
-			- [getassetstate](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getassetstate/demo)
-		- [Get Balance (not implemented)](#get-balance-not-implemented)
-			- [getbalance](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getbalance/demo)
-		- [Get Best Block Hash](#get-best-block-hash)
-			- [getbestblockhash](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getbestblockhash/demo)
-		- [Get Block](#get-block)
-			- [getblock](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getblock/demo)
-		- [Get Block Count](#get-block-count)
-			- [getblockcount](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getblockcount/demo)
-		- [Get Block Header](#get-block-header)
-			- [getblockheader](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getblockheader/demo)
-		- [Get Block Sys Fee](#get-block-sys-fee)
-			- [getblocksysfee](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getblocksysfee/demo)
-		- [Get Connection Count](#get-connection-count)
-			- [getconnectioncount](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getconnectioncount/demo)
-		- [Get Contract State](#get-contract-state)
-			- [getcontractstate](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getcontractstate/demo)
-		- [Get Peers](#get-peers)
-			- [getpeers](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getpeers/demo)
-		- [Get Raw Memory Pool](#get-raw-memory-pool)
-			- [getrawmempool](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getrawmempool/demo)
-		- [Get Raw Transaction](#get-raw-transaction)
-			- [getrawtransaction](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getrawtransaction/demo)
-		- [Get Storage](#get-storage) 		
-			- [getstorage](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getstorage/demo)
-		- [Get Transaction Output](#get-transaction-output) 	
-			- [gettxout](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/gettxout/demo)
-		- [Get Validators](#get-validators)
-			- [getvalidators](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getvalidators/demo)
-		- [Get Version](#get-version)
-			- [getversion](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getassetstate/demo)
-		- [Invoke](#invoke)
-			- [doinvoke](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/doinvoke/demo)
-		- [Invoke Function](#invoke-function)
-			- [invokefunction](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/invokefunction/demo)
-		- [Invoke Script](#invoke-script)
-			- [invokescript](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/invokescript/demo)
-		- [Validate Address](#validate-address)
-			- [validateaddress](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/validateaddress/demo)
-=======
 			- [getaccountstate](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getaccountstate/demo)
 		- [Get Asset State](#get-asset-state)
 			- [getassetstate](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getassetstate/demo)
@@ -89,7 +46,6 @@
 			- [invokescript](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/invokescript/demo)
 		- [Validate Address](#validate-address)
 			- [validateaddress](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/validateaddress/demo)
->>>>>>> upstream/master
 	- [Other Examples](#other-examples)
 	- [Utilities](#utilities)
 
@@ -114,11 +70,8 @@ getaccountstate(address)
 
 Get the account state for a wallet address.
 
-<<<<<<< HEAD
-JSFiddle: [getaccountstate](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getaccountstate/demo)
-=======
+
 JSFiddle: [getaccountstate](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getaccountstate/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getaccountstate.html
 
@@ -128,11 +81,7 @@ getassetstate(asset_id_hash)
 
 Queries the asset information, based on the specified asset number.
 
-<<<<<<< HEAD
-JSFiddle: [getassetstate](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getassetstate/demo)
-=======
 JSFiddle: [getassetstate](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getassetstate/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getassetstate.html
 
@@ -144,11 +93,7 @@ Returns the balance of the corresponding asset in the wallet according to the sp
 
 NOTE: getBalance is not currently implemented as an RPC call in neon-js as the Neo API requires a wallet to be open to access it. Balances for arbitrary addresses can be queried with getaccountstate. This reference is here to educate and provide reminder to future implementation using an API like Neoscan.
 
-<<<<<<< HEAD
-JSFiddle: [getbalance](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getbalance/demo)
-=======
 JSFiddle: [getbalance](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getbalance/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getbalance.html
 
@@ -158,11 +103,7 @@ getbestblockhash()
 
 Get the hash of the highest (most recent) block.
 
-<<<<<<< HEAD
-JSFiddle: [getBestBlockHash](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getbestblockhash/demo)
-=======
 JSFiddle: [getBestBlockHash](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getbestblockhash/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getbestblockhash.html
 
@@ -174,11 +115,7 @@ getblock(index)
 
 Get block data by its hash or index.
 
-<<<<<<< HEAD
-JSFiddle: [getBlock](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getblock/demo)
-=======
 JSFiddle: [getBlock](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getblock/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getblock.html
 
@@ -188,11 +125,7 @@ getblockcount()
 
 Get the number of blocks on a chain.
 
-<<<<<<< HEAD
-JSFiddle: [getBlockCount](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getblockcount/demo)
-=======
 JSFiddle: [getBlockCount](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getblockcount/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getblockcount.html
 
@@ -203,11 +136,7 @@ getblockheader(hash)
 Returns the corresponding block header information according to the specified script hash.
 This method builds a custom request and executes it using the neon-js RPC query facility.
 
-<<<<<<< HEAD
-JSFiddle: [getblockheader](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getblockheader/demo)
-=======
 JSFiddle: [getblockheader](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getblockheader/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getblockheader.html
 
@@ -217,11 +146,7 @@ getblocksysfee(blockIndex)
 
 Returns the system fees of the block, based on the specified index.
 
-<<<<<<< HEAD
-JSFiddle: [getblocksysfee](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getblocksysfee/demo)
-=======
 JSFiddle: [getblocksysfee](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getblocksysfee/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getblocksysfee.html
 
@@ -231,11 +156,7 @@ getconnectioncount()
 
 Gets the current number of connections for the node.
 
-<<<<<<< HEAD
-JSFiddle: [getconnectioncount](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getconnectioncount/demo)
-=======
 JSFiddle: [getconnectioncount](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getconnectioncount/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getconnectioncount.html
 
@@ -245,11 +166,7 @@ getcontractstate(hash)
 
 Queries contract information, according to the contract script hash.
 
-<<<<<<< HEAD
-JSFiddle: [getcontractstate](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getcontractstate/demo)
-=======
 JSFiddle: [getcontractstate](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getcontractstate/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getcontractstate.html
 
@@ -259,11 +176,7 @@ getpeers()
 
 Gets a list of nodes that are currently connected/disconnected by this node.
 
-<<<<<<< HEAD
-JSFiddle: [getpeers](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getpeers/demo)
-=======
 JSFiddle: [getpeers](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getpeers/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getpeers.html
 
@@ -274,11 +187,7 @@ getrawmempool()
 
 Gets a list of unconfirmed transactions in memory.
 
-<<<<<<< HEAD
-JSFiddle: [getrawmempool](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getrawmempool/demo)
-=======
 JSFiddle: [getrawmempool](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getrawmempool/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getrawmempool.html
 
@@ -288,15 +197,9 @@ getrawtransaction(hash)
 
 Returns the corresponding transaction information based on the specified hash value.
 
-<<<<<<< HEAD
-JSFiddle: [getrawtransaction](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getrawtransaction/demo)
-
-API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getrawtransaction.html
-=======
 JSFiddle: [getrawtransaction](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getrawtransaction/demo)
 
-API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getrawmempool.html
->>>>>>> upstream/master
+API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getrawtransaction.html
 
 #### Get Storage
 
@@ -304,15 +207,9 @@ getstorage(hash, key)
 
 Returns the stored value, according to the contract script hash and the stored key.
 
-<<<<<<< HEAD
-JSFiddle: [getstorage](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getstorage/demo)
-
-API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getstorage.html
-=======
 JSFiddle: [getstorage](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getstorage/demo)
 
-API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getcontractstate.html
->>>>>>> upstream/master
+API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getstorage.html
 
 #### Get Transaction Output
 
@@ -320,11 +217,7 @@ gettxout(txid, index)
 
 Returns the corresponding unspent transaction output information (returned change), based on the specified hash and index. If the transaction output is already spent, the result value will be null.
 
-<<<<<<< HEAD
-JSFiddle: [gettxout](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/gettxout/demo)
-=======
 JSFiddle: [gettxout](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/gettxout/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/gettxout.html
 
@@ -334,11 +227,7 @@ getvalidators()
 
 Returns the current NEO consensus nodes information and voting status.
 
-<<<<<<< HEAD
-JSFiddle: [getvalidators](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getvalidators/demo)
-=======
 JSFiddle: [getvalidators](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getvalidators/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getvalidators.html
 
@@ -348,11 +237,7 @@ getversion()
 
 Gets version information of this node.
 
-<<<<<<< HEAD
-JSFiddle: [getversion](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/getversion/demo)
-=======
 JSFiddle: [getversion](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getversion/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getversion.html
 
@@ -364,11 +249,7 @@ Invokes a smart contract at specified script hash with the given parameters.
 
 neon-js wraps invoke with a helper called doInvoke.
 
-<<<<<<< HEAD
-JSFiddle: [invoke](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/doinvoke/demo)
-=======
 JSFiddle: [invoke](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/doinvoke/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/invoke.html
 
@@ -378,11 +259,7 @@ invokefunction(scriptHash, operation, params)
 
 Invokes a smart contract at specified script hash, passing in an operation and its params.
 
-<<<<<<< HEAD
-JSFiddle: [invokefunction](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/invokefunction/demo)
-=======
 JSFiddle: [invokefunction](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/invokefunction/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/invokefunction.html
 
@@ -392,11 +269,7 @@ invokescript(script)
 
 Runs a script through the virtual machine and returns the results.
 
-<<<<<<< HEAD
-JSFiddle: [invokescript](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/invokescript/demo)
-=======
 JSFiddle: [invokescript](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/invokescript/demo)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/invokescript.html
 
@@ -406,11 +279,7 @@ validateaddress(address)
 
 Verify that the address is a correct NEO address.
 
-<<<<<<< HEAD
-JSFiddle: [validateAddress](https://jsfiddle.net/gh/get/jquery/3.0/phetter/neon-js/tree/master/examples/browser/validateaddress/demo/)
-=======
 JSFiddle: [validateAddress](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/validateaddress/demo/)
->>>>>>> upstream/master
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/validateaddress.html
 
