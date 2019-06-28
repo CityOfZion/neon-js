@@ -41,8 +41,5 @@
   "private": true,
   "workspaces": [
     "packages/*"
-  ],
-  "dependencies": {
-    "@cityofzion/neon-js": "^4.6.0"
-  }
+  ]
 }
