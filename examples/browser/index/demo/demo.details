@@ -1,4 +1,4 @@
 name: /Neon:v2.9.0/ API Browser Example Index
 description: Press each button to run that example
 resources:
-  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js@4.5.2/dist/browser.min.js
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js@4.6/dist/browser.min.js
