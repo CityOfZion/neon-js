@@ -1,4 +1,8 @@
 name: invokescript
 description: Runs a script through the virtual machine and returns the results.
 resources:
+<<<<<<< HEAD
   - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js@4.6/dist/browser.min.js
+=======
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js@4.5.2/dist/browser.min.js
+>>>>>>> upstream/master
