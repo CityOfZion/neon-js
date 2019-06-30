@@ -131,54 +131,6 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@cityofzion/neon-api@^4.6.0":
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-4.6.0.tgz#23ca1417d3d531c143a965ebafaff9ae5576dd74"
-  integrity sha512-lzlLoGFarYqPZsEMSxSPXRFOmFvSvjylo4ti9Atn7xQhpSxJydlhKs/Ysf7TZk4NzohGOH3t8gkUxmISpThsCA==
-  dependencies:
-    "@cityofzion/neon-core" "^4.6.0"
-    axios "0.19.0"
-
-"@cityofzion/neon-core@^4.6.0":
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-4.6.0.tgz#51203c1d8e0dd4552ee431371dcf5b2307998736"
-  integrity sha512-EkqN6pUxymIvLpzo2A0UmdiD9oYcwy5IoZZF6/acTfEBsoef1QNa/fEnPIYH6W+uI1IK3AY5WKOIzJTTOFMRdA==
-  dependencies:
-    "@types/bn.js" "4.11.5"
-    "@types/bs58" "4.0.0"
-    "@types/crypto-js" "3.1.43"
-    "@types/elliptic" "6.4.6"
-    "@types/loglevel" "1.5.4"
-    "@types/node" "11.13.4"
-    axios "0.19.0"
-    bignumber.js "7.2.1"
-    bn.js "4.11.8"
-    bs58 "4.0.1"
-    bs58check "2.1.2"
-    crypto-js "3.1.9-1"
-    elliptic "6.4.1"
-    loglevel "1.6.1"
-    loglevel-plugin-prefix "0.8.4"
-    scrypt-js "2.0.4"
-    secure-random "1.1.1"
-    wif "2.0.6"
-
-"@cityofzion/neon-js@^4.6.0":
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-js/-/neon-js-4.6.0.tgz#2822a74ad19dbafe51f941c633e03fed72284006"
-  integrity sha512-gqaNtx6oOjrF2agkt8quZb7yMX7KD3w3wJXyOiI/ZPQqVtTiLJ1zqaKIz3D5RfT25jhzA6Dtxa28XoXZsDOSsw==
-  dependencies:
-    "@cityofzion/neon-api" "^4.6.0"
-    "@cityofzion/neon-core" "^4.6.0"
-    "@cityofzion/neon-nep5" "^4.6.0"
-
-"@cityofzion/neon-nep5@^4.6.0":
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-nep5/-/neon-nep5-4.6.0.tgz#5bd37e0e6e6da3d9c46478c282d6cc6735b8bdae"
-  integrity sha512-FBz9fIta4wNcBtL9cz11Oe7MixKwUnQpIcULdPzThkkKoS/uj07rzfyeErLGZJBbAN5hC9AYF2AkzGlci9emig==
-  dependencies:
-    "@cityofzion/neon-core" "^4.6.0"
-
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
