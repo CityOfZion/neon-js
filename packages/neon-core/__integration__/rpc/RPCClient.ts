@@ -2,6 +2,7 @@ import { rpc } from "../../src/index";
 import { ContractParam } from "../../src/sc";
 
 const TESTNET_URLS = [
+  "https://seed11.ngd.network:20331",
   "https://test1.cityofzion.io:443",
   "https://test2.cityofzion.io:443",
   "https://test3.cityofzion.io:443",

@@ -439,9 +439,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getUnspents.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest
-          .fn()
-          .mockImplementation(() => ({ result: { balance: expected } }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
       const result = await client.getUnspents("addr");
 
@@ -469,9 +467,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getClaimable.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest
-          .fn()
-          .mockImplementation(() => ({ result: { claimable: expected } }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
       const result = await client.getClaimable("addr");
 
