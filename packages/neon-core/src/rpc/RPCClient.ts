@@ -324,7 +324,7 @@ export class RPCClient {
    */
   public async getUnspents(addr: string): Promise<any> {
     const response = await this.execute(Query.getUnspents(addr));
-    return response.result.balance;
+    return response.result;
   }
 
   /**
@@ -340,7 +340,7 @@ export class RPCClient {
    */
   public async getClaimable(addr: string): Promise<any> {
     const response = await this.execute(Query.getClaimable(addr));
-    return response.result.claimable;
+    return response.result;
   }
 }
 
