@@ -209,24 +209,6 @@ describe("static", () => {
     expect(result.method).toEqual("validateaddress");
     expect(result.params).toEqual(["addr"]);
   });
-
-  test("getUnspents", () => {
-    const result = Query.getUnspents("addr");
-    expect(result.method).toEqual("getunspents");
-    expect(result.params).toEqual(["addr"]);
-  });
-
-  test("getUnclaimed", () => {
-    const result = Query.getUnclaimed("addr");
-    expect(result.method).toEqual("getunclaimed");
-    expect(result.params).toEqual(["addr"]);
-  });
-
-  test("getClaimable", () => {
-    const result = Query.getClaimable("addr");
-    expect(result.method).toEqual("getclaimable");
-    expect(result.params).toEqual(["addr"]);
-  });
 });
 
 describe("execute", () => {
