@@ -433,4 +433,50 @@ describe("RPC Methods", () => {
       expect(Query.validateAddress).toBeCalledWith("addr");
     });
   });
+
+  describe("getUnspents", () => {
+    test("success", async () => {
+      const expected = jest.fn();
+      Query.getUnspents.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest
+          .fn()
+          .mockImplementation(() => ({ result: { balance: expected } }))
+      }));
+      const result = await client.getUnspents("addr");
+
+      expect(result).toEqual(expected);
+      expect(Query.getUnspents).toBeCalledWith("addr");
+    });
+  });
+
+  describe("getUnclaimed", () => {
+    test("success", async () => {
+      const expected = jest.fn();
+      Query.getUnclaimed.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+      }));
+      const result = await client.getUnclaimed("addr");
+
+      expect(result).toEqual(expected);
+      expect(Query.getUnclaimed).toBeCalledWith("addr");
+    });
+  });
+
+  describe("getClaimable", () => {
+    test("success", async () => {
+      const expected = jest.fn();
+      Query.getClaimable.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest
+          .fn()
+          .mockImplementation(() => ({ result: { claimable: expected } }))
+      }));
+      const result = await client.getClaimable("addr");
+
+      expect(result).toEqual(expected);
+      expect(Query.getClaimable).toBeCalledWith("addr");
+    });
+  });
 });

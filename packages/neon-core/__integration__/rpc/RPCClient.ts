@@ -289,4 +289,25 @@ describe("RPC Methods", () => {
     const result = await client.validateAddress(address);
     expect(result).toBe(true);
   });
+
+  test("getUnspents", async () => {
+    const result = await client.getUnspents(address);
+    expect(Object.keys(result)).toEqual(
+      expect.arrayContaining(["balance", "address"])
+    );
+  });
+
+  test("getClaimable", async () => {
+    const result = await client.getClaimable(address);
+    expect(Object.keys(result)).toEqual(
+      expect.arrayContaining(["claimable", "address", "unclaimed"])
+    );
+  });
+
+  test("getUnclaimed", async () => {
+    const result = await client.getUnclaimed(address);
+    expect(Object.keys(result)).toEqual(
+      expect.arrayContaining(["available", "unavailable", "unclaimed"])
+    );
+  });
 });
