@@ -299,39 +299,6 @@ export class Query {
     });
   }
 
-  /**
-   * This Query Returns information of the unspent UTXO assets at the specified address.
-   * @param addr Address to get the UTXO
-   */
-  public static getUnspents(addr: string): Query {
-    return new Query({
-      method: "getunspents",
-      params: [addr]
-    });
-  }
-
-  /**
-   * This Query returns unclaimed GAS amount of the specified address.
-   * @param addr Address to get the unclaimed gas
-   */
-  public static getUnclaimed(addr: string): Query {
-    return new Query({
-      method: "getunclaimed",
-      params: [addr]
-    });
-  }
-
-  /**
-   * This Query returns claimable GAS information of the specified address.
-   * @param addr Address to get the claimable gas
-   */
-  public static getClaimable(addr: string): Query {
-    return new Query({
-      method: "getclaimable",
-      params: [addr]
-    });
-  }
-
   public req: RPCRequest;
   public res: any;
   public completed: boolean;
