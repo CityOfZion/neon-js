@@ -318,6 +318,30 @@ export class RPCClient {
     const response = await this.execute(Query.validateAddress(addr));
     return response.result.isvalid;
   }
+
+  /**
+   * Get the unspent utxo for an address
+   */
+  public async getUnspents(addr: string): Promise<any> {
+    const response = await this.execute(Query.getUnspents(addr));
+    return response.result.balance;
+  }
+
+  /**
+   * Get the unclaimed gas amount for an address
+   */
+  public async getUnclaimed(addr: string): Promise<any> {
+    const response = await this.execute(Query.getUnclaimed(addr));
+    return response.result;
+  }
+
+  /**
+   * Get the claimable for an address
+   */
+  public async getClaimable(addr: string): Promise<any> {
+    const response = await this.execute(Query.getClaimable(addr));
+    return response.result.claimable;
+  }
 }
 
 export default RPCClient;
