@@ -1,4 +1,4 @@
-import { rpc } from "../../src/index";
+import { rpc, wallet } from "../../src/index";
 import { ContractParam } from "../../src/sc";
 
 const TESTNET_URLS = [
@@ -293,16 +293,12 @@ describe("RPC Methods", () => {
 
   test("getUnspents", async () => {
     const result = await client.getUnspents(address);
-    expect(Object.keys(result)).toEqual(
-      expect.arrayContaining(["balance", "address"])
-    );
+    expect(result).toBeInstanceOf(wallet.Balance);
   });
 
   test("getClaimable", async () => {
     const result = await client.getClaimable(address);
-    expect(Object.keys(result)).toEqual(
-      expect.arrayContaining(["claimable", "address", "unclaimed"])
-    );
+    expect(result).toBeInstanceOf(wallet.Claims);
   });
 
   test("getUnclaimed", async () => {
