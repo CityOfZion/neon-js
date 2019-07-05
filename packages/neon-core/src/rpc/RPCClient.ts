@@ -3,9 +3,10 @@ import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from "../consts";
 import logger from "../logging";
 import { timeout } from "../settings";
 import { BaseTransaction } from "../tx/transaction/BaseTransaction";
-import { isAddress } from "../wallet";
+import { isAddress, ClaimItem } from "../wallet";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
+import { wallet } from "..";
 
 const log = logger("rpc");
 
@@ -15,6 +16,12 @@ export interface Validator {
   publickey: string;
   votes: string;
   active: boolean;
+}
+
+export interface GetUnclaimedResult {
+  available: number;
+  unavailable: number;
+  unclaimed: number;
 }
 
 /**
@@ -322,15 +329,15 @@ export class RPCClient {
   /**
    * Get the unspent utxo for an address
    */
-  public async getUnspents(addr: string): Promise<any> {
+  public async getUnspents(addr: string): Promise<wallet.Balance> {
     const response = await this.execute(Query.getUnspents(addr));
-    return response.result;
+    return this.parseUnspentsToBalance(response.result);
   }
 
   /**
    * Get the unclaimed gas amount for an address
    */
-  public async getUnclaimed(addr: string): Promise<any> {
+  public async getUnclaimed(addr: string): Promise<GetUnclaimedResult> {
     const response = await this.execute(Query.getUnclaimed(addr));
     return response.result;
   }
@@ -338,9 +345,51 @@ export class RPCClient {
   /**
    * Get the claimable for an address
    */
-  public async getClaimable(addr: string): Promise<any> {
+  public async getClaimable(addr: string): Promise<wallet.Claims> {
     const response = await this.execute(Query.getClaimable(addr));
-    return response.result;
+    return new wallet.Claims({
+      net: this.net,
+      address: response.result.address,
+      claims: response.result.claimable.map(
+        (rawClaim: any) =>
+          new Object({
+            claim: rawClaim.unclaimed,
+            txid: rawClaim.txid,
+            index: rawClaim.n,
+            value: rawClaim.value,
+            start: rawClaim.start_height,
+            end: rawClaim.end_height
+          })
+      )
+    });
+  }
+
+  private parseUnspentsToBalance(getUnspentsResult: any): wallet.Balance {
+    const bal = new wallet.Balance({
+      address: getUnspentsResult.address
+    });
+    console.log(getUnspentsResult);
+
+    for (const assetBalance of getUnspentsResult.balance) {
+      if (assetBalance.amount === 0) {
+        continue;
+      }
+      if (assetBalance.unspent.length > 0) {
+        bal.addAsset(assetBalance.asset_symbol, {
+          unspent: assetBalance.unspent.map(
+            (utxo: any) =>
+              new wallet.Coin({
+                index: utxo.n,
+                txid: utxo.txid,
+                value: utxo.value
+              })
+          )
+        });
+      } else {
+        bal.addToken(assetBalance.asset_symbol, assetBalance.amount);
+      }
+    }
+    return bal;
   }
 }
 
