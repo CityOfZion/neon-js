@@ -36,6 +36,12 @@
     "Past Versions": ["changelog/v3", "changelog/v2", "changelog/v1"]
   },
   "examples": {
-    "Examples": ["examples/first", "examples/second"]
+    "Examples": [
+      "examples/network",
+      "examples/wallet",
+      "examples/native_asset", 
+      "examples/smart_contract",
+      "examples/nep5"
+    ]
   }
 }

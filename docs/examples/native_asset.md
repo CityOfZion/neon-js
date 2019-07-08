@@ -1,5 +1,5 @@
 ---
-id: first
+id: native_asset
 title: Native Asset
 ---
 

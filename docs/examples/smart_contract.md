@@ -1,5 +1,5 @@
 ---
-id: first
+id: smart_contract
 title: Smart Contract
 ---
 
