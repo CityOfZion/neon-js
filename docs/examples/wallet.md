@@ -1,5 +1,5 @@
 ---
-id: first
+id: wallet
 title: Wallet
 ---
 

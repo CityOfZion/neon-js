@@ -1,5 +1,5 @@
 ---
-id: first
+id: nep5
 title: NEP-5
 ---
 

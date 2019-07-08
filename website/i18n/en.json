@@ -56,11 +56,20 @@
       "changelog/v3": {
         "title": "Changelog (v3)"
       },
-      "examples/first": {
-        "title": "The First"
+      "examples/native_asset": {
+        "title": "Native Asset"
       },
-      "examples/second": {
-        "title": "The Second"
+      "examples/nep5": {
+        "title": "NEP-5"
+      },
+      "examples/network": {
+        "title": "Network"
+      },
+      "examples/smart_contract": {
+        "title": "Smart Contract"
+      },
+      "examples/wallet": {
+        "title": "Wallet"
       },
       "guides/adv/apicore": {
         "title": "Advanced - API Core Components"

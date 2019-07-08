@@ -28,7 +28,7 @@ const siteConfig = {
     { doc: 'api/index', label: 'API' },
     { doc: 'changelog/latest', label: 'Changelog' },
     { page: 'help', label: 'Help' },
-    { doc: 'examples/first', label: 'Examples' },
+    { doc: 'examples/network', label: 'Examples' },
   ],
   users,
   /* path to images for header/footer */
