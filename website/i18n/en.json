@@ -56,6 +56,9 @@
       "changelog/v3": {
         "title": "Changelog (v3)"
       },
+      "examples/index": {
+        "title": "Overview"
+      },
       "examples/native_asset": {
         "title": "Native Asset"
       },
@@ -108,9 +111,9 @@
     "links": {
       "Docs": "Docs",
       "API": "API",
+      "Examples": "Examples",
       "Changelog": "Changelog",
-      "Help": "Help",
-      "Examples": "Examples"
+      "Help": "Help"
     },
     "categories": {
       "Getting Started": "Getting Started",
@@ -120,7 +123,9 @@
       "Plugin Modules": "Plugin Modules",
       "Latest": "Latest",
       "Past Versions": "Past Versions",
-      "Examples": "Examples"
+      "Precondition": "Precondition",
+      "Native Asset": "Native Asset",
+      "Smart Contract": "Smart Contract"
     }
   },
   "pages-strings": {
@@ -135,6 +140,7 @@
     "Get Started|no description given": "Get Started",
     "Tutorial|no description given": "Tutorial",
     "API|no description given": "API",
+    "Examples|no description given": "Examples",
     "Key generation, manipulation and encryption|no description given": "Key generation, manipulation and encryption",
     "Help Translate|recruit community translators for your project": "Help Translate",
     "Edit this Doc|recruitment message asking to edit the doc source": "Edit",

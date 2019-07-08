@@ -3,9 +3,11 @@ id: nep5
 title: NEP-5
 ---
 
-## Get NEP-5 Tokens Balance
+> You can refer to **Precondition** part to check the initiation of `apiProvider`, `myWallet` and `myAccount`
 
-### Using RPC Query to get tokens balance
+## Get Balance
+
+### With RPC Query
 
 ```javascript
 const generator = nep5.abi.balanceOf(
@@ -28,9 +30,9 @@ rpc.Query.invokeScript(script)
 
 
 
-## Send NEP-5 Tokens
+## Send NEP-5
 
-### Using Neon API to send tokens
+### With Neon API (High Level)
 
 ```javascript
 // we must change data type of contract parameters
@@ -77,8 +79,7 @@ Neon.doInvoke(config)
 
 
 
-### Using NEO-Scan API to send tokens
-
+### With NEO-Scan API (Low Level)
 ```javascript
 // Receiver address
 const receivingAddress = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
@@ -144,7 +145,7 @@ createTxByNeoScan().then(transaction => {
 
 
 
-### Sending tokens by constructing raw invocation transaction
+### Constructing Raw transaction
 
 This method is not recommended in neon-js.
 
@@ -210,11 +211,11 @@ client
 
 
 
-## Using NEO to Mint NEP-5 Tokens
+## Mint Tokens
 
 NOTE: You have to define the "mint_token" method in your NEP-5 contract.
 
-### Using Neon API to mint tokens
+### With Neon API (High Level)
 
 ```javascript
 // now we use another account to mint tokens
@@ -254,7 +255,7 @@ Neon.doInvoke(config)
 
 
 
-### Using NEO-Scan API to mint tokens
+### With NEO-Scan API (Low Level)
 
 ```javascript
 // now we use another account to mint tokens
@@ -304,7 +305,7 @@ createTxByNeoScan().then(transaction => {
 
 
 
-### Minting tokens by constructing raw invocation transaction
+### Constructing Raw Transaction
 
 This method is not recommended in neon-js.
 
@@ -379,6 +380,76 @@ client
     console.log(err);
   });
 ```
+## Witdraw - Extract NEO/GAS From a Contract
 
+First, you have to deposit some NEO/GAS into the contract.
 
+When you want to extract NEO/GAS from a smart contract, the verification trigger of the smart contract must be satisfied. It's hard to customize high level API as the verfication trigger may be different from case to case.
 
+```javascript
+const neoAssetId =
+  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
+const gasAssetId =
+  "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
+ 
+// the unspent tx from contract
+const inputObj = {
+  prevHash: "95cfeed6a101babe5df8903c72952b59e239880f3be41ab2a65fb8269284765d",
+  prevIndex: 0
+};
+ 
+// output to owner
+const outPutObj = {
+  assetId: neoAssetId,
+  value: "100",
+  scriptHash: ownerAccount.scriptHash
+};
+ 
+// create raw transaction
+let rawTransaction = new tx.ContractTransaction();
+ 
+rawTransaction.addAttribute(
+  tx.TxAttrUsage.Script,
+  u.reverseHex(wallet.getScriptHashFromAddress(ownerAccount.address))
+);
+ 
+rawTransaction.inputs[0] = new tx.TransactionInput(inputObj);
+rawTransaction.addOutput(new tx.TransactionOutput(outPutObj));
+ 
+// build invocationScript
+// String, Array
+const sb = Neon.create.scriptBuilder();
+sb.emitPush(2);
+sb.emitPush(u.str2hexstring("haha"));
+ 
+let witnessObj = {
+  invocationScript: sb.str,
+  verificationScript: ""
+};
+let witness = new tx.Witness(witnessObj);
+witness.scriptHash = "f3418e5385d450fe7c2126a6e2943";
+ 
+rawTransaction.addWitness(witness);
+ 
+// sign transaction with sender's private key
+const signature = wallet.sign(
+  rawTransaction.serialize(false),
+  ownerAccount.privateKey
+);
+ 
+// add witness
+rawTransaction.addWitness(
+  tx.Witness.fromSignature(signature, ownerAccount.publicKey)
+);
+ 
+// send raw transaction
+const client = new rpc.RPCClient("http://localhost:30333");
+client
+  .sendRawTransaction(rawTransaction)
+  .then(res => {
+    console.log(res);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+```
