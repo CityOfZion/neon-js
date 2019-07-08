@@ -13,7 +13,7 @@ const { default: Neon, rpc, api, wallet, tx, sc, u } = require("@cityofzion/neon
 // Connect to the NEO MainNet/TestNet
 const network = "MainNet"; // "TestNet"
 const apiProvider = new api.neoscan.instance(
-    // NEO-Scan API URL
+  // NEO-Scan API URL
   "https://api.neoscan.io/api/main_net"
   //"https://neoscan-testnet.io/api/test_net"  
 );
@@ -38,7 +38,7 @@ const apiCli = new api.neoCli.instance(
 
 
 
-## Connect to the neo-local PrivateNet
+## Connect to the PrivateNet
 
 ### Using NEO-Scan API
 

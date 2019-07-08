@@ -146,6 +146,8 @@ createTxByNeoScan().then(transaction => {
 
 ### Sending tokens by constructing raw invocation transaction
 
+This method is not recommended in neon-js.
+
 ```javascript
 // Receiver address
 const receivingAddress = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
@@ -209,6 +211,8 @@ client
 
 
 ## Using NEO to Mint NEP-5 Tokens
+
+NOTE: You have to define the "mint_token" method in your NEP-5 contract.
 
 ### Using Neon API to mint tokens
 
@@ -301,6 +305,8 @@ createTxByNeoScan().then(transaction => {
 
 
 ### Minting tokens by constructing raw invocation transaction
+
+This method is not recommended in neon-js.
 
 ```javascript
 const neoAssetId =

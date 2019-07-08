@@ -71,6 +71,8 @@ createTxWithNeoScan().then(transaction => {
 
 ### Sending NEO and GAS by constructing contract transaction
 
+This method is not recommended in neon-js.
+
 ```javascript
 // Receiver address and script hash
 const receivingAddress = "AT27F9e1HaUHi6LNhxafVFMDrajtWVksNq";
@@ -188,6 +190,8 @@ createTxWithNeoScan().then(transaction => {
 
 ### Claiming GAS by constructing claim transaction
 
+This method is not recommended in neon-js.
+
 ```javascript
 // Receiver address and script hash
 const receivingAddress = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
@@ -211,7 +215,7 @@ let claimObj2 = {
  
 let outPutObj1 = {
   assetId: gasAssetId,
-  value: "29011.99940376",  //available GAS,RPC: getunclaimed()
+  value: "29011.99940376",  //available GAS, RPC: getunclaimed()
   scriptHash: myAccount.scriptHash
 };
  

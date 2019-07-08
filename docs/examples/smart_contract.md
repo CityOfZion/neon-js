@@ -83,6 +83,8 @@ createTxByNeoScan().then(transaction => {
 
 ## Invoking Contract by constructing invocation transaction
 
+This method is not recommended in neon-js.
+
 ```javascript
 const props = {
   scriptHash: "80de34fbe3e6488ce316b722c5455387b001df31",
@@ -131,6 +133,8 @@ client
 
 ## Local Invocation(Will not send to the NEO blockchain)
 
+NOTE: This method will not send any transactions to the blockchain.
+
 ```javascript
 const sb = Neon.create.scriptBuilder();
 sb.emitAppCall("80de34fbe3e6488ce316b722c5455387b001df31", "name");
@@ -148,7 +152,13 @@ rpc.Query.invokeScript(script)
   });
 ```
 
+
+
 ## Extract NEO/GAS From a Contract
+
+First, you have to deposit some NEO/GAS into the contract.
+
+When you want to extract NEO/GAS from a smart contract, the verification trigger of the smart contract must be satisfied.
 
 ```javascript
 const neoAssetId =
