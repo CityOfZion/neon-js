@@ -3,18 +3,19 @@ id: network
 title: Network
 ---
 
-## Connect to the MainNet
+## Connect to the MainNet/TestNet
 
 ### Using NEO-Scan API
 
 ```javascript
 const { default: Neon, rpc, api, wallet, tx, sc, u } = require("@cityofzion/neon-js");
 
-// Connect to the NEO MainNet
-const network = "MainNet";
+// Connect to the NEO MainNet/TestNet
+const network = "MainNet"; // "TestNet"
 const apiProvider = new api.neoscan.instance(
     // NEO-Scan API URL
   "https://api.neoscan.io/api/main_net"
+  //"https://neoscan-testnet.io/api/test_net"  
 );
 ```
 
@@ -25,47 +26,15 @@ const apiProvider = new api.neoscan.instance(
 ```javascript
 const { default: Neon, rpc, api, wallet, tx, sc, u } = require("@cityofzion/neon-js");
 
-// Connect to the NEO MainNet
-const network = "TestNet";
+// Connect to the NEO MainNet/TestNet
+const network = "MainNet";  // "TestNet"
 const apiCli = new api.neoCli.instance(
   	// RPC node on main net
   "http://seed5.ngd.network:10332"
+   	// TestNet Node
+  //"http://seed5.ngd.network:20332"
 );
 ```
-
-
-
-## Connect to the TestNet
-
-### Using NEO-Scan API
-
-```javascript
-const { default: Neon, rpc, api, wallet, tx, sc, u } = require("@cityofzion/neon-js");
-
-// Connect to the NEO TestNet
-const network = "TestNet";
-const apiProvider = new api.neoscan.instance(
-    // NEO-Scan API URL
-  "https://neoscan-testnet.io/api/test_net"
-);
-```
-
-
-
-### Using NeoCli API
-
-```javascript
-const { default: Neon, rpc, api, wallet, tx, sc, u } = require("@cityofzion/neon-js");
-
-// Connect to the NEO TestNet
-const network = "TestNet";
-const apiCli = new api.neoCli.instance(
-  // RPC node on test net
-  "http://seed5.ngd.network:20332"
-);
-```
-
-
 
 
 
