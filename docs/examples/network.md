@@ -3,7 +3,7 @@ id: first
 title: Network
 ---
 
-## Connect to the main_net
+## Connect to the MainNet
 
 ### Using NEO-Scan API
 
@@ -35,7 +35,7 @@ const apiCli = new api.neoCli.instance(
 
 
 
-## Connect to the test_net
+## Connect to the TestNet
 
 ### Using NEO-Scan API
 
@@ -69,7 +69,7 @@ const apiCli = new api.neoCli.instance(
 
 
 
-## Connect to the neo-local private_net
+## Connect to the neo-local PrivateNet
 
 ### Using NEO-Scan API
 
