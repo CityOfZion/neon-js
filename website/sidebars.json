@@ -34,5 +34,8 @@
   "changelog": {
     "Latest": ["changelog/latest"],
     "Past Versions": ["changelog/v3", "changelog/v2", "changelog/v1"]
+  },
+  "examples": {
+    "Examples": ["examples/first", "examples/second"]
   }
 }

@@ -56,6 +56,12 @@
       "changelog/v3": {
         "title": "Changelog (v3)"
       },
+      "examples/first": {
+        "title": "The First"
+      },
+      "examples/second": {
+        "title": "The Second"
+      },
       "guides/adv/apicore": {
         "title": "Advanced - API Core Components"
       },
@@ -72,7 +78,7 @@
         "title": "Basic - Invoking a Smart Contract"
       },
       "guides/basic/multi": {
-        "title": "Signing with a multi-sig account"
+        "title": "Basic - Signing with a multi-sig account"
       },
       "guides/basic/privnet": {
         "title": "Basic - Using a Private Net"
@@ -94,7 +100,8 @@
       "Docs": "Docs",
       "API": "API",
       "Changelog": "Changelog",
-      "Help": "Help"
+      "Help": "Help",
+      "Examples": "Examples"
     },
     "categories": {
       "Getting Started": "Getting Started",
@@ -103,7 +110,8 @@
       "Core Modules": "Core Modules",
       "Plugin Modules": "Plugin Modules",
       "Latest": "Latest",
-      "Past Versions": "Past Versions"
+      "Past Versions": "Past Versions",
+      "Examples": "Examples"
     }
   },
   "pages-strings": {
