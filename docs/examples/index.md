@@ -14,8 +14,8 @@ We write some example codes of `neon-js` for developers to refer to. The example
 
 - Wallet Operation
   - Create wallet
-  - import wallet
-  - export wallet
+  - Import wallet
+  - Export wallet
 
 - Native Asset
   - Get Balance
