@@ -1,11 +1,9 @@
-import { num2VarInt, StringStream } from "../../u";
+import { num2VarInt, StringStream, fixed82num } from "../../u";
 import {
   TransactionAttribute,
-  TransactionInput,
-  TransactionOutput,
   Witness
 } from "../components";
-import { TransactionLike } from "./BaseTransaction";
+import { TransactionLike } from "./Transaction";
 
 export function deserializeArrayOf<T>(
   type: (ss: StringStream) => T,
@@ -39,6 +37,22 @@ export function deserializeVersion(
   return Object.assign({ version: parseInt(byte, 16) });
 }
 
+export function deserializeScript(
+  ss: StringStream,
+  tx: Partial<TransactionLike> = {}
+): Partial<TransactionLike> {
+  const script = ss.readVarBytes();
+  return Object.assign(tx, { script });
+}
+
+export function deserializeSystemFee(
+  ss: StringStream,
+  tx: Partial<TransactionLike> = {}
+): Partial<TransactionLike> {
+  const gas = fixed82num(ss.read(8));
+  return Object.assign(tx, { gas });
+}
+
 export function deserializeAttributes(
   ss: StringStream,
   tx: Partial<TransactionLike>
@@ -48,26 +62,6 @@ export function deserializeAttributes(
     ss
   ).map(i => i.export());
   return Object.assign(tx, { attributes });
-}
-
-export function deserializeInputs(
-  ss: StringStream,
-  tx: Partial<TransactionLike>
-): Partial<TransactionLike> {
-  const inputs = deserializeArrayOf(TransactionInput.fromStream, ss).map(i =>
-    i.export()
-  );
-  return Object.assign(tx, { inputs });
-}
-
-export function deserializeOutputs(
-  ss: StringStream,
-  tx: Partial<TransactionLike>
-): Partial<TransactionLike> {
-  const outputs = deserializeArrayOf(TransactionOutput.fromStream, ss).map(i =>
-    i.export()
-  );
-  return Object.assign(tx, { outputs });
 }
 
 export function deserializeWitnesses(

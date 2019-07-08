@@ -97,3 +97,5 @@ export const TX_VERSION: { [key: string]: number } = {
   PUBLISH: 0,
   REGISTER: 0
 };
+
+export const TX_VERSION_V3 = 0;
