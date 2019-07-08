@@ -3,9 +3,41 @@ id: native_asset
 title: Native Asset
 ---
 
+> You can refer to **Precondition** part to check the initiation of `apiProvider`, `myWallet` and `myAccount`
+## Get Balance
+
+### with NEO-Scan API
+
+```javascript
+apiProvider
+ .getBalance(myWallet.accounts[1].address)
+ .then(res =>
+    console.log(
+      `NEO: ${res.assets["NEO"].balance.toNumber()},
+       GAS: ${res.assets["GAS"].balance.toNumber()}`
+   )
+ )
+ .catch("Get Balance Error!");
+```
+
+### with RPC Query
+
+```javascript
+rpc.Query.getAccountState(myWallet.accounts[1].address)
+  .execute("http://localhost:30333")
+  .then(response => {
+    console.log(
+      `NEO: ${response.result.balances[0].value},
+       GAS: ${response.result.balances[1].value}`
+    );
+  })
+  .catch("Get Balance Error!");
+```
+
+
 ## Send NEO & GAS
 
-### Using Neon API to send NEO and GAS
+### with Neon API (High Level)
 
 ```javascript
 // Receiver address
@@ -35,7 +67,7 @@ Neon.sendAsset(config)
 
 
 
-### Using NEO-Scan API to send NEO and GAS
+### With NEO-Scan API (Low Level)
 
 ```javascript
 const receivingAddress = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
@@ -69,7 +101,7 @@ createTxWithNeoScan().then(transaction => {
 
 
 
-### Sending NEO and GAS by constructing contract transaction
+### Constructing Raw Transaction
 
 This method is not recommended in neon-js.
 
@@ -137,7 +169,7 @@ client
 
 ## Claim GAS
 
-### Using Neon API to claim GAS
+### With Neon API (High Level)
 
 ```javascript
 // Claimer configs
@@ -160,7 +192,7 @@ Neon.claimGas(config)
 
 
 
-### Using NEO-Scan API to claim GAS
+### With NEO-Scan API (Low Level)
 
 ```javascript
 // create claim transaction using NEO-Scan API
@@ -188,7 +220,7 @@ createTxWithNeoScan().then(transaction => {
 
 
 
-### Claiming GAS by constructing claim transaction
+### Constructing Raw transaction
 
 This method is not recommended in neon-js.
 

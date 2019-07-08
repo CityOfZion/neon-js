@@ -36,12 +36,9 @@
     "Past Versions": ["changelog/v3", "changelog/v2", "changelog/v1"]
   },
   "examples": {
-    "Examples": [
-      "examples/network",
-      "examples/wallet",
-      "examples/native_asset", 
-      "examples/smart_contract",
-      "examples/nep5"
-    ]
+    "Overview": ["examples/index"],
+    "Precondition": ["examples/network", "examples/wallet"],
+    "Native Asset": ["examples/native_asset"],
+    "Smart Contract":["examples/smart_contract", "examples/nep5"]
   }
 }

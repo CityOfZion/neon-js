@@ -3,49 +3,39 @@ id: network
 title: Network
 ---
 
-## Connect to the MainNet/TestNet
+## Initiate MainNet/TestNet Instance
 
-### Using NEO-Scan API
+### With NEO-Scan API
 
 ```javascript
-const { default: Neon, rpc, api, wallet, tx, sc, u } = require("@cityofzion/neon-js");
+const { api } = require("@cityofzion/neon-js");
 
-// Connect to the NEO MainNet/TestNet
-const network = "MainNet"; // "TestNet"
+const network = "MainNet"; // or "TestNet"
 const apiProvider = new api.neoscan.instance(
-  // NEO-Scan API URL
   "https://api.neoscan.io/api/main_net"
-  //"https://neoscan-testnet.io/api/test_net"  
+  //or "https://neoscan-testnet.io/api/test_net" for TestNet
 );
 ```
 
-
-
-### Using NeoCli API
+### With NeoCli API
 
 ```javascript
-const { default: Neon, rpc, api, wallet, tx, sc, u } = require("@cityofzion/neon-js");
+const { api } = require("@cityofzion/neon-js");
 
-// Connect to the NEO MainNet/TestNet
-const network = "MainNet";  // "TestNet"
+const network = "MainNet";  // or "TestNet"
 const apiCli = new api.neoCli.instance(
-  	// RPC node on main net
   "http://seed5.ngd.network:10332"
-   	// TestNet Node
-  //"http://seed5.ngd.network:20332"
+  //or "http://seed5.ngd.network:20332" for TestNet
 );
 ```
 
-
-
-## Connect to the PrivateNet
+## Initiate PrivateNet Instance
 
 ### Using NEO-Scan API
 
 ```javascript
-const { default: Neon, rpc, api, wallet, tx, sc, u } = require("@cityofzion/neon-js");
+const { default: Neon, rpc, api} = require("@cityofzion/neon-js");
  
-// Connect to neo-local network
 const privateNetConfig = {
   name: "PrivateNet",
   nodes: [
@@ -53,9 +43,9 @@ const privateNetConfig = {
     "neo-cli-privatenet-2:20334",
     "neo-cli-privatenet-3:20335",
     "neo-cli-privatenet-4:20336"
- ],
+ ], // Optional
   extra: {
-    neoscan: "http://localhost:4000/api/main_net"
+    neoscan: "http://localhost:4000/api/main_net" // neo-scan url for private chain
  }
 };
  
@@ -72,7 +62,7 @@ const apiProvider = new api.neoscan.instance("PrivateNet");
 ### Using RPC Client
 
 ```javascript
-const nodeUrl = "http://localhost:30333"
+const nodeUrl = "http://localhost:30333" // rpc url
 const rpcClient = new rpc.RPCClient(nodeUrl);
 ```
 
