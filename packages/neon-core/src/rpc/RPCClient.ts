@@ -368,7 +368,6 @@ export class RPCClient {
     const bal = new wallet.Balance({
       address: getUnspentsResult.address
     });
-    console.log(getUnspentsResult);
 
     for (const assetBalance of getUnspentsResult.balance) {
       if (assetBalance.amount === 0) {
