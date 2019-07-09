@@ -1,0 +1,4 @@
+name: getconnectioncount
+description: Gets the current number of connections for the node.
+resources:
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js

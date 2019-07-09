@@ -1,0 +1,4 @@
+  name: getblockheader
+  description: Returns the corresponding block header information according to the specified script hash. This method builds a custom request and executes it using the neon-js RPC query facility.
+  resources:
+    - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js

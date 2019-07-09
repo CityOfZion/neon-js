@@ -1,0 +1,4 @@
+name: getrawmempool
+description: Gets a list of unconfirmed transactions in memory.
+resources:
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js

@@ -1,0 +1,4 @@
+name: getblocksysfee
+description: Returns the system fees of the block, based on the specified index.
+resources:
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js

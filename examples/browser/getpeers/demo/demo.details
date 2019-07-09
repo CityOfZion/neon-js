@@ -1,0 +1,4 @@
+name: getpeers
+description: Gets a list of nodes that are currently connected/disconnected by this node.
+resources:
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js

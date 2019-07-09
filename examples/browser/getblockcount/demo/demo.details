@@ -1,0 +1,4 @@
+name: getblockcount
+description: Get the number of blocks on a chain.
+resources:
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js
