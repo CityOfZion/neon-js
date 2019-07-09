@@ -56,6 +56,13 @@ describe("getTokenBalances", () => {
     expect(Object.keys(balances)).toEqual(
       expect.arrayContaining(["RPX", "RHTT4", "LWTF", "NXT"])
     );
+    expect(balances.NXT instanceof u.Fixed8).toBe(true);
+    const balance = await getTokenBalance(
+      TESTNET_URL,
+      CONST.CONTRACTS.TEST_NXT,
+      "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+    );
+    expect(balances.NXT.toNumber()).toBe(balance.toNumber());
   });
 });
 
