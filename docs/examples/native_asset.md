@@ -9,6 +9,8 @@ title: Native Asset
 ### with NEO-Scan API
 
 ```javascript
+const { default: Neon, api } = require("@cityofzion/neon-js");
+
 apiProvider
  .getBalance(myWallet.accounts[1].address)
  .then(res =>
@@ -23,6 +25,8 @@ apiProvider
 ### with RPC Query
 
 ```javascript
+const { rpc } = require("@cityofzion/neon-js");
+
 rpc.Query.getAccountState(myWallet.accounts[1].address)
   .execute("http://localhost:30333")
   .then(response => {
@@ -40,6 +44,8 @@ rpc.Query.getAccountState(myWallet.accounts[1].address)
 ### with Neon API (High Level)
 
 ```javascript
+const { default: Neon, api } = require("@cityofzion/neon-js");
+
 // Receiver address
 const receivingAddress = "AJdNhG7qh6p2CNxMnEyb5xGrER5HmsxwjH";
 const intent = api.makeIntent({ NEO: 1, GAS: 1 }, receivingAddress);
@@ -70,6 +76,8 @@ Neon.sendAsset(config)
 ### With NEO-Scan API (Low Level)
 
 ```javascript
+const { default: Neon, rpc, api } = require("@cityofzion/neon-js");
+
 const receivingAddress = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
  
 // create contract transaction using NEO-Scan API
@@ -85,7 +93,7 @@ async function createTxWithNeoScan() {
 }
  
 // Send raw transaction
-const client = Neon.create.rpcClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://localhost:30333");
 createTxWithNeoScan().then(transaction => {
   console.log(transaction);
   client
@@ -106,6 +114,8 @@ createTxWithNeoScan().then(transaction => {
 This method is not recommended in neon-js.
 
 ```javascript
+const { default: Neon, wallet, rpc, tx } = require("@cityofzion/neon-js");
+
 // Receiver address and script hash
 const receivingAddress = "AT27F9e1HaUHi6LNhxafVFMDrajtWVksNq";
 const receivingAddressScriptHash = "7b5a8ec29318ad44143a29f947357995824f2ecc";
@@ -172,6 +182,8 @@ client
 ### With Neon API (High Level)
 
 ```javascript
+const { default: Neon, api } = require("@cityofzion/neon-js");
+
 // Claimer configs
 const config = {
   api: apiProvider, // The network to perform the action, MainNet or TestNet.
@@ -195,6 +207,8 @@ Neon.claimGas(config)
 ### With NEO-Scan API (Low Level)
 
 ```javascript
+const { default: Neon, rpc, api } = require("@cityofzion/neon-js");
+
 // create claim transaction using NEO-Scan API
 async function createTxWithNeoScan() {
   let claims = await apiProvider.getClaims(myAccount.address);
@@ -204,7 +218,7 @@ async function createTxWithNeoScan() {
 }
  
 // Send raw transaction
-const client = Neon.create.rpcClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://localhost:30333");
 createTxWithNeoScan().then(transaction => {
   console.log(transaction);
   client
@@ -225,6 +239,8 @@ createTxWithNeoScan().then(transaction => {
 This method is not recommended in neon-js.
 
 ```javascript
+const { default: Neon, wallet, rpc, tx } = require("@cityofzion/neon-js");
+
 // Receiver address and script hash
 const receivingAddress = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
 const receivingAddressScriptHash = "3299cf047547fc89db493f10dfed26e4e5d28fca";
