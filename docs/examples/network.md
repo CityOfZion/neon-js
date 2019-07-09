@@ -5,12 +5,12 @@ title: Network
 
 ## Initiate MainNet/TestNet Instance
 
-### With NEO-Scan API
+### With Neoscan API
 
 ```javascript
 const { api } = require("@cityofzion/neon-js");
 
-const network = "MainNet"; // or "TestNet"
+const NETWORK = "MainNet"; // or "TestNet"
 const apiProvider = new api.neoscan.instance(
   "https://api.neoscan.io/api/main_net"
   //or "https://neoscan-testnet.io/api/test_net" for TestNet
@@ -22,7 +22,7 @@ const apiProvider = new api.neoscan.instance(
 ```javascript
 const { api } = require("@cityofzion/neon-js");
 
-const network = "MainNet";  // or "TestNet"
+const NETWORK = "MainNet"; // or "TestNet"
 const apiCli = new api.neoCli.instance(
   "http://seed5.ngd.network:10332"
   //or "http://seed5.ngd.network:20332" for TestNet
@@ -31,11 +31,11 @@ const apiCli = new api.neoCli.instance(
 
 ## Initiate PrivateNet Instance
 
-### Using NEO-Scan API
+### Using Neoscan API
 
 ```javascript
-const { default: Neon, rpc, api} = require("@cityofzion/neon-js");
- 
+const { default: Neon, rpc, api } = require("@cityofzion/neon-js");
+
 const privateNetConfig = {
   name: "PrivateNet",
   nodes: [
@@ -43,28 +43,26 @@ const privateNetConfig = {
     "neo-cli-privatenet-2:20334",
     "neo-cli-privatenet-3:20335",
     "neo-cli-privatenet-4:20336"
- ], // Optional
+  ], // Optional
   extra: {
-    neoscan: "http://localhost:4000/api/main_net" // neo-scan url for private chain
- }
+    // Neoscan URL
+    neoscan: "http://localhost:4000/api/main_net"
+  }
 };
- 
+
 // Add network config to neon-js
 const privateNet = new rpc.Network(privateNetConfig);
 Neon.add.network(privateNet, true);
- 
-// You will be able to lookup an instance of PrivateNet neoscan
+
+// lookup an instance of PrivateNet neoscan
 const apiProvider = new api.neoscan.instance("PrivateNet");
 ```
-
-
 
 ### Using RPC Client
 
 ```javascript
 const { rpc } = require("@cityofzion/neon-js");
 
-const nodeUrl = "http://rpc.url:portNum" // rpc url
-const rpcClient = new rpc.RPCClient(nodeUrl);
+const nodeUrl = "http://rpc.url:portNum"; // RPC URL
+const client = new rpc.RPCClient(nodeUrl);
 ```
-

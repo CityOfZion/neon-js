@@ -12,7 +12,8 @@ In this way, `neon-js` will generate a random key pair.
 ```javascript
 const { default: Neon, wallet } = require("@cityofzion/neon-js");
 
-// We create a wallet with name 'myWallet'. Arguments 'name' is optional. The constructor is fine with no arguments.
+// We create a wallet with name 'myWallet'.
+// Arguments 'name' is optional.
 const myWallet = Neon.create.wallet({ name: "MyWallet" });
 // We generate a new Account and add it to the wallet
 myWallet.addAccount();
@@ -24,12 +25,10 @@ myWallet.addAccount();
 const { default: Neon, wallet } = require("@cityofzion/neon-js");
 
 // We add Account "myAccount" to the wallet using a wif key.
-const wifKey = "KxDgvEKzgSBPPfuVfw67oPQBSjidEiqTHURKSDL1R7yGaGYAeYnr";
-const myAccount = new wallet.Account(privateKey);
+const WIF = "KxDgvEKzgSBPPfuVfw67oPQBSjidEiqTHURKSDL1R7yGaGYAeYnr";
+const myAccount = new wallet.Account(WIF);
 myWallet.addAccount(myAccount);
 ```
-
-
 
 ### Import wallet by nep6 file
 
@@ -41,13 +40,11 @@ const myAccount = new wallet.Account(
   JSON.parse(fs.readFileSync("./wallet.json"))
 );
 myWallet.addAccount(myAccount);
-// we need to decrypt wallet by a password
+// We need to decrypt wallet by a password
 myAccount.decrypt("password").then(() => {
   console.log(myAccount.WIF);
 });
 ```
-
-
 
 ## Export Wallet
 

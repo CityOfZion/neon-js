@@ -2,7 +2,7 @@
 id: index
 title: Overview
 ---
-We write some example codes of `neon-js` for developers to refer to. The examples are expected to cover all cases and methods on different levels.
+Here are some examples of `neon-js` for developers to refer to. The examples are expected to cover all cases and methods on different levels.
 
 ## Cases
 - Network Initiation
