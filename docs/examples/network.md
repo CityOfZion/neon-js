@@ -64,7 +64,7 @@ const apiProvider = new api.neoscan.instance("PrivateNet");
 ```javascript
 const { rpc } = require("@cityofzion/neon-js");
 
-const nodeUrl = "http://localhost:30333" // rpc url
+const nodeUrl = "http://rpc.url:portNum" // rpc url
 const rpcClient = new rpc.RPCClient(nodeUrl);
 ```
 
