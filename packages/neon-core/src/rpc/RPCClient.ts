@@ -3,10 +3,9 @@ import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from "../consts";
 import logger from "../logging";
 import { timeout } from "../settings";
 import { BaseTransaction } from "../tx/transaction/BaseTransaction";
-import { isAddress, ClaimItem } from "../wallet";
+import { isAddress, Claims, Balance, Coin } from "../wallet";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
-import { wallet } from "..";
 
 const log = logger("rpc");
 
@@ -329,7 +328,7 @@ export class RPCClient {
   /**
    * Get the unspent utxo for an address
    */
-  public async getUnspents(addr: string): Promise<wallet.Balance> {
+  public async getUnspents(addr: string): Promise<Balance> {
     const response = await this.execute(Query.getUnspents(addr));
     return this.parseUnspentsToBalance(response.result);
   }
@@ -345,9 +344,9 @@ export class RPCClient {
   /**
    * Get the claimable for an address
    */
-  public async getClaimable(addr: string): Promise<wallet.Claims> {
+  public async getClaimable(addr: string): Promise<Claims> {
     const response = await this.execute(Query.getClaimable(addr));
-    return new wallet.Claims({
+    return new Claims({
       net: this.net,
       address: response.result.address,
       claims: response.result.claimable.map(
@@ -364,8 +363,8 @@ export class RPCClient {
     });
   }
 
-  private parseUnspentsToBalance(getUnspentsResult: any): wallet.Balance {
-    const bal = new wallet.Balance({
+  private parseUnspentsToBalance(getUnspentsResult: any): Balance {
+    const bal = new Balance({
       address: getUnspentsResult.address
     });
 
@@ -377,7 +376,7 @@ export class RPCClient {
         bal.addAsset(assetBalance.asset_symbol, {
           unspent: assetBalance.unspent.map(
             (utxo: any) =>
-              new wallet.Coin({
+              new Coin({
                 index: utxo.n,
                 txid: utxo.txid,
                 value: utxo.value
