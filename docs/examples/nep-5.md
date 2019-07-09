@@ -21,7 +21,7 @@ const script = builder.str;
  
 // local invocation
 rpc.Query.invokeScript(script)
- .execute("http://localhost:30333")
+ .execute("http://rpc.url:portNum")
  .then(res => {
     console.log(res);
  })
@@ -63,7 +63,7 @@ const script = Neon.create.script(props);
  
 const config = {
   api: apiProvider, // The API Provider that we rely on for balance and rpc information
-  url: "http://localhost:30333",
+  url: "http://rpc.url:portNum",
   account: myAccount, // The sending Account
   script: script, // The Smart Contract invocation script
   gas: 0, //This is additional gas paying to system fee.
@@ -136,7 +136,7 @@ async function createTxByNeoScan() {
 }
  
 // send transaction
-const client = new rpc.RPCClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://rpc.url:portNum");
 createTxByNeoScan().then(transaction => {
   client
     .sendRawTransaction(transaction)
@@ -206,7 +206,7 @@ rawTransaction.addWitness(
 );
  
 // send raw transaction
-const client = new rpc.RPCClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
   .sendRawTransaction(rawTransaction)
   .then(res => {
@@ -246,7 +246,7 @@ const script = Neon.create.script(props);
  
 const config = {
   api: apiProvider,
-  url: "http://localhost:30333",
+  url: "http://rpc.url:portNum",
   account: senderAccount, // here is "sender address", not an "owner address".
   intents: intent,
   script: script
@@ -302,7 +302,7 @@ async function createTxByNeoScan() {
 }
  
 // send transaction
-const client = new rpc.RPCClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://rpc.url:portNum");
 createTxByNeoScan().then(transaction => {
   client
     .sendRawTransaction(transaction)
@@ -384,7 +384,7 @@ rawTransaction.addWitness(
 );
  
 // send raw transaction
-const client = new rpc.RPCClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
   .sendRawTransaction(rawTransaction)
   .then(res => {
@@ -394,11 +394,13 @@ client
     console.log(err);
   });
 ```
-## Withdraw - Extract NEO/GAS From a Contract
+## Witdraw - Receive NEO/GAS from Contract
 
 First, you have to deposit some NEO/GAS into the contract.
 
-When you want to extract NEO/GAS from a smart contract, the verification trigger of the smart contract must be satisfied. It's hard to customize high level API as the verfication trigger may be different from case to case.
+> When you want to extract NEO/GAS from a smart contract, the verification trigger of the smart contract must be satisfied. It's hard to customize high level API as the verfication trigger may be different from case to case.
+
+> In below example, verification trigger will check the signature from contract owner
 
 ```javascript
 const { default: Neon, wallet, tx, u, rpc } = require("@cityofzion/neon-js");
@@ -459,7 +461,7 @@ rawTransaction.addWitness(
 );
  
 // send raw transaction
-const client = new rpc.RPCClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
   .sendRawTransaction(rawTransaction)
   .then(res => {

@@ -5,14 +5,14 @@ title: Wallet
 
 ## Create/Import Wallet
 
-### Create wallet and random account
+### Create wallet and a random account
 
-In this way, the SDK will generate a random key pair.
+In this way, `neon-js` will generate a random key pair.
 
 ```javascript
 const { default: Neon, wallet } = require("@cityofzion/neon-js");
 
-// We create a wallet with name 'myWallet'. This is optional. The constructor is fine with no arguments.
+// We create a wallet with name 'myWallet'. Arguments 'name' is optional. The constructor is fine with no arguments.
 const myWallet = Neon.create.wallet({ name: "MyWallet" });
 // We generate a new Account and add it to the wallet
 myWallet.addAccount();

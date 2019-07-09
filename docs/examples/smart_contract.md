@@ -22,7 +22,7 @@ console.log(script);
  
 const config = {
   api: apiProvider, // The API Provider that we rely on for balance and rpc information
-  url: "http://localhost:30333", // Optional if apiProvider is assigned
+  url: "http://rpc.url:portNum", // Optional if apiProvider is assigned
   account: myAccount, // The sending Account
   script: script, // The Smart Contract invocation script
   gas: 0, //This is additional gas paying to system fee.
@@ -74,7 +74,7 @@ async function createTxByNeoScan() {
 }
  
 // Send raw transaction
-const client = new rpc.RPCClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://rpc.url:portNum");
 createTxByNeoScan().then(transaction => {
   client
     .sendRawTransaction(transaction)
@@ -128,7 +128,7 @@ rawTransaction.addWitness(
 );
  
 // Send raw transaction
-const client = new rpc.RPCClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
   .sendRawTransaction(rawTransaction)
   .then(res => {
@@ -155,7 +155,7 @@ const script = sb.str;
  
 // Using RPC Query to do local invocation
 rpc.Query.invokeScript(script)
-  .execute("http://localhost:30333")
+  .execute("http://rpc.url:portNum")
   .then(res => {
     console.log(res.result);
   })

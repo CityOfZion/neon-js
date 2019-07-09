@@ -28,7 +28,7 @@ apiProvider
 const { rpc } = require("@cityofzion/neon-js");
 
 rpc.Query.getAccountState(myWallet.accounts[1].address)
-  .execute("http://localhost:30333")
+  .execute("http://rpc.url:portNum")
   .then(response => {
     console.log(
       `NEO: ${response.result.balances[0].value},
@@ -53,11 +53,11 @@ const intent = api.makeIntent({ NEO: 1, GAS: 1 }, receivingAddress);
 // Sender configs
 const config = {
   api: apiProvider, // The network to perform the action, MainNet or TestNet.
-  url: "http://localhost:30333",
+  url: "http://rpc.url:portNum",
   account: myAccount, // This is the address which the assets come from.
   intents: intent, // This is where you want to send assets to.
-  gas: 0, //This is additional gas paying to system fee.
-  fees: 0 //Additional gas paying for network fee(prioritizing, oversize transaction).
+  gas: 0, // Optional, this is additional gas paying to system fee.
+  fees: 0 // Optional, additional gas paying for network fee(prioritizing, oversize transaction).
 };
  
 // Neon API
@@ -93,7 +93,7 @@ async function createTxWithNeoScan() {
 }
  
 // Send raw transaction
-const client = new rpc.RPCClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://rpc.url:portNum");
 createTxWithNeoScan().then(transaction => {
   console.log(transaction);
   client
@@ -164,7 +164,7 @@ rawTransaction.addWitness(
 );
  
 // use RPC Client to send raw transaction
-const client = new rpc.RPCClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
  .sendRawTransaction(rawTransaction)
  .then(response => {
@@ -187,7 +187,7 @@ const { default: Neon, api } = require("@cityofzion/neon-js");
 // Claimer configs
 const config = {
   api: apiProvider, // The network to perform the action, MainNet or TestNet.
-  url: "http://localhost:30333",
+  url: "http://rpc.url:portNum",
   account: myAccount // This is the address which the assets come from.
 };
  
@@ -218,7 +218,7 @@ async function createTxWithNeoScan() {
 }
  
 // Send raw transaction
-const client = new rpc.RPCClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://rpc.url:portNum");
 createTxWithNeoScan().then(transaction => {
   console.log(transaction);
   client
@@ -293,7 +293,7 @@ rawTransaction.addWitness(
 );
  
 // Send raw transaction
-const client = new rpc.RPCClient("http://localhost:30333");
+const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
   .sendRawTransaction(rawTransaction)
   .then(res => {

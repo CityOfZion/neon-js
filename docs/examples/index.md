@@ -1,11 +1,8 @@
 ---
 id: index
 title: Overview
-author: Frank Li
-authorURL: https://twitter.com/foobarbaz
-authorFBID: 503283835
 ---
-We write some example codes of `neon-js` for developers to refer to. The examples aim to cover all cases and methods on different levels.
+We write some example codes of `neon-js` for developers to refer to. The examples are expected to cover all cases and methods on different levels.
 
 ## Cases
 - Network Initiation
@@ -28,10 +25,10 @@ We write some example codes of `neon-js` for developers to refer to. The example
 
 
 - NEP-5
-  - Get NEP-5 Balance
-  - Send NEP-5
+  - Get NEP5 Balance
+  - Send NEP5
   - Mint Tokens
-  - Withdraw(Extract Native Asset from Contract Address)
+  - Withdraw(Receive NEO/GAS from Contract Address)
 
 ## API Levels
 - High Level API
