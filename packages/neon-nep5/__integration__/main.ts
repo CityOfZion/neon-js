@@ -57,6 +57,20 @@ describe("getTokenBalances", () => {
       expect.arrayContaining(["RPX", "RHTT4", "LWTF", "NXT"])
     );
   });
+
+  test("getTokenBalances and getTokenBalance should return same value", async () => {
+    const balances = await getTokenBalances(
+      TESTNET_URL,
+      [CONST.CONTRACTS.TEST_NXT],
+      "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+    );
+    const balance = await getTokenBalance(
+      TESTNET_URL,
+      CONST.CONTRACTS.TEST_NXT,
+      "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+    );
+    expect(balances.NXT.toNumber()).toBe(balance.toNumber());
+  });
 });
 
 describe("getToken", () => {
