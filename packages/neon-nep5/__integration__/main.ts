@@ -56,7 +56,14 @@ describe("getTokenBalances", () => {
     expect(Object.keys(balances)).toEqual(
       expect.arrayContaining(["RPX", "RHTT4", "LWTF", "NXT"])
     );
-    expect(balances.NXT instanceof u.Fixed8).toBe(true);
+  });
+
+  test("getTokenBalances and getTokenBalance should return same value", async () => {
+    const balances = await getTokenBalances(
+      TESTNET_URL,
+      [CONST.CONTRACTS.TEST_NXT],
+      "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+    );
     const balance = await getTokenBalance(
       TESTNET_URL,
       CONST.CONTRACTS.TEST_NXT,
@@ -64,20 +71,6 @@ describe("getTokenBalances", () => {
     );
     expect(balances.NXT.toNumber()).toBe(balance.toNumber());
   });
-});
-
-test("getTokenBalances and getTokenBalance should return same value", async () => {
-  const balances = await getTokenBalances(
-    TESTNET_URL,
-    [CONST.CONTRACTS.TEST_NXT],
-    "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
-  );
-  const balance = await getTokenBalance(
-    TESTNET_URL,
-    CONST.CONTRACTS.TEST_NXT,
-    "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
-  );
-  expect(balances.NXT.toNumber()).toBe(balance.toNumber());
 });
 
 describe("getToken", () => {
