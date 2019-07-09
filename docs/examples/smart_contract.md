@@ -10,6 +10,8 @@ title: Smart Contract
 ### With Neon API (High Level)
 
 ```javascript
+const { default: Neon, api } = require("@cityofzion/neon-js");
+
 const sb = Neon.create.scriptBuilder();
 // fill your contract script hash, function name and parameters
 sb.emitAppCall("80de34fbe3e6488ce316b722c5455387b001df31", "name");
@@ -21,7 +23,7 @@ console.log(script);
 const config = {
   api: apiProvider, // The API Provider that we rely on for balance and rpc information
   url: "http://localhost:30333", // Optional if apiProvider is assigned
-  account: account1, // The sending Account
+  account: myAccount, // The sending Account
   script: script, // The Smart Contract invocation script
   gas: 0, //This is additional gas paying to system fee.
   fees: 0 //Additional gas paying for network fee(prioritizing, oversize transaction).
@@ -43,6 +45,8 @@ Neon.doInvoke(config)
 ### With NEO-Scan API (Low Level)
 
 ```javascript
+const { default: Neon, tx, rpc, u } = require("@cityofzion/neon-js");
+
 // fill your contract script hash, function name and parameters
 const props = {
   scriptHash: "80de34fbe3e6488ce316b722c5455387b001df31",
@@ -54,7 +58,7 @@ const script = Neon.create.script(props);
  
 // create transaction using NEO-Scan API
 async function createTxByNeoScan() {
-  let balance = await apiProvider.getBalance(account1.address);
+  let balance = await apiProvider.getBalance(myAccount.address);
   let transaction = new tx.InvocationTransaction({
     script: script,
     gas: 0
@@ -62,10 +66,10 @@ async function createTxByNeoScan() {
  
   transaction.addAttribute(
     tx.TxAttrUsage.Script,
-    u.reverseHex(wallet.getScriptHashFromAddress(account1.address))
+    u.reverseHex(wallet.getScriptHashFromAddress(myAccount.address))
   );
  
-  transaction.calculate(balance).sign(account1.privateKey);
+  transaction.calculate(balance).sign(myAccount.privateKey);
   return transaction;
 }
  
@@ -90,6 +94,8 @@ createTxByNeoScan().then(transaction => {
 This method is not recommended in neon-js.
 
 ```javascript
+const { default: Neon, tx, wallet, rpc, u } = require("@cityofzion/neon-js");
+
 const props = {
   scriptHash: "80de34fbe3e6488ce316b722c5455387b001df31",
   operation: "symbol",
@@ -107,18 +113,18 @@ let rawTransaction = new tx.InvocationTransaction({
 // build input objects and output objects.
 rawTransaction.addAttribute(
   tx.TxAttrUsage.Script,
-  u.reverseHex(wallet.getScriptHashFromAddress(account1.address))
+  u.reverseHex(wallet.getScriptHashFromAddress(myAccount.address))
 );
  
 // sign transaction with sender's private key
 const signature = wallet.sign(
   rawTransaction.serialize(false),
-  account1.privateKey
+  myAccount.privateKey
 );
  
 // add witness
 rawTransaction.addWitness(
-  tx.Witness.fromSignature(signature, account1.publicKey)
+  tx.Witness.fromSignature(signature, myAccount.publicKey)
 );
  
 // Send raw transaction
@@ -140,6 +146,8 @@ client
 NOTE: This method will not send any transactions to the blockchain.
 
 ```javascript
+const { default: Neon, rpc } = require("@cityofzion/neon-js");
+
 const sb = Neon.create.scriptBuilder();
 sb.emitAppCall("80de34fbe3e6488ce316b722c5455387b001df31", "name");
 // Returns a hexstring

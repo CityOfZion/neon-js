@@ -10,6 +10,8 @@ title: NEP-5
 ### With RPC Query
 
 ```javascript
+const { default: Neon, nep5, rpc } = require("@cityofzion/neon-js");
+
 const generator = nep5.abi.balanceOf(
   "80de34fbe3e6488ce316b722c5455387b001df31",
   myAccount.address
@@ -35,6 +37,8 @@ rpc.Query.invokeScript(script)
 ### With Neon API (High Level)
 
 ```javascript
+const { default: Neon, api, sc } = require("@cityofzion/neon-js");
+
 // we must change data type of contract parameters
 const param_sending_address = sc.ContractParam.byteArray(
   myAccount.address,
@@ -81,6 +85,8 @@ Neon.doInvoke(config)
 
 ### With NEO-Scan API (Low Level)
 ```javascript
+const { default: Neon, api, sc, wallet, tx, u, rpc } = require("@cityofzion/neon-js");
+
 // Receiver address
 const receivingAddress = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
 const receivingAddressScriptHash = "3299cf047547fc89db493f10dfed26e4e5d28fca";
@@ -150,6 +156,8 @@ createTxByNeoScan().then(transaction => {
 This method is not recommended in neon-js.
 
 ```javascript
+const { default: Neon, sc, wallet, tx, u, rpc } = require("@cityofzion/neon-js");
+
 // Receiver address
 const receivingAddress = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
  
@@ -218,6 +226,8 @@ NOTE: You have to define the "mint_token" method in your NEP-5 contract.
 ### With Neon API (High Level)
 
 ```javascript
+const { default: Neon, wallet, api } = require("@cityofzion/neon-js");
+
 // now we use another account to mint tokens
 const privateKey = "L264xiwmnYdmgpXEqMGCH8j8g8jpW9Bx5Xvz6xV58B9aYd1p4bEK";
 const senderAccount = new wallet.Account(privateKey);
@@ -258,6 +268,8 @@ Neon.doInvoke(config)
 ### With NEO-Scan API (Low Level)
 
 ```javascript
+const { default: Neon, wallet, api, rpc } = require("@cityofzion/neon-js");
+
 // now we use another account to mint tokens
 const privateKey = "L264xiwmnYdmgpXEqMGCH8j8g8jpW9Bx5Xvz6xV58B9aYd1p4bEK";
 const senderAccount = new wallet.Account(privateKey);
@@ -310,6 +322,8 @@ createTxByNeoScan().then(transaction => {
 This method is not recommended in neon-js.
 
 ```javascript
+const { default: Neon, wallet, tx, rpc } = require("@cityofzion/neon-js");
+
 const neoAssetId =
   "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
 const gasAssetId =
@@ -380,13 +394,15 @@ client
     console.log(err);
   });
 ```
-## Witdraw - Extract NEO/GAS From a Contract
+## Withdraw - Extract NEO/GAS From a Contract
 
 First, you have to deposit some NEO/GAS into the contract.
 
 When you want to extract NEO/GAS from a smart contract, the verification trigger of the smart contract must be satisfied. It's hard to customize high level API as the verfication trigger may be different from case to case.
 
 ```javascript
+const { default: Neon, wallet, tx, u, rpc } = require("@cityofzion/neon-js");
+
 const neoAssetId =
   "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
 const gasAssetId =
