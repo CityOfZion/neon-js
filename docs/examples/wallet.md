@@ -19,7 +19,7 @@ const myWallet = Neon.create.wallet({ name: "MyWallet" });
 myWallet.addAccount();
 ```
 
-### Import account by WIF
+### Import WIF
 
 ```javascript
 const { default: Neon, wallet } = require("@cityofzion/neon-js");
@@ -48,7 +48,7 @@ myAccount.decrypt("password").then(() => {
 
 ## Export Wallet
 
-### Export a JSON file
+### Export as JSON file
 
 ```javascript
 const { default: Neon, wallet, fs } = require("@cityofzion/neon-js");

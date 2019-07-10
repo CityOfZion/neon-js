@@ -7,7 +7,7 @@ title: Native Asset
 
 ## Get Balance
 
-### With Neoscan API
+### Neonscan API Provider
 
 ```javascript
 const { default: Neon, api } = require("@cityofzion/neon-js");
@@ -23,7 +23,7 @@ apiProvider
   .catch("Get Balance Error!");
 ```
 
-### With RPC Query
+### RPC Query
 
 ```javascript
 const { rpc } = require("@cityofzion/neon-js");
@@ -41,7 +41,7 @@ rpc.Query.getAccountState(myWallet.accounts[1].address)
 
 ## Send NEO & GAS
 
-### With Neon API (High Level)
+### High Level
 
 ```javascript
 const { default: Neon, api } = require("@cityofzion/neon-js");
@@ -71,7 +71,7 @@ Neon.sendAsset(config)
   });
 ```
 
-### With Neoscan API (Low Level)
+### Low Level
 
 ```javascript
 const { default: Neon, rpc, api } = require("@cityofzion/neon-js");
@@ -105,19 +105,12 @@ createTxWithNeoScan().then(transaction => {
 });
 ```
 
-### Constructing Raw Transaction
+### Raw Level
 
 ```javascript
-const { default: Neon, wallet, rpc, tx } = require("@cityofzion/neon-js");
+const { default: Neon, wallet, rpc, tx, CONST } = require("@cityofzion/neon-js");
 
-// Receiver address and script hash
-const RECEIVER_ADDRESS = "AT27F9e1HaUHi6LNhxafVFMDrajtWVksNq";
-const RECEIVER_ADDRESSScriptHash = "7b5a8ec29318ad44143a29f947357995824f2ecc";
-
-const NEO_ASSET_ID =
-  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
-const GAS_ASSET_ID =
-  "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
+const toAccount = new wallet.Account("AT27F9e1HaUHi6LNhxafVFMDrajtWVksNq");
 
 // Create contract transaction
 let rawTransaction = Neon.create.contractTx();
@@ -130,15 +123,15 @@ let inputObj = {
 
 // note: you need to calculate the balance of your account
 let outPutObj1 = {
-  assetId: NEO_ASSET_ID,
+  assetId: CONST.ASSET_ID.NEO,
   value: "99999899",
   scriptHash: myAccount.scriptHash
 };
 
 let outPutObj2 = {
-  assetId: NEO_ASSET_ID,
+  assetId: CONST.ASSET_ID.NEO,
   value: "100",
-  scriptHash: RECEIVER_ADDRESSScriptHash
+  scriptHash: toAccount.scriptHash
 };
 
 // Add transaction inputs and outputs
@@ -171,7 +164,7 @@ client
 
 ## Claim GAS
 
-### With Neon API (High Level)
+### High Level
 
 ```javascript
 const { default: Neon, api } = require("@cityofzion/neon-js");
@@ -194,7 +187,7 @@ Neon.claimGas(config)
   });
 ```
 
-### With Neoscan API (Low Level)
+### Low Level 
 
 ```javascript
 const { default: Neon, rpc, api } = require("@cityofzion/neon-js");
@@ -222,19 +215,10 @@ createTxWithNeoScan().then(transaction => {
 });
 ```
 
-### Constructing Raw transaction
+### Raw Level
 
 ```javascript
-const { default: Neon, wallet, rpc, tx } = require("@cityofzion/neon-js");
-
-// Receiver address and script hash
-const RECEIVER_ADDRESS = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
-const RECEIVER_ADDRESSScriptHash = "3299cf047547fc89db493f10dfed26e4e5d28fca";
-
-const NEO_ASSET_ID =
-  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
-const GAS_ASSET_ID =
-  "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
+const { default: Neon, wallet, rpc, tx, CONST } = require("@cityofzion/neon-js");
 
 // RPC: getclaimable()
 let claimObj1 = {
@@ -248,7 +232,7 @@ let claimObj2 = {
 };
 
 let outPutObj1 = {
-  assetId: GAS_ASSET_ID,
+  assetId: CONST.ASSET_ID.GAS,
   value: "29011.99940376", // RPC: getunclaimed()
   scriptHash: myAccount.scriptHash
 };
