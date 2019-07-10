@@ -12,12 +12,11 @@ title: NEP-5
 ```javascript
 const { default: Neon, nep5, rpc } = require("@cityofzion/neon-js");
 
-const generator = nep5.abi.balanceOf(
+const scBuilder = nep5.abi.balanceOf(
   "80de34fbe3e6488ce316b722c5455387b001df31",
   myAccount.address
 );
-const builder = generator();
-const script = builder.str;
+const script = scBuilder().str;
 
 // local invocation
 rpc.Query.invokeScript(script)
@@ -37,27 +36,10 @@ rpc.Query.invokeScript(script)
 ```javascript
 const { default: Neon, api, sc } = require("@cityofzion/neon-js");
 
-// We must change data type of contract parameters
-const param_sending_address = sc.ContractParam.byteArray(
-  myAccount.address,
-  "address"
-);
-const param_receiving_address = sc.ContractParam.byteArray(
-  "AN6nd3B7iQxKK23DWAFSzgykbyTjMdieXD",
-  "address"
-);
-// We need to mul 1e8 because the format is Fixed8
-const param_amount = Neon.create.contractParam("Integer", 100 * 1e8);
-
-// Build contract script
-// Using "transfer" function
-const props = {
-  scriptHash: "80de34fbe3e6488ce316b722c5455387b001df31",
-  operation: "transfer",
-  args: [param_sending_address, param_receiving_address, param_amount]
-};
-
-const script = Neon.create.script(props);
+const contractScriptHash = "80de34fbe3e6488ce316b722c5455387b001df31";
+const to_addr = "AN6nd3B7iQxKK23DWAFSzgykbyTjMdieXD";
+const scBuilder =  nep5.abi.transfer(contractScriptHash, myAccount.address, to_addr , 100);
+const script = scBuilder().str;
 
 const config = {
   api: apiProvider, // Network
@@ -87,7 +69,8 @@ const { default: Neon, api, sc, wallet, tx, u, rpc } = require("@cityofzion/neon
 // Receiver address
 const RECEIVER_ADDRESS = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
 
-// change the data type of contract parameters
+// Instead of nep abi script builder, we build contract method param here.
+// Change the data type of contract parameters
 const param_sending_address = sc.ContractParam.byteArray(
   myAccount.address,
   "address"
