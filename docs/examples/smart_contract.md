@@ -158,7 +158,7 @@ rpc.Query.invokeScript(script)
 
 You have to deposit some NEO/GAS to contract address in advance.
 
-> When you want to extract NEO/GAS from a smart contract, the verification trigger of the smart contract must be satisfied. It's hard to customize high level API as the verfication trigger may be different from case to case.
+> When you want to extract NEO/GAS from a smart contract, the verification trigger of the smart contract must be satisfied. It's hard to customize high level API as the verification trigger may be different from case to case.
 
 > In below example, verification trigger of the invoked smart contract will check the signature from contract owner
 
