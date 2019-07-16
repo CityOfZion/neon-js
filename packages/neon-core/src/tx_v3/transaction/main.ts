@@ -1,8 +1,5 @@
 import { num2VarInt, StringStream, fixed82num } from "../../u";
-import {
-  TransactionAttribute,
-  Witness
-} from "../components";
+import { TransactionAttribute, Witness } from "../components";
 import { TransactionLike } from "./Transaction";
 
 export function deserializeArrayOf<T>(

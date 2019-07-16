@@ -17,7 +17,15 @@ import {
   WitnessLike
 } from "../components";
 import TxAttrUsage from "../txAttrUsage";
-import { serializeArrayOf, deserializeType, deserializeVersion, deserializeScript, deserializeSystemFee, deserializeAttributes, deserializeWitnesses } from "./main";
+import {
+  serializeArrayOf,
+  deserializeType,
+  deserializeVersion,
+  deserializeScript,
+  deserializeSystemFee,
+  deserializeAttributes,
+  deserializeWitnesses
+} from "./main";
 const log = logger("tx_v3");
 
 export interface TransactionLike {
