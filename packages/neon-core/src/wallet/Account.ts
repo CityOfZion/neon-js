@@ -3,7 +3,10 @@ import { DEFAULT_ACCOUNT_CONTRACT, DEFAULT_SCRYPT } from "../consts";
 import logger from "../logging";
 import { hash160, reverseHex } from "../u";
 import * as core from "./core";
-import { constructMultiSigVerificationScript } from "./multisig";
+import {
+  constructMultiSigVerificationScript,
+  constructMultiSigVerificationScriptNeo3
+} from "./multisig";
 import { decrypt, encrypt, ScryptParams } from "./nep2";
 import {
   isAddress,
@@ -63,6 +66,26 @@ export class Account {
     publicKeys: string[]
   ): Account {
     const verificationScript = constructMultiSigVerificationScript(
+      signingThreshold,
+      publicKeys
+    );
+    return new Account({
+      contract: {
+        script: verificationScript,
+        parameters: Array(signingThreshold).map((_, i) => ({
+          name: `signature${i}`,
+          type: "Signature"
+        })),
+        deployed: false
+      }
+    });
+  }
+
+  public static createMultiSigNeo3(
+    signingThreshold: number,
+    publicKeys: string[]
+  ): Account {
+    const verificationScript = constructMultiSigVerificationScriptNeo3(
       signingThreshold,
       publicKeys
     );
