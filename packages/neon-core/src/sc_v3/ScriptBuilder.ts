@@ -21,8 +21,8 @@ export interface ScriptIntent {
 }
 
 function toInteropMethodHash(method: string) {
-  return u.str2hexstring((u.sha256(u.str2hexstring(method))));
-} 
+  return u.str2hexstring(u.sha256(u.str2hexstring(method)));
+}
 
 function isValidValue(value: any): boolean {
   if (value) {
