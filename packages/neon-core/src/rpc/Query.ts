@@ -4,6 +4,7 @@ import { compareArray } from "../helper";
 import logger from "../logging";
 import { timeout } from "../settings";
 import { BaseTransaction } from "../tx/transaction/BaseTransaction";
+import { Transaction } from "../tx_v3";
 
 const log = logger("rpc");
 
@@ -265,7 +266,7 @@ export class Query {
    * @param transaction Transaction as a Transaction object or hexstring.
    */
   public static sendRawTransaction(
-    transaction: BaseTransaction | string
+    transaction: BaseTransaction | string | Transaction
   ): Query {
     const serialized =
       transaction instanceof BaseTransaction

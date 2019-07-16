@@ -3,6 +3,7 @@ import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from "../consts";
 import logger from "../logging";
 import { timeout } from "../settings";
 import { BaseTransaction } from "../tx/transaction/BaseTransaction";
+import { Transaction } from "../tx_v3";
 import { isAddress } from "../wallet";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
@@ -297,7 +298,7 @@ export class RPCClient {
    * Sends a serialized transaction to the network.
    */
   public async sendRawTransaction(
-    transaction: BaseTransaction | string
+    transaction: BaseTransaction | string | Transaction
   ): Promise<boolean> {
     const response = await this.execute(Query.sendRawTransaction(transaction));
     return response.result;
