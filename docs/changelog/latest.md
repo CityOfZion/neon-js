@@ -3,6 +3,13 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.6.1
+=====
+
+- Fixes
+
+  - Fix getTokenBalances multiplying balance wrongly.
+
 4.6.0
 =====
 
