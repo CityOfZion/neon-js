@@ -83,3 +83,21 @@ test.each([
     expect(resultScript).toBe(expected);
   }
 );
+
+test("transfer", () => {
+  const account = new wallet.Account(
+    "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69"
+  );
+  const amtToSendTest = 922.33720369;
+  const generator = abi.transfer(
+    "9488220e8654d798f9b9cb9e74bd611ecc83fd0f",
+    account.address,
+    account.address,
+    amtToSendTest
+  );
+  const builder = generator();
+
+  const script =
+    "0531e28e79151435b20010db73bf86371075ddfba4e6596f1ff35d1435b20010db73bf86371075ddfba4e6596f1ff35d53c1087472616e73666572670ffd83cc1e61bd749ecbb9f998d754860e228894";
+  expect(builder["str"]).toBe(script);
+});
