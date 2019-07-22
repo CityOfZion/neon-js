@@ -31,7 +31,7 @@ describe.each([
     expect(result.toReverseHex()).toBe(hex);
   });
 
-  test("toRawNumber2", () => {
+  test("toRawNumber", () => {
     const result = new Fixed8(num);
     expect(result.toRawNumber()).toEqual(new BN(raw_num));
   });
