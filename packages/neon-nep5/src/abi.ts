@@ -92,7 +92,7 @@ export function transfer(
   return (sb = new sc.ScriptBuilder()) => {
     const fromHash = addressToScriptHash(fromAddr);
     const toHash = addressToScriptHash(toAddr);
-    const adjustedAmt = new u.Fixed8(amt).mul(100000000);
+    const adjustedAmt = new u.Fixed8(amt).toRawNumber();
     return sb.emitAppCall(scriptHash, "transfer", [
       fromHash,
       toHash,

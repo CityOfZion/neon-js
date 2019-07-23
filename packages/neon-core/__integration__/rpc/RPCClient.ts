@@ -1,7 +1,8 @@
-import { rpc } from "../../src/index";
+import { rpc, wallet } from "../../src/index";
 import { ContractParam } from "../../src/sc";
 
 const TESTNET_URLS = [
+  "https://seed11.ngd.network:20331",
   "https://test1.cityofzion.io:443",
   "https://test2.cityofzion.io:443",
   "https://test3.cityofzion.io:443",
@@ -288,5 +289,22 @@ describe("RPC Methods", () => {
   test("validateAddress", async () => {
     const result = await client.validateAddress(address);
     expect(result).toBe(true);
+  });
+
+  test("getUnspents", async () => {
+    const result = await client.getUnspents(address);
+    expect(result).toBeInstanceOf(wallet.Balance);
+  });
+
+  test("getClaimable", async () => {
+    const result = await client.getClaimable(address);
+    expect(result).toBeInstanceOf(wallet.Claims);
+  });
+
+  test("getUnclaimed", async () => {
+    const result = await client.getUnclaimed(address);
+    expect(Object.keys(result)).toEqual(
+      expect.arrayContaining(["available", "unavailable", "unclaimed"])
+    );
   });
 });
