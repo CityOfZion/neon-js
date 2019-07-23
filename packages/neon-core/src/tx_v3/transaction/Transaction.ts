@@ -4,10 +4,12 @@ import {
   hash256,
   num2hexstring,
   reverseHex,
-  str2hexstring,
   Fixed8,
   StringStream,
-  num2VarInt
+  num2VarInt,
+  ensureHex,
+  generateRandomArray,
+  ab2hexstring
 } from "../../u";
 import { Account, sign } from "../../wallet";
 import {
@@ -16,43 +18,93 @@ import {
   Witness,
   WitnessLike
 } from "../components";
-import TxAttrUsage from "../txAttrUsage";
 import {
   serializeArrayOf,
-  deserializeType,
   deserializeVersion,
   deserializeScript,
-  deserializeSystemFee,
+  deserializeFee,
   deserializeAttributes,
-  deserializeWitnesses
+  deserializeWitnesses,
+  formatSender,
+  deserializeNonce,
+  deserializeSender,
+  deserializeValidUntilBlock
 } from "./main";
 const log = logger("tx_v3");
 
 export interface TransactionLike {
   version: number;
+  nonce: number;
+  sender: string;
+  systemFee: Fixed8 | number;
+  networkFee: Fixed8 | number;
+  validUntilBlock: number;
   attributes: TransactionAttributeLike[];
   scripts: WitnessLike[];
   script: string;
-  gas: number | Fixed8;
 }
 
 export class Transaction {
   public version: number;
+  /**
+   * A random number to avoid hash collision
+   */
+  public nonce: number;
+  /**
+   * transation invoker in script hash
+   */
+  public sender: string;
+
+  /**
+   * Distributed to NEO holders
+   */
+  public systemFee: Fixed8;
+
+  /**
+   * Distributed to consensus nodes
+   */
+  public networkFee: Fixed8;
+
+  /**
+   * Current transaction will not be valid until block of height validUntilBlock
+   */
+  public validUntilBlock: number;
   public attributes: TransactionAttribute[];
   public scripts: Witness[];
   public script: string;
-  public gas: Fixed8;
+
+  public static MAX_VALIDUNTILBLOCK_INCREMENT = 2102400;
 
   public constructor(tx: Partial<TransactionLike> = {}) {
-    this.version = tx.version || TX_VERSION_V3;
-    this.attributes = Array.isArray(tx.attributes)
-      ? tx.attributes.map(a => new TransactionAttribute(a))
+    if (tx.version && tx.version !== 0) {
+      throw new Error(`Transaction version should be 0 not ${tx.version}`);
+    }
+    const {
+      version,
+      nonce,
+      sender,
+      systemFee,
+      networkFee,
+      validUntilBlock,
+      attributes,
+      scripts,
+      script
+    } = tx;
+    this.version = version || TX_VERSION_V3;
+    this.nonce = nonce || parseInt(ab2hexstring(generateRandomArray(4)), 16);
+    this.sender = formatSender(sender);
+    this.systemFee = new Fixed8(systemFee);
+    this.networkFee = new Fixed8(networkFee);
+    // TODO: The default should be snapshot.height + MAX_VALIDUNTILBLOCK_INCREMENT, but it needs request to get block height, thus this is a temporary value
+    this.validUntilBlock =
+      validUntilBlock || Transaction.MAX_VALIDUNTILBLOCK_INCREMENT;
+    this.attributes = Array.isArray(attributes)
+      ? attributes.map(a => new TransactionAttribute(a))
       : [];
-    this.scripts = Array.isArray(tx.scripts)
-      ? tx.scripts.map(a => new Witness(a))
+    this.scripts = Array.isArray(scripts)
+      ? scripts.map(a => new Witness(a))
       : [];
-    this.script = tx.script || "";
-    this.gas = new Fixed8(tx.gas);
+    this.script = script || "";
   }
 
   public get [Symbol.toStringTag](): string {
@@ -66,7 +118,7 @@ export class Transaction {
   }
 
   public get fees(): number {
-    return this.gas.toNumber();
+    return this.systemFee.plus(this.networkFee).toNumber();
   }
 
   /**
@@ -75,11 +127,13 @@ export class Transaction {
    */
   public static deserialize(hex: string): Transaction {
     const ss = new StringStream(hex);
-    let txObj = deserializeType(ss);
-    txObj = deserializeVersion(ss, txObj);
-    txObj = deserializeScript(ss, txObj);
-    txObj = deserializeSystemFee(ss, txObj);
+    let txObj = deserializeVersion(ss);
+    txObj = deserializeNonce(ss, txObj);
+    txObj = deserializeSender(ss, txObj);
+    txObj = deserializeFee(ss, txObj);
+    txObj = deserializeValidUntilBlock(ss, txObj);
     txObj = deserializeAttributes(ss, txObj);
+    txObj = deserializeScript(ss, txObj);
     if (!ss.isEmpty()) {
       txObj = deserializeWitnesses(ss, txObj);
     }
@@ -97,15 +151,6 @@ export class Transaction {
     }
     this.attributes.push(new TransactionAttribute({ usage, data }));
     return this;
-  }
-
-  /**
-   * Add a remark.
-   * @param remark A remark in ASCII.
-   */
-  public addRemark(remark: string): this {
-    const hexRemark = str2hexstring(remark);
-    return this.addAttribute(TxAttrUsage.Remark, hexRemark);
   }
 
   /**
@@ -129,15 +174,20 @@ export class Transaction {
    * @return {string} Hexstring.
    */
   public serialize(signed: boolean = true): string {
-    let out = "";
-    out += num2hexstring(this.version);
-    out += num2VarInt(this.script.length / 2);
-    out += this.script;
-    if (this.version > 0) {
+    if (this.version !== 0) {
       throw new Error(`Version must be 0`);
     }
-    out += this.gas.toReverseHex();
+    ensureHex(this.sender);
+    let out = "";
+    out += num2hexstring(this.version);
+    out += num2hexstring(this.nonce);
+    out += this.sender;
+    out += this.systemFee.toReverseHex();
+    out += this.networkFee.toReverseHex();
+    out += num2hexstring(this.validUntilBlock);
+    out += num2VarInt(this.script.length / 2);
     out += serializeArrayOf(this.attributes);
+    out += this.script;
     if (signed) {
       out += serializeArrayOf(this.scripts);
     }
@@ -169,10 +219,14 @@ export class Transaction {
   public export(): TransactionLike {
     return {
       version: this.version,
+      nonce: this.nonce,
+      sender: this.sender,
+      systemFee: this.systemFee.toNumber(),
+      networkFee: this.networkFee.toNumber(),
+      validUntilBlock: this.validUntilBlock,
       attributes: this.attributes.map(a => a.export()),
       scripts: this.scripts.map(a => a.export()),
-      script: this.script,
-      gas: this.gas.toNumber()
+      script: this.script
     };
   }
 }
