@@ -1,7 +1,6 @@
 import BN from "bn.js";
 import {
   ensureHex,
-  int2hex,
   num2hexstring,
   reverseHex,
   str2hexstring,
@@ -12,12 +11,17 @@ import ContractParam, {
   likeContractParam
 } from "./ContractParam";
 import OpCode from "./OpCode";
+import { u } from "..";
+import InteropService from "./InteropService";
 
 export interface ScriptIntent {
   scriptHash: string;
   operation?: string;
   args?: any[];
-  useTailCall?: boolean;
+}
+
+function toInteropMethodHash(method: string) {
+  return u.str2hexstring(u.sha256(u.str2hexstring(method)));
 }
 
 function isValidValue(value: any): boolean {
@@ -29,63 +33,6 @@ function isValidValue(value: any): boolean {
     return true;
   }
   return false;
-}
-
-/**
- * Retrieves a single AppCall from a ScriptBuilder object.
- * Returns ScriptIntents starting from the beginning of the script.
- * This is based off the pointer in the stream.
- * @param sb
- * @returns A single ScriptIntent if available.
- */
-function retrieveAppCall(sb: ScriptBuilder): ScriptIntent | null {
-  const output: ScriptIntent = {
-    scriptHash: "",
-    args: []
-  };
-
-  while (!sb.isEmpty()) {
-    const b = sb.read();
-    const n = parseInt(b, 16);
-    switch (true) {
-      case n === 0:
-        output.args!.unshift(0);
-        break;
-      case n < 75:
-        output.args!.unshift(sb.read(n));
-        break;
-      case n >= 81 && n <= 96:
-        output.args!.unshift(n - 80);
-        break;
-      case n === 193:
-        const len = output.args!.shift();
-        const cache = [];
-        for (let i = 0; i < len; i++) {
-          cache.unshift(output.args!.shift());
-        }
-        output.args!.unshift(cache);
-        break;
-      case n === 102:
-        sb.pter = sb.str.length;
-        break;
-      case n === 103:
-        output.scriptHash = reverseHex(sb.read(20));
-        output.useTailCall = false;
-        return output;
-      case n === 105:
-        output.scriptHash = reverseHex(sb.read(20));
-        output.useTailCall = true;
-        return output;
-      case n === 241:
-        break;
-      default:
-        throw new Error(`Encounter unknown byte: ${b}`);
-    }
-  }
-  if (output.scriptHash === "") {
-    return null;
-  }
-  return output;
 }
 
 /**
@@ -104,20 +51,15 @@ export class ScriptBuilder extends StringStream {
     return this;
   }
 
-  /**
-   * Appends args, operation and scriptHash
-   * @param scriptHash Hexstring(BE)
-   * @param operation ASCII, defaults to null
-   * @param args any
-   * @param useTailCall Use TailCall instead of AppCall
-   * @return this
-   */
   public emitAppCall(
     scriptHash: string,
-    operation: string | null = null,
-    args?: any[] | string | number | boolean,
-    useTailCall: boolean = false
+    operation: string,
+    args: any[] | string | number | boolean
   ): this {
+    ensureHex(scriptHash);
+    if (scriptHash.length !== 40) {
+      throw new Error("ScriptHash should be 20 bytes long!");
+    }
     this.emitPush(args);
     if (operation) {
       let hexOp = "";
@@ -126,26 +68,13 @@ export class ScriptBuilder extends StringStream {
       }
       this.emitPush(hexOp);
     }
-    this._emitAppCall(scriptHash, useTailCall);
-    return this;
+
+    this.emitPush(reverseHex(scriptHash));
+    return this.emitSysCall(InteropService.SYSTEM_CONTRACT_CALL);
   }
 
-  /**
-   * Appends a SysCall
-   * @param api api of SysCall
-   * @return this
-   */
-  public emitSysCall(api: string): this {
-    if (!api) {
-      throw new Error("Invalid SysCall API");
-    }
-    const apiBytes = str2hexstring(api);
-    const length = int2hex(apiBytes.length / 2);
-    if (length.length !== 2) {
-      throw new Error("Invalid length for SysCall API");
-    }
-    const out = length + apiBytes;
-    return this.emit(OpCode.SYSCALL, out);
+  public emitSysCall(service: InteropService) {
+    return this.emit(OpCode.SYSCALL, toInteropMethodHash(service));
   }
 
   /**
@@ -175,39 +104,6 @@ export class ScriptBuilder extends StringStream {
       default:
         throw new Error();
     }
-  }
-
-  /**
-   * Reverse engineer a script back to its params.
-   * A script may have multiple invocations so a list is always returned.
-   * @return A list of ScriptIntents[].
-   */
-  public toScriptParams(): ScriptIntent[] {
-    this.reset();
-    const scripts = [];
-    while (!this.isEmpty()) {
-      const a = retrieveAppCall(this);
-      if (a) {
-        scripts.push(a);
-      }
-    }
-    return scripts;
-  }
-
-  /**
-   * Appends a AppCall and scriptHash. Used to end off a script.
-   * @param scriptHash Hexstring(BE)
-   * @param useTailCall Defaults to false
-   */
-  private _emitAppCall(scriptHash: string, useTailCall: boolean = false): this {
-    ensureHex(scriptHash);
-    if (scriptHash.length !== 40) {
-      throw new Error("ScriptHash should be 20 bytes long!");
-    }
-    return this.emit(
-      useTailCall ? OpCode.TAILCALL : OpCode.APPCALL,
-      reverseHex(scriptHash)
-    );
   }
 
   /**

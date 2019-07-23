@@ -1,5 +1,6 @@
 import { str2hexstring } from "../u";
 import ScriptBuilder, { ScriptIntent } from "./ScriptBuilder";
+import InteropService from "./InteropService";
 
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
@@ -14,12 +15,12 @@ export function createScript(...intents: (ScriptIntent | string)[]): string {
     if (!scriptIntent.scriptHash) {
       throw new Error("No scriptHash found!");
     }
-    const { scriptHash, operation, args, useTailCall } = Object.assign(
-      { operation: null, args: undefined, useTailCall: false },
+    const { scriptHash, operation, args = [] } = Object.assign(
+      { operation: null, args: undefined },
       scriptIntent
     );
 
-    sb.emitAppCall(scriptHash, operation, args, useTailCall);
+    sb.emitAppCall(scriptHash, operation, args);
   }
   return sb.str;
 }
@@ -49,6 +50,6 @@ export function generateDeployScript(params: DeployParams) {
     .emitPush(params.returnType || "ff00")
     .emitPush(params.parameterList)
     .emitPush(params.script)
-    .emitSysCall("Neo.Contract.Create");
+    .emitSysCall(InteropService.NEO_CONTRACT_CREATE);
   return sb;
 }

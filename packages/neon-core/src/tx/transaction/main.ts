@@ -1,11 +1,8 @@
-import { num2VarInt, StringStream } from "../../u";
-import {
-  TransactionAttribute,
-  TransactionInput,
-  TransactionOutput,
-  Witness
-} from "../components";
-import { TransactionLike } from "./BaseTransaction";
+import { num2VarInt, StringStream, fixed82num, ensureHex } from "../../u";
+import { TransactionAttribute, Witness, toTxAttrUsage } from "../components";
+import { TransactionLike } from "./Transaction";
+import { getScriptHashFromAddress } from "../../wallet";
+import TxAttrUsage from "../txAttrUsage";
 
 export function deserializeArrayOf<T>(
   type: (ss: StringStream) => T,
@@ -23,20 +20,59 @@ export function serializeArrayOf(prop: any[]): string {
   return num2VarInt(prop.length) + prop.map(p => p.serialize()).join("");
 }
 
-export function deserializeType(
-  ss: StringStream,
-  tx: Partial<TransactionLike> = {}
-): Partial<TransactionLike> {
-  const byte = ss.read();
-  return Object.assign(tx, { type: parseInt(byte, 16) });
-}
-
 export function deserializeVersion(
   ss: StringStream,
   tx: Partial<TransactionLike> = {}
 ): Partial<TransactionLike> {
   const byte = ss.read();
-  return Object.assign({ version: parseInt(byte, 16) });
+  const version = parseInt(byte, 16);
+  if (version !== 0) {
+    throw new Error(`Transaction version should be 0 not ${version}`);
+  }
+  return Object.assign(tx, { version });
+}
+
+export function deserializeNonce(
+  ss: StringStream,
+  tx: Partial<TransactionLike> = {}
+): Partial<TransactionLike> {
+  const nonce = parseInt(ss.read(4), 16);
+  return Object.assign(tx, { nonce });
+}
+
+export function deserializeSender(
+  ss: StringStream,
+  tx: Partial<TransactionLike> = {}
+): Partial<TransactionLike> {
+  return Object.assign(tx, { sender: ss.read(20) });
+}
+
+export function deserializeScript(
+  ss: StringStream,
+  tx: Partial<TransactionLike> = {}
+): Partial<TransactionLike> {
+  const script = ss.readVarBytes();
+  if (script.length === 0) {
+    throw new Error("Script should not be vacant.");
+  }
+  return Object.assign(tx, { script });
+}
+
+export function deserializeFee(
+  ss: StringStream,
+  tx: Partial<TransactionLike> = {}
+): Partial<TransactionLike> {
+  const systemFee = fixed82num(ss.read(8));
+  const networkFee = fixed82num(ss.read(8));
+  return Object.assign(tx, { systemFee, networkFee });
+}
+
+export function deserializeValidUntilBlock(
+  ss: StringStream,
+  tx: Partial<TransactionLike>
+): Partial<TransactionLike> {
+  const validUntilBlock = parseInt(ss.read(4), 16);
+  return Object.assign(tx, { validUntilBlock });
 }
 
 export function deserializeAttributes(
@@ -47,27 +83,18 @@ export function deserializeAttributes(
     TransactionAttribute.fromStream,
     ss
   ).map(i => i.export());
+  const cosigners = attributes
+    .filter(attr => toTxAttrUsage(attr.usage) === TxAttrUsage.Cosigner)
+    .map(attr => attr.data);
+  if (
+    !cosigners.every(
+      cosigner =>
+        cosigners.indexOf(cosigner) === cosigners.lastIndexOf(cosigner)
+    )
+  ) {
+    throw new Error("Cosigner should not duplicate.");
+  }
   return Object.assign(tx, { attributes });
-}
-
-export function deserializeInputs(
-  ss: StringStream,
-  tx: Partial<TransactionLike>
-): Partial<TransactionLike> {
-  const inputs = deserializeArrayOf(TransactionInput.fromStream, ss).map(i =>
-    i.export()
-  );
-  return Object.assign(tx, { inputs });
-}
-
-export function deserializeOutputs(
-  ss: StringStream,
-  tx: Partial<TransactionLike>
-): Partial<TransactionLike> {
-  const outputs = deserializeArrayOf(TransactionOutput.fromStream, ss).map(i =>
-    i.export()
-  );
-  return Object.assign(tx, { outputs });
 }
 
 export function deserializeWitnesses(
@@ -78,4 +105,22 @@ export function deserializeWitnesses(
     i.export()
   );
   return Object.assign(tx, { scripts });
+}
+
+export function formatSender(sender: string | undefined): string {
+  if (!sender) {
+    return "";
+  }
+  if (sender.length === 42 && sender.startsWith("0x")) {
+    const hex = sender.slice(2);
+    ensureHex(hex);
+    return hex;
+  } else if (sender.length === 40) {
+    ensureHex(sender);
+    return sender;
+  } else if (sender.length === 34) {
+    return getScriptHashFromAddress(sender);
+  } else {
+    throw new Error(`Sender format error: ${sender}`);
+  }
 }

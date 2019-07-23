@@ -1,30 +1,6 @@
-import { OpCode, ScriptBuilder } from "../sc";
+import { ScriptBuilder, InteropService } from "../sc";
 import { reverseHex, StringStream } from "../u";
 import { isPublicKey } from "./verify";
-import { InteropService, ScriptBuilder as ScriptBuilderNeo3 } from "../sc_v3";
-
-export function constructMultiSigVerificationScriptNeo3(
-  signingThreshold: number,
-  keys: string[]
-) {
-  if (signingThreshold > keys.length) {
-    throw new Error(
-      "signingThreshold must be smaller than or equal to number of keys"
-    );
-  }
-
-  const ss = new ScriptBuilderNeo3();
-  ss.emitPush(signingThreshold);
-  keys.forEach(k => {
-    if (!isPublicKey(k, true)) {
-      throw new Error(`${k} is not a valid encoded public key`);
-    }
-    ss.emitPush(k);
-  });
-  ss.emitPush(keys.length);
-  ss.emitSysCall(InteropService.NEO_CRYPTO_CHECKMULTISIG);
-  return ss.str;
-}
 
 export function constructMultiSigVerificationScript(
   signingThreshold: number,
@@ -45,7 +21,7 @@ export function constructMultiSigVerificationScript(
     ss.emitPush(k);
   });
   ss.emitPush(keys.length);
-  ss.emit(OpCode.CHECKMULTISIG);
+  ss.emitSysCall(InteropService.NEO_CRYPTO_CHECKMULTISIG);
   return ss.str;
 }
 

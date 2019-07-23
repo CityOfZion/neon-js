@@ -11,7 +11,9 @@ export enum ContractParamType {
   PublicKey = 0x06,
   String = 0x07,
   Array = 0x10,
+  Map = 0x12,
   InteropInterface = 0xf0,
+  Any = 0xfe,
   Void = 0xff
 }
 

@@ -8,7 +8,9 @@ export interface TransactionAttributeLike {
   data: string;
 }
 
-function toTxAttrUsage(type: TxAttrUsage | string | number): TxAttrUsage {
+export function toTxAttrUsage(
+  type: TxAttrUsage | string | number
+): TxAttrUsage {
   if (typeof type === "string") {
     if (type in TxAttrUsage) {
       return TxAttrUsage[type as keyof typeof TxAttrUsage];
@@ -33,20 +35,7 @@ export class TransactionAttribute {
 
   public static fromStream(ss: StringStream): TransactionAttribute {
     const usage = parseInt(ss.read(1), 16);
-    let data: string;
-    if (usage === 0x00 || usage === 0x30 || (usage >= 0xa1 && usage <= 0xaf)) {
-      data = ss.read(32);
-    } else if (usage === 0x02 || usage === 0x03) {
-      data = num2hexstring(usage) + ss.read(32);
-    } else if (usage === 0x20) {
-      data = ss.read(20);
-    } else if (usage === 0x81) {
-      data = ss.read(parseInt(ss.read(1), 16));
-    } else if (usage === 0x90 || usage >= 0xf0) {
-      data = ss.readVarBytes();
-    } else {
-      throw new Error(`Unknown usage type: ${usage}. Context: ${ss.context()}`);
-    }
+    let data: string = ss.readVarBytes();
     return new TransactionAttribute({ usage, data });
   }
 
@@ -70,16 +59,8 @@ export class TransactionAttribute {
       throw new Error(`Data size too big!`);
     }
     let out = num2hexstring(this.usage);
-    if (this.usage === 0x81) {
-      out += num2hexstring(this.data.length / 2);
-    } else if (this.usage === 0x90 || this.usage >= 0xf0) {
-      out += num2VarInt(this.data.length / 2);
-    }
-    if (this.usage === 0x02 || this.usage === 0x03) {
-      out += this.data.substr(2, 64);
-    } else {
-      out += this.data;
-    }
+    out += num2VarInt(this.data.length / 2);
+    out += this.data;
     return out;
   }
 
