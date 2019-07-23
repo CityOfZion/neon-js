@@ -58,7 +58,6 @@ export class Account {
    * ];
    * const acct = Account.createMultiSig(threshold, publicKeys);
    */
-
   public static createMultiSig(
     signingThreshold: number,
     publicKeys: string[]

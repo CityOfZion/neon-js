@@ -86,16 +86,4 @@ export const NEP_FLAG = "e0";
 
 export const RPC_VERSION = "2.3.2";
 
-export const TX_VERSION: { [key: string]: number } = {
-  CLAIM: 0,
-  CONTRACT: 0,
-  INVOCATION: 1,
-  ISSUE: 0,
-  STATE: 0,
-  MINER: 0,
-  ENROLLMENT: 0,
-  PUBLISH: 0,
-  REGISTER: 0
-};
-
-export const TX_VERSION_V3 = 0;
+export const TX_VERSION = 0;

@@ -1,6 +1,7 @@
 import { str2hexstring } from "../u";
 import ScriptBuilder, { ScriptIntent } from "./ScriptBuilder";
 import InteropService from "./InteropService";
+import { ASSET_ID } from "../consts";
 
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
@@ -20,7 +21,13 @@ export function createScript(...intents: (ScriptIntent | string)[]): string {
       scriptIntent
     );
 
-    sb.emitAppCall(scriptHash, operation, args);
+    if (scriptHash === ASSET_ID.NEO) {
+      sb.emitNeoCall(operation, args);
+    } else if (scriptHash === ASSET_ID.GAS) {
+      sb.emitGasCall(operation, args);
+    } else {
+      sb.emitAppCall(scriptHash, operation, args);
+    }
   }
   return sb.str;
 }

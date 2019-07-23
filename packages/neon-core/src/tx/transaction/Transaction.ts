@@ -1,4 +1,4 @@
-import { TX_VERSION_V3 } from "../../consts";
+import { TX_VERSION } from "../../consts";
 import logger from "../../logging";
 import {
   hash256,
@@ -30,7 +30,7 @@ import {
   deserializeSender,
   deserializeValidUntilBlock
 } from "./main";
-const log = logger("tx_v3");
+const log = logger("tx");
 
 export interface TransactionLike {
   version: number;
@@ -90,7 +90,7 @@ export class Transaction {
       scripts,
       script
     } = tx;
-    this.version = version || TX_VERSION_V3;
+    this.version = version || TX_VERSION;
     this.nonce = nonce || parseInt(ab2hexstring(generateRandomArray(4)), 16);
     this.sender = formatSender(sender);
     this.systemFee = new Fixed8(systemFee);

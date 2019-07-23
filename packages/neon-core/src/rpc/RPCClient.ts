@@ -2,9 +2,8 @@ import { AxiosRequestConfig } from "axios";
 import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from "../consts";
 import logger from "../logging";
 import { timeout } from "../settings";
-import { BaseTransaction } from "../tx/transaction/BaseTransaction";
 import { isAddress, Claims, Balance, Coin } from "../wallet";
-import { Transaction } from "../tx_v3";
+import { Transaction } from "../tx";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
 
@@ -304,7 +303,7 @@ export class RPCClient {
    * Sends a serialized transaction to the network.
    */
   public async sendRawTransaction(
-    transaction: BaseTransaction | string | Transaction
+    transaction: Transaction | string
   ): Promise<boolean> {
     const response = await this.execute(Query.sendRawTransaction(transaction));
     return response.result;

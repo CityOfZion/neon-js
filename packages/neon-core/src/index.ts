@@ -6,6 +6,5 @@ import * as settings from "./settings";
 import * as tx from "./tx";
 import * as u from "./u";
 import * as wallet from "./wallet";
-import * as tx_v3 from "./tx_v3";
 
-export { rpc, sc, tx, wallet, u, CONST, settings, logging, tx_v3 };
+export { rpc, sc, tx, wallet, u, CONST, settings, logging };
