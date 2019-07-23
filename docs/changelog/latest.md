@@ -3,6 +3,21 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.7.0
+=====
+
+- Neon-core
+
+  - Add v2.10.2 RPC methods
+
+- Docs
+
+  - Add code examples
+
+- Fixes
+
+  - Fix Fixed8 overflow in nep5 transfer method
+
 4.6.1
 =====
 
