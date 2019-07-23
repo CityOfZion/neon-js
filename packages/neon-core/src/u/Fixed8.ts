@@ -73,7 +73,7 @@ export class Fixed8 extends BN {
 
   public toHex(): string {
     let hexstring = "";
-    const num = super.times(DECIMALS);
+    const num = this.toRawNumber();
 
     hexstring = num.isLessThan(0)
       ? TOTAL_FIXED8_HEX.plus(num).toString(16) // convert num to two complement
@@ -84,6 +84,13 @@ export class Fixed8 extends BN {
 
   public toReverseHex(): string {
     return reverseHex(this.toHex());
+  }
+
+  /**
+   * Returns a raw number represetation of Fixed8.
+   */
+  public toRawNumber(): BN {
+    return super.times(DECIMALS);
   }
 
   /**
