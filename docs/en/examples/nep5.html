@@ -1,0 +1,387 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>NEP-5 · neon-js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&gt; You can refer to **Precondition** part to check the initiation of `apiProvider`, `myWallet` and `myAccount`"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="NEP-5 · neon-js"/><meta property="og:type" content="website"/><meta property="og:url" content="http://cityofzion.io/neon-js/index.html"/><meta property="og:description" content="&gt; You can refer to **Precondition** part to check the initiation of `apiProvider`, `myWallet` and `myAccount`"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/neon-js/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://unpkg.com/@cityofzion/neon-js"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
+          addBackToTop(
+            {"zIndex":100}
+          )
+        });
+        </script><script src="/neon-js/js/scrollSpy.js"></script><link rel="stylesheet" href="/neon-js/css/main.css"/><script src="/neon-js/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/neon-js/en"><img class="logo" src="/neon-js/img/logo.svg" alt="neon-js"/><h2 class="headerTitleWithLogo">neon-js</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/neon-js/docs/en/installation.html" target="_self">Docs</a></li><li class=""><a href="/neon-js/docs/en/api/index.html" target="_self">API</a></li><li class="siteNavGroupActive"><a href="/neon-js/docs/en/examples/index.html" target="_self">Examples</a></li><li class=""><a href="/neon-js/docs/en/changelog/latest.html" target="_self">Changelog</a></li><li class=""><a href="/neon-js/en/help.html" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Smart Contract</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Overview</h3><ul class=""><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/examples/index.html">Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Precondition</h3><ul class=""><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/examples/network.html">Network</a></li><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/examples/wallet.html">Wallet</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Native Asset</h3><ul class=""><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/examples/native_asset.html">Native Asset</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Smart Contract</h3><ul class=""><li class="navListItem"><a class="navItem" href="/neon-js/docs/en/examples/smart_contract.html">Smart Contract</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/neon-js/docs/en/examples/nep5.html">NEP-5</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">NEP-5</h1></header><article><div><span><blockquote>
+<p>You can refer to <strong>Precondition</strong> part to check the initiation of <code>apiProvider</code>, <code>myWallet</code> and <code>myAccount</code></p>
+</blockquote>
+<h2><a class="anchor" aria-hidden="true" id="get-balance"></a><a href="#get-balance" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Get Balance</h2>
+<h3><a class="anchor" aria-hidden="true" id="with-rpc-query"></a><a href="#with-rpc-query" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>With RPC Query</h3>
+<pre><code class="hljs css language-javascript"><span class="hljs-keyword">const</span> { <span class="hljs-attr">default</span>: Neon, nep5, rpc } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@cityofzion/neon-js"</span>);
+
+<span class="hljs-keyword">const</span> scBuilder = nep5.abi.balanceOf(
+  <span class="hljs-string">"80de34fbe3e6488ce316b722c5455387b001df31"</span>,
+  myAccount.address
+);
+<span class="hljs-keyword">const</span> script = scBuilder().str;
+
+<span class="hljs-comment">// local invocation</span>
+rpc.Query.invokeScript(script)
+  .execute(<span class="hljs-string">"http://rpc.url:portNum"</span>)
+  .then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(res);
+  })
+  .catch(<span class="hljs-function"><span class="hljs-params">config</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(config);
+  });
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="send-nep-5"></a><a href="#send-nep-5" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Send NEP-5</h2>
+<h3><a class="anchor" aria-hidden="true" id="high-level"></a><a href="#high-level" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>High Level</h3>
+<pre><code class="hljs css language-javascript"><span class="hljs-keyword">const</span> { <span class="hljs-attr">default</span>: Neon, api, sc } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@cityofzion/neon-js"</span>);
+
+<span class="hljs-keyword">const</span> contractScriptHash = <span class="hljs-string">"80de34fbe3e6488ce316b722c5455387b001df31"</span>;
+<span class="hljs-keyword">const</span> to_addr = <span class="hljs-string">"AN6nd3B7iQxKK23DWAFSzgykbyTjMdieXD"</span>;
+<span class="hljs-keyword">const</span> scBuilder =  nep5.abi.transfer(contractScriptHash, myAccount.address, to_addr , <span class="hljs-number">100</span>);
+<span class="hljs-keyword">const</span> script = scBuilder().str;
+
+<span class="hljs-keyword">const</span> config = {
+  <span class="hljs-attr">api</span>: apiProvider, <span class="hljs-comment">// Network</span>
+  url: <span class="hljs-string">"http://rpc.url:portNum"</span>, <span class="hljs-comment">// RPC URL</span>
+  account: myAccount, <span class="hljs-comment">// Your Account</span>
+  script: script, <span class="hljs-comment">// The Smart Contract invocation script</span>
+  gas: <span class="hljs-number">0</span>, <span class="hljs-comment">// Optional, system fee.</span>
+  fees: <span class="hljs-number">0</span> <span class="hljs-comment">// Optional, network fee</span>
+};
+
+<span class="hljs-comment">// Neon API</span>
+Neon.doInvoke(config)
+  .then(<span class="hljs-function"><span class="hljs-params">config</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"\n\n--- Response ---"</span>);
+    <span class="hljs-built_in">console</span>.log(config.response);
+  })
+  .catch(<span class="hljs-function"><span class="hljs-params">config</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(config);
+  });
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="low-level"></a><a href="#low-level" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Low Level</h3>
+<pre><code class="hljs css language-javascript"><span class="hljs-keyword">const</span> { <span class="hljs-attr">default</span>: Neon, api, sc, wallet, tx, u, rpc } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@cityofzion/neon-js"</span>);
+
+<span class="hljs-comment">// Receiver address</span>
+<span class="hljs-keyword">const</span> RECEIVER_ADDRESS = <span class="hljs-string">"AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w"</span>;
+
+<span class="hljs-comment">// Instead of nep abi script builder, we build contract method param here.</span>
+<span class="hljs-comment">// Change the data type of contract parameters</span>
+<span class="hljs-keyword">const</span> param_sending_address = sc.ContractParam.byteArray(
+  myAccount.address,
+  <span class="hljs-string">"address"</span>
+);
+<span class="hljs-keyword">const</span> param_receiving_address = sc.ContractParam.byteArray(
+  RECEIVER_ADDRESS,
+  <span class="hljs-string">"address"</span>
+);
+<span class="hljs-keyword">const</span> param_amount = Neon.create.contractParam(<span class="hljs-string">"Integer"</span>, <span class="hljs-number">100</span> * <span class="hljs-number">1e8</span>);
+
+<span class="hljs-comment">// Build contract script</span>
+<span class="hljs-comment">// Using "transfer" function</span>
+<span class="hljs-keyword">const</span> props = {
+  <span class="hljs-attr">scriptHash</span>: <span class="hljs-string">"80de34fbe3e6488ce316b722c5455387b001df31"</span>,
+  <span class="hljs-attr">operation</span>: <span class="hljs-string">"transfer"</span>,
+  <span class="hljs-attr">args</span>: [param_sending_address, param_receiving_address, param_amount]
+};
+
+<span class="hljs-keyword">const</span> script = Neon.create.script(props);
+
+<span class="hljs-comment">// Create transaction by Neoscan API</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createTxByNeoScan</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> balance = <span class="hljs-keyword">await</span> apiProvider.getBalance(myAccount.address);
+  <span class="hljs-keyword">let</span> transaction = <span class="hljs-keyword">new</span> tx.InvocationTransaction({
+    <span class="hljs-attr">script</span>: script,
+    <span class="hljs-attr">gas</span>: <span class="hljs-number">0</span>
+  });
+
+  transaction.addAttribute(
+    tx.TxAttrUsage.Script,
+    u.reverseHex(wallet.getScriptHashFromAddress(myAccount.address))
+  );
+
+  transaction.calculate(balance).sign(myAccount.privateKey);
+  <span class="hljs-keyword">return</span> transaction;
+}
+
+<span class="hljs-comment">// send transaction</span>
+<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> rpc.RPCClient(<span class="hljs-string">"http://rpc.url:portNum"</span>);
+createTxByNeoScan().then(<span class="hljs-function"><span class="hljs-params">transaction</span> =&gt;</span> {
+  client
+    .sendRawTransaction(transaction)
+    .then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(res);
+    })
+    .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(err);
+    });
+});
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="raw-level"></a><a href="#raw-level" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Raw Level</h3>
+<pre><code class="hljs css language-javascript"><span class="hljs-keyword">const</span> { <span class="hljs-attr">default</span>: Neon, sc, wallet, tx, u, rpc } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@cityofzion/neon-js"</span>);
+
+<span class="hljs-comment">// Receiver address</span>
+<span class="hljs-keyword">const</span> RECEIVER_ADDRESS = <span class="hljs-string">"AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w"</span>;
+
+<span class="hljs-comment">// We must change the data type of contract parameters</span>
+<span class="hljs-keyword">const</span> param_sending_address = sc.ContractParam.byteArray(
+  myAccount.address,
+  <span class="hljs-string">"address"</span>
+);
+<span class="hljs-keyword">const</span> param_receiving_address = sc.ContractParam.byteArray(
+  RECEIVER_ADDRESS,
+  <span class="hljs-string">"address"</span>
+);
+<span class="hljs-keyword">const</span> param_amount = Neon.create.contractParam(<span class="hljs-string">"Integer"</span>, <span class="hljs-number">100</span> * <span class="hljs-number">1e8</span>);
+
+<span class="hljs-comment">// Build contract script</span>
+<span class="hljs-keyword">const</span> props = {
+  <span class="hljs-attr">scriptHash</span>: <span class="hljs-string">"80de34fbe3e6488ce316b722c5455387b001df31"</span>,
+  <span class="hljs-attr">operation</span>: <span class="hljs-string">"transfer"</span>,
+  <span class="hljs-attr">args</span>: [param_sending_address, param_receiving_address, param_amount]
+};
+
+<span class="hljs-keyword">const</span> script = Neon.create.script(props);
+
+<span class="hljs-comment">// Create transaction object</span>
+<span class="hljs-keyword">let</span> rawTransaction = <span class="hljs-keyword">new</span> tx.InvocationTransaction({
+  <span class="hljs-attr">script</span>: script,
+  <span class="hljs-attr">gas</span>: <span class="hljs-number">0</span>
+});
+
+<span class="hljs-comment">// Build input objects and output objects.</span>
+rawTransaction.addAttribute(
+  tx.TxAttrUsage.Script,
+  u.reverseHex(wallet.getScriptHashFromAddress(myAccount.address))
+);
+
+<span class="hljs-comment">// Sign transaction with sender's private key</span>
+<span class="hljs-keyword">const</span> signature = wallet.sign(
+  rawTransaction.serialize(<span class="hljs-literal">false</span>),
+  myAccount.privateKey
+);
+
+<span class="hljs-comment">// Add witness</span>
+rawTransaction.addWitness(
+  tx.Witness.fromSignature(signature, myAccount.publicKey)
+);
+
+<span class="hljs-comment">// Send raw transaction</span>
+<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> rpc.RPCClient(<span class="hljs-string">"http://rpc.url:portNum"</span>);
+client
+  .sendRawTransaction(rawTransaction)
+  .then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(res);
+  })
+  .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(err);
+  });
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="mint-tokens"></a><a href="#mint-tokens" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Mint Tokens</h2>
+<blockquote>
+<p>NOTE: You have to define the &quot;mint_token&quot; method in your NEP-5 contract.</p>
+</blockquote>
+<h3><a class="anchor" aria-hidden="true" id="high-level-1"></a><a href="#high-level-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>High Level</h3>
+<pre><code class="hljs css language-javascript"><span class="hljs-keyword">const</span> { <span class="hljs-attr">default</span>: Neon, wallet, api } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@cityofzion/neon-js"</span>);
+
+<span class="hljs-comment">// Now we use another account to mint tokens</span>
+<span class="hljs-keyword">const</span> SENDER_WIF = <span class="hljs-string">"L264xiwmnYdmgpXEqMGCH8j8g8jpW9Bx5Xvz6xV58B9aYd1p4bEK"</span>;
+<span class="hljs-keyword">const</span> senderAccount = <span class="hljs-keyword">new</span> wallet.Account(SENDER_WIF);
+myWallet.addAccount(senderAccount);
+
+<span class="hljs-comment">// Build config</span>
+<span class="hljs-keyword">const</span> CONTRACT_ADDRESS = <span class="hljs-string">"AMtzZ3mfbXvgEDMokitAsEGbPHEgNTTbhA"</span>;
+<span class="hljs-keyword">const</span> intent = api.makeIntent({ <span class="hljs-attr">NEO</span>: <span class="hljs-number">1</span> }, CONTRACT_ADDRESS);
+<span class="hljs-keyword">const</span> props = {
+  <span class="hljs-attr">scriptHash</span>: <span class="hljs-string">"db62ff35f42f3418e5385d450fe7c2126a6e2943"</span>,
+  <span class="hljs-attr">operation</span>: <span class="hljs-string">"mintTokens"</span>,
+  <span class="hljs-attr">args</span>: []
+};
+
+<span class="hljs-keyword">const</span> script = Neon.create.script(props);
+
+<span class="hljs-keyword">const</span> config = {
+  <span class="hljs-attr">api</span>: apiProvider, <span class="hljs-comment">// Network</span>
+  url: <span class="hljs-string">"http://rpc.url:portNum"</span>, <span class="hljs-comment">// RPC URL</span>
+  account: senderAccount, <span class="hljs-comment">// Sender's Account</span>
+  intents: intent,
+  <span class="hljs-attr">script</span>: script
+};
+
+<span class="hljs-comment">// Neon API</span>
+Neon.doInvoke(config)
+  .then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"\n\n--- Response ---"</span>);
+    <span class="hljs-built_in">console</span>.log(res);
+  })
+  .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(err);
+  });
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="low-level-1"></a><a href="#low-level-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Low Level</h3>
+<pre><code class="hljs css language-javascript"><span class="hljs-keyword">const</span> { <span class="hljs-attr">default</span>: Neon, wallet, api, rpc } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@cityofzion/neon-js"</span>);
+
+<span class="hljs-comment">// Now we use another account to mint tokens</span>
+<span class="hljs-keyword">const</span> privateKey = <span class="hljs-string">"L264xiwmnYdmgpXEqMGCH8j8g8jpW9Bx5Xvz6xV58B9aYd1p4bEK"</span>;
+<span class="hljs-keyword">const</span> senderAccount = <span class="hljs-keyword">new</span> wallet.Account(privateKey);
+myWallet.addAccount(senderAccount);
+
+<span class="hljs-comment">// Build contract script</span>
+<span class="hljs-keyword">const</span> CONTRACT_ADDRESS = <span class="hljs-string">"AMtzZ3mfbXvgEDMokitAsEGbPHEgNTTbhA"</span>;
+<span class="hljs-keyword">const</span> props = {
+  <span class="hljs-attr">scriptHash</span>: <span class="hljs-string">"db62ff35f42f3418e5385d450fe7c2126a6e2943"</span>,
+  <span class="hljs-attr">operation</span>: <span class="hljs-string">"mintTokens"</span>,
+  <span class="hljs-attr">args</span>: []
+};
+
+<span class="hljs-keyword">const</span> script = Neon.create.script(props);
+
+<span class="hljs-comment">// Create transaction by Neoscan API</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createTxByNeoScan</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> balance = <span class="hljs-keyword">await</span> apiProvider.getBalance(senderAccount.address);
+  <span class="hljs-keyword">let</span> transaction = <span class="hljs-keyword">new</span> tx.InvocationTransaction({
+    <span class="hljs-attr">script</span>: script,
+    <span class="hljs-attr">gas</span>: <span class="hljs-number">0</span>
+  });
+
+  <span class="hljs-comment">// Add intent</span>
+  transaction.addIntent(<span class="hljs-string">"NEO"</span>, <span class="hljs-number">1</span>, CONTRACT_ADDRESS);
+
+  <span class="hljs-comment">// Calculate your balance and add signature</span>
+  transaction.calculate(balance).sign(senderAccount.privateKey);
+  <span class="hljs-keyword">return</span> transaction;
+}
+
+<span class="hljs-comment">// Send transaction</span>
+<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> rpc.RPCClient(<span class="hljs-string">"http://rpc.url:portNum"</span>);
+createTxByNeoScan().then(<span class="hljs-function"><span class="hljs-params">transaction</span> =&gt;</span> {
+  client
+    .sendRawTransaction(transaction)
+    .then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(res);
+    })
+    .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(err);
+    });
+});
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="raw-level-1"></a><a href="#raw-level-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Raw Level</h3>
+<pre><code class="hljs css language-javascript"><span class="hljs-keyword">const</span> { <span class="hljs-attr">default</span>: Neon, wallet, tx, rpc, CONST } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@cityofzion/neon-js"</span>);
+
+<span class="hljs-keyword">const</span> CONTRACT_ADDRESS = <span class="hljs-string">"AMtzZ3mfbXvgEDMokitAsEGbPHEgNTTbhA"</span>;
+
+<span class="hljs-comment">// Your NEO unspent tx</span>
+<span class="hljs-keyword">const</span> inputObj = {
+  <span class="hljs-attr">prevHash</span>: <span class="hljs-string">"afc2db042aa9d732e3e14694a1925512741178a44b2ac854476b6eeac53e070f"</span>,
+  <span class="hljs-attr">prevIndex</span>: <span class="hljs-number">1</span>
+};
+
+<span class="hljs-comment">// Output to contract address</span>
+<span class="hljs-keyword">const</span> outPutObj1 = {
+  <span class="hljs-attr">assetId</span>: CONST.ASSET_ID.NEO,
+  <span class="hljs-attr">value</span>: <span class="hljs-string">"1"</span>,
+  <span class="hljs-attr">scriptHash</span>: <span class="hljs-string">"db62ff35f42f3418e5385d450fe7c2126a6e2943"</span>
+};
+
+<span class="hljs-comment">// The rest NEO</span>
+<span class="hljs-keyword">const</span> outPutObj2 = {
+  <span class="hljs-attr">assetId</span>: CONST.ASSET_ID.NEO,
+  <span class="hljs-attr">value</span>: <span class="hljs-string">"494"</span>,
+  <span class="hljs-attr">scriptHash</span>: senderAccount.scriptHash
+};
+
+<span class="hljs-comment">// Build contract script</span>
+<span class="hljs-keyword">const</span> props = {
+  <span class="hljs-attr">scriptHash</span>: <span class="hljs-string">"db62ff35f42f3418e5385d450fe7c2126a6e2943"</span>,
+  <span class="hljs-attr">operation</span>: <span class="hljs-string">"mintTokens"</span>,
+  <span class="hljs-attr">args</span>: []
+};
+
+<span class="hljs-keyword">const</span> script = Neon.create.script(props);
+
+<span class="hljs-comment">// Create transaction object</span>
+<span class="hljs-keyword">let</span> rawTransaction = <span class="hljs-keyword">new</span> tx.InvocationTransaction({
+  <span class="hljs-attr">script</span>: script,
+  <span class="hljs-attr">gas</span>: <span class="hljs-number">0</span>
+});
+
+<span class="hljs-comment">// Add inputs/outputs</span>
+rawTransaction.inputs[<span class="hljs-number">0</span>] = <span class="hljs-keyword">new</span> tx.TransactionInput(inputObj);
+rawTransaction.addOutput(<span class="hljs-keyword">new</span> tx.TransactionOutput(outPutObj1));
+rawTransaction.addOutput(<span class="hljs-keyword">new</span> tx.TransactionOutput(outPutObj2));
+
+<span class="hljs-comment">// Sign transaction with sender's private key</span>
+<span class="hljs-keyword">const</span> signature = wallet.sign(
+  rawTransaction.serialize(<span class="hljs-literal">false</span>),
+  senderAccount.privateKey
+);
+
+<span class="hljs-comment">// Add witness</span>
+rawTransaction.addWitness(
+  tx.Witness.fromSignature(signature, senderAccount.publicKey)
+);
+
+<span class="hljs-comment">// Send raw transaction</span>
+<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> rpc.RPCClient(<span class="hljs-string">"http://rpc.url:portNum"</span>);
+client
+  .sendRawTransaction(rawTransaction)
+  .then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(res);
+  })
+  .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(err);
+  });
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/neon-js/docs/en/examples/smart_contract.html"><span class="arrow-prev">← </span><span>Smart Contract</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#get-balance">Get Balance</a><ul class="toc-headings"><li><a href="#with-rpc-query">With RPC Query</a></li></ul></li><li><a href="#send-nep-5">Send NEP-5</a><ul class="toc-headings"><li><a href="#high-level">High Level</a></li><li><a href="#low-level">Low Level</a></li><li><a href="#raw-level">Raw Level</a></li></ul></li><li><a href="#mint-tokens">Mint Tokens</a><ul class="toc-headings"><li><a href="#high-level-1">High Level</a></li><li><a href="#low-level-1">Low Level</a></li><li><a href="#raw-level-1">Raw Level</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/neon-js/" class="nav-home"><img src="/neon-js/img/logo.svg" alt="neon-js" width="66" height="58"/></a><div><h5>Docs</h5><a href="/neon-js/docs/en/installation.html">Getting Started</a><a href="/neon-js/docs/en/guides/basic/sendasset.html">Guides</a><a href="/neon-js/docs/en/api/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/wczVXTN">Discord Chat</a><a href="https://www.reddit.com/r/NEO/" target="_blank">NEO Reddit</a></div><div><h5>More</h5><a href="https://neo.org/" target="_blank">NEO</a><a href="https://github.com/cityofzion/neon-js" target="_blank">GitHub</a><a class="github-button" href="https://github.com/cityofzion/neon-js" data-icon="octicon-star" data-count-href="/cityofzion/neon-js/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="http://cityofzion.io" target="_blank" class="fbOpenSource"><img src="/neon-js/img/coz_med.png" alt="City of Zion" width="150" height="150"/></a><section class="copyright">Copyright © 2019 City of Zion</section></footer></div></body></html>
