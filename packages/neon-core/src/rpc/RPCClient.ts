@@ -2,14 +2,11 @@ import { AxiosRequestConfig } from "axios";
 import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from "../consts";
 import logger from "../logging";
 import { timeout } from "../settings";
-import { isAddress, Claims, Balance, Coin } from "../wallet";
 import { Transaction } from "../tx";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
 
 const log = logger("rpc");
-
-const versionRegex = /NEO:(\d+\.\d+\.\d+)/;
 
 export interface Validator {
   publickey: string;
@@ -110,25 +107,6 @@ export class RPCClient {
   }
 
   /**
-   * Gets the state of an account given an address.
-   */
-  public async getAccountState(addr: string): Promise<any> {
-    if (!isAddress(addr)) {
-      throw new Error(`Invalid address given: ${addr}`);
-    }
-    const response = await this.execute(Query.getAccountState(addr));
-    return response.result;
-  }
-
-  /**
-   * Gets the state of an asset given an id.
-   */
-  public async getAssetState(assetId: string): Promise<any> {
-    const response = await this.execute(Query.getAssetState(assetId));
-    return response.result;
-  }
-
-  /**
    * Gets the block at a given height or hash.
    */
   public async getBlock(
@@ -226,14 +204,6 @@ export class RPCClient {
   }
 
   /**
-   * Gets the transaction output given a transaction id and index
-   */
-  public async getTxOut(txid: string, index: number): Promise<any> {
-    const response = await this.execute(Query.getTxOut(txid, index));
-    return response.result;
-  }
-
-  /**
    * Gets the list of validators available for voting.
    */
   public async getValidators(): Promise<Validator[]> {
@@ -264,17 +234,6 @@ export class RPCClient {
         throw err;
       }
     }
-  }
-
-  /**
-   * Calls a smart contract with the given parameters. This method is a local invoke, results are not reflected on the blockchain.
-   */
-  public async invoke(
-    scriptHash: string,
-    ...params: any[]
-  ): Promise<RPCVMResponse> {
-    const response = await this.execute(Query.invoke(scriptHash, ...params));
-    return response.result;
   }
 
   /**
@@ -323,71 +282,6 @@ export class RPCClient {
   public async validateAddress(addr: string): Promise<boolean> {
     const response = await this.execute(Query.validateAddress(addr));
     return response.result.isvalid;
-  }
-
-  /**
-   * Get the unspent utxo for an address
-   */
-  public async getUnspents(addr: string): Promise<Balance> {
-    const response = await this.execute(Query.getUnspents(addr));
-    return this.parseUnspentsToBalance(response.result);
-  }
-
-  /**
-   * Get the unclaimed gas amount for an address
-   */
-  public async getUnclaimed(addr: string): Promise<GetUnclaimedResult> {
-    const response = await this.execute(Query.getUnclaimed(addr));
-    return response.result;
-  }
-
-  /**
-   * Get the claimable for an address
-   */
-  public async getClaimable(addr: string): Promise<Claims> {
-    const response = await this.execute(Query.getClaimable(addr));
-    return new Claims({
-      net: this.net,
-      address: response.result.address,
-      claims: response.result.claimable.map(
-        (rawClaim: any) =>
-          new Object({
-            claim: rawClaim.unclaimed,
-            txid: rawClaim.txid,
-            index: rawClaim.n,
-            value: rawClaim.value,
-            start: rawClaim.start_height,
-            end: rawClaim.end_height
-          })
-      )
-    });
-  }
-
-  private parseUnspentsToBalance(getUnspentsResult: any): Balance {
-    const bal = new Balance({
-      address: getUnspentsResult.address
-    });
-
-    for (const assetBalance of getUnspentsResult.balance) {
-      if (assetBalance.amount === 0) {
-        continue;
-      }
-      if (assetBalance.unspent.length > 0) {
-        bal.addAsset(assetBalance.asset_symbol, {
-          unspent: assetBalance.unspent.map(
-            (utxo: any) =>
-              new Coin({
-                index: utxo.n,
-                txid: utxo.txid,
-                value: utxo.value
-              })
-          )
-        });
-      } else {
-        bal.addToken(assetBalance.asset_symbol, assetBalance.amount);
-      }
-    }
-    return bal;
   }
 }
 

@@ -11,17 +11,12 @@ import ContractParam, {
   likeContractParam
 } from "./ContractParam";
 import OpCode from "./OpCode";
-import { u } from "..";
 import InteropService from "./InteropService";
 
 export interface ScriptIntent {
   scriptHash: string;
   operation?: string;
   args?: any[];
-}
-
-function toInteropMethodHash(method: string) {
-  return u.str2hexstring(u.sha256(u.str2hexstring(method)));
 }
 
 function isValidValue(value: any): boolean {
@@ -103,7 +98,7 @@ export class ScriptBuilder extends StringStream {
   }
 
   public emitSysCall(service: InteropService) {
-    return this.emit(OpCode.SYSCALL, toInteropMethodHash(service));
+    return this.emit(OpCode.SYSCALL, service);
   }
 
   /**

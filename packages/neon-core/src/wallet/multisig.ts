@@ -51,11 +51,13 @@ export function getSigningThresholdFromVerificationScript(
   verificationScript: string
 ): number {
   const checkSigOpCode = verificationScript.slice(
-    verificationScript.length - 2
+    verificationScript.length - 8
   );
-  if (checkSigOpCode === "ac") {
+  if (checkSigOpCode === InteropService.NEO_CRYPTO_CHECKSIG.toString()) {
     return 1;
-  } else if (checkSigOpCode === "ae") {
+  } else if (
+    checkSigOpCode === InteropService.NEO_CRYPTO_CHECKMULTISIG.toString()
+  ) {
     const ss = new StringStream(verificationScript);
     const byte = parseInt(ss.peek(), 16);
     if (byte < 80) {
