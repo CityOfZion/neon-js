@@ -99,13 +99,16 @@ export class Query {
 
   /**
    * This Query Returns the corresponding block header information according to the specified script hash.
-   * @param {string} hash the block script hash.
-   * @param {number} verbose Optional, the default value of verbose is 0. When verbose is 0, the serialized information of the block is returned, represented by a hexadecimal string. If you need to get detailed information, you will need to use the SDK for deserialization. When verbose is 1, detailed information of the corresponding block in Json format string, is returned.
+   * @param indexOrHash height or hash of block.
+   * @param verbose Optional, the default value of verbose is 0. When verbose is 0, the serialized information of the block is returned, represented by a hexadecimal string. If you need to get detailed information, you will need to use the SDK for deserialization. When verbose is 1, detailed information of the corresponding block in Json format string, is returned.
    */
-  public static getBlockHeader(hash: string, verbose: number = 0): Query {
+  public static getBlockHeader(
+    indexOrHash: string | number,
+    verbose: 0 | 1 = 0
+  ): Query {
     return new Query({
       method: "getblockheader",
-      params: verbose ? [hash, verbose] : [hash]
+      params: [indexOrHash, verbose]
     });
   }
 
@@ -149,11 +152,15 @@ export class Query {
   }
 
   /**
-   * This Query returns the transaction hashes of the transactions waiting to be processed at the node.
+   * This Query returns the transaction hashes of the transactions confirmed or unconfirmed.
+   * @param shouldGetUnverified Optional. Default is 0.
+   * shouldGetUnverified = 0, get confirmed transaction hashes
+   * shouldGetUnverified = 1, get current block height and confirmed and unconfirmed tx hash
    */
-  public static getRawMemPool(): Query {
+  public static getRawMemPool(shouldGetUnverified: 0 | 1 = 0): Query {
     return new Query({
-      method: "getrawmempool"
+      method: "getrawmempool",
+      params: [shouldGetUnverified]
     });
   }
 

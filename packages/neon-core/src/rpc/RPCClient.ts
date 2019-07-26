@@ -142,6 +142,21 @@ export class RPCClient {
   }
 
   /**
+   * Get the corresponding block header information according to the specified script hash.
+   * @param indexOrHash height or hash of block.
+   * @param verbose Optional, the default value of verbose is 0. When verbose is 0, the serialized information of the block is returned, represented by a hexadecimal string. If you need to get detailed information, you will need to use the SDK for deserialization. When verbose is 1, detailed information of the corresponding block in Json format string, is returned.
+   */
+  public async getBlockHeader(
+    indexOrHash: number | string,
+    verbose: 0 | 1 = 0
+  ): Promise<any> {
+    const response = await this.execute(
+      Query.getBlockHeader(indexOrHash, verbose)
+    );
+    return response.result;
+  }
+
+  /**
    * Get the system fees of a block.
    * @param {number} index
    * @return {Promise<string>} - System fees as a string.
@@ -177,10 +192,17 @@ export class RPCClient {
   }
 
   /**
-   * Gets a list of all transaction hashes waiting to be processed.
+   * This Query returns the transaction hashes of the transactions confirmed or unconfirmed.
+   * @param shouldGetUnverified Optional. Default is 0.
+   * shouldGetUnverified = 0, get confirmed transaction hashes
+   * shouldGetUnverified = 1, get current block height and confirmed and unconfirmed tx hash
    */
-  public async getRawMemPool(): Promise<string[]> {
-    const response = await this.execute(Query.getRawMemPool());
+  public async getRawMemPool(
+    shouldGetUnverified: 0 | 1 = 0
+  ): Promise<string[]> {
+    const response = await this.execute(
+      Query.getRawMemPool(shouldGetUnverified)
+    );
     return response.result;
   }
 
@@ -200,6 +222,15 @@ export class RPCClient {
    */
   public async getStorage(scriptHash: string, key: string): Promise<string> {
     const response = await this.execute(Query.getStorage(scriptHash, key));
+    return response.result;
+  }
+
+  /**
+   * Gets the block index in which the transaction is found.
+   * @param txid hash of the specific transaction.
+   */
+  public async getTxHeight(txid: string): Promise<number> {
+    const response = await this.execute(Query.getTxHeight(txid));
     return response.result;
   }
 
@@ -234,6 +265,14 @@ export class RPCClient {
         throw err;
       }
     }
+  }
+
+  /**
+   * This Query returns a list of plugins loaded by the node.
+   */
+  public async listPlugins(): Promise<any> {
+    const response = await this.execute(Query.listPlugins());
+    return response.result;
   }
 
   /**
