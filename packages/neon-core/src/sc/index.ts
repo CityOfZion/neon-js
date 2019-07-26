@@ -4,3 +4,4 @@ export * from "./ScriptBuilder";
 export * from "./OpCode";
 export * from "./InteropService";
 export * from "./StackItem";
+export * from "./tokens_abi";

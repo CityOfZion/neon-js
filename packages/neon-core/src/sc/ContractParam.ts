@@ -53,6 +53,10 @@ export class ContractParam {
     return new ContractParam(ContractParamType.Boolean, !!value);
   }
 
+  public static publicKey(value: string): ContractParam {
+    return new ContractParam(ContractParamType.PublicKey, value);
+  }
+
   /**
    * Creates a Hash160 ContractParam. This is used for containing a scriptHash. Do not reverse the input if using this format.
    * @param {string} value - A 40 character long hexstring. Automatically converts an address to scripthash if provided.

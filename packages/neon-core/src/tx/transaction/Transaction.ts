@@ -30,6 +30,7 @@ import {
   deserializeSender,
   deserializeValidUntilBlock
 } from "./main";
+import { ScriptIntent, createScript } from "../../sc";
 const log = logger("tx");
 
 export interface TransactionLike {
@@ -164,6 +165,21 @@ export class Transaction {
     this.scripts.push(witness);
     this.scripts = this.scripts.sort(
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
+    );
+    return this;
+  }
+
+  /**
+   * Adds some script intents to the Transaction
+   * @param scriptIntents sciprt Intents to add to the transaction
+   */
+  public addIntent(scriptIntents: ScriptIntent[] | ScriptIntent): this {
+    if (!Array.isArray(scriptIntents)) {
+      scriptIntents = [scriptIntents];
+    }
+    this.script = scriptIntents.reduce(
+      (accumulatedScript, intent) => accumulatedScript + createScript(intent),
+      this.script
     );
     return this;
   }

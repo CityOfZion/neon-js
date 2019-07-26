@@ -60,3 +60,13 @@ export function generateDeployScript(params: DeployParams) {
     .emitSysCall(InteropService.NEO_CONTRACT_CREATE);
   return sb;
 }
+
+// TODO: update a deployed contract
+export function generateUpdateScript() {
+  throw new Error("Not Implemented.");
+}
+
+// TODO: destroy a deployed contract
+export function generateDestroyScript() {
+  throw new Error("Not Implemented.");
+}

@@ -79,6 +79,15 @@ export class ScriptBuilder extends StringStream {
     return this.emitSysCall(InteropService.NEO_NATIVE_TOKENS_GAS);
   }
 
+  public emitPolicyCall(
+    operation: string,
+    args?: any[] | string | number | boolean
+  ): this {
+    this.emitPush(args);
+    this._emitContractOperation(operation);
+    return this.emitSysCall(InteropService.NEO_NATIVE_POLICY);
+  }
+
   public emitAppCall(
     scriptHash: string,
     operation?: string,
@@ -222,9 +231,16 @@ export class ScriptBuilder extends StringStream {
         return this._emitArray(param.value);
       case ContractParamType.Hash160:
         return this._emitString(reverseHex(param.value));
+      case ContractParamType.PublicKey:
+        return this._emitString(str2hexstring(param.value));
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }
+  }
+
+  public reset(): void {
+    this.str = "";
+    this.pter = 0;
   }
 }
 
