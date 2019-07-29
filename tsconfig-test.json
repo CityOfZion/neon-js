@@ -6,7 +6,5 @@
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
-  "exclude": [
-    "packages/**/lib/**/*","packages/**/dist/**/*"
-  ]
+  "exclude": ["packages/**/lib/**/*", "packages/**/dist/**/*"]
 }

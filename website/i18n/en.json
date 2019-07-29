@@ -56,6 +56,24 @@
       "changelog/v3": {
         "title": "Changelog (v3)"
       },
+      "examples/index": {
+        "title": "Overview"
+      },
+      "examples/native_asset": {
+        "title": "Native Asset"
+      },
+      "examples/nep5": {
+        "title": "NEP-5"
+      },
+      "examples/network": {
+        "title": "Network"
+      },
+      "examples/smart_contract": {
+        "title": "Smart Contract"
+      },
+      "examples/wallet": {
+        "title": "Wallet"
+      },
       "guides/adv/apicore": {
         "title": "Advanced - API Core Components"
       },
@@ -72,7 +90,7 @@
         "title": "Basic - Invoking a Smart Contract"
       },
       "guides/basic/multi": {
-        "title": "Signing with a multi-sig account"
+        "title": "Basic - Signing with a multi-sig account"
       },
       "guides/basic/privnet": {
         "title": "Basic - Using a Private Net"
@@ -93,6 +111,7 @@
     "links": {
       "Docs": "Docs",
       "API": "API",
+      "Examples": "Examples",
       "Changelog": "Changelog",
       "Help": "Help"
     },
@@ -103,7 +122,10 @@
       "Core Modules": "Core Modules",
       "Plugin Modules": "Plugin Modules",
       "Latest": "Latest",
-      "Past Versions": "Past Versions"
+      "Past Versions": "Past Versions",
+      "Precondition": "Precondition",
+      "Native Asset": "Native Asset",
+      "Smart Contract": "Smart Contract"
     }
   },
   "pages-strings": {
@@ -118,6 +140,7 @@
     "Get Started|no description given": "Get Started",
     "Tutorial|no description given": "Tutorial",
     "API|no description given": "API",
+    "Examples|no description given": "Examples",
     "Key generation, manipulation and encryption|no description given": "Key generation, manipulation and encryption",
     "Help Translate|recruit community translators for your project": "Help Translate",
     "Edit this Doc|recruitment message asking to edit the doc source": "Edit",
