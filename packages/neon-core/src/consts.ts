@@ -7,9 +7,11 @@ export const ASSETS: { [key: string]: string } = {
   "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7": "GAS"
 };
 
+// TODO: Policy contract asset id
 export const ASSET_ID: { [key: string]: string } = {
   NEO: "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-  GAS: "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"
+  GAS: "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+  POLICY: ""
 };
 
 export const ASSET_TYPE: { [key: string]: number } = {
@@ -86,4 +88,12 @@ export const NEP_FLAG = "e0";
 
 export const RPC_VERSION = "2.3.2";
 
+// transaction related
 export const TX_VERSION = 0;
+
+export const SYSTEM_FEE_FACTOR = 1;
+
+export const SYSTEM_FEE_FREE = 0;
+
+// this can be updated by query policy native contract method `getFeePerByte`
+export const POLICY_FEE_PERBYTE = 1000e-8;

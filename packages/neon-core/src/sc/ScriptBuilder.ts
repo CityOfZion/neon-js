@@ -4,7 +4,8 @@ import {
   num2hexstring,
   reverseHex,
   str2hexstring,
-  StringStream
+  StringStream,
+  Fixed8
 } from "../u";
 import ContractParam, {
   ContractParamType,
@@ -12,11 +13,18 @@ import ContractParam, {
 } from "./ContractParam";
 import OpCode from "./OpCode";
 import InteropService from "./InteropService";
+import { OpCodePrices } from "./OpCodePrices";
+import { getInteropSericePrice } from "./InteropServicePrices";
 
 export interface ScriptIntent {
-  scriptHash: string;
+  scriptHash: string | "NEO" | "GAS" | "POLICY";
   operation?: string;
   args?: any[];
+}
+
+export interface ScriptResult {
+  hex: string;
+  fee: Fixed8;
 }
 
 function isValidValue(value: any): boolean {
@@ -35,11 +43,18 @@ function isValidValue(value: any): boolean {
  * @extends StringStream
  */
 export class ScriptBuilder extends StringStream {
+  public fee: Fixed8;
+
+  public constructor(str = "") {
+    super(str);
+    this.fee = new Fixed8(0);
+  }
   /**
    * Appends an Opcode, followed by args
    */
   public emit(op: OpCode, args?: string): this {
     this.str += num2hexstring(op);
+    this.fee.plus(OpCodePrices[op]);
     if (args) {
       this.str += args;
     }
@@ -67,7 +82,11 @@ export class ScriptBuilder extends StringStream {
   ): this {
     this.emitPush(args);
     this._emitContractOperation(operation);
-    return this.emitSysCall(InteropService.NEO_NATIVE_TOKENS_NEO);
+    return this.emitSysCall(
+      InteropService.NEO_NATIVE_TOKENS_NEO,
+      undefined,
+      operation
+    );
   }
 
   public emitGasCall(
@@ -76,7 +95,11 @@ export class ScriptBuilder extends StringStream {
   ): this {
     this.emitPush(args);
     this._emitContractOperation(operation);
-    return this.emitSysCall(InteropService.NEO_NATIVE_TOKENS_GAS);
+    return this.emitSysCall(
+      InteropService.NEO_NATIVE_TOKENS_GAS,
+      undefined,
+      operation
+    );
   }
 
   public emitPolicyCall(
@@ -85,7 +108,11 @@ export class ScriptBuilder extends StringStream {
   ): this {
     this.emitPush(args);
     this._emitContractOperation(operation);
-    return this.emitSysCall(InteropService.NEO_NATIVE_POLICY);
+    return this.emitSysCall(
+      InteropService.NEO_NATIVE_POLICY,
+      undefined,
+      operation
+    );
   }
 
   public emitAppCall(
@@ -106,7 +133,12 @@ export class ScriptBuilder extends StringStream {
     return this.emitSysCall(InteropService.SYSTEM_CONTRACT_CALL);
   }
 
-  public emitSysCall(service: InteropService) {
+  public emitSysCall(
+    service: InteropService,
+    size?: number,
+    operation?: string
+  ) {
+    this.fee.plus(getInteropSericePrice(service, size, operation));
     return this.emit(OpCode.SYSCALL, service);
   }
 
@@ -160,7 +192,9 @@ export class ScriptBuilder extends StringStream {
     ensureHex(hexstring);
     const size = hexstring.length / 2;
     if (size <= OpCode.PUSHBYTES75) {
+      // this is actually pushing opcode PUSHBYTES1-75, will generate fee.
       this.str += num2hexstring(size);
+      this.fee.add(OpCodePrices[OpCode.PUSHBYTES75]);
       this.str += hexstring;
     } else if (size < 0x100) {
       this.emit(OpCode.PUSHDATA1);
@@ -239,8 +273,16 @@ export class ScriptBuilder extends StringStream {
   }
 
   public reset(): void {
+    super.reset();
     this.str = "";
-    this.pter = 0;
+    this.fee = new Fixed8(0);
+  }
+
+  public exportAsScriptResult(): ScriptResult {
+    return {
+      hex: this.str,
+      fee: this.fee
+    };
   }
 }
 

@@ -1,4 +1,4 @@
-import { TX_VERSION } from "../../consts";
+import { TX_VERSION, POLICY_FEE_PERBYTE } from "../../consts";
 import logger from "../../logging";
 import {
   hash256,
@@ -11,7 +11,12 @@ import {
   generateRandomArray,
   ab2hexstring
 } from "../../u";
-import { Account, sign } from "../../wallet";
+import {
+  Account,
+  sign,
+  getPublicKeysFromVerificationScript,
+  getSigningThresholdFromVerificationScript
+} from "../../wallet";
 import {
   TransactionAttribute,
   TransactionAttributeLike,
@@ -28,9 +33,19 @@ import {
   formatSender,
   deserializeNonce,
   deserializeSender,
-  deserializeValidUntilBlock
+  deserializeValidUntilBlock,
+  getCosignersFromAttributes,
+  getVarSize
 } from "./main";
-import { ScriptIntent, createScript } from "../../sc";
+import {
+  ScriptIntent,
+  createScript,
+  OpCode,
+  OpCodePrices,
+  getInteropSericePrice,
+  InteropService,
+  ScriptBuilder
+} from "../../sc";
 const log = logger("tx");
 
 export interface TransactionLike {
@@ -41,8 +56,18 @@ export interface TransactionLike {
   networkFee: Fixed8 | number;
   validUntilBlock: number;
   attributes: TransactionAttributeLike[];
+  intents: ScriptIntent[];
   scripts: WitnessLike[];
   script: string;
+}
+
+export interface TransactionInitials {
+  sender: string;
+  networkFee: Fixed8 | number;
+  validUntilBlock: number;
+  attributes: TransactionAttributeLike[];
+  intents: ScriptIntent[];
+  scripts: WitnessLike[];
 }
 
 export class Transaction {
@@ -71,31 +96,24 @@ export class Transaction {
    */
   public validUntilBlock: number;
   public attributes: TransactionAttribute[];
+  public intents: ScriptIntent[];
   public scripts: Witness[];
   public script: string;
 
   public static MAX_VALIDUNTILBLOCK_INCREMENT = 2102400;
 
-  public constructor(tx: Partial<TransactionLike> = {}) {
-    if (tx.version && tx.version !== 0) {
-      throw new Error(`Transaction version should be 0 not ${tx.version}`);
-    }
+  public constructor(tx: Partial<TransactionInitials> = {}) {
     const {
-      version,
-      nonce,
       sender,
-      systemFee,
       networkFee,
       validUntilBlock,
       attributes,
-      scripts,
-      script
+      intents,
+      scripts
     } = tx;
-    this.version = version || TX_VERSION;
-    this.nonce = nonce || parseInt(ab2hexstring(generateRandomArray(4)), 16);
+    this.version = TX_VERSION;
+    this.nonce = parseInt(ab2hexstring(generateRandomArray(4)), 16);
     this.sender = formatSender(sender);
-    this.systemFee = new Fixed8(systemFee);
-    this.networkFee = new Fixed8(networkFee);
     // TODO: The default should be snapshot.height + MAX_VALIDUNTILBLOCK_INCREMENT, but it needs request to get block height, thus this is a temporary value
     this.validUntilBlock =
       validUntilBlock || Transaction.MAX_VALIDUNTILBLOCK_INCREMENT;
@@ -105,7 +123,21 @@ export class Transaction {
     this.scripts = Array.isArray(scripts)
       ? scripts.map(a => new Witness(a))
       : [];
-    this.script = script || "";
+    if (intents !== undefined) {
+      this.intents = intents;
+      const scriptFromIntents = createScript(...intents);
+      this.script = scriptFromIntents.hex;
+      this.systemFee = scriptFromIntents.fee;
+    } else {
+      this.intents = [];
+      this.script = "";
+      this.systemFee = new Fixed8(0);
+    }
+    log.info(
+      `System fee in transacation initiation: ${this.systemFee.toNumber()}`
+    );
+
+    this.networkFee = new Fixed8(networkFee);
   }
 
   public get [Symbol.toStringTag](): string {
@@ -171,17 +203,87 @@ export class Transaction {
 
   /**
    * Adds some script intents to the Transaction
+   * System Fee will be increased automatically
+   * However system Fee calculated in this method is insufficient if calling non-native contracts.
    * @param scriptIntents sciprt Intents to add to the transaction
    */
   public addIntent(scriptIntents: ScriptIntent[] | ScriptIntent): this {
     if (!Array.isArray(scriptIntents)) {
       scriptIntents = [scriptIntents];
     }
-    this.script = scriptIntents.reduce(
-      (accumulatedScript, intent) => accumulatedScript + createScript(intent),
-      this.script
+
+    let increasedSystemFee = new Fixed8(0);
+    this.script = scriptIntents.reduce((accumulatedScript, intent) => {
+      const { hex, fee } = createScript(intent);
+      this.systemFee.plus(fee);
+      increasedSystemFee.plus(fee);
+      this.intents.push(intent);
+      return accumulatedScript + hex;
+    }, this.script);
+    log.info(
+      `Increased systemFee: ${increasedSystemFee.toNumber()}, totally ${this.systemFee.toNumber()}`
     );
     return this;
+  }
+
+  /**
+   * calculate networkFee
+   * networkFee = verificationCost + txSize * POLICY_FEE_PERBYTE
+   * @param autoAjust when true, auto justify tx networkfee to the minimum value
+   * @returns minimum networkFee that this tx needs
+   */
+  public calculateNetworkFee(autoAdjust: boolean = true): Fixed8 {
+    const signers = this.getScriptHashesForVerifying();
+    // compute the size of transaction.
+    const txHeaderSize =
+      /* version */ 1 +
+      /* nonce */ 4 /* sender */ +
+      20 +
+      /* systemFee */ 8 +
+      /* networkFee */ 8 +
+      /* validUntilBlock */ 4;
+    let size =
+      txHeaderSize +
+      serializeArrayOf(this.attributes).length / 2 +
+      this.script.length / 2 +
+      getVarSize(signers.length);
+    let networkFee = new Fixed8(0);
+    signers.forEach(signer => {
+      const account = new Account(signer);
+      if (!account.isMultiSig) {
+        size += 66 + signer.length / 2;
+        networkFee.add(
+          OpCodePrices[OpCode.PUSHBYTES64] +
+            OpCodePrices[OpCode.PUSHBYTES33] +
+            getInteropSericePrice(InteropService.NEO_CRYPTO_CHECKSIG)
+        );
+      } else {
+        const sb = new ScriptBuilder();
+        const n = getPublicKeysFromVerificationScript(account.contract.script)
+          .length;
+        const m = getSigningThresholdFromVerificationScript(
+          account.contract.script
+        );
+        const size_env = 65 * m;
+        size += getVarSize(size_env) + size_env + signer.length / 2;
+        networkFee = networkFee.add(
+          OpCodePrices[OpCode.PUSHBYTES64] * m +
+            OpCodePrices[
+              parseInt(sb.emitPush(m).str.slice(0, 2), 16) as OpCode
+            ] +
+            OpCodePrices[OpCode.PUSHBYTES33] * n +
+            OpCodePrices[
+              parseInt(sb.emitPush(n).str.slice(0, 2), 16) as OpCode
+            ] +
+            getInteropSericePrice(InteropService.NEO_CRYPTO_CHECKMULTISIG, n)
+        );
+      }
+    });
+    networkFee = networkFee.add(size * POLICY_FEE_PERBYTE);
+    if (autoAdjust) {
+      this.networkFee = networkFee;
+    }
+    return networkFee;
   }
 
   /**
@@ -241,9 +343,16 @@ export class Transaction {
       networkFee: this.networkFee.toNumber(),
       validUntilBlock: this.validUntilBlock,
       attributes: this.attributes.map(a => a.export()),
+      intents: this.intents,
       scripts: this.scripts.map(a => a.export()),
       script: this.script
     };
+  }
+
+  public getScriptHashesForVerifying(): string[] {
+    let hashes = getCosignersFromAttributes(this.attributes);
+    hashes.unshift(this.sender);
+    return hashes.sort();
   }
 }
 

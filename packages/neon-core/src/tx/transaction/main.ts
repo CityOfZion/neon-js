@@ -1,5 +1,10 @@
 import { num2VarInt, StringStream, fixed82num, ensureHex } from "../../u";
-import { TransactionAttribute, Witness, toTxAttrUsage } from "../components";
+import {
+  TransactionAttribute,
+  Witness,
+  toTxAttrUsage,
+  TransactionAttributeLike
+} from "../components";
 import { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
 import TxAttrUsage from "../txAttrUsage";
@@ -75,6 +80,14 @@ export function deserializeValidUntilBlock(
   return Object.assign(tx, { validUntilBlock });
 }
 
+export function getCosignersFromAttributes(
+  attrs: TransactionAttribute[] | TransactionAttributeLike[]
+): string[] {
+  return attrs
+    .filter(attr => toTxAttrUsage(attr.usage) === TxAttrUsage.Cosigner)
+    .map(attr => attr.data);
+}
+
 export function deserializeAttributes(
   ss: StringStream,
   tx: Partial<TransactionLike>
@@ -83,9 +96,7 @@ export function deserializeAttributes(
     TransactionAttribute.fromStream,
     ss
   ).map(i => i.export());
-  const cosigners = attributes
-    .filter(attr => toTxAttrUsage(attr.usage) === TxAttrUsage.Cosigner)
-    .map(attr => attr.data);
+  const cosigners = getCosignersFromAttributes(attributes);
   if (
     !cosigners.every(
       cosigner =>
@@ -122,5 +133,15 @@ export function formatSender(sender: string | undefined): string {
     return getScriptHashFromAddress(sender);
   } else {
     throw new Error(`Sender format error: ${sender}`);
+  }
+}
+
+export function getVarSize(value: number): number {
+  if (value < 0xfd) {
+    return 1;
+  } else if (value < 0xffff) {
+    return 3;
+  } else {
+    return 5;
   }
 }
