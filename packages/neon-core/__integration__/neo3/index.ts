@@ -5,7 +5,7 @@ import { RPCClient } from "../../src/rpc";
 const privateKey = "";
 const url = "";
 
-describe("NEO3 transfer neo", async function() {
+describe.skip("NEO3 transfer neo", async function() {
   const rpcClient = new RPCClient(url);
   const fromAccount = new wallet.Account(privateKey);
   const to = "";

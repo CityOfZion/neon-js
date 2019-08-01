@@ -13,7 +13,6 @@ export class NEP5 extends NativeContract {
   protected _sb: ScriptBuilder;
   public constructor(name: string = "NEP5", scriptHash: string = "") {
     super(name);
-    this._setMethodPrices();
     this.scriptHash = scriptHash;
     this._sb = new ScriptBuilder();
   }
@@ -64,14 +63,5 @@ export class NEP5 extends NativeContract {
       toHash,
       ContractParam.integer(adjustedAmt.toString())
     ]);
-  }
-
-  protected _setMethodPrices() {
-    this.methodPrices.set("name", new Fixed8(0));
-    this.methodPrices.set("symbol", new Fixed8(0));
-    this.methodPrices.set("decimals", new Fixed8(0));
-    this.methodPrices.set("totalSupply", new Fixed8(1000000e-8));
-    this.methodPrices.set("balanceOf", new Fixed8(1000000e-8));
-    this.methodPrices.set("transfer", new Fixed8(8000000e-8));
   }
 }

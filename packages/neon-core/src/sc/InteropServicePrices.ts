@@ -1,12 +1,6 @@
 import InteropService from "./InteropService";
-import {
-  NEO,
-  GAS,
-  Policy,
-  GasInstance,
-  NeoInstance,
-  PolicyInstance
-} from "./tokens_abi";
+import NativeContractMethodPrices from "./nativeContractMethodPrices";
+import { Fixed8 } from "../u";
 
 const gasPerByte = 100000e-8;
 const fixedPrices = {
@@ -116,21 +110,27 @@ export function getInteropSericePrice(
           `method param is necessary for interopService ${service}`
         );
       }
-      return NeoInstance.getMethodPrice(method).toNumber();
+      return (
+        NativeContractMethodPrices.get(method) || new Fixed8(0)
+      ).toNumber();
     case InteropService.NEO_NATIVE_TOKENS_GAS:
       if (method === undefined) {
         throw new Error(
           `method param is necessary for interopService ${service}`
         );
       }
-      return GasInstance.getMethodPrice(method).toNumber();
+      return (
+        NativeContractMethodPrices.get(method) || new Fixed8(0)
+      ).toNumber();
     case InteropService.NEO_NATIVE_POLICY:
       if (method === undefined) {
         throw new Error(
           `method param is necessary for interopService ${service}`
         );
       }
-      return PolicyInstance.getMethodPrice(method).toNumber();
+      return (
+        NativeContractMethodPrices.get(method) || new Fixed8(0)
+      ).toNumber();
     default:
       return fixedPrices[service];
   }

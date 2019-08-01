@@ -1,7 +1,7 @@
 import _axios from "axios";
 import { mocked } from "ts-jest/utils";
 import Query from "../../src/rpc/Query";
-import { ContractTransaction } from "../../src/tx";
+import { Transaction } from "../../src/tx";
 
 jest.mock("axios");
 
@@ -41,16 +41,10 @@ describe("equals", () => {
 });
 
 describe("static", () => {
-  test("getAccountState", () => {
-    const result = Query.getAccountState("test");
-    expect(result.method).toEqual("getaccountstate");
-    expect(result.params).toEqual(["test"]);
-  });
-
-  test("getAssetState", () => {
-    const result = Query.getAssetState("test");
-    expect(result.method).toEqual("getassetstate");
-    expect(result.params).toEqual(["test"]);
+  test("getBestBlockHash", () => {
+    const result = Query.getBestBlockHash();
+    expect(result.method).toEqual("getbestblockhash");
+    expect(result.params).toEqual([]);
   });
 
   describe("getBlock", () => {
@@ -67,16 +61,30 @@ describe("static", () => {
     });
   });
 
+  test("getBlockCount", () => {
+    const result = Query.getBlockCount();
+    expect(result.method).toEqual("getblockcount");
+    expect(result.params).toEqual([]);
+  });
+
   test("getBlockHash", () => {
     const result = Query.getBlockHash(123);
     expect(result.method).toEqual("getblockhash");
     expect(result.params).toEqual([123]);
   });
 
-  test("getBestBlockHash", () => {
-    const result = Query.getBestBlockHash();
-    expect(result.method).toEqual("getbestblockhash");
-    expect(result.params).toEqual([]);
+  describe("getBlockHeader", () => {
+    test("param in number", () => {
+      const result = Query.getBlockHeader(123, 0);
+      expect(result.method).toEqual("getblockheader");
+      expect(result.params).toEqual([123, 0]);
+    });
+
+    test("param in blockhash", () => {
+      const result1 = Query.getBlockHeader("blockhash", 1);
+      expect(result1.method).toEqual("getblockheader");
+      expect(result1.params).toEqual(["blockhash", 1]);
+    });
   });
 
   test("getBlockSysFee", () => {
@@ -104,9 +112,9 @@ describe("static", () => {
   });
 
   test("getRawMemPool", () => {
-    const result = Query.getRawMemPool();
+    const result = Query.getRawMemPool(0);
     expect(result.method).toEqual("getrawmempool");
-    expect(result.params).toEqual([]);
+    expect(result.params).toEqual([0]);
   });
 
   describe("getRawTransaction", () => {
@@ -129,10 +137,10 @@ describe("static", () => {
     expect(result.params).toEqual(["contract", "key"]);
   });
 
-  test("getTxOut", () => {
-    const result = Query.getTxOut("hash", 1);
-    expect(result.method).toEqual("gettxout");
-    expect(result.params).toEqual(["hash", 1]);
+  test("getTxHeight", () => {
+    const result = Query.getTxHeight("hash");
+    expect(result.method).toEqual("gettransactionheight");
+    expect(result.params).toEqual(["hash"]);
   });
 
   test("getValidators", () => {
@@ -145,21 +153,6 @@ describe("static", () => {
     const result = Query.getVersion();
     expect(result.method).toEqual("getversion");
     expect(result.params).toEqual([]);
-  });
-
-  describe("invoke", () => {
-    test("no params", () => {
-      const result = Query.invoke("hash");
-      expect(result.method).toEqual("invoke");
-      expect(result.params).toEqual(["hash", []]);
-    });
-
-    test("muliple params", () => {
-      const params = [jest.fn(), jest.fn(), jest.fn()];
-      const result = Query.invoke("hash", params[0], params[1], params[2]);
-      expect(result.method).toEqual("invoke");
-      expect(result.params).toEqual(["hash", params]);
-    });
   });
 
   describe("invokeFunction", () => {
@@ -189,6 +182,12 @@ describe("static", () => {
     expect(result.params).toEqual(["script"]);
   });
 
+  describe("listPlugins", () => {
+    const result = Query.listPlugins();
+    expect(result.method).toEqual("listplugins");
+    expect(result.params).toEqual([]);
+  });
+
   describe("sendRawTransaction", () => {
     test("hexstring", () => {
       const result = Query.sendRawTransaction("abcd");
@@ -197,34 +196,22 @@ describe("static", () => {
     });
 
     test("Transaction", () => {
-      const tx = new ContractTransaction();
+      const tx = new Transaction();
       const result = Query.sendRawTransaction(tx);
       expect(result.method).toEqual("sendrawtransaction");
       expect(result.params).toEqual([tx.serialize(true)]);
     });
   });
 
+  test("submitBlock", () => {
+    const result = Query.submitBlock("block");
+    expect(result.method).toEqual("submitblock");
+    expect(result.params).toEqual(["block"]);
+  });
+
   test("validateAddress", () => {
     const result = Query.validateAddress("addr");
     expect(result.method).toEqual("validateaddress");
-    expect(result.params).toEqual(["addr"]);
-  });
-
-  test("getUnspents", () => {
-    const result = Query.getUnspents("addr");
-    expect(result.method).toEqual("getunspents");
-    expect(result.params).toEqual(["addr"]);
-  });
-
-  test("getUnclaimed", () => {
-    const result = Query.getUnclaimed("addr");
-    expect(result.method).toEqual("getunclaimed");
-    expect(result.params).toEqual(["addr"]);
-  });
-
-  test("getClaimable", () => {
-    const result = Query.getClaimable("addr");
-    expect(result.method).toEqual("getclaimable");
     expect(result.params).toEqual(["addr"]);
   });
 });

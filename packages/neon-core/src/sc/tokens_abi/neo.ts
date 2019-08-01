@@ -2,7 +2,7 @@ import { NEP5 } from "./nep5";
 import { getScriptHashFromAddress } from "../../wallet";
 import ContractParam from "../ContractParam";
 import { ScriptResult } from "../ScriptBuilder";
-import { Fixed8 } from "../../u";
+import NativeContractMethodPrices from "../nativeContractMethodPrices";
 
 export class NEO extends NEP5 {
   public constructor() {
@@ -14,7 +14,7 @@ export class NEO extends NEP5 {
       throw new Error("sb not initiated.");
     }
     this._sb.reset();
-    const fee = this.methodPrices.get(method);
+    const fee = NativeContractMethodPrices.get(method);
     if (fee === undefined) {
       throw new Error(`${method} price not stored!`);
     }
@@ -56,16 +56,6 @@ export class NEO extends NEP5 {
         ...pubkeys.map(pubkey => ContractParam.publicKey(pubkey))
       )
     ]);
-  }
-
-  protected _setMethodPrices() {
-    super._setMethodPrices();
-    this.methodPrices.set("unclaimedGas", new Fixed8(3000000e-8));
-    this.methodPrices.set("registerValidator", new Fixed8(5000000e-8));
-    this.methodPrices.set("getRegisteredValidators", new Fixed8(1));
-    this.methodPrices.set("getValidators", new Fixed8(1));
-    this.methodPrices.set("getNextBlockValidators", new Fixed8(1));
-    this.methodPrices.set("vote", new Fixed8(5));
   }
 }
 

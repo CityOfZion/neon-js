@@ -1,7 +1,7 @@
 import { NEP5 } from "./nep5";
 import ContractParam from "../ContractParam";
 import { ScriptResult } from "../ScriptBuilder";
-import { Fixed8 } from "../../u";
+import NativeContractMethodPrices from "../nativeContractMethodPrices";
 
 export class GAS extends NEP5 {
   public constructor() {
@@ -14,7 +14,7 @@ export class GAS extends NEP5 {
     }
     this._sb.reset();
 
-    const fee = this.methodPrices.get(method);
+    const fee = NativeContractMethodPrices.get(method);
     if (fee === undefined) {
       throw new Error(`${method} price not stored!`);
     }
@@ -26,11 +26,6 @@ export class GAS extends NEP5 {
 
   public getSysFeeAmount(index: number): ScriptResult {
     return this.buildScript("getSysFeeAmount", [ContractParam.integer(index)]);
-  }
-
-  protected _setMethodPrices() {
-    super._setMethodPrices();
-    this.methodPrices.set("getSysFeeAmount", new Fixed8(1000000e-8));
   }
 }
 

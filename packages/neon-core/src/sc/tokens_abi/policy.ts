@@ -2,7 +2,7 @@ import ScriptBuilder, { ScriptResult } from "../ScriptBuilder";
 import ContractParam from "../ContractParam";
 import { getScriptHashFromAddress } from "../../wallet";
 import { NativeContract } from "./NativeContract";
-import { Fixed8 } from "../../u";
+import NativeContractMethodPrices from "../nativeContractMethodPrices";
 
 /**
  * Policy Token Contract is about consensus configuration.
@@ -12,7 +12,6 @@ export class Policy extends NativeContract {
 
   public constructor() {
     super("Policy");
-    this._setMethodPrices();
     this._sb = new ScriptBuilder();
   }
 
@@ -20,7 +19,7 @@ export class Policy extends NativeContract {
     if (!this._sb) {
       throw new Error("sb not initiated");
     }
-    const fee = this.methodPrices.get(method);
+    const fee = NativeContractMethodPrices.get(method);
     if (fee === undefined) {
       throw new Error(`${method} price not stored!`);
     }
@@ -58,16 +57,6 @@ export class Policy extends NativeContract {
 
   public unblockAccount(addr: string): ScriptResult {
     return this.buildScript("unblockAccount", [getScriptHashFromAddress(addr)]);
-  }
-
-  protected _setMethodPrices() {
-    this.methodPrices.set("getMaxTransactionsPerBlock", new Fixed8(1000000e-8));
-    this.methodPrices.set("getFeePerByte", new Fixed8(1000000e-8));
-    this.methodPrices.set("getBlockedAccounts", new Fixed8(1000000e-8));
-    this.methodPrices.set("setMaxTransactionsPerBlock", new Fixed8(3000000e-8));
-    this.methodPrices.set("setFeePerByte", new Fixed8(3000000e-8));
-    this.methodPrices.set("blockAccount", new Fixed8(3000000e-8));
-    this.methodPrices.set("unblockAccount", new Fixed8(3000000e-8));
   }
 }
 
