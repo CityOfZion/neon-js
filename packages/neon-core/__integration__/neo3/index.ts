@@ -1,8 +1,7 @@
-import { sc, wallet, u } from "../../src";
+import { wallet } from "../../src";
 import { Transaction, TxAttrUsage } from "../../src/tx";
 import { RPCClient } from "../../src/rpc";
 
-const NEO_SCRIPTHASH = "";
 const privateKey = "";
 const url = "";
 
@@ -11,16 +10,16 @@ describe("NEO3 transfer neo", async function() {
   const fromAccount = new wallet.Account(privateKey);
   const to = "";
   const amount = 10;
-  const script = sc.createScript({
-    scriptHash: NEO_SCRIPTHASH,
+  const intent = {
+    scriptHash: "NEO",
     operation: "transfer",
     args: [fromAccount.address, to, amount]
-  });
+  };
   const validUntilBlock =
     Transaction.MAX_VALIDUNTILBLOCK_INCREMENT +
     (await rpcClient.getBlockCount());
   const invocation_tx = new Transaction({
-    script,
+    intents: [intent],
     sender: fromAccount.scriptHash,
     validUntilBlock
   });

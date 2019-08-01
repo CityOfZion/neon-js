@@ -38,6 +38,11 @@ function isValidValue(value: any): boolean {
   return false;
 }
 
+// TODO
+function retrieveAppCall(sb: ScriptBuilder): ScriptIntent | null {
+  throw new Error("Not Implemented");
+}
+
 /**
  * Builds a VM script in hexstring. Used for constructing smart contract method calls.
  * @extends StringStream

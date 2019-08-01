@@ -1,5 +1,5 @@
-import { ScriptBuilder, InteropService } from "../sc";
-import { reverseHex, StringStream } from "../u";
+import { ScriptBuilder, InteropService, OpCode } from "../sc";
+import { reverseHex, StringStream, num2hexstring } from "../u";
 import { isPublicKey } from "./verify";
 
 export function constructMultiSigVerificationScript(
@@ -36,7 +36,7 @@ export function getPublicKeysFromVerificationScript(
   const keys = [] as string[];
   while (!ss.isEmpty()) {
     const byte = ss.read();
-    if (byte === "21") {
+    if (byte === num2hexstring(OpCode.PUSHBYTES33)) {
       keys.push(ss.read(33));
     }
   }

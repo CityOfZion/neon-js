@@ -2,16 +2,18 @@ export const ADDR_VERSION = "17";
 
 export const ASSETS: { [key: string]: string } = {
   NEO: "NEO",
-  c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b: "NEO",
+  "43cf98eddbe047e198a3e5d57006311442a0ca15": "NEO",
   GAS: "GAS",
-  "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7": "GAS"
+  a1760976db5fcdfab2a9930e8f6ce875b2d18225: "GAS",
+  POLICY: "POLICY",
+  "9c5699b260bd468e2160dd5d45dfd2686bba8b77": "POLICY"
 };
 
 // TODO: Policy contract asset id
 export const ASSET_ID: { [key: string]: string } = {
-  NEO: "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-  GAS: "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-  POLICY: ""
+  NEO: "43cf98eddbe047e198a3e5d57006311442a0ca15",
+  GAS: "a1760976db5fcdfab2a9930e8f6ce875b2d18225",
+  POLICY: "9c5699b260bd468e2160dd5d45dfd2686bba8b77"
 };
 
 export const ASSET_TYPE: { [key: string]: number } = {
@@ -49,13 +51,6 @@ export const DEFAULT_SCRYPT = {
   r: 8,
   p: 8,
   size: 64
-};
-
-export const DEFAULT_SYSFEE: { [key: string]: number } = {
-  enrollmentTransaction: 1000,
-  issueTransaction: 500,
-  publishTransaction: 500,
-  registerTransaction: 10000
 };
 
 export const DEFAULT_WALLET = {
