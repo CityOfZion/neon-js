@@ -1,4 +1,9 @@
-import { TX_VERSION, POLICY_FEE_PERBYTE } from "../../consts";
+import {
+  TX_VERSION,
+  POLICY_FEE_PERBYTE,
+  SYSTEM_FEE_FREE,
+  SYSTEM_FEE_FACTOR
+} from "../../consts";
 import logger from "../../logging";
 import {
   hash256,
@@ -205,6 +210,7 @@ export class Transaction {
    * Adds some script intents to the Transaction
    * System Fee will be increased automatically
    * However system Fee calculated in this method is insufficient if calling non-native contracts.
+   * If the transaction is invoking contracts other than native contracts, invokeScript rpc request can test the systemFee.
    * @param scriptIntents sciprt Intents to add to the transaction
    */
   public addIntent(scriptIntents: ScriptIntent[] | ScriptIntent): this {
@@ -224,6 +230,26 @@ export class Transaction {
       `Increased systemFee: ${increasedSystemFee.toNumber()}, totally ${this.systemFee.toNumber()}`
     );
     return this;
+  }
+
+  /**
+   * This function regulate system fee with 2 processes:
+   * 1. considering the free system fee threshold
+   * 2. ceil systemFee with factor
+   */
+  public regulateSystemFee(): void {
+    let systemFee = this.systemFee.minus(SYSTEM_FEE_FREE);
+    systemFee = systemFee.comparedTo(0) >= 0 ? systemFee : new Fixed8(0);
+    if (systemFee.comparedTo(0) > 0) {
+      const remainder = systemFee.mod(SYSTEM_FEE_FACTOR);
+      if (remainder.comparedTo(0) > 0) {
+        this.systemFee = systemFee.plus(remainder);
+      } else {
+        this.systemFee = systemFee;
+      }
+    } else {
+      this.systemFee = new Fixed8(0);
+    }
   }
 
   /**

@@ -158,8 +158,6 @@ export const OpCodePrices = {
   [OpCode.MIN]: 200e-8,
   [OpCode.MAX]: 200e-8,
   [OpCode.WITHIN]: 200e-8,
-  [OpCode.SHA1]: 300000e-8,
-  [OpCode.SHA256]: 1000000e-8,
   [OpCode.ARRAYSIZE]: 150e-8,
   [OpCode.PACK]: 7000e-8,
   [OpCode.UNPACK]: 7000e-8,

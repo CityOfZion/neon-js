@@ -156,8 +156,6 @@ export enum OpCode {
   MIN = 163,
   MAX = 164,
   WITHIN = 165,
-  SHA1 = 167,
-  SHA256 = 168,
   ARRAYSIZE = 192,
   PACK = 193,
   UNPACK = 194,
