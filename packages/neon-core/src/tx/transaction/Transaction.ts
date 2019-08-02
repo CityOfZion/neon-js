@@ -221,8 +221,8 @@ export class Transaction {
     let increasedSystemFee = new Fixed8(0);
     this.script = scriptIntents.reduce((accumulatedScript, intent) => {
       const { hex, fee } = createScript(intent);
-      this.systemFee.plus(fee);
-      increasedSystemFee.plus(fee);
+      this.systemFee = this.systemFee.plus(fee);
+      increasedSystemFee = increasedSystemFee.plus(fee);
       this.intents.push(intent);
       return accumulatedScript + hex;
     }, this.script);
@@ -278,7 +278,7 @@ export class Transaction {
       const account = new Account(signer);
       if (!account.isMultiSig) {
         size += 66 + signer.length / 2;
-        networkFee.add(
+        networkFee = networkFee.add(
           OpCodePrices[OpCode.PUSHBYTES64] +
             OpCodePrices[OpCode.PUSHBYTES33] +
             getInteropSericePrice(InteropService.NEO_CRYPTO_CHECKSIG)

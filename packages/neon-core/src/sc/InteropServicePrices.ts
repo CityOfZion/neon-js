@@ -1,5 +1,5 @@
 import InteropService from "./InteropService";
-import NativeContractMethodPrices from "./nativeContractMethodPrices";
+import NativeContractMethodPrices from "./NativeContractMethodPrices";
 import { Fixed8 } from "../u";
 
 const gasPerByte = 100000e-8;

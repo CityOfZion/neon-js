@@ -130,5 +130,40 @@
         "useTailCall": false
       }
     ]
+  },
+  "neo": {
+    "script": "",
+    "scriptIntent": {
+      "scriptHash": "NEO",
+      "operation": "balanceOf",
+      "args": [
+        {
+          "type": "Hash160",
+          "value": "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+        }
+      ]
+    },
+    "fee": 1000000e-8
+  },
+  "gas": {
+    "script": "",
+    "scriptIntent": {
+      "scriptHash": "gas",
+      "operation": "balanceOf",
+      "args": [
+        {
+          "type": "Hash160",
+          "value": "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+        }
+      ]
+    }
+  },
+  "policy": {
+    "script": "",
+    "scriptIntent": {
+      "scriptHash": "Policy",
+      "operation": "getMaxTransactionPerBlock",
+      "args": []
+    }
   }
 }

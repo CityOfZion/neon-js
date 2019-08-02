@@ -1,4 +1,4 @@
-import { str2hexstring } from "../u";
+import { str2hexstring, Fixed8 } from "../u";
 import ScriptBuilder, { ScriptIntent, ScriptResult } from "./ScriptBuilder";
 import InteropService from "./InteropService";
 import { ASSET_ID } from "../consts";

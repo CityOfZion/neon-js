@@ -54,12 +54,17 @@ export class ScriptBuilder extends StringStream {
     super(str);
     this.fee = new Fixed8(0);
   }
+
+  // TODO
+  public toScriptParams(): ScriptIntent[] {
+    throw new Error("Not implemented");
+  }
   /**
    * Appends an Opcode, followed by args
    */
   public emit(op: OpCode, args?: string): this {
     this.str += num2hexstring(op);
-    this.fee.plus(OpCodePrices[op]);
+    this.fee = this.fee.plus(OpCodePrices[op]);
     if (args) {
       this.str += args;
     }
@@ -143,7 +148,7 @@ export class ScriptBuilder extends StringStream {
     size?: number,
     operation?: string
   ) {
-    this.fee.plus(getInteropSericePrice(service, size, operation));
+    this.fee = this.fee.plus(getInteropSericePrice(service, size, operation));
     return this.emit(OpCode.SYSCALL, service);
   }
 
@@ -199,7 +204,7 @@ export class ScriptBuilder extends StringStream {
     if (size <= OpCode.PUSHBYTES75) {
       // this is actually pushing opcode PUSHBYTES1-75, will generate fee.
       this.str += num2hexstring(size);
-      this.fee.add(OpCodePrices[OpCode.PUSHBYTES75]);
+      this.fee = this.fee.plus(OpCodePrices[OpCode.PUSHBYTES75]);
       this.str += hexstring;
     } else if (size < 0x100) {
       this.emit(OpCode.PUSHDATA1);

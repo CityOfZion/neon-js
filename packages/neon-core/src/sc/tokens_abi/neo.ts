@@ -1,10 +1,10 @@
-import { NEP5 } from "./nep5";
 import { getScriptHashFromAddress } from "../../wallet";
 import ContractParam from "../ContractParam";
 import { ScriptResult } from "../ScriptBuilder";
-import NativeContractMethodPrices from "../nativeContractMethodPrices";
+import NativeContractMethodPrices from "../NativeContractMethodPrices";
+import { NativeNEP5 } from "./native_nep5";
 
-export class NEO extends NEP5 {
+export class NEO extends NativeNEP5 {
   public constructor() {
     super("NEO");
   }
@@ -58,5 +58,3 @@ export class NEO extends NEP5 {
     ]);
   }
 }
-
-export const NeoInstance = new NEO();

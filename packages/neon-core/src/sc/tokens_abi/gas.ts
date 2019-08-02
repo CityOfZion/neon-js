@@ -1,9 +1,9 @@
-import { NEP5 } from "./nep5";
 import ContractParam from "../ContractParam";
 import { ScriptResult } from "../ScriptBuilder";
-import NativeContractMethodPrices from "../nativeContractMethodPrices";
+import NativeContractMethodPrices from "../NativeContractMethodPrices";
+import { NativeNEP5 } from "./native_nep5";
 
-export class GAS extends NEP5 {
+export class GAS extends NativeNEP5 {
   public constructor() {
     super("GAS");
   }
@@ -28,5 +28,3 @@ export class GAS extends NEP5 {
     return this.buildScript("getSysFeeAmount", [ContractParam.integer(index)]);
   }
 }
-
-export const GasInstance = new GAS();

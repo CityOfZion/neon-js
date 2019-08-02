@@ -2,7 +2,7 @@ import ScriptBuilder, { ScriptResult } from "../ScriptBuilder";
 import ContractParam from "../ContractParam";
 import { getScriptHashFromAddress } from "../../wallet";
 import { NativeContract } from "./NativeContract";
-import NativeContractMethodPrices from "../nativeContractMethodPrices";
+import NativeContractMethodPrices from "../NativeContractMethodPrices";
 
 /**
  * Policy Token Contract is about consensus configuration.
@@ -29,8 +29,8 @@ export class Policy extends NativeContract {
     };
   }
 
-  public getMaxTransactionPerBlock(): ScriptResult {
-    return this.buildScript("getMaxTransactionPerBlock");
+  public getMaxTransactionsPerBlock(): ScriptResult {
+    return this.buildScript("getMaxTransactionsPerBlock");
   }
 
   public getFeePerByte(): ScriptResult {
@@ -59,5 +59,3 @@ export class Policy extends NativeContract {
     return this.buildScript("unblockAccount", [getScriptHashFromAddress(addr)]);
   }
 }
-
-export const PolicyInstance = new Policy();
