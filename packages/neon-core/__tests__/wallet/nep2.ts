@@ -11,24 +11,24 @@ const simpleKeys = {
   a: {
     wif: "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
     passphrase: "city of zion",
-    encryptedWif: "6PYLHmDf7R4im6NUF34MwcbViPpjwfdkrPMdFjuCXnEFmmK2A7AAzVAvTa"
+    encryptedWif: "6PYLPLfpCoGkGvVFeN9KjvvT6dNBoYag3c2co362y9Gge1GSjMewf5J6tc"
   },
   b: {
     wif: "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
     passphrase: "我的密码",
-    encryptedWif: "6PYWVp3xerNdVMtSELSNZDBMP1qXrM1o6NrCQHqpeWLMd3rgeUE1rQuwrm"
+    encryptedWif: "6PYQqmDYkjqD6D3wsh5YquFqtgWsxThLAZDni1oEXaEp1MTqJKPHzVJEaU"
   },
   c: {
     wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
     passphrase: "MyL33tP@33w0rd",
-    encryptedWif: "6PYNoc1EFvW5rJD2Tg6k24xEVGZ56sY1YN5NG2sSF1qUKHy47uEwTkdcYs"
+    encryptedWif: "6PYQ5fKhgWtqs2y81eBVbt1GsEWx634cRHeJcuknwUW2PyVc9itQqfLhtR"
   }
 };
 
 const testKey = {
   wif: "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
   passphrase: "city of zion",
-  encryptedWif: "6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF"
+  encryptedWif: "6PYLPLfpCw87u1t7TP14gkNweUkuqwpso8qmMt24Kp8aona6K7fvurdsDQ"
 };
 describe("NEP2", () => {
   describe("Default", () => {

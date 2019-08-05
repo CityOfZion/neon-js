@@ -16,9 +16,13 @@ export function toTxAttrUsage(
       return TxAttrUsage[type as keyof typeof TxAttrUsage];
     }
     throw new Error(`${type} not found in TxAttrUsage!`);
+  } else if (typeof type === "number") {
+    if (TxAttrUsage.Cosigner !== type && TxAttrUsage.Url !== type) {
+      throw new Error(`${type} not found in TxAttrUsage!`);
+    }
   }
 
-  return type;
+  return type as TxAttrUsage;
 }
 
 /**

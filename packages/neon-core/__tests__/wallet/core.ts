@@ -2,38 +2,38 @@ import * as C from "../../src/wallet/core";
 
 describe.each([
   [
-    "Adc4jT59RjDLdXbBni6xzg6SEcLVhHZ5Z9",
+    "AVA5bxQf8PwYbPsfaSQwULRNwnppX6Sv3d",
     {
-      address: "Adc4jT59RjDLdXbBni6xzg6SEcLVhHZ5Z9",
+      address: "AVA5bxQf8PwYbPsfaSQwULRNwnppX6Sv3d",
       publicKey:
         "02963fc761eb7135c4593bfc6a0af96d8588b70d8f6ef3af8549181e57772181f5",
       privateKey:
         "a7b9775c6b9136bf89f63def7eab0c5f2d3d0c9e85492717f54386420cce5aa1",
-      scriptHash: "77f807a219d340423a307310ac15c1d179dc77ef",
+      scriptHash: "5faf3ee4abb1cd33c96f34b150bf4ea750c4cc92",
       WIF: "L2qkBc4ogTZERR4Watg4QoQq37w8fxrVZkYrPk7ZZSoRUZsr9yML"
     }
   ],
   [
-    "ARCvt1d5qAGzcHqJCWA2MxvhTLQDb9dvjQ",
+    "AHbHRbqu6vheHZrLPXrMtwYxmuXxuHBzL2",
     {
-      address: "ARCvt1d5qAGzcHqJCWA2MxvhTLQDb9dvjQ",
+      address: "AHbHRbqu6vheHZrLPXrMtwYxmuXxuHBzL2",
       publicKey:
         "03c663ba46afa8349f020eb9e8f9e1dc1c8e877b9d239e139af699049126e0f321",
       privateKey:
         "4f0d41eda93941d106d4a26cc90b4b4fddc0e03b396ac94eb439c5d9e0cd6548",
-      scriptHash: "f5cf63dfe3821b4d17302aeb8551b219d83a7667",
+      scriptHash: "db629d6002aed6ca97f6f0efe55bf9cf4986ef13",
       WIF: "KysNqEuLb3wmZJ6PsxbA9Bh6ewTybEda4dEiN9X7X48dJPkLWZ5a"
     }
   ],
   [
-    "AYYrr4GauveRr45WwAJyw6izvEMvasBBXH",
+    "AUV5gfc8uYFojgGPoS6W3vCJvJnm3wTiod",
     {
-      address: "AYYrr4GauveRr45WwAJyw6izvEMvasBBXH",
+      address: "AUV5gfc8uYFojgGPoS6W3vCJvJnm3wTiod",
       publicKey:
         "02c1a9b2d0580902a6c2d09a8febd0a7a13518a9a61d08183f09ff929b66ac7c26",
       privateKey:
         "793466a3dfe3935a475d02290e37000a3e835f6740f9733e72e979d6e1166e13",
-      scriptHash: "e485d31067646f5d43f0b8328edf31e8fa0f04b8",
+      scriptHash: "ff10b596a4b8a22c83462ed8de6bde1ab59c6c8b",
       WIF: "L1HKLWratxFhX94XSn98JEULQYKGhRycf4nREe3Cs8EPQStF5u9E"
     }
   ]

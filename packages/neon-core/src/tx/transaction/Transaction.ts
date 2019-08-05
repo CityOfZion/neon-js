@@ -66,15 +66,6 @@ export interface TransactionLike {
   script: string;
 }
 
-export interface TransactionInitials {
-  sender: string;
-  networkFee: Fixed8 | number;
-  validUntilBlock: number;
-  attributes: TransactionAttributeLike[];
-  intents: ScriptIntent[];
-  scripts: WitnessLike[];
-}
-
 export class Transaction {
   public version: number;
   /**
@@ -97,6 +88,11 @@ export class Transaction {
   public networkFee: Fixed8;
 
   /**
+   * System Fee calculated while adding intents
+   */
+  private _pre_systemFee: Fixed8;
+
+  /**
    * Current transaction will not be valid until block of height validUntilBlock
    */
   public validUntilBlock: number;
@@ -107,17 +103,21 @@ export class Transaction {
 
   public static MAX_VALIDUNTILBLOCK_INCREMENT = 2102400;
 
-  public constructor(tx: Partial<TransactionInitials> = {}) {
+  public constructor(tx: Partial<TransactionLike> = {}) {
     const {
+      version,
+      nonce,
       sender,
+      systemFee,
       networkFee,
       validUntilBlock,
       attributes,
       intents,
-      scripts
+      scripts,
+      script
     } = tx;
-    this.version = TX_VERSION;
-    this.nonce = parseInt(ab2hexstring(generateRandomArray(4)), 16);
+    this.version = version || TX_VERSION;
+    this.nonce = nonce || parseInt(ab2hexstring(generateRandomArray(4)), 16);
     this.sender = formatSender(sender);
     // TODO: The default should be snapshot.height + MAX_VALIDUNTILBLOCK_INCREMENT, but it needs request to get block height, thus this is a temporary value
     this.validUntilBlock =
@@ -128,21 +128,16 @@ export class Transaction {
     this.scripts = Array.isArray(scripts)
       ? scripts.map(a => new Witness(a))
       : [];
+    this.systemFee = systemFee ? new Fixed8(systemFee) : new Fixed8(0);
+    this.networkFee = networkFee ? new Fixed8(networkFee) : new Fixed8(0);
+    this._pre_systemFee = new Fixed8(0);
+    this.script = script || "";
     if (intents !== undefined) {
       this.intents = intents;
-      const scriptFromIntents = createScript(...intents);
-      this.script = scriptFromIntents.hex;
-      this.systemFee = scriptFromIntents.fee;
+      this.addIntent(...intents);
     } else {
       this.intents = [];
-      this.script = "";
-      this.systemFee = new Fixed8(0);
     }
-    log.info(
-      `System fee in transacation initiation: ${this.systemFee.toNumber()}`
-    );
-
-    this.networkFee = new Fixed8(networkFee);
   }
 
   public get [Symbol.toStringTag](): string {
@@ -213,15 +208,11 @@ export class Transaction {
    * If the transaction is invoking contracts other than native contracts, invokeScript rpc request can test the systemFee.
    * @param scriptIntents sciprt Intents to add to the transaction
    */
-  public addIntent(scriptIntents: ScriptIntent[] | ScriptIntent): this {
-    if (!Array.isArray(scriptIntents)) {
-      scriptIntents = [scriptIntents];
-    }
-
+  public addIntent(...scriptIntents: ScriptIntent[]): this {
     let increasedSystemFee = new Fixed8(0);
     this.script = scriptIntents.reduce((accumulatedScript, intent) => {
       const { hex, fee } = createScript(intent);
-      this.systemFee = this.systemFee.plus(fee);
+      this._pre_systemFee = this._pre_systemFee.plus(fee);
       increasedSystemFee = increasedSystemFee.plus(fee);
       this.intents.push(intent);
       return accumulatedScript + hex;
@@ -230,6 +221,15 @@ export class Transaction {
       `Increased systemFee: ${increasedSystemFee.toNumber()}, totally ${this.systemFee.toNumber()}`
     );
     return this;
+  }
+
+  /**
+   * If transaction script is constructed only by method `addIntent`, systemFee will be calcuated.
+   * If all intents are about native contract invocation, this system fee is accurate.
+   * In this case, you can use this method to get minimum system fee.
+   */
+  public useCalculatedSystemFee(): void {
+    this.systemFee = this._pre_systemFee;
   }
 
   /**
@@ -243,7 +243,9 @@ export class Transaction {
     if (systemFee.comparedTo(0) > 0) {
       const remainder = systemFee.mod(SYSTEM_FEE_FACTOR);
       if (remainder.comparedTo(0) > 0) {
-        this.systemFee = systemFee.plus(remainder);
+        this.systemFee = systemFee.plus(
+          new Fixed8(SYSTEM_FEE_FACTOR).minus(remainder)
+        );
       } else {
         this.systemFee = systemFee;
       }
@@ -324,13 +326,13 @@ export class Transaction {
     ensureHex(this.sender);
     let out = "";
     out += num2hexstring(this.version);
-    out += num2hexstring(this.nonce);
+    out += num2hexstring(this.nonce, 4);
     out += this.sender;
     out += this.systemFee.toReverseHex();
     out += this.networkFee.toReverseHex();
-    out += num2hexstring(this.validUntilBlock);
-    out += num2VarInt(this.script.length / 2);
+    out += num2hexstring(this.validUntilBlock, 4);
     out += serializeArrayOf(this.attributes);
+    out += num2VarInt(this.script.length / 2);
     out += this.script;
     if (signed) {
       out += serializeArrayOf(this.scripts);
