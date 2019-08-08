@@ -2,11 +2,14 @@ import { AxiosRequestConfig } from "axios";
 import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from "../consts";
 import logger from "../logging";
 import { timeout } from "../settings";
-import { Transaction } from "../tx";
+import { BaseTransaction } from "../tx/transaction/BaseTransaction";
+import { isAddress, Claims, Balance, Coin } from "../wallet";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
 
 const log = logger("rpc");
+
+const versionRegex = /NEO:(\d+\.\d+\.\d+)/;
 
 export interface Validator {
   publickey: string;
@@ -107,6 +110,25 @@ export class RPCClient {
   }
 
   /**
+   * Gets the state of an account given an address.
+   */
+  public async getAccountState(addr: string): Promise<any> {
+    if (!isAddress(addr)) {
+      throw new Error(`Invalid address given: ${addr}`);
+    }
+    const response = await this.execute(Query.getAccountState(addr));
+    return response.result;
+  }
+
+  /**
+   * Gets the state of an asset given an id.
+   */
+  public async getAssetState(assetId: string): Promise<any> {
+    const response = await this.execute(Query.getAssetState(assetId));
+    return response.result;
+  }
+
+  /**
    * Gets the block at a given height or hash.
    */
   public async getBlock(
@@ -138,21 +160,6 @@ export class RPCClient {
    */
   public async getBlockCount(): Promise<number> {
     const response = await this.execute(Query.getBlockCount());
-    return response.result;
-  }
-
-  /**
-   * Get the corresponding block header information according to the specified script hash.
-   * @param indexOrHash height or hash of block.
-   * @param verbose Optional, the default value of verbose is 0. When verbose is 0, the serialized information of the block is returned, represented by a hexadecimal string. If you need to get detailed information, you will need to use the SDK for deserialization. When verbose is 1, detailed information of the corresponding block in Json format string, is returned.
-   */
-  public async getBlockHeader(
-    indexOrHash: number | string,
-    verbose: 0 | 1 = 0
-  ): Promise<any> {
-    const response = await this.execute(
-      Query.getBlockHeader(indexOrHash, verbose)
-    );
     return response.result;
   }
 
@@ -192,17 +199,10 @@ export class RPCClient {
   }
 
   /**
-   * This Query returns the transaction hashes of the transactions confirmed or unconfirmed.
-   * @param shouldGetUnverified Optional. Default is 0.
-   * shouldGetUnverified = 0, get confirmed transaction hashes
-   * shouldGetUnverified = 1, get current block height and confirmed and unconfirmed tx hash
+   * Gets a list of all transaction hashes waiting to be processed.
    */
-  public async getRawMemPool(
-    shouldGetUnverified: 0 | 1 = 0
-  ): Promise<string[]> {
-    const response = await this.execute(
-      Query.getRawMemPool(shouldGetUnverified)
-    );
+  public async getRawMemPool(): Promise<string[]> {
+    const response = await this.execute(Query.getRawMemPool());
     return response.result;
   }
 
@@ -226,11 +226,10 @@ export class RPCClient {
   }
 
   /**
-   * Gets the block index in which the transaction is found.
-   * @param txid hash of the specific transaction.
+   * Gets the transaction output given a transaction id and index
    */
-  public async getTxHeight(txid: string): Promise<number> {
-    const response = await this.execute(Query.getTxHeight(txid));
+  public async getTxOut(txid: string, index: number): Promise<any> {
+    const response = await this.execute(Query.getTxOut(txid, index));
     return response.result;
   }
 
@@ -268,10 +267,13 @@ export class RPCClient {
   }
 
   /**
-   * This Query returns a list of plugins loaded by the node.
+   * Calls a smart contract with the given parameters. This method is a local invoke, results are not reflected on the blockchain.
    */
-  public async listPlugins(): Promise<any> {
-    const response = await this.execute(Query.listPlugins());
+  public async invoke(
+    scriptHash: string,
+    ...params: any[]
+  ): Promise<RPCVMResponse> {
+    const response = await this.execute(Query.invoke(scriptHash, ...params));
     return response.result;
   }
 
@@ -301,7 +303,7 @@ export class RPCClient {
    * Sends a serialized transaction to the network.
    */
   public async sendRawTransaction(
-    transaction: Transaction | string
+    transaction: BaseTransaction | string
   ): Promise<boolean> {
     const response = await this.execute(Query.sendRawTransaction(transaction));
     return response.result;
@@ -321,6 +323,71 @@ export class RPCClient {
   public async validateAddress(addr: string): Promise<boolean> {
     const response = await this.execute(Query.validateAddress(addr));
     return response.result.isvalid;
+  }
+
+  /**
+   * Get the unspent utxo for an address
+   */
+  public async getUnspents(addr: string): Promise<Balance> {
+    const response = await this.execute(Query.getUnspents(addr));
+    return this.parseUnspentsToBalance(response.result);
+  }
+
+  /**
+   * Get the unclaimed gas amount for an address
+   */
+  public async getUnclaimed(addr: string): Promise<GetUnclaimedResult> {
+    const response = await this.execute(Query.getUnclaimed(addr));
+    return response.result;
+  }
+
+  /**
+   * Get the claimable for an address
+   */
+  public async getClaimable(addr: string): Promise<Claims> {
+    const response = await this.execute(Query.getClaimable(addr));
+    return new Claims({
+      net: this.net,
+      address: response.result.address,
+      claims: response.result.claimable.map(
+        (rawClaim: any) =>
+          new Object({
+            claim: rawClaim.unclaimed,
+            txid: rawClaim.txid,
+            index: rawClaim.n,
+            value: rawClaim.value,
+            start: rawClaim.start_height,
+            end: rawClaim.end_height
+          })
+      )
+    });
+  }
+
+  private parseUnspentsToBalance(getUnspentsResult: any): Balance {
+    const bal = new Balance({
+      address: getUnspentsResult.address
+    });
+
+    for (const assetBalance of getUnspentsResult.balance) {
+      if (assetBalance.amount === 0) {
+        continue;
+      }
+      if (assetBalance.unspent.length > 0) {
+        bal.addAsset(assetBalance.asset_symbol, {
+          unspent: assetBalance.unspent.map(
+            (utxo: any) =>
+              new Coin({
+                index: utxo.n,
+                txid: utxo.txid,
+                value: utxo.value
+              })
+          )
+        });
+      } else {
+        bal.addToken(assetBalance.asset_symbol, assetBalance.amount);
+      }
+    }
+    return bal;
   }
 }
 

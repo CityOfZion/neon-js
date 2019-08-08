@@ -1,3 +1,4 @@
+import { DEFAULT_SYSFEE } from "../../src/consts";
 import Protocol from "../../src/rpc/Protocol";
 
 describe("constructor", () => {
@@ -8,6 +9,7 @@ describe("constructor", () => {
     expect(result.addressVersion).toEqual(23);
     expect(result.standbyValidators).toEqual([]);
     expect(result.seedList).toEqual([]);
+    expect(result.systemFee).toEqual(DEFAULT_SYSFEE);
   });
 
   test("ProtocolLike", () => {
@@ -15,7 +17,13 @@ describe("constructor", () => {
       Magic: 999999,
       AddressVersion: 99,
       StandbyValidators: ["1", "2", "3", "4"],
-      SeedList: ["a", "b", "c", "d"]
+      SeedList: ["a", "b", "c", "d"],
+      SystemFee: {
+        EnrollmentTransaction: 1000,
+        IssueTransaction: 500,
+        PublishTransaction: 500,
+        RegisterTransaction: 10000
+      }
     };
 
     const result = new Protocol(testObject);
@@ -23,6 +31,7 @@ describe("constructor", () => {
     expect(result.addressVersion).toEqual(testObject.AddressVersion);
     expect(result.standbyValidators).toEqual(testObject.StandbyValidators);
     expect(result.seedList).toEqual(testObject.SeedList);
+    expect(result.systemFee).toEqual(testObject.SystemFee);
   });
 
   test("Protocol", () => {
@@ -35,6 +44,7 @@ describe("constructor", () => {
     const result = new Protocol(protocolObj);
     expect(result instanceof Protocol).toBeTruthy();
     expect(result).not.toBe(protocolObj);
+    expect(result.systemFee).not.toBe(protocolObj.systemFee);
   });
 });
 
@@ -44,7 +54,13 @@ describe("export", () => {
       Magic: 999999,
       AddressVersion: 99,
       StandbyValidators: ["1", "2", "3", "4"],
-      SeedList: ["a", "b", "c", "d"]
+      SeedList: ["a", "b", "c", "d"],
+      SystemFee: {
+        EnrollmentTransaction: 1000,
+        IssueTransaction: 500,
+        PublishTransaction: 500,
+        RegisterTransaction: 10000
+      }
     };
 
     const protocolObj = new Protocol(expected);
@@ -58,13 +74,25 @@ describe("equals", () => {
     Magic: 999999,
     AddressVersion: 99,
     StandbyValidators: ["1", "2", "3", "4"],
-    SeedList: ["a", "b", "c", "d"]
+    SeedList: ["a", "b", "c", "d"],
+    SystemFee: {
+      EnrollmentTransaction: 1000,
+      IssueTransaction: 500,
+      PublishTransaction: 500,
+      RegisterTransaction: 10000
+    }
   };
   const obj2 = {
     magic: 999998,
     addressVersion: 99,
     StandbyValidators: ["1", "2", "3", "4"],
-    SeedList: ["a", "b", "c", "d"]
+    SeedList: ["a", "b", "c", "d"],
+    SystemFee: {
+      EnrollmentTransaction: 1000,
+      IssueTransaction: 500,
+      PublishTransaction: 500,
+      RegisterTransaction: 10000
+    }
   };
   const protocol1 = new Protocol(obj1);
   const protocol2 = new Protocol(obj2);

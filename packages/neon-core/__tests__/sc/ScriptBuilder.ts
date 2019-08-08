@@ -1,24 +1,12 @@
 import ContractParam from "../../src/sc/ContractParam";
 import OpCode from "../../src/sc/OpCode";
 import ScriptBuilder from "../../src/sc/ScriptBuilder";
-import {
-  OpCodePrices,
-  NativeContractMethodPrices,
-  InteropService
-} from "../../src/sc";
 
 describe("constructor", () => {
   test("empty", () => {
     const result = new ScriptBuilder();
 
     expect(result instanceof ScriptBuilder).toBeTruthy();
-  });
-
-  test("init & reset", () => {
-    const result = new ScriptBuilder("Init");
-    expect(result.str).toBe("Init");
-    result.reset();
-    expect(result.str).toBe("");
   });
 });
 
@@ -27,14 +15,12 @@ describe("emit", () => {
     const sb = new ScriptBuilder();
     sb.emit(OpCode.PUSH1);
     expect(sb.str).toBe("51");
-    expect(sb.fee.toNumber()).toBe(OpCodePrices[OpCode.PUSH1]);
   });
 
   test("OpCode with args", () => {
     const sb = new ScriptBuilder();
     sb.emit(16 as OpCode, "0102");
     expect(sb.str).toBe("100102");
-    expect(sb.fee.equals(OpCodePrices[16 as OpCode])).toBeTruthy();
   });
 
   test("returns this", () => {
@@ -51,27 +37,30 @@ describe("emitAppCall", () => {
       {
         scriptHash: "dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f",
         operation: "name",
-        args: []
+        args: [],
+        useTailCall: false
       },
-      "00c1046e616d65145f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc68627d5b52"
+      "00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc"
     ],
     [
       "simple emitAppCall with null args",
       {
         scriptHash: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
         operation: "symbol",
-        args: null
+        args: null,
+        useTailCall: false
       },
-      "000673796d626f6c1411c4d1f4fba619f2628870d36e3a9773e874705b68627d5b52"
+      "000673796d626f6c6711c4d1f4fba619f2628870d36e3a9773e874705b"
     ],
     [
       "simple emitAppCall with false args",
       {
         scriptHash: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
         operation: "decimals",
-        args: false
+        args: false,
+        useTailCall: false
       },
-      "0008646563696d616c731411c4d1f4fba619f2628870d36e3a9773e874705b68627d5b52"
+      "0008646563696d616c736711c4d1f4fba619f2628870d36e3a9773e874705b"
     ],
     [
       "emitAppCall with args",
@@ -80,18 +69,20 @@ describe("emitAppCall", () => {
         operation: "balanceOf",
         args: [
           "5fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b"
-        ]
+        ],
+        useTailCall: false
       },
-      "205fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b51c10962616c616e63654f661411c4d1f4fba619f2628870d36e3a9773e874705b68627d5b52"
+      "205fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b"
     ],
     [
       "emitAppCall with number arg",
       {
         scriptHash: "db81b3d1e546a958e60c8ce33c766165100c04b7",
         operation: null,
-        args: 7
+        args: 7,
+        useTailCall: false
       },
-      "5714b7040c106561763ce38c0ce658a946e5d1b381db68627d5b52"
+      "5767b7040c106561763ce38c0ce658a946e5d1b381db"
     ],
     [
       "emitAppCall with ContractParam args in array",
@@ -103,9 +94,10 @@ describe("emitAppCall", () => {
             type: "Hash160",
             value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
           }
-        ]
+        ],
+        useTailCall: false
       },
-      "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f661411c4d1f4fba619f2628870d36e3a9773e874705b68627d5b52"
+      "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b"
     ],
     [
       "emitAppCall with pure ContractParam args",
@@ -120,41 +112,20 @@ describe("emitAppCall", () => {
               value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
             }
           ]
-        }
+        },
+        useTailCall: false
       },
-      "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f661411c4d1f4fba619f2628870d36e3a9773e874705b68627d5b52"
+      "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b"
     ]
   ])("%s", (msg: string, data: any, expected: string) => {
     const sb = new ScriptBuilder();
-    sb.emitAppCall(data.scriptHash, data.operation, data.args);
+    sb.emitAppCall(
+      data.scriptHash,
+      data.operation,
+      data.args,
+      data.useTailCall
+    );
     expect(sb.str).toBe(expected);
-  });
-});
-
-describe("Native Contact Call", () => {
-  test("emitNeoCall", () => {
-    const sb = new ScriptBuilder();
-    sb.emitNeoCall("getRegisteredValidators", []);
-    expect(sb.str).toBe(
-      "00c1176765745265676973746572656456616c696461746f72736845c49284"
-    );
-    expect(sb.fee.toNumber()).toBe(1.0000715);
-  });
-
-  test("emitGasCall", () => {
-    const sb = new ScriptBuilder();
-    sb.emitGasCall("decimals", []);
-    expect(sb.str).toBe("00c108646563696d616c7368eb43f4f4");
-    expect(sb.fee.toNumber()).toBe(0.0000715);
-  });
-
-  test("emitPolicyCall", () => {
-    const sb = new ScriptBuilder();
-    sb.emitPolicyCall("getMaxTransactionsPerBlock", []);
-    expect(sb.str).toBe(
-      "00c11a6765744d61785472616e73616374696f6e73506572426c6f636b6875f4fa6b"
-    );
-    expect(sb.fee.toNumber()).toBe(0.0100715);
   });
 });
 
@@ -227,7 +198,7 @@ describe("emitPush", () => {
   });
 });
 
-describe.skip("toScriptParams", () => {
+describe("toScriptParams", () => {
   test("NEP5 token transfer scripts", () => {
     const rawScript =
       "0400e1f50514d0d6076f6953a895b0c23a21c9cd342a974554d714961d3ef7448228f7e1bbe14b99e031cc7f8d7e8453c1087472616e73666572679ffc47dd7f4678024f01aea820a262e76653b13ff10400c2eb0b1476dada428b7bbc938ac82a8ea94802f74f121a46145ed9efbac2a1e0f24a90d49a775e7b1165812d4e53c1087472616e73666572679ffc47dd7f4678024f01aea820a262e76653b13ff10400a3e111148b5b7e57f83c84bbba0375ac5c2297cdb095eeb2145ed9efbac2a1e0f24a90d49a775e7b1165812d4e53c1087472616e73666572679ffc47dd7f4678024f01aea820a262e76653b13ff1040084d71714961d3ef7448228f7e1bbe14b99e031cc7f8d7e84145ed9efbac2a1e0f24a90d49a775e7b1165812d4e53c1087472616e73666572679ffc47dd7f4678024f01aea820a262e76653b13ff166205b697264ebe483";

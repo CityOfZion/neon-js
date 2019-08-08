@@ -1,3 +1,5 @@
+import { DEFAULT_SYSFEE } from "../consts";
+import { compareObject } from "../helper";
 import logger from "../logging";
 
 const log = logger("protocol");
@@ -7,6 +9,7 @@ export interface ProtocolLike {
   addressVersion: number;
   standbyValidators: string[];
   seedList: string[];
+  systemFee: { [key: string]: number };
 }
 
 export interface ProtocolJSON {
@@ -14,6 +17,7 @@ export interface ProtocolJSON {
   AddressVersion: number;
   StandbyValidators: string[];
   SeedList: string[];
+  SystemFee: { [key: string]: number };
 }
 
 function compareArrays(current: any[], other: any[]): boolean {
@@ -36,6 +40,7 @@ export class Protocol {
   public addressVersion: number;
   public standbyValidators: string[];
   public seedList: string[];
+  public systemFee: { [key: string]: number };
 
   public constructor(config: Partial<ProtocolLike & ProtocolJSON> = {}) {
     this.magic = config.magic || config.Magic || 0;
@@ -43,6 +48,10 @@ export class Protocol {
     this.standbyValidators =
       config.standbyValidators || config.StandbyValidators || [];
     this.seedList = config.seedList || config.SeedList || [];
+    this.systemFee = Object.assign(
+      {},
+      config.systemFee || config.SystemFee || DEFAULT_SYSFEE
+    );
   }
 
   public get [Symbol.toStringTag](): string {
@@ -54,7 +63,8 @@ export class Protocol {
       Magic: this.magic,
       AddressVersion: this.addressVersion,
       StandbyValidators: this.standbyValidators,
-      SeedList: this.seedList
+      SeedList: this.seedList,
+      SystemFee: this.systemFee
     };
   }
 
@@ -66,7 +76,8 @@ export class Protocol {
       compareArrays(
         this.standbyValidators,
         other.standbyValidators || other.StandbyValidators || []
-      )
+      ) &&
+      compareObject(this.systemFee, other.systemFee || other.SystemFee || {})
     );
   }
 }

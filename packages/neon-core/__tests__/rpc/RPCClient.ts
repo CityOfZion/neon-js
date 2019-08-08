@@ -2,6 +2,7 @@ import { mocked } from "ts-jest/utils";
 import _Query from "../../src/rpc/Query";
 import RPCClient from "../../src/rpc/RPCClient";
 import { DEFAULT_RPC } from "../../src/consts";
+import { wallet } from "../../src";
 
 jest.mock("../../src/rpc/Query");
 
@@ -67,17 +68,24 @@ describe("RPC Methods", () => {
     client = new RPCClient("testUrl");
   });
 
-  describe("getBestBlockHash", () => {
+  describe("getAccountState", () => {
     test("success", async () => {
+      const address = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
       const expected = jest.fn();
-      Query.getBestBlockHash.mockImplementationOnce(() => ({
+      Query.getAccountState.mockImplementationOnce(() => ({
         req: { method: "" },
         execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
-      const result = await client.getBestBlockHash();
+      const result = await client.getAccountState(address);
 
       expect(result).toEqual(expected);
-      expect(Query.getBestBlockHash).toBeCalled();
+      expect(Query.getAccountState).toBeCalledWith(address);
+    });
+
+    test("errors if input is not address", () => {
+      const result = client.getAccountState("a");
+
+      expect(result).rejects.toThrow("Invalid address");
     });
   });
 
@@ -107,20 +115,6 @@ describe("RPC Methods", () => {
     });
   });
 
-  describe("getBlockCount", () => {
-    test("success", async () => {
-      const expected = jest.fn();
-      Query.getBlockCount.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getBlockCount();
-
-      expect(result).toEqual(expected);
-      expect(Query.getBlockCount).toBeCalled();
-    });
-  });
-
   describe("getBlockHash", () => {
     test("success", async () => {
       const expected = jest.fn();
@@ -135,29 +129,17 @@ describe("RPC Methods", () => {
     });
   });
 
-  describe("getBlockHeader", () => {
-    test("call with index", async () => {
+  describe("getBlockCount", () => {
+    test("success", async () => {
       const expected = jest.fn();
-      Query.getBlockHeader.mockImplementationOnce(() => ({
+      Query.getBlockCount.mockImplementationOnce(() => ({
         req: { method: "" },
         execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
-      const result = await client.getBlockHeader(1, 0);
+      const result = await client.getBlockCount();
 
       expect(result).toEqual(expected);
-      expect(Query.getBlockHeader).toBeCalledWith(1, 0);
-    });
-
-    test("call with hash", async () => {
-      const expected = jest.fn();
-      Query.getBlockHeader.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getBlockHeader("hash", 1);
-
-      expect(result).toEqual(expected);
-      expect(Query.getBlockHeader).toBeCalledWith("hash", 1);
+      expect(Query.getBlockCount).toBeCalled();
     });
   });
 
@@ -271,17 +253,17 @@ describe("RPC Methods", () => {
     });
   });
 
-  describe("getTxHeight", () => {
+  describe("getTxOut", () => {
     test("success", async () => {
       const expected = jest.fn();
-      Query.getTxHeight.mockImplementationOnce(() => ({
+      Query.getTxOut.mockImplementationOnce(() => ({
         req: { method: "" },
         execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
-      const result = await client.getTxHeight("txid");
+      const result = await client.getTxOut("txid", 1);
 
       expect(result).toEqual(expected);
-      expect(Query.getTxHeight).toBeCalledWith("txid");
+      expect(Query.getTxOut).toBeCalledWith("txid", 1);
     });
   });
 
@@ -316,6 +298,34 @@ describe("RPC Methods", () => {
       expect(result).toEqual(expected);
       expect(Query.getVersion).toBeCalled();
       expect(client.version).toEqual(expected);
+    });
+  });
+
+  describe("invoke", () => {
+    test("success", async () => {
+      const expected = jest.fn();
+      Query.invoke.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+      }));
+      const randomObj = {};
+      const result = await client.invoke("hash", 1, "2", randomObj);
+
+      expect(result).toEqual(expected);
+      expect(Query.invoke).toBeCalledWith("hash", 1, "2", randomObj);
+    });
+
+    test("pass params as array", async () => {
+      const expected = jest.fn();
+      Query.invoke.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+      }));
+      const randomObj = {};
+      const result = await client.invoke("hash", [1, "2", randomObj]);
+
+      expect(result).toEqual(expected);
+      expect(Query.invoke).toBeCalledWith("hash", 1, "2", randomObj);
     });
   });
 
@@ -381,20 +391,6 @@ describe("RPC Methods", () => {
     });
   });
 
-  describe("listPlugins", () => {
-    test("success", async () => {
-      const expected = jest.fn();
-      Query.listPlugins.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.listPlugins();
-
-      expect(result).toEqual(expected);
-      expect(Query.invokeScript).toBeCalled();
-    });
-  });
-
   describe("sendRawTransaction", () => {
     test("success", async () => {
       const expected = jest.fn();
@@ -436,6 +432,48 @@ describe("RPC Methods", () => {
 
       expect(result).toEqual(expected);
       expect(Query.validateAddress).toBeCalledWith("addr");
+    });
+  });
+
+  describe("getUnspents", () => {
+    test("success", async () => {
+      const queryExpected = { balance: [], address: "" };
+      Query.getUnspents.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest.fn().mockImplementation(() => ({ result: queryExpected }))
+      }));
+      const result = await client.getUnspents("addr");
+
+      expect(result).toEqual(new wallet.Balance());
+      expect(Query.getUnspents).toBeCalledWith("addr");
+    });
+  });
+
+  describe("getUnclaimed", () => {
+    test("success", async () => {
+      const expected = jest.fn();
+      Query.getUnclaimed.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+      }));
+      const result = await client.getUnclaimed("addr");
+
+      expect(result).toEqual(expected);
+      expect(Query.getUnclaimed).toBeCalledWith("addr");
+    });
+  });
+
+  describe("getClaimable", () => {
+    test("success", async () => {
+      const expected = { claimable: [], address: "", unclaimed: 0 };
+      Query.getClaimable.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+      }));
+      const result = await client.getClaimable("addr");
+
+      expect(result).toBeInstanceOf(wallet.Claims);
+      expect(Query.getClaimable).toBeCalledWith("addr");
     });
   });
 });

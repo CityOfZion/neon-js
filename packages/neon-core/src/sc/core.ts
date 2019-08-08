@@ -1,14 +1,10 @@
-import { str2hexstring, Fixed8 } from "../u";
-import ScriptBuilder, { ScriptIntent, ScriptResult } from "./ScriptBuilder";
-import InteropService from "./InteropService";
-import { ASSET_ID } from "../consts";
+import { str2hexstring } from "../u";
+import ScriptBuilder, { ScriptIntent } from "./ScriptBuilder";
 
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
  */
-export function createScript(
-  ...intents: (ScriptIntent | string)[]
-): ScriptResult {
+export function createScript(...intents: (ScriptIntent | string)[]): string {
   const sb = new ScriptBuilder();
   for (const scriptIntent of intents) {
     if (typeof scriptIntent === "string") {
@@ -18,33 +14,18 @@ export function createScript(
     if (!scriptIntent.scriptHash) {
       throw new Error("No scriptHash found!");
     }
-    const { scriptHash, operation, args = [] } = Object.assign(
-      { operation: null, args: undefined },
+    const { scriptHash, operation, args, useTailCall } = Object.assign(
+      { operation: null, args: undefined, useTailCall: false },
       scriptIntent
     );
 
-    if (scriptHash === ASSET_ID.NEO || scriptHash.toUpperCase() === "NEO") {
-      sb.emitNeoCall(operation, args);
-    } else if (
-      scriptHash === ASSET_ID.GAS ||
-      scriptHash.toUpperCase() === "GAS"
-    ) {
-      sb.emitGasCall(operation, args);
-    } else if (
-      scriptHash === ASSET_ID.POLICY ||
-      scriptHash.toUpperCase() === "POLICY"
-    ) {
-      sb.emitPolicyCall(operation, args);
-    } else {
-      sb.emitAppCall(scriptHash, operation, args);
-    }
+    sb.emitAppCall(scriptHash, operation, args, useTailCall);
   }
-  return sb.exportAsScriptResult();
+  return sb.str;
 }
 
 export interface DeployParams {
   script: string;
-  manifest: string;
   name: string;
   version: string;
   author: string;
@@ -57,7 +38,6 @@ export interface DeployParams {
 /**
  * Generates script for deploying contract
  */
-// TODO: not sure if this has to be modifed or not
 export function generateDeployScript(params: DeployParams) {
   const sb = new ScriptBuilder();
   sb.emitPush(str2hexstring(params.description))
@@ -68,21 +48,7 @@ export function generateDeployScript(params: DeployParams) {
     .emitPush(params.needsStorage || false)
     .emitPush(params.returnType || "ff00")
     .emitPush(params.parameterList)
-    .emitPush(params.manifest)
     .emitPush(params.script)
-    .emitSysCall(
-      InteropService.NEO_CONTRACT_CREATE,
-      (params.manifest.length + params.script.length) / 2
-    );
+    .emitSysCall("Neo.Contract.Create");
   return sb;
-}
-
-// TODO: update a deployed contract
-export function generateUpdateScript() {
-  throw new Error("Not Implemented.");
-}
-
-// TODO: destroy a deployed contract
-export function generateDestroyScript() {
-  throw new Error("Not Implemented.");
 }
