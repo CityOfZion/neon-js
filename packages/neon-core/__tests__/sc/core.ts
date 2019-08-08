@@ -3,6 +3,8 @@ import { createScript, generateDeployScript } from "../../src/sc/core";
 import _ScriptBuilder from "../../src/sc/ScriptBuilder";
 import * as _u from "../../src/u";
 import testIntents from "./scriptIntents.json";
+import { Fixed8 } from "../../src/u";
+import { InteropService } from "../../src/sc";
 
 jest.mock("../../src/sc/ScriptBuilder");
 jest.mock("../../src/u");
@@ -23,40 +25,88 @@ describe("createScript", () => {
     expect(sb.emitAppCall).toBeCalledWith(
       intent.scriptHash,
       intent.operation,
-      intent.args,
-      false
+      intent.args
     );
   });
 
   test("hexstring", () => {
-    ScriptBuilder.mockImplementationOnce(() => {
-      return { str: "" };
-    });
     const script = "00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc";
+    ScriptBuilder.mockImplementationOnce(() => {
+      return {
+        str: "",
+        fee: new Fixed8(0),
+        exportAsScriptResult: () => {
+          return {
+            hex: script,
+            fee: new Fixed8(0)
+          };
+        }
+      };
+    });
     const result = createScript(script);
-    expect(result).toBe(script);
+    expect(result.hex).toBe(script);
   });
 
   test("multiple ScriptIntents", () => {
     const expected = jest.fn();
     const mockEmitAppCall = jest.fn();
     ScriptBuilder.mockImplementationOnce(() => {
-      return { str: expected, emitAppCall: mockEmitAppCall };
+      return {
+        str: "",
+        fee: new Fixed8(),
+        emitAppCall: mockEmitAppCall,
+        exportAsScriptResult: () => {
+          return {
+            hex: expected,
+            fee: new Fixed8(0)
+          };
+        }
+      };
     });
-    const intents = [1, 2, 3, 4, 5].map(
-      i =>
-        ({
-          scriptHash: jest.fn(),
-          operation: jest.fn(),
-          args: jest.fn(),
-          useTailCall: jest.fn()
-        } as any)
-    );
+    const intents = [
+      testIntents[1].scriptIntent,
+      testIntents[2].scriptIntent,
+      testIntents[3].scriptIntent,
+      testIntents[4].scriptIntent,
+      testIntents[5].scriptIntent
+    ];
     const result = createScript(...intents);
-    expect(result).toBe(expected);
+    expect(result.hex).toBe(expected);
     expect(mockEmitAppCall.mock.calls).toEqual(
-      intents.map(i => [i.scriptHash, i.operation, i.args, i.useTailCall])
+      intents.map(i => [i.scriptHash, i.operation, i.args])
     );
+  });
+
+  describe("Native Contract", () => {
+    test("Neo", () => {
+      const neoIntent = testIntents["neo"].scriptIntent;
+      const result = createScript(neoIntent);
+      const sb = ScriptBuilder.mock.instances[0];
+      expect(sb.emitNeoCall).toBeCalledWith(
+        neoIntent.operation,
+        neoIntent.args
+      );
+    });
+
+    test("Gas", () => {
+      const neoIntent = testIntents["gas"].scriptIntent;
+      const result = createScript(neoIntent);
+      const sb = ScriptBuilder.mock.instances[0];
+      expect(sb.emitGasCall).toBeCalledWith(
+        neoIntent.operation,
+        neoIntent.args
+      );
+    });
+
+    test("Policy", () => {
+      const neoIntent = testIntents["policy"].scriptIntent;
+      const result = createScript(neoIntent);
+      const sb = ScriptBuilder.mock.instances[0];
+      expect(sb.emitPolicyCall).toBeCalledWith(
+        neoIntent.operation,
+        neoIntent.args
+      );
+    });
   });
 });
 
@@ -83,6 +133,7 @@ describe("generateDeployScript", () => {
 
   test("full params", () => {
     const params = {
+      manifest: jest.fn(),
       script: jest.fn(),
       name: jest.fn(),
       version: jest.fn(),
@@ -111,13 +162,15 @@ describe("generateDeployScript", () => {
       params.needsStorage,
       params.returnType,
       params.parameterList,
+      params.manifest,
       params.script,
-      "Neo.Contract.Create"
+      InteropService.NEO_CONTRACT_CREATE
     ]);
   });
 
   test("defaults", () => {
     const params = {
+      manifest: jest.fn(),
       script: jest.fn(),
       name: jest.fn(),
       version: jest.fn(),
@@ -144,8 +197,9 @@ describe("generateDeployScript", () => {
       false,
       "ff00",
       params.parameterList,
+      params.manifest,
       params.script,
-      "Neo.Contract.Create"
+      InteropService.NEO_CONTRACT_CREATE
     ]);
   });
 });
