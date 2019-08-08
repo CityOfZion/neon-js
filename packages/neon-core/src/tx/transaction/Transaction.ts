@@ -40,17 +40,13 @@ import {
   deserializeSender,
   deserializeValidUntilBlock,
   getCosignersFromAttributes,
-  getVarSize
+  getVarSize,
+  getNetworkFeeForSig,
+  getNetworkFeeForMultiSig,
+  getSizeForSig,
+  getSizeForMultiSig
 } from "./main";
-import {
-  ScriptIntent,
-  createScript,
-  OpCode,
-  OpCodePrices,
-  getInteropSericePrice,
-  InteropService,
-  ScriptBuilder
-} from "../../sc";
+import { ScriptIntent, createScript } from "../../sc";
 const log = logger("tx");
 
 export interface TransactionLike {
@@ -93,7 +89,7 @@ export class Transaction {
   private _pre_systemFee: Fixed8;
 
   /**
-   * Current transaction will not be valid until block of height validUntilBlock
+   * Current transaction will be invalid after block of height validUntilBlock
    */
   public validUntilBlock: number;
   public attributes: TransactionAttribute[];
@@ -134,7 +130,7 @@ export class Transaction {
     this.script = script || "";
     if (intents !== undefined) {
       this.intents = intents;
-      this.addIntent(...intents);
+      this.addIntents(...intents);
     } else {
       this.intents = [];
     }
@@ -152,6 +148,20 @@ export class Transaction {
 
   public get fees(): number {
     return this.systemFee.plus(this.networkFee).toNumber();
+  }
+
+  /**
+   * Transaction header size
+   */
+  public get headerSize(): number {
+    return (
+      /* version */ 1 +
+      /* nonce */ 4 /* sender */ +
+      20 +
+      /* systemFee */ 8 +
+      /* networkFee */ 8 +
+      /* validUntilBlock */ 4
+    );
   }
 
   /**
@@ -208,7 +218,7 @@ export class Transaction {
    * If the transaction is invoking contracts other than native contracts, invokeScript rpc request can test the systemFee.
    * @param scriptIntents sciprt Intents to add to the transaction
    */
-  public addIntent(...scriptIntents: ScriptIntent[]): this {
+  public addIntents(...scriptIntents: ScriptIntent[]): this {
     let increasedSystemFee = new Fixed8(0);
     this.script = scriptIntents.reduce((accumulatedScript, intent) => {
       const { hex, fee } = createScript(intent);
@@ -233,9 +243,9 @@ export class Transaction {
   }
 
   /**
-   * This function regulate system fee with 2 processes:
-   * 1. considering the free system fee threshold
-   * 2. ceil systemFee with factor
+   * This function regulate system fee in 2 processes:
+   * 1. minus the free system fee amount
+   * 2. systemFee must be multiples of `SYSTEM_FEE_FACTOR`; if not, ceil it.
    */
   public regulateSystemFee(): void {
     let systemFee = this.systemFee.minus(SYSTEM_FEE_FREE);
@@ -261,56 +271,37 @@ export class Transaction {
    * @returns minimum networkFee that this tx needs
    */
   public calculateNetworkFee(autoAdjust: boolean = true): Fixed8 {
+    let networkFee = new Fixed8(0);
+
     const signers = this.getScriptHashesForVerifying();
-    // compute the size of transaction.
-    const txHeaderSize =
-      /* version */ 1 +
-      /* nonce */ 4 /* sender */ +
-      20 +
-      /* systemFee */ 8 +
-      /* networkFee */ 8 +
-      /* validUntilBlock */ 4;
+
     let size =
-      txHeaderSize +
+      this.headerSize +
       serializeArrayOf(this.attributes).length / 2 +
       this.script.length / 2 +
       getVarSize(signers.length);
-    let networkFee = new Fixed8(0);
+
     signers.forEach(signer => {
       const account = new Account(signer);
       if (!account.isMultiSig) {
-        size += 66 + signer.length / 2;
-        networkFee = networkFee.add(
-          OpCodePrices[OpCode.PUSHBYTES64] +
-            OpCodePrices[OpCode.PUSHBYTES33] +
-            getInteropSericePrice(InteropService.NEO_CRYPTO_CHECKSIG)
-        );
+        size += getSizeForSig(signer);
+        networkFee = networkFee.add(getNetworkFeeForSig());
       } else {
-        const sb = new ScriptBuilder();
         const n = getPublicKeysFromVerificationScript(account.contract.script)
           .length;
         const m = getSigningThresholdFromVerificationScript(
           account.contract.script
         );
-        const size_env = 65 * m;
-        size += getVarSize(size_env) + size_env + signer.length / 2;
-        networkFee = networkFee.add(
-          OpCodePrices[OpCode.PUSHBYTES64] * m +
-            OpCodePrices[
-              parseInt(sb.emitPush(m).str.slice(0, 2), 16) as OpCode
-            ] +
-            OpCodePrices[OpCode.PUSHBYTES33] * n +
-            OpCodePrices[
-              parseInt(sb.emitPush(n).str.slice(0, 2), 16) as OpCode
-            ] +
-            getInteropSericePrice(InteropService.NEO_CRYPTO_CHECKMULTISIG, n)
-        );
+        size += getSizeForMultiSig(signer, m);
+        networkFee = networkFee.add(getNetworkFeeForMultiSig(m, n));
       }
     });
     networkFee = networkFee.add(size * POLICY_FEE_PERBYTE);
+
     if (autoAdjust) {
       this.networkFee = networkFee;
     }
+
     return networkFee;
   }
 

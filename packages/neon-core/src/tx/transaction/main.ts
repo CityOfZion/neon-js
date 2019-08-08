@@ -8,6 +8,13 @@ import {
 import { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
 import TxAttrUsage from "../txAttrUsage";
+import {
+  OpCodePrices,
+  OpCode,
+  InteropService,
+  getInteropSericePrice,
+  ScriptBuilder
+} from "../../sc";
 
 export function deserializeArrayOf<T>(
   type: (ss: StringStream) => T,
@@ -144,4 +151,42 @@ export function getVarSize(value: number): number {
   } else {
     return 5;
   }
+}
+
+export function getNetworkFeeForSig(): number {
+  return (
+    OpCodePrices[OpCode.PUSHBYTES64] +
+    OpCodePrices[OpCode.PUSHBYTES33] +
+    getInteropSericePrice(InteropService.NEO_CRYPTO_CHECKSIG)
+  );
+}
+
+export function getSizeForSig(signer: string): number {
+  return 66 + signer.length / 2;
+}
+
+export function getNetworkFeeForMultiSig(
+  signingThreshold: number,
+  pubkeysNum: number
+): number {
+  const sb = new ScriptBuilder();
+  return (
+    OpCodePrices[OpCode.PUSHBYTES64] * signingThreshold +
+    OpCodePrices[
+      parseInt(sb.emitPush(signingThreshold).str.slice(0, 2), 16) as OpCode
+    ] +
+    OpCodePrices[OpCode.PUSHBYTES33] * pubkeysNum +
+    OpCodePrices[
+      parseInt(sb.emitPush(pubkeysNum).str.slice(0, 2), 16) as OpCode
+    ] +
+    getInteropSericePrice(InteropService.NEO_CRYPTO_CHECKMULTISIG, pubkeysNum)
+  );
+}
+
+export function getSizeForMultiSig(
+  signer: string,
+  signingThreshold: number
+): number {
+  const size_env = 65 * signingThreshold;
+  return getVarSize(size_env) + size_env + signer.length / 2;
 }
