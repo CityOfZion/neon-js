@@ -172,13 +172,9 @@ export function getNetworkFeeForMultiSig(
   const sb = new ScriptBuilder();
   return (
     OpCodePrices[OpCode.PUSHBYTES64] * signingThreshold +
-    OpCodePrices[
-      parseInt(sb.emitPush(signingThreshold).str.slice(0, 2), 16) as OpCode
-    ] +
+    OpCodePrices[sb.emitPush(signingThreshold).str.slice(0, 2) as OpCode] +
     OpCodePrices[OpCode.PUSHBYTES33] * pubkeysNum +
-    OpCodePrices[
-      parseInt(sb.emitPush(pubkeysNum).str.slice(0, 2), 16) as OpCode
-    ] +
+    OpCodePrices[sb.emitPush(pubkeysNum).str.slice(0, 2) as OpCode] +
     getInteropSericePrice(InteropService.NEO_CRYPTO_CHECKMULTISIG, pubkeysNum)
   );
 }

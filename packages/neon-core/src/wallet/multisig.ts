@@ -36,7 +36,7 @@ export function getPublicKeysFromVerificationScript(
   const keys = [] as string[];
   while (!ss.isEmpty()) {
     const byte = ss.read();
-    if (byte === num2hexstring(OpCode.PUSHBYTES33)) {
+    if (byte === OpCode.PUSHBYTES33) {
       keys.push(ss.read(33));
     }
   }

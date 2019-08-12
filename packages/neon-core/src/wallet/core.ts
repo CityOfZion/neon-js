@@ -96,9 +96,9 @@ export const getVerificationScriptFromPublicKey = (
   publicKey: string
 ): string => {
   return (
-    num2hexstring(OpCode.PUSHBYTES33) +
+    OpCode.PUSHBYTES33 +
     publicKey +
-    num2hexstring(OpCode.SYSCALL) +
+    OpCode.SYSCALL +
     InteropService.NEO_CRYPTO_CHECKSIG
   );
 };
