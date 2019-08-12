@@ -1,6 +1,6 @@
 <p align="center">
   <img
-    src="http://res.cloudinary.com/vidsy/image/upload/v1503160820/CoZ_Icon_DARKBLUE_200x178px_oq0gxm.png"
+    src="https://cityofzion.io/assets/images/website-images/CoZ_Icon_DARKBLUE_200x178px.png"
     width="125px;">
 </p>
 
