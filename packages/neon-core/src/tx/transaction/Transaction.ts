@@ -296,7 +296,7 @@ export class Transaction {
         networkFee = networkFee.add(getNetworkFeeForMultiSig(m, n));
       }
     });
-    networkFee = networkFee.add(size * POLICY_FEE_PERBYTE);
+    networkFee = networkFee.add(new Fixed8(size).multipliedBy(POLICY_FEE_PERBYTE));
 
     if (autoAdjust) {
       this.networkFee = networkFee;
