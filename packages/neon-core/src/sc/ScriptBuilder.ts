@@ -90,7 +90,7 @@ export class ScriptBuilder extends StringStream {
     operation: string,
     args?: any[] | string | number | boolean
   ): this {
-    this.emitPush(args);
+    this.emitPush(args || []);
     this._emitContractOperation(operation);
     return this.emitSysCall(
       InteropService.NEO_NATIVE_TOKENS_NEO,
@@ -103,7 +103,7 @@ export class ScriptBuilder extends StringStream {
     operation: string,
     args?: any[] | string | number | boolean
   ): this {
-    this.emitPush(args);
+    this.emitPush(args || []);
     this._emitContractOperation(operation);
     return this.emitSysCall(
       InteropService.NEO_NATIVE_TOKENS_GAS,
@@ -116,7 +116,7 @@ export class ScriptBuilder extends StringStream {
     operation: string,
     args?: any[] | string | number | boolean
   ): this {
-    this.emitPush(args);
+    this.emitPush(args || []);
     this._emitContractOperation(operation);
     return this.emitSysCall(
       InteropService.NEO_NATIVE_POLICY,
@@ -134,7 +134,7 @@ export class ScriptBuilder extends StringStream {
     if (scriptHash.length !== 40) {
       throw new Error("ScriptHash should be 20 bytes long!");
     }
-    this.emitPush(args);
+    this.emitPush(args || []);
     if (operation) {
       this._emitContractOperation(operation);
     }
