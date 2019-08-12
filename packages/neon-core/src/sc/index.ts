@@ -3,7 +3,7 @@ export * from "./core";
 export * from "./ScriptBuilder";
 export * from "./OpCode";
 export * from "./OpCodePrices";
-export * from "./InteropService";
+export * from "./InteropServiceCode";
 export * from "./InteropServicePrices";
 export * from "./StackItem";
 export * from "./NativeContractMethodPrices";

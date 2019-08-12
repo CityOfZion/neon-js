@@ -1,4 +1,4 @@
-export enum InteropService {
+export enum InteropServiceCode {
   SYSTEM_EXECUTIONENGINE_GETSCRIPTCONTAINER = "9a1f194a",
   SYSTEM_EXECUTIONENGINE_GETEXECUTINGSCRIPTHASH = "87c3d264",
   SYSTEM_EXECUTIONENGINE_GETCALLINGSCRIPTHASH = "45995a5c",
@@ -69,4 +69,4 @@ export enum InteropService {
   NEO_NATIVE_POLICY = "75f4fa6b"
 }
 
-export default InteropService;
+export default InteropServiceCode;

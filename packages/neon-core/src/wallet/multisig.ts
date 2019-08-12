@@ -1,4 +1,4 @@
-import { ScriptBuilder, InteropService, OpCode } from "../sc";
+import { ScriptBuilder, InteropServiceCode, OpCode } from "../sc";
 import { reverseHex, StringStream, num2hexstring } from "../u";
 import { isPublicKey } from "./verify";
 
@@ -21,7 +21,7 @@ export function constructMultiSigVerificationScript(
     ss.emitPush(k);
   });
   ss.emitPush(keys.length);
-  ss.emitSysCall(InteropService.NEO_CRYPTO_CHECKMULTISIG, keys.length);
+  ss.emitSysCall(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG, keys.length);
   return ss.str;
 }
 
@@ -53,9 +53,9 @@ export function getSigningThresholdFromVerificationScript(
   const checkSigOpCode = verificationScript.slice(
     verificationScript.length - 8
   );
-  if (checkSigOpCode === InteropService.NEO_CRYPTO_CHECKSIG) {
+  if (checkSigOpCode === InteropServiceCode.NEO_CRYPTO_CHECKSIG) {
     return 1;
-  } else if (checkSigOpCode === InteropService.NEO_CRYPTO_CHECKMULTISIG) {
+  } else if (checkSigOpCode === InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG) {
     const ss = new StringStream(verificationScript);
     const byte = parseInt(ss.peek(), 16);
     if (byte < 80) {

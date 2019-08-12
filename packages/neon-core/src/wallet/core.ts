@@ -21,7 +21,7 @@ import {
 } from "../u";
 import { generateRandomArray } from "../u/random";
 import { curve, sign } from "./signing";
-import { OpCode, InteropService } from "../sc";
+import { OpCode, InteropServiceCode } from "../sc";
 
 /**
  * Encodes a public key.
@@ -99,7 +99,7 @@ export const getVerificationScriptFromPublicKey = (
     OpCode.PUSHBYTES33 +
     publicKey +
     OpCode.SYSCALL +
-    InteropService.NEO_CRYPTO_CHECKSIG
+    InteropServiceCode.NEO_CRYPTO_CHECKSIG
   );
 };
 

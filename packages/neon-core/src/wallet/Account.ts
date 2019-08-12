@@ -13,7 +13,7 @@ import {
   isScriptHash,
   isWIF
 } from "./verify";
-import { InteropService } from "../sc";
+import { InteropServiceCode } from "../sc";
 
 const log = logger("wallet");
 
@@ -158,7 +158,7 @@ export class Account {
       !!this.contract &&
       !!this.contract.script &&
       this.contract.script.slice(this.contract.script.length - 8) ===
-        InteropService.NEO_CRYPTO_CHECKMULTISIG
+        InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
     );
   }
 

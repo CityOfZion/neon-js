@@ -11,7 +11,7 @@ import TxAttrUsage from "../txAttrUsage";
 import {
   OpCodePrices,
   OpCode,
-  InteropService,
+  InteropServiceCode,
   getInteropSericePrice,
   ScriptBuilder
 } from "../../sc";
@@ -157,7 +157,7 @@ export function getNetworkFeeForSig(): number {
   return (
     OpCodePrices[OpCode.PUSHBYTES64] +
     OpCodePrices[OpCode.PUSHBYTES33] +
-    getInteropSericePrice(InteropService.NEO_CRYPTO_CHECKSIG)
+    getInteropSericePrice(InteropServiceCode.NEO_CRYPTO_CHECKSIG)
   );
 }
 
@@ -175,7 +175,10 @@ export function getNetworkFeeForMultiSig(
     OpCodePrices[sb.emitPush(signingThreshold).str.slice(0, 2) as OpCode] +
     OpCodePrices[OpCode.PUSHBYTES33] * pubkeysNum +
     OpCodePrices[sb.emitPush(pubkeysNum).str.slice(0, 2) as OpCode] +
-    getInteropSericePrice(InteropService.NEO_CRYPTO_CHECKMULTISIG, pubkeysNum)
+    getInteropSericePrice(
+      InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG,
+      pubkeysNum
+    )
   );
 }
 
