@@ -1,5 +1,5 @@
 import { num2hexstring, num2VarInt, reverseHex, StringStream } from "../../u";
-import { TxAttrUsage } from "../txAttrUsage";
+import { TxAttrUsage } from "./txAttrUsage";
 
 const maxTransactionAttributeSize = 65535;
 

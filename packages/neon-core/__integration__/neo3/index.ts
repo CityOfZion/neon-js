@@ -5,6 +5,7 @@ import { RPCClient } from "../../src/rpc";
 const privateKey = "";
 const url = "";
 
+// TODO: this is just test for neo3 functions, will be removed.
 describe.skip("NEO3 transfer neo", async function() {
   const rpcClient = new RPCClient(url);
   const fromAccount = new wallet.Account(privateKey);
@@ -18,13 +19,13 @@ describe.skip("NEO3 transfer neo", async function() {
   const validUntilBlock =
     Transaction.MAX_VALIDUNTILBLOCK_INCREMENT +
     (await rpcClient.getBlockCount());
-  const invocation_tx = new Transaction({
+  const transaction1 = new Transaction({
     intents: [intent],
     sender: fromAccount.scriptHash,
     validUntilBlock
   });
 
-  invocation_tx.sign(fromAccount);
-  const result = await rpcClient.sendRawTransaction(invocation_tx);
+  transaction1.sign(fromAccount);
+  const result = await rpcClient.sendRawTransaction(transaction1);
   expect(result).toBe(true);
 });

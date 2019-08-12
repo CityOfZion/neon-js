@@ -40,7 +40,7 @@ import {
   deserializeSender,
   deserializeValidUntilBlock,
   getCosignersFromAttributes,
-  getVarSize,
+  getCompressedSize,
   getNetworkFeeForSig,
   getNetworkFeeForMultiSig,
   getSizeForSig,
@@ -279,7 +279,7 @@ export class Transaction {
       this.headerSize +
       serializeArrayOf(this.attributes).length / 2 +
       this.script.length / 2 +
-      getVarSize(signers.length);
+      getCompressedSize(signers.length);
 
     signers.forEach(signer => {
       const account = new Account(signer);
