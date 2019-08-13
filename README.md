@@ -1,6 +1,6 @@
 <p align="center">
   <img
-    src="https://cityofzion.io/assets/images/website-images/CoZ_Icon_DARKBLUE_200x178px.png"
+    src="https://raw.githubusercontent.com/CityOfZion/visual-identity/develop/_CoZ%20Branding/_Logo/_Logo%20icon/_PNG%20200x178px/CoZ_Icon_DARKBLUE_200x178px.png"
     width="125px;">
 </p>
 
