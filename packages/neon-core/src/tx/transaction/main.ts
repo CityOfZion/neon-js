@@ -190,5 +190,5 @@ export function getSizeForMultiSig(
   signingThreshold: number
 ): number {
   const size_env = 65 * signingThreshold;
-  return getVarSize(size_env) + size_env + signer.length / 2;
+  return getCompressedSize(size_env) + size_env + signer.length / 2;
 }

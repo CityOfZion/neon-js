@@ -1,4 +1,3 @@
-import { DEFAULT_SYSFEE } from "../../src/consts";
 import Protocol from "../../src/rpc/Protocol";
 
 describe("constructor", () => {
@@ -9,7 +8,6 @@ describe("constructor", () => {
     expect(result.addressVersion).toEqual(23);
     expect(result.standbyValidators).toEqual([]);
     expect(result.seedList).toEqual([]);
-    expect(result.systemFee).toEqual(DEFAULT_SYSFEE);
   });
 
   test("ProtocolLike", () => {

@@ -1,24 +1,6 @@
 import { CONST, tx, u } from "@cityofzion/neon-core";
 
-const requiresProcessing = [
-  tx.TxAttrUsage.Description,
-  tx.TxAttrUsage.DescriptionUrl,
-  tx.TxAttrUsage.Remark,
-  tx.TxAttrUsage.Remark2,
-  tx.TxAttrUsage.Remark3,
-  tx.TxAttrUsage.Remark4,
-  tx.TxAttrUsage.Remark5,
-  tx.TxAttrUsage.Remark6,
-  tx.TxAttrUsage.Remark7,
-  tx.TxAttrUsage.Remark8,
-  tx.TxAttrUsage.Remark9,
-  tx.TxAttrUsage.Remark10,
-  tx.TxAttrUsage.Remark11,
-  tx.TxAttrUsage.Remark12,
-  tx.TxAttrUsage.Remark13,
-  tx.TxAttrUsage.Remark14,
-  tx.TxAttrUsage.Remark15
-];
+const requiresProcessing = [tx.TxAttrUsage.Url];
 
 export function extractAsset(params: {
   [key: string]: string;
@@ -62,16 +44,6 @@ function matchAttribute(
     };
   }
   switch (key) {
-    case "ecdh02":
-      return {
-        usage: tx.TxAttrUsage.ECDH02,
-        data
-      };
-    case "ecdh03":
-      return {
-        usage: tx.TxAttrUsage.ECDH03,
-        data
-      };
     default:
       return undefined;
   }

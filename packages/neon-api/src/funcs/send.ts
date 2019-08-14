@@ -1,10 +1,6 @@
 import { logging, rpc, tx } from "@cityofzion/neon-core";
 import { checkProperty } from "./common";
-import {
-  DoInvokeConfig,
-  ManagedApiBasicConfig,
-  SendAssetConfig
-} from "./types";
+import { ManagedApiBasicConfig } from "./types";
 
 const log = logging.default("api");
 /**
@@ -12,9 +8,9 @@ const log = logging.default("api");
  * @param {object} config - Configuration object.
  * @return {Promise<object>} Configuration object + response
  */
-export async function sendTx<
-  T extends ManagedApiBasicConfig<tx.BaseTransaction>
->(config: T): Promise<T> {
+export async function sendTx(
+  config: ManagedApiBasicConfig
+): Promise<ManagedApiBasicConfig> {
   checkProperty(config, "tx", "url");
   const response = await rpc.Query.sendRawTransaction(config.tx!).execute(
     config.url!
@@ -29,13 +25,4 @@ export async function sendTx<
     );
   }
   return Object.assign(config, { response });
-}
-
-export async function applyTxToBalance<
-  T extends DoInvokeConfig | SendAssetConfig
->(config: T): Promise<T> {
-  if (config.response && config.response.result && config.balance) {
-    config.balance.applyTx(config.tx!, false);
-  }
-  return config;
 }

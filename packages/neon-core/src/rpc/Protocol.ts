@@ -1,4 +1,3 @@
-import { DEFAULT_SYSFEE } from "../consts";
 import { compareObject } from "../helper";
 import logger from "../logging";
 
@@ -48,10 +47,7 @@ export class Protocol {
     this.standbyValidators =
       config.standbyValidators || config.StandbyValidators || [];
     this.seedList = config.seedList || config.SeedList || [];
-    this.systemFee = Object.assign(
-      {},
-      config.systemFee || config.SystemFee || DEFAULT_SYSFEE
-    );
+    this.systemFee = Object.assign({}, config.systemFee || config.SystemFee);
   }
 
   public get [Symbol.toStringTag](): string {

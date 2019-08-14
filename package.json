@@ -13,8 +13,8 @@
     "release": "yarn prepublishOnly && lerna publish",
     "start": "jest --watch",
     "test": "jest",
-    "test:integration": "jest /packages/.*/__integration__/.*",
-    "test:unit": "jest /packages/.*/__tests__/.*"
+    "test:integration": "jest /packages/neon-core/__integration__/.*",
+    "test:unit": "jest /packages/neon-core/__tests__/.*"
   },
   "devDependencies": {
     "@types/jest": "24.0.15",

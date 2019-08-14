@@ -3,7 +3,7 @@ import { DEFAULT_REQ } from "../consts";
 import { compareArray } from "../helper";
 import logger from "../logging";
 import { timeout } from "../settings";
-import { BaseTransaction } from "../tx/transaction/BaseTransaction";
+import { Transaction } from "../tx";
 
 const log = logger("rpc");
 
@@ -264,11 +264,9 @@ export class Query {
    * This Query transmits the specific transaction to the node.
    * @param transaction Transaction as a Transaction object or hexstring.
    */
-  public static sendRawTransaction(
-    transaction: BaseTransaction | string
-  ): Query {
+  public static sendRawTransaction(transaction: Transaction | string): Query {
     const serialized =
-      transaction instanceof BaseTransaction
+      transaction instanceof Transaction
         ? transaction.serialize(true)
         : transaction;
     return new Query({

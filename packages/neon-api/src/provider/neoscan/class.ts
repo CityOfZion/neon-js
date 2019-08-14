@@ -1,13 +1,6 @@
-import { logging, rpc, settings, u, wallet } from "@cityofzion/neon-core";
+import { logging, rpc, settings } from "@cityofzion/neon-core";
 import { PastTransaction, Provider } from "../common";
-import {
-  getBalance,
-  getClaims,
-  getHeight,
-  getMaxClaimAmount,
-  getRPCEndpoint,
-  getTransactionHistory
-} from "./core";
+import { getHeight, getRPCEndpoint, getTransactionHistory } from "./core";
 const log = logging.default("api");
 
 export class Neoscan implements Provider {
@@ -42,15 +35,6 @@ export class Neoscan implements Provider {
     return this.rpc.net;
   }
 
-  public getBalance(address: string): Promise<wallet.Balance> {
-    return getBalance(this.url, address);
-  }
-  public getClaims(address: string): Promise<wallet.Claims> {
-    return getClaims(this.url, address);
-  }
-  public getMaxClaimAmount(address: string): Promise<u.Fixed8> {
-    return getMaxClaimAmount(this.url, address);
-  }
   public getHeight(): Promise<number> {
     return getHeight(this.url);
   }

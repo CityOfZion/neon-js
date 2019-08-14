@@ -11,9 +11,9 @@ function addSignature(transaction: tx.Transaction, signature: string): void {
  * @param config - Configuration object.
  * @return Configuration object.
  */
-export async function signTx<
-  T extends ManagedApiBasicConfig<tx.BaseTransaction>
->(config: T): Promise<T> {
+export async function signTx(
+  config: ManagedApiBasicConfig
+): Promise<ManagedApiBasicConfig> {
   checkProperty(config, "signingFunction", "tx");
   const signatures = await config.signingFunction!(
     config.tx!.serialize(false),

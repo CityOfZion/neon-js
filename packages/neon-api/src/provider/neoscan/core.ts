@@ -20,28 +20,6 @@ import {
 } from "./responses";
 const log = logging.default("api");
 
-function parseUnspent(unspentArr: NeoscanTx[]): wallet.CoinLike[] {
-  return unspentArr.map(coin => {
-    return {
-      index: coin.n,
-      txid: coin.txid,
-      value: coin.value
-    };
-  });
-}
-function parseClaims(claimArr: NeoscanClaim[]): wallet.ClaimItemLike[] {
-  return claimArr.map(c => {
-    return {
-      start: c.start_height,
-      end: c.end_height,
-      index: c.n,
-      claim: c.unclaimed,
-      txid: c.txid,
-      value: c.value
-    };
-  });
-}
-
 function getChange(
   vin: { asset: string; value: number }[],
   vout: { asset: string; value: number }[],
@@ -94,81 +72,6 @@ export async function getRPCEndpoint(url: string): Promise<string> {
   const goodNodes = findGoodNodesFromHeight(nodes);
   const bestRPC = await getBestUrl(goodNodes);
   return bestRPC;
-}
-
-/**
- * Gets balance for an address. Returns an empty Balance if endpoint returns not found.
- * @param url - URL of a neoscan service.
- * @param address Address to check.
- * @return Balance of address retrieved from endpoint.
- */
-export async function getBalance(
-  url: string,
-  address: string
-): Promise<wallet.Balance> {
-  const response = await axios.get(url + "/v1/get_balance/" + address);
-  const data = response.data as NeoscanV1GetBalanceResponse;
-  if (data.address === "not found" && data.balance === null) {
-    return new wallet.Balance({ net: url, address });
-  }
-  const bal = new wallet.Balance({
-    net: url,
-    address: data.address
-  });
-  const neoscanBalances = data.balance as NeoscanBalance[];
-  for (const b of neoscanBalances) {
-    if (b.amount > 0 && b.unspent.length > 0) {
-      bal.addAsset(b.asset, {
-        unspent: parseUnspent(b.unspent)
-      } as Partial<wallet.AssetBalanceLike>);
-    } else {
-      bal.addToken(b.asset, b.amount);
-    }
-  }
-  log.info(`Retrieved Balance for ${address} from neoscan ${url}`);
-  return bal;
-}
-
-/**
- * Get claimable amounts for an address. Returns an empty Claims if endpoint returns not found.
- * @param url - URL of a neoscan service.
- * @param address - Address to check.
- * @return Claims retrieved from endpoint.
- */
-export async function getClaims(
-  url: string,
-  address: string
-): Promise<wallet.Claims> {
-  const response = await axios.get(url + "/v1/get_claimable/" + address);
-  const data = response.data as NeoscanV1GetClaimableResponse;
-  if (data.address === "not found" && data.claimable === null) {
-    return new wallet.Claims({ address: data.address });
-  }
-  const claims = parseClaims(data.claimable as NeoscanClaim[]);
-  log.info(`Retrieved Claims for ${address} from neoscan ${url}`);
-  return new wallet.Claims({
-    net: url,
-    address: data.address,
-    claims
-  });
-}
-
-/**
- * Gets the maximum amount of gas claimable after spending all NEO.
- * @param url - URL of a neoscan service.
- * @param address Address to check.
- * @return
- */
-export async function getMaxClaimAmount(
-  url: string,
-  address: string
-): Promise<u.Fixed8> {
-  const response = await axios.get(url + "/v1/get_unclaimed/" + address);
-  const data = response.data as NeoscanV1GetUnclaimedResponse;
-  log.info(
-    `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neoscan ${url}`
-  );
-  return new u.Fixed8(data.unclaimed || 0);
 }
 
 /**
