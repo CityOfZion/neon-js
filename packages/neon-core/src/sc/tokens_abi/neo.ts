@@ -1,7 +1,6 @@
 import { getScriptHashFromAddress } from "../../wallet";
 import ContractParam from "../ContractParam";
 import { ScriptResult } from "../ScriptBuilder";
-import NativeContractMethodPrices from "../NativeContractMethodPrices";
 import { NativeNEP5 } from "./native_nep5";
 
 export class NEO extends NativeNEP5 {
@@ -14,14 +13,7 @@ export class NEO extends NativeNEP5 {
       throw new Error("sb not initiated.");
     }
     this._sb.reset();
-    const fee = NativeContractMethodPrices.get(method);
-    if (fee === undefined) {
-      throw new Error(`${method} price not stored!`);
-    }
-    return {
-      hex: this._sb.emitNeoCall(method, args).str,
-      fee
-    };
+    return this._sb.emitNeoCall(method, args).exportAsScriptResult();
   }
 
   public unclaimedGas(addr: string, end: number): ScriptResult {

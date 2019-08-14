@@ -58,6 +58,7 @@ export interface DeployParams {
  * Generates script for deploying contract
  */
 // TODO: not sure if this has to be modifed or not
+// TODO: need to add a class: Manifest
 export function generateDeployScript(params: DeployParams) {
   const sb = new ScriptBuilder();
   sb.emitPush(str2hexstring(params.description))
