@@ -90,5 +90,5 @@ export const SYSTEM_FEE_FACTOR = 1;
 
 export const SYSTEM_FEE_FREE = 0;
 
-// this can be updated by query policy native contract method `getFeePerByte`
+// you can also get this value by querying policy native contract method `getFeePerByte`
 export const POLICY_FEE_PERBYTE = 1000e-8;
