@@ -195,8 +195,8 @@ describe("Add Methods", () => {
     );
   });
 
-  test("addIntent", () => {
-    tx1.addIntent({ scriptHash: "NEO", operation: "transfer", args: [10] });
+  test("addIntents", () => {
+    tx1.addIntents({ scriptHash: "NEO", operation: "transfer", args: [10] });
     expect(tx1.intents.length).toBe(1);
     expect(tx1.script).toBe("005a51c1087472616e736665726845c49284");
   });

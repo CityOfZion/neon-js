@@ -50,12 +50,14 @@ export function getPublicKeysFromVerificationScript(
 export function getSigningThresholdFromVerificationScript(
   verificationScript: string
 ): number {
-  const checkSigOpCode = verificationScript.slice(
+  const checkSigInteropCode = verificationScript.slice(
     verificationScript.length - 8
   );
-  if (checkSigOpCode === InteropServiceCode.NEO_CRYPTO_CHECKSIG) {
+  if (checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_CHECKSIG) {
     return 1;
-  } else if (checkSigOpCode === InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG) {
+  } else if (
+    checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
+  ) {
     const ss = new StringStream(verificationScript);
     const byte = parseInt(ss.peek(), 16);
     if (byte < 80) {

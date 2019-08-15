@@ -75,11 +75,22 @@ export class Transaction {
 
   /**
    * Distributed to NEO holders
+   * systemFee is calculated by summarizing prices of all the opcodes and interopServices used while executing transaction script in vm.
+   * ```ts
+   * const systemFee = SUM(OpCodePrices + InteropServiceCodePrices)
+   * ```
+   * The most reliable way to calculate minimum systemFee is to use invokeScript method to test, as it's hard to know what the contract will do.
+   * If transaction only invokes native contracts, systemFee can be calculated offline.
    */
   public systemFee: Fixed8;
 
   /**
    * Distributed to consensus nodes
+   * networkFee is calculated according to transaction size and verificationScript cost in witnesses.
+   * ```ts
+   * const networkFee = FeePerByte * txSize + SUM(verificationScriptCost)
+   * ```
+   * The calculation of `verificationScriptCost` is same as systemFee
    */
   public networkFee: Fixed8;
 

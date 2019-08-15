@@ -63,7 +63,7 @@ export class ScriptBuilder extends StringStream {
    * Appends an Opcode, followed by args
    */
   public emit(op: OpCode, args?: string): this {
-    this.str += num2hexstring(op);
+    this.str += op;
     this.fee = this.fee.plus(OpCodePrices[op]);
     if (args) {
       this.str += args;
@@ -86,10 +86,7 @@ export class ScriptBuilder extends StringStream {
    * @param operation
    * @param args
    */
-  public emitNeoCall(
-    operation: string,
-    args?: any[] | string | number | boolean
-  ): this {
+  public emitNeoCall(operation: string, args?: any[]): this {
     this.emitPush(args || []);
     this._emitContractOperation(operation);
     return this.emitSysCall(
@@ -99,10 +96,7 @@ export class ScriptBuilder extends StringStream {
     );
   }
 
-  public emitGasCall(
-    operation: string,
-    args?: any[] | string | number | boolean
-  ): this {
+  public emitGasCall(operation: string, args?: any[]): this {
     this.emitPush(args || []);
     this._emitContractOperation(operation);
     return this.emitSysCall(
@@ -112,10 +106,7 @@ export class ScriptBuilder extends StringStream {
     );
   }
 
-  public emitPolicyCall(
-    operation: string,
-    args?: any[] | string | number | boolean
-  ): this {
+  public emitPolicyCall(operation: string, args?: any[]): this {
     this.emitPush(args || []);
     this._emitContractOperation(operation);
     return this.emitSysCall(
@@ -128,7 +119,7 @@ export class ScriptBuilder extends StringStream {
   public emitAppCall(
     scriptHash: string,
     operation?: string,
-    args?: any[] | string | number | boolean
+    args?: any[]
   ): this {
     ensureHex(scriptHash);
     if (scriptHash.length !== 40) {
@@ -239,11 +230,9 @@ export class ScriptBuilder extends StringStream {
       return this.emit(OpCode.PUSH0);
     }
     if (bn.gtn(0) && bn.lten(16)) {
-      return this.emit((
-        81 /* PUSH1 */ -
-        1 +
-        bn.toNumber()
-      ).toString() as OpCode);
+      return this.emit(num2hexstring(
+        81 /* PUSH1 */ - 1 + bn.toNumber()
+      ) as OpCode);
     }
     const msbSet = bn.testn(bn.byteLength() * 8 - 1);
 

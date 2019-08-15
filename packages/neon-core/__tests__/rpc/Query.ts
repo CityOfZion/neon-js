@@ -1,7 +1,7 @@
 import _axios from "axios";
 import { mocked } from "ts-jest/utils";
 import Query from "../../src/rpc/Query";
-import { ContractTransaction } from "../../src/tx";
+import { Transaction } from "../../src/tx";
 
 jest.mock("axios");
 
@@ -197,7 +197,7 @@ describe("static", () => {
     });
 
     test("Transaction", () => {
-      const tx = new ContractTransaction();
+      const tx = new Transaction();
       const result = Query.sendRawTransaction(tx);
       expect(result.method).toEqual("sendrawtransaction");
       expect(result.params).toEqual([tx.serialize(true)]);
