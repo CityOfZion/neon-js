@@ -17,7 +17,7 @@ export function toTxAttrUsage(
     }
     throw new Error(`${type} not found in TxAttrUsage!`);
   } else if (typeof type === "number") {
-    if (TxAttrUsage.Cosigner !== type && TxAttrUsage.Url !== type) {
+    if (TxAttrUsage.Url !== type) {
       throw new Error(`${type} not found in TxAttrUsage!`);
     }
   }
