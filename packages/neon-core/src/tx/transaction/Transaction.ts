@@ -108,7 +108,10 @@ export class Transaction {
   public scripts: Witness[];
   public script: string;
 
-  public static MAX_VALIDUNTILBLOCK_INCREMENT = 2102400;
+  /**
+   * `MAX_VALIDUNTILBLOCK_INCREMENT` in neo core
+   */
+  public static MAX_TRANSACTION_LIFESPAN = 2102400;
 
   public constructor(tx: Partial<TransactionLike> = {}) {
     const {
@@ -127,14 +130,16 @@ export class Transaction {
     this.nonce = nonce || parseInt(ab2hexstring(generateRandomArray(4)), 16);
     this.sender = formatSender(sender);
     // TODO: The default should be snapshot.height + MAX_VALIDUNTILBLOCK_INCREMENT, but it needs request to get block height, thus this is a temporary value
-    this.validUntilBlock =
-      validUntilBlock || Transaction.MAX_VALIDUNTILBLOCK_INCREMENT;
+    this.validUntilBlock = validUntilBlock || 0;
     this.attributes = Array.isArray(attributes)
       ? attributes.map(a => new TransactionAttribute(a))
       : [];
     this.scripts = Array.isArray(scripts)
       ? scripts.map(a => new Witness(a))
       : [];
+    this.scripts = this.scripts.sort(
+      (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
+    );
     this.systemFee = systemFee ? new Fixed8(systemFee) : new Fixed8(0);
     this.networkFee = networkFee ? new Fixed8(networkFee) : new Fixed8(0);
     this._pre_systemFee = new Fixed8(0);

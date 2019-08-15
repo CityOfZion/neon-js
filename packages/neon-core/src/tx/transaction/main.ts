@@ -12,7 +12,7 @@ import {
   OpCodePrices,
   OpCode,
   InteropServiceCode,
-  getInteropSericePrice,
+  getInteropServicePrice,
   ScriptBuilder
 } from "../../sc";
 import logger from "../../logging";
@@ -42,7 +42,7 @@ export function deserializeVersion(
   const byte = ss.read();
   const version = parseInt(byte, 16);
   if (version !== 0) {
-    log.warn(`Transaction version should be 0 not ${version}`);
+    throw new Error(`Transaction version should be 0 not ${version}`);
   }
   return Object.assign(tx, { version });
 }
@@ -160,7 +160,7 @@ export function getNetworkFeeForSig(): number {
   return (
     OpCodePrices[OpCode.PUSHBYTES64] +
     OpCodePrices[OpCode.PUSHBYTES33] +
-    getInteropSericePrice(InteropServiceCode.NEO_CRYPTO_CHECKSIG)
+    getInteropServicePrice(InteropServiceCode.NEO_CRYPTO_CHECKSIG)
   );
 }
 
@@ -178,7 +178,7 @@ export function getNetworkFeeForMultiSig(
     OpCodePrices[sb.emitPush(signingThreshold).str.slice(0, 2) as OpCode] +
     OpCodePrices[OpCode.PUSHBYTES33] * pubkeysNum +
     OpCodePrices[sb.emitPush(pubkeysNum).str.slice(0, 2) as OpCode] +
-    getInteropSericePrice(
+    getInteropServicePrice(
       InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG,
       pubkeysNum
     )

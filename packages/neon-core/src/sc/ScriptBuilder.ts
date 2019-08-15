@@ -14,7 +14,7 @@ import ContractParam, {
 import OpCode from "./OpCode";
 import InteropServiceCode from "./InteropServiceCode";
 import { OpCodePrices } from "./OpCodePrices";
-import { getInteropSericePrice } from "./InteropServicePrices";
+import { getInteropServicePrice } from "./InteropServicePrices";
 
 export interface ScriptIntent {
   scriptHash: string | "NEO" | "GAS" | "POLICY";
@@ -139,7 +139,7 @@ export class ScriptBuilder extends StringStream {
     size?: number,
     operation?: string
   ) {
-    this.fee = this.fee.plus(getInteropSericePrice(service, size, operation));
+    this.fee = this.fee.plus(getInteropServicePrice(service, size, operation));
     return this.emit(OpCode.SYSCALL, service);
   }
 
