@@ -1,14 +1,37 @@
-import { rpc, u, wallet } from "@cityofzion/neon-core";
+import { rpc, u } from "@cityofzion/neon-core";
+import { Account } from "@cityofzion/neon-core/lib/wallet";
+import { ScriptIntent } from "@cityofzion/neon-core/lib/sc";
 export interface PastTransaction {
   txid: string;
   blockHeight: number;
   change: { [assetSymbol: string]: u.Fixed8 };
 }
 
+export interface Balance {
+  [index: string]: number;
+}
+
+export interface SendAssetConfig {
+  from: Account | string;
+  to: string;
+  asset: string;
+  amount: number;
+}
+
 export interface Provider {
   name: string;
   getRPCEndpoint(noCache?: boolean): Promise<string>;
   getHeight(): Promise<number>;
+  /**
+   * Get balance of certain address
+   * @param addr
+   */
+  getBalance(addr: string): Promise<Balance>;
+  getMaxClaimAmount(addr: string): Promise<number>;
+  claimGas(account: Account | string): Promise<boolean>;
+  sendAsset(...configs: SendAssetConfig[]): Promise<boolean>;
+  readInvoke(...intents: (string | ScriptIntent)[]): Promise<any>;
+  invoke(...intents: (string | ScriptIntent)[]): Promise<boolean>;
   getTransactionHistory(address: string): Promise<PastTransaction[]>;
 }
 
