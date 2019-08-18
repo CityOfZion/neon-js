@@ -1,15 +1,13 @@
-import loglevel from "loglevel";
-import prefix from "loglevel-plugin-prefix";
+export function setAll(lvl: string): void {}
 
-prefix.reg(loglevel);
-loglevel.setDefaultLevel("silent");
-
-export function setAll(lvl: loglevel.LogLevelDesc): void {
-  Object.keys(loglevel.getLoggers()).map(key => {
-    const lg = loglevel.getLogger(key);
-    lg.setLevel(lvl as loglevel.LogLevelDesc);
-  });
+const fackLoger = {
+  info: (...args: any) => {},
+  warn: (...args: any) => {},
+  debug: (...args: any) => {},
+  error: (...args: any) => {},
+  default: (...args: any) => {}
 }
+
 
 const fn = (level: string, name?: string, timestamp?: Date) => {
   const ts = timestamp ? timestamp : new Date().toUTCString();
@@ -18,8 +16,6 @@ const fn = (level: string, name?: string, timestamp?: Date) => {
 };
 
 export default (label: string) => {
-  const l = loglevel.getLogger(label);
-  prefix.apply(l, { format: fn });
-  return l;
+  return fackLoger
 };
-export const logger = loglevel;
+export const logger = fackLoger;
