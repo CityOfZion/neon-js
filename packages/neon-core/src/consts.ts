@@ -1,6 +1,6 @@
 export const ADDR_VERSION = "17";
 
-export const ASSETS: { [key: string]: string } = {
+export const NATIVE_CONTRACTS: { [key: string]: string } = {
   NEO: "NEO",
   "43cf98eddbe047e198a3e5d57006311442a0ca15": "NEO",
   GAS: "GAS",
@@ -9,8 +9,7 @@ export const ASSETS: { [key: string]: string } = {
   "9c5699b260bd468e2160dd5d45dfd2686bba8b77": "POLICY"
 };
 
-// TODO: Policy contract asset id
-export const ASSET_ID: { [key: string]: string } = {
+export const NATIVE_CONTRACTS_ID: { [key: string]: string } = {
   NEO: "43cf98eddbe047e198a3e5d57006311442a0ca15",
   GAS: "a1760976db5fcdfab2a9930e8f6ce875b2d18225",
   POLICY: "9c5699b260bd468e2160dd5d45dfd2686bba8b77"

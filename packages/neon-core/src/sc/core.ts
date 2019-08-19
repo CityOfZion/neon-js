@@ -1,7 +1,7 @@
 import { str2hexstring, Fixed8 } from "../u";
 import ScriptBuilder, { ScriptIntent, ScriptResult } from "./ScriptBuilder";
 import InteropServiceCode from "./InteropServiceCode";
-import { ASSET_ID } from "../consts";
+import { NATIVE_CONTRACTS_ID } from "../consts";
 
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
@@ -23,15 +23,15 @@ export function createScript(
       scriptIntent
     );
 
-    if (scriptHash === ASSET_ID.NEO || scriptHash.toUpperCase() === "NEO") {
+    if (scriptHash === NATIVE_CONTRACTS_ID.NEO || scriptHash.toUpperCase() === "NEO") {
       sb.emitNeoCall(operation, args);
     } else if (
-      scriptHash === ASSET_ID.GAS ||
+      scriptHash === NATIVE_CONTRACTS_ID.GAS ||
       scriptHash.toUpperCase() === "GAS"
     ) {
       sb.emitGasCall(operation, args);
     } else if (
-      scriptHash === ASSET_ID.POLICY ||
+      scriptHash === NATIVE_CONTRACTS_ID.POLICY ||
       scriptHash.toUpperCase() === "POLICY"
     ) {
       sb.emitPolicyCall(operation, args);
