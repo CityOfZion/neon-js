@@ -224,7 +224,9 @@ export class Transaction {
       invocationScript: witness.invocationScript,
       verificationScript: witness.verificationScript
     });
-    cloneWitness.scriptHash = witness.scriptHash;
+    if (!cloneWitness.verificationScript) {
+      cloneWitness.scriptHash = witness.scriptHash;
+    }
 
     this.scripts.push(cloneWitness);
     this.scripts = this.scripts.sort(
