@@ -220,7 +220,13 @@ export class Transaction {
     if (witness.scriptHash === "") {
       throw new Error("Please define the scriptHash for this Witness!");
     }
-    this.scripts.push(witness);
+    const cloneWitness = new Witness({
+      invocationScript: witness.invocationScript,
+      verificationScript: witness.verificationScript
+    });
+    cloneWitness.scriptHash = witness.scriptHash;
+
+    this.scripts.push(cloneWitness);
     this.scripts = this.scripts.sort(
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
     );
