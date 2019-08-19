@@ -227,18 +227,10 @@ describe("Fee Related", () => {
     });
   }
 
-  describe("calculateNetworkFee", () => {
-    test("true as param to assign networkFee", () => {
-      const tx1 = createTxforTestFeeMethods();
-      tx1.calculateNetworkFee(true);
-      expect(tx1.networkFee.toNumber()).toBe(0.0115024);
-    });
-
-    test("false as param to assign networkFee", () => {
-      const tx1 = createTxforTestFeeMethods();
-      tx1.calculateNetworkFee(false);
-      expect(tx1.networkFee.toNumber()).toBe(0);
-    });
+  test("calculateNetworkFee", () => {
+    const tx1 = createTxforTestFeeMethods();
+    tx1.calculateNetworkFee();
+    expect(tx1.networkFee.toNumber()).toBe(0.0115024);
   });
 
   test("useCalculatedSystemFee", () => {

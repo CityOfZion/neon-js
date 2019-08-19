@@ -287,13 +287,11 @@ export class Transaction {
   }
 
   /**
-   * calculate networkFee
+   * calculate networkFee and assign it to tx networkFee prop
    * networkFee = verificationCost + txSize * POLICY_FEE_PERBYTE
-   * @param autoAjust when true, auto justify tx networkfee to the minimum value
-   * @returns minimum networkFee that this tx needs
    */
-  public calculateNetworkFee(autoAdjust: boolean = true): Fixed8 {
-    let networkFee = new Fixed8(0);
+  public calculateNetworkFee(): void {
+    this.networkFee = new Fixed8(0);
 
     const signers = this.getScriptHashesForVerifying();
 
@@ -307,7 +305,7 @@ export class Transaction {
       const account = new Account(signer);
       if (!account.isMultiSig) {
         size += getSizeForSig(signer);
-        networkFee = networkFee.add(getNetworkFeeForSig());
+        this.networkFee = this.networkFee.add(getNetworkFeeForSig());
       } else {
         const n = getPublicKeysFromVerificationScript(account.contract.script)
           .length;
@@ -315,18 +313,12 @@ export class Transaction {
           account.contract.script
         );
         size += getSizeForMultiSig(signer, m);
-        networkFee = networkFee.add(getNetworkFeeForMultiSig(m, n));
+        this.networkFee = this.networkFee.add(getNetworkFeeForMultiSig(m, n));
       }
     });
-    networkFee = networkFee.add(
+    this.networkFee = this.networkFee.add(
       new Fixed8(size).multipliedBy(POLICY_FEE_PERBYTE)
     );
-
-    if (autoAdjust) {
-      this.networkFee = networkFee;
-    }
-
-    return networkFee;
   }
 
   /**
