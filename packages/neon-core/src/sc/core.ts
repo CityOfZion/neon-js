@@ -23,7 +23,10 @@ export function createScript(
       scriptIntent
     );
 
-    if (scriptHash === NATIVE_CONTRACTS_ID.NEO || scriptHash.toUpperCase() === "NEO") {
+    if (
+      scriptHash === NATIVE_CONTRACTS_ID.NEO ||
+      scriptHash.toUpperCase() === "NEO"
+    ) {
       sb.emitNeoCall(operation, args);
     } else if (
       scriptHash === NATIVE_CONTRACTS_ID.GAS ||
