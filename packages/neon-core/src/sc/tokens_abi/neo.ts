@@ -1,4 +1,3 @@
-import { getScriptHashFromAddress } from "../../wallet";
 import ContractParam from "../ContractParam";
 import { ScriptResult } from "../ScriptBuilder";
 import { NativeNEP5 } from "./native_nep5";
@@ -18,7 +17,7 @@ export class NEO extends NativeNEP5 {
 
   public unclaimedGas(addr: string, end: number): ScriptResult {
     return this.buildScript("unclaimedGas", [
-      getScriptHashFromAddress(addr),
+      ContractParam.hash160(addr),
       ContractParam.integer(end.toString())
     ]);
   }
@@ -43,7 +42,7 @@ export class NEO extends NativeNEP5 {
 
   public vote(addr: string, pubkeys: string[]): ScriptResult {
     return this.buildScript("vote", [
-      getScriptHashFromAddress(addr),
+      ContractParam.hash160(addr),
       ContractParam.array(
         ...pubkeys.map(pubkey => ContractParam.publicKey(pubkey))
       )

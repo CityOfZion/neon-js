@@ -1,6 +1,6 @@
 import { str2hexstring, Fixed8 } from "../u";
 import ScriptBuilder, { ScriptIntent, ScriptResult } from "./ScriptBuilder";
-import InteropService from "./InteropService";
+import InteropServiceCode from "./InteropServiceCode";
 import { ASSET_ID } from "../consts";
 
 /**
@@ -72,7 +72,7 @@ export function generateDeployScript(params: DeployParams) {
     .emitPush(params.manifest)
     .emitPush(params.script)
     .emitSysCall(
-      InteropService.NEO_CONTRACT_CREATE,
+      InteropServiceCode.NEO_CONTRACT_CREATE,
       (params.manifest.length + params.script.length) / 2
     );
   return sb;

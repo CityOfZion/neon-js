@@ -4,7 +4,7 @@ import _ScriptBuilder from "../../src/sc/ScriptBuilder";
 import * as _u from "../../src/u";
 import testIntents from "./scriptIntents.json";
 import { Fixed8 } from "../../src/u";
-import { InteropService } from "../../src/sc";
+import { InteropServiceCode } from "../../src/sc";
 
 jest.mock("../../src/sc/ScriptBuilder");
 jest.mock("../../src/u");
@@ -164,7 +164,7 @@ describe("generateDeployScript", () => {
       params.parameterList,
       params.manifest,
       params.script,
-      InteropService.NEO_CONTRACT_CREATE
+      InteropServiceCode.NEO_CONTRACT_CREATE
     ]);
   });
 
@@ -199,7 +199,7 @@ describe("generateDeployScript", () => {
       params.parameterList,
       params.manifest,
       params.script,
-      InteropService.NEO_CONTRACT_CREATE
+      InteropServiceCode.NEO_CONTRACT_CREATE
     ]);
   });
 });

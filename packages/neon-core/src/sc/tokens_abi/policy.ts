@@ -1,6 +1,5 @@
 import ScriptBuilder, { ScriptResult } from "../ScriptBuilder";
 import ContractParam from "../ContractParam";
-import { getScriptHashFromAddress } from "../../wallet";
 import { NativeContract } from "./NativeContract";
 
 /**
@@ -44,10 +43,10 @@ export class Policy extends NativeContract {
   }
 
   public blockAccount(addr: string): ScriptResult {
-    return this.buildScript("blockAccount", [getScriptHashFromAddress(addr)]);
+    return this.buildScript("blockAccount", [ContractParam.hash160(addr)]);
   }
 
   public unblockAccount(addr: string): ScriptResult {
-    return this.buildScript("unblockAccount", [getScriptHashFromAddress(addr)]);
+    return this.buildScript("unblockAccount", [ContractParam.hash160(addr)]);
   }
 }

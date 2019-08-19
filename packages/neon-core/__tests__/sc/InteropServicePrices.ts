@@ -1,18 +1,18 @@
-import { getInteropSericePrice, InteropService } from "../../src/sc";
+import { getInteropServicePrice, InteropServiceCode } from "../../src/sc";
 
 describe("getInteropSericePrice", () => {
   test("Fixed Price Service", () => {
     expect(
-      getInteropSericePrice(
-        InteropService.SYSTEM_EXECUTIONENGINE_GETSCRIPTCONTAINER
+      getInteropServicePrice(
+        InteropServiceCode.SYSTEM_EXECUTIONENGINE_GETSCRIPTCONTAINER
       )
     ).toBe(250e-8);
   });
 
   test("Native Contract Method", () => {
     expect(
-      getInteropSericePrice(
-        InteropService.NEO_NATIVE_TOKENS_NEO,
+      getInteropServicePrice(
+        InteropServiceCode.NEO_NATIVE_TOKENS_NEO,
         undefined,
         "balanceOf"
       )
@@ -20,8 +20,8 @@ describe("getInteropSericePrice", () => {
   });
 
   test("Storage Realted Service", () => {
-    expect(getInteropSericePrice(InteropService.SYSTEM_STORAGE_PUT, 5)).toBe(
-      5 * 100000e-8
-    );
+    expect(
+      getInteropServicePrice(InteropServiceCode.SYSTEM_STORAGE_PUT, 5)
+    ).toBe(5 * 100000e-8);
   });
 });

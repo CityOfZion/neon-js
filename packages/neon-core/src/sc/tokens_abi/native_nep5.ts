@@ -1,5 +1,4 @@
 import { ScriptBuilder, ScriptResult } from "../ScriptBuilder";
-import { getScriptHashFromAddress } from "../../wallet";
 import { Fixed8 } from "../../u";
 import ContractParam from "../ContractParam";
 import { NativeContract } from "./NativeContract";
@@ -46,7 +45,7 @@ export class NativeNEP5 extends NativeContract {
   }
 
   public balanceOf(addr: string): ScriptResult {
-    return this.buildScript("balanceOf", [getScriptHashFromAddress(addr)]);
+    return this.buildScript("balanceOf", [ContractParam.hash160(addr)]);
   }
 
   public transfer(
@@ -54,8 +53,8 @@ export class NativeNEP5 extends NativeContract {
     toAddr: string,
     amt: Fixed8 | number
   ): ScriptResult {
-    const fromHash = getScriptHashFromAddress(fromAddr);
-    const toHash = getScriptHashFromAddress(toAddr);
+    const fromHash = ContractParam.hash160(fromAddr);
+    const toHash = ContractParam.hash160(toAddr);
     const adjustedAmt = new Fixed8(amt).toRawNumber();
     return this.buildScript("transfer", [
       fromHash,

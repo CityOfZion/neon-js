@@ -1,11 +1,7 @@
 import ContractParam from "../../src/sc/ContractParam";
 import OpCode from "../../src/sc/OpCode";
 import ScriptBuilder from "../../src/sc/ScriptBuilder";
-import {
-  OpCodePrices,
-  NativeContractMethodPrices,
-  InteropService
-} from "../../src/sc";
+import { OpCodePrices } from "../../src/sc";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -32,14 +28,14 @@ describe("emit", () => {
 
   test("OpCode with args", () => {
     const sb = new ScriptBuilder();
-    sb.emit(16 as OpCode, "0102");
+    sb.emit("10" as OpCode, "0102");
     expect(sb.str).toBe("100102");
-    expect(sb.fee.equals(OpCodePrices[16 as OpCode])).toBeTruthy();
+    expect(sb.fee.equals(OpCodePrices["10" as OpCode])).toBeTruthy();
   });
 
   test("returns this", () => {
     const sb = new ScriptBuilder();
-    const result = sb.emit(1 as OpCode);
+    const result = sb.emit("01" as OpCode);
     expect(result).toBe(sb);
   });
 });
@@ -54,24 +50,6 @@ describe("emitAppCall", () => {
         args: []
       },
       "00c1046e616d65145f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc68627d5b52"
-    ],
-    [
-      "simple emitAppCall with null args",
-      {
-        scriptHash: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
-        operation: "symbol",
-        args: null
-      },
-      "000673796d626f6c1411c4d1f4fba619f2628870d36e3a9773e874705b68627d5b52"
-    ],
-    [
-      "simple emitAppCall with false args",
-      {
-        scriptHash: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
-        operation: "decimals",
-        args: false
-      },
-      "0008646563696d616c731411c4d1f4fba619f2628870d36e3a9773e874705b68627d5b52"
     ],
     [
       "emitAppCall with args",
@@ -207,7 +185,7 @@ describe("emitPush", () => {
     [
       "ContractParam(integer) veryBigNumber",
       ContractParam.integer(veryBigNumber),
-      OpCode.PUSHDATA1.toString(16) +
+      OpCode.PUSHDATA1 +
         (veryBigNumberBytes.length / 2).toString(16) +
         veryBigNumberBytes
     ],
@@ -216,7 +194,7 @@ describe("emitPush", () => {
     [
       "ContractParam(integer) verySmallNumber",
       ContractParam.integer(verySmallNumber),
-      OpCode.PUSHDATA1.toString(16) +
+      OpCode.PUSHDATA1 +
         (verySmallNumberBytes.length / 2).toString(16) +
         verySmallNumberBytes
     ]
