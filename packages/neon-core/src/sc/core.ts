@@ -71,10 +71,9 @@ export function generateDeployScript(params: DeployParams) {
     .emitPush(params.parameterList)
     .emitPush(params.manifest)
     .emitPush(params.script)
-    .emitSysCall(
-      InteropServiceCode.NEO_CONTRACT_CREATE,
-      (params.manifest.length + params.script.length) / 2
-    );
+    .emitSysCall(InteropServiceCode.NEO_CONTRACT_CREATE, {
+      size: (params.manifest.length + params.script.length) / 2
+    });
   return sb;
 }
 

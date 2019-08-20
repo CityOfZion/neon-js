@@ -14,7 +14,10 @@ import ContractParam, {
 import OpCode from "./OpCode";
 import InteropServiceCode from "./InteropServiceCode";
 import { OpCodePrices } from "./OpCodePrices";
-import { getInteropServicePrice } from "./InteropServicePrices";
+import {
+  getInteropServicePrice,
+  InteropServicePriceParam
+} from "./InteropServicePrices";
 
 export interface ScriptIntent {
   scriptHash: string | "NEO" | "GAS" | "POLICY";
@@ -89,31 +92,25 @@ export class ScriptBuilder extends StringStream {
   public emitNeoCall(operation: string, args?: any[]): this {
     this.emitPush(args || []);
     this._emitContractOperation(operation);
-    return this.emitSysCall(
-      InteropServiceCode.NEO_NATIVE_TOKENS_NEO,
-      undefined,
-      operation
-    );
+    return this.emitSysCall(InteropServiceCode.NEO_NATIVE_TOKENS_NEO, {
+      method: operation
+    });
   }
 
   public emitGasCall(operation: string, args?: any[]): this {
     this.emitPush(args || []);
     this._emitContractOperation(operation);
-    return this.emitSysCall(
-      InteropServiceCode.NEO_NATIVE_TOKENS_GAS,
-      undefined,
-      operation
-    );
+    return this.emitSysCall(InteropServiceCode.NEO_NATIVE_TOKENS_GAS, {
+      method: operation
+    });
   }
 
   public emitPolicyCall(operation: string, args?: any[]): this {
     this.emitPush(args || []);
     this._emitContractOperation(operation);
-    return this.emitSysCall(
-      InteropServiceCode.NEO_NATIVE_POLICY,
-      undefined,
-      operation
-    );
+    return this.emitSysCall(InteropServiceCode.NEO_NATIVE_POLICY, {
+      method: operation
+    });
   }
 
   public emitAppCall(
@@ -136,10 +133,9 @@ export class ScriptBuilder extends StringStream {
 
   public emitSysCall(
     service: InteropServiceCode,
-    size?: number,
-    operation?: string
+    param?: Partial<InteropServicePriceParam>
   ) {
-    this.fee = this.fee.plus(getInteropServicePrice(service, size, operation));
+    this.fee = this.fee.plus(getInteropServicePrice(service, param));
     return this.emit(OpCode.SYSCALL, service);
   }
 

@@ -11,17 +11,15 @@ describe("getInteropServicePrice", () => {
 
   test("Native Contract Method", () => {
     expect(
-      getInteropServicePrice(
-        InteropServiceCode.NEO_NATIVE_TOKENS_NEO,
-        undefined,
-        "balanceOf"
-      )
+      getInteropServicePrice(InteropServiceCode.NEO_NATIVE_TOKENS_NEO, {
+        method: "balanceOf"
+      })
     ).toBe(1000000e-8);
   });
 
   test("Write Storage Service", () => {
     expect(
-      getInteropServicePrice(InteropServiceCode.SYSTEM_STORAGE_PUT, 5)
+      getInteropServicePrice(InteropServiceCode.SYSTEM_STORAGE_PUT, { size: 5 })
     ).toBe(5 * 100000e-8);
   });
 });
