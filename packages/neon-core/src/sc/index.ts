@@ -7,4 +7,3 @@ export * from "./InteropServiceCode";
 export * from "./InteropServicePrices";
 export * from "./StackItem";
 export * from "./NativeContractMethodPrices";
-export * from "./tokens_abi";
