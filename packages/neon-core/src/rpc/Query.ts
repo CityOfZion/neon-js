@@ -192,7 +192,7 @@ export class Query {
    * This Query returns the block index in which the transaction is found.
    * @param txid hash of the specific transaction.
    */
-  public static getTxHeight(txid: string): Query {
+  public static getTransactionHeight(txid: string): Query {
     return new Query({
       method: "gettransactionheight",
       params: [txid]

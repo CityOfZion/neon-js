@@ -1,6 +1,6 @@
 import { getInteropServicePrice, InteropServiceCode } from "../../src/sc";
 
-describe("getInteropSericePrice", () => {
+describe("getInteropServicePrice", () => {
   test("Fixed Price Service", () => {
     expect(
       getInteropServicePrice(
@@ -19,7 +19,7 @@ describe("getInteropSericePrice", () => {
     ).toBe(1000000e-8);
   });
 
-  test("Storage Realted Service", () => {
+  test("Write Storage Service", () => {
     expect(
       getInteropServicePrice(InteropServiceCode.SYSTEM_STORAGE_PUT, 5)
     ).toBe(5 * 100000e-8);

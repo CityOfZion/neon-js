@@ -145,15 +145,20 @@ export class RPCClient {
    * Get the corresponding block header information according to the specified script hash.
    * @param indexOrHash height or hash of block.
    * @param verbose Optional, the default value of verbose is 0. When verbose is 0, the serialized information of the block is returned, represented by a hexadecimal string. If you need to get detailed information, you will need to use the SDK for deserialization. When verbose is 1, detailed information of the corresponding block in Json format string, is returned.
+   * @returns verbose = 0, blocker header hex string; verbose = 1, block header info in json
    */
   public async getBlockHeader(
     indexOrHash: number | string,
     verbose: 0 | 1 = 0
-  ): Promise<any> {
+  ): Promise<string | object> {
     const response = await this.execute(
       Query.getBlockHeader(indexOrHash, verbose)
     );
-    return response.result;
+    if (verbose === 0) {
+      return response.result as string;
+    } else {
+      return response.result as object;
+    }
   }
 
   /**
@@ -229,8 +234,8 @@ export class RPCClient {
    * Gets the block index in which the transaction is found.
    * @param txid hash of the specific transaction.
    */
-  public async getTxHeight(txid: string): Promise<number> {
-    const response = await this.execute(Query.getTxHeight(txid));
+  public async getTransactionHeight(txid: string): Promise<number> {
+    const response = await this.execute(Query.getTransactionHeight(txid));
     return response.result;
   }
 

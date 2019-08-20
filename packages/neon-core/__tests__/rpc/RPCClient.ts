@@ -271,17 +271,17 @@ describe("RPC Methods", () => {
     });
   });
 
-  describe("getTxHeight", () => {
+  describe("getTransactionHeight", () => {
     test("success", async () => {
       const expected = jest.fn();
-      Query.getTxHeight.mockImplementationOnce(() => ({
+      Query.getTransactionHeight.mockImplementationOnce(() => ({
         req: { method: "" },
         execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
-      const result = await client.getTxHeight("txid");
+      const result = await client.getTransactionHeight("txid");
 
       expect(result).toEqual(expected);
-      expect(Query.getTxHeight).toBeCalledWith("txid");
+      expect(Query.getTransactionHeight).toBeCalledWith("txid");
     });
   });
 

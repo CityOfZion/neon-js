@@ -138,8 +138,8 @@ describe("static", () => {
     expect(result.params).toEqual(["contract", "key"]);
   });
 
-  test("getTxHeight", () => {
-    const result = Query.getTxHeight("hash");
+  test("getTransactionHeight", () => {
+    const result = Query.getTransactionHeight("hash");
     expect(result.method).toEqual("gettransactionheight");
     expect(result.params).toEqual(["hash"]);
   });
