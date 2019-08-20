@@ -13,11 +13,6 @@ import ContractParam, {
 } from "./ContractParam";
 import OpCode from "./OpCode";
 import InteropServiceCode from "./InteropServiceCode";
-import { OpCodePrices } from "./OpCodePrices";
-import {
-  getInteropServicePrice,
-  InteropServicePriceParam
-} from "./InteropServicePrices";
 
 export interface ScriptIntent {
   scriptHash: string | "NEO" | "GAS" | "POLICY";
@@ -46,18 +41,16 @@ function retrieveAppCall(sb: ScriptBuilder): ScriptIntent | null {
   throw new Error("Not Implemented");
 }
 
+// TODO
+function calculatePrice(sb: ScriptBuilder): Fixed8 {
+  return new Fixed8(0);
+}
+
 /**
  * Builds a VM script in hexstring. Used for constructing smart contract method calls.
  * @extends StringStream
  */
 export class ScriptBuilder extends StringStream {
-  public fee: Fixed8;
-
-  public constructor(str = "") {
-    super(str);
-    this.fee = new Fixed8(0);
-  }
-
   // TODO
   public toScriptParams(): ScriptIntent[] {
     throw new Error("Not implemented");
@@ -67,7 +60,6 @@ export class ScriptBuilder extends StringStream {
    */
   public emit(op: OpCode, args?: string): this {
     this.str += op;
-    this.fee = this.fee.plus(OpCodePrices[op]);
     if (args) {
       this.str += args;
     }
@@ -92,25 +84,19 @@ export class ScriptBuilder extends StringStream {
   public emitNeoCall(operation: string, args?: any[]): this {
     this.emitPush(args || []);
     this._emitContractOperation(operation);
-    return this.emitSysCall(InteropServiceCode.NEO_NATIVE_TOKENS_NEO, {
-      method: operation
-    });
+    return this.emitSysCall(InteropServiceCode.NEO_NATIVE_TOKENS_NEO);
   }
 
   public emitGasCall(operation: string, args?: any[]): this {
     this.emitPush(args || []);
     this._emitContractOperation(operation);
-    return this.emitSysCall(InteropServiceCode.NEO_NATIVE_TOKENS_GAS, {
-      method: operation
-    });
+    return this.emitSysCall(InteropServiceCode.NEO_NATIVE_TOKENS_GAS);
   }
 
   public emitPolicyCall(operation: string, args?: any[]): this {
     this.emitPush(args || []);
     this._emitContractOperation(operation);
-    return this.emitSysCall(InteropServiceCode.NEO_NATIVE_POLICY, {
-      method: operation
-    });
+    return this.emitSysCall(InteropServiceCode.NEO_NATIVE_POLICY);
   }
 
   public emitAppCall(
@@ -131,11 +117,7 @@ export class ScriptBuilder extends StringStream {
     return this.emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALL);
   }
 
-  public emitSysCall(
-    service: InteropServiceCode,
-    param?: Partial<InteropServicePriceParam>
-  ) {
-    this.fee = this.fee.plus(getInteropServicePrice(service, param));
+  public emitSysCall(service: InteropServiceCode) {
     return this.emit(OpCode.SYSCALL, service);
   }
 
@@ -191,7 +173,6 @@ export class ScriptBuilder extends StringStream {
     if (size <= 75 /* PUSHBYTES75 */) {
       // this is actually pushing opcode PUSHBYTES1-75, will generate fee.
       this.str += num2hexstring(size);
-      this.fee = this.fee.plus(OpCodePrices[OpCode.PUSHBYTES75]);
       this.str += hexstring;
     } else if (size < 0x100) {
       this.emit(OpCode.PUSHDATA1);
@@ -269,19 +250,6 @@ export class ScriptBuilder extends StringStream {
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }
-  }
-
-  public reset(): void {
-    super.reset();
-    this.str = "";
-    this.fee = new Fixed8(0);
-  }
-
-  public exportAsScriptResult(): ScriptResult {
-    return {
-      hex: this.str,
-      fee: this.fee
-    };
   }
 }
 

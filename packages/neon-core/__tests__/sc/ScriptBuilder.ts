@@ -10,11 +10,9 @@ describe("constructor", () => {
     expect(result instanceof ScriptBuilder).toBeTruthy();
   });
 
-  test("init & reset", () => {
+  test("init", () => {
     const result = new ScriptBuilder("Init");
     expect(result.str).toBe("Init");
-    result.reset();
-    expect(result.str).toBe("");
   });
 });
 
@@ -23,14 +21,12 @@ describe("emit", () => {
     const sb = new ScriptBuilder();
     sb.emit(OpCode.PUSH1);
     expect(sb.str).toBe("51");
-    expect(sb.fee.toNumber()).toBe(OpCodePrices[OpCode.PUSH1]);
   });
 
   test("OpCode with args", () => {
     const sb = new ScriptBuilder();
     sb.emit("10" as OpCode, "0102");
     expect(sb.str).toBe("100102");
-    expect(sb.fee.equals(OpCodePrices["10" as OpCode])).toBeTruthy();
   });
 
   test("returns this", () => {
@@ -116,14 +112,12 @@ describe("Native Contact Call", () => {
     expect(sb.str).toBe(
       "00c1176765745265676973746572656456616c696461746f72736845c49284"
     );
-    expect(sb.fee.toNumber()).toBe(1.0000715);
   });
 
   test("emitGasCall", () => {
     const sb = new ScriptBuilder();
     sb.emitGasCall("decimals", []);
     expect(sb.str).toBe("00c108646563696d616c7368eb43f4f4");
-    expect(sb.fee.toNumber()).toBe(0.0000715);
   });
 
   test("emitPolicyCall", () => {
@@ -132,7 +126,6 @@ describe("Native Contact Call", () => {
     expect(sb.str).toBe(
       "00c11a6765744d61785472616e73616374696f6e73506572426c6f636b6875f4fa6b"
     );
-    expect(sb.fee.toNumber()).toBe(0.0100715);
   });
 });
 
