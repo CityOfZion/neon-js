@@ -36,25 +36,11 @@ function isValidValue(value: any): boolean {
   return false;
 }
 
-// TODO
-function retrieveAppCall(sb: ScriptBuilder): ScriptIntent | null {
-  throw new Error("Not Implemented");
-}
-
-// TODO
-function calculatePrice(sb: ScriptBuilder): Fixed8 {
-  return new Fixed8(0);
-}
-
 /**
  * Builds a VM script in hexstring. Used for constructing smart contract method calls.
  * @extends StringStream
  */
 export class ScriptBuilder extends StringStream {
-  // TODO
-  public toScriptParams(): ScriptIntent[] {
-    throw new Error("Not implemented");
-  }
   /**
    * Appends an Opcode, followed by args
    */
