@@ -72,38 +72,6 @@ describe("createScript", () => {
       intents.map(i => [i.scriptHash, i.operation, i.args])
     );
   });
-
-  describe("Native Contract", () => {
-    test("Neo", () => {
-      const neoIntent = testIntents["neo"].scriptIntent;
-      const result = createScript(neoIntent);
-      const sb = ScriptBuilder.mock.instances[0];
-      expect(sb.emitNeoCall).toBeCalledWith(
-        neoIntent.operation,
-        neoIntent.args
-      );
-    });
-
-    test("Gas", () => {
-      const neoIntent = testIntents["gas"].scriptIntent;
-      const result = createScript(neoIntent);
-      const sb = ScriptBuilder.mock.instances[0];
-      expect(sb.emitGasCall).toBeCalledWith(
-        neoIntent.operation,
-        neoIntent.args
-      );
-    });
-
-    test("Policy", () => {
-      const neoIntent = testIntents["policy"].scriptIntent;
-      const result = createScript(neoIntent);
-      const sb = ScriptBuilder.mock.instances[0];
-      expect(sb.emitPolicyCall).toBeCalledWith(
-        neoIntent.operation,
-        neoIntent.args
-      );
-    });
-  });
 });
 
 describe("generateDeployScript", () => {

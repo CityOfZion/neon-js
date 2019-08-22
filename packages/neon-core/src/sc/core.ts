@@ -21,21 +21,7 @@ export function createScript(...intents: (ScriptIntent | string)[]): string {
       scriptIntent
     );
 
-    if (scriptHash === ASSET_ID.NEO || scriptHash.toUpperCase() === "NEO") {
-      sb.emitNeoCall(operation, args);
-    } else if (
-      scriptHash === ASSET_ID.GAS ||
-      scriptHash.toUpperCase() === "GAS"
-    ) {
-      sb.emitGasCall(operation, args);
-    } else if (
-      scriptHash === ASSET_ID.POLICY ||
-      scriptHash.toUpperCase() === "POLICY"
-    ) {
-      sb.emitPolicyCall(operation, args);
-    } else {
-      sb.emitAppCall(scriptHash, operation, args);
-    }
+    sb.emitAppCall(scriptHash, operation, args);
   }
   return sb.str;
 }

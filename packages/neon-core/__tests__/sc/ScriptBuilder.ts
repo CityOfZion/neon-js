@@ -105,30 +105,6 @@ describe("emitAppCall", () => {
   });
 });
 
-describe("Native Contact Call", () => {
-  test("emitNeoCall", () => {
-    const sb = new ScriptBuilder();
-    sb.emitNeoCall("getRegisteredValidators", []);
-    expect(sb.str).toBe(
-      "00c1176765745265676973746572656456616c696461746f72736845c49284"
-    );
-  });
-
-  test("emitGasCall", () => {
-    const sb = new ScriptBuilder();
-    sb.emitGasCall("decimals", []);
-    expect(sb.str).toBe("00c108646563696d616c7368eb43f4f4");
-  });
-
-  test("emitPolicyCall", () => {
-    const sb = new ScriptBuilder();
-    sb.emitPolicyCall("getMaxTransactionsPerBlock", []);
-    expect(sb.str).toBe(
-      "00c11a6765744d61785472616e73616374696f6e73506572426c6f636b6875f4fa6b"
-    );
-  });
-});
-
 const veryBigNumber =
   "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215";
 const veryBigNumberBytes =
