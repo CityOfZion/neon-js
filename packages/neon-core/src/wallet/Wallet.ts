@@ -98,9 +98,9 @@ export class Wallet {
    * Attempts to decrypt Account at index in array.
    * @param index Index of Account in array.
    * @param keyphrase keyphrase
-   * @return Promise of the decrypted account.
+   * @return Promise of decryption success/failure.
    */
-  public decrypt(index: number, keyphrase: string): Promise<Account> {
+  public async decrypt(index: number, keyphrase: string): Promise<boolean> {
     if (index < 0) {
       return Promise.reject(`Index cannot be negative! index: ${index}`);
     }
@@ -109,49 +109,47 @@ export class Wallet {
         `Index cannot larger than Accounts array! index: ${index}`
       );
     }
-    return this.accounts[index]
-      .decrypt(keyphrase, this.scrypt)
-      .catch(err => Promise.reject(`${err} index: ${index}`));
+    await this.accounts[index].decrypt(keyphrase, this.scrypt);
+    return true;
   }
 
   /**
    * Attempts to decrypt all accounts with keyphrase.
    * @param keyphrase
-   * @return Promise of this(Wallet).
+   * @return Promise of accounts decryption success/failure .
    */
-  public decryptAll(keyphrase: string): Promise<this> {
+  public decryptAll(keyphrase: string): Promise<boolean[]> {
     return Promise.all(
       this.accounts.map((acct, i) => this.decrypt(i, keyphrase))
-    ).then(res => this);
+    );
   }
 
   /**
    * Attempts to encrypt Account at index in array.
    * @param index Index of Account in array.
    * @param keyphrase
-   * @return Promise of encrypted account
+   * @return Promise of encryption success/failure.
    */
-  public encrypt(index: number, keyphrase: string): Promise<Account> {
+  public async encrypt(index: number, keyphrase: string): Promise<boolean> {
     if (index < 0) {
       return Promise.reject("Index cannot be negative!");
     }
     if (index >= this.accounts.length) {
       return Promise.reject("Index cannot larger than Accounts array!");
     }
-    return this.accounts[index]
-      .encrypt(keyphrase, this.scrypt)
-      .catch(err => Promise.reject(`${err} index: ${index}`));
+    await this.accounts[index].encrypt(keyphrase, this.scrypt);
+    return true;
   }
 
   /**
    * Attempts to encrypt all accounts with keyphrase.
    * @param keyphrase
-   * @return Promise of this(Wallet).
+   * @return Promise of accounts encryption success/failure.
    */
-  public encryptAll(keyphrase: string): Promise<this> {
+  public encryptAll(keyphrase: string): Promise<boolean[]> {
     return Promise.all(
       this.accounts.map((acct, i) => this.encrypt(i, keyphrase))
-    ).then(res => this);
+    );
   }
 
   /**
