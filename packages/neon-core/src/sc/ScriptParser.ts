@@ -18,7 +18,7 @@ function checkArgs(args?: any[]): void {
  * Read a script to readable contract invocations.
  * @extends StringStream
  */
-export class ScriptReader extends StringStream {
+export class ScriptParser extends StringStream {
   /**
    * Retrieves a single AppCall.
    * Returns ScriptIntents starting from the beginning of the script.
@@ -118,4 +118,4 @@ export class ScriptReader extends StringStream {
   }
 }
 
-export default ScriptReader;
+export default ScriptParser;
