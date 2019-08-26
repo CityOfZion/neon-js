@@ -81,7 +81,7 @@ describe("add account, default account", () => {
     });
     wallet.addAccount(new Account(PRIVATE_KEY1));
     wallet.addAccount(new Account(PRIVATE_KEY2));
-    expect(wallet.defaultAccount).toBe(wallet.accounts[0]);
+    expect(wallet.defaultAccount.privateKey).toBe(PRIVATE_KEY1);
   });
 
   test("set default account", () => {
@@ -96,33 +96,71 @@ describe("add account, default account", () => {
   });
 });
 
-describe("encrypt & decrypt", () => {
-  test("encrypt", async () => {
+describe("encrypt", () => {
+  test("success", () => {
     const wallet = new Wallet();
     wallet.addAccount(new Account(PRIVATE_KEY1));
     wallet.addAccount(new Account(PRIVATE_KEY2));
-    const result = await wallet.encrypt(0, "passw0rd");
-    expect(result).toBeTruthy();
-  }, 5000);
-
-  test("encryptAll", async () => {
+    return wallet.encrypt(0, "passw0rd").then(res => {
+      expect(res).toBeTruthy();
+      expect(wallet.accounts[0].encrypted).toBe(
+        "6PYVQfxBH2zBvFsJ1zBZJUUD8ykvCdWrAfZzjWw4RRskjwLAc74bkT3eQn"
+      );
+    });
+  });
+  test("failure", () => {
     const wallet = new Wallet();
     wallet.addAccount(new Account(PRIVATE_KEY1));
     wallet.addAccount(new Account(PRIVATE_KEY2));
-    const result = await wallet.encryptAll("passw0rd");
-    const json = wallet.export();
-    expect(result).toStrictEqual([true, true]);
-  }, 5000);
+    return wallet.encrypt(-1, "passw0rd").catch(err => {
+      expect(err).toBeDefined();
+    });
+  });
+});
 
-  test("decrypt", async () => {
-    const wallet = new Wallet(WALLET_JSON);
-    const result = await wallet.decrypt(0, "passw0rd");
-    expect(result).toBeTruthy();
-  }, 5000);
+describe("encryptAll", () => {
+  test("success", () => {
+    const wallet = new Wallet();
+    wallet.addAccount(new Account(PRIVATE_KEY1));
+    wallet.addAccount(new Account(PRIVATE_KEY2));
+    return wallet.encryptAll("passw0rd").then(res => {
+      expect(res).toStrictEqual([true, true]);
+      expect(wallet.accounts[0].encrypted).toBe(
+        "6PYVQfxBH2zBvFsJ1zBZJUUD8ykvCdWrAfZzjWw4RRskjwLAc74bkT3eQn"
+      );
+    });
+  });
+});
 
-  test("decryptAll", async () => {
+describe("decrypt", () => {
+  test("success", () => {
     const wallet = new Wallet(WALLET_JSON);
-    const result = await wallet.decryptAll("passw0rd");
-    expect(result).toStrictEqual([true, true]);
-  }, 5000);
+    return wallet.decrypt(0, "passw0rd").then(res => {
+      expect(res).toBeTruthy();
+      expect(wallet.accounts[0].privateKey).toBe(PRIVATE_KEY1);
+    });
+  });
+  test("failure", () => {
+    const wallet = new Wallet(WALLET_JSON);
+    return wallet.decrypt(1, "passw0rd_failure").catch(err => {
+      expect(err).toBeDefined();
+    });
+  });
+});
+
+describe("decryptAll", () => {
+  test("success", () => {
+    const wallet = new Wallet(WALLET_JSON);
+    return wallet.decryptAll("passw0rd").then(res => {
+      expect(res).toStrictEqual([true, true]);
+      expect(wallet.accounts[0].privateKey).toBe(PRIVATE_KEY1);
+    });
+  });
+
+  test("failure", () => {
+    const wallet = new Wallet(WALLET_JSON);
+    return wallet.decryptAll("passw0rd_failre").catch(err => {
+      expect(err).toBeDefined();
+    });
+  });
 });
