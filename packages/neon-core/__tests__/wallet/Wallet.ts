@@ -103,7 +103,7 @@ describe("encrypt & decrypt", () => {
     wallet.addAccount(new Account(PRIVATE_KEY2));
     const result = await wallet.encrypt(0, "passw0rd");
     expect(result).toBeTruthy();
-  });
+  }, 5000);
 
   test("encryptAll", async () => {
     const wallet = new Wallet();
@@ -112,17 +112,17 @@ describe("encrypt & decrypt", () => {
     const result = await wallet.encryptAll("passw0rd");
     const json = wallet.export();
     expect(result).toStrictEqual([true, true]);
-  });
+  }, 5000);
 
   test("decrypt", async () => {
     const wallet = new Wallet(WALLET_JSON);
     const result = await wallet.decrypt(0, "passw0rd");
     expect(result).toBeTruthy();
-  });
+  }, 5000);
 
   test("decryptAll", async () => {
     const wallet = new Wallet(WALLET_JSON);
     const result = await wallet.decryptAll("passw0rd");
     expect(result).toStrictEqual([true, true]);
-  });
+  }, 5000);
 });
