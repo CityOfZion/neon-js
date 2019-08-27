@@ -2,9 +2,9 @@ import { AxiosRequestConfig } from "axios";
 import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from "../consts";
 import logger from "../logging";
 import { timeout } from "../settings";
+import { Transaction } from "../tx";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
-import { Transaction } from "../tx";
 
 const log = logger("rpc");
 

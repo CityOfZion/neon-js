@@ -1,13 +1,11 @@
 import { str2hexstring } from "../u";
-import ScriptBuilder, { ScriptIntent, ScriptResult } from "./ScriptBuilder";
+import ScriptBuilder, { ScriptIntent } from "./ScriptBuilder";
 import InteropServiceCode from "./InteropServiceCode";
 
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
  */
-export function createScript(
-  ...intents: (ScriptIntent | string)[]
-): ScriptResult {
+export function createScript(...intents: (ScriptIntent | string)[]): string {
   const sb = new ScriptBuilder();
   for (const scriptIntent of intents) {
     if (typeof scriptIntent === "string") {
@@ -24,7 +22,7 @@ export function createScript(
 
     sb.emitAppCall(scriptHash, operation, args);
   }
-  return sb.exportAsScriptResult();
+  return sb.str;
 }
 
 export interface DeployParams {

@@ -42,17 +42,6 @@ function isValidValue(value: any): boolean {
  * @extends StringStream
  */
 export class ScriptBuilder extends StringStream {
-  public fee: Fixed8;
-
-  public constructor(str = "") {
-    super(str);
-    this.fee = new Fixed8(0);
-  }
-
-  // TODO
-  public toScriptParams(): ScriptIntent[] {
-    throw new Error("Not implemented");
-  }
   /**
    * Appends an Opcode, followed by args
    */
@@ -231,19 +220,6 @@ export class ScriptBuilder extends StringStream {
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }
-  }
-
-  public reset(): void {
-    super.reset();
-    this.str = "";
-    this.fee = new Fixed8(0);
-  }
-
-  public exportAsScriptResult(): ScriptResult {
-    return {
-      hex: this.str,
-      fee: this.fee
-    };
   }
 }
 
