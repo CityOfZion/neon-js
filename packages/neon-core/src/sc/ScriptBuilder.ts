@@ -1,23 +1,29 @@
 import BN from "bn.js";
 import {
   ensureHex,
-  int2hex,
   num2hexstring,
   reverseHex,
   str2hexstring,
-  StringStream
+  StringStream,
+  Fixed8
 } from "../u";
 import ContractParam, {
   ContractParamType,
   likeContractParam
 } from "./ContractParam";
 import OpCode from "./OpCode";
+import InteropServiceCode from "./InteropServiceCode";
+import { ASSET_ID } from "../consts";
 
 export interface ScriptIntent {
-  scriptHash: string;
+  scriptHash: string | "NEO" | "GAS" | "POLICY";
   operation?: string;
   args?: any[];
-  useTailCall?: boolean;
+}
+
+export interface ScriptResult {
+  hex: string;
+  fee: Fixed8;
 }
 
 function isValidValue(value: any): boolean {
@@ -32,63 +38,6 @@ function isValidValue(value: any): boolean {
 }
 
 /**
- * Retrieves a single AppCall from a ScriptBuilder object.
- * Returns ScriptIntents starting from the beginning of the script.
- * This is based off the pointer in the stream.
- * @param sb
- * @returns A single ScriptIntent if available.
- */
-function retrieveAppCall(sb: ScriptBuilder): ScriptIntent | null {
-  const output: ScriptIntent = {
-    scriptHash: "",
-    args: []
-  };
-
-  while (!sb.isEmpty()) {
-    const b = sb.read();
-    const n = parseInt(b, 16);
-    switch (true) {
-      case n === 0:
-        output.args!.unshift(0);
-        break;
-      case n < 75:
-        output.args!.unshift(sb.read(n));
-        break;
-      case n >= 81 && n <= 96:
-        output.args!.unshift(n - 80);
-        break;
-      case n === 193:
-        const len = output.args!.shift();
-        const cache = [];
-        for (let i = 0; i < len; i++) {
-          cache.unshift(output.args!.shift());
-        }
-        output.args!.unshift(cache);
-        break;
-      case n === 102:
-        sb.pter = sb.str.length;
-        break;
-      case n === 103:
-        output.scriptHash = reverseHex(sb.read(20));
-        output.useTailCall = false;
-        return output;
-      case n === 105:
-        output.scriptHash = reverseHex(sb.read(20));
-        output.useTailCall = true;
-        return output;
-      case n === 241:
-        break;
-      default:
-        throw new Error(`Encounter unknown byte: ${b}`);
-    }
-  }
-  if (output.scriptHash === "") {
-    return null;
-  }
-  return output;
-}
-
-/**
  * Builds a VM script in hexstring. Used for constructing smart contract method calls.
  * @extends StringStream
  */
@@ -97,55 +46,49 @@ export class ScriptBuilder extends StringStream {
    * Appends an Opcode, followed by args
    */
   public emit(op: OpCode, args?: string): this {
-    this.str += num2hexstring(op);
+    this.str += op;
     if (args) {
       this.str += args;
     }
     return this;
   }
 
-  /**
-   * Appends args, operation and scriptHash
-   * @param scriptHash Hexstring(BE)
-   * @param operation ASCII, defaults to null
-   * @param args any
-   * @param useTailCall Use TailCall instead of AppCall
-   * @return this
-   */
-  public emitAppCall(
-    scriptHash: string,
-    operation: string | null = null,
-    args?: any[] | string | number | boolean,
-    useTailCall: boolean = false
-  ): this {
-    this.emitPush(args);
-    if (operation) {
-      let hexOp = "";
-      for (let i = 0; i < operation.length; i++) {
-        hexOp += num2hexstring(operation.charCodeAt(i));
-      }
-      this.emitPush(hexOp);
+  private _emitContractOperation(operation: string): this {
+    let hexOp = "";
+    for (let i = 0; i < operation.length; i++) {
+      hexOp += num2hexstring(operation.charCodeAt(i));
     }
-    this._emitAppCall(scriptHash, useTailCall);
-    return this;
+    return this.emitPush(hexOp);
   }
 
-  /**
-   * Appends a SysCall
-   * @param api api of SysCall
-   * @return this
-   */
-  public emitSysCall(api: string): this {
-    if (!api) {
-      throw new Error("Invalid SysCall API");
+  public emitAppCall(
+    scriptHash: string,
+    operation?: string,
+    args?: any[]
+  ): this {
+    ensureHex(scriptHash);
+    if (scriptHash.length !== 40) {
+      throw new Error("ScriptHash should be 20 bytes long!");
     }
-    const apiBytes = str2hexstring(api);
-    const length = int2hex(apiBytes.length / 2);
-    if (length.length !== 2) {
-      throw new Error("Invalid length for SysCall API");
+    this.emitPush(args || []);
+    if (operation) {
+      this._emitContractOperation(operation);
     }
-    const out = length + apiBytes;
-    return this.emit(OpCode.SYSCALL, out);
+
+    if (scriptHash.toUpperCase() === "NEO") {
+      scriptHash = ASSET_ID.NEO;
+    } else if (scriptHash.toUpperCase() === "GAS") {
+      scriptHash = ASSET_ID.GAS;
+    } else if (scriptHash.toUpperCase() === "POLICY") {
+      scriptHash = ASSET_ID.POLICY;
+    }
+
+    this.emitPush(reverseHex(scriptHash));
+    return this.emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALL);
+  }
+
+  public emitSysCall(service: InteropServiceCode) {
+    return this.emit(OpCode.SYSCALL, service);
   }
 
   /**
@@ -178,39 +121,6 @@ export class ScriptBuilder extends StringStream {
   }
 
   /**
-   * Reverse engineer a script back to its params.
-   * A script may have multiple invocations so a list is always returned.
-   * @return A list of ScriptIntents[].
-   */
-  public toScriptParams(): ScriptIntent[] {
-    this.reset();
-    const scripts = [];
-    while (!this.isEmpty()) {
-      const a = retrieveAppCall(this);
-      if (a) {
-        scripts.push(a);
-      }
-    }
-    return scripts;
-  }
-
-  /**
-   * Appends a AppCall and scriptHash. Used to end off a script.
-   * @param scriptHash Hexstring(BE)
-   * @param useTailCall Defaults to false
-   */
-  private _emitAppCall(scriptHash: string, useTailCall: boolean = false): this {
-    ensureHex(scriptHash);
-    if (scriptHash.length !== 40) {
-      throw new Error("ScriptHash should be 20 bytes long!");
-    }
-    return this.emit(
-      useTailCall ? OpCode.TAILCALL : OpCode.APPCALL,
-      reverseHex(scriptHash)
-    );
-  }
-
-  /**
    * Private method to append an array
    * @private
    */
@@ -230,7 +140,8 @@ export class ScriptBuilder extends StringStream {
   private _emitString(hexstring: string): this {
     ensureHex(hexstring);
     const size = hexstring.length / 2;
-    if (size <= OpCode.PUSHBYTES75) {
+    if (size <= 75 /* PUSHBYTES75 */) {
+      // this is actually pushing opcode PUSHBYTES1-75, will generate fee.
       this.str += num2hexstring(size);
       this.str += hexstring;
     } else if (size < 0x100) {
@@ -266,7 +177,9 @@ export class ScriptBuilder extends StringStream {
       return this.emit(OpCode.PUSH0);
     }
     if (bn.gtn(0) && bn.lten(16)) {
-      return this.emit(OpCode.PUSH1 - 1 + bn.toNumber());
+      return this.emit(num2hexstring(
+        81 /* PUSH1 */ - 1 + bn.toNumber()
+      ) as OpCode);
     }
     const msbSet = bn.testn(bn.byteLength() * 8 - 1);
 
@@ -302,6 +215,8 @@ export class ScriptBuilder extends StringStream {
         return this._emitArray(param.value);
       case ContractParamType.Hash160:
         return this._emitString(reverseHex(param.value));
+      case ContractParamType.PublicKey:
+        return this._emitString(str2hexstring(param.value));
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }

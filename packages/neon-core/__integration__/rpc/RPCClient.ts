@@ -30,7 +30,7 @@ beforeAll(async () => {
   }
 });
 
-describe("RPC Methods", () => {
+describe.skip("RPC Methods", () => {
   test("getAccountState", async () => {
     const result = await client.getAccountState(address);
     expect(Object.keys(result)).toEqual(

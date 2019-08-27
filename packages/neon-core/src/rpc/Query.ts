@@ -3,7 +3,7 @@ import { DEFAULT_REQ } from "../consts";
 import { compareArray } from "../helper";
 import logger from "../logging";
 import { timeout } from "../settings";
-import { BaseTransaction } from "../tx/transaction/BaseTransaction";
+import { Transaction } from "../tx";
 
 const log = logger("rpc");
 
@@ -54,22 +54,11 @@ export async function queryRPC(
  */
 export class Query {
   /**
-   * @param addr address in Base58 encoding (starting with A)
+   * This Query returns the hash of the highest block.
    */
-  public static getAccountState(addr: string): Query {
+  public static getBestBlockHash(): Query {
     return new Query({
-      method: "getaccountstate",
-      params: [addr]
-    });
-  }
-
-  /**
-   * @param assetId
-   */
-  public static getAssetState(assetId: string): Query {
-    return new Query({
-      method: "getassetstate",
-      params: [assetId]
+      method: "getbestblockhash"
     });
   }
 
@@ -89,6 +78,15 @@ export class Query {
   }
 
   /**
+   * This Query returns the current block height.
+   */
+  public static getBlockCount(): Query {
+    return new Query({
+      method: "getblockcount"
+    });
+  }
+
+  /**
    * This Query returns the hash of a specific block.
    * @param {number} index height of block.
    */
@@ -100,20 +98,17 @@ export class Query {
   }
 
   /**
-   * This Query returns the hash of the highest block.
+   * This Query Returns the corresponding block header information according to the specified script hash.
+   * @param indexOrHash height or hash of block.
+   * @param verbose Optional, the default value of verbose is 0. When verbose is 0, the serialized information of the block is returned, represented by a hexadecimal string. If you need to get detailed information, you will need to use the SDK for deserialization. When verbose is 1, detailed information of the corresponding block in Json format string, is returned.
    */
-  public static getBestBlockHash(): Query {
+  public static getBlockHeader(
+    indexOrHash: string | number,
+    verbose: 0 | 1 = 0
+  ): Query {
     return new Query({
-      method: "getbestblockhash"
-    });
-  }
-
-  /**
-   * This Query returns the current block height.
-   */
-  public static getBlockCount(): Query {
-    return new Query({
-      method: "getblockcount"
+      method: "getblockheader",
+      params: [indexOrHash, verbose]
     });
   }
 
@@ -157,11 +152,15 @@ export class Query {
   }
 
   /**
-   * This Query returns the transaction hashes of the transactions waiting to be processed at the node.
+   * This Query returns the transaction hashes of the transactions confirmed or unconfirmed.
+   * @param shouldGetUnverified Optional. Default is 0.
+   * shouldGetUnverified = 0, get confirmed transaction hashes
+   * shouldGetUnverified = 1, get current block height and confirmed and unconfirmed tx hash
    */
-  public static getRawMemPool(): Query {
+  public static getRawMemPool(shouldGetUnverified: 0 | 1 = 0): Query {
     return new Query({
-      method: "getrawmempool"
+      method: "getrawmempool",
+      params: [shouldGetUnverified]
     });
   }
 
@@ -190,14 +189,13 @@ export class Query {
   }
 
   /**
-   * This Query returns the status of a TransactionOutput. If the output has been spent, this will return null.
-   * @param txid hash of transaction.
-   * @param index position of output in the vout array.
+   * This Query returns the block index in which the transaction is found.
+   * @param txid hash of the specific transaction.
    */
-  public static getTxOut(txid: string, index: number): Query {
+  public static getTransactionHeight(txid: string): Query {
     return new Query({
-      method: "gettxout",
-      params: [txid, index]
+      method: "gettransactionheight",
+      params: [txid]
     });
   }
 
@@ -217,18 +215,6 @@ export class Query {
   public static getVersion(): Query {
     return new Query({
       method: "getversion"
-    });
-  }
-
-  /**
-   * This Query invokes the VM to run the given contract with the given parameters.
-   * @param scriptHash hash of contract to test.
-   * @param params parameters to pass into the VM.
-   */
-  public static invoke(scriptHash: string, ...params: any[]): Query {
-    return new Query({
-      method: "invoke",
-      params: [scriptHash, params]
     });
   }
 
@@ -261,14 +247,22 @@ export class Query {
   }
 
   /**
+   * This Query returns a list of plugins loaded by the node.
+   */
+  public static listPlugins(): Query {
+    return new Query({
+      method: "listplugins",
+      params: []
+    });
+  }
+
+  /**
    * This Query transmits the specific transaction to the node.
    * @param transaction Transaction as a Transaction object or hexstring.
    */
-  public static sendRawTransaction(
-    transaction: BaseTransaction | string
-  ): Query {
+  public static sendRawTransaction(transaction: Transaction | string): Query {
     const serialized =
-      transaction instanceof BaseTransaction
+      transaction instanceof Transaction
         ? transaction.serialize(true)
         : transaction;
     return new Query({
@@ -295,39 +289,6 @@ export class Query {
   public static validateAddress(addr: string): Query {
     return new Query({
       method: "validateaddress",
-      params: [addr]
-    });
-  }
-
-  /**
-   * This Query Returns information of the unspent UTXO assets at the specified address.
-   * @param addr Address to get the UTXO
-   */
-  public static getUnspents(addr: string): Query {
-    return new Query({
-      method: "getunspents",
-      params: [addr]
-    });
-  }
-
-  /**
-   * This Query returns unclaimed GAS amount of the specified address.
-   * @param addr Address to get the unclaimed gas
-   */
-  public static getUnclaimed(addr: string): Query {
-    return new Query({
-      method: "getunclaimed",
-      params: [addr]
-    });
-  }
-
-  /**
-   * This Query returns claimable GAS information of the specified address.
-   * @param addr Address to get the claimable gas
-   */
-  public static getClaimable(addr: string): Query {
-    return new Query({
-      method: "getclaimable",
       params: [addr]
     });
   }
