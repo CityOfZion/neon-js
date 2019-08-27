@@ -2,14 +2,11 @@ import { AxiosRequestConfig } from "axios";
 import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from "../consts";
 import logger from "../logging";
 import { timeout } from "../settings";
-import { isAddress } from "../wallet";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
 import { Transaction } from "../tx";
 
 const log = logger("rpc");
-
-const versionRegex = /NEO:(\d+\.\d+\.\d+)/;
 
 export interface Validator {
   publickey: string;
@@ -110,25 +107,6 @@ export class RPCClient {
   }
 
   /**
-   * Gets the state of an account given an address.
-   */
-  public async getAccountState(addr: string): Promise<any> {
-    if (!isAddress(addr)) {
-      throw new Error(`Invalid address given: ${addr}`);
-    }
-    const response = await this.execute(Query.getAccountState(addr));
-    return response.result;
-  }
-
-  /**
-   * Gets the state of an asset given an id.
-   */
-  public async getAssetState(assetId: string): Promise<any> {
-    const response = await this.execute(Query.getAssetState(assetId));
-    return response.result;
-  }
-
-  /**
    * Gets the block at a given height or hash.
    */
   public async getBlock(
@@ -161,6 +139,26 @@ export class RPCClient {
   public async getBlockCount(): Promise<number> {
     const response = await this.execute(Query.getBlockCount());
     return response.result;
+  }
+
+  /**
+   * Get the corresponding block header information according to the specified script hash.
+   * @param indexOrHash height or hash of block.
+   * @param verbose Optional, the default value of verbose is 0. When verbose is 0, the serialized information of the block is returned, represented by a hexadecimal string. If you need to get detailed information, you will need to use the SDK for deserialization. When verbose is 1, detailed information of the corresponding block in Json format string, is returned.
+   * @returns verbose = 0, blocker header hex string; verbose = 1, block header info in json
+   */
+  public async getBlockHeader(
+    indexOrHash: number | string,
+    verbose: 0 | 1 = 0
+  ): Promise<string | object> {
+    const response = await this.execute(
+      Query.getBlockHeader(indexOrHash, verbose)
+    );
+    if (verbose === 0) {
+      return response.result as string;
+    } else {
+      return response.result as object;
+    }
   }
 
   /**
@@ -199,10 +197,17 @@ export class RPCClient {
   }
 
   /**
-   * Gets a list of all transaction hashes waiting to be processed.
+   * This Query returns the transaction hashes of the transactions confirmed or unconfirmed.
+   * @param shouldGetUnverified Optional. Default is 0.
+   * shouldGetUnverified = 0, get confirmed transaction hashes
+   * shouldGetUnverified = 1, get current block height and confirmed and unconfirmed tx hash
    */
-  public async getRawMemPool(): Promise<string[]> {
-    const response = await this.execute(Query.getRawMemPool());
+  public async getRawMemPool(
+    shouldGetUnverified: 0 | 1 = 0
+  ): Promise<string[]> {
+    const response = await this.execute(
+      Query.getRawMemPool(shouldGetUnverified)
+    );
     return response.result;
   }
 
@@ -226,10 +231,11 @@ export class RPCClient {
   }
 
   /**
-   * Gets the transaction output given a transaction id and index
+   * Gets the block index in which the transaction is found.
+   * @param txid hash of the specific transaction.
    */
-  public async getTxOut(txid: string, index: number): Promise<any> {
-    const response = await this.execute(Query.getTxOut(txid, index));
+  public async getTransactionHeight(txid: string): Promise<number> {
+    const response = await this.execute(Query.getTransactionHeight(txid));
     return response.result;
   }
 
@@ -267,13 +273,10 @@ export class RPCClient {
   }
 
   /**
-   * Calls a smart contract with the given parameters. This method is a local invoke, results are not reflected on the blockchain.
+   * This Query returns a list of plugins loaded by the node.
    */
-  public async invoke(
-    scriptHash: string,
-    ...params: any[]
-  ): Promise<RPCVMResponse> {
-    const response = await this.execute(Query.invoke(scriptHash, ...params));
+  public async listPlugins(): Promise<any> {
+    const response = await this.execute(Query.listPlugins());
     return response.result;
   }
 

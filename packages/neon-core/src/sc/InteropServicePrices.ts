@@ -2,6 +2,11 @@ import InteropServiceCode from "./InteropServiceCode";
 import NativeContractMethodPrices from "./NativeContractMethodPrices";
 import { Fixed8 } from "../u";
 
+export interface InteropServicePriceParam {
+  size: number;
+  method: string;
+}
+
 const GAS_PER_BYTE = 100000e-8;
 const fixedPrices = {
   [InteropServiceCode.SYSTEM_EXECUTIONENGINE_GETSCRIPTCONTAINER]: 250e-8,
@@ -83,37 +88,36 @@ function getCheckMultiSigPrice(size: number): number {
 
 export function getInteropServicePrice(
   service: InteropServiceCode,
-  size?: number,
-  method?: string
+  param?: Partial<InteropServicePriceParam>
 ): number {
   switch (service) {
     case InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG:
-      if (size === undefined) {
+      if (!param || !param.size) {
         throw new Error(
           `size param is necessary for InteropServiceCode ${service}`
         );
       }
-      return getCheckMultiSigPrice(size);
+      return getCheckMultiSigPrice(param.size);
     case InteropServiceCode.SYSTEM_STORAGE_PUT:
     case InteropServiceCode.SYSTEM_STORAGE_PUTEX:
     case InteropServiceCode.NEO_CONTRACT_CREATE:
     case InteropServiceCode.NEO_CONTRACT_UPDATE:
-      if (size === undefined) {
+      if (!param || !param.size) {
         throw new Error(
           `size param is necessary for InteropServiceCode ${service}`
         );
       }
-      return getStoragePrice(size);
+      return getStoragePrice(param.size);
     case InteropServiceCode.NEO_NATIVE_TOKENS_NEO:
     case InteropServiceCode.NEO_NATIVE_TOKENS_GAS:
     case InteropServiceCode.NEO_NATIVE_POLICY:
-      if (method === undefined) {
+      if (!param || !param.method) {
         throw new Error(
           `method param is necessary for InteropServiceCode ${service}`
         );
       }
       return (
-        NativeContractMethodPrices.get(method) || new Fixed8(0)
+        NativeContractMethodPrices.get(param.method) || new Fixed8(0)
       ).toNumber();
     default:
       return fixedPrices[service];

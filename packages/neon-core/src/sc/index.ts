@@ -1,6 +1,7 @@
 export * from "./ContractParam";
 export * from "./core";
 export * from "./ScriptBuilder";
+export * from "./ScriptParser";
 export * from "./OpCode";
 export * from "./OpCodePrices";
 export * from "./InteropServiceCode";

@@ -49,18 +49,14 @@ describe("createScript", () => {
 
   test("multiple ScriptIntents", () => {
     const expected = jest.fn();
-    const mockEmitAppCall = jest.fn();
+    const mockEmitCall = jest.fn();
     ScriptBuilder.mockImplementationOnce(() => {
       return {
-        str: "",
-        fee: new Fixed8(),
-        emitAppCall: mockEmitAppCall,
-        exportAsScriptResult: () => {
-          return {
-            hex: expected,
-            fee: new Fixed8(0)
-          };
-        }
+        str: expected,
+        emitAppCall: mockEmitCall,
+        emitGasCall: mockEmitCall,
+        emitNeoCall: mockEmitCall,
+        emitPolicyCall: mockEmitCall
       };
     });
     const intents = [
@@ -71,8 +67,8 @@ describe("createScript", () => {
       testIntents[5].scriptIntent
     ];
     const result = createScript(...intents);
-    expect(result.hex).toBe(expected);
-    expect(mockEmitAppCall.mock.calls).toEqual(
+    expect(result).toBe(expected);
+    expect(mockEmitCall.mock.calls).toEqual(
       intents.map(i => [i.scriptHash, i.operation, i.args])
     );
   });

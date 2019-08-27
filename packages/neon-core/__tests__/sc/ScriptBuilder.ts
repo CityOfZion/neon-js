@@ -10,11 +10,9 @@ describe("constructor", () => {
     expect(result instanceof ScriptBuilder).toBeTruthy();
   });
 
-  test("init & reset", () => {
+  test("init", () => {
     const result = new ScriptBuilder("Init");
     expect(result.str).toBe("Init");
-    result.reset();
-    expect(result.str).toBe("");
   });
 });
 

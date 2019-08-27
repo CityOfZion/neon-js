@@ -144,6 +144,18 @@ describe("Static constructors", () => {
       expect(result.value).toEqual([c1, c2]);
     });
   });
+
+  test("publicKey", () => {
+    const result = ContractParam.publicKey(
+      "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee"
+    );
+
+    expect(result instanceof ContractParam).toBeTruthy();
+    expect(result.type).toBe(ContractParamType.PublicKey);
+    expect(result.value).toBe(
+      "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee"
+    );
+  });
 });
 
 describe("likeContractParam", () => {

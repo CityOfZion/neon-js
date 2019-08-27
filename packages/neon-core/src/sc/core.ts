@@ -1,7 +1,6 @@
-import { str2hexstring, Fixed8 } from "../u";
+import { str2hexstring } from "../u";
 import ScriptBuilder, { ScriptIntent, ScriptResult } from "./ScriptBuilder";
 import InteropServiceCode from "./InteropServiceCode";
-import { NATIVE_CONTRACTS_ID } from "../consts";
 
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
@@ -23,24 +22,7 @@ export function createScript(
       scriptIntent
     );
 
-    if (
-      scriptHash === NATIVE_CONTRACTS_ID.NEO ||
-      scriptHash.toUpperCase() === "NEO"
-    ) {
-      sb.emitNeoCall(operation, args);
-    } else if (
-      scriptHash === NATIVE_CONTRACTS_ID.GAS ||
-      scriptHash.toUpperCase() === "GAS"
-    ) {
-      sb.emitGasCall(operation, args);
-    } else if (
-      scriptHash === NATIVE_CONTRACTS_ID.POLICY ||
-      scriptHash.toUpperCase() === "POLICY"
-    ) {
-      sb.emitPolicyCall(operation, args);
-    } else {
-      sb.emitAppCall(scriptHash, operation, args);
-    }
+    sb.emitAppCall(scriptHash, operation, args);
   }
   return sb.exportAsScriptResult();
 }
@@ -61,6 +43,7 @@ export interface DeployParams {
  * Generates script for deploying contract
  */
 // TODO: not sure if this has to be modifed or not
+// TODO: need to add a class: Manifest
 export function generateDeployScript(params: DeployParams) {
   const sb = new ScriptBuilder();
   sb.emitPush(str2hexstring(params.description))
@@ -73,10 +56,7 @@ export function generateDeployScript(params: DeployParams) {
     .emitPush(params.parameterList)
     .emitPush(params.manifest)
     .emitPush(params.script)
-    .emitSysCall(
-      InteropServiceCode.NEO_CONTRACT_CREATE,
-      (params.manifest.length + params.script.length) / 2
-    );
+    .emitSysCall(InteropServiceCode.NEO_CONTRACT_CREATE);
   return sb;
 }
 
