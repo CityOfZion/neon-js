@@ -101,6 +101,7 @@ describe("encrypt", () => {
     const wallet = new Wallet();
     wallet.addAccount(new Account(PRIVATE_KEY1));
     wallet.addAccount(new Account(PRIVATE_KEY2));
+    expect.assertions(2);
     return wallet.encrypt(0, "passw0rd").then(res => {
       expect(res).toBeTruthy();
       expect(wallet.accounts[0].encrypted).toBe(
@@ -112,6 +113,7 @@ describe("encrypt", () => {
     const wallet = new Wallet();
     wallet.addAccount(new Account(PRIVATE_KEY1));
     wallet.addAccount(new Account(PRIVATE_KEY2));
+    expect.assertions(1);
     return wallet.encrypt(-1, "passw0rd").catch(err => {
       expect(err).toBeDefined();
     });
@@ -123,6 +125,7 @@ describe("encryptAll", () => {
     const wallet = new Wallet();
     wallet.addAccount(new Account(PRIVATE_KEY1));
     wallet.addAccount(new Account(PRIVATE_KEY2));
+    expect.assertions(2);
     return wallet.encryptAll("passw0rd").then(res => {
       expect(res).toStrictEqual([true, true]);
       expect(wallet.accounts[0].encrypted).toBe(
@@ -135,6 +138,7 @@ describe("encryptAll", () => {
 describe("decrypt", () => {
   test("success", () => {
     const wallet = new Wallet(WALLET_JSON);
+    expect.assertions(2);
     return wallet.decrypt(0, "passw0rd").then(res => {
       expect(res).toBeTruthy();
       expect(wallet.accounts[0].privateKey).toBe(PRIVATE_KEY1);
@@ -142,6 +146,7 @@ describe("decrypt", () => {
   });
   test("failure", () => {
     const wallet = new Wallet(WALLET_JSON);
+    expect.assertions(1);
     return wallet.decrypt(1, "passw0rd_failure").catch(err => {
       expect(err).toBeDefined();
     });
@@ -151,6 +156,7 @@ describe("decrypt", () => {
 describe("decryptAll", () => {
   test("success", () => {
     const wallet = new Wallet(WALLET_JSON);
+    expect.assertions(2);
     return wallet.decryptAll("passw0rd").then(res => {
       expect(res).toStrictEqual([true, true]);
       expect(wallet.accounts[0].privateKey).toBe(PRIVATE_KEY1);
@@ -159,7 +165,8 @@ describe("decryptAll", () => {
 
   test("failure", () => {
     const wallet = new Wallet(WALLET_JSON);
-    return wallet.decryptAll("passw0rd_failre").catch(err => {
+    expect.assertions(1);
+    return wallet.decryptAll("passw0rd_failure").catch(err => {
       expect(err).toBeDefined();
     });
   });
