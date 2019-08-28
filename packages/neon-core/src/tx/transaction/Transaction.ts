@@ -237,7 +237,7 @@ export class Transaction {
 
   /**
    * Adds some script intents to the Transaction
-   * System Fee will be increased automatically
+   * System Fee will be increased automatically (currently deprecated)
    * However system Fee calculated in this method is insufficient if calling non-native contracts.
    * If the transaction is invoking contracts other than native contracts, invokeScript rpc request can test the systemFee.
    * @param scriptIntents sciprt Intents to add to the transaction
@@ -245,11 +245,11 @@ export class Transaction {
   public addIntents(...scriptIntents: ScriptIntent[]): this {
     let increasedSystemFee = new Fixed8(0);
     this.script = scriptIntents.reduce((accumulatedScript, intent) => {
-      const { hex, fee } = createScript(intent);
-      this._pre_systemFee = this._pre_systemFee.plus(fee);
-      increasedSystemFee = increasedSystemFee.plus(fee);
+      const script = createScript(intent);
+      // this._pre_systemFee = this._pre_systemFee.plus(fee);
+      // increasedSystemFee = increasedSystemFee.plus(fee);
       this.intents.push(intent);
-      return accumulatedScript + hex;
+      return accumulatedScript + script;
     }, this.script);
     log.info(
       `Increased systemFee: ${increasedSystemFee.toNumber()}, totally ${this.systemFee.toNumber()}`

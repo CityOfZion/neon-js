@@ -47,8 +47,8 @@ function parseTxHistory(
       .filter(o => o.address_hash === address)
       .map(i => ({ asset: i.asset, value: i.value }));
     const change = {
-      NEO: getChange(vin, vout, CONST.NATIVE_CONTRACTS_ID.NEO),
-      GAS: getChange(vin, vout, CONST.NATIVE_CONTRACTS_ID.GAS)
+      NEO: getChange(vin, vout, CONST.ASSET_ID.NEO),
+      GAS: getChange(vin, vout, CONST.ASSET_ID.GAS)
     };
     return {
       txid: tx.txid,

@@ -10,9 +10,9 @@ export function extractAsset(params: {
   }
   switch (params.asset) {
     case "neo":
-      return CONST.NATIVE_CONTRACTS_ID.NEO;
+      return CONST.ASSET_ID.NEO;
     case "gas":
-      return CONST.NATIVE_CONTRACTS_ID.GAS;
+      return CONST.ASSET_ID.GAS;
     default:
       return params.asset;
   }

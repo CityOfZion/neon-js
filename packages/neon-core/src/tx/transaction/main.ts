@@ -7,12 +7,12 @@ import {
 } from "../components";
 import { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
-import TxAttrUsage from "../txAttrUsage";
+import TxAttrUsage from "../components/txAttrUsage";
 import {
   OpCodePrices,
   OpCode,
   InteropServiceCode,
-  getInteropSericePrice,
+  getInteropServicePrice,
   ScriptBuilder
 } from "../../sc";
 
@@ -143,7 +143,7 @@ export function formatSender(sender: string | undefined): string {
   }
 }
 
-export function getVarSize(value: number): number {
+export function getCompressedSize(value: number): number {
   if (value < 0xfd) {
     return 1;
   } else if (value < 0xffff) {
@@ -157,7 +157,7 @@ export function getNetworkFeeForSig(): number {
   return (
     OpCodePrices[OpCode.PUSHBYTES64] +
     OpCodePrices[OpCode.PUSHBYTES33] +
-    getInteropSericePrice(InteropServiceCode.NEO_CRYPTO_CHECKSIG)
+    getInteropServicePrice(InteropServiceCode.NEO_CRYPTO_CHECKSIG)
   );
 }
 
@@ -175,10 +175,9 @@ export function getNetworkFeeForMultiSig(
     OpCodePrices[sb.emitPush(signingThreshold).str.slice(0, 2) as OpCode] +
     OpCodePrices[OpCode.PUSHBYTES33] * pubkeysNum +
     OpCodePrices[sb.emitPush(pubkeysNum).str.slice(0, 2) as OpCode] +
-    getInteropSericePrice(
-      InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG,
-      pubkeysNum
-    )
+    getInteropServicePrice(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG, {
+      size: pubkeysNum
+    })
   );
 }
 
@@ -187,5 +186,5 @@ export function getSizeForMultiSig(
   signingThreshold: number
 ): number {
   const size_env = 65 * signingThreshold;
-  return getVarSize(size_env) + size_env + signer.length / 2;
+  return getCompressedSize(size_env) + size_env + signer.length / 2;
 }

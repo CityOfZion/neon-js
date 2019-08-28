@@ -21,7 +21,7 @@ export function constructMultiSigVerificationScript(
     ss.emitPush(k);
   });
   ss.emitPush(keys.length);
-  ss.emitSysCall(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG, keys.length);
+  ss.emitSysCall(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG);
   return ss.str;
 }
 
