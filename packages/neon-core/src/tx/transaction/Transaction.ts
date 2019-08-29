@@ -63,9 +63,12 @@ export interface TransactionLike {
 }
 
 export class Transaction {
+  /**
+   * Only version=0 is valid for NEO3
+   */
   public version: number;
   /**
-   * A random number to avoid hash collision
+   * A random 4-byte number to avoid hash collision, range [0, 2**32)
    */
   public nonce: number;
   /**
@@ -76,9 +79,11 @@ export class Transaction {
   /**
    * Distributed to NEO holders
    * systemFee is calculated by summarizing prices of all the opcodes and interopServices used while executing transaction script in vm.
-   * ```ts
+   *
+   * @example
    * const systemFee = SUM(OpCodePrices + InteropServiceCodePrices)
-   * ```
+   *
+   * @description
    * The most reliable way to calculate minimum systemFee is to use invokeScript method to test, as it's hard to know what the contract will do.
    * If transaction only invokes native contracts, systemFee can be calculated offline.
    */
@@ -87,10 +92,13 @@ export class Transaction {
   /**
    * Distributed to consensus nodes
    * networkFee is calculated according to transaction size and verificationScript cost in witnesses.
-   * ```ts
+   *
+   * @example
    * const networkFee = FeePerByte * txSize + SUM(verificationScriptCost)
-   * ```
-   * The calculation of `verificationScriptCost` is same as systemFee
+   *
+   * @description
+   * First part of networkFee is counted by transaction size by unit price `FeePerByte`
+   * `verificationScriptCost` is calculated by summing up opcodes and interopService prices, like `systemFee`; contract verificationScript may need to be run in the VM to get the exact price.
    */
   public networkFee: Fixed8;
 
@@ -109,7 +117,7 @@ export class Transaction {
   public script: string;
 
   /**
-   * `MAX_VALIDUNTILBLOCK_INCREMENT` in neo core
+   * @description Maximum duration in blocks that a transaction can stay valid in the mempol
    */
   public static MAX_TRANSACTION_LIFESPAN = 2102400;
 
@@ -129,7 +137,6 @@ export class Transaction {
     this.version = version || TX_VERSION;
     this.nonce = nonce || parseInt(ab2hexstring(generateRandomArray(4)), 16);
     this.sender = formatSender(sender);
-    // TODO: The default should be snapshot.height + MAX_VALIDUNTILBLOCK_INCREMENT, but it needs request to get block height, thus this is a temporary value
     this.validUntilBlock = validUntilBlock || 0;
     this.attributes = Array.isArray(attributes)
       ? attributes.map(a => new TransactionAttribute(a))
@@ -317,6 +324,7 @@ export class Transaction {
         size += getSizeForMultiSig(signer, m);
         this.networkFee = this.networkFee.add(getNetworkFeeForMultiSig(m, n));
       }
+      // TODO: consider about contract verfication script
     });
     this.networkFee = this.networkFee.add(
       new Fixed8(size).multipliedBy(POLICY_FEE_PERBYTE)
