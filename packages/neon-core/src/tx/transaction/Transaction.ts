@@ -1,9 +1,4 @@
-import {
-  TX_VERSION,
-  POLICY_FEE_PERBYTE,
-  SYSTEM_FEE_FREE,
-  SYSTEM_FEE_FACTOR
-} from "../../consts";
+import { TX_VERSION } from "../../consts";
 import logger from "../../logging";
 import {
   hash256,
@@ -16,12 +11,7 @@ import {
   generateRandomArray,
   ab2hexstring
 } from "../../u";
-import {
-  Account,
-  sign,
-  getPublicKeysFromVerificationScript,
-  getSigningThresholdFromVerificationScript
-} from "../../wallet";
+import { Account, sign } from "../../wallet";
 import {
   TransactionAttribute,
   TransactionAttributeLike,
@@ -39,12 +29,7 @@ import {
   deserializeNonce,
   deserializeSender,
   deserializeValidUntilBlock,
-  getCosignersFromAttributes,
-  getCompressedSize,
-  getNetworkFeeForSig,
-  getNetworkFeeForMultiSig,
-  getSizeForSig,
-  getSizeForMultiSig
+  getCosignersFromAttributes
 } from "./main";
 import { ScriptIntent, createScript } from "../../sc";
 const log = logger("tx");
@@ -253,6 +238,7 @@ export class Transaction {
     let increasedSystemFee = new Fixed8(0);
     this.script = scriptIntents.reduce((accumulatedScript, intent) => {
       const script = createScript(intent);
+      // TODO: add fee calculation here.
       // this._pre_systemFee = this._pre_systemFee.plus(fee);
       // increasedSystemFee = increasedSystemFee.plus(fee);
       this.intents.push(intent);
@@ -262,73 +248,6 @@ export class Transaction {
       `Increased systemFee: ${increasedSystemFee.toNumber()}, totally ${this.systemFee.toNumber()}`
     );
     return this;
-  }
-
-  /**
-   * If transaction script is constructed only by method `addIntent`, systemFee will be calcuated.
-   * If all intents are about native contract invocation, this system fee is accurate.
-   * In this case, you can use this method to get minimum system fee.
-   */
-  public useCalculatedSystemFee(): void {
-    this.systemFee = this._pre_systemFee;
-  }
-
-  /**
-   * This function regulate system fee in 2 processes:
-   * 1. minus the free system fee amount
-   * 2. systemFee must be multiples of `SYSTEM_FEE_FACTOR`; if not, ceil it.
-   */
-  public regulateSystemFee(): void {
-    let systemFee = this.systemFee.minus(SYSTEM_FEE_FREE);
-    systemFee = systemFee.comparedTo(0) >= 0 ? systemFee : new Fixed8(0);
-    if (systemFee.comparedTo(0) > 0) {
-      const remainder = systemFee.mod(SYSTEM_FEE_FACTOR);
-      if (remainder.comparedTo(0) > 0) {
-        this.systemFee = systemFee.plus(
-          new Fixed8(SYSTEM_FEE_FACTOR).minus(remainder)
-        );
-      } else {
-        this.systemFee = systemFee;
-      }
-    } else {
-      this.systemFee = new Fixed8(0);
-    }
-  }
-
-  /**
-   * calculate networkFee and assign it to tx networkFee prop
-   * networkFee = verificationCost + txSize * POLICY_FEE_PERBYTE
-   */
-  public calculateNetworkFee(): void {
-    this.networkFee = new Fixed8(0);
-
-    const signers = this.getScriptHashesForVerifying();
-
-    let size =
-      this.headerSize +
-      serializeArrayOf(this.attributes).length / 2 +
-      this.script.length / 2 +
-      getCompressedSize(signers.length);
-
-    signers.forEach(signer => {
-      const account = new Account(signer);
-      if (!account.isMultiSig) {
-        size += getSizeForSig(signer);
-        this.networkFee = this.networkFee.add(getNetworkFeeForSig());
-      } else {
-        const n = getPublicKeysFromVerificationScript(account.contract.script)
-          .length;
-        const m = getSigningThresholdFromVerificationScript(
-          account.contract.script
-        );
-        size += getSizeForMultiSig(signer, m);
-        this.networkFee = this.networkFee.add(getNetworkFeeForMultiSig(m, n));
-      }
-      // TODO: consider about contract verfication script
-    });
-    this.networkFee = this.networkFee.add(
-      new Fixed8(size).multipliedBy(POLICY_FEE_PERBYTE)
-    );
   }
 
   /**
