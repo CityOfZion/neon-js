@@ -1,7 +1,6 @@
 import ScriptBuilder, { ScriptIntent } from "./ScriptBuilder";
 import InteropServiceCode from "./InteropServiceCode";
-import { ContractManifest } from "./manifest/ContractManifest";
-
+import { ContractManifest } from "./manifest";
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
  */

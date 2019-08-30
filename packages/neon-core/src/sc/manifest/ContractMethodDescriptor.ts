@@ -22,18 +22,20 @@ export class ContractMethodDescriptor extends ContractEventDescriptor {
     return Object.assign({}, super.export(), { returnType: this.returnType });
   }
 
-  public static readonly DEFAULT_ENTRY_POINT = new ContractMethodDescriptor({
-    name: "Main",
-    parameters: [
-      new ContractParameterDefinition({
-        name: "operation",
-        type: ContractParamType.String
-      }),
-      new ContractParameterDefinition({
-        name: "args",
-        type: ContractParamType.Array
-      })
-    ],
-    returnType: ContractParamType.Void
-  });
+  public static readonly DEFAULT_ENTRY_POINT = function(): ContractMethodDescriptor {
+    return new ContractMethodDescriptor({
+      name: "Main",
+      parameters: [
+        new ContractParameterDefinition({
+          name: "operation",
+          type: ContractParamType.String
+        }),
+        new ContractParameterDefinition({
+          name: "args",
+          type: ContractParamType.Array
+        })
+      ],
+      returnType: ContractParamType.Void
+    });
+  };
 }

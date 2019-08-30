@@ -1,7 +1,6 @@
 import ContractParam from "../../src/sc/ContractParam";
 import OpCode from "../../src/sc/OpCode";
 import ScriptBuilder from "../../src/sc/ScriptBuilder";
-import { OpCodePrices } from "../../src/sc";
 
 describe("constructor", () => {
   test("empty", () => {

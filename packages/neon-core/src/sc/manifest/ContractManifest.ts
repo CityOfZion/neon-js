@@ -54,7 +54,7 @@ export class ContractManifest {
     manifest.hash = hash;
     manifest.abi = new ContractAbi({
       hash,
-      entryPoint: ContractMethodDescriptor.DEFAULT_ENTRY_POINT,
+      entryPoint: ContractMethodDescriptor.DEFAULT_ENTRY_POINT(),
       events: [new ContractEventDescriptor({})],
       methods: [new ContractMethodDescriptor({})]
     });
