@@ -20,8 +20,7 @@
       "script":
         "080100000000000000143775292229eccdf904f16fff8e83e7cffdc0f0ce1435b20010db73bf86371075ddfba4e6596f1ff35d53c1087472616e736665726754a64cac1b1073e662933ef3e30b007cd98d67d7",
       "systemFee": 1,
-      "networkFee": 1,
-      "intents": []
+      "networkFee": 1
     }
   },
   "2": {
@@ -44,8 +43,7 @@
           "verificationScript":
             "2103b0602f36a556b70e6c205398e58ce85193c769a250552fd1ee58b17b1a173712ac"
         }
-      ],
-      "intents": []
+      ]
     }
   }
 }

@@ -31,7 +31,6 @@ import {
   deserializeValidUntilBlock,
   getCosignersFromAttributes
 } from "./main";
-import { ScriptIntent, createScript } from "../../sc";
 const log = logger("tx");
 
 export interface TransactionLike {
@@ -42,7 +41,6 @@ export interface TransactionLike {
   networkFee: Fixed8 | number;
   validUntilBlock: number;
   attributes: TransactionAttributeLike[];
-  intents: ScriptIntent[];
   scripts: WitnessLike[];
   script: string;
 }
@@ -88,16 +86,10 @@ export class Transaction {
   public networkFee: Fixed8;
 
   /**
-   * System Fee calculated while adding intents
-   */
-  private _pre_systemFee: Fixed8;
-
-  /**
    * Current transaction will be invalid after block of height validUntilBlock
    */
   public validUntilBlock: number;
   public attributes: TransactionAttribute[];
-  public intents: ScriptIntent[];
   public scripts: Witness[];
   public script: string;
 
@@ -115,7 +107,6 @@ export class Transaction {
       networkFee,
       validUntilBlock,
       attributes,
-      intents,
       scripts,
       script
     } = tx;
@@ -134,14 +125,7 @@ export class Transaction {
     );
     this.systemFee = systemFee ? new Fixed8(systemFee) : new Fixed8(0);
     this.networkFee = networkFee ? new Fixed8(networkFee) : new Fixed8(0);
-    this._pre_systemFee = new Fixed8(0);
     this.script = script || "";
-    if (intents !== undefined) {
-      this.intents = intents;
-      this.addIntents(...intents);
-    } else {
-      this.intents = [];
-    }
   }
 
   public get [Symbol.toStringTag](): string {
@@ -228,29 +212,6 @@ export class Transaction {
   }
 
   /**
-   * Adds some script intents to the Transaction
-   * System Fee will be increased automatically (currently deprecated)
-   * However system Fee calculated in this method is insufficient if calling non-native contracts.
-   * If the transaction is invoking contracts other than native contracts, invokeScript rpc request can test the systemFee.
-   * @param scriptIntents sciprt Intents to add to the transaction
-   */
-  public addIntents(...scriptIntents: ScriptIntent[]): this {
-    let increasedSystemFee = new Fixed8(0);
-    this.script = scriptIntents.reduce((accumulatedScript, intent) => {
-      const script = createScript(intent);
-      // TODO: add fee calculation here.
-      // this._pre_systemFee = this._pre_systemFee.plus(fee);
-      // increasedSystemFee = increasedSystemFee.plus(fee);
-      this.intents.push(intent);
-      return accumulatedScript + script;
-    }, this.script);
-    log.info(
-      `Increased systemFee: ${increasedSystemFee.toNumber()}, totally ${this.systemFee.toNumber()}`
-    );
-    return this;
-  }
-
-  /**
    * Serialize the transaction and return it as a hexstring.
    * @param {boolean} signed  - Whether to serialize the signatures. Signing requires it to be serialized without the signatures.
    * @return {string} Hexstring.
@@ -307,7 +268,6 @@ export class Transaction {
       networkFee: this.networkFee.toNumber(),
       validUntilBlock: this.validUntilBlock,
       attributes: this.attributes.map(a => a.export()),
-      intents: this.intents,
       scripts: this.scripts.map(a => a.export()),
       script: this.script
     };

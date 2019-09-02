@@ -1,7 +1,6 @@
 import { Transaction, TransactionLike, Witness } from "../../../src/tx";
 import samples from "./Transaction.json";
 import { Account } from "../../../src/wallet";
-import { Fixed8 } from "../../../src/u";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -50,18 +49,6 @@ describe("constructor", () => {
     expect(result.script).toBe(testObject.script);
     expect(result.scripts[0]).not.toBe(testObject.scripts[0]);
   });
-
-  test("Intents", () => {
-    const testObject = {
-      intents: [{ scriptHash: "NEO", operation: "transfer", args: [10] }],
-      script: "00"
-    } as Partial<TransactionLike>;
-
-    const result = new Transaction(testObject);
-    expect(result.script).toBe(
-      "005a51c1087472616e736665721415caa04214310670d5e5a398e147e0dbed98cf4368627d5b52"
-    );
-  });
 });
 
 describe("getters", () => {
@@ -107,8 +94,7 @@ describe("export", () => {
     validUntilBlock: 1000,
     attributes: [],
     scripts: [{ invocationScript: "ab", verificationScript: "" }],
-    script: "00",
-    intents: []
+    script: "00"
   } as Partial<TransactionLike>;
 
   const transaction = new Transaction(expected);
@@ -206,15 +192,6 @@ describe("Add Methods", () => {
       "4073b9a44d007966c19e3010202aeed6dd9a158ab2b49d42eb14a3ab43509112674117a3e4cb0c9eadb45e93db621a3d0d6aa1a66086dc55b08a8e28de740e7dd7"
     );
   });
-
-  test("addIntents", () => {
-    const tx1 = createTxforTestAddMethods();
-    tx1.addIntents({ scriptHash: "NEO", operation: "transfer", args: [10] });
-    expect(tx1.intents.length).toBe(1);
-    expect(tx1.script).toBe(
-      "005a51c1087472616e736665721415caa04214310670d5e5a398e147e0dbed98cf4368627d5b52"
-    );
-  });
 });
 
 // TODO
@@ -228,31 +205,9 @@ describe.skip("Fee Related", () => {
       networkFee: 0,
       validUntilBlock: 1000,
       attributes: [],
-      scripts: [],
-      intents: [{ scriptHash: "NEO", operation: "transfer", args: [10] }]
+      scripts: []
     });
   }
-
-  test("calculateNetworkFee", () => {
-    const tx1 = createTxforTestFeeMethods();
-    tx1.calculateNetworkFee();
-    expect(tx1.networkFee.toNumber()).toBe(0.0117124);
-  });
-
-  // TODO
-  test.skip("useCalculatedSystemFee", () => {
-    const tx1 = createTxforTestFeeMethods();
-    tx1.useCalculatedSystemFee();
-    expect(tx1.systemFee.toNumber()).toBe(0.0800718);
-  });
-
-  test("regulateSystemFee", () => {
-    const tx1 = createTxforTestFeeMethods();
-    // tx1.useCalculatedSystemFee();
-    tx1.systemFee = new Fixed8(0.23);
-    tx1.regulateSystemFee();
-    expect(tx1.systemFee.toNumber()).toBe(1);
-  });
 });
 
 const dataSet = Object.keys(samples).map(k => {
