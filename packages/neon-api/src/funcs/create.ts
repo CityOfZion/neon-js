@@ -7,7 +7,7 @@ export async function createTx(
   config.tx = new tx.Transaction(
     Object.assign(
       {
-        intents: config.intents || []
+        script: config.script
       },
       config.override
     )
