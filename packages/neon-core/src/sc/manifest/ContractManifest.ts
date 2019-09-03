@@ -31,14 +31,14 @@ export class ContractManifest {
   public constructor(obj: Partial<ContractManifestLike>) {
     const {
       groups = [],
-      features: { payable, storage } = { payable: false, storage: false },
+      features = {},
       abi = {},
       permissions = [],
       trusts = "*",
       safeMethods = "*"
     } = obj;
     this.groups = groups.map(group => new ContractGroup(group));
-    this.features = new ContractFeatures(storage, payable);
+    this.features = new ContractFeatures(features);
     this.abi = new ContractAbi(abi);
     this.permissions = permissions.map(
       permission => new ContractPermission(permission)
@@ -46,23 +46,6 @@ export class ContractManifest {
     this.trusts = WildCardContainer.fromSerialized(trusts);
     this.safeMethods = WildCardContainer.fromSerialized(safeMethods);
     this.hash = this.abi.hash;
-  }
-
-  public static createDefault(hash: string): ContractManifest {
-    const manifest = new ContractManifest({});
-    manifest.permissions = [ContractPermission.defaultPermission];
-    manifest.hash = hash;
-    manifest.abi = new ContractAbi({
-      hash,
-      entryPoint: ContractMethodDescriptor.DEFAULT_ENTRY_POINT(),
-      events: [new ContractEventDescriptor({})],
-      methods: [new ContractMethodDescriptor({})]
-    });
-    manifest.features = new ContractFeatures();
-    manifest.groups = [new ContractGroup({})];
-    manifest.safeMethods = WildCardContainer.from();
-    manifest.trusts = WildCardContainer.from();
-    return manifest;
   }
 
   public canCall(manifest: ContractManifest, method: string): boolean {

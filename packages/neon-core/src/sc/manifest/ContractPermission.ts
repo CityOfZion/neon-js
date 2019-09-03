@@ -16,8 +16,6 @@ export class ContractPermission {
     this.methods = WildCardContainer.fromSerialized(methods);
   }
 
-  public static readonly defaultPermission = new ContractPermission({});
-
   public export(): ContractPermissionLike {
     return {
       contract: this.contract.export(),

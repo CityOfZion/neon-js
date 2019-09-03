@@ -7,8 +7,9 @@ export class ContractFeatures {
   public hasStorage: boolean;
   public payable: boolean;
 
-  public constructor(hasStorage?: boolean, payable?: boolean) {
-    this.hasStorage = !!hasStorage;
+  public constructor(obj: Partial<ContractFeaturesLike>) {
+    const { storage = false, payable = false } = obj;
+    this.hasStorage = !!storage;
     this.payable = !!payable;
   }
 
