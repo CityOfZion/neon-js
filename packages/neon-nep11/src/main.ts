@@ -1,4 +1,4 @@
-import { logging, wallet } from "@cityofzion/neon-core";
+import { logging, wallet, u } from "@cityofzion/neon-core";
 const path = require('path');
 const { spawn } = require('child_process');
 
@@ -19,9 +19,10 @@ export async function buildIteratorScript(
 ): Promise<string> {
   return new Promise((resolve) => {
     const { scriptHash } = account;
+    const reversed = u.reverseHex(scriptHash);
 
     const file = path.join(__dirname, '../build-script.py');
-    const pythonProcess = spawn('python3', [file, contractHash, scriptHash, page, maxResults]);
+    const pythonProcess = spawn('python3', [file, contractHash, reversed, page, maxResults]);
     pythonProcess.stdout.on('data', (data: any) => {
       let script = data.toString('utf8');
       script = script.replace(/^\s+|\s+$/g, '');
