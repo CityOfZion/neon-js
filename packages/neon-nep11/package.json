@@ -1,0 +1,46 @@
+{
+  "name": "@cityofzion/neon-nep11",
+  "description": "Neon-NEP11 Module",
+  "version": "4.7.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CityOfZion/neon-js.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "neo",
+    "antshares",
+    "javascript",
+    "libraries"
+  ],
+  "author": "Wyatt Mufson <wyatt@ryu.games> (https://github.com/wyattmufson)",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "dist:prod": "tsc -m commonjs --outDir dist",
+    "clean": "rimraf ./lib ./dist tsconfig.tsbuildinfo",
+    "prepublishOnly": "yarn clean && yarn build && yarn dist:prod",
+    "lint": "eslint src/**/*.ts __tests__/**/*.ts __integration__/**/*.ts",
+    "pretty": "prettier --write --loglevel=warn \"./{src,__{tests,integration}__}/**/*.ts\"",
+    "start": "jest --watch",
+    "test": "jest",
+    "test:integration": "jest /packages/.*/__integration__/.*",
+    "test:unit": "jest /packages/.*/__tests__/.*"
+  },
+  "dependencies": {
+    "@cityofzion/neon-core": "^4.7.0"
+  },
+  "peerDependencies": {
+    "@cityofzion/neon-core": "^4.0.0"
+  },
+  "files": [
+    "dist/",
+    "lib/"
+  ],
+  "gitHead": "d21633d03deca1f4bc6c3a4f4e1d32a61aec2fe3"
+}
