@@ -1,4 +1,6 @@
-import { wallet } from "@cityofzion/neon-core";
+import { logging, wallet } from "@cityofzion/neon-core";
+const path = require('path');
+const { spawn } = require('child_process');
 
 const log = logging.default("nep11");
 
@@ -12,15 +14,15 @@ const log = logging.default("nep11");
 export async function buildIteratorScript(
   account: wallet.Account,
   contractHash: string,
-  page: int,
-  maxResults: int
+  page: number,
+  maxResults: number
 ): Promise<string> {
   return new Promise((resolve) => {
     const { scriptHash } = account;
 
-    const file = path.join(__dirname, 'load.py');
+    const file = path.join(__dirname, '../build-script.py');
     const pythonProcess = spawn('python3', [file, contractHash, scriptHash, page, maxResults]);
-    pythonProcess.stdout.on('data', (data) => {
+    pythonProcess.stdout.on('data', (data: any) => {
       let script = data.toString('utf8');
       script = script.replace(/^\s+|\s+$/g, '');
       resolve(script);
@@ -29,5 +31,5 @@ export async function buildIteratorScript(
     setTimeout(() => {
       resolve('');
     }, 7000);
-  }
+  });
 }
