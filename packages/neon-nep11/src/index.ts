@@ -3,7 +3,7 @@ import * as nep11 from "./plugin";
 
 function bundle<T extends typeof _Neon>(
   neonCore: T
-): T & { nep5: typeof nep11 } {
+): T & { nep11: typeof nep11 } {
   return { ...(neonCore as any), nep11 };
 }
 
