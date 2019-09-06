@@ -1,44 +1,46 @@
 import { ContractGroup, ContractGroupLike } from "./ContractGroup";
-import { ContractFeatures, ContractFeaturesLike } from "./ContractFeatures";
 import { ContractAbi, ContractAbiLike } from "./ContractAbi";
 import {
   ContractPermission,
   ContractPermissionLike
 } from "./ContractPermission";
 import { WildCardContainer } from "./WildCardContainer";
-import { ContractMethodDescriptor } from "./ContractMethodDescriptor";
-import { ContractEventDescriptor } from "./ContractEventDescriptor";
 
 export interface ContractManifestLike {
   groups: ContractGroupLike[];
-  features: ContractFeaturesLike;
   abi: ContractAbiLike;
   permissions: ContractPermissionLike[];
   trusts: "*" | string[];
   safeMethods: "*" | string[];
+  features: {
+    storage: boolean;
+    payable: boolean;
+  };
 }
 
 export class ContractManifest {
   public static readonly MAX_LENGTH = 2048;
   public hash: string;
   public groups: ContractGroup[];
-  public features: ContractFeatures;
   public abi: ContractAbi;
   public permissions: ContractPermission[];
   public trusts: WildCardContainer;
   public safeMethods: WildCardContainer;
+  public hasStorage: boolean;
+  public payable: boolean;
 
   public constructor(obj: Partial<ContractManifestLike>) {
     const {
       groups = [],
-      features = {},
+      features: { storage = false, payable = false } = {},
       abi = {},
       permissions = [],
       trusts = "*",
       safeMethods = "*"
     } = obj;
     this.groups = groups.map(group => new ContractGroup(group));
-    this.features = new ContractFeatures(features);
+    this.hasStorage = storage;
+    this.payable = payable;
     this.abi = new ContractAbi(abi);
     this.permissions = permissions.map(
       permission => new ContractPermission(permission)
@@ -71,16 +73,15 @@ export class ContractManifest {
   public export(): ContractManifestLike {
     return {
       groups: this.groups.map(group => group.export()),
-      features: this.features.export(),
+      features: {
+        storage: this.hasStorage,
+        payable: this.payable
+      },
       abi: this.abi.export(),
       permissions: this.permissions.map(permission => permission.export()),
       trusts: this.trusts.export(),
       safeMethods: this.safeMethods.export()
     };
-  }
-
-  public toString(): string {
-    return JSON.stringify(this.export());
   }
 
   // TODO
