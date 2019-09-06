@@ -8,6 +8,9 @@ import {
 import { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
 import TxAttrUsage from "../components/txAttrUsage";
+import logger from "../../logging";
+
+const log = logger("tx");
 
 export function deserializeArrayOf<T>(
   type: (ss: StringStream) => T,
@@ -32,7 +35,7 @@ export function deserializeVersion(
   const byte = ss.read();
   const version = parseInt(byte, 16);
   if (version !== 0) {
-    throw new Error(`Transaction version should be 0 not ${version}`);
+    log.error(`Transaction version should be 0 not ${version}`);
   }
   return Object.assign(tx, { version });
 }
@@ -58,7 +61,7 @@ export function deserializeScript(
 ): Partial<TransactionLike> {
   const script = ss.readVarBytes();
   if (script.length === 0) {
-    throw new Error("Script should not be vacant.");
+    log.error("Script should not be vacant.");
   }
   return Object.assign(tx, { script });
 }
@@ -103,7 +106,7 @@ export function deserializeAttributes(
         cosigners.indexOf(cosigner) === cosigners.lastIndexOf(cosigner)
     )
   ) {
-    throw new Error("Cosigner should not duplicate.");
+    log.error("Cosigner should not duplicate.");
   }
   return Object.assign(tx, { attributes });
 }
