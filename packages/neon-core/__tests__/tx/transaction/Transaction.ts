@@ -1,31 +1,245 @@
-import {
-  ContractTransaction,
-  InvocationTransaction,
-  Transaction
-} from "../../../src/tx";
+import { Transaction, TransactionLike, Witness } from "../../../src/tx";
+import samples from "./Transaction.json";
+import { Account } from "../../../src/wallet";
 
-describe("deserialize", () => {
-  test("deserialize unsigned tx", () => {
-    const result = Transaction.deserialize(
-      "d1012502e80351c10a6d696e74546f6b656e73676c3f26d7b3a8b2079d053ceb86d13a2fe42b402900e1f5050000000000016ee3ab02e4b1955e38e5e3a8219887bfe62431ed1e476559875e59609d6e85c4000001e72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c60f035e0d90b000000f00cf8e363c29f33f8333df8462d06cae499b5fa"
-    );
+describe("constructor", () => {
+  test("empty", () => {
+    const result = new Transaction();
 
-    expect(result).toBeInstanceOf(InvocationTransaction);
-    expect(result.attributes.length).toBe(0);
-    expect(result.inputs.length).toBe(1);
-    expect(result.outputs.length).toBe(1);
-    expect(result.scripts.length).toBe(0);
+    expect(result instanceof Transaction).toBeTruthy();
+    expect(result.version).toBe(0);
+    expect(result.nonce).toBeDefined();
+    expect(result.validUntilBlock).toBeDefined();
+    expect(result.systemFee.toNumber()).toBe(0);
+    expect(result.networkFee.toNumber()).toBe(0);
+    expect(result.script).toEqual("");
   });
 
-  test("deserialize signed tx", () => {
-    const result = Transaction.deserialize(
-      "800000022d9848a35942a8860b944d6c5f51c358bf2a8fbced8fd94975f38212cd448f7b0200b0c73210bc15bd74a25c07dcb7110f1d1be02c7818a5f9f8157af1ee5d7e18260100049b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc500e1f505000000003775292229eccdf904f16fff8e83e7cffdc0f0cee72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c6001000000000000003775292229eccdf904f16fff8e83e7cffdc0f0ce9b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc500c2eb0b0000000035b20010db73bf86371075ddfba4e6596f1ff35de72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c60e60300000000000035b20010db73bf86371075ddfba4e6596f1ff35d014140053539269d07c6d6a14f2f05c3676f97b803fe1cf6e10480878ca59b4713d58bf7f6864e817e760133633104b070657d36f662784493a2c8df63777cc2037c7d2321031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9ac"
-    );
+  test("TransactionLike", () => {
+    const testObject = {
+      version: 1,
+      nonce: 1,
+      validUntilBlock: 1000,
+      systemFee: 1,
+      networkFee: 10,
+      script: "00"
+    } as Partial<TransactionLike>;
 
-    expect(result).toBeInstanceOf(ContractTransaction);
-    expect(result.attributes.length).toBe(0);
-    expect(result.inputs.length).toBe(2);
-    expect(result.outputs.length).toBe(4);
-    expect(result.scripts.length).toBe(1);
+    const result = new Transaction(testObject);
+    expect(result instanceof Transaction).toBeTruthy();
+    expect(result.version).toBe(testObject.version);
+    expect(result.nonce).toBe(testObject.nonce);
+    expect(result.validUntilBlock).toBe(testObject.validUntilBlock);
+    expect(result.systemFee.toNumber()).toBe(testObject.systemFee);
+    expect(result.networkFee.toNumber()).toBe(testObject.networkFee);
+    expect(result.script).toEqual(testObject.script);
+  });
+
+  test("Transaction", () => {
+    const testObject = new Transaction({
+      version: 1,
+      scripts: [{ invocationScript: "ab", verificationScript: "" }],
+      systemFee: 1,
+      script: "00"
+    });
+
+    const result = new Transaction(testObject);
+    expect(result instanceof Transaction).toBeTruthy();
+    expect(result).not.toBe(testObject);
+    expect(result.script).toBe(testObject.script);
+    expect(result.scripts[0]).not.toBe(testObject.scripts[0]);
   });
 });
+
+describe("getters", () => {
+  test("fees", () => {
+    const tx = new Transaction({
+      systemFee: 2,
+      networkFee: 4
+    });
+    expect(tx.fees).toBe(6);
+  });
+
+  test("hash", () => {
+    const tx = new Transaction({
+      nonce: 12345,
+      validUntilBlock: 1000
+    });
+    expect(tx.hash).toBe(
+      "cb1715e1649b7c37ac8bc8856dda05e9a0888f4103b1307d60ddaa96f4c26c31"
+    );
+  });
+
+  test("signers", () => {
+    const tx = new Transaction({
+      sender: "39e9c91012be63a58504e52b7318c1274554ae3d",
+      attributes: [
+        { usage: "Cosigner", data: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26" }
+      ]
+    });
+    expect(tx.getScriptHashesForVerifying()).toStrictEqual([
+      "39e9c91012be63a58504e52b7318c1274554ae3d",
+      "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26"
+    ]);
+  });
+});
+
+describe("export", () => {
+  const expected = {
+    version: 1,
+    nonce: 123,
+    sender: "39e9c91012be63a58504e52b7318c1274554ae3d",
+    systemFee: 12,
+    networkFee: 13,
+    validUntilBlock: 1000,
+    attributes: [],
+    scripts: [{ invocationScript: "ab", verificationScript: "" }],
+    script: "00"
+  } as Partial<TransactionLike>;
+
+  const transaction = new Transaction(expected);
+  const result = transaction.export();
+  expect(result).toEqual(expected);
+});
+
+describe("equals", () => {
+  const obj1 = {
+    version: 0,
+    nonce: 123,
+    sender: "39e9c91012be63a58504e52b7318c1274554ae3d",
+    systemFee: 12,
+    networkFee: 13,
+    validUntilBlock: 1000,
+    attributes: [],
+    scripts: [{ invocationScript: "ab", verificationScript: "" }],
+    script: "00"
+  };
+
+  const obj2 = {
+    version: 0,
+    nonce: 1234,
+    sender: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
+    systemFee: 12,
+    networkFee: 1,
+    validUntilBlock: 1000,
+    attributes: [],
+    scripts: [{ invocationScript: "ab", verificationScript: "" }],
+    script: "00"
+  };
+  const tx1 = new Transaction(obj1);
+  const tx2 = new Transaction(obj2);
+
+  test.each([
+    ["Invocation1 === Invocation1", tx1, tx1, true],
+    ["Invocation1 !== Invocation2", tx1, tx2, false],
+    ["Invocation1 === Obj1", tx1, obj1, true],
+    ["Invocation1 !== Obj2", tx1, obj2, false]
+  ])("%s", (msg: string, a: Transaction, b: any, cond: boolean) => {
+    expect(a.equals(b)).toBe(cond);
+  });
+});
+
+describe("Add Methods", () => {
+  function createTxforTestAddMethods(): Transaction {
+    return new Transaction({
+      version: 0,
+      nonce: 123,
+      sender: "39e9c91012be63a58504e52b7318c1274554ae3d",
+      systemFee: 12,
+      networkFee: 13,
+      validUntilBlock: 1000,
+      attributes: [],
+      scripts: [],
+      script: "00"
+    });
+  }
+
+  test("addAttribute", () => {
+    const tx1 = createTxforTestAddMethods();
+    tx1.addAttribute(32, "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26");
+    expect(tx1.attributes[0].usage).toBe(32);
+    expect(tx1.attributes[0].data).toBe(
+      "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26"
+    );
+  });
+
+  test("addWitness", () => {
+    const tx1 = createTxforTestAddMethods();
+    tx1.addWitness(
+      new Witness({
+        invocationScript: "ab",
+        verificationScript:
+          "210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba68747476aa"
+      })
+    );
+    expect(tx1.scripts[0].invocationScript).toBe("ab");
+    expect(tx1.scripts[0].verificationScript).toBe(
+      "210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba68747476aa"
+    );
+  });
+
+  test("sign", () => {
+    const tx1 = createTxforTestAddMethods();
+    const account = new Account(
+      "9600debdb033bae62179baadb439c65088a450d5eecff782f641778fab23e21d"
+    );
+    tx1.scripts = [];
+    tx1.sign(account);
+    expect(tx1.scripts[0].verificationScript).toBe(
+      "210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba68747476aa"
+    );
+    expect(tx1.scripts[0].invocationScript).toBe(
+      "4073b9a44d007966c19e3010202aeed6dd9a158ab2b49d42eb14a3ab43509112674117a3e4cb0c9eadb45e93db621a3d0d6aa1a66086dc55b08a8e28de740e7dd7"
+    );
+  });
+});
+
+// TODO
+describe.skip("Fee Related", () => {
+  function createTxforTestFeeMethods(): Transaction {
+    return new Transaction({
+      version: 0,
+      nonce: 123,
+      sender: "39e9c91012be63a58504e52b7318c1274554ae3d",
+      systemFee: 12,
+      networkFee: 0,
+      validUntilBlock: 1000,
+      attributes: [],
+      scripts: []
+    });
+  }
+});
+
+const dataSet = Object.keys(samples).map(k => {
+  const s = samples[k];
+  return [s.txid, s.serialized, s.deserialized];
+});
+
+describe.each(dataSet)(
+  "%s",
+  (
+    txid: string,
+    serialized: string,
+    deserialized: Partial<TransactionLike>
+  ) => {
+    let tx: Transaction;
+    test("Serialize properly", () => {
+      tx = new Transaction(deserialized);
+      expect(tx.serialize()).toBe(serialized);
+    });
+
+    test("Deserialize properly", () => {
+      tx = Transaction.deserialize(serialized);
+      expect(tx instanceof Transaction).toBeTruthy();
+    });
+
+    test("exports properly", () => {
+      const result = tx.export();
+      expect(result).toEqual(deserialized);
+    });
+
+    test("produce correct hash", () => {
+      expect(tx.hash).toEqual(txid);
+    });
+  }
+);

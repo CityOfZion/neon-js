@@ -1,5 +1,5 @@
-import { OpCode, ScriptBuilder } from "../sc";
-import { reverseHex, StringStream } from "../u";
+import { ScriptBuilder, InteropServiceCode, OpCode } from "../sc";
+import { reverseHex, StringStream, num2hexstring } from "../u";
 import { isPublicKey } from "./verify";
 
 export function constructMultiSigVerificationScript(
@@ -21,8 +21,7 @@ export function constructMultiSigVerificationScript(
     ss.emitPush(k);
   });
   ss.emitPush(keys.length);
-  // TODO: temp annotate to pass build
-  // ss.emit(OpCode.CHECKMULTISIG);
+  ss.emitSysCall(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG);
   return ss.str;
 }
 
@@ -37,7 +36,7 @@ export function getPublicKeysFromVerificationScript(
   const keys = [] as string[];
   while (!ss.isEmpty()) {
     const byte = ss.read();
-    if (byte === "21") {
+    if (byte === OpCode.PUSHBYTES33) {
       keys.push(ss.read(33));
     }
   }
@@ -51,12 +50,14 @@ export function getPublicKeysFromVerificationScript(
 export function getSigningThresholdFromVerificationScript(
   verificationScript: string
 ): number {
-  const checkSigOpCode = verificationScript.slice(
-    verificationScript.length - 2
+  const checkSigInteropCode = verificationScript.slice(
+    verificationScript.length - 8
   );
-  if (checkSigOpCode === "ac") {
+  if (checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_CHECKSIG) {
     return 1;
-  } else if (checkSigOpCode === "ae") {
+  } else if (
+    checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
+  ) {
     const ss = new StringStream(verificationScript);
     const byte = parseInt(ss.peek(), 16);
     if (byte < 80) {

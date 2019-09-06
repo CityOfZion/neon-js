@@ -66,10 +66,6 @@ export class ScriptBuilder extends StringStream {
     operation?: string,
     args?: any[]
   ): this {
-    ensureHex(scriptHash);
-    if (scriptHash.length !== 40) {
-      throw new Error("ScriptHash should be 20 bytes long!");
-    }
     this.emitPush(args || []);
     if (operation) {
       this._emitContractOperation(operation);
@@ -81,6 +77,10 @@ export class ScriptBuilder extends StringStream {
       scriptHash = ASSET_ID.GAS;
     } else if (scriptHash.toUpperCase() === "POLICY") {
       scriptHash = ASSET_ID.POLICY;
+    }
+    ensureHex(scriptHash);
+    if (scriptHash.length !== 40) {
+      throw new Error("ScriptHash should be 20 bytes long!");
     }
 
     this.emitPush(reverseHex(scriptHash));

@@ -54,21 +54,6 @@ export default class ApiBalancer implements Provider {
     return await this.loadBalance(f);
   }
 
-  public async getBalance(address: string): Promise<wallet.Balance> {
-    const f = async (p: Provider) => await p.getBalance(address);
-    return await this.loadBalance(f);
-  }
-
-  public async getClaims(address: string): Promise<wallet.Claims> {
-    const f = async (p: Provider) => await p.getClaims(address);
-    return await this.loadBalance(f);
-  }
-
-  public async getMaxClaimAmount(address: string): Promise<u.Fixed8> {
-    const f = async (p: Provider) => await p.getMaxClaimAmount(address);
-    return await this.loadBalance(f);
-  }
-
   public async getHeight(): Promise<number> {
     const f = async (p: Provider) => await p.getHeight();
     return await this.loadBalance(f);

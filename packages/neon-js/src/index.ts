@@ -35,10 +35,6 @@ const create = {
   privateKey: wallet.generatePrivateKey,
   signature: wallet.generateSignature,
   wallet: (k: neonCore.wallet.WalletJSON) => new wallet.Wallet(k),
-  claimTx: () => new tx.ClaimTransaction(),
-  contractTx: () => new tx.ContractTransaction(),
-  invocationTx: () => new tx.InvocationTransaction(),
-  stateTx: () => new tx.StateTransaction(),
   contractParam: (type: keyof typeof sc.ContractParamType, value: any) =>
     new sc.ContractParam(type, value),
   script: sc.createScript,
@@ -68,8 +64,6 @@ const is = {
  */
 const deserialize = {
   attribute: tx.TransactionAttribute.deserialize,
-  input: tx.TransactionInput.deserialize,
-  output: tx.TransactionOutput.deserialize,
   script: tx.Witness.deserialize,
   tx: tx.Transaction.deserialize
 };
@@ -97,10 +91,6 @@ const verify = {
 };
 
 export default {
-  sendAsset: api.sendAsset,
-  claimGas: api.claimGas,
-  doInvoke: api.doInvoke,
-  setupVote: api.setupVote,
   create,
   deserialize,
   is,

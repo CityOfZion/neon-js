@@ -2,7 +2,6 @@ import _axios from "axios";
 import { mocked } from "ts-jest/utils";
 import Query from "../../src/rpc/Query";
 import { Transaction } from "../../src/tx";
-import InvocationTransaction from "../../src/tx/transaction/InvocationTransaction";
 
 jest.mock("axios");
 
@@ -196,9 +195,8 @@ describe("static", () => {
       expect(result.params).toEqual(["abcd"]);
     });
 
-    // TODO: temp skip this test
-    test.skip("Transaction", () => {
-      const tx = new InvocationTransaction();
+    test("Transaction", () => {
+      const tx = new Transaction();
       const result = Query.sendRawTransaction(tx);
       expect(result.method).toEqual("sendrawtransaction");
       expect(result.params).toEqual([tx.serialize(true)]);
