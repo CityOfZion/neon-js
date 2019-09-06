@@ -78,7 +78,7 @@ jobs:
           at: .
       - run:
           name: Install neo-boa
-          command: yarn boa
+          command: yarn pip && yarn boa
       - run: mkdir reports
       - run:
           name: Integration Tests

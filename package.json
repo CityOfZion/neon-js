@@ -15,6 +15,7 @@
     "test": "jest",
     "test:integration": "jest /packages/.*/__integration__/.*",
     "test:unit": "jest /packages/.*/__tests__/.*",
+    "pip": "apt update && apt install python3-pip && apt install python3.7",
     "boa": "pip3 install neo-boa"
   },
   "devDependencies": {
