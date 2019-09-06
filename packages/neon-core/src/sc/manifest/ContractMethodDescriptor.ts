@@ -1,22 +1,38 @@
 import { ContractParamType } from "../ContractParam";
 import {
-  ContractEventDescriptor,
-  ContractEventDescriptorLike
-} from "./ContractEventDescriptor";
+  ContractParameterDefinitionLike,
+  ContractParameterDefinition
+} from ".";
 
-export interface ContractMethodDescriptorLike
-  extends ContractEventDescriptorLike {
+export interface ContractMethodDescriptorLike {
+  name: string;
+  parameters: ContractParameterDefinitionLike[];
   returnType: ContractParamType;
 }
 
-export class ContractMethodDescriptor extends ContractEventDescriptor {
+export class ContractMethodDescriptor {
+  public name: string;
+  public parameters: ContractParameterDefinition[];
   public returnType: ContractParamType;
+
   public constructor(obj: Partial<ContractMethodDescriptorLike>) {
-    super(obj);
-    this.returnType = obj.returnType || ContractParamType.Any;
+    const {
+      name = "",
+      parameters = [],
+      returnType = ContractParamType.Any
+    } = obj;
+    this.name = name;
+    this.parameters = parameters.map(
+      param => new ContractParameterDefinition(param)
+    );
+    this.returnType = returnType;
   }
 
   public export(): ContractMethodDescriptorLike {
-    return Object.assign({}, super.export(), { returnType: this.returnType });
+    return {
+      name: this.name,
+      parameters: this.parameters.map(parameter => parameter.export()),
+      returnType: this.returnType
+    };
   }
 }

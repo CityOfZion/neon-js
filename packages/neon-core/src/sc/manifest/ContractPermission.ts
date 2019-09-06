@@ -1,5 +1,4 @@
 import { ContractPermissionDescriptor } from "./ContractPermissionDescriptor";
-import { WildCardContainer } from "./WildCardContainer";
 
 export interface ContractPermissionLike {
   contract: string;
@@ -8,18 +7,18 @@ export interface ContractPermissionLike {
 
 export class ContractPermission {
   public contract: ContractPermissionDescriptor;
-  public methods: WildCardContainer;
+  public methods: "*" | string[];
 
   public constructor(obj: Partial<ContractPermissionLike>) {
     const { contract = "*", methods = "*" } = obj;
     this.contract = new ContractPermissionDescriptor(contract);
-    this.methods = WildCardContainer.fromSerialized(methods);
+    this.methods = methods;
   }
 
   public export(): ContractPermissionLike {
     return {
       contract: this.contract.export(),
-      methods: this.methods.export()
+      methods: this.methods
     };
   }
 }

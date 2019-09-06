@@ -4,7 +4,6 @@ import {
   ContractPermission,
   ContractPermissionLike
 } from "./ContractPermission";
-import { WildCardContainer } from "./WildCardContainer";
 
 export interface ContractManifestLike {
   groups: ContractGroupLike[];
@@ -24,8 +23,8 @@ export class ContractManifest {
   public groups: ContractGroup[];
   public abi: ContractAbi;
   public permissions: ContractPermission[];
-  public trusts: WildCardContainer;
-  public safeMethods: WildCardContainer;
+  public trusts: "*" | string[];
+  public safeMethods: "*" | string[];
   public hasStorage: boolean;
   public payable: boolean;
 
@@ -45,8 +44,8 @@ export class ContractManifest {
     this.permissions = permissions.map(
       permission => new ContractPermission(permission)
     );
-    this.trusts = WildCardContainer.fromSerialized(trusts);
-    this.safeMethods = WildCardContainer.fromSerialized(safeMethods);
+    this.trusts = trusts;
+    this.safeMethods = safeMethods;
     this.hash = this.abi.hash;
   }
 
@@ -64,7 +63,9 @@ export class ContractManifest {
           return false;
         }
       }
-      return methods.isWildcard || methods.export().includes(method);
+      return (
+        methods === "*" || methods.length === 0 || methods.includes(method)
+      );
     });
   }
 
@@ -81,8 +82,8 @@ export class ContractManifest {
       },
       abi: this.abi.export(),
       permissions: this.permissions.map(permission => permission.export()),
-      trusts: this.trusts.export(),
-      safeMethods: this.safeMethods.export()
+      trusts: this.trusts,
+      safeMethods: this.safeMethods
     };
   }
 

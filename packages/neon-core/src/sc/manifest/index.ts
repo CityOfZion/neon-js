@@ -6,4 +6,3 @@ export * from "./ContractMethodDescriptor";
 export * from "./ContractParameterDefinition";
 export * from "./ContractPermission";
 export * from "./ContractPermissionDescriptor";
-export * from "./WildCardContainer";
