@@ -13,6 +13,7 @@ import {
   isScriptHash,
   isWIF
 } from "./verify";
+import { InteropServiceCode } from "../sc";
 
 const log = logger("wallet");
 
@@ -154,9 +155,10 @@ export class Account {
 
   public get isMultiSig() {
     return (
-      this.contract &&
-      this.contract.script &&
-      this.contract.script.slice(this.contract.script.length - 2) === "ae"
+      !!this.contract &&
+      !!this.contract.script &&
+      this.contract.script.slice(this.contract.script.length - 8) ===
+        InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
     );
   }
 

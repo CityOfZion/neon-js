@@ -1,15 +1,18 @@
 export const ADDR_VERSION = "17";
 
-export const ASSETS: { [key: string]: string } = {
+export const NATIVE_CONTRACTS: { [key: string]: string } = {
   NEO: "NEO",
-  c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b: "NEO",
+  "43cf98eddbe047e198a3e5d57006311442a0ca15": "NEO",
   GAS: "GAS",
-  "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7": "GAS"
+  a1760976db5fcdfab2a9930e8f6ce875b2d18225: "GAS",
+  POLICY: "POLICY",
+  "9c5699b260bd468e2160dd5d45dfd2686bba8b77": "POLICY"
 };
 
 export const ASSET_ID: { [key: string]: string } = {
-  NEO: "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-  GAS: "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"
+  NEO: "43cf98eddbe047e198a3e5d57006311442a0ca15",
+  GAS: "a1760976db5fcdfab2a9930e8f6ce875b2d18225",
+  POLICY: "9c5699b260bd468e2160dd5d45dfd2686bba8b77"
 };
 
 export const ASSET_TYPE: { [key: string]: number } = {
@@ -49,13 +52,6 @@ export const DEFAULT_SCRYPT = {
   size: 64
 };
 
-export const DEFAULT_SYSFEE: { [key: string]: number } = {
-  enrollmentTransaction: 1000,
-  issueTransaction: 500,
-  publishTransaction: 500,
-  registerTransaction: 10000
-};
-
 export const DEFAULT_WALLET = {
   name: "myWallet",
   version: "1.0",
@@ -86,14 +82,12 @@ export const NEP_FLAG = "e0";
 
 export const RPC_VERSION = "2.3.2";
 
-export const TX_VERSION: { [key: string]: number } = {
-  CLAIM: 0,
-  CONTRACT: 0,
-  INVOCATION: 1,
-  ISSUE: 0,
-  STATE: 0,
-  MINER: 0,
-  ENROLLMENT: 0,
-  PUBLISH: 0,
-  REGISTER: 0
-};
+// transaction related
+export const TX_VERSION = 0;
+
+export const SYSTEM_FEE_FACTOR = 1;
+
+export const SYSTEM_FEE_FREE = 0;
+
+// you can also get this value by querying policy native contract method `getFeePerByte`
+export const POLICY_FEE_PERBYTE = 1000e-8;

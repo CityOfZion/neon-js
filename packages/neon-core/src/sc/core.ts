@@ -1,7 +1,6 @@
 import { str2hexstring } from "../u";
 import ScriptBuilder, { ScriptIntent } from "./ScriptBuilder";
 import InteropServiceCode from "./InteropServiceCode";
-import { ASSET_ID } from "../consts";
 
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.

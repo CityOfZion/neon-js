@@ -1,5 +1,4 @@
-import { rpc, tx, u, wallet } from "@cityofzion/neon-core";
-import { ManagedApiBasicConfig } from "./types";
+import { rpc, tx } from "@cityofzion/neon-core";
 
 /**
  * Check that properties are defined in obj.
@@ -19,28 +18,6 @@ export function checkProperty<T extends object, K extends keyof T>(
       throw new ReferenceError(`Property not found: ${prop}`);
     }
   }
-}
-
-/**
- * Adds the necessary attributes for validating an empty transaction.
- * @param config
- * @return
- */
-export async function modifyTransactionForEmptyTransaction<
-  U extends tx.BaseTransaction,
-  T extends ManagedApiBasicConfig<U>
->(config: T): Promise<T> {
-  if (config.tx!.inputs.length === 0 && config.tx!.outputs.length === 0) {
-    config.tx!.addAttribute(
-      tx.TxAttrUsage.Script,
-      u.reverseHex(wallet.getScriptHashFromAddress(config.account!.address))
-    );
-    // This adds some random bits to the transaction to prevent any hash collision.
-    config.tx!.addRemark(
-      Date.now().toString() + u.ab2hexstring(u.generateRandomArray(4))
-    );
-  }
-  return config;
 }
 
 const sensitiveFields = ["privateKey"];

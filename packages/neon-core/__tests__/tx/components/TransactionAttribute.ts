@@ -8,9 +8,18 @@ describe("constructor", () => {
     expect(f).toThrow("TransactionAttribute requires usage and data fields");
   });
 
-  test("TransactionAttributeLike (int usage)", () => {
+  test("TransactionAttributeLike (wrong usage)", () => {
     const testObject = {
       usage: 240,
+      data: "test"
+    } as TransactionAttributeLike;
+    const f = () => new TransactionAttribute(testObject);
+    expect(f).toThrow();
+  });
+
+  test("TransactionAttributeLike (int usage)", () => {
+    const testObject = {
+      usage: 129,
       data: "test"
     } as TransactionAttributeLike;
 
@@ -22,19 +31,19 @@ describe("constructor", () => {
 
   test("TransactionAttributeLike (str usage)", () => {
     const testObject = {
-      usage: "Remark",
+      usage: "Url",
       data: "test"
     } as TransactionAttributeLike;
 
     const result = new TransactionAttribute(testObject);
     expect(result instanceof TransactionAttribute).toBeTruthy();
-    expect(result.usage).toEqual(240);
+    expect(result.usage).toEqual(129);
     expect(result.data).toEqual(testObject.data);
   });
 
   test("TransactionAttribute", () => {
     const testObject = new TransactionAttribute({
-      usage: 240,
+      usage: 129,
       data: "test"
     });
 
@@ -47,7 +56,7 @@ describe("constructor", () => {
 describe("export", () => {
   test("export to TransactionAttributeLike", () => {
     const expected = {
-      usage: 240,
+      usage: 129,
       data: "test"
     };
 
@@ -59,11 +68,11 @@ describe("export", () => {
 
 describe("equals", () => {
   const obj1 = {
-    usage: 240,
+    usage: 32,
     data: "obj1"
   };
   const obj2 = {
-    usage: 241,
+    usage: 129,
     data: "obj2"
   };
   const attr1 = new TransactionAttribute(obj1);
@@ -81,20 +90,19 @@ describe("equals", () => {
 
 const dataSet = [
   [
-    "Remark",
+    "Cosigner",
     {
-      usage: parseInt("f0", 16),
-      // This is a remark
-      data: "5468697320697320612072656d61726b"
+      usage: 32,
+      data: "d336d7eb9975a29b2404fdb28185e277a4b299bc"
     },
-    "f0105468697320697320612072656d61726b"
+    "2014d336d7eb9975a29b2404fdb28185e277a4b299bc"
   ]
 ];
 
 describe("serialize", () => {
   test("errors if data too big", () => {
     const result = new TransactionAttribute({
-      usage: 0,
+      usage: 32,
       data: "0".repeat(999999)
     });
 

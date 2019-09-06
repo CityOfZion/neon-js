@@ -8,12 +8,7 @@ import {
   PastTransaction,
   RpcNode
 } from "../common";
-import {
-  NeonDbBalance,
-  NeonDbClaims,
-  NeonDbHistory,
-  NeonDbNode
-} from "./responses";
+import { NeonDbHistory, NeonDbNode } from "./responses";
 const log = logging.default("api");
 
 /**
@@ -34,79 +29,6 @@ export async function getRPCEndpoint(url: string): Promise<string> {
   const goodNodes = findGoodNodesFromHeight(nodes);
   const bestRPC = await getBestUrl(goodNodes);
   return bestRPC;
-}
-
-/**
- * Get balances of NEO and GAS for an address
- * @param url - URL of a neonDB service.
- * @param address - Address to check.
- * @return  Balance of address
- */
-export async function getBalance(
-  url: string,
-  address: string
-): Promise<wallet.Balance> {
-  const response = await axios.get(url + "/v2/address/balance/" + address);
-  const data = response.data as NeonDbBalance;
-  const bal = new wallet.Balance({ net: url, address } as wallet.BalanceLike);
-  if (data.NEO.balance > 0) {
-    bal.addAsset("NEO", data.NEO);
-  }
-  if (data.GAS.balance > 0) {
-    bal.addAsset("GAS", data.GAS);
-  }
-  log.info(`Retrieved Balance for ${address} from neonDB ${url}`);
-  return bal;
-}
-
-/**
- * Get amounts of available (spent) and unavailable claims.
- * @param url - URL of a neonDB service.
- * @param address - Address to check.
- * @return An object with available and unavailable GAS amounts.
- */
-export async function getClaims(
-  url: string,
-  address: string
-): Promise<wallet.Claims> {
-  const response = await axios.get(url + "/v2/address/claims/" + address);
-  const data = response.data as NeonDbClaims;
-  const claims = data.claims.map(c => {
-    return {
-      claim: new u.Fixed8(c.claim || 0).div(100000000),
-      index: c.index,
-      txid: c.txid,
-      start: c.start || 0,
-      end: c.end || 0,
-      value: c.value
-    };
-  });
-  log.info(`Retrieved Claims for ${address} from neonDB ${url}`);
-  return new wallet.Claims({
-    net: url,
-    address,
-    claims
-  } as wallet.ClaimsLike);
-}
-
-/**
- * Gets the maximum amount of gas claimable after spending all NEO.
- * @param url - URL of a neonDB service.
- * @param address - Address to check.
- * @return An object with available and unavailable GAS amounts.
- */
-export async function getMaxClaimAmount(
-  url: string,
-  address: string
-): Promise<u.Fixed8> {
-  const response = await axios.get(url + "/v2/address/claims/" + address);
-  const data = response.data as NeonDbClaims;
-  log.info(
-    `Retrieved maximum amount of gas claimable after spending all NEO for ${address} from neonDB ${url}`
-  );
-  return new u.Fixed8(data.total_claim + data.total_unspent_claim).div(
-    100000000
-  );
 }
 
 /**
