@@ -54,11 +54,13 @@ export class ContractManifest {
     return this.permissions.some(permission => {
       const { contract, methods } = permission;
       if (contract.isHash) {
-        if (contract.hash! !== manifest.hash) {
+        if (contract.descriptor! !== manifest.hash) {
           return false;
         }
       } else if (contract.isGroup) {
-        if (manifest.groups.every(group => group.pubKey !== contract.group)) {
+        if (
+          manifest.groups.every(group => group.pubKey !== contract.descriptor)
+        ) {
           return false;
         }
       }

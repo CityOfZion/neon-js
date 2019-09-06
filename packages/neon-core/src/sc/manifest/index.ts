@@ -1,6 +1,5 @@
 export * from "./ContractAbi";
 export * from "./ContractEventDescriptor";
-export * from "./ContractFeatures";
 export * from "./ContractGroup";
 export * from "./ContractManifest";
 export * from "./ContractMethodDescriptor";

@@ -12,7 +12,7 @@ export class ContractPermission {
 
   public constructor(obj: Partial<ContractPermissionLike>) {
     const { contract = "*", methods = "*" } = obj;
-    this.contract = ContractPermissionDescriptor.fromString(contract);
+    this.contract = new ContractPermissionDescriptor(contract);
     this.methods = WildCardContainer.fromSerialized(methods);
   }
 
