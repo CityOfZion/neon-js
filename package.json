@@ -14,7 +14,8 @@
     "start": "jest --watch",
     "test": "jest",
     "test:integration": "jest /packages/.*/__integration__/.*",
-    "test:unit": "jest /packages/.*/__tests__/.*"
+    "test:unit": "jest /packages/.*/__tests__/.*",
+    "boa": "pip3 install neo-boa"
   },
   "devDependencies": {
     "@types/jest": "24.0.15",

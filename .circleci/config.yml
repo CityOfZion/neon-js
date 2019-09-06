@@ -76,6 +76,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
+      - run:
+          name: Install neo-boa
+          command: yarn boa
       - run: mkdir reports
       - run:
           name: Integration Tests
