@@ -19,7 +19,6 @@ export interface ContractManifestLike {
 
 export class ContractManifest {
   public static readonly MAX_LENGTH = 2048;
-  public hash: string;
   public groups: ContractGroup[];
   public abi: ContractAbi;
   public permissions: ContractPermission[];
@@ -46,7 +45,10 @@ export class ContractManifest {
     );
     this.trusts = trusts;
     this.safeMethods = safeMethods;
-    this.hash = this.abi.hash;
+  }
+
+  public get hash(): string {
+    return this.abi.hash;
   }
 
   public canCall(manifest: ContractManifest, method: string): boolean {
@@ -92,3 +94,5 @@ export class ContractManifest {
     return true;
   }
 }
+
+export default ContractManifest;

@@ -2,7 +2,7 @@ export class ContractPermissionDescriptor {
   public descriptor?: string;
 
   public get isHash(): boolean {
-    return !!this.descriptor && this.descriptor.length === 42;
+    return !!this.descriptor && this.descriptor.length === 40;
   }
 
   public get isGroup(): boolean {
@@ -16,7 +16,14 @@ export class ContractPermissionDescriptor {
   public constructor(descriptor?: string) {
     if (
       !!descriptor &&
-      descriptor.length !== 42 &&
+      descriptor.length === 42 &&
+      descriptor.indexOf("0x") === 0
+    ) {
+      descriptor = descriptor.slice(2);
+    }
+    if (
+      !!descriptor &&
+      descriptor.length !== 40 &&
       descriptor.length !== 66 &&
       descriptor !== "*"
     ) {
@@ -28,6 +35,7 @@ export class ContractPermissionDescriptor {
   }
 
   public export(): string {
-    return this.descriptor || "*";
+    /* Add "0x" to match standard */
+    return this.isHash ? `0x${this.descriptor}` : this.descriptor || "*";
   }
 }
