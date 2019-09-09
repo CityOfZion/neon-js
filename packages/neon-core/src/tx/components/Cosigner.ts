@@ -1,22 +1,12 @@
-import { WitnessScope, extractScopes } from "./WitnessScope";
+import { WitnessScope } from "./WitnessScope";
 import { StringStream, num2hexstring } from "../../u";
 import { deserializeArrayOf, serializeArrayOf } from "../main";
 
 export interface CosignerLike {
   account: string;
-  scopes: WitnessScope[];
+  scopes: number;
   allowedContracts: string[];
   allowedGroups: string[];
-}
-
-function isTargetContainedInScopes(
-  scopes: WitnessScope[],
-  targetScope: WitnessScope
-): boolean {
-  if (targetScope === WitnessScope.Global) {
-    return scopes.every(scope => scope === WitnessScope.Global);
-  }
-  return scopes.includes(targetScope);
 }
 
 export class Cosigner {
@@ -24,40 +14,50 @@ export class Cosigner {
    * script hash of cosigner
    */
   public account: string;
-  public scopes: WitnessScope[];
+  public scopes: WitnessScope;
   public allowedContracts: string[];
   public allowedGroups: string[];
-  // This limits maximum number of allowedContracts or allowedGroups here
-  private maxSubitems: number = 16;
+
+  /**
+   * @description This limits maximum number of allowedContracts or allowedGroups here
+   */
+  private readonly MAX_SUB_ITEMS: number = 16;
 
   public constructor(signer: Partial<CosignerLike>) {
     const { account, scopes, allowedContracts, allowedGroups } = signer;
     this.account = account || "";
-    this.scopes = scopes || [WitnessScope.Global];
+    this.scopes = new WitnessScope(scopes);
     this.allowedContracts = allowedContracts || [];
     this.allowedGroups = allowedGroups || [];
   }
 
-  public isScope(targetScope: WitnessScope): boolean {
-    return isTargetContainedInScopes(this.scopes, targetScope);
+  public get isGlobal() {
+    return this.scopes.isGlobal;
+  }
+
+  public get isCalledByEntry() {
+    return this.scopes.isCalledByEntry;
+  }
+
+  public get isCustomContracts() {
+    return this.scopes.isCustomContracts;
+  }
+
+  public get isCustomGroups() {
+    return this.scopes.isCustomGroups;
   }
 
   public static deserialize(ss: StringStream): CosignerLike {
     const account = ss.read(20);
-    const scopes = extractScopes(ss.read());
+    const scopes = parseInt(ss.read(), 16);
+    const witnessScope = new WitnessScope(scopes);
 
     const readStringFromStream = (ss1: StringStream) => ss1.readVarBytes();
 
-    const allowedContracts = isTargetContainedInScopes(
-      scopes,
-      WitnessScope.CustomContracts
-    )
+    const allowedContracts = witnessScope.isCustomContracts
       ? deserializeArrayOf(readStringFromStream, ss)
       : [];
-    const allowedGroups = isTargetContainedInScopes(
-      scopes,
-      WitnessScope.CustomContracts
-    )
+    const allowedGroups = witnessScope.isCustomGroups
       ? deserializeArrayOf(readStringFromStream, ss)
       : [];
     return { account, scopes, allowedContracts, allowedGroups };
@@ -66,13 +66,11 @@ export class Cosigner {
   public serialize(): string {
     let out = "";
     out += this.account;
-    out += num2hexstring(
-      this.scopes.reduce((scopesInByte, scope) => scopesInByte | scope)
-    );
-    if (this.isScope(WitnessScope.CustomContracts)) {
+    out += num2hexstring(this.scopes.export());
+    if (this.isCustomContracts) {
       out += serializeArrayOf(this.allowedContracts);
     }
-    if (this.isScope(WitnessScope.CustomGroups)) {
+    if (this.isCustomGroups) {
       out += serializeArrayOf(this.allowedGroups);
     }
 
@@ -82,7 +80,7 @@ export class Cosigner {
   public export(): CosignerLike {
     return {
       account: this.account,
-      scopes: this.scopes,
+      scopes: this.scopes.export(),
       allowedContracts: this.allowedContracts,
       allowedGroups: this.allowedContracts
     };
