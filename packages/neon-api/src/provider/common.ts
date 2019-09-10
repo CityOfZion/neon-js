@@ -22,6 +22,11 @@ export interface Provider {
   name: string;
   getRPCEndpoint(noCache?: boolean): Promise<string>;
   getHeight(): Promise<number>;
+  getTransactionHistory(address: string): Promise<PastTransaction[]>;
+}
+
+export interface DataProvider extends Provider {
+  getAPIEndpoint(net: string): string;
   /**
    * Get balance of certain address
    * @param addr
@@ -32,11 +37,6 @@ export interface Provider {
   sendAsset(...configs: SendAssetConfig[]): Promise<boolean>;
   readInvoke(...intents: (string | ScriptIntent)[]): Promise<any>;
   invoke(...intents: (string | ScriptIntent)[]): Promise<boolean>;
-  getTransactionHistory(address: string): Promise<PastTransaction[]>;
-}
-
-export interface DataProvider extends Provider {
-  getAPIEndpoint(net: string): string;
 }
 
 export interface RpcNode {
