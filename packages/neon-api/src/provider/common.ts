@@ -31,11 +31,15 @@ export interface DataProvider extends Provider {
    * Get balance of certain address
    * @param addr
    */
-  getBalance(addr: string): Promise<Balance>;
+  getBalance(addr: string, asset: string): Promise<Balance>;
+  getBalances(addr: string, ...asset: string[]): Promise<Balance[]>;
   getMaxClaimAmount(addr: string): Promise<number>;
+  readInvoke(...intents: (string | ScriptIntent)[]): Promise<any>;
+}
+
+export interface EntityProvider extends DataProvider {
   claimGas(account: Account | string): Promise<boolean>;
   sendAsset(...configs: SendAssetConfig[]): Promise<boolean>;
-  readInvoke(...intents: (string | ScriptIntent)[]): Promise<any>;
   invoke(...intents: (string | ScriptIntent)[]): Promise<boolean>;
 }
 

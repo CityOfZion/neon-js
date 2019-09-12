@@ -87,7 +87,10 @@ export class ScriptBuilder extends StringStream {
     return this.emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALL);
   }
 
-  public emitSysCall(service: InteropServiceCode) {
+  public emitSysCall(service: InteropServiceCode, ...args: any[]) {
+    for (let i = args.length - 1; i >= 0; i--) {
+      this.emitPush(args[i]);
+    }
     return this.emit(OpCode.SYSCALL, service);
   }
 

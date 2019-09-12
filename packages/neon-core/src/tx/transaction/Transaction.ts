@@ -180,10 +180,7 @@ export class Transaction {
    * @param usage The usage type. Do refer to txAttrUsage enum values for all available options.
    * @param data The data as hexstring.
    */
-  public addAttribute(usage: number, data: string): this {
-    if (typeof data !== "string") {
-      throw new TypeError("data should be formatted as string!");
-    }
+  public addAttribute(usage: number | string, data: string): this {
     this.attributes.push(new TransactionAttribute({ usage, data }));
     return this;
   }
