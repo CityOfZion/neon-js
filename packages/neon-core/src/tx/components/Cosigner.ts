@@ -24,56 +24,26 @@ export class Cosigner {
   private readonly MAX_SUB_ITEMS: number = 16;
 
   public constructor(signer: Partial<CosignerLike>) {
-    const { account, scopes, allowedContracts, allowedGroups } = signer;
-    this.account = account || "";
-    this.scopes = !scopes ? WitnessScope.Global : scopes & 0x11;
-    this.allowedContracts = allowedContracts || [];
-    this.allowedGroups = allowedGroups || [];
+    const {
+      account = "",
+      scopes = WitnessScope.Global,
+      allowedContracts = [],
+      allowedGroups = []
+    } = signer;
+    this.account = account;
+    this.scopes = scopes & 0xff;
+    this.allowedContracts = [...allowedContracts];
+    this.allowedGroups = [...allowedGroups];
   }
 
-  public get isGlobal() {
-    return this.scopes === WitnessScope.Global;
+  public addAllowedContracts(...contracts: string[]) {
+    this.scopes |= WitnessScope.CustomContracts;
+    this.allowedContracts.push(...contracts);
   }
 
-  public removeAllScopes() {
-    this.scopes = WitnessScope.Global;
-  }
-
-  public get isCalledByEntry() {
-    return (
-      (this.scopes & WitnessScope.CalledByEntry) === WitnessScope.CalledByEntry
-    );
-  }
-
-  public set isCalledByEntry(yes: boolean) {
-    yes
-      ? (this.scopes |= WitnessScope.CalledByEntry)
-      : (this.scopes &= ~WitnessScope.CalledByEntry);
-  }
-
-  public get isCustomContracts() {
-    return (
-      (this.scopes & WitnessScope.CustomContracts) ===
-      WitnessScope.CustomContracts
-    );
-  }
-
-  public set isCustomContracts(yes: boolean) {
-    yes
-      ? (this.scopes |= WitnessScope.CustomContracts)
-      : (this.scopes &= ~WitnessScope.CustomContracts);
-  }
-
-  public get isCustomGroups() {
-    return (
-      (this.scopes & WitnessScope.CustomGroups) === WitnessScope.CustomGroups
-    );
-  }
-
-  public set isCustomGroups(yes: boolean) {
-    yes
-      ? (this.scopes |= WitnessScope.CustomGroups)
-      : (this.scopes &= ~WitnessScope.CustomGroups);
+  public addAllowedGroups(...groups: string[]) {
+    this.scopes |= WitnessScope.CustomGroups;
+    this.allowedGroups.push(...groups);
   }
 
   public static deserialize(ss: StringStream): CosignerLike {
@@ -83,11 +53,11 @@ export class Cosigner {
     const readStringFromStream = (ss1: StringStream) => ss1.readVarBytes();
 
     const allowedContracts =
-      (scopes & WitnessScope.CustomContracts) === WitnessScope.CustomContracts
+      scopes & WitnessScope.CustomContracts
         ? deserializeArrayOf(readStringFromStream, ss)
         : [];
     const allowedGroups =
-      (scopes & WitnessScope.CustomGroups) === WitnessScope.CustomGroups
+      scopes & WitnessScope.CustomGroups
         ? deserializeArrayOf(readStringFromStream, ss)
         : [];
     return { account, scopes, allowedContracts, allowedGroups };
@@ -97,10 +67,10 @@ export class Cosigner {
     let out = "";
     out += this.account;
     out += num2hexstring(this.scopes);
-    if (this.isCustomContracts) {
+    if (this.scopes & WitnessScope.CustomContracts) {
       out += serializeArrayOf(this.allowedContracts);
     }
-    if (this.isCustomGroups) {
+    if (this.scopes & WitnessScope.CustomGroups) {
       out += serializeArrayOf(this.allowedGroups);
     }
 
@@ -111,8 +81,8 @@ export class Cosigner {
     return {
       account: this.account,
       scopes: this.scopes,
-      allowedContracts: this.allowedContracts,
-      allowedGroups: this.allowedContracts
+      allowedContracts: [...this.allowedContracts],
+      allowedGroups: [...this.allowedContracts]
     };
   }
 }
