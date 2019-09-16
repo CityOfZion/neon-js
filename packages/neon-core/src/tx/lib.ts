@@ -16,6 +16,13 @@ export function deserializeArrayOf<T>(
   return output;
 }
 
-export function serializeArrayOf(prop: Array<Serializable | string>): string {
-  return num2VarInt(prop.length) + prop.map(p => (typeof p === "string"? num2VarInt(p.length / 2) + p : p.serialize())).join("");
+export function serializeArrayOf(prop: (Serializable | string)[]): string {
+  return (
+    num2VarInt(prop.length) +
+    prop
+      .map(p =>
+        typeof p === "string" ? num2VarInt(p.length / 2) + p : p.serialize()
+      )
+      .join("")
+  );
 }
