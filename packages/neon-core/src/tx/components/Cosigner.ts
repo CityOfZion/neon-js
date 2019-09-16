@@ -1,6 +1,6 @@
 import { WitnessScope } from "./WitnessScope";
 import { StringStream, num2hexstring } from "../../u";
-import { deserializeArrayOf, serializeArrayOf } from "../main";
+import { deserializeArrayOf, serializeArrayOf } from "../lib";
 
 export interface CosignerLike {
   account: string;
@@ -23,7 +23,7 @@ export class Cosigner {
    */
   private readonly MAX_SUB_ITEMS: number = 16;
 
-  public constructor(signer: Partial<CosignerLike>) {
+  public constructor(signer: Partial<CosignerLike> = {}) {
     const {
       account = "",
       scopes = WitnessScope.Global,
@@ -86,3 +86,5 @@ export class Cosigner {
     };
   }
 }
+
+export default Cosigner;

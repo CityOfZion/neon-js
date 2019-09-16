@@ -1,27 +1,11 @@
-import { num2VarInt, StringStream, fixed82num, ensureHex } from "../u";
-import { TransactionAttribute, Witness } from "./components";
+import { StringStream, fixed82num, ensureHex } from "../../u";
+import { TransactionAttribute, Witness, Cosigner } from "../components";
 import { TransactionLike } from "./Transaction";
-import { getScriptHashFromAddress } from "../wallet";
-import logger from "../logging";
-import { Cosigner } from "./components/Cosigner";
+import { getScriptHashFromAddress } from "../../wallet";
+import { deserializeArrayOf } from "../lib";
+import logger from "../../logging";
 
 const log = logger("tx");
-
-export function deserializeArrayOf<T>(
-  type: (ss: StringStream) => T,
-  ss: StringStream
-): T[] {
-  const output = [];
-  const len = ss.readVarInt();
-  for (let i = 0; i < len; i++) {
-    output.push(type(ss));
-  }
-  return output;
-}
-
-export function serializeArrayOf(prop: any[]): string {
-  return num2VarInt(prop.length) + prop.map(p => p.serialize()).join("");
-}
 
 export function deserializeVersion(
   ss: StringStream,

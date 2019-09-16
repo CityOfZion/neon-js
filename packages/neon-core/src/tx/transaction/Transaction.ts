@@ -19,7 +19,6 @@ import {
   WitnessLike
 } from "../components";
 import {
-  serializeArrayOf,
   deserializeVersion,
   deserializeScript,
   deserializeFee,
@@ -30,8 +29,9 @@ import {
   deserializeSender,
   deserializeValidUntilBlock,
   deserializeCosigners
-} from "../main";
+} from "./main";
 import { CosignerLike, Cosigner } from "../components/Cosigner";
+import { serializeArrayOf } from "../lib";
 const log = logger("tx");
 
 export interface TransactionLike {
