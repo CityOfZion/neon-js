@@ -1,4 +1,11 @@
-import { num2hexstring, num2VarInt, reverseHex, StringStream } from "../../u";
+import {
+  num2hexstring,
+  num2VarInt,
+  reverseHex,
+  StringStream,
+  isHex,
+  str2hexstring
+} from "../../u";
 import { TxAttrUsage } from "./txAttrUsage";
 
 const maxTransactionAttributeSize = 65535;
@@ -23,6 +30,10 @@ export function toTxAttrUsage(
   }
 
   return type as TxAttrUsage;
+}
+
+function convertDataToHex(data: string): string {
+  return isHex(data) ? data : str2hexstring(data);
 }
 
 /**
@@ -63,8 +74,9 @@ export class TransactionAttribute {
       throw new Error(`Data size too big!`);
     }
     let out = num2hexstring(this.usage);
-    out += num2VarInt(this.data.length / 2);
-    out += this.data;
+    const dataInHex = convertDataToHex(this.data);
+    out += num2VarInt(dataInHex.length / 2);
+    out += dataInHex;
     return out;
   }
 
@@ -77,7 +89,8 @@ export class TransactionAttribute {
 
   public equals(other: TransactionAttributeLike): boolean {
     return (
-      this.usage === toTxAttrUsage(other.usage) && this.data === other.data
+      this.usage === toTxAttrUsage(other.usage) &&
+      convertDataToHex(this.data) === convertDataToHex(other.data)
     );
   }
 }

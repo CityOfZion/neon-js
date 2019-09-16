@@ -5,8 +5,8 @@ import { deserializeArrayOf, serializeArrayOf } from "../lib";
 export interface CosignerLike {
   account: string;
   scopes: number;
-  allowedContracts: string[];
-  allowedGroups: string[];
+  allowedContracts?: string[];
+  allowedGroups?: string[];
 }
 
 export class Cosigner {

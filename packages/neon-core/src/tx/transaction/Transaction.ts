@@ -183,6 +183,11 @@ export class Transaction {
     return new Transaction(txObj);
   }
 
+  public addCosigner(...cosigners: CosignerLike[]): this {
+    this.cosigners.push(...cosigners.map(cosigner => new Cosigner(cosigner)));
+    return this;
+  }
+
   /**
    * Add an attribute.
    * @param usage The usage type. Do refer to txAttrUsage enum values for all available options.

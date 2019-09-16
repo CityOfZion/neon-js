@@ -1,6 +1,7 @@
 import TransactionAttribute, {
   TransactionAttributeLike
 } from "../../../src/tx/components/TransactionAttribute";
+import { hexstring2str } from "../../../src/u";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -68,7 +69,7 @@ describe("export", () => {
 
 describe("equals", () => {
   const obj1 = {
-    usage: 32,
+    usage: 129,
     data: "obj1"
   };
   const obj2 = {
@@ -92,17 +93,17 @@ const dataSet = [
   [
     "Cosigner",
     {
-      usage: 32,
-      data: "d336d7eb9975a29b2404fdb28185e277a4b299bc"
+      usage: 129,
+      data: "http://url"
     },
-    "2014d336d7eb9975a29b2404fdb28185e277a4b299bc"
+    "810a687474703a2f2f75726c"
   ]
 ];
 
 describe("serialize", () => {
   test("errors if data too big", () => {
     const result = new TransactionAttribute({
-      usage: 32,
+      usage: 129,
       data: "0".repeat(999999)
     });
 
@@ -123,7 +124,9 @@ describe("deserialize", () => {
     "%s",
     (msg: string, expected: TransactionAttributeLike, data: string) => {
       const result = TransactionAttribute.deserialize(data);
-      expect(result.export()).toEqual(expected);
+      const exported = result.export();
+      expect(exported.usage).toEqual(expected.usage);
+      expect(hexstring2str(exported.data)).toBe(expected.data);
     }
   );
 });
