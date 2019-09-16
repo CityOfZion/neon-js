@@ -82,7 +82,7 @@ export class Cosigner {
       account: this.account,
       scopes: this.scopes,
       allowedContracts: [...this.allowedContracts],
-      allowedGroups: [...this.allowedContracts]
+      allowedGroups: [...this.allowedGroups]
     };
   }
 }
