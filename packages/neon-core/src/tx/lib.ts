@@ -1,5 +1,9 @@
 import { num2VarInt, StringStream } from "../u";
 
+export interface Serializable {
+  serialize: () => string;
+}
+
 export function deserializeArrayOf<T>(
   type: (ss: StringStream) => T,
   ss: StringStream
@@ -12,6 +16,6 @@ export function deserializeArrayOf<T>(
   return output;
 }
 
-export function serializeArrayOf(prop: any[]): string {
-  return num2VarInt(prop.length) + prop.map(p => p.serialize()).join("");
+export function serializeArrayOf(prop: Array<Serializable | string>): string {
+  return num2VarInt(prop.length) + prop.map(p => (typeof p === "string"? num2VarInt(p.length / 2) + p : p.serialize())).join("");
 }
