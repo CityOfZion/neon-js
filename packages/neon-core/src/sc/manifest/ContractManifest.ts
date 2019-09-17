@@ -54,14 +54,12 @@ export class ContractManifest {
   public canCall(manifest: ContractManifest, method: string): boolean {
     return this.permissions.some(permission => {
       const { contract, methods } = permission;
-      if (contract.isHash) {
-        if (contract.descriptor! !== manifest.hash) {
+      if (permission.isHash) {
+        if (contract !== manifest.hash) {
           return false;
         }
-      } else if (contract.isGroup) {
-        if (
-          manifest.groups.every(group => group.pubKey !== contract.descriptor)
-        ) {
+      } else if (permission.isGroup) {
+        if (manifest.groups.every(group => group.pubKey !== contract)) {
           return false;
         }
       }

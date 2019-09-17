@@ -1,12 +1,9 @@
 import { ContractParamType } from "../ContractParam";
-import {
-  ContractParameterDefinitionLike,
-  ContractParameterDefinition
-} from ".";
+import { ContractParameterDefinition } from ".";
 
 export interface ContractMethodDescriptorLike {
   name: string;
-  parameters: ContractParameterDefinitionLike[];
+  parameters: ContractParameterDefinition[];
   returnType: ContractParamType;
 }
 
@@ -22,16 +19,14 @@ export class ContractMethodDescriptor {
       returnType = ContractParamType.Any
     } = obj;
     this.name = name;
-    this.parameters = parameters.map(
-      param => new ContractParameterDefinition(param)
-    );
+    this.parameters = [...parameters];
     this.returnType = returnType;
   }
 
   public export(): ContractMethodDescriptorLike {
     return {
       name: this.name,
-      parameters: this.parameters.map(parameter => parameter.export()),
+      parameters: [...this.parameters],
       returnType: this.returnType
     };
   }

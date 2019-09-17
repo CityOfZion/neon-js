@@ -1,11 +1,8 @@
-import {
-  ContractParameterDefinition,
-  ContractParameterDefinitionLike
-} from "./ContractParameterDefinition";
+import { ContractParameterDefinition } from "./ContractParameterDefinition";
 
 export interface ContractEventDescriptorLike {
   name: string;
-  parameters: ContractParameterDefinitionLike[];
+  parameters: ContractParameterDefinition[];
 }
 
 export class ContractEventDescriptor {
@@ -15,15 +12,13 @@ export class ContractEventDescriptor {
   public constructor(obj: Partial<ContractEventDescriptorLike>) {
     const { name = "", parameters = [] } = obj;
     this.name = name;
-    this.parameters = parameters.map(
-      param => new ContractParameterDefinition(param)
-    );
+    this.parameters = [...parameters];
   }
 
   public export() {
     return {
       name: this.name,
-      parameters: this.parameters.map(param => param.export())
+      parameters: [...this.parameters]
     };
   }
 }
