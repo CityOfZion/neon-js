@@ -1,9 +1,5 @@
 import { StringStream, fixed82num, ensureHex } from "../../u";
-import {
-  TransactionAttribute,
-  Witness,
-  Cosigner
-} from "../components";
+import { TransactionAttribute, Witness, Cosigner } from "../components";
 import { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
 import logger from "../../logging";
