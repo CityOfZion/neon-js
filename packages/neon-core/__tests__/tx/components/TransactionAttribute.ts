@@ -70,7 +70,6 @@ describe("constructor", () => {
     expect(result instanceof TransactionAttribute).toBeTruthy();
     expect(result.usage).toEqual(129);
     expect(result.data).toEqual("687474703a2f2f75726c");
-    expect(result.dataReadable).toEqual("http://url");
   });
 });
 

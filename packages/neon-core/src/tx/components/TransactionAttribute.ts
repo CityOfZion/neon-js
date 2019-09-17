@@ -81,13 +81,6 @@ export class TransactionAttribute {
     return "TransactionAttribute";
   }
 
-  /**
-   * @description data in readable ASCII format
-   */
-  public get dataReadable(): string {
-    return hexstring2str(this.data);
-  }
-
   public serialize(): string {
     if (this.data.length > maxTransactionAttributeSize) {
       throw new Error(`Data size too big!`);
