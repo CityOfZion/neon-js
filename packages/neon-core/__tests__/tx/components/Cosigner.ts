@@ -43,7 +43,7 @@ describe("constructor & export", () => {
 describe("add methods", () => {
   test("addAllowedContracts", () => {
     const cosigner = new Cosigner();
-    expect(!!(cosigner.scopes & WitnessScope.CustomContracts)).toBeFalsy();
+    expect(cosigner.scopes & WitnessScope.CustomContracts).toBeFalsy();
     cosigner.addAllowedContracts(
       "43cf98eddbe047e198a3e5d57006311442a0ca15",
       "a1760976db5fcdfab2a9930e8f6ce875b2d18225"

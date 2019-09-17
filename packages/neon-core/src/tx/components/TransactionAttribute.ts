@@ -1,10 +1,10 @@
 import {
   num2hexstring,
   num2VarInt,
-  reverseHex,
   StringStream,
-  isHex,
-  str2hexstring
+  ensureHex,
+  str2hexstring,
+  hexstring2str
 } from "../../u";
 import { TxAttrUsage } from "./txAttrUsage";
 
@@ -32,10 +32,6 @@ export function toTxAttrUsage(
   return type as TxAttrUsage;
 }
 
-function convertDataToHex(data: string): string {
-  return isHex(data) ? data : str2hexstring(data);
-}
-
 /**
  * An attribute that is used to decorate the transaction.
  * Used for appending additional information to the transaction.
@@ -55,18 +51,41 @@ export class TransactionAttribute {
   }
 
   public usage: TxAttrUsage;
+
+  /**
+   * @description data in hex format
+   */
   public data: string;
 
   public constructor(obj: TransactionAttributeLike) {
     if (!obj || obj.usage === undefined || obj.data === undefined) {
       throw new Error("TransactionAttribute requires usage and data fields");
     }
-    this.usage = toTxAttrUsage(obj.usage);
-    this.data = obj.data;
+    const { usage, data } = obj;
+    this.usage = toTxAttrUsage(usage);
+    ensureHex(data);
+    this.data = data;
+  }
+
+  /**
+   * @param url url string in ASCII format
+   */
+  public static Url(url: string): TransactionAttribute {
+    return new TransactionAttribute({
+      usage: TxAttrUsage.Url,
+      data: str2hexstring(url)
+    });
   }
 
   public get [Symbol.toStringTag](): string {
     return "TransactionAttribute";
+  }
+
+  /**
+   * @description data in readable ASCII format
+   */
+  public get dataReadable(): string {
+    return hexstring2str(this.data);
   }
 
   public serialize(): string {
@@ -74,9 +93,8 @@ export class TransactionAttribute {
       throw new Error(`Data size too big!`);
     }
     let out = num2hexstring(this.usage);
-    const dataInHex = convertDataToHex(this.data);
-    out += num2VarInt(dataInHex.length / 2);
-    out += dataInHex;
+    out += num2VarInt(this.data.length / 2);
+    out += this.data;
     return out;
   }
 
@@ -89,8 +107,7 @@ export class TransactionAttribute {
 
   public equals(other: TransactionAttributeLike): boolean {
     return (
-      this.usage === toTxAttrUsage(other.usage) &&
-      convertDataToHex(this.data) === convertDataToHex(other.data)
+      this.usage === toTxAttrUsage(other.usage) && this.data === other.data
     );
   }
 }

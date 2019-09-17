@@ -12,7 +12,7 @@ describe("constructor", () => {
   test("TransactionAttributeLike (wrong usage)", () => {
     const testObject = {
       usage: 240,
-      data: "test"
+      data: "2f75726c"
     } as TransactionAttributeLike;
     const f = () => new TransactionAttribute(testObject);
     expect(f).toThrow();
@@ -21,7 +21,7 @@ describe("constructor", () => {
   test("TransactionAttributeLike (int usage)", () => {
     const testObject = {
       usage: 129,
-      data: "test"
+      data: "2f75726c"
     } as TransactionAttributeLike;
 
     const result = new TransactionAttribute(testObject);
@@ -33,7 +33,7 @@ describe("constructor", () => {
   test("TransactionAttributeLike (str usage)", () => {
     const testObject = {
       usage: "Url",
-      data: "test"
+      data: "2f75726c"
     } as TransactionAttributeLike;
 
     const result = new TransactionAttribute(testObject);
@@ -42,15 +42,35 @@ describe("constructor", () => {
     expect(result.data).toEqual(testObject.data);
   });
 
+  test("TransactionAttributeLike (data not in hex)", () => {
+    const testObject = {
+      usage: 129,
+      data: "test"
+    };
+
+    const result = function() {
+      new TransactionAttribute(testObject);
+    };
+    expect(result).toThrow();
+  });
+
   test("TransactionAttribute", () => {
     const testObject = new TransactionAttribute({
       usage: 129,
-      data: "test"
+      data: "2f75726c"
     });
 
     const result = new TransactionAttribute(testObject);
     expect(result instanceof TransactionAttribute).toBeTruthy();
     expect(result).toEqual(testObject);
+  });
+
+  test("Static Url", () => {
+    const result = TransactionAttribute.Url("http://url");
+    expect(result instanceof TransactionAttribute).toBeTruthy();
+    expect(result.usage).toEqual(129);
+    expect(result.data).toEqual("687474703a2f2f75726c");
+    expect(result.dataReadable).toEqual("http://url");
   });
 });
 
@@ -58,7 +78,7 @@ describe("export", () => {
   test("export to TransactionAttributeLike", () => {
     const expected = {
       usage: 129,
-      data: "test"
+      data: "2f75726c"
     };
 
     const txAttr = new TransactionAttribute(expected);
@@ -70,11 +90,11 @@ describe("export", () => {
 describe("equals", () => {
   const obj1 = {
     usage: 129,
-    data: "obj1"
+    data: "2f75726c"
   };
   const obj2 = {
     usage: 129,
-    data: "obj2"
+    data: "703a2f"
   };
   const attr1 = new TransactionAttribute(obj1);
   const attr2 = new TransactionAttribute(obj2);
@@ -94,9 +114,9 @@ const dataSet = [
     "Cosigner",
     {
       usage: 129,
-      data: "http://url"
+      data: "2f75726c"
     },
-    "810a687474703a2f2f75726c"
+    "81042f75726c"
   ]
 ];
 
@@ -104,7 +124,7 @@ describe("serialize", () => {
   test("errors if data too big", () => {
     const result = new TransactionAttribute({
       usage: 129,
-      data: "0".repeat(999999)
+      data: "0".repeat(1000000)
     });
 
     expect(result.serialize).toThrow();
@@ -124,9 +144,7 @@ describe("deserialize", () => {
     "%s",
     (msg: string, expected: TransactionAttributeLike, data: string) => {
       const result = TransactionAttribute.deserialize(data);
-      const exported = result.export();
-      expect(exported.usage).toEqual(expected.usage);
-      expect(hexstring2str(exported.data)).toBe(expected.data);
+      expect(result.export()).toEqual(expected);
     }
   );
 });

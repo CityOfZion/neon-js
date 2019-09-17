@@ -178,9 +178,9 @@ describe("Add Methods", () => {
 
   test("addAttribute", () => {
     const tx1 = createTxforTestAddMethods();
-    tx1.addAttribute(129, "http://url");
+    tx1.addAttribute(129, "72e9a2");
     expect(tx1.attributes[0].usage).toBe(129);
-    expect(tx1.attributes[0].data).toBe("http://url");
+    expect(tx1.attributes[0].data).toBe("72e9a2");
   });
 
   test("addWitness", () => {
