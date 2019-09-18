@@ -19,7 +19,6 @@ import {
   WitnessLike
 } from "../components";
 import {
-  serializeArrayOf,
   deserializeVersion,
   deserializeScript,
   deserializeFee,
@@ -29,8 +28,10 @@ import {
   deserializeNonce,
   deserializeSender,
   deserializeValidUntilBlock,
-  getCosignersFromAttributes
+  deserializeCosigners
 } from "./main";
+import { CosignerLike, Cosigner } from "../components/Cosigner";
+import { serializeArrayOf } from "../lib";
 const log = logger("tx");
 
 export interface TransactionLike {
@@ -41,6 +42,7 @@ export interface TransactionLike {
   networkFee: Fixed8 | number;
   validUntilBlock: number;
   attributes: TransactionAttributeLike[];
+  cosigners: CosignerLike[];
   scripts: WitnessLike[];
   script: string;
 }
@@ -90,6 +92,7 @@ export class Transaction {
    */
   public validUntilBlock: number;
   public attributes: TransactionAttribute[];
+  public cosigners: Cosigner[];
   public scripts: Witness[];
   public script: string;
 
@@ -107,6 +110,7 @@ export class Transaction {
       networkFee,
       validUntilBlock,
       attributes,
+      cosigners,
       scripts,
       script
     } = tx;
@@ -123,6 +127,9 @@ export class Transaction {
     this.scripts = this.scripts.sort(
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
     );
+    this.cosigners = cosigners
+      ? cosigners.map(cosigner => new Cosigner(cosigner))
+      : [];
     this.systemFee = systemFee ? new Fixed8(systemFee) : new Fixed8(0);
     this.networkFee = networkFee ? new Fixed8(networkFee) : new Fixed8(0);
     this.script = script || "";
@@ -168,11 +175,17 @@ export class Transaction {
     txObj = deserializeFee(ss, txObj);
     txObj = deserializeValidUntilBlock(ss, txObj);
     txObj = deserializeAttributes(ss, txObj);
+    txObj = deserializeCosigners(ss, txObj);
     txObj = deserializeScript(ss, txObj);
     if (!ss.isEmpty()) {
       txObj = deserializeWitnesses(ss, txObj);
     }
     return new Transaction(txObj);
+  }
+
+  public addCosigner(...cosigners: CosignerLike[]): this {
+    this.cosigners.push(...cosigners.map(cosigner => new Cosigner(cosigner)));
+    return this;
   }
 
   /**
@@ -229,6 +242,7 @@ export class Transaction {
     out += this.networkFee.toReverseHex();
     out += num2hexstring(this.validUntilBlock, 4);
     out += serializeArrayOf(this.attributes);
+    out += serializeArrayOf(this.cosigners);
     out += num2VarInt(this.script.length / 2);
     out += this.script;
     if (signed) {
@@ -268,13 +282,14 @@ export class Transaction {
       networkFee: this.networkFee.toNumber(),
       validUntilBlock: this.validUntilBlock,
       attributes: this.attributes.map(a => a.export()),
+      cosigners: this.cosigners.map(cosigner => cosigner.export()),
       scripts: this.scripts.map(a => a.export()),
       script: this.script
     };
   }
 
   public getScriptHashesForVerifying(): string[] {
-    let hashes = getCosignersFromAttributes(this.attributes);
+    let hashes = this.cosigners.map(cosigner => cosigner.account);
     hashes.unshift(this.sender);
     return hashes.sort();
   }
