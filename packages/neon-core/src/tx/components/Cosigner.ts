@@ -3,6 +3,7 @@ import { StringStream, num2hexstring } from "../../u";
 import { deserializeArrayOf, serializeArrayOf } from "../lib";
 
 export interface CosignerLike {
+  /* account scripthash in big endian */
   account: string;
   scopes: number;
   allowedContracts?: string[];
