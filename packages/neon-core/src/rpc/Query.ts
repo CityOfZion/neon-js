@@ -65,11 +65,11 @@ export class Query {
   /**
    * This Query returns the specified block either as a hexstring or human readable JSON.
    * @param indexOrHash height or hash of block.
-   * @param verbose 0 for hexstring, 1 for JSON. Defaults to 1.
+   * @param verbose 0 for hexstring, 1 for JSON. Defaults to 0.
    */
   public static getBlock(
     indexOrHash: string | number,
-    verbose: number = 1
+    verbose: 0 | 1 = 0
   ): Query {
     return new Query({
       method: "getblock",
@@ -167,9 +167,9 @@ export class Query {
   /**
    * This Query returns information about a specific transaction in either hexstring or human readable JSON.
    * @param txid hash of the specific transaction.
-   * @param verbose 0 for hexstring, 1 for JSON. Defaults to 1.
+   * @param verbose 0 for hexstring, 1 for JSON. Defaults to 0.
    */
-  public static getRawTransaction(txid: string, verbose: number = 1): Query {
+  public static getRawTransaction(txid: string, verbose: number = 0): Query {
     return new Query({
       method: "getrawtransaction",
       params: [txid, verbose]
@@ -336,13 +336,13 @@ export class Query {
     config: AxiosRequestConfig = {}
   ): Promise<any> {
     if (this.completed) {
-      throw new Error("This request has been sent");
+      return Promise.reject("This request has been sent");
     }
     const response = await queryRPC(url, this.req, config);
     this.res = response;
     this.completed = true;
     if (response.error) {
-      throw new Error(`${url}: ${response.error.message}`);
+      return Promise.reject(`${url}: ${response.error.message}`);
     }
     if (this.parse) {
       log.info(`Query[${this.req.method}] successful`);
