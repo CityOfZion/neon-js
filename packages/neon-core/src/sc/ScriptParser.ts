@@ -90,6 +90,8 @@ export class ScriptParser extends StringStream {
           output.operation = hexstring2str(output.args!.shift());
           output.args = output.args!.shift();
           return output;
+        case n === 241:
+          break;
         default:
           throw new Error(`Encounter unknown byte: ${b}`);
       }
