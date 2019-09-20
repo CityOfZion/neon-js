@@ -1,8 +1,11 @@
-import { RPCClient, IntegerParser } from "@cityofzion/neon-core/lib/rpc";
-import { createScript, ContractParam } from "@cityofzion/neon-core/lib/sc";
+import { RPCClient, IntegerParser, Query } from "@cityofzion/neon-core/lib/rpc";
+import {
+  createScript,
+  ContractParam,
+  ScriptIntent,
+  StackItemLike
+} from "@cityofzion/neon-core/lib/sc";
 import { ASSET_ID } from "@cityofzion/neon-core/lib/consts";
-import { Transaction } from "@cityofzion/neon-core/lib/tx";
-import { Account } from "@cityofzion/neon-core/lib/wallet";
 
 export interface Balance {
   [index: string]: number;
@@ -10,11 +13,11 @@ export interface Balance {
 
 export class NetProvider {
   private _url: string;
-  private rpc: RPCClient;
+  protected _rpc: RPCClient;
 
   public constructor(url: string) {
     this._url = url;
-    this.rpc = new RPCClient(url);
+    this._rpc = new RPCClient(url);
   }
 
   public get node() {
@@ -23,11 +26,11 @@ export class NetProvider {
 
   public set node(url: string) {
     this._url = url;
-    this.rpc = new RPCClient(url);
+    this._rpc = new RPCClient(url);
   }
 
   public getHeight(): Promise<number> {
-    return this.rpc.getBlockCount();
+    return this._rpc.getBlockCount();
   }
 
   public async getBalance(addr: string, asset: string): Promise<number> {
@@ -37,7 +40,7 @@ export class NetProvider {
       operation: "balanceOf",
       args: [addrInHash160]
     });
-    const { state, stack } = await this.rpc.invokeScript(script);
+    const { state, stack } = await this._rpc.invokeScript(script);
     if (state === "FAULT") {
       return Promise.reject(`Error Happenned!`);
     }
@@ -61,7 +64,7 @@ export class NetProvider {
         };
       })
     );
-    const { state, stack } = await this.rpc.invokeScript(script);
+    const { state, stack } = await this._rpc.invokeScript(script);
     if (state === "FAULT") {
       return Promise.reject(`Error Happenned!`);
     }
@@ -85,31 +88,23 @@ export class NetProvider {
       operation: "unClaimGas",
       args: [addrInHash160, untilBlockHeight]
     });
-    const { state, stack } = await this.rpc.invokeScript(script);
+    const { state, stack } = await this._rpc.invokeScript(script);
     if (state === "FAULT") {
       return Promise.reject(`Error Happenned!`);
     }
     return IntegerParser(stack[0]);
   }
 
-  public async claimGas(account: Account | string): Promise<boolean> {
-    if (typeof account === "string") {
-      account = new Account(account);
+  public async readInvoke(
+    scriptsIntents: (string | ScriptIntent)[]
+  ): Promise<StackItemLike[]> {
+    const script = createScript(...scriptsIntents);
+    const { state, stack } = await this._rpc.invokeScript(script);
+    if (state.indexOf("FAULT") >= 0) {
+      return Promise.reject(stack);
+    } else {
+      return stack;
     }
-    const addressInHash160 = ContractParam.hash160(account.address);
-    const amount = await this.getBalance(account.address, ASSET_ID.NEO);
-    const script = createScript({
-      scriptHash: ASSET_ID.NEO,
-      operation: "transfer",
-      args: [addressInHash160, addressInHash160, ContractParam.integer(amount)]
-    });
-    const transaction = new Transaction({
-      sender: account.scriptHash,
-      script,
-      validUntilBlock:
-        Transaction.MAX_TRANSACTION_LIFESPAN + (await this.getHeight())
-    }).sign(account);
-    return this.rpc.sendRawTransaction(transaction);
   }
 }
 

@@ -1,6 +1,7 @@
 import * as _Neon from "@cityofzion/neon-core";
-import * as plugin from "./plugin";
 import { default as apiSettings } from "./settings";
+import { TransactionBuilder } from "./transationBuilder";
+import { NetProvider, EntityProvider } from "./providers";
 
 function assignSettings(
   baseSettings: typeof _Neon.settings,
@@ -21,10 +22,18 @@ function assignSettings(
 }
 function bundle<T extends typeof _Neon>(
   neonCore: T
-): T & { api: typeof plugin } {
+): T & {
+  TransactionBuilder: TransactionBuilder;
+  NetProvider: NetProvider;
+  EntityProvider: EntityProvider;
+} {
   assignSettings(neonCore.settings, apiSettings);
-  return { ...(neonCore as any), api: plugin };
+  return {
+    ...(neonCore as any),
+    TransactionBuilder,
+    NetProvider,
+    EntityProvider
+  };
 }
 
 export default bundle;
-export * from "./plugin";

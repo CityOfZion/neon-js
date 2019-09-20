@@ -287,7 +287,14 @@ export class Transaction {
 
   public getScriptHashesForVerifying(): string[] {
     let hashes = this.cosigners.map(cosigner => cosigner.account);
-    hashes.unshift(this.sender);
+    if (
+      !hashes.every(hash => hashes.indexOf(hash) === hashes.lastIndexOf(hash))
+    ) {
+      throw new Error(`Duplicate Cosigner`);
+    }
+    if (hashes.indexOf(this.sender) < 0) {
+      hashes.unshift(this.sender);
+    }
     return hashes.sort();
   }
 }
