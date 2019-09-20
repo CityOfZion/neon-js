@@ -1,4 +1,11 @@
-import { num2hexstring, num2VarInt, reverseHex, StringStream } from "../../u";
+import {
+  num2hexstring,
+  num2VarInt,
+  StringStream,
+  ensureHex,
+  str2hexstring,
+  hexstring2str
+} from "../../u";
 import { TxAttrUsage } from "./txAttrUsage";
 
 const maxTransactionAttributeSize = 65535;
@@ -17,7 +24,7 @@ export function toTxAttrUsage(
     }
     throw new Error(`${type} not found in TxAttrUsage!`);
   } else if (typeof type === "number") {
-    if (TxAttrUsage.Cosigner !== type && TxAttrUsage.Url !== type) {
+    if (TxAttrUsage.Url !== type) {
       throw new Error(`${type} not found in TxAttrUsage!`);
     }
   }
@@ -44,14 +51,30 @@ export class TransactionAttribute {
   }
 
   public usage: TxAttrUsage;
+
+  /**
+   * @description data in hex format
+   */
   public data: string;
 
   public constructor(obj: TransactionAttributeLike) {
     if (!obj || obj.usage === undefined || obj.data === undefined) {
       throw new Error("TransactionAttribute requires usage and data fields");
     }
-    this.usage = toTxAttrUsage(obj.usage);
-    this.data = obj.data;
+    const { usage, data } = obj;
+    this.usage = toTxAttrUsage(usage);
+    ensureHex(data);
+    this.data = data;
+  }
+
+  /**
+   * @param url url string in ASCII format
+   */
+  public static Url(url: string): TransactionAttribute {
+    return new TransactionAttribute({
+      usage: TxAttrUsage.Url,
+      data: str2hexstring(url)
+    });
   }
 
   public get [Symbol.toStringTag](): string {

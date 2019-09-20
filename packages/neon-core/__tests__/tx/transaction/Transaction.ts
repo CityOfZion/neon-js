@@ -1,6 +1,12 @@
-import { Transaction, TransactionLike, Witness } from "../../../src/tx";
+import {
+  Transaction,
+  TransactionLike,
+  Witness,
+  WitnessScope
+} from "../../../src/tx";
 import samples from "./Transaction.json";
 import { Account } from "../../../src/wallet";
+import { str2hexstring } from "../../../src/u";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -66,15 +72,18 @@ describe("getters", () => {
       validUntilBlock: 1000
     });
     expect(tx.hash).toBe(
-      "cb1715e1649b7c37ac8bc8856dda05e9a0888f4103b1307d60ddaa96f4c26c31"
+      "361fbecac04d5a5924f9a7a73ccb34fe9eb0157943257fc5c9feff2c38d3f2c2"
     );
   });
 
   test("signers", () => {
     const tx = new Transaction({
       sender: "39e9c91012be63a58504e52b7318c1274554ae3d",
-      attributes: [
-        { usage: "Cosigner", data: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26" }
+      cosigners: [
+        {
+          account: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
+          scopes: WitnessScope.Global
+        }
       ]
     });
     expect(tx.getScriptHashesForVerifying()).toStrictEqual([
@@ -89,6 +98,7 @@ describe("export", () => {
     version: 1,
     nonce: 123,
     sender: "39e9c91012be63a58504e52b7318c1274554ae3d",
+    cosigners: [],
     systemFee: 12,
     networkFee: 13,
     validUntilBlock: 1000,
@@ -154,13 +164,23 @@ describe("Add Methods", () => {
     });
   }
 
-  test("addAttribute", () => {
+  test("addCosigner", () => {
     const tx1 = createTxforTestAddMethods();
-    tx1.addAttribute(32, "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26");
-    expect(tx1.attributes[0].usage).toBe(32);
-    expect(tx1.attributes[0].data).toBe(
+    tx1.addCosigner({
+      account: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
+      scopes: WitnessScope.Global
+    });
+    expect(tx1.cosigners[0].account).toBe(
       "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26"
     );
+    expect(tx1.cosigners[0].scopes).toBe(WitnessScope.Global);
+  });
+
+  test("addAttribute", () => {
+    const tx1 = createTxforTestAddMethods();
+    tx1.addAttribute(129, "72e9a2");
+    expect(tx1.attributes[0].usage).toBe(129);
+    expect(tx1.attributes[0].data).toBe("72e9a2");
   });
 
   test("addWitness", () => {
@@ -189,25 +209,9 @@ describe("Add Methods", () => {
       "210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba68747476aa"
     );
     expect(tx1.scripts[0].invocationScript).toBe(
-      "4073b9a44d007966c19e3010202aeed6dd9a158ab2b49d42eb14a3ab43509112674117a3e4cb0c9eadb45e93db621a3d0d6aa1a66086dc55b08a8e28de740e7dd7"
+      "4037a82382d11fda7c388a2e23c8408c5e95de0f8d2d805de0b6899ab3f436f9a134814da03d78d6c41f415ed31b5b55ff1be2b4dcf903e67db2bc76eae04a93cb"
     );
   });
-});
-
-// TODO
-describe.skip("Fee Related", () => {
-  function createTxforTestFeeMethods(): Transaction {
-    return new Transaction({
-      version: 0,
-      nonce: 123,
-      sender: "39e9c91012be63a58504e52b7318c1274554ae3d",
-      systemFee: 12,
-      networkFee: 0,
-      validUntilBlock: 1000,
-      attributes: [],
-      scripts: []
-    });
-  }
 });
 
 const dataSet = Object.keys(samples).map(k => {

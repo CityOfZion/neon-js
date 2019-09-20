@@ -1,32 +1,11 @@
-import { num2VarInt, StringStream, fixed82num, ensureHex } from "../../u";
-import {
-  TransactionAttribute,
-  Witness,
-  toTxAttrUsage,
-  TransactionAttributeLike
-} from "../components";
+import { StringStream, fixed82num, ensureHex } from "../../u";
+import { TransactionAttribute, Witness, Cosigner } from "../components";
 import { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
-import TxAttrUsage from "../components/txAttrUsage";
 import logger from "../../logging";
+import { deserializeArrayOf } from "../lib";
 
 const log = logger("tx");
-
-export function deserializeArrayOf<T>(
-  type: (ss: StringStream) => T,
-  ss: StringStream
-): T[] {
-  const output = [];
-  const len = ss.readVarInt();
-  for (let i = 0; i < len; i++) {
-    output.push(type(ss));
-  }
-  return output;
-}
-
-export function serializeArrayOf(prop: any[]): string {
-  return num2VarInt(prop.length) + prop.map(p => p.serialize()).join("");
-}
 
 export function deserializeVersion(
   ss: StringStream,
@@ -83,14 +62,6 @@ export function deserializeValidUntilBlock(
   return Object.assign(tx, { validUntilBlock });
 }
 
-export function getCosignersFromAttributes(
-  attrs: TransactionAttribute[] | TransactionAttributeLike[]
-): string[] {
-  return attrs
-    .filter(attr => toTxAttrUsage(attr.usage) === TxAttrUsage.Cosigner)
-    .map(attr => attr.data);
-}
-
 export function deserializeAttributes(
   ss: StringStream,
   tx: Partial<TransactionLike>
@@ -99,15 +70,6 @@ export function deserializeAttributes(
     TransactionAttribute.fromStream,
     ss
   ).map(i => i.export());
-  const cosigners = getCosignersFromAttributes(attributes);
-  if (
-    !cosigners.every(
-      cosigner =>
-        cosigners.indexOf(cosigner) === cosigners.lastIndexOf(cosigner)
-    )
-  ) {
-    log.error("Cosigner should not duplicate.");
-  }
   return Object.assign(tx, { attributes });
 }
 
@@ -137,4 +99,20 @@ export function formatSender(sender: string | undefined): string {
   } else {
     throw new Error(`Sender format error: ${sender}`);
   }
+}
+
+export function deserializeCosigners(
+  ss: StringStream,
+  tx: Partial<TransactionLike>
+): Partial<TransactionLike> {
+  const cosigners = deserializeArrayOf(Cosigner.deserialize, ss);
+  if (
+    !cosigners.every(
+      cosigner =>
+        cosigners.indexOf(cosigner) === cosigners.lastIndexOf(cosigner)
+    )
+  ) {
+    log.warn("Cosigner should not duplicate.");
+  }
+  return Object.assign(tx, { cosigners });
 }

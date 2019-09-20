@@ -3,7 +3,6 @@
  * @enum {number}
  */
 export enum TxAttrUsage {
-  Cosigner = 32,
   Url = 129
 }
 
