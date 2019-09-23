@@ -6,6 +6,7 @@ const PRIVATE_KEY1 =
   "a7b9775c6b9136bf89f63def7eab0c5f2d3d0c9e85492717f54386420cce5aa1";
 const PRIVATE_KEY2 =
   "4f0d41eda93941d106d4a26cc90b4b4fddc0e03b396ac94eb439c5d9e0cd6548";
+
 const WALLET_JSON = {
   accounts: [
     {
