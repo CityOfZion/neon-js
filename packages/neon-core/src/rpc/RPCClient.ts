@@ -14,13 +14,7 @@ export interface Validator {
   active: boolean;
 }
 
-export interface GetUnclaimedResult {
-  available: number;
-  unavailable: number;
-  unclaimed: number;
-}
-
-export interface BlockHeader {
+export interface BlockHeaderLike {
   hash: string;
   size: number;
   version: number;
@@ -34,7 +28,7 @@ export interface BlockHeader {
   nextblockhash: string;
 }
 
-export interface Block extends BlockHeader {
+export interface BlockLike extends BlockHeaderLike {
   consensus_data: {
     nonce: string;
     primary: number;
@@ -42,25 +36,11 @@ export interface Block extends BlockHeader {
   tx: TransactionLike[];
 }
 
-export interface GetBlockParam {
-  indexOrHash: number | string;
-  verbose?: 0 | 1;
+export interface CliPlugin {
+  name: string;
+  version: string;
+  interfaces: string[];
 }
-
-export interface GetTxParam {
-  txid: string;
-  verbose?: 0 | 1;
-}
-
-export type getBlockResult<T extends GetBlockParam> = T["verbose"] extends 1
-  ? Block
-  : string;
-export type getBlockHeaderResult<
-  T extends GetBlockParam
-> = T["verbose"] extends 1 ? BlockHeader : string;
-export type getTxResult<T extends GetTxParam> = T["verbose"] extends 1
-  ? TransactionLike
-  : string;
 
 /**
  * RPC Client model to query a NEO node. Contains built-in methods to query using RPC calls.
@@ -150,13 +130,22 @@ export class RPCClient {
 
   /**
    * Gets the block at a given height or hash.
-   * @param param: `indexOrHash`-height or hash of desired block; `verbose`- 0 for serialized block in hex, 1 for json format, defaults to 0
+   * @param indexOrHash - height or hash of desired block;
+   * @param verbose - 0 for serialized block in hex, 1 for json format, defaults to 0
    * @returns string or block object according to verbose
    */
-  public async getBlock<T extends GetBlockParam>(
-    param: T
-  ): Promise<getBlockResult<T>> {
-    const { indexOrHash, verbose } = param;
+  public async getBlock(
+    indexOrHash: number | string,
+    verbose?: 0
+  ): Promise<string>;
+  public async getBlock(
+    indexOrHash: number | string,
+    verbose: 1
+  ): Promise<BlockLike>;
+  public async getBlock(
+    indexOrHash: number | string,
+    verbose?: 0 | 1
+  ): Promise<string | BlockLike> {
     const response = await this.execute(Query.getBlock(indexOrHash, verbose));
     return response.result;
   }
@@ -187,13 +176,22 @@ export class RPCClient {
 
   /**
    * Get the corresponding block header information according to the specified script hash.
-   * @param param: `indexOrHash`-height or hash of desired block; `verbose`- 0 for serialized block in hex, 1 for json format, defaults to 0
+   * @param indexOrHash - height or hash of desired block
+   * @param verbose - 0 for serialized block in hex, 1 for json format, defaults to 0
    * @returns verbose = 0, blocker header hex string; verbose = 1, block header info in json
    */
-  public async getBlockHeader<T extends GetBlockParam>(
-    param: T
-  ): Promise<getBlockHeaderResult<T>> {
-    const { indexOrHash, verbose } = param;
+  public async getBlockHeader(
+    indexOrHash: number | string,
+    verbose?: 0
+  ): Promise<string>;
+  public async getBlockHeader(
+    indexOrHash: number | string,
+    verbose: 1
+  ): Promise<BlockHeaderLike>;
+  public async getBlockHeader(
+    indexOrHash: number | string,
+    verbose?: 0 | 1
+  ): Promise<string | BlockHeaderLike> {
     const response = await this.execute(
       Query.getBlockHeader(indexOrHash, verbose)
     );
@@ -253,12 +251,19 @@ export class RPCClient {
 
   /**
    * Gets a transaction based on its hash.
-   * @param
+   * @param txid - transaction id
+   * @param verbose - 0, will query transaction in hex string; 1 will query for transaction object. defaults to 0
+   * @return transaction hex or object
    */
-  public async getRawTransaction<T extends GetTxParam>(
-    param: T
-  ): Promise<getTxResult<T>> {
-    const { txid, verbose } = param;
+  public async getRawTransaction(txid: string, verbose?: 0): Promise<string>;
+  public async getRawTransaction(
+    txid: string,
+    verbose: 1
+  ): Promise<TransactionLike>;
+  public async getRawTransaction(
+    txid: string,
+    verbose?: 0 | 1
+  ): Promise<string | TransactionLike> {
     const response = await this.execute(Query.getRawTransaction(txid, verbose));
     return response.result;
   }
@@ -316,7 +321,7 @@ export class RPCClient {
   /**
    * This Query returns a list of plugins loaded by the node.
    */
-  public async listPlugins(): Promise<object[]> {
+  public async listPlugins(): Promise<CliPlugin[]> {
     const response = await this.execute(Query.listPlugins());
     return response.result;
   }

@@ -1,5 +1,5 @@
 import { rpc, CONST } from "../../src/index";
-import { ContractParam, createScript, ScriptParser } from "../../src/sc";
+import { ContractParam, createScript } from "../../src/sc";
 import { Transaction, WitnessScope } from "../../src/tx";
 import { Account } from "../../src/wallet";
 import { reverseHex } from "../../src/u";
@@ -64,18 +64,15 @@ describe("RPC Methods", () => {
       ]
     };
     test("height as index, verbose = 0", async () => {
-      const result = await client.getBlock({
-        indexOrHash: 100
-      });
+      const result = await client.getBlock(100);
       expect(result).toBe(the100thBlockHash);
     });
 
     test("hash as index, verbose = 1", async () => {
-      const result = await client.getBlock({
-        indexOrHash:
-          "47383336f5bf76e4eb621484a58c4d2de064b28bc197000a7218177c77d4d1c8",
-        verbose: 1
-      });
+      const result = await client.getBlock(
+        "47383336f5bf76e4eb621484a58c4d2de064b28bc197000a7218177c77d4d1c8",
+        1
+      );
       expect(result.consensus_data).toStrictEqual(
         the100thBlockJson.consensus_data
       );
@@ -125,18 +122,15 @@ describe("RPC Methods", () => {
       ]
     };
     test("height as index, verbose = 0", async () => {
-      const result = await client.getBlockHeader({
-        indexOrHash: 100
-      });
+      const result = await client.getBlockHeader(100);
       expect(result).toBe(the100thBlockHeaderHash);
     });
 
     test("hash as index, verbose = 1", async () => {
-      const result = await client.getBlock({
-        indexOrHash:
-          "47383336f5bf76e4eb621484a58c4d2de064b28bc197000a7218177c77d4d1c8",
-        verbose: 1
-      });
+      const result = await client.getBlock(
+        "47383336f5bf76e4eb621484a58c4d2de064b28bc197000a7218177c77d4d1c8",
+        1
+      );
       expect(result.merkleroot).toStrictEqual(
         the100thBlockHeaderJson.merkleroot
       );
@@ -181,18 +175,17 @@ describe("RPC Methods", () => {
 
   describe("getRawTransaction", () => {
     test("verbose", async () => {
-      const result = await client.getRawTransaction({
-        txid:
-          "7d6f49c21623c25817b4ca5b14ecc79284d75e14b65b8415d01fa439c48ba064",
-        verbose: 1
-      });
+      const result = await client.getRawTransaction(
+        "7d6f49c21623c25817b4ca5b14ecc79284d75e14b65b8415d01fa439c48ba064",
+        1
+      );
       expect(result.nonce).toEqual(242735824);
     });
 
     test("non-verbose", async () => {
-      const result = await client.getRawTransaction({
-        txid: "7d6f49c21623c25817b4ca5b14ecc79284d75e14b65b8415d01fa439c48ba064"
-      });
+      const result = await client.getRawTransaction(
+        "7d6f49c21623c25817b4ca5b14ecc79284d75e14b65b8415d01fa439c48ba064"
+      );
       expect(result).toBe(
         "00d0da770ec7e4fce7f40b9616bd1884a9b85d33e4f617c3de00e1f5050000000000e1f50500000000244a20000001c7e4fce7f40b9616bd1884a9b85d33e4f617c3de01505114c7e4fce7f40b9616bd1884a9b85d33e4f617c3de14c7e4fce7f40b9616bd1884a9b85d33e4f617c3de53c1087472616e736665721415caa04214310670d5e5a398e147e0dbed98cf4368627d5b5201414030f17ca4b22d50bb6b7f4398466d2f700eb24e5a9d762acc7a5091a0ab774f311af28b81d3488431dffe91bb5ab89cfdadcf9a75028a66e54cb8eb77c7db03cb2721031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c968747476aa"
       );

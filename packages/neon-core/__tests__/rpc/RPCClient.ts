@@ -1,6 +1,6 @@
 import { mocked } from "ts-jest/utils";
 import _Query from "../../src/rpc/Query";
-import RPCClient, { GetTxParam } from "../../src/rpc/RPCClient";
+import RPCClient from "../../src/rpc/RPCClient";
 import { DEFAULT_RPC } from "../../src/consts";
 
 jest.mock("../../src/rpc/Query");
@@ -88,9 +88,7 @@ describe("RPC Methods", () => {
         req: { method: "" },
         execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
-      const result = await client.getBlock({
-        indexOrHash: 1
-      });
+      const result = await client.getBlock(1);
 
       expect(result).toEqual(expected);
       expect(Query.getBlock).toBeCalledWith(1, undefined);
@@ -102,10 +100,7 @@ describe("RPC Methods", () => {
         req: { method: "" },
         execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
-      const result = await client.getBlock({
-        indexOrHash: "hash",
-        verbose: 1
-      });
+      const result = await client.getBlock("hash", 1);
 
       expect(result).toEqual(expected);
       expect(Query.getBlock).toBeCalledWith("hash", 1);
@@ -147,9 +142,7 @@ describe("RPC Methods", () => {
         req: { method: "" },
         execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
-      const result = await client.getBlockHeader({
-        indexOrHash: 1
-      });
+      const result = await client.getBlockHeader(1);
 
       expect(result).toEqual(expected);
       expect(Query.getBlockHeader).toBeCalledWith(1, undefined);
@@ -161,10 +154,7 @@ describe("RPC Methods", () => {
         req: { method: "" },
         execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
-      const result = await client.getBlockHeader({
-        indexOrHash: "hash",
-        verbose: 1
-      });
+      const result = await client.getBlockHeader("hash", 1);
 
       expect(result).toEqual(expected);
       expect(Query.getBlockHeader).toBeCalledWith("hash", 1);
@@ -248,10 +238,7 @@ describe("RPC Methods", () => {
         req: { method: "" },
         execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
-      const result = await client.getRawTransaction({
-        txid: "txid",
-        verbose: 1
-      });
+      const result = await client.getRawTransaction("txid", 1);
 
       expect(result).toEqual(expected);
       expect(Query.getRawTransaction).toBeCalledWith("txid", 1);
@@ -263,9 +250,7 @@ describe("RPC Methods", () => {
         req: { method: "" },
         execute: jest.fn().mockImplementation(() => ({ result: expected }))
       }));
-      const result = await client.getRawTransaction({
-        txid: "txid"
-      });
+      const result = await client.getRawTransaction("txid");
 
       expect(result).toEqual(expected);
       expect(Query.getRawTransaction).toBeCalledWith("txid", undefined);
