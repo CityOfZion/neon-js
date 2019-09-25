@@ -90,6 +90,9 @@ export class ScriptParser extends StringStream {
           output.operation = hexstring2str(output.args!.shift());
           output.args = output.args!.shift();
           return output;
+        /* THROWIFNOT, neo-cli will add this op to end of script */
+        case n === 241:
+          break;
         default:
           throw new Error(`Encounter unknown byte: ${b}`);
       }
