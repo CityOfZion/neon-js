@@ -169,7 +169,7 @@ export class Query {
    * @param txid hash of the specific transaction.
    * @param verbose 0 for hexstring, 1 for JSON. Defaults to 0.
    */
-  public static getRawTransaction(txid: string, verbose: number = 0): Query {
+  public static getRawTransaction(txid: string, verbose: 0 | 1 = 0): Query {
     return new Query({
       method: "getrawtransaction",
       params: [txid, verbose]
