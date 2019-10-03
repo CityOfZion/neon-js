@@ -11,10 +11,18 @@
   ],
   "command": {
     "version": {
-      "allowBranch": "master"
+      "allowBranch": [
+        "master",
+        "next",
+        "archive/*"
+      ]
     },
     "publish": {
-      "allowBranch": "master"
+      "allowBranch": [
+        "master",
+        "next",
+        "archive/*"
+      ]
     }
   }
 }

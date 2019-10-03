@@ -10,11 +10,14 @@
     "prestart": "yarn build && yarn dist",
     "prepublishOnly": "lerna run prepublishOnly",
     "pretty": "prettier --write --loglevel=warn \"**/{src,__{tests,integration}__}/**/*.ts\"",
-    "release": "yarn prepublishOnly && lerna publish",
+    "release:latest": "lerna publish from-package",
+    "release:next": "lerna publish from-git --canary --pre-dist-tag next",
     "start": "jest --watch",
     "test": "jest",
     "test:integration": "jest /packages/.*/__integration__/.*",
-    "test:unit": "jest /packages/.*/__tests__/.*"
+    "test:unit": "jest /packages/.*/__tests__/.*",
+    "version:latest": "lerna version --conventional-commits --no-changelog",
+    "version:next": "lerna version --conventional-commits --conventional-prerelease --no-changelog --preid next"
   },
   "devDependencies": {
     "@types/jest": "24.0.15",
