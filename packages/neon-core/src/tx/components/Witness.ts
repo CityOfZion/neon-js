@@ -98,7 +98,7 @@ export class Witness {
   public verificationScript: string;
 
   // tslint:disable-next-line:variable-name
-  private _scriptHash: string = "";
+  private _scriptHash = "";
 
   public constructor(obj: WitnessLike) {
     if (

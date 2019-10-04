@@ -5,7 +5,7 @@ export const networks: { [net: string]: Network } = {};
 
 export { defaultCalculationStrategy };
 
-export let timeout = {
+export const timeout = {
   ping: 2000,
   rpc: 30000
 };
