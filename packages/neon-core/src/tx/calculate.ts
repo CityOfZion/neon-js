@@ -4,6 +4,7 @@ import { AssetBalance, Balance, getScriptHashFromAddress } from "../wallet";
 import { TransactionInput, TransactionOutput } from "./components";
 import { balancedApproach, calculationStrategyFunction } from "./strategy";
 
+//eslint-disable-next-line
 export let defaultCalculationStrategy = balancedApproach;
 
 /**

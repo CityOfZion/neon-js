@@ -35,7 +35,7 @@ export class StringStream {
    * ss.peek();  // "01"
    * ss.peek(5); // "0102"
    */
-  public peek(bytes: number = 1): string {
+  public peek(bytes = 1): string {
     if (this.isEmpty()) {
       return "";
     }
@@ -50,7 +50,7 @@ export class StringStream {
    * ss.read(); // "01"
    * ss.read(2); // "0203"
    */
-  public read(bytes: number = 1): string {
+  public read(bytes = 1): string {
     if (this.isEmpty()) {
       throw new Error("Reached the end of the stream!");
     }
