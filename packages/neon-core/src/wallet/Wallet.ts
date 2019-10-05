@@ -98,78 +98,58 @@ export class Wallet {
    * Attempts to decrypt Account at index in array.
    * @param index Index of Account in array.
    * @param keyphrase keyphrase
-   * @return Decryption success/failure
+   * @return Promise of decryption success/failure.
    */
-  public decrypt(index: number, keyphrase: string): boolean {
+  public async decrypt(index: number, keyphrase: string): Promise<boolean> {
     if (index < 0) {
-      throw new Error("Index cannot be negative!");
+      return Promise.reject(`Index cannot be negative! index: ${index}`);
     }
     if (index >= this.accounts.length) {
-      throw new Error("Index cannot larger than Accounts array!");
+      return Promise.reject(
+        `Index cannot larger than Accounts array! index: ${index}`
+      );
     }
-    try {
-      this.accounts[index].decrypt(keyphrase, this.scrypt);
-      return true;
-    } catch (err) {
-      return false;
-    }
+    await this.accounts[index].decrypt(keyphrase, this.scrypt);
+    return true;
   }
 
   /**
    * Attempts to decrypt all accounts with keyphrase.
    * @param keyphrase
-   * @return Each boolean represents if that Account has been decrypted successfully.
+   * @return Promise of accounts decryption success/failure .
    */
-  public decryptAll(keyphrase: string): boolean[] {
-    const results: boolean[] = [];
-    this.accounts.map((acct, i) => {
-      results.push(this.decrypt(i, keyphrase));
-    });
-    log.info(
-      `decryptAll for Wallet ${this.name}: ${results.reduce((c, p) => {
-        return p + (c ? "1" : "0");
-      }, "")}`
+  public decryptAll(keyphrase: string): Promise<boolean[]> {
+    return Promise.all(
+      this.accounts.map((acct, i) => this.decrypt(i, keyphrase))
     );
-    return results;
   }
 
   /**
    * Attempts to encrypt Account at index in array.
    * @param index Index of Account in array.
    * @param keyphrase
-   * @return Encryption success/failure
+   * @return Promise of encryption success/failure.
    */
-  public encrypt(index: number, keyphrase: string): boolean {
+  public async encrypt(index: number, keyphrase: string): Promise<boolean> {
     if (index < 0) {
-      throw new Error("Index cannot be negative!");
+      return Promise.reject("Index cannot be negative!");
     }
     if (index >= this.accounts.length) {
-      throw new Error("Index cannot larger than Accounts array!");
+      return Promise.reject("Index cannot larger than Accounts array!");
     }
-    try {
-      this.accounts[index].encrypt(keyphrase, this.scrypt);
-      return true;
-    } catch (err) {
-      return false;
-    }
+    await this.accounts[index].encrypt(keyphrase, this.scrypt);
+    return true;
   }
 
   /**
    * Attempts to encrypt all accounts with keyphrase.
    * @param keyphrase
-   * @return Each boolean represents if that Account has been encrypted successfully.
+   * @return Promise of accounts encryption success/failure.
    */
-  public encryptAll(keyphrase: string): boolean[] {
-    const results: boolean[] = [];
-    this.accounts.map((acct, i) => {
-      results.push(this.encrypt(i, keyphrase));
-    });
-    log.info(
-      `decryptAll for Wallet ${this.name}: ${results.reduce((c, p) => {
-        return p + (c ? "1" : "0");
-      }, "")}`
+  public encryptAll(keyphrase: string): Promise<boolean[]> {
+    return Promise.all(
+      this.accounts.map((acct, i) => this.encrypt(i, keyphrase))
     );
-    return results;
   }
 
   /**

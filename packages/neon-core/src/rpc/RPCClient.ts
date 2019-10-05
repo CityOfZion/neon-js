@@ -209,10 +209,7 @@ export class RPCClient {
   /**
    * Gets a transaction based on its hash.
    */
-  public async getRawTransaction(
-    txid: string,
-    verbose: number = 1
-  ): Promise<any> {
+  public async getRawTransaction(txid: string, verbose = 1): Promise<any> {
     const response = await this.execute(Query.getRawTransaction(txid, verbose));
     return response.result;
   }

@@ -159,10 +159,7 @@ export class Balance {
    * @param tx Transaction that has been sent and accepted by Node.
    * @param confirmed If confirmed, new coins will be added to unspent. Else, new coins will be added to unconfirmed property first.
    */
-  public applyTx(
-    tx: BaseTransaction | string,
-    confirmed: boolean = false
-  ): Balance {
+  public applyTx(tx: BaseTransaction | string, confirmed = false): Balance {
     tx = tx instanceof BaseTransaction ? tx : Transaction.deserialize(tx);
     const symbols = this.assetSymbols;
     // Spend coins

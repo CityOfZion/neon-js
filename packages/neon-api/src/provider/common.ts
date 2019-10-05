@@ -46,7 +46,7 @@ export async function getBestUrl(rpcs: RpcNode[]): Promise<string> {
 
 export function findGoodNodesFromHeight(
   nodes: RpcNode[],
-  tolerance: number = 1
+  tolerance = 1
 ): RpcNode[] {
   if (nodes.length === 0) {
     throw new Error("No eligible nodes found!");

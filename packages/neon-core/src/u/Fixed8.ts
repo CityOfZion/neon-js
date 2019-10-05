@@ -122,7 +122,7 @@ export class Fixed8 extends BN {
    * @param rm
    * @return {Fixed8}
    */
-  public round(dp: number = 0, rm?: BN.RoundingMode): Fixed8 {
+  public round(dp = 0, rm?: BN.RoundingMode): Fixed8 {
     return new Fixed8(super.decimalPlaces(dp, rm));
   }
 

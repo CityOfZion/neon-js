@@ -78,10 +78,7 @@ export class Query {
    * @param indexOrHash height or hash of block.
    * @param verbose 0 for hexstring, 1 for JSON. Defaults to 1.
    */
-  public static getBlock(
-    indexOrHash: string | number,
-    verbose: number = 1
-  ): Query {
+  public static getBlock(indexOrHash: string | number, verbose = 1): Query {
     return new Query({
       method: "getblock",
       params: [indexOrHash, verbose]
@@ -170,7 +167,7 @@ export class Query {
    * @param txid hash of the specific transaction.
    * @param verbose 0 for hexstring, 1 for JSON. Defaults to 1.
    */
-  public static getRawTransaction(txid: string, verbose: number = 1): Query {
+  public static getRawTransaction(txid: string, verbose = 1): Query {
     return new Query({
       method: "getrawtransaction",
       params: [txid, verbose]
