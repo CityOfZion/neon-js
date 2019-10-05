@@ -87,27 +87,64 @@ jobs:
       - store_artifacts:
           path: reports
 
+  publish-latest:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Login to npm
+          command: npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+      - run:
+          name: Publish to npm
+          command: yarn release:latest --yes
+
+  publish-next:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Login to npm
+          command: npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+      - run:
+          name: Publish to npm
+          command: yarn release:next --yes
+
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - setup
+      - setup:
+          filters:
+            branches:
+              ignore: gh-pages
       - lint:
           requires:
             - setup
-          filters:
-            branches:
-              ignore: gh-pages
       - unit-test:
           requires:
             - setup
-          filters:
-            branches:
-              ignore: gh-pages
       - integration-test:
           requires:
             - lint
             - unit-test
+      - publish-latest:
+          requires:
+            - integration-test
           filters:
             branches:
-              ignore: gh-pages
+              only: master
+            tags:
+              only: /v[0-9]+\.[0-9]+\.[0-9]+$/
+      - publish-next:
+          requires:
+            - integration-test
+          filters:
+            branches:
+              only: next
+            tags:
+              only: /v[0-9]+\.[0-9]+\.[0-9]+-next.*/
+

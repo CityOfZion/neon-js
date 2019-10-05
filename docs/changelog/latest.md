@@ -3,6 +3,18 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.7.1
+=====
+
+- Others
+
+  - Update dev dependencies to latest.
+  - Update loglevel to latest dependency to use native typings. Removed internal shims.
+
+- Fixes
+
+  - encrypt/decrypt in Wallet return promise correctly
+
 4.7.0
 =====
 
