@@ -42,7 +42,7 @@ export class ContractPermission {
 
   public export(): ContractPermissionLike {
     return {
-      contract: this.isHash ? `0x${this.contract}` : this.contract,
+      contract: this.contract,
       methods: this.methods
     };
   }

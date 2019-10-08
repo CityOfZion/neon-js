@@ -98,7 +98,7 @@ const definedManifestLike: ContractManifestLike = {
   ],
   permissions: [
     {
-      contract: "0xa1760976db5fcdfab2a9930e8f6ce875b2d18225",
+      contract: "a1760976db5fcdfab2a9930e8f6ce875b2d18225",
       methods: ["balanceOf"]
     }
   ],
@@ -228,7 +228,7 @@ describe("parse", () => {
       },
       permissions: [
         {
-          contract: "0x0000000000000000000000000000000000000000",
+          contract: "0000000000000000000000000000000000000000",
           methods: ["method1", "method2"]
         }
       ],
