@@ -19,13 +19,13 @@ const TOTAL_FIXED8_HEX = new BN(2).pow(64);
  * A fixed point notation used widely in the NEO system for representing decimals.
  * It uses a signed 64-bit integer divided by 10^8. This allows it to accurately represent 8 decimal places.
  * Supports up to 8 decimals and is 8 bytes long.
- * ```
+ * @example
  * const zero = new Fixed8();
  * const fromNumber = new Fixed8(12345);
  * const fromString = new Fixed8("12345");
  * const fromHex = Fixed8.fromHex("3039");
  * const fromReverseHex = Fixed8.fromReverseHex("3930");
- * ```
+ *
  */
 export class Fixed8 extends BN {
   /**
