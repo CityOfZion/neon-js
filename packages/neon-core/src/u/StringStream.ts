@@ -91,7 +91,7 @@ export class StringStream {
    * ss.reset();
    * ss.read(); // "01"
    */
-  public reset() {
+  public reset(): void {
     this.pter = 0;
   }
 
@@ -99,7 +99,7 @@ export class StringStream {
    * Returns a printable string of the characters around the pointer.
    * Used for debugging.
    */
-  public context() {
+  public context(): string {
     const before =
       this.pter > 10
         ? this.str.slice(this.pter - 10, this.pter)
