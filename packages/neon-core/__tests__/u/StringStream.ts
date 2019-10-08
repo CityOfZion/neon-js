@@ -52,8 +52,8 @@ describe("peek", () => {
   );
 });
 
-describe("reading", () => {
-  test("reads byte", () => {
+describe("read", () => {
+  test("reads byte by byte", () => {
     const bytes = ["01", "02", "03", "04", "05"];
     const ss = new StringStream(bytes.join(""));
     for (const b of bytes) {
@@ -79,6 +79,19 @@ describe("readVarBytes", () => {
     const expected = "0102030405";
     const ss = new StringStream(data + expected);
     const result = ss.readVarBytes();
+    expect(result).toBe(expected);
+  });
+});
+
+describe("readVarInt", () => {
+  test.each([
+    ["uint8", "01", 1],
+    ["uint16", "fd0102", 513],
+    ["uint32", "fe01020304", 67305985],
+    ["uint64", "ff0102030405060708", 578437695752307200]
+  ])("%s", (msg: string, data: string, expected: number) => {
+    const ss = new StringStream(data);
+    const result = ss.readVarInt();
     expect(result).toBe(expected);
   });
 });
