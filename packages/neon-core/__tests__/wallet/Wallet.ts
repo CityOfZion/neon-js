@@ -98,77 +98,71 @@ describe("add account, default account", () => {
 });
 
 describe("encrypt", () => {
-  test("success", () => {
+  test("success", async () => {
     const wallet = new Wallet();
     wallet.addAccount(new Account(PRIVATE_KEY1));
     wallet.addAccount(new Account(PRIVATE_KEY2));
     expect.assertions(2);
-    return wallet.encrypt(0, "passw0rd").then(res => {
-      expect(res).toBeTruthy();
-      expect(wallet.accounts[0].encrypted).toBe(
-        "6PYVQfxBH2zBvFsJ1zBZJUUD8ykvCdWrAfZzjWw4RRskjwLAc74bkT3eQn"
-      );
-    });
+    const result = await wallet.encrypt(0, "passw0rd");
+
+    expect(result).toBeTruthy();
+    expect(wallet.accounts[0].encrypted).toBe(
+      "6PYVQfxBH2zBvFsJ1zBZJUUD8ykvCdWrAfZzjWw4RRskjwLAc74bkT3eQn"
+    );
   });
-  test("failure", () => {
+  test("failure", async () => {
     const wallet = new Wallet();
     wallet.addAccount(new Account(PRIVATE_KEY1));
     wallet.addAccount(new Account(PRIVATE_KEY2));
-    expect.assertions(1);
-    return wallet.encrypt(-1, "passw0rd").catch(err => {
-      expect(err).toBeDefined();
-    });
+
+    await expect(wallet.encrypt(-1, "passw0rd")).rejects.toThrow();
   });
 });
 
 describe("encryptAll", () => {
-  test("success", () => {
+  test("success", async () => {
     const wallet = new Wallet();
     wallet.addAccount(new Account(PRIVATE_KEY1));
     wallet.addAccount(new Account(PRIVATE_KEY2));
-    expect.assertions(2);
-    return wallet.encryptAll("passw0rd").then(res => {
-      expect(res).toStrictEqual([true, true]);
-      expect(wallet.accounts[0].encrypted).toBe(
-        "6PYVQfxBH2zBvFsJ1zBZJUUD8ykvCdWrAfZzjWw4RRskjwLAc74bkT3eQn"
-      );
-    });
+
+    const result = await wallet.encryptAll("passw0rd");
+
+    expect(result).toStrictEqual([true, true]);
+    expect(wallet.accounts[0].encrypted).toBe(
+      "6PYVQfxBH2zBvFsJ1zBZJUUD8ykvCdWrAfZzjWw4RRskjwLAc74bkT3eQn"
+    );
   });
 });
 
 describe("decrypt", () => {
-  test("success", () => {
+  test("success", async () => {
     const wallet = new Wallet(WALLET_JSON);
-    expect.assertions(2);
-    return wallet.decrypt(0, "passw0rd").then(res => {
-      expect(res).toBeTruthy();
-      expect(wallet.accounts[0].privateKey).toBe(PRIVATE_KEY1);
-    });
+
+    const result = await wallet.decrypt(0, "passw0rd");
+
+    expect(result).toBeTruthy();
+    expect(wallet.accounts[0].privateKey).toBe(PRIVATE_KEY1);
   });
-  test("failure", () => {
+  test("failure", async () => {
     const wallet = new Wallet(WALLET_JSON);
-    expect.assertions(1);
-    return wallet.decrypt(1, "passw0rd_failure").catch(err => {
-      expect(err).toBeDefined();
-    });
+
+    await expect(wallet.decrypt(1, "passw0rd_failure")).rejects.toThrow();
   });
 });
 
 describe("decryptAll", () => {
-  test("success", () => {
+  test("success", async () => {
     const wallet = new Wallet(WALLET_JSON);
-    expect.assertions(2);
-    return wallet.decryptAll("passw0rd").then(res => {
-      expect(res).toStrictEqual([true, true]);
-      expect(wallet.accounts[0].privateKey).toBe(PRIVATE_KEY1);
-    });
+
+    const result = await wallet.decryptAll("passw0rd");
+
+    expect(result).toStrictEqual([true, true]);
+    expect(wallet.accounts[0].privateKey).toBe(PRIVATE_KEY1);
   });
 
-  test("failure", () => {
+  test("failure", async () => {
     const wallet = new Wallet(WALLET_JSON);
-    expect.assertions(1);
-    return wallet.decryptAll("passw0rd_failure").catch(err => {
-      expect(err).toBeDefined();
-    });
+
+    await expect(wallet.decryptAll("passw0rd_failure")).rejects.toThrow();
   });
 });
