@@ -17,15 +17,25 @@ const TOTAL_FIXED8_HEX = new BN(2).pow(64);
 
 /**
  * A fixed point notation used widely in the NEO system for representing decimals.
- * It is basically a hexideciaml integer that is divided by the 10^8.
+ * It uses a signed 64-bit integer divided by 10^8. This allows it to accurately represent 8 decimal places.
  * Supports up to 8 decimals and is 8 bytes long.
- * @extends BN
+ * @example
+ * const zero = new Fixed8();
+ * const fromNumber = new Fixed8(12345);
+ * const fromString = new Fixed8("12345");
+ * const fromHex = Fixed8.fromHex("3039");
+ * const fromReverseHex = Fixed8.fromReverseHex("3930");
+ *
  */
 export class Fixed8 extends BN {
-  // The maximum Fixed8 is obtained by dividing 0x7fffffffffffffff (= 9223372036854775807) with 10^8.
+  /**
+   * Maximum value that a Fixed8 can hold (92233720368.54775807).
+   */
   public static readonly MAX_VALUE = new Fixed8(MAX_FIXED8_HEX.div(DECIMALS));
 
-  // The minimum Fixed8 is obtained by dividing 0x8000000000000000 (= -9223372036854775808) with 10^8.
+  /**
+   * Minimum value that a Fixed8 can hold (-9223372036854775808).
+   */
   public static readonly MIN_VALUE = new Fixed8(MIN_FIXED8_HEX.div(DECIMALS));
 
   public static fromHex(hex: string): Fixed8 {
@@ -118,9 +128,8 @@ export class Fixed8 extends BN {
    * Returns a Fixed8 rounded to the nearest dp decimal places according to rounding mode rm.
    * If dp is null, round to whole number.
    * If rm is null, round according to default rounding mode.
-   * @param dp
-   * @param rm
-   * @return {Fixed8}
+   * @param dp Number of decimal places to keep. Defaults to 0.
+   * @param rm Rounding mode.
    */
   public round(dp = 0, rm?: BN.RoundingMode): Fixed8 {
     return new Fixed8(super.decimalPlaces(dp, rm));

@@ -2,16 +2,14 @@ import Fixed8 from "./Fixed8";
 import { ensureHex, reverseHex } from "./misc";
 
 /**
- * @param buf ArrayBuffer
- * @returns ASCII string
+ * Converts an ArrayBuffer to an ASCII string.
  */
 export function ab2str(buf: ArrayBuffer | ArrayLike<number>): string {
   return String.fromCharCode.apply(null, Array.from(new Uint8Array(buf)));
 }
 
 /**
- * @param str ASCII string
- * @returns
+ * Converts an ASCII string into an arrayBuffer.
  */
 export function str2ab(str: string): Uint8Array {
   if (typeof str !== "string") {
@@ -25,10 +23,9 @@ export function str2ab(str: string): Uint8Array {
 }
 
 /**
- * @param str HEX string
- * @returns
+ * Converts a hexstring into an arrayBuffer.
  */
-export function hexstring2ab(str: any): Uint8Array {
+export function hexstring2ab(str: string): Uint8Array {
   ensureHex(str);
   if (!str.length) {
     return new Uint8Array(0);
@@ -95,7 +92,7 @@ export function int2hex(num: number): string {
  * @param littleEndian Encode the hex in little endian form
  */
 export function num2hexstring(
-  num: any,
+  num: number,
   size = 1,
   littleEndian = false
 ): string {
@@ -145,10 +142,9 @@ export function num2fixed8(num: number, size = 8): string {
   }
   if (size % 1 !== 0) {
     throw new Error(
-      `num2fixed expected an integer for argument size but got ${size} instead.`
+      `num2fixed8 expected an integer for argument size but got ${size} instead.`
     );
   }
-  const i = new Fixed8(num);
   return new Fixed8(num).toReverseHex().slice(0, size * 2);
 }
 
