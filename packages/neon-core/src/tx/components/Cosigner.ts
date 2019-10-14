@@ -1,33 +1,41 @@
 import { WitnessScope } from "./WitnessScope";
 import { StringStream, num2hexstring } from "../../u";
 import { deserializeArrayOf, serializeArrayOf } from "../lib";
+import { ScriptHash } from "../../basic/hex/ScriptHash";
+import { PublicKey } from "../../basic/hex/PublicKey";
 
 export interface CosignerLike {
-  /* account scripthash in big endian */
   account: string;
   scopes: number;
   allowedContracts?: string[];
   allowedGroups?: string[];
 }
 
+export interface CosignerConfig {
+  account: ScriptHash;
+  scopes: number;
+  allowedContracts?: ScriptHash[];
+  allowedGroups?: PublicKey[];
+}
+
 export class Cosigner {
   /**
    * script hash of cosigner
    */
-  public account: string;
+  public account: ScriptHash;
   public scopes: WitnessScope;
-  public allowedContracts: string[];
-  public allowedGroups: string[];
+  public allowedContracts: ScriptHash[];
+  public allowedGroups: PublicKey[];
 
   /**
    * @description This limits maximum number of allowedContracts or allowedGroups here
    */
   private readonly MAX_SUB_ITEMS: number = 16;
 
-  public constructor(signer: Partial<CosignerLike> = {}) {
+  public constructor(signer: CosignerConfig) {
     const {
-      account = "",
-      scopes = WitnessScope.Global,
+      account,
+      scopes,
       allowedContracts = [],
       allowedGroups = []
     } = signer;
@@ -37,42 +45,52 @@ export class Cosigner {
     this.allowedGroups = [...allowedGroups];
   }
 
-  public addAllowedContracts(...contracts: string[]) {
+  public addAllowedContracts(...contracts: ScriptHash[]) {
     this.scopes |= WitnessScope.CustomContracts;
     this.allowedContracts.push(...contracts);
   }
 
-  public addAllowedGroups(...groups: string[]) {
+  public addAllowedGroups(...groups: PublicKey[]) {
     this.scopes |= WitnessScope.CustomGroups;
     this.allowedGroups.push(...groups);
   }
 
-  public static deserialize(ss: StringStream): CosignerLike {
-    const account = ss.read(20);
+  public static deserialize(ss: StringStream): CosignerConfig {
+    const account = ScriptHash.fromHexString(ss.read(20), false);
     const scopes = parseInt(ss.read(), 16);
-
-    const readStringFromStream = (ss1: StringStream) => ss1.readVarBytes();
 
     const allowedContracts =
       scopes & WitnessScope.CustomContracts
-        ? deserializeArrayOf(readStringFromStream, ss)
+        ? deserializeArrayOf(
+            (ss1: StringStream) =>
+              ScriptHash.fromHexString(ss1.readVarBytes(), true),
+            ss
+          ) // TODO: confirm if it's little endian here
         : [];
     const allowedGroups =
       scopes & WitnessScope.CustomGroups
-        ? deserializeArrayOf(readStringFromStream, ss)
+        ? deserializeArrayOf(
+            (ss1: StringStream) =>
+              PublicKey.fromHexString(ss1.readVarBytes(), true),
+            ss
+          )
         : [];
     return { account, scopes, allowedContracts, allowedGroups };
   }
 
   public serialize(): string {
     let out = "";
-    out += this.account;
+    out += this.account.value(false);
     out += num2hexstring(this.scopes);
     if (this.scopes & WitnessScope.CustomContracts) {
-      out += serializeArrayOf(this.allowedContracts);
+      out += serializeArrayOf(
+        this.allowedContracts.map(contract => contract.value(true))
+      );
     }
     if (this.scopes & WitnessScope.CustomGroups) {
-      out += serializeArrayOf(this.allowedGroups);
+      out += serializeArrayOf(
+        this.allowedGroups.map(group => group.value(true))
+      );
     }
 
     return out;
@@ -80,10 +98,12 @@ export class Cosigner {
 
   public export(): CosignerLike {
     return {
-      account: this.account,
+      account: this.account.value(false),
       scopes: this.scopes,
-      allowedContracts: [...this.allowedContracts],
-      allowedGroups: [...this.allowedGroups]
+      allowedContracts: [
+        ...this.allowedContracts.map(contract => contract.value(true))
+      ],
+      allowedGroups: [...this.allowedGroups.map(group => group.value(true))]
     };
   }
 }
