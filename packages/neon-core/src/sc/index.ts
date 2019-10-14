@@ -9,3 +9,4 @@ export * from "./InteropServicePrices";
 export * from "./StackItem";
 export * from "./NativeContractMethodPrices";
 export * from "./manifest";
+export * from "./native_contracts_abi";
