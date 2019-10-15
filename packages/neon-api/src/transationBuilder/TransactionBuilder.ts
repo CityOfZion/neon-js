@@ -171,7 +171,7 @@ export class TransactionBuilder {
     return this;
   }
 
-  public async validate(autoFix: boolean = false): Promise<boolean> {
+  public async validate(autoFix = false): Promise<boolean> {
     return Promise.all([
       this.validateValidUntilBlock(autoFix),
       this.validateIntents(),
@@ -181,9 +181,7 @@ export class TransactionBuilder {
     ]).then(res => res.reduce((result, value) => result || value));
   }
 
-  public async validateValidUntilBlock(
-    autoFix: boolean = false
-  ): Promise<boolean> {
+  public async validateValidUntilBlock(autoFix = false): Promise<boolean> {
     const { validUntilBlock } = this._transaction;
     const height = await this._rpc.getBlockCount();
     if (validUntilBlock <= height) {
@@ -210,7 +208,7 @@ export class TransactionBuilder {
     return true;
   }
 
-  public async validateSystemFee(autoFix: boolean = false): Promise<boolean> {
+  public async validateSystemFee(autoFix = false): Promise<boolean> {
     const { script, systemFee } = this._transaction;
     const { state, gas_consumed } = await this._rpc.invokeScript(script);
     if (state.indexOf("HALT") >= 0) {
@@ -240,8 +238,8 @@ export class TransactionBuilder {
     return true;
   }
 
-  public async validateNetworkFee(autoFix: boolean = false): Promise<boolean> {
-    let networkFee = new Fixed8(0);
+  public async validateNetworkFee(autoFix = false): Promise<boolean> {
+    const networkFee = new Fixed8(0);
     try {
       const signers = this._transaction.getScriptHashesForVerifying();
       signers.forEach(signer => {
@@ -325,7 +323,7 @@ export class TransactionBuilder {
     return signers.every(signer => scriptHashes.indexOf(signer) >= 0);
   }
 
-  public async execute(): Promise<boolean> {
+  public async execute(): Promise<string> {
     return this._rpc.sendRawTransaction(this._transaction);
   }
 }
