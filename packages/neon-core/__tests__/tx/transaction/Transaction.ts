@@ -72,7 +72,7 @@ describe("getters", () => {
       validUntilBlock: 1000
     });
     expect(tx.hash).toBe(
-      "361fbecac04d5a5924f9a7a73ccb34fe9eb0157943257fc5c9feff2c38d3f2c2"
+      "4c5f49fd484037109d11358c6054f637c0414ee4018a91316e0925a87fe26ac0"
     );
   });
 
@@ -209,7 +209,7 @@ describe("Add Methods", () => {
       "210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba68747476aa"
     );
     expect(tx1.scripts[0].invocationScript).toBe(
-      "4037a82382d11fda7c388a2e23c8408c5e95de0f8d2d805de0b6899ab3f436f9a134814da03d78d6c41f415ed31b5b55ff1be2b4dcf903e67db2bc76eae04a93cb"
+      "40ab51e521a287dfeb83a51b1444ca31fbdc88d2181c156e65d30b3423d24bed693feb5ac8511c24efd766c664a3b09ec9cf2e24588226aab16175d84dc0fcbeea"
     );
   });
 });

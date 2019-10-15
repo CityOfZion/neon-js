@@ -49,15 +49,15 @@ describe("static", () => {
 
   describe("getBlock", () => {
     test("hash/index with verbose arg", () => {
-      const result = Query.getBlock("test", 0);
+      const result = Query.getBlock("test", 1);
       expect(result.method).toEqual("getblock");
-      expect(result.params).toEqual(["test", 0]);
+      expect(result.params).toEqual(["test", 1]);
     });
 
     test("with defaults", () => {
       const result = Query.getBlock("test");
       expect(result.method).toEqual("getblock");
-      expect(result.params).toEqual(["test", 1]);
+      expect(result.params).toEqual(["test", 0]);
     });
   });
 
@@ -119,15 +119,15 @@ describe("static", () => {
 
   describe("getRawTransaction", () => {
     test("all args", () => {
-      const result = Query.getRawTransaction("test", 0);
+      const result = Query.getRawTransaction("test", 1);
       expect(result.method).toEqual("getrawtransaction");
-      expect(result.params).toEqual(["test", 0]);
+      expect(result.params).toEqual(["test", 1]);
     });
 
     test("defaults", () => {
       const result = Query.getRawTransaction("test");
       expect(result.method).toEqual("getrawtransaction");
-      expect(result.params).toEqual(["test", 1]);
+      expect(result.params).toEqual(["test", 0]);
     });
   });
 

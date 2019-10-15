@@ -1,8 +1,13 @@
 import { reverseHex } from "./misc";
 
 /**
- * A simple string stream that allows user to read a string byte by byte using read().
- * @param str - The string to read as a stream.
+ * A simple string stream that allows user to read a hexstring byte by byte using read().
+ * @param str - The hexstring to read as a stream.
+ *
+ * @example
+ * const ss = new StringStream("01020304");
+ * const zeroOne = ss.read();
+ * const zeroTwoZeroThree = ss.read(2);
  */
 export class StringStream {
   public str: string;
@@ -29,13 +34,14 @@ export class StringStream {
   }
 
   /**
-   * Peek at the next bytes on the string. May return less than intended bytes if reaching end of stream.
+   * Peek at the next bytes on the string but does not move the pointer.
+   * May return less than intended bytes if reached end of stream.
    * @example
    * const ss = new StringStream("0102");
    * ss.peek();  // "01"
    * ss.peek(5); // "0102"
    */
-  public peek(bytes: number = 1): string {
+  public peek(bytes = 1): string {
     if (this.isEmpty()) {
       return "";
     }
@@ -50,7 +56,7 @@ export class StringStream {
    * ss.read(); // "01"
    * ss.read(2); // "0203"
    */
-  public read(bytes: number = 1): string {
+  public read(bytes = 1): string {
     if (this.isEmpty()) {
       throw new Error("Reached the end of the stream!");
     }
@@ -62,6 +68,9 @@ export class StringStream {
   /**
    * Reads some bytes off the stream.
    * A variable-length integer is first read off the stream and then bytes equal to the integer is read off and returned.
+   * @example
+   * const ss = new StringStream("03010203040506")
+   * const result = ss.readVarBytes(); //010203
    */
   public readVarBytes(): string {
     return this.read(this.readVarInt());
@@ -70,6 +79,19 @@ export class StringStream {
   /**
    * Reads an integer of variable bytelength. May consume up to 9 bytes.
    * The first byte read indicates if more bytes need to be read off.
+   * The bytes are read and converted from little endian hexadecimal to number.
+   * @example
+   * const ss = new StringStream("01");
+   * const r1 = ss.readVarInt();
+   *
+   * const ss2 = new StringStream("fd0102");
+   * const r2 = ss.readVarInt(); // 513
+   *
+   * const ss4 = new StringStream("fe01020304");
+   * const r4 = ss.readVarInt(); // 67305985
+   *
+   * const ss8 = new StringStream("ff0102030405060708");
+   * const r8 = ss.readVarInt(); // 578437695752307200
    */
   public readVarInt(): number {
     let len = parseInt(this.read(1), 16);
@@ -91,7 +113,7 @@ export class StringStream {
    * ss.reset();
    * ss.read(); // "01"
    */
-  public reset() {
+  public reset(): void {
     this.pter = 0;
   }
 
@@ -99,7 +121,7 @@ export class StringStream {
    * Returns a printable string of the characters around the pointer.
    * Used for debugging.
    */
-  public context() {
+  public context(): string {
     const before =
       this.pter > 10
         ? this.str.slice(this.pter - 10, this.pter)

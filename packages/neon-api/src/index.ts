@@ -6,7 +6,7 @@ function assignSettings(
   baseSettings: typeof _Neon.settings,
   newSettings: { [k: string]: any }
 ): void {
-  for (var key in newSettings) {
+  for (const key in newSettings) {
     if (!(key in baseSettings)) {
       Object.defineProperty(baseSettings, key, {
         get() {

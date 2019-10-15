@@ -1,5 +1,9 @@
 import { mocked } from "ts-jest/utils";
-import { createScript, generateDeployScript } from "../../src/sc/core";
+import {
+  createScript,
+  generateDeployScript,
+  validateDeployParams
+} from "../../src/sc/core";
 import _ScriptBuilder from "../../src/sc/ScriptBuilder";
 import * as _u from "../../src/u";
 import testIntents from "./scriptIntents.json";
@@ -97,70 +101,12 @@ describe("generateDeployScript", () => {
 
   test("full params", () => {
     const params = {
-      manifest: jest.fn(),
-      script: jest.fn(),
-      name: jest.fn(),
-      version: jest.fn(),
-      author: jest.fn(),
-      email: jest.fn(),
-      description: jest.fn(),
-      needsStorage: jest.fn(),
-      returnType: jest.fn(),
-      parameterList: jest.fn()
+      manifest: `{"c":1}`,
+      script: jest.fn()
     } as any;
 
     const result = generateDeployScript(params);
-    expect(u.str2hexstring.mock.calls).toEqual([
-      [params.description],
-      [params.email],
-      [params.author],
-      [params.version],
-      [params.name]
-    ]);
     expect(order).toEqual([
-      params.description,
-      params.email,
-      params.author,
-      params.version,
-      params.name,
-      params.needsStorage,
-      params.returnType,
-      params.parameterList,
-      params.manifest,
-      params.script,
-      InteropServiceCode.NEO_CONTRACT_CREATE
-    ]);
-  });
-
-  test("defaults", () => {
-    const params = {
-      manifest: jest.fn(),
-      script: jest.fn(),
-      name: jest.fn(),
-      version: jest.fn(),
-      author: jest.fn(),
-      email: jest.fn(),
-      description: jest.fn(),
-      parameterList: jest.fn()
-    } as any;
-
-    const result = generateDeployScript(params);
-    expect(u.str2hexstring.mock.calls).toEqual([
-      [params.description],
-      [params.email],
-      [params.author],
-      [params.version],
-      [params.name]
-    ]);
-    expect(order).toEqual([
-      params.description,
-      params.email,
-      params.author,
-      params.version,
-      params.name,
-      false,
-      "ff00",
-      params.parameterList,
       params.manifest,
       params.script,
       InteropServiceCode.NEO_CONTRACT_CREATE

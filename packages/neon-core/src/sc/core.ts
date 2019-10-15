@@ -1,7 +1,6 @@
-import { str2hexstring } from "../u";
 import ScriptBuilder, { ScriptIntent } from "./ScriptBuilder";
 import InteropServiceCode from "./InteropServiceCode";
-
+import { ContractManifest } from "./manifest";
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
  */
@@ -28,42 +27,42 @@ export function createScript(...intents: (ScriptIntent | string)[]): string {
 export interface DeployParams {
   script: string;
   manifest: string;
-  name: string;
-  version: string;
-  author: string;
-  email: string;
-  description: string;
-  needsStorage: boolean;
-  returnType: string;
-  parameterList: string;
+}
+
+export function validateDeployParams(params: DeployParams): void {
+  const { script, manifest } = params;
+  if (script.length > 1024 * 1024) {
+    throw new Error(
+      `Script length ${script.length} is exceeding upper limit: 1024*1024`
+    );
+  }
+  if (manifest.length > ContractManifest.MAX_LENGTH) {
+    throw new Error(
+      `Manifest length ${manifest.length} is exceeding upper limit: ${ContractManifest.MAX_LENGTH}`
+    );
+  }
+  const contractManifest = ContractManifest.parse(manifest);
+  if (!contractManifest.isValid()) {
+    throw new Error(`Manifest is not valid!`);
+  }
 }
 /**
  * Generates script for deploying contract
  */
-// TODO: not sure if this has to be modifed or not
-// TODO: need to add a class: Manifest
 export function generateDeployScript(params: DeployParams) {
+  validateDeployParams(params);
   const sb = new ScriptBuilder();
-  sb.emitPush(str2hexstring(params.description))
-    .emitPush(str2hexstring(params.email))
-    .emitPush(str2hexstring(params.author))
-    .emitPush(str2hexstring(params.version))
-    .emitPush(str2hexstring(params.name))
-    .emitPush(params.needsStorage || false)
-    .emitPush(params.returnType || "ff00")
-    .emitPush(params.parameterList)
-    .emitPush(params.manifest)
+  sb.emitPush(params.manifest)
     .emitPush(params.script)
     .emitSysCall(InteropServiceCode.NEO_CONTRACT_CREATE);
   return sb;
 }
 
-// TODO: update a deployed contract
-export function generateUpdateScript() {
-  throw new Error("Not Implemented.");
-}
-
-// TODO: destroy a deployed contract
-export function generateDestroyScript() {
-  throw new Error("Not Implemented.");
+export function generateUpdateScript(params: DeployParams) {
+  validateDeployParams(params);
+  const sb = new ScriptBuilder();
+  sb.emitPush(params.manifest)
+    .emitPush(params.script)
+    .emitSysCall(InteropServiceCode.NEO_CONTRACT_UPDATE);
+  return sb;
 }

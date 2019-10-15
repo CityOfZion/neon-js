@@ -1,4 +1,4 @@
-import { StringStream, fixed82num, ensureHex } from "../../u";
+import { StringStream, fixed82num, ensureHex, reverseHex } from "../../u";
 import { TransactionAttribute, Witness, Cosigner } from "../components";
 import { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
@@ -23,7 +23,7 @@ export function deserializeNonce(
   ss: StringStream,
   tx: Partial<TransactionLike> = {}
 ): Partial<TransactionLike> {
-  const nonce = parseInt(ss.read(4), 16);
+  const nonce = parseInt(reverseHex(ss.read(4)), 16);
   return Object.assign(tx, { nonce });
 }
 
@@ -58,7 +58,7 @@ export function deserializeValidUntilBlock(
   ss: StringStream,
   tx: Partial<TransactionLike>
 ): Partial<TransactionLike> {
-  const validUntilBlock = parseInt(ss.read(4), 16);
+  const validUntilBlock = parseInt(reverseHex(ss.read(4)), 16);
   return Object.assign(tx, { validUntilBlock });
 }
 

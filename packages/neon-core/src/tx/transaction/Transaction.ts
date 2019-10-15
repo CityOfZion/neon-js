@@ -57,7 +57,7 @@ export class Transaction {
    */
   public nonce: number;
   /**
-   * transation invoker in script hash
+   * transation invoker in script hash in big endian
    */
   public sender: string;
 
@@ -233,11 +233,11 @@ export class Transaction {
     ensureHex(this.sender);
     let out = "";
     out += num2hexstring(this.version);
-    out += num2hexstring(this.nonce, 4);
+    out += num2hexstring(this.nonce, 4, true);
     out += this.sender;
     out += this.systemFee.toReverseHex();
     out += this.networkFee.toReverseHex();
-    out += num2hexstring(this.validUntilBlock, 4);
+    out += num2hexstring(this.validUntilBlock, 4, true);
     out += serializeArrayOf(this.attributes);
     out += serializeArrayOf(this.cosigners);
     out += num2VarInt(this.script.length / 2);
