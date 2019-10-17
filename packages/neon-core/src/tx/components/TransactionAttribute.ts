@@ -46,7 +46,7 @@ export class TransactionAttribute {
 
   public static fromStream(ss: StringStream): TransactionAttribute {
     const usage = parseInt(ss.read(1), 16);
-    const data: string = ss.readVarBytes();
+    let data: string = ss.readVarBytes();
     return new TransactionAttribute({ usage, data });
   }
 

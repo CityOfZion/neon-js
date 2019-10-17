@@ -193,7 +193,10 @@ export class Transaction {
    * @param usage The usage type. Do refer to txAttrUsage enum values for all available options.
    * @param data The data as hexstring.
    */
-  public addAttribute(usage: number | string, data: string): this {
+  public addAttribute(usage: number, data: string): this {
+    if (typeof data !== "string") {
+      throw new TypeError("data should be formatted as string!");
+    }
     this.attributes.push(new TransactionAttribute({ usage, data }));
     return this;
   }
@@ -226,7 +229,7 @@ export class Transaction {
    * @param {boolean} signed  - Whether to serialize the signatures. Signing requires it to be serialized without the signatures.
    * @return {string} Hexstring.
    */
-  public serialize(signed = true): string {
+  public serialize(signed: boolean = true): string {
     if (this.version !== 0) {
       throw new Error(`Version must be 0`);
     }
@@ -286,15 +289,8 @@ export class Transaction {
   }
 
   public getScriptHashesForVerifying(): string[] {
-    const hashes = this.cosigners.map(cosigner => cosigner.account);
-    if (
-      !hashes.every(hash => hashes.indexOf(hash) === hashes.lastIndexOf(hash))
-    ) {
-      throw new Error(`Duplicate Cosigner`);
-    }
-    if (hashes.indexOf(this.sender) < 0) {
-      hashes.unshift(this.sender);
-    }
+    let hashes = this.cosigners.map(cosigner => cosigner.account);
+    hashes.unshift(this.sender);
     return hashes.sort();
   }
 }
