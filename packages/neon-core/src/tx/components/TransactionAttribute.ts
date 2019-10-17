@@ -45,7 +45,7 @@ export class TransactionAttribute {
 
   public static fromStream(ss: StringStream): TransactionAttribute {
     const usage = parseInt(ss.read(1), 16);
-    let data: HexString = HexString.fromHexString(ss.readVarBytes());
+    const data: HexString = HexString.fromHexString(ss.readVarBytes());
     return new TransactionAttribute({ usage, data });
   }
 
