@@ -7,25 +7,11 @@ import {
   CosignerLike
 } from "@cityofzion/neon-core/lib/tx";
 import { RPCClient } from "@cityofzion/neon-core/lib/rpc";
-import {
-  ScriptIntent,
-  createScript,
-  OpCodePrices,
-  OpCode,
-  getInteropServicePrice,
-  InteropServiceCode,
-  ScriptBuilder
-} from "@cityofzion/neon-core/lib/sc";
+import { ScriptIntent, createScript } from "@cityofzion/neon-core/lib/sc";
 import logger from "@cityofzion/neon-core/lib/logging";
 import { Fixed8, reverseHex } from "@cityofzion/neon-core/lib/u";
-import {
-  Account,
-  getSigningThresholdFromVerificationScript,
-  getPublicKeysFromVerificationScript,
-  verify,
-  getScriptHashFromPublicKey
-} from "@cityofzion/neon-core/lib/wallet";
-import { POLICY_FEE_PERBYTE } from "@cityofzion/neon-core/lib/consts";
+import { Account } from "@cityofzion/neon-core/lib/wallet";
+import { getNetworkFee, getScriptHashesFromTxWitnesses } from "./util";
 
 const log = logger("transactionBuilder");
 
@@ -45,14 +31,29 @@ export interface TransactionBuilderConfig {
   script?: string;
 }
 
+/**
+ * `TransactionBuilder` is to build a transaction in a more convinient and mature way.
+ * It is more powerf
+ */
 export class TransactionBuilder {
   private _sender: Account;
+  /**
+   * Cosigners
+   */
   private _cosigners: CosignerLike[] = [];
+  /**
+   * Cosigner accounts that client has access to
+   */
   private _cosignerAccounts: Account[] = [];
   private _rpc: RPCClient;
   private _intents: ScriptIntent[] = [];
   private _transaction: Transaction;
 
+  /**
+   * A TransactionBuilder instance can build class with the same network and sender account
+   * @param rpc to specify network, can be RPCClient or rpc url
+   * @param sender the sender account, can be Account or privateKey
+   */
   public constructor(rpc: RPCClient | string, sender: Account | string) {
     if (typeof rpc === "string") {
       this._rpc = new RPCClient(rpc);
@@ -71,6 +72,10 @@ export class TransactionBuilder {
     });
   }
 
+  /**
+   * Load a pack of transaction config info at one time
+   * @param config
+   */
   public loadFromConfig(config: TransactionBuilderConfig): this {
     const { intents = [], cosigners = [] } = config;
     this._cosigners = [];
@@ -88,6 +93,9 @@ export class TransactionBuilder {
     return this;
   }
 
+  /**
+   * Reset the builder to the initial state, so that it can be used to build a new transaction
+   */
   public reset(): this {
     this._cosigners = [];
     this._cosignerAccounts = [];
@@ -123,6 +131,11 @@ export class TransactionBuilder {
     return this._intents;
   }
 
+  /**
+   * Cosigner must sign the transaction to make it valid.
+   * Still you could add just an address to build the transaction, and you can export the transaction for cosigner account holder to sign it
+   * @param cosigners
+   */
   public addCosigners(
     ...cosigners: (CosignerWithAccount | CosignerLike)[]
   ): this {
@@ -141,6 +154,10 @@ export class TransactionBuilder {
     return this;
   }
 
+  /**
+   * You can add multiple intents to the transaction
+   * @param intents
+   */
   public addIntents(...intents: ScriptIntent[]): this {
     this._transaction.script += createScript(...intents);
     this._intents.push(...intents);
@@ -154,6 +171,13 @@ export class TransactionBuilder {
     return this;
   }
 
+  /**
+   * You can just use `sign` function to do this.
+   * Still this is useful when：
+   *   1. Need to accept a cosigner's signature
+   *   2. Need to use verification trigger of a contract address
+   * @param witnesses
+   */
   public addWitnesses(...witnesses: Witness[]): this {
     witnesses.forEach(witness => this._transaction.addWitness(witness));
     return this;
@@ -164,6 +188,11 @@ export class TransactionBuilder {
     return this;
   }
 
+  /**
+   * The transaction must be signed with sender and all other cosigners.
+   * It may be that all signatures cannot be aquired from one client.
+   * This function is to sign the transaction with (sender) aquired accounts.
+   */
   public signWithAquiredAccounts(): this {
     [this._sender, ...this._cosignerAccounts].forEach(account => {
       this._transaction.sign(account);
@@ -171,44 +200,49 @@ export class TransactionBuilder {
     return this;
   }
 
-  public async validate(autoFix = false): Promise<boolean> {
+  /**
+   * Validate the transaction and try to fix the invalidation if user agreed.
+   * Validations:
+   *   1. validUntilBlock prop
+   *   2. Intents
+   *   3. fee related
+   *   4. signature
+   * @param autoFix default to be false.
+   */
+  public async validate(autoFix = false): Promise<this> {
     return Promise.all([
       this.validateValidUntilBlock(autoFix),
       this.validateIntents(),
       this.validateSystemFee(autoFix),
       this.validateNetworkFee(autoFix),
       this.validateSigning()
-    ]).then(res => res.reduce((result, value) => result || value));
+    ]).then(() => this);
   }
 
-  public async validateValidUntilBlock(autoFix = false): Promise<boolean> {
+  public async validateValidUntilBlock(autoFix = false): Promise<this> {
     const { validUntilBlock } = this._transaction;
     const height = await this._rpc.getBlockCount();
-    if (validUntilBlock <= height) {
+    if (
+      validUntilBlock <= height ||
+      validUntilBlock >= height + Transaction.MAX_TRANSACTION_LIFESPAN
+    ) {
       if (autoFix) {
         this._transaction.validUntilBlock =
           Transaction.MAX_TRANSACTION_LIFESPAN + height - 1;
-        return true;
+        return this;
       }
-      return false;
-    } else if (
-      validUntilBlock >=
-      height + Transaction.MAX_TRANSACTION_LIFESPAN
-    ) {
-      console.warn(
-        `Transaction is valid, but it will wait for about ${validUntilBlock -
-          height -
-          Transaction.MAX_TRANSACTION_LIFESPAN} blocks to be valid to be packed.`
+      return Promise.reject(
+        `validUntilBlock prop is not valid: ${validUntilBlock}`
       );
     }
-    return true;
+    return this;
   }
 
-  public async validateIntents(): Promise<boolean> {
-    return true;
+  public async validateIntents(): Promise<this> {
+    return this;
   }
 
-  public async validateSystemFee(autoFix = false): Promise<boolean> {
+  public async validateSystemFee(autoFix = false): Promise<this> {
     const { script, systemFee } = this._transaction;
     const { state, gas_consumed } = await this._rpc.invokeScript(script);
     if (state.indexOf("HALT") >= 0) {
@@ -225,102 +259,56 @@ export class TransactionBuilder {
         `Will change systemFee from ${systemFee} to ${requiredSystemFee}`
       );
       this._transaction.systemFee = systemFee;
-      return true;
+      return this;
     } else if (requiredSystemFee.isGreaterThan(systemFee)) {
-      log.error(
-        `Need systemFee at least ${requiredSystemFee}, only ${systemFee} is assigned`
-      );
-      return false;
+      const error = `Need systemFee at least ${requiredSystemFee}, only ${systemFee} is assigned`;
+      log.error(error);
+      return Promise.reject(error);
     } else if (!systemFee.ceil().equals(systemFee)) {
-      log.error(`SystemFee must be ceiled to integer: ${systemFee}`);
-      return false;
+      const error = `SystemFee must be ceiled to integer: ${systemFee}`;
+      log.error(error);
+      return Promise.reject(error);
     }
-    return true;
-  }
-
-  public async validateNetworkFee(autoFix = false): Promise<boolean> {
-    const networkFee = new Fixed8(0);
-    try {
-      const signers = this._transaction.getScriptHashesForVerifying();
-      signers.forEach(signer => {
-        const account = new Account(signer);
-        if (!account.isMultiSig) {
-          networkFee.add(this._getNetworkFeeForSig());
-        } else {
-          const n = getPublicKeysFromVerificationScript(account.contract.script)
-            .length;
-          const m = getSigningThresholdFromVerificationScript(
-            account.contract.script
-          );
-          networkFee.add(this._getNetworkFeeForMultiSig(m, n));
-        }
-        // TODO: consider about contract verfication script
-      });
-
-      const size = this._transaction.serialize(true).length / 2;
-      networkFee.add(new Fixed8(size).multipliedBy(POLICY_FEE_PERBYTE));
-    } catch (err) {
-      return Promise.reject(err);
-    }
-
-    if (autoFix) {
-      this._transaction.networkFee = networkFee;
-      return true;
-    } else if (networkFee.isGreaterThan(this._transaction.networkFee)) {
-      log.error(
-        `Need networkFee at least ${networkFee}, only ${this._transaction.networkFee} is assigned`
-      );
-      return false;
-    }
-
-    return true;
-  }
-
-  private _getNetworkFeeForSig(): number {
-    return (
-      OpCodePrices[OpCode.PUSHBYTES64] +
-      OpCodePrices[OpCode.PUSHBYTES33] +
-      getInteropServicePrice(InteropServiceCode.NEO_CRYPTO_CHECKSIG)
-    );
-  }
-
-  private _getNetworkFeeForMultiSig(
-    signingThreshold: number,
-    pubkeysNum: number
-  ): number {
-    const sb = new ScriptBuilder();
-    return (
-      OpCodePrices[OpCode.PUSHBYTES64] * signingThreshold +
-      OpCodePrices[sb.emitPush(signingThreshold).str.slice(0, 2) as OpCode] +
-      OpCodePrices[OpCode.PUSHBYTES33] * pubkeysNum +
-      OpCodePrices[sb.emitPush(pubkeysNum).str.slice(0, 2) as OpCode] +
-      getInteropServicePrice(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG, {
-        size: pubkeysNum
-      })
-    );
-  }
-
-  public async useBestValidUntilBlock(): Promise<this> {
-    this._transaction.validUntilBlock =
-      Transaction.MAX_TRANSACTION_LIFESPAN +
-      (await this.rpc.getBlockCount()) -
-      1;
     return this;
   }
 
-  public async validateSigning(): Promise<boolean> {
-    const scriptHashes: string[] = [];
-    this._transaction.scripts.forEach(script =>
-      scriptHashes.push(
-        ...getPublicKeysFromVerificationScript(script.verificationScript).map(
-          publicKey => getScriptHashFromPublicKey(publicKey)
-        )
-      )
+  public async validateNetworkFee(autoFix = false): Promise<this> {
+    const networkFee = getNetworkFee(this._transaction);
+    if (autoFix) {
+      this._transaction.networkFee = networkFee;
+      return this;
+    } else if (networkFee.isGreaterThan(this._transaction.networkFee)) {
+      const error = `Need networkFee at least ${networkFee}, only ${this._transaction.networkFee} is assigned`;
+      log.error(error);
+      return Promise.reject(error);
+    }
+    return this;
+  }
+
+  public async validateSigning(): Promise<this> {
+    const scriptHashes: string[] = getScriptHashesFromTxWitnesses(
+      this._transaction
     );
     const signers = this._transaction
       .getScriptHashesForVerifying()
       .map(hash => reverseHex(hash));
-    return signers.every(signer => scriptHashes.indexOf(signer) >= 0);
+    let notSigned = "";
+    if (
+      signers.every(signer => {
+        if (scriptHashes.indexOf(signer) < 0) {
+          notSigned = signer;
+          return false;
+        }
+        return true;
+      })
+    ) {
+      return this;
+    }
+    return Promise.reject(`Lack signature from ${notSigned}`);
+  }
+
+  public exportTransaction(withSignature = false): string {
+    return this._transaction.serialize(withSignature);
   }
 
   public async execute(): Promise<string> {
