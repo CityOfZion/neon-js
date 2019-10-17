@@ -229,7 +229,7 @@ export class Transaction {
    * @param {boolean} signed  - Whether to serialize the signatures. Signing requires it to be serialized without the signatures.
    * @return {string} Hexstring.
    */
-  public serialize(signed = true): string {
+  public serialize(signed: boolean = true): string {
     if (this.version !== 0) {
       throw new Error(`Version must be 0`);
     }
@@ -289,7 +289,7 @@ export class Transaction {
   }
 
   public getScriptHashesForVerifying(): string[] {
-    const hashes = this.cosigners.map(cosigner => cosigner.account);
+    let hashes = this.cosigners.map(cosigner => cosigner.account);
     hashes.unshift(this.sender);
     return hashes.sort();
   }

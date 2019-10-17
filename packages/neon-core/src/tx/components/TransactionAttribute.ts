@@ -1,17 +1,18 @@
-import { num2hexstring, num2VarInt, StringStream } from "../../u";
+import {
+  num2hexstring,
+  num2VarInt,
+  StringStream,
+  ensureHex,
+  str2hexstring,
+  hexstring2str
+} from "../../u";
 import { TxAttrUsage } from "./txAttrUsage";
-import { HexString } from "../../basic/hex/HexString";
 
 const maxTransactionAttributeSize = 65535;
 
 export interface TransactionAttributeLike {
   usage: number | string;
   data: string;
-}
-
-export interface TransactionAttributeConfig {
-  usage: TxAttrUsage | number | string;
-  data: HexString;
 }
 
 export function toTxAttrUsage(
@@ -45,7 +46,7 @@ export class TransactionAttribute {
 
   public static fromStream(ss: StringStream): TransactionAttribute {
     const usage = parseInt(ss.read(1), 16);
-    const data: HexString = HexString.fromHexString(ss.readVarBytes());
+    let data: string = ss.readVarBytes();
     return new TransactionAttribute({ usage, data });
   }
 
@@ -54,14 +55,15 @@ export class TransactionAttribute {
   /**
    * @description data in hex format
    */
-  public data: HexString;
+  public data: string;
 
-  public constructor(obj: TransactionAttributeConfig) {
+  public constructor(obj: TransactionAttributeLike) {
     if (!obj || obj.usage === undefined || obj.data === undefined) {
       throw new Error("TransactionAttribute requires usage and data fields");
     }
     const { usage, data } = obj;
     this.usage = toTxAttrUsage(usage);
+    ensureHex(data);
     this.data = data;
   }
 
@@ -71,7 +73,7 @@ export class TransactionAttribute {
   public static Url(url: string): TransactionAttribute {
     return new TransactionAttribute({
       usage: TxAttrUsage.Url,
-      data: HexString.fromASCIIString(url)
+      data: str2hexstring(url)
     });
   }
 
@@ -80,29 +82,25 @@ export class TransactionAttribute {
   }
 
   public serialize(): string {
-    const dataInHex = this.data.value();
-    if (dataInHex.length > maxTransactionAttributeSize) {
+    if (this.data.length > maxTransactionAttributeSize) {
       throw new Error(`Data size too big!`);
     }
     let out = num2hexstring(this.usage);
-    out += num2VarInt(dataInHex.length / 2);
-    out += dataInHex;
+    out += num2VarInt(this.data.length / 2);
+    out += this.data;
     return out;
   }
 
   public export(): TransactionAttributeLike {
     return {
       usage: this.usage,
-      data: this.data.value()
+      data: this.data
     };
   }
 
-  public equals(
-    other: TransactionAttributeConfig | TransactionAttribute
-  ): boolean {
+  public equals(other: TransactionAttributeLike): boolean {
     return (
-      this.usage === toTxAttrUsage(other.usage) &&
-      this.data.isEqualTo(other.data)
+      this.usage === toTxAttrUsage(other.usage) && this.data === other.data
     );
   }
 }
