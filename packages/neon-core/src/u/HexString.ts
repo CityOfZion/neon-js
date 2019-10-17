@@ -8,8 +8,10 @@ import {
 } from "./convert";
 
 export class HexString {
+  /**
+   * Will store value in big endian
+   */
   private _value: string;
-  private _littleEndian: boolean;
 
   protected _checkValue(value: string) {
     ensureHex(value);
@@ -20,59 +22,54 @@ export class HexString {
       value = value.slice(2);
     }
     this._checkValue(value);
-    this._value = value;
-    this._littleEndian = littleEndian;
+    this._value = littleEndian ? reverseHex(value) : value;
   }
 
   /**
-   * Get hex value as string
-   * @param asLittleEndian true, export a little-endian string; false, export a big-endian string; default to be false
+   * Export hex value as string
+   * @param asLittleEndian true, export as a little-endian string; false, export as a big-endian string; default to be false
    * @returns string
    */
-  public value(asLittleEndian = false): string {
-    if (this._littleEndian === asLittleEndian) {
-      return this._value;
-    } else {
-      return reverseHex(this._value);
-    }
+  public export(asLittleEndian = false): string {
+    return asLittleEndian ? reverseHex(this._value) : this._value;
   }
 
   public reverse(): this {
-    this._littleEndian = !this._littleEndian;
+    this._value = reverseHex(this._value);
     return this;
   }
 
   public isEqualTo(other: HexString): boolean {
-    return this.value() === other.value();
+    return this.export() === other.export();
   }
 
   public xor(other: HexString): HexString {
-    return HexString.fromHexString(hexXor(this.value(), other.value()));
+    return HexString.fromHex(hexXor(this.export(), other.export()));
   }
 
-  public toASCIIString(): string {
-    return hexstring2str(this.value());
+  public toAscii(): string {
+    return hexstring2str(this.export());
   }
 
   public toNumber(): number {
-    return parseInt(this.value(), 16);
+    return parseInt(this.export(), 16);
   }
 
   public toArrayBuffer(): Uint8Array {
-    return hexstring2ab(this.value());
+    return hexstring2ab(this.export());
   }
 
-  public static fromHexString(str: string, littleEndian = false) {
+  public static fromHex(str: string, littleEndian = false) {
     return new HexString(str, littleEndian);
   }
 
-  public static fromASCIIString(str: string, littleEndian = false) {
+  public static fromAscii(str: string) {
     const hex = str2hexstring(str);
-    return new HexString(littleEndian ? reverseHex(hex) : hex, littleEndian);
+    return new HexString(hex);
   }
 
-  public static fromNumber(num: number, littleEndian = false) {
-    return new HexString(num2hexstring(num, 1, littleEndian), littleEndian);
+  public static fromNumber(num: number) {
+    return new HexString(num2hexstring(num));
   }
 
   public static fromArrayBuffer(arr: ArrayBuffer | ArrayLike<number>) {
