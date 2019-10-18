@@ -25,13 +25,12 @@ export class HexString {
     this._value = littleEndian ? reverseHex(value) : value;
   }
 
-  /**
-   * Export hex value as string
-   * @param asLittleEndian true, export as a little-endian string; false, export as a big-endian string; default to be false
-   * @returns string
-   */
-  public export(asLittleEndian = false): string {
-    return asLittleEndian ? reverseHex(this._value) : this._value;
+  public toBigEndian(): string {
+    return this._value;
+  }
+
+  public toLittleEndian(): string {
+    return reverseHex(this._value);
   }
 
   public reverse(): this {
@@ -40,23 +39,23 @@ export class HexString {
   }
 
   public isEqualTo(other: HexString): boolean {
-    return this.export() === other.export();
+    return this.toBigEndian() === other.toBigEndian();
   }
 
   public xor(other: HexString): HexString {
-    return HexString.fromHex(hexXor(this.export(), other.export()));
+    return HexString.fromHex(hexXor(this.toBigEndian(), other.toBigEndian()));
   }
 
   public toAscii(): string {
-    return hexstring2str(this.export());
+    return hexstring2str(this.toBigEndian());
   }
 
   public toNumber(): number {
-    return parseInt(this.export(), 16);
+    return parseInt(this.toBigEndian(), 16);
   }
 
   public toArrayBuffer(): Uint8Array {
-    return hexstring2ab(this.export());
+    return hexstring2ab(this.toBigEndian());
   }
 
   public static fromHex(str: string, littleEndian = false) {
@@ -68,11 +67,14 @@ export class HexString {
     return new HexString(hex);
   }
 
-  public static fromNumber(num: number) {
-    return new HexString(num2hexstring(num));
+  public static fromNumber(num: number, littleEndian = false) {
+    return new HexString(num2hexstring(num), littleEndian);
   }
 
-  public static fromArrayBuffer(arr: ArrayBuffer | ArrayLike<number>) {
-    return new HexString(ab2hexstring(arr));
+  public static fromArrayBuffer(
+    arr: ArrayBuffer | ArrayLike<number>,
+    littleEndian = false
+  ) {
+    return new HexString(ab2hexstring(arr), littleEndian);
   }
 }
