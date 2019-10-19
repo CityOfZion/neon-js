@@ -110,7 +110,7 @@ export class Transaction {
       networkFee,
       validUntilBlock,
       attributes,
-      cosigners,
+      cosigners = [],
       scripts,
       script
     } = tx;
@@ -127,9 +127,8 @@ export class Transaction {
     this.scripts = this.scripts.sort(
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
     );
-    this.cosigners = cosigners
-      ? cosigners.map(cosigner => new Cosigner(cosigner))
-      : [];
+    this.cosigners = [];
+    this.addCosigner(...cosigners);
     this.systemFee = systemFee ? new Fixed8(systemFee) : new Fixed8(0);
     this.networkFee = networkFee ? new Fixed8(networkFee) : new Fixed8(0);
     this.script = script || "";
@@ -184,7 +183,17 @@ export class Transaction {
   }
 
   public addCosigner(...cosigners: CosignerLike[]): this {
-    this.cosigners.push(...cosigners.map(cosigner => new Cosigner(cosigner)));
+    const cosignerHashes = this.cosigners.map(cosigner => cosigner.account);
+    this.cosigners.push(
+      ...cosigners.map(cosigner => {
+        const hash = cosigner.account;
+        if (cosignerHashes.indexOf(hash) >= 0) {
+          throw new Error(`Cannot add duplicate cosigner: ${hash}`);
+        }
+        cosignerHashes.push(hash);
+        return new Cosigner(cosigner);
+      })
+    );
     return this;
   }
 
@@ -193,10 +202,7 @@ export class Transaction {
    * @param usage The usage type. Do refer to txAttrUsage enum values for all available options.
    * @param data The data as hexstring.
    */
-  public addAttribute(usage: number, data: string): this {
-    if (typeof data !== "string") {
-      throw new TypeError("data should be formatted as string!");
-    }
+  public addAttribute(usage: number | string, data: string): this {
     this.attributes.push(new TransactionAttribute({ usage, data }));
     return this;
   }
@@ -229,7 +235,7 @@ export class Transaction {
    * @param {boolean} signed  - Whether to serialize the signatures. Signing requires it to be serialized without the signatures.
    * @return {string} Hexstring.
    */
-  public serialize(signed: boolean = true): string {
+  public serialize(signed = true): string {
     if (this.version !== 0) {
       throw new Error(`Version must be 0`);
     }
@@ -289,8 +295,10 @@ export class Transaction {
   }
 
   public getScriptHashesForVerifying(): string[] {
-    let hashes = this.cosigners.map(cosigner => cosigner.account);
-    hashes.unshift(this.sender);
+    const hashes = this.cosigners.map(cosigner => cosigner.account);
+    if (hashes.indexOf(this.sender) < 0) {
+      hashes.unshift(this.sender);
+    }
     return hashes.sort();
   }
 }
