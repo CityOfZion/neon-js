@@ -69,16 +69,23 @@ export class HexString {
 
   /**
    * Export as number
+   * @param asLittleEndian whether export as little endian number, default to be false
    */
-  public toNumber(): number {
-    return parseInt(this.toBigEndian(), 16);
+  public toNumber(asLittleEndian = false): number {
+    return parseInt(
+      asLittleEndian ? this.toLittleEndian() : this.toBigEndian(),
+      16
+    );
   }
 
   /**
    * Export to ArrayBuffer in Uint8Array
+   * @param asLittleEndian whether export as little endian array, default to be false
    */
-  public toArrayBuffer(): Uint8Array {
-    return hexstring2ab(this.toBigEndian());
+  public toArrayBuffer(asLittleEndian = false): Uint8Array {
+    return hexstring2ab(
+      asLittleEndian ? this.toLittleEndian() : this.toBigEndian()
+    );
   }
 
   /**
