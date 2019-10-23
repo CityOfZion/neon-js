@@ -227,14 +227,14 @@ describe("execute", () => {
     expect(result).toBe(expected);
   });
 
-  test("basic error", () => {
+  test("basic error", async () => {
     const url = "testUrl";
     const expected = jest.fn();
     axios.post.mockImplementationOnce(() =>
       Promise.resolve({ error: { message: expected } })
     );
     const result = Query.getVersion().execute(url);
-    expect(result).rejects.toThrow();
+    await expect(result).rejects.toThrow();
   });
 
   test("cannot re-query", async () => {
@@ -243,7 +243,7 @@ describe("execute", () => {
     const q = Query.getVersion();
     const r1 = await q.execute(url);
     const r2 = q.execute(url);
-    expect(r2).rejects.toThrow("This request has been sent");
+    await expect(r2).rejects.toThrow("This request has been sent");
   });
 
   test("calls parser when successful", async () => {
