@@ -99,6 +99,7 @@ export class TransactionBuilder {
           })
         );
       } else {
+        this._cosignerAccounts.push(new Account(cosigner.account));
         newCosingers.push(cosigner as CosignerLike);
       }
     });
@@ -140,12 +141,25 @@ export class TransactionBuilder {
     return this;
   }
 
-  public setSystemFee(fee: Fixed8) {
-    this._transaction.systemFee = fee;
-  }
+  public addMultiSig(multisigAccount: Account, ...witnesses: Witness[]) {
+    if (!multisigAccount.isMultiSig) {
+      throw new Error(`${multisigAccount} is not a multi-sig account`);
+    }
 
-  public setNetworkFee(fee: Fixed8) {
-    this._transaction.networkFee = fee;
+    if (
+      ![this._sender, ...this._cosignerAccounts].some(
+        account => account.address === multisigAccount.address
+      )
+    ) {
+      throw new Error(`${multisigAccount} is neither sender nor cosigner`);
+    }
+
+    const multisigWitness = Witness.buildMultiSig(
+      this._transaction.serialize(),
+      witnesses,
+      multisigAccount
+    );
+    return this.addWitnesses(multisigWitness);
   }
 
   public sign(account: Account | string): this {
@@ -160,9 +174,17 @@ export class TransactionBuilder {
    */
   public signWithAquiredAccounts(): this {
     [this._sender, ...this._cosignerAccounts].forEach(account => {
-      this._transaction.sign(account);
+      account.privateKey && this._transaction.sign(account);
     });
     return this;
+  }
+
+  public setSystemFee(fee: Fixed8) {
+    this._transaction.systemFee = fee;
+  }
+
+  public setNetworkFee(fee: Fixed8) {
+    this._transaction.networkFee = fee;
   }
 
   public validateValidUntilBlock(
