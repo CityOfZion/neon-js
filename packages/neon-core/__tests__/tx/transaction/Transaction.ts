@@ -174,6 +174,13 @@ describe("Add Methods", () => {
       "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26"
     );
     expect(tx1.cosigners[0].scopes).toBe(WitnessScope.Global);
+    const addDuplicate = function() {
+      tx1.addCosigner({
+        account: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
+        scopes: WitnessScope.Global
+      });
+    };
+    expect(addDuplicate).toThrowError();
   });
 
   test("addAttribute", () => {

@@ -336,13 +336,13 @@ export class Query {
     config: AxiosRequestConfig = {}
   ): Promise<any> {
     if (this.completed) {
-      return Promise.reject("This request has been sent");
+      throw new Error("This request has been sent");
     }
     const response = await queryRPC(url, this.req, config);
     this.res = response;
     this.completed = true;
     if (response.error) {
-      return Promise.reject(`${url}: ${response.error.message}`);
+      throw new Error(`${url}: ${response.error.message}`);
     }
     if (this.parse) {
       log.info(`Query[${this.req.method}] successful`);

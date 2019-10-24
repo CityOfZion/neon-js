@@ -1,6 +1,7 @@
 import ContractParam from "../../src/sc/ContractParam";
 import OpCode from "../../src/sc/OpCode";
 import ScriptBuilder from "../../src/sc/ScriptBuilder";
+import { InteropServiceCode } from "../../src/sc";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -32,6 +33,18 @@ describe("emit", () => {
     const sb = new ScriptBuilder();
     const result = sb.emit("01" as OpCode);
     expect(result).toBe(sb);
+  });
+});
+
+describe("emitSysCall", () => {
+  test("emitSysCall with args", () => {
+    const sb = new ScriptBuilder();
+    const result = sb.emitSysCall(
+      InteropServiceCode.NEO_CONTRACT_CREATE,
+      "a45f",
+      "2bc5"
+    ).str;
+    expect(result).toBe("022bc502a45f68f66ca56e");
   });
 });
 
@@ -170,14 +183,5 @@ describe("emitPush", () => {
     const sb = new ScriptBuilder();
     sb.emitPush(data);
     expect(sb.str).toBe(expected);
-  });
-});
-
-describe.skip("toScriptParams", () => {
-  test("NEP5 token transfer scripts", () => {
-    const rawScript =
-      "0400e1f50514d0d6076f6953a895b0c23a21c9cd342a974554d714961d3ef7448228f7e1bbe14b99e031cc7f8d7e8453c1087472616e73666572679ffc47dd7f4678024f01aea820a262e76653b13ff10400c2eb0b1476dada428b7bbc938ac82a8ea94802f74f121a46145ed9efbac2a1e0f24a90d49a775e7b1165812d4e53c1087472616e73666572679ffc47dd7f4678024f01aea820a262e76653b13ff10400a3e111148b5b7e57f83c84bbba0375ac5c2297cdb095eeb2145ed9efbac2a1e0f24a90d49a775e7b1165812d4e53c1087472616e73666572679ffc47dd7f4678024f01aea820a262e76653b13ff1040084d71714961d3ef7448228f7e1bbe14b99e031cc7f8d7e84145ed9efbac2a1e0f24a90d49a775e7b1165812d4e53c1087472616e73666572679ffc47dd7f4678024f01aea820a262e76653b13ff166205b697264ebe483";
-    const scriptIntents = new ScriptBuilder(rawScript).toScriptParams();
-    expect(scriptIntents.length).toEqual(4);
   });
 });
