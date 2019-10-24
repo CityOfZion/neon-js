@@ -188,13 +188,8 @@ export class Transaction {
     return this;
   }
 
-  /**
-   * Add an attribute.
-   * @param usage The usage type. Do refer to txAttrUsage enum values for all available options.
-   * @param data The data as hexstring.
-   */
-  public addAttribute(usage: number | string, data: string): this {
-    this.attributes.push(new TransactionAttribute({ usage, data }));
+  public addAttribute(...attributes: Array<TransactionAttribute>) {
+    this.attributes.push(...attributes);
     return this;
   }
 

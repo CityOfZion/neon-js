@@ -8,12 +8,14 @@ import {
 } from "@cityofzion/neon-core/lib/tx";
 import { RPCClient } from "@cityofzion/neon-core/lib/rpc";
 import { ScriptIntent, createScript } from "@cityofzion/neon-core/lib/sc";
-import logger from "@cityofzion/neon-core/lib/logging";
-import { Fixed8, reverseHex } from "@cityofzion/neon-core/lib/u";
+import { reverseHex, Fixed8 } from "@cityofzion/neon-core/lib/u";
 import { Account } from "@cityofzion/neon-core/lib/wallet";
-import { getNetworkFee, getScriptHashesFromTxWitnesses } from "./util";
-
-const log = logger("transactionBuilder");
+import {
+  validateValidUntilBlock,
+  validateSystemFee,
+  validateNetworkFee,
+  validateSigning
+} from "./validation";
 
 export interface CosignerWithAccount
   extends Pick<CosignerLike, Exclude<keyof CosignerLike, "account">> {
@@ -21,6 +23,7 @@ export interface CosignerWithAccount
 }
 
 export interface TransactionBuilderConfig {
+  sender: Account | string;
   intents?: ScriptIntent[];
   cosigners?: (CosignerWithAccount | CosignerLike)[];
   systemFee?: number;
@@ -45,7 +48,6 @@ export class TransactionBuilder {
    * Cosigner accounts that client has access to
    */
   private _cosignerAccounts: Account[] = [];
-  private _rpc: RPCClient;
   private _intents: ScriptIntent[] = [];
   private _transaction: Transaction;
 
@@ -54,81 +56,29 @@ export class TransactionBuilder {
    * @param rpc to specify network, can be RPCClient or rpc url
    * @param sender the sender account, can be Account or privateKey
    */
-  public constructor(rpc: RPCClient | string, sender: Account | string) {
-    if (typeof rpc === "string") {
-      this._rpc = new RPCClient(rpc);
-    } else {
-      this._rpc = rpc;
-    }
-
+  public constructor(config: TransactionBuilderConfig) {
+    const { sender, intents = [], cosigners = [] } = config;
     if (typeof sender === "string") {
       this._sender = new Account(sender);
     } else {
       this._sender = sender;
     }
-
-    this._transaction = new Transaction({
-      sender: reverseHex(this._sender.scriptHash)
-    });
-  }
-
-  /**
-   * Load a pack of transaction config info at one time
-   * @param config
-   */
-  public loadFromConfig(config: TransactionBuilderConfig): this {
-    const { intents = [], cosigners = [] } = config;
     this._cosigners = [];
     this._cosignerAccounts = [];
-    this.addCosigners(...cosigners);
-
     this._intents = [];
+
     this._transaction = new Transaction(
       Object.assign(config, {
         sender: reverseHex(this._sender.scriptHash),
         cosigners: this._cosigners
       })
     );
+    this.addCosigners(...cosigners);
     this.addIntents(...intents);
-    return this;
   }
 
-  /**
-   * Reset the builder to the initial state, so that it can be used to build a new transaction
-   */
-  public reset(): this {
-    this._cosigners = [];
-    this._cosignerAccounts = [];
-    this._intents = [];
-    this._transaction = new Transaction({
-      sender: reverseHex(this._sender.scriptHash)
-    });
-    return this;
-  }
-
-  public get sender() {
-    return this._sender;
-  }
-
-  public set sender(sender: Account) {
-    this._sender = sender;
-    this._transaction.sender = sender.scriptHash;
-  }
-
-  public get url() {
-    return this._rpc.net;
-  }
-
-  public set url(url: string) {
-    this._rpc.net = url;
-  }
-
-  public set rpc(rpc: RPCClient) {
-    this._rpc = rpc;
-  }
-
-  public get intents() {
-    return this._intents;
+  public get transaction() {
+    return this._transaction;
   }
 
   /**
@@ -139,18 +89,22 @@ export class TransactionBuilder {
   public addCosigners(
     ...cosigners: (CosignerWithAccount | CosignerLike)[]
   ): this {
+    const newCosingers: CosignerLike[] = [];
     cosigners.forEach(cosigner => {
       if (typeof cosigner.account !== "string") {
         this._cosignerAccounts.push(cosigner.account);
-        this._cosigners.push(
+        newCosingers.push(
           Object.assign({}, cosigner, {
             account: reverseHex(cosigner.account.scriptHash)
           })
         );
       } else {
-        this._cosigners.push(cosigner as CosignerLike);
+        newCosingers.push(cosigner as CosignerLike);
       }
     });
+
+    this._cosigners.push(...newCosingers);
+    this._transaction.addCosigner(...newCosingers);
     return this;
   }
 
@@ -164,10 +118,13 @@ export class TransactionBuilder {
     return this;
   }
 
-  public addAttributes(...attributes: TransactionAttributeLike[]): this {
-    this._transaction.attributes.push(
-      ...attributes.map(attribute => new TransactionAttribute(attribute))
-    );
+  /**
+   * Add an attribute.
+   * @param usage The usage type. Do refer to txAttrUsage enum values for all available options.
+   * @param data The data as hexstring.
+   */
+  public addAttribute(usage: number | string, data: string): this {
+    this._transaction.addAttribute(new TransactionAttribute({ usage, data }));
     return this;
   }
 
@@ -181,6 +138,14 @@ export class TransactionBuilder {
   public addWitnesses(...witnesses: Witness[]): this {
     witnesses.forEach(witness => this._transaction.addWitness(witness));
     return this;
+  }
+
+  public setSystemFee(fee: Fixed8) {
+    this._transaction.systemFee = fee;
+  }
+
+  public setNetworkFee(fee: Fixed8) {
+    this._transaction.networkFee = fee;
   }
 
   public sign(account: Account | string): this {
@@ -200,6 +165,31 @@ export class TransactionBuilder {
     return this;
   }
 
+  public validateValidUntilBlock(
+    rpc: RPCClient,
+    autoFix = false
+  ): Promise<Transaction> {
+    return validateValidUntilBlock(this._transaction, rpc, autoFix);
+  }
+
+  public validateSystemFee(
+    rpc: RPCClient,
+    autoFix = false
+  ): Promise<Transaction> {
+    return validateSystemFee(this._transaction, rpc, autoFix);
+  }
+
+  public validateNetworkFee(
+    rpc: RPCClient,
+    autoFix = false
+  ): Promise<Transaction> {
+    return validateNetworkFee(this._transaction, rpc, autoFix);
+  }
+
+  public validateSigning(): Promise<Transaction> {
+    return validateSigning(this._transaction);
+  }
+
   /**
    * Validate the transaction and try to fix the invalidation if user agreed.
    * Validations:
@@ -209,109 +199,16 @@ export class TransactionBuilder {
    *   4. signature
    * @param autoFix default to be false.
    */
-  public async validate(autoFix = false): Promise<this> {
+  public validate(rpc: RPCClient, autoFix = false): Promise<Transaction> {
     return Promise.all([
-      this.validateValidUntilBlock(autoFix),
-      this.validateIntents(),
-      this.validateSystemFee(autoFix),
-      this.validateNetworkFee(autoFix),
+      this.validateValidUntilBlock(rpc, autoFix),
+      this.validateSystemFee(rpc, autoFix),
+      this.validateNetworkFee(rpc, autoFix),
       this.validateSigning()
-    ]).then(() => this);
+    ]).then(res => this._transaction);
   }
 
-  public async validateValidUntilBlock(autoFix = false): Promise<this> {
-    const { validUntilBlock } = this._transaction;
-    const height = await this._rpc.getBlockCount();
-    if (
-      validUntilBlock <= height ||
-      validUntilBlock >= height + Transaction.MAX_TRANSACTION_LIFESPAN
-    ) {
-      if (autoFix) {
-        this._transaction.validUntilBlock =
-          Transaction.MAX_TRANSACTION_LIFESPAN + height - 1;
-        return this;
-      }
-      return Promise.reject(
-        `validUntilBlock prop is not valid: ${validUntilBlock}`
-      );
-    }
-    return this;
-  }
-
-  public async validateIntents(): Promise<this> {
-    return this;
-  }
-
-  public async validateSystemFee(autoFix = false): Promise<this> {
-    const { script, systemFee } = this._transaction;
-    const { state, gas_consumed } = await this._rpc.invokeScript(script);
-    if (state.indexOf("HALT") >= 0) {
-      log.info(`transaction script will be excuted successfullyd: ${script}`);
-    } else {
-      return Promise.reject(
-        `transaction script will not be excuted successfullyd: ${script}`
-      );
-    }
-
-    const requiredSystemFee = new Fixed8(parseFloat(gas_consumed));
-    if (autoFix && !requiredSystemFee.equals(systemFee)) {
-      log.info(
-        `Will change systemFee from ${systemFee} to ${requiredSystemFee}`
-      );
-      this._transaction.systemFee = systemFee;
-      return this;
-    } else if (requiredSystemFee.isGreaterThan(systemFee)) {
-      const error = `Need systemFee at least ${requiredSystemFee}, only ${systemFee} is assigned`;
-      log.error(error);
-      return Promise.reject(error);
-    } else if (!systemFee.ceil().equals(systemFee)) {
-      const error = `SystemFee must be ceiled to integer: ${systemFee}`;
-      log.error(error);
-      return Promise.reject(error);
-    }
-    return this;
-  }
-
-  public async validateNetworkFee(autoFix = false): Promise<this> {
-    const networkFee = getNetworkFee(this._transaction);
-    if (autoFix) {
-      this._transaction.networkFee = networkFee;
-      return this;
-    } else if (networkFee.isGreaterThan(this._transaction.networkFee)) {
-      const error = `Need networkFee at least ${networkFee}, only ${this._transaction.networkFee} is assigned`;
-      log.error(error);
-      return Promise.reject(error);
-    }
-    return this;
-  }
-
-  public async validateSigning(): Promise<this> {
-    const scriptHashes: string[] = getScriptHashesFromTxWitnesses(
-      this._transaction
-    );
-    const signers = this._transaction
-      .getScriptHashesForVerifying()
-      .map(hash => reverseHex(hash));
-    let notSigned = "";
-    if (
-      signers.every(signer => {
-        if (scriptHashes.indexOf(signer) < 0) {
-          notSigned = signer;
-          return false;
-        }
-        return true;
-      })
-    ) {
-      return this;
-    }
-    return Promise.reject(`Lack signature from ${notSigned}`);
-  }
-
-  public exportTransaction(withSignature = false): string {
-    return this._transaction.serialize(withSignature);
-  }
-
-  public async execute(): Promise<string> {
-    return this._rpc.sendRawTransaction(this._transaction);
+  public async sendTo(rpc: RPCClient): Promise<string> {
+    return rpc.sendRawTransaction(this._transaction);
   }
 }
