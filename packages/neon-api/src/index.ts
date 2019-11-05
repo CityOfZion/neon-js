@@ -1,6 +1,6 @@
 import * as _Neon from "@cityofzion/neon-core";
 import { default as apiSettings } from "./settings";
-import { TransactionBuilder } from "./transationBuilder";
+import { TransactionBuilder } from "./txService";
 
 function assignSettings(
   baseSettings: typeof _Neon.settings,

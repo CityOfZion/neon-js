@@ -6,16 +6,9 @@ import {
   Witness,
   CosignerLike
 } from "@cityofzion/neon-core/lib/tx";
-import { RPCClient } from "@cityofzion/neon-core/lib/rpc";
 import { ScriptIntent, createScript } from "@cityofzion/neon-core/lib/sc";
 import { reverseHex, Fixed8 } from "@cityofzion/neon-core/lib/u";
 import { Account } from "@cityofzion/neon-core/lib/wallet";
-import {
-  validateValidUntilBlock,
-  validateSystemFee,
-  validateNetworkFee,
-  validateSigning
-} from "./validation";
 
 export interface CosignerWithAccount
   extends Pick<CosignerLike, Exclude<keyof CosignerLike, "account">> {
@@ -187,50 +180,7 @@ export class TransactionBuilder {
     this._transaction.networkFee = fee;
   }
 
-  public validateValidUntilBlock(
-    rpc: RPCClient,
-    autoFix = false
-  ): Promise<Transaction> {
-    return validateValidUntilBlock(this._transaction, rpc, autoFix);
-  }
-
-  public validateSystemFee(
-    rpc: RPCClient,
-    autoFix = false
-  ): Promise<Transaction> {
-    return validateSystemFee(this._transaction, rpc, autoFix);
-  }
-
-  public validateNetworkFee(
-    rpc: RPCClient,
-    autoFix = false
-  ): Promise<Transaction> {
-    return validateNetworkFee(this._transaction, rpc, autoFix);
-  }
-
-  public validateSigning(): Promise<Transaction> {
-    return validateSigning(this._transaction);
-  }
-
-  /**
-   * Validate the transaction and try to fix the invalidation if user agreed.
-   * Validations:
-   *   1. validUntilBlock prop
-   *   2. Intents
-   *   3. fee related
-   *   4. signature
-   * @param autoFix default to be false.
-   */
-  public validate(rpc: RPCClient, autoFix = false): Promise<Transaction> {
-    return Promise.all([
-      this.validateValidUntilBlock(rpc, autoFix),
-      this.validateSystemFee(rpc, autoFix),
-      this.validateNetworkFee(rpc, autoFix),
-      this.validateSigning()
-    ]).then(res => this._transaction);
-  }
-
-  public async sendTo(rpc: RPCClient): Promise<string> {
-    return rpc.sendRawTransaction(this._transaction);
+  public export(): Transaction {
+    return this._transaction;
   }
 }
