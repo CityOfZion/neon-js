@@ -2,7 +2,8 @@ import {
   Transaction,
   TransactionLike,
   Witness,
-  WitnessScope
+  WitnessScope,
+  TransactionAttribute
 } from "../../../src/tx";
 import samples from "./Transaction.json";
 import { Account } from "../../../src/wallet";
@@ -185,7 +186,12 @@ describe("Add Methods", () => {
 
   test("addAttribute", () => {
     const tx1 = createTxforTestAddMethods();
-    tx1.addAttribute(129, "72e9a2");
+    tx1.addAttribute(
+      new TransactionAttribute({
+        usage: 129,
+        data: "72e9a2"
+      })
+    );
     expect(tx1.attributes[0].usage).toBe(129);
     expect(tx1.attributes[0].data).toBe("72e9a2");
   });
