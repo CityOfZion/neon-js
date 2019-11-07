@@ -1,26 +1,25 @@
-import { Transaction } from "@cityofzion/neon-core/lib/tx";
-import { RPCClient } from "@cityofzion/neon-core/lib/rpc";
-import { Fixed8, reverseHex } from "@cityofzion/neon-core/lib/u";
+import { tx, rpc, u } from "@cityofzion/neon-core";
 import { getNetworkFee, getScriptHashesFromTxWitnesses } from "./util";
 
 export class TransactionValidator {
-  public rpcClient: RPCClient;
+  public rpcClient: rpc.RPCClient;
 
-  constructor(rpc: RPCClient) {
+  constructor(rpc: rpc.RPCClient) {
     this.rpcClient = rpc;
   }
 
   validateValidUntilBlock = async (
-    transaction: Transaction,
+    transaction: tx.Transaction,
     autoFix = false
-  ): Promise<Transaction> => {
+  ): Promise<tx.Transaction> => {
     const { validUntilBlock } = transaction;
     const height = await this.rpcClient.getBlockCount();
     if (
       validUntilBlock <= height ||
-      validUntilBlock >= height + Transaction.MAX_TRANSACTION_LIFESPAN
+      validUntilBlock >= height + tx.Transaction.MAX_TRANSACTION_LIFESPAN
     ) {
-      const vub_suggestion = Transaction.MAX_TRANSACTION_LIFESPAN + height - 1;
+      const vub_suggestion =
+        tx.Transaction.MAX_TRANSACTION_LIFESPAN + height - 1;
       if (autoFix) {
         transaction.validUntilBlock = vub_suggestion;
         return transaction;
@@ -32,7 +31,9 @@ export class TransactionValidator {
     return transaction;
   };
 
-  validateIntents = async (transaction: Transaction): Promise<Transaction> => {
+  validateIntents = async (
+    transaction: tx.Transaction
+  ): Promise<tx.Transaction> => {
     return transaction;
   };
 
@@ -44,12 +45,12 @@ export class TransactionValidator {
    */
 
   validateSystemFee = async (
-    transaction: Transaction,
+    transaction: tx.Transaction,
     autoFix = false
-  ): Promise<Transaction> => {
+  ): Promise<tx.Transaction> => {
     const { script, systemFee } = transaction;
     const { gas_consumed } = await this.rpcClient.invokeScript(script);
-    const requiredSystemFee = new Fixed8(parseFloat(gas_consumed)).ceil();
+    const requiredSystemFee = new u.Fixed8(parseFloat(gas_consumed)).ceil();
     if (autoFix && !requiredSystemFee.equals(systemFee)) {
       transaction.systemFee = systemFee;
     } else if (requiredSystemFee.isGreaterThan(systemFee)) {
@@ -66,9 +67,9 @@ export class TransactionValidator {
    * @param autoFix
    */
   validateNetworkFee = async (
-    transaction: Transaction,
+    transaction: tx.Transaction,
     autoFix = false
-  ): Promise<Transaction> => {
+  ): Promise<tx.Transaction> => {
     const { networkFee } = transaction;
     const requiredNetworkFee = getNetworkFee(transaction);
     if (autoFix && !requiredNetworkFee.equals(networkFee)) {
@@ -81,11 +82,13 @@ export class TransactionValidator {
     return transaction;
   };
 
-  validateSigning = async (transaction: Transaction): Promise<Transaction> => {
+  validateSigning = async (
+    transaction: tx.Transaction
+  ): Promise<tx.Transaction> => {
     const scriptHashes: string[] = getScriptHashesFromTxWitnesses(transaction);
     const signers = transaction
       .getScriptHashesForVerifying()
-      .map(hash => reverseHex(hash));
+      .map(hash => u.reverseHex(hash));
     let notSigned = "";
     if (
       signers.every(signer => {

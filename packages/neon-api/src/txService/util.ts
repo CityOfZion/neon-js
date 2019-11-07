@@ -1,25 +1,10 @@
-import {
-  OpCodePrices,
-  OpCode,
-  getInteropServicePrice,
-  InteropServiceCode,
-  ScriptBuilder
-} from "@cityofzion/neon-core/lib/sc";
-import { Transaction } from "@cityofzion/neon-core/lib/tx";
-import {
-  Account,
-  getPublicKeysFromVerificationScript,
-  getSigningThresholdFromVerificationScript,
-  getScriptHashFromPublicKey
-} from "@cityofzion/neon-core/lib/wallet";
-import { Fixed8 } from "@cityofzion/neon-core/lib/u";
-import { POLICY_FEE_PERBYTE } from "@cityofzion/neon-core/lib/consts";
+import { tx, wallet, u, sc, CONST } from "@cityofzion/neon-core";
 
 export function getNetworkFeeForSig(): number {
   return (
-    OpCodePrices[OpCode.PUSHBYTES64] +
-    OpCodePrices[OpCode.PUSHBYTES33] +
-    getInteropServicePrice(InteropServiceCode.NEO_CRYPTO_CHECKSIG)
+    sc.OpCodePrices[sc.OpCode.PUSHBYTES64] +
+    sc.OpCodePrices[sc.OpCode.PUSHBYTES33] +
+    sc.getInteropServicePrice(sc.InteropServiceCode.NEO_CRYPTO_CHECKSIG)
   );
 }
 
@@ -27,29 +12,32 @@ export function getNetworkFeeForMultiSig(
   signingThreshold: number,
   pubkeysNum: number
 ): number {
-  const sb = new ScriptBuilder();
+  const sb = new sc.ScriptBuilder();
   return (
-    OpCodePrices[OpCode.PUSHBYTES64] * signingThreshold +
-    OpCodePrices[sb.emitPush(signingThreshold).str.slice(0, 2) as OpCode] +
-    OpCodePrices[OpCode.PUSHBYTES33] * pubkeysNum +
-    OpCodePrices[sb.emitPush(pubkeysNum).str.slice(0, 2) as OpCode] +
-    getInteropServicePrice(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG, {
+    sc.OpCodePrices[sc.OpCode.PUSHBYTES64] * signingThreshold +
+    sc.OpCodePrices[
+      sb.emitPush(signingThreshold).str.slice(0, 2) as sc.OpCode
+    ] +
+    sc.OpCodePrices[sc.OpCode.PUSHBYTES33] * pubkeysNum +
+    sc.OpCodePrices[sb.emitPush(pubkeysNum).str.slice(0, 2) as sc.OpCode] +
+    sc.getInteropServicePrice(sc.InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG, {
       size: pubkeysNum
     })
   );
 }
 
-export function getNetworkFee(transaction: Transaction): Fixed8 {
-  const networkFee = new Fixed8(0);
+export function getNetworkFee(transaction: tx.Transaction): u.Fixed8 {
+  const networkFee = new u.Fixed8(0);
   const signers = transaction.getScriptHashesForVerifying();
   signers.forEach(signer => {
-    const account = new Account(signer);
+    const account = new wallet.Account(signer);
     if (!account.isMultiSig) {
       networkFee.add(getNetworkFeeForSig());
     } else {
-      const n = getPublicKeysFromVerificationScript(account.contract.script)
-        .length;
-      const m = getSigningThresholdFromVerificationScript(
+      const n = wallet.getPublicKeysFromVerificationScript(
+        account.contract.script
+      ).length;
+      const m = wallet.getSigningThresholdFromVerificationScript(
         account.contract.script
       );
       networkFee.add(getNetworkFeeForMultiSig(m, n));
@@ -57,20 +45,40 @@ export function getNetworkFee(transaction: Transaction): Fixed8 {
     // TODO: consider about contract verfication script
   });
   const size = transaction.serialize(true).length / 2;
-  networkFee.add(new Fixed8(size).multipliedBy(POLICY_FEE_PERBYTE));
+  networkFee.add(new u.Fixed8(size).multipliedBy(CONST.POLICY_FEE_PERBYTE));
   return networkFee;
 }
 
 export function getScriptHashesFromTxWitnesses(
-  transaction: Transaction
+  transaction: tx.Transaction
 ): string[] {
   const scriptHashes: string[] = [];
   transaction.scripts.forEach(script =>
     scriptHashes.push(
-      ...getPublicKeysFromVerificationScript(script.verificationScript).map(
-        publicKey => getScriptHashFromPublicKey(publicKey)
-      )
+      ...wallet
+        .getPublicKeysFromVerificationScript(script.verificationScript)
+        .map(publicKey => wallet.getScriptHashFromPublicKey(publicKey))
     )
   );
   return scriptHashes;
+}
+
+export function checkMultisigAcc(
+  transaction: tx.Transaction,
+  multisigAcc: wallet.Account
+) {
+  if (!multisigAcc.isMultiSig) {
+    throw new Error(`${multisigAcc} is not a multi-sig account`);
+  }
+
+  if (
+    ![
+      transaction.sender,
+      ...transaction.cosigners.map(cosigner => cosigner.account)
+    ].some(scriptHash => u.reverseHex(scriptHash) === multisigAcc.scriptHash)
+  ) {
+    throw new Error(
+      `${multisigAcc} is neither sender nor cosigner in this transaction ${transaction}`
+    );
+  }
 }

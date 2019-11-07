@@ -1,104 +1,18 @@
-import {
-  Transaction,
-  TransactionAttributeLike,
-  WitnessLike,
-  TransactionAttribute,
-  Witness,
-  CosignerLike
-} from "@cityofzion/neon-core/lib/tx";
-import { ScriptIntent, createScript } from "@cityofzion/neon-core/lib/sc";
-import { reverseHex, Fixed8 } from "@cityofzion/neon-core/lib/u";
-import { Account } from "@cityofzion/neon-core/lib/wallet";
+import { tx, sc, u } from "@cityofzion/neon-core";
 
-export interface CosignerWithAccount
-  extends Pick<CosignerLike, Exclude<keyof CosignerLike, "account">> {
-  account: Account;
-}
-
-export interface TransactionBuilderConfig {
-  sender: Account | string;
-  intents?: ScriptIntent[];
-  cosigners?: (CosignerWithAccount | CosignerLike)[];
-  systemFee?: number;
-  networkFee?: number;
-  validUntilBlock?: number;
-  attributes?: TransactionAttributeLike[];
-  scripts?: WitnessLike[];
-  script?: string;
-}
-
-/**
- * `TransactionBuilder` is to build a transaction in a more convinient and mature way.
- * It is more powerf
- */
 export class TransactionBuilder {
-  private _sender: Account;
-  /**
-   * Cosigners
-   */
-  private _cosigners: CosignerLike[] = [];
-  /**
-   * Cosigner accounts that client has access to
-   */
-  private _cosignerAccounts: Account[] = [];
-  private _intents: ScriptIntent[] = [];
-  private _transaction: Transaction;
+  private _config: Partial<tx.TransactionLike>;
 
-  /**
-   * A TransactionBuilder instance can build class with the same network and sender account
-   * @param rpc to specify network, can be RPCClient or rpc url
-   * @param sender the sender account, can be Account or privateKey
-   */
-  public constructor(config: TransactionBuilderConfig) {
-    const { sender, intents = [], cosigners = [] } = config;
-    if (typeof sender === "string") {
-      this._sender = new Account(sender);
-    } else {
-      this._sender = sender;
-    }
-    this._cosigners = [];
-    this._cosignerAccounts = [];
-    this._intents = [];
-
-    this._transaction = new Transaction(
-      Object.assign(config, {
-        sender: reverseHex(this._sender.scriptHash),
-        cosigners: this._cosigners
-      })
-    );
-    this.addCosigners(...cosigners);
-    this.addIntents(...intents);
-  }
-
-  public get transaction() {
-    return this._transaction;
+  public constructor(config: Partial<tx.TransactionLike>) {
+    this._config = config;
   }
 
   /**
-   * Cosigner must sign the transaction to make it valid.
-   * Still you could add just an address to build the transaction, and you can export the transaction for cosigner account holder to sign it
+   * Add cosigners
    * @param cosigners
    */
-  public addCosigners(
-    ...cosigners: (CosignerWithAccount | CosignerLike)[]
-  ): this {
-    const newCosingers: CosignerLike[] = [];
-    cosigners.forEach(cosigner => {
-      if (typeof cosigner.account !== "string") {
-        this._cosignerAccounts.push(cosigner.account);
-        newCosingers.push(
-          Object.assign({}, cosigner, {
-            account: reverseHex(cosigner.account.scriptHash)
-          })
-        );
-      } else {
-        this._cosignerAccounts.push(new Account(cosigner.account));
-        newCosingers.push(cosigner as CosignerLike);
-      }
-    });
-
-    this._cosigners.push(...newCosingers);
-    this._transaction.addCosigner(...newCosingers);
+  public addCosigners(...cosigners: tx.CosignerLike[]): this {
+    this._config.cosigners = [...(this._config.cosigners || []), ...cosigners];
     return this;
   }
 
@@ -106,9 +20,9 @@ export class TransactionBuilder {
    * You can add multiple intents to the transaction
    * @param intents
    */
-  public addIntents(...intents: ScriptIntent[]): this {
-    this._transaction.script += createScript(...intents);
-    this._intents.push(...intents);
+  public addIntents(...intents: sc.ScriptIntent[]): this {
+    this._config.script =
+      this._config.script || "" + sc.createScript(...intents);
     return this;
   }
 
@@ -118,69 +32,27 @@ export class TransactionBuilder {
    * @param data The data as hexstring.
    */
   public addAttribute(usage: number | string, data: string): this {
-    this._transaction.addAttribute(new TransactionAttribute({ usage, data }));
+    this._config.attributes = [
+      ...(this._config.attributes || []),
+      {
+        usage,
+        data
+      }
+    ];
     return this;
   }
 
-  /**
-   * You can just use `sign` function to do this.
-   * Still this is useful when：
-   *   1. Need to accept a cosigner's signature
-   *   2. Need to use verification trigger of a contract address
-   * @param witnesses
-   */
-  public addWitnesses(...witnesses: Witness[]): this {
-    witnesses.forEach(witness => this._transaction.addWitness(witness));
+  public setSystemFee(fee: u.Fixed8) {
+    this._config.systemFee = fee;
     return this;
   }
 
-  public addMultiSig(multisigAccount: Account, ...witnesses: Witness[]) {
-    if (!multisigAccount.isMultiSig) {
-      throw new Error(`${multisigAccount} is not a multi-sig account`);
-    }
-
-    if (
-      ![this._sender, ...this._cosignerAccounts].some(
-        account => account.address === multisigAccount.address
-      )
-    ) {
-      throw new Error(`${multisigAccount} is neither sender nor cosigner`);
-    }
-
-    const multisigWitness = Witness.buildMultiSig(
-      this._transaction.serialize(),
-      witnesses,
-      multisigAccount
-    );
-    return this.addWitnesses(multisigWitness);
-  }
-
-  public sign(account: Account | string): this {
-    this._transaction.sign(account);
+  public setNetworkFee(fee: u.Fixed8) {
+    this._config.networkFee = fee;
     return this;
   }
 
-  /**
-   * The transaction must be signed with sender and all other cosigners.
-   * It may be that all signatures cannot be aquired from one client.
-   * This function is to sign the transaction with (sender) aquired accounts.
-   */
-  public signWithAquiredAccounts(): this {
-    [this._sender, ...this._cosignerAccounts].forEach(account => {
-      account.privateKey && this._transaction.sign(account);
-    });
-    return this;
-  }
-
-  public setSystemFee(fee: Fixed8) {
-    this._transaction.systemFee = fee;
-  }
-
-  public setNetworkFee(fee: Fixed8) {
-    this._transaction.networkFee = fee;
-  }
-
-  public export(): Transaction {
-    return this._transaction;
+  public build(): tx.Transaction {
+    return new tx.Transaction(this._config);
   }
 }
