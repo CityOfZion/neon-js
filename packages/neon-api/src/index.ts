@@ -1,6 +1,6 @@
 import * as _Neon from "@cityofzion/neon-core";
 import { default as apiSettings } from "./settings";
-import { TransactionBuilder } from "./transaction";
+import * as factory from "./transaction";
 
 function assignSettings(
   baseSettings: typeof _Neon.settings,
@@ -22,12 +22,12 @@ function assignSettings(
 function bundle<T extends typeof _Neon>(
   neonCore: T
 ): T & {
-  TransactionBuilder: TransactionBuilder;
+  api: typeof factory;
 } {
   assignSettings(neonCore.settings, apiSettings);
   return {
     ...(neonCore as any),
-    TransactionBuilder
+    api: factory
   };
 }
 

@@ -6,6 +6,7 @@ const neonWithApi = apiPlugin(neonCore);
 const neonJs = nepPlugin(neonWithApi);
 
 export const {
+  api,
   nep5,
   settings,
   sc,
