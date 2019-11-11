@@ -197,16 +197,21 @@ export class Transaction {
     return this;
   }
 
-  public addAttribute(...attributes: Array<TransactionAttribute>) {
-    this.attributes.push(...attributes);
+  public addAttribute(...attrs: Array<TransactionAttributeLike>) {
+    this.attributes.push(...attrs.map(attr => new TransactionAttribute(attr)));
     return this;
   }
 
   /**
-   * Adds an Witness to the Transaction and automatically sorts the witnesses according to scripthash.
-   * @param witness The Witness object to add.
+   * Adds Witnesses to the Transaction and automatically sorts the witnesses according to scripthash.
+   * @param witnesses The Witnesses to add.
    */
-  public addWitness(witness: Witness): this {
+  public addWitness(...witnesses: WitnessLike[]): this {
+    witnesses.forEach(witness => this._addWitness(new Witness(witness)));
+    return this;
+  }
+
+  private _addWitness(witness: Witness): this {
     if (witness.scriptHash === "") {
       throw new Error("Please define the scriptHash for this Witness!");
     }

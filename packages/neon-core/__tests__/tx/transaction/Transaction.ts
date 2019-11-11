@@ -7,7 +7,6 @@ import {
 } from "../../../src/tx";
 import samples from "./Transaction.json";
 import { Account } from "../../../src/wallet";
-import { str2hexstring } from "../../../src/u";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -186,25 +185,21 @@ describe("Add Methods", () => {
 
   test("addAttribute", () => {
     const tx1 = createTxforTestAddMethods();
-    tx1.addAttribute(
-      new TransactionAttribute({
-        usage: 129,
-        data: "72e9a2"
-      })
-    );
+    tx1.addAttribute({
+      usage: 129,
+      data: "72e9a2"
+    });
     expect(tx1.attributes[0].usage).toBe(129);
     expect(tx1.attributes[0].data).toBe("72e9a2");
   });
 
   test("addWitness", () => {
     const tx1 = createTxforTestAddMethods();
-    tx1.addWitness(
-      new Witness({
-        invocationScript: "ab",
-        verificationScript:
-          "210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba68747476aa"
-      })
-    );
+    tx1.addWitness({
+      invocationScript: "ab",
+      verificationScript:
+        "210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba68747476aa"
+    });
     expect(tx1.scripts[0].invocationScript).toBe("ab");
     expect(tx1.scripts[0].verificationScript).toBe(
       "210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba68747476aa"
