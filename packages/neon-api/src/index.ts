@@ -1,6 +1,6 @@
 import * as _Neon from "@cityofzion/neon-core";
-import * as plugin from "./plugin";
 import { default as apiSettings } from "./settings";
+import * as factory from "./transaction";
 
 function assignSettings(
   baseSettings: typeof _Neon.settings,
@@ -21,10 +21,14 @@ function assignSettings(
 }
 function bundle<T extends typeof _Neon>(
   neonCore: T
-): T & { api: typeof plugin } {
+): T & {
+  api: typeof factory;
+} {
   assignSettings(neonCore.settings, apiSettings);
-  return { ...(neonCore as any), api: plugin };
+  return {
+    ...(neonCore as any),
+    api: factory
+  };
 }
 
 export default bundle;
-export * from "./plugin";

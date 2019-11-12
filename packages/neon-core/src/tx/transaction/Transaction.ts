@@ -128,7 +128,7 @@ export class Transaction {
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
     );
     this.cosigners = [];
-    this.addCosigner(...cosigners);
+    cosigners.forEach(cosigner => this.addCosigner(cosigner));
     this.systemFee = systemFee ? new Fixed8(systemFee) : new Fixed8(0);
     this.networkFee = networkFee ? new Fixed8(networkFee) : new Fixed8(0);
     this.script = script || "";
@@ -182,48 +182,26 @@ export class Transaction {
     return new Transaction(txObj);
   }
 
-  public addCosigner(...cosigners: CosignerLike[]): this {
+  public addCosigner(cosigner: CosignerLike): this {
     const cosignerHashes = this.cosigners.map(cosigner => cosigner.account);
-    this.cosigners.push(
-      ...cosigners.map(cosigner => {
-        const hash = cosigner.account;
-        if (cosignerHashes.indexOf(hash) >= 0) {
-          throw new Error(`Cannot add duplicate cosigner: ${hash}`);
-        }
-        cosignerHashes.push(hash);
-        return new Cosigner(cosigner);
-      })
-    );
+    if (cosignerHashes.indexOf(cosigner.account) >= 0) {
+      throw new Error(`Cannot add duplicate cosigner: ${cosigner.account}`);
+    }
+    this.cosigners.push(new Cosigner(cosigner));
+    return this;
+  }
+
+  public addAttribute(attr: TransactionAttributeLike) {
+    this.attributes.push(new TransactionAttribute(attr));
     return this;
   }
 
   /**
-   * Add an attribute.
-   * @param usage The usage type. Do refer to txAttrUsage enum values for all available options.
-   * @param data The data as hexstring.
+   * Adds Witness to the Transaction and automatically sorts the witnesses according to scripthash.
+   * @param obj The Witness object to add as witness
    */
-  public addAttribute(usage: number | string, data: string): this {
-    this.attributes.push(new TransactionAttribute({ usage, data }));
-    return this;
-  }
-
-  /**
-   * Adds an Witness to the Transaction and automatically sorts the witnesses according to scripthash.
-   * @param witness The Witness object to add.
-   */
-  public addWitness(witness: Witness): this {
-    if (witness.scriptHash === "") {
-      throw new Error("Please define the scriptHash for this Witness!");
-    }
-    const cloneWitness = new Witness({
-      invocationScript: witness.invocationScript,
-      verificationScript: witness.verificationScript
-    });
-    if (!cloneWitness.verificationScript) {
-      cloneWitness.scriptHash = witness.scriptHash;
-    }
-
-    this.scripts.push(cloneWitness);
+  public addWitness(obj: WitnessLike): this {
+    this.scripts.push(new Witness(obj));
     this.scripts = this.scripts.sort(
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
     );
