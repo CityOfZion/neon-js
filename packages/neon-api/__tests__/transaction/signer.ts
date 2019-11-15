@@ -105,6 +105,20 @@ describe("signWithWitness", () => {
       ACCOUNTS_WITNESSES[1]
     );
   });
+
+  test("invalid witness", () => {
+    const signer = createTransactionSigner();
+    const signWithInvalidWitness = () => {
+      signer.signWithWitness(
+        new tx.Witness({
+          invocationScript: "abcd",
+          verificationScript:
+            "21032879f12ac79b9305bf768bb50f1c1c889330361fee037fe886f820bcaa521553ac"
+        })
+      );
+    };
+    expect(signWithInvalidWitness).toThrowError();
+  });
 });
 
 describe("addMultiSig", () => {

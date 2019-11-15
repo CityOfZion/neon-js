@@ -31,7 +31,10 @@ export class TransactionSigner {
    * @param witnesses witnesses that will be added to the transaction
    */
   public signWithWitness(...witnesses: tx.Witness[]) {
-    witnesses.forEach(witness => this.transaction.addWitness(witness));
+    witnesses.forEach(witness => {
+      this._checkWitness(witness);
+      this.transaction.addWitness(witness);
+    });
   }
 
   /**
@@ -54,8 +57,24 @@ export class TransactionSigner {
 
   private _checkAcc(account: wallet.Account | string) {
     const acc = new wallet.Account(account);
-    if (!this._getSignerHashes().some(hash => hash === acc.scriptHash)) {
-      throw new Error(`${account} is neither sender nor cosigner`);
+    this._checkScripthash(acc.scriptHash);
+  }
+
+  private _checkWitness(witness: tx.Witness) {
+    const publicKeys = wallet.getPublicKeysFromVerificationScript(
+      witness.verificationScript
+    );
+    if (publicKeys.length > 1) {
+      const threshold = wallet.getSigningThresholdFromVerificationScript(
+        witness.verificationScript
+      );
+      this._checkScripthash(
+        wallet.Account.createMultiSig(threshold, publicKeys).scriptHash
+      );
+    } else if (publicKeys.length === 1) {
+      this._checkScripthash(wallet.getScriptHashFromPublicKey(publicKeys[0]));
+    } else {
+      throw new Error("Invalid witness: Invalid verification script.");
     }
   }
 
@@ -64,11 +83,7 @@ export class TransactionSigner {
       throw new Error(`${multisigAcc} is not a multi-sig account`);
     }
 
-    if (
-      !this._getSignerHashes().some(hash => hash === multisigAcc.scriptHash)
-    ) {
-      throw new Error(`${multisigAcc} is neither sender nor cosigner`);
-    }
+    this._checkScripthash(multisigAcc.scriptHash);
   }
 
   private _getSignerHashes() {
@@ -76,5 +91,13 @@ export class TransactionSigner {
       this.transaction.sender,
       ...this.transaction.cosigners.map(cosigner => cosigner.account)
     ].map(hash => u.reverseHex(hash));
+  }
+
+  private _checkScripthash(scriptHash: string) {
+    if (!this._getSignerHashes().some(hash => hash === scriptHash)) {
+      throw new Error(
+        `account with scripthash: ${scriptHash} is neither sender nor cosigner`
+      );
+    }
   }
 }
