@@ -1,14 +1,29 @@
 import { tx, rpc, u } from "@cityofzion/neon-core";
 import { getNetworkFee, getScriptHashesFromTxWitnesses } from "./util";
 
+export enum ValidationAttributes {
+  None = 0,
+  ValidUntilBlock = 1 << 0,
+  SystemFee = 1 << 1,
+  NetworkFee = 1 << 2,
+  Scripts = 1 << 3
+}
+
 export interface ValidationSuggestion<T> {
+  /**
+   * Whether this is auto-fixed by validator
+   * Validator will try to fix the transaction when param `autoFix` is set to TRUE
+   */
+  fixed: boolean;
   prev: T;
   suggestion: T;
 }
 
 export interface ValidationResult {
-  result: boolean;
-  fixed: boolean;
+  /**
+   * Whether the transaction is valid after validation
+   */
+  valid: boolean;
   validaUntilBlock?: ValidationSuggestion<number>;
   systemFee?: ValidationSuggestion<u.Fixed8>;
   networkFee?: ValidationSuggestion<u.Fixed8>;
@@ -54,26 +69,25 @@ export class TransactionValidator {
       if (autoFix) {
         this.transaction.validUntilBlock = vub_suggestion;
         return {
-          result: true,
-          fixed: true,
+          valid: true,
           validaUntilBlock: {
+            fixed: true,
             prev: validUntilBlock,
             suggestion: vub_suggestion
           }
         };
       }
       return {
-        result: false,
-        fixed: false,
+        valid: false,
         validaUntilBlock: {
+          fixed: false,
           prev: validUntilBlock,
           suggestion: vub_suggestion
         }
       };
     }
     return {
-      result: true,
-      fixed: false
+      valid: true
     };
   };
 
@@ -95,26 +109,25 @@ export class TransactionValidator {
     if (autoFix && !minimumSystemFee.equals(systemFee)) {
       this.transaction.systemFee = minimumSystemFee;
       return {
-        result: true,
-        fixed: true,
+        valid: true,
         systemFee: {
+          fixed: true,
           prev: systemFee,
           suggestion: minimumSystemFee
         }
       };
     } else if (minimumSystemFee.isGreaterThan(systemFee)) {
       return {
-        result: false,
-        fixed: false,
+        valid: false,
         systemFee: {
+          fixed: false,
           prev: systemFee,
           suggestion: minimumSystemFee
         }
       };
     }
     return {
-      result: true,
-      fixed: false
+      valid: true
     };
   };
 
@@ -128,26 +141,25 @@ export class TransactionValidator {
     if (autoFix && !minimumNetworkFee.equals(networkFee)) {
       this.transaction.networkFee = minimumNetworkFee;
       return {
-        result: true,
-        fixed: true,
+        valid: true,
         networkFee: {
+          fixed: true,
           prev: networkFee,
           suggestion: minimumNetworkFee
         }
       };
     } else if (minimumNetworkFee.isGreaterThan(networkFee)) {
       return {
-        result: false,
-        fixed: false,
+        valid: false,
         networkFee: {
+          fixed: false,
           prev: networkFee,
           suggestion: minimumNetworkFee
         }
       };
     }
     return {
-      result: true,
-      fixed: false
+      valid: true
     };
   };
 
@@ -173,17 +185,45 @@ export class TransactionValidator {
       })
     ) {
       return {
-        result: true,
-        fixed: false
+        valid: true
       };
     }
 
     return {
-      result: false,
-      fixed: false,
+      valid: false,
       witnesses: {
         notSignedHash
       }
     };
   };
+
+  async validate(
+    attrs: ValidationAttributes,
+    autoFix = false
+  ): Promise<ValidationResult> {
+    const validationTasks: Array<Promise<ValidationResult>> = [];
+    if (attrs & ValidationAttributes.ValidUntilBlock) {
+      validationTasks.push(this.validateValidUntilBlock(autoFix));
+    }
+
+    if (attrs & ValidationAttributes.SystemFee) {
+      validationTasks.push(this.validateSystemFee(autoFix));
+    }
+
+    if (attrs & ValidationAttributes.NetworkFee) {
+      validationTasks.push(this.validateNetworkFee(autoFix));
+    }
+
+    if (attrs & ValidationAttributes.Scripts) {
+      validationTasks.push(this.validateSigning());
+    }
+
+    return Promise.all(validationTasks).then(res =>
+      res.reduce((prev, cur) => {
+        return Object.assign({}, cur, {
+          valid: prev.valid && cur.valid
+        });
+      })
+    );
+  }
 }
