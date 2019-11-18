@@ -6,7 +6,8 @@ export enum ValidationAttributes {
   ValidUntilBlock = 1 << 0,
   SystemFee = 1 << 1,
   NetworkFee = 1 << 2,
-  Script = 1 << 3
+  Script = 1 << 3,
+  All = 15
 }
 
 export interface ValidationSuggestion<T> {
@@ -225,43 +226,31 @@ export class TransactionValidator {
 
   async validate(
     attrs: ValidationAttributes,
-    autoFix: ValidationAttributes | boolean
+    autoFix: ValidationAttributes
   ): Promise<ValidationResult> {
     const validationTasks: Array<Promise<ValidationResult>> = [];
     if (attrs & ValidationAttributes.ValidUntilBlock) {
-      if (typeof autoFix === "boolean") {
-        validationTasks.push(this.validateValidUntilBlock(autoFix));
-      } else {
-        validationTasks.push(
-          this.validateValidUntilBlock(
-            Boolean(autoFix & ValidationAttributes.ValidUntilBlock)
-          )
-        );
-      }
+      validationTasks.push(
+        this.validateValidUntilBlock(
+          Boolean(autoFix & ValidationAttributes.ValidUntilBlock)
+        )
+      );
     }
 
     if (attrs & ValidationAttributes.SystemFee) {
-      if (typeof autoFix === "boolean") {
-        validationTasks.push(this.validateSystemFee(autoFix));
-      } else {
-        validationTasks.push(
-          this.validateSystemFee(
-            Boolean(autoFix & ValidationAttributes.SystemFee)
-          )
-        );
-      }
+      validationTasks.push(
+        this.validateSystemFee(
+          Boolean(autoFix & ValidationAttributes.SystemFee)
+        )
+      );
     }
 
     if (attrs & ValidationAttributes.NetworkFee) {
-      if (typeof autoFix === "boolean") {
-        validationTasks.push(this.validateNetworkFee(autoFix));
-      } else {
-        validationTasks.push(
-          this.validateNetworkFee(
-            Boolean(autoFix & ValidationAttributes.NetworkFee)
-          )
-        );
-      }
+      validationTasks.push(
+        this.validateNetworkFee(
+          Boolean(autoFix & ValidationAttributes.NetworkFee)
+        )
+      );
     }
 
     if (
