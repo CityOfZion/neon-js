@@ -26,19 +26,30 @@ export function getNetworkFeeForMultiSig(
   );
 }
 
+function getVerificationScriptsFromWitnesses(
+  transaction: tx.Transaction
+): Array<string> {
+  return transaction.scripts.map(witness => witness.verificationScript);
+}
+
+function isMultiSig(verificationScript: string) {
+  return (
+    verificationScript.slice(verificationScript.length - 8) ===
+    sc.InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
+  );
+}
+
 export function getNetworkFee(transaction: tx.Transaction): u.Fixed8 {
   const networkFee = new u.Fixed8(0);
-  const signers = transaction.getScriptHashesForVerifying();
-  signers.forEach(signer => {
-    const account = new wallet.Account(signer);
-    if (!account.isMultiSig) {
+  const verificationScripts = getVerificationScriptsFromWitnesses(transaction);
+  verificationScripts.forEach(verificationScript => {
+    if (isMultiSig(verificationScript)) {
       networkFee.add(getNetworkFeeForSig());
     } else {
-      const n = wallet.getPublicKeysFromVerificationScript(
-        account.contract.script
-      ).length;
+      const n = wallet.getPublicKeysFromVerificationScript(verificationScript)
+        .length;
       const m = wallet.getSigningThresholdFromVerificationScript(
-        account.contract.script
+        verificationScript
       );
       networkFee.add(getNetworkFeeForMultiSig(m, n));
     }

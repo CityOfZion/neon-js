@@ -55,9 +55,7 @@ export class TransactionValidator {
    * validate transaction attribute - validUntilBlock
    * @param autoFix will automatically fix transaction if specified as true
    */
-  validateValidUntilBlock = async (
-    autoFix = false
-  ): Promise<ValidationResult> => {
+  async validateValidUntilBlock(autoFix = false): Promise<ValidationResult> {
     const { validUntilBlock } = this.transaction;
     const height = await this.rpcClient.getBlockCount();
     if (
@@ -89,20 +87,13 @@ export class TransactionValidator {
     return {
       valid: true
     };
-  };
-
-  // validateIntents = async (): Promise<ValidationResult> => {
-  //   return {
-  //     result: true,
-  //     fixed: false
-  //   };
-  // };
+  }
 
   /**
    * validate systemFee
    * @param autoFix will automatically fix transaction if specified as true
    */
-  validateSystemFee = async (autoFix = false): Promise<ValidationResult> => {
+  async validateSystemFee(autoFix = false): Promise<ValidationResult> {
     const { script, systemFee } = this.transaction;
     const { gas_consumed } = await this.rpcClient.invokeScript(script);
     const minimumSystemFee = new u.Fixed8(parseFloat(gas_consumed)).ceil();
@@ -116,7 +107,10 @@ export class TransactionValidator {
           suggestion: minimumSystemFee
         }
       };
-    } else if (minimumSystemFee.isGreaterThan(systemFee)) {
+    } else if (
+      minimumSystemFee.isGreaterThan(systemFee) ||
+      !systemFee.isEqualTo(systemFee.ceil())
+    ) {
       return {
         valid: false,
         systemFee: {
@@ -129,13 +123,13 @@ export class TransactionValidator {
     return {
       valid: true
     };
-  };
+  }
 
   /**
    * Validate NetworkFee
    * @param autoFix will automatically fix transaction if specified as true
    */
-  validateNetworkFee = async (autoFix = false): Promise<ValidationResult> => {
+  async validateNetworkFee(autoFix = false): Promise<ValidationResult> {
     const { networkFee } = this.transaction;
     const minimumNetworkFee = getNetworkFee(this.transaction);
     if (autoFix && !minimumNetworkFee.equals(networkFee)) {
@@ -161,12 +155,12 @@ export class TransactionValidator {
     return {
       valid: true
     };
-  };
+  }
 
   /**
    * Validate Signatures
    */
-  validateSigning = async (): Promise<ValidationResult> => {
+  async validateSigning(): Promise<ValidationResult> {
     const scriptHashes: string[] = getScriptHashesFromTxWitnesses(
       this.transaction
     );
@@ -195,7 +189,7 @@ export class TransactionValidator {
         notSignedHash
       }
     };
-  };
+  }
 
   async validate(
     attrs: ValidationAttributes,
