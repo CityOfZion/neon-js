@@ -1,4 +1,4 @@
-import { tx, rpc, u } from "@cityofzion/neon-core";
+import { tx, rpc, u, sc } from "@cityofzion/neon-core";
 import { getNetworkFee, getScriptHashesFromTxWitnesses } from "./util";
 
 export enum ValidationAttributes {
@@ -6,7 +6,8 @@ export enum ValidationAttributes {
   ValidUntilBlock = 1 << 0,
   SystemFee = 1 << 1,
   NetworkFee = 1 << 2,
-  Scripts = 1 << 3
+  Scripts = 1 << 3,
+  Intents = 1 << 4
 }
 
 export interface ValidationSuggestion<T> {
@@ -26,6 +27,7 @@ export interface ValidationResult {
   valid: boolean;
   suggestions?: {
     validaUntilBlock?: ValidationSuggestion<number>;
+    intents?: Array<string>;
     systemFee?: ValidationSuggestion<u.Fixed8>;
     networkFee?: ValidationSuggestion<u.Fixed8>;
     witnesses?: string;
@@ -91,6 +93,55 @@ export class TransactionValidator {
     return {
       valid: true
     };
+  }
+
+  private async _validateIntent(
+    intent: sc.ScriptIntent
+  ): Promise<string | undefined> {
+    const { scriptHash, operation } = intent;
+    const manifest = await this.rpcClient.getContractState(scriptHash);
+    if (manifest === null) {
+      return `Unknow contract ${scriptHash}`;
+    }
+
+    if (operation) {
+      if (
+        manifest.abi.methods.map(method => method.name).indexOf(operation) < 0
+      ) {
+        return `Unknow method ${operation} for constract ${scriptHash}`;
+      }
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Validate intents
+   */
+  async validateIntents(): Promise<ValidationResult> {
+    const intents = new sc.ScriptParser(
+      this.transaction.script
+    ).toScriptParams();
+    const intentsRes: Array<string> = [];
+    await Promise.all(
+      intents.map(intent =>
+        this._validateIntent(intent).then(res =>
+          res ? intentsRes.push(res) : res
+        )
+      )
+    );
+    if (intentsRes.length > 0) {
+      return {
+        valid: false,
+        suggestions: {
+          intents: intentsRes
+        }
+      };
+    } else {
+      return {
+        valid: true
+      };
+    }
   }
 
   /**
@@ -222,6 +273,14 @@ export class TransactionValidator {
 
     if (attrs & ValidationAttributes.Scripts) {
       validationTasks.push(this.validateSigning());
+    }
+
+    if (attrs & ValidationAttributes.Scripts) {
+      validationTasks.push(this.validateSigning());
+    }
+
+    if (attrs & ValidationAttributes.Intents) {
+      validationTasks.push(this.validateIntents());
     }
 
     return Promise.all(validationTasks).then(res =>

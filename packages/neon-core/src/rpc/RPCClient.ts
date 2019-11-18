@@ -5,6 +5,7 @@ import { timeout } from "../settings";
 import { Transaction, TransactionLike, WitnessLike } from "../tx";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
+import { ContractManifest } from "../sc";
 
 const log = logger("rpc");
 
@@ -220,10 +221,14 @@ export class RPCClient {
   /**
    * Gets the state of the contract at the given scriptHash.
    */
-  // TODO: parse result to manifest when contract manifest is merged
-  public async getContractState(scriptHash: string): Promise<object> {
+  public async getContractState(
+    scriptHash: string
+  ): Promise<ContractManifest | null> {
     const response = await this.execute(Query.getContractState(scriptHash));
-    return response.result;
+    if (response.error) {
+      return null;
+    }
+    return new ContractManifest(response.result);
   }
 
   /**
