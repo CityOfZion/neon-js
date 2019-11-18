@@ -129,7 +129,7 @@ describe("addMultiSig", () => {
         sender: u.reverseHex(MULTISIG_ACCOUNT.scriptHash)
       }).build()
     );
-    signer.addMultiSig(
+    signer.signWithMultiSigAccount(
       MULTISIG_ACCOUNT,
       ...ACCOUNTS_WITNESSES.map(obj => new tx.Witness(obj))
     );
@@ -144,7 +144,7 @@ describe("addMultiSig", () => {
   test("invalid addMultiSig", () => {
     const signer = createTransactionSigner();
     const signWithMultiAcc = () => {
-      signer.addMultiSig(
+      signer.signWithMultiSigAccount(
         MULTISIG_ACCOUNT,
         ...ACCOUNTS_WITNESSES.map(obj => new tx.Witness(obj))
       );

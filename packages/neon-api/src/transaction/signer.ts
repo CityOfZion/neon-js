@@ -42,7 +42,7 @@ export class TransactionSigner {
    * @param multisigAccount multisig account
    * @param witnesses signatures from accounts within the multisig-account
    */
-  public addMultiSig(
+  public signWithMultiSigAccount(
     multisigAccount: wallet.Account,
     ...witnesses: tx.Witness[]
   ) {
@@ -80,7 +80,9 @@ export class TransactionSigner {
 
   private _checkMultisigAcc(multisigAcc: wallet.Account) {
     if (!multisigAcc.isMultiSig) {
-      throw new Error(`${multisigAcc} is not a multi-sig account`);
+      throw new Error(
+        `${multisigAcc} is not a multi-sig account or cannot get verificationScript from it`
+      );
     }
 
     this._checkScripthash(multisigAcc.scriptHash);
