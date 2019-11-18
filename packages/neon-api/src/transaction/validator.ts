@@ -6,7 +6,7 @@ export enum ValidationAttributes {
   ValidUntilBlock = 1 << 0,
   SystemFee = 1 << 1,
   NetworkFee = 1 << 2,
-  Intents = 1 << 3
+  Script = 1 << 3
 }
 
 export interface ValidationSuggestion<T> {
@@ -26,7 +26,7 @@ export interface ValidationResult {
   valid: boolean;
   suggestions?: {
     validaUntilBlock?: ValidationSuggestion<number>;
-    intents?: Array<string>;
+    script?: Array<string>;
     systemFee?: ValidationSuggestion<u.Fixed8>;
     networkFee?: ValidationSuggestion<u.Fixed8>;
   };
@@ -116,7 +116,7 @@ export class TransactionValidator {
   /**
    * Validate intents
    */
-  async validateIntents(): Promise<ValidationResult> {
+  async validateScript(): Promise<ValidationResult> {
     const intents = new sc.ScriptParser(
       this.transaction.script
     ).toScriptParams();
@@ -132,7 +132,7 @@ export class TransactionValidator {
       return {
         valid: false,
         suggestions: {
-          intents: intentsRes
+          script: intentsRes
         }
       };
     } else {
@@ -147,7 +147,7 @@ export class TransactionValidator {
    * @param autoFix will automatically fix transaction if specified as true
    */
   async validateSystemFee(autoFix = false): Promise<ValidationResult> {
-    const validateIntentsResult = await this.validateIntents();
+    const validateIntentsResult = await this.validateScript();
     if (!validateIntentsResult.valid) {
       return validateIntentsResult;
     }
@@ -266,9 +266,9 @@ export class TransactionValidator {
 
     if (
       !(attrs & ValidationAttributes.SystemFee) &&
-      attrs & ValidationAttributes.Intents
+      attrs & ValidationAttributes.Script
     ) {
-      validationTasks.push(this.validateIntents());
+      validationTasks.push(this.validateScript());
     }
 
     return Promise.all(validationTasks).then(res =>
