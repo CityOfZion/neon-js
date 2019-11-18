@@ -24,11 +24,11 @@ export interface ValidationResult {
    * Whether the transaction is valid after validation
    */
   valid: boolean;
-  validaUntilBlock?: ValidationSuggestion<number>;
-  systemFee?: ValidationSuggestion<u.Fixed8>;
-  networkFee?: ValidationSuggestion<u.Fixed8>;
-  witnesses?: {
-    notSignedHash: string;
+  suggestions?: {
+    validaUntilBlock?: ValidationSuggestion<number>;
+    systemFee?: ValidationSuggestion<u.Fixed8>;
+    networkFee?: ValidationSuggestion<u.Fixed8>;
+    witnesses?: string;
   };
 }
 
@@ -68,19 +68,23 @@ export class TransactionValidator {
         this.transaction.validUntilBlock = vub_suggestion;
         return {
           valid: true,
-          validaUntilBlock: {
-            fixed: true,
-            prev: validUntilBlock,
-            suggestion: vub_suggestion
+          suggestions: {
+            validaUntilBlock: {
+              fixed: true,
+              prev: validUntilBlock,
+              suggestion: vub_suggestion
+            }
           }
         };
       }
       return {
         valid: false,
-        validaUntilBlock: {
-          fixed: false,
-          prev: validUntilBlock,
-          suggestion: vub_suggestion
+        suggestions: {
+          validaUntilBlock: {
+            fixed: false,
+            prev: validUntilBlock,
+            suggestion: vub_suggestion
+          }
         }
       };
     }
@@ -101,10 +105,12 @@ export class TransactionValidator {
       this.transaction.systemFee = minimumSystemFee;
       return {
         valid: true,
-        systemFee: {
-          fixed: true,
-          prev: systemFee,
-          suggestion: minimumSystemFee
+        suggestions: {
+          systemFee: {
+            fixed: true,
+            prev: systemFee,
+            suggestion: minimumSystemFee
+          }
         }
       };
     } else if (
@@ -113,10 +119,12 @@ export class TransactionValidator {
     ) {
       return {
         valid: false,
-        systemFee: {
-          fixed: false,
-          prev: systemFee,
-          suggestion: minimumSystemFee
+        suggestions: {
+          systemFee: {
+            fixed: false,
+            prev: systemFee,
+            suggestion: minimumSystemFee
+          }
         }
       };
     }
@@ -136,19 +144,23 @@ export class TransactionValidator {
       this.transaction.networkFee = minimumNetworkFee;
       return {
         valid: true,
-        networkFee: {
-          fixed: true,
-          prev: networkFee,
-          suggestion: minimumNetworkFee
+        suggestions: {
+          networkFee: {
+            fixed: true,
+            prev: networkFee,
+            suggestion: minimumNetworkFee
+          }
         }
       };
     } else if (minimumNetworkFee.isGreaterThan(networkFee)) {
       return {
         valid: false,
-        networkFee: {
-          fixed: false,
-          prev: networkFee,
-          suggestion: minimumNetworkFee
+        suggestions: {
+          networkFee: {
+            fixed: false,
+            prev: networkFee,
+            suggestion: minimumNetworkFee
+          }
         }
       };
     }
@@ -185,8 +197,8 @@ export class TransactionValidator {
 
     return {
       valid: false,
-      witnesses: {
-        notSignedHash
+      suggestions: {
+        witnesses: `Still need a signature from ${notSignedHash}`
       }
     };
   }
@@ -214,9 +226,13 @@ export class TransactionValidator {
 
     return Promise.all(validationTasks).then(res =>
       res.reduce((prev, cur) => {
-        return Object.assign({}, cur, {
-          valid: prev.valid && cur.valid
-        });
+        return {
+          valid: prev.valid && cur.valid,
+          suggestions: {
+            ...prev.suggestions,
+            ...cur.suggestions
+          }
+        };
       })
     );
   }
