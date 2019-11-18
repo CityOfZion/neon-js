@@ -225,19 +225,43 @@ export class TransactionValidator {
 
   async validate(
     attrs: ValidationAttributes,
-    autoFix = false
+    autoFix: ValidationAttributes | boolean
   ): Promise<ValidationResult> {
     const validationTasks: Array<Promise<ValidationResult>> = [];
     if (attrs & ValidationAttributes.ValidUntilBlock) {
-      validationTasks.push(this.validateValidUntilBlock(autoFix));
+      if (typeof autoFix === "boolean") {
+        validationTasks.push(this.validateValidUntilBlock(autoFix));
+      } else {
+        validationTasks.push(
+          this.validateValidUntilBlock(
+            Boolean(autoFix & ValidationAttributes.ValidUntilBlock)
+          )
+        );
+      }
     }
 
     if (attrs & ValidationAttributes.SystemFee) {
-      validationTasks.push(this.validateSystemFee(autoFix));
+      if (typeof autoFix === "boolean") {
+        validationTasks.push(this.validateSystemFee(autoFix));
+      } else {
+        validationTasks.push(
+          this.validateSystemFee(
+            Boolean(autoFix & ValidationAttributes.SystemFee)
+          )
+        );
+      }
     }
 
     if (attrs & ValidationAttributes.NetworkFee) {
-      validationTasks.push(this.validateNetworkFee(autoFix));
+      if (typeof autoFix === "boolean") {
+        validationTasks.push(this.validateNetworkFee(autoFix));
+      } else {
+        validationTasks.push(
+          this.validateNetworkFee(
+            Boolean(autoFix & ValidationAttributes.NetworkFee)
+          )
+        );
+      }
     }
 
     if (
