@@ -6,8 +6,7 @@ export enum ValidationAttributes {
   ValidUntilBlock = 1 << 0,
   SystemFee = 1 << 1,
   NetworkFee = 1 << 2,
-  Scripts = 1 << 3,
-  Intents = 1 << 4
+  Intents = 1 << 3
 }
 
 export interface ValidationSuggestion<T> {
@@ -30,7 +29,6 @@ export interface ValidationResult {
     intents?: Array<string>;
     systemFee?: ValidationSuggestion<u.Fixed8>;
     networkFee?: ValidationSuggestion<u.Fixed8>;
-    witnesses?: string;
   };
 }
 
@@ -149,6 +147,11 @@ export class TransactionValidator {
    * @param autoFix will automatically fix transaction if specified as true
    */
   async validateSystemFee(autoFix = false): Promise<ValidationResult> {
+    const validateIntentsResult = await this.validateIntents();
+    if (!validateIntentsResult.valid) {
+      return validateIntentsResult;
+    }
+
     const { script, systemFee } = this.transaction;
     const { gas_consumed } = await this.rpcClient.invokeScript(script);
     const minimumSystemFee = new u.Fixed8(parseFloat(gas_consumed)).ceil();
@@ -220,40 +223,6 @@ export class TransactionValidator {
     };
   }
 
-  /**
-   * Validate Signatures
-   */
-  async validateSigning(): Promise<ValidationResult> {
-    const scriptHashes: string[] = getScriptHashesFromTxWitnesses(
-      this.transaction
-    );
-    const signers = this.transaction
-      .getScriptHashesForVerifying()
-      .map(hash => u.reverseHex(hash));
-
-    let notSignedHash = "";
-    if (
-      signers.every(signer => {
-        if (scriptHashes.indexOf(signer) < 0) {
-          notSignedHash = signer;
-          return false;
-        }
-        return true;
-      })
-    ) {
-      return {
-        valid: true
-      };
-    }
-
-    return {
-      valid: false,
-      suggestions: {
-        witnesses: `Still need a signature from ${notSignedHash}`
-      }
-    };
-  }
-
   async validate(
     attrs: ValidationAttributes,
     autoFix = false
@@ -271,15 +240,10 @@ export class TransactionValidator {
       validationTasks.push(this.validateNetworkFee(autoFix));
     }
 
-    if (attrs & ValidationAttributes.Scripts) {
-      validationTasks.push(this.validateSigning());
-    }
-
-    if (attrs & ValidationAttributes.Scripts) {
-      validationTasks.push(this.validateSigning());
-    }
-
-    if (attrs & ValidationAttributes.Intents) {
+    if (
+      !(attrs & ValidationAttributes.SystemFee) &&
+      attrs & ValidationAttributes.Intents
+    ) {
       validationTasks.push(this.validateIntents());
     }
 
