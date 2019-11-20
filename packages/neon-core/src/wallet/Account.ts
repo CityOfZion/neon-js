@@ -149,11 +149,11 @@ export class Account {
     return "Account";
   }
 
-  public [inspect]() {
+  public [inspect](): string {
     return `[Account: ${this.label}]`;
   }
 
-  public get isMultiSig() {
+  public get isMultiSig(): boolean {
     return (
       !!this.contract &&
       !!this.contract.script &&
@@ -290,32 +290,24 @@ export class Account {
   /**
    * Encrypts the current privateKey and return the Account object.
    */
-  public encrypt(
+  public async encrypt(
     keyphrase: string,
     scryptParams: ScryptParams = DEFAULT_SCRYPT
   ): Promise<this> {
-    return Promise.resolve()
-      .then(_ => encrypt(this.privateKey, keyphrase, scryptParams))
-      .then(encrypted => {
-        this._encrypted = encrypted;
-        return this;
-      });
+    this._encrypted = await encrypt(this.privateKey, keyphrase, scryptParams);
+    return this;
   }
 
   /**
    * Decrypts the encrypted key and return the Account object.
    */
-  public decrypt(
+  public async decrypt(
     keyphrase: string,
     scryptParams: ScryptParams = DEFAULT_SCRYPT
   ): Promise<this> {
-    return Promise.resolve()
-      .then(_ => decrypt(this.encrypted, keyphrase, scryptParams))
-      .then(wif => {
-        this._WIF = wif;
-        this._updateContractScript();
-        return this;
-      });
+    this._WIF = await decrypt(this.encrypted, keyphrase, scryptParams);
+    this._updateContractScript();
+    return this;
   }
 
   /**

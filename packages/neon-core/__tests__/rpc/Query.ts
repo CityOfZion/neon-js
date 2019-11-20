@@ -241,7 +241,7 @@ describe("execute", () => {
     const url = "testUrl";
     axios.post.mockImplementationOnce(() => Promise.resolve({ data: "" }));
     const q = Query.getVersion();
-    const r1 = await q.execute(url);
+    await q.execute(url);
     const r2 = q.execute(url);
     await expect(r2).rejects.toThrow("This request has been sent");
   });

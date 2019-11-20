@@ -1,9 +1,5 @@
 import { mocked } from "ts-jest/utils";
-import {
-  createScript,
-  generateDeployScript,
-  validateDeployParams
-} from "../../src/sc/core";
+import { createScript, generateDeployScript } from "../../src/sc/core";
 import _ScriptBuilder from "../../src/sc/ScriptBuilder";
 import * as _u from "../../src/u";
 import testIntents from "./scriptIntents.json";
@@ -23,7 +19,7 @@ beforeEach(() => {
 describe("createScript", () => {
   test("single ScriptIntent", () => {
     const intent = testIntents[1].scriptIntent;
-    const result = createScript(intent);
+    createScript(intent);
     expect(ScriptBuilder).toHaveBeenCalledTimes(1);
     const sb = ScriptBuilder.mock.instances[0];
     expect(sb.emitAppCall).toBeCalledWith(
@@ -105,7 +101,7 @@ describe("generateDeployScript", () => {
       script: jest.fn()
     } as any;
 
-    const result = generateDeployScript(params);
+    generateDeployScript(params);
     expect(order).toEqual([
       params.manifest,
       params.script,

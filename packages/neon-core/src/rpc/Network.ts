@@ -1,8 +1,5 @@
 import { compareObject, compareUnsortedPlainArrays } from "../helper";
-import logger from "../logging";
 import Protocol, { ProtocolJSON, ProtocolLike } from "./Protocol";
-
-const log = logger("protocol");
 
 export interface NetworkLike {
   name: string;

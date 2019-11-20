@@ -1,4 +1,4 @@
-import { sc, u, wallet } from "@cityofzion/neon-core";
+import { u, wallet } from "@cityofzion/neon-core";
 import * as abi from "../src/abi";
 
 function randomScriptHash() {
@@ -15,7 +15,6 @@ function randomAddress() {
 
 const scriptHash = randomScriptHash();
 const fromAddr = randomAddress();
-const toAddr = randomAddress();
 
 test("name", () => {
   const resultFunction = abi.name(scriptHash);

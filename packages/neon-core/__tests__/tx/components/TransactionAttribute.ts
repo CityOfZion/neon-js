@@ -1,12 +1,12 @@
 import TransactionAttribute, {
   TransactionAttributeLike
 } from "../../../src/tx/components/TransactionAttribute";
-import { hexstring2str } from "../../../src/u";
 
 describe("constructor", () => {
   test("empty", () => {
-    const f = () => new TransactionAttribute({} as TransactionAttributeLike);
-    expect(f).toThrow("TransactionAttribute requires usage and data fields");
+    expect(
+      () => new TransactionAttribute({} as TransactionAttributeLike)
+    ).toThrow("TransactionAttribute requires usage and data fields");
   });
 
   test("TransactionAttributeLike (wrong usage)", () => {
@@ -14,8 +14,7 @@ describe("constructor", () => {
       usage: 240,
       data: "2f75726c"
     } as TransactionAttributeLike;
-    const f = () => new TransactionAttribute(testObject);
-    expect(f).toThrow();
+    expect(() => new TransactionAttribute(testObject)).toThrow();
   });
 
   test("TransactionAttributeLike (int usage)", () => {
@@ -48,10 +47,7 @@ describe("constructor", () => {
       data: "test"
     };
 
-    const result = function() {
-      new TransactionAttribute(testObject);
-    };
-    expect(result).toThrow();
+    expect(() => new TransactionAttribute(testObject)).toThrow();
   });
 
   test("TransactionAttribute", () => {
@@ -103,9 +99,17 @@ describe("equals", () => {
     ["Attr1 !== Attr2", attr1, attr2, false],
     ["Attr1 === Obj1", attr1, obj1, true],
     ["Attr1 !== Obj2", attr1, obj2, false]
-  ])("%s", (msg: string, a: TransactionAttribute, b: any, cond: boolean) => {
-    expect(a.equals(b)).toBe(cond);
-  });
+  ])(
+    "%s",
+    (
+      msg: string,
+      a: TransactionAttribute,
+      b: Partial<TransactionAttributeLike>,
+      cond: boolean
+    ) => {
+      expect(a.equals(b)).toBe(cond);
+    }
+  );
 });
 
 const dataSet = [
@@ -131,7 +135,7 @@ describe("serialize", () => {
 
   test.each(dataSet)(
     "%s",
-    (msg: string, data: TransactionAttributeLike, expected: string) => {
+    (_msg: string, data: TransactionAttributeLike, expected: string) => {
       const result = new TransactionAttribute(data);
       expect(result.serialize()).toBe(expected);
     }
@@ -141,7 +145,7 @@ describe("serialize", () => {
 describe("deserialize", () => {
   test.each(dataSet)(
     "%s",
-    (msg: string, expected: TransactionAttributeLike, data: string) => {
+    (_msg: string, expected: TransactionAttributeLike, data: string) => {
       const result = TransactionAttribute.deserialize(data);
       expect(result.export()).toEqual(expected);
     }

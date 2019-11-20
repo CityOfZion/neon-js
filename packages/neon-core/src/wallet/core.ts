@@ -11,14 +11,7 @@ import base58 from "bs58";
 import { Buffer } from "buffer";
 import WIF from "wif";
 import { ADDR_VERSION } from "../consts";
-import {
-  ab2hexstring,
-  hash160,
-  hash256,
-  hexstring2ab,
-  reverseHex,
-  num2hexstring
-} from "../u";
+import { ab2hexstring, hash160, hash256, hexstring2ab, reverseHex } from "../u";
 import { generateRandomArray } from "../u/random";
 import { curve, sign } from "./signing";
 import { OpCode, InteropServiceCode } from "../sc";
