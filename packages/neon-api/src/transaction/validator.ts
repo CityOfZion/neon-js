@@ -10,15 +10,19 @@ export enum ValidationAttributes {
   All = ValidUntilBlock | SystemFee | NetworkFee | Script
 }
 
-export interface ValidationSuggestion<T> {
-  /**
-   * Whether this is auto-fixed by validator
-   * Validator will try to fix the transaction when param `autoFix` is set to TRUE
-   */
-  fixed: boolean;
-  prev: T;
-  suggestion: T;
-}
+export type ValidationSuggestion<T> =
+  | {
+      /**
+       * Whether this is auto-fixed by validator
+       * Validator will try to fix the transaction when param `autoFix` is set to TRUE
+       */
+      fixed: boolean;
+      prev: T;
+      suggestion: T;
+    }
+  | {
+      message: T;
+    };
 
 export interface ValidationResult {
   /**
@@ -27,7 +31,7 @@ export interface ValidationResult {
   valid: boolean;
   suggestions?: {
     validUntilBlock?: ValidationSuggestion<number>;
-    script?: Array<string>;
+    script?: ValidationSuggestion<string>;
     systemFee?: ValidationSuggestion<u.Fixed8>;
     networkFee?: ValidationSuggestion<u.Fixed8>;
   };
@@ -132,7 +136,9 @@ export class TransactionValidator {
       return {
         valid: false,
         suggestions: {
-          script: intentsRes
+          script: {
+            message: intentsRes.join(";")
+          }
         }
       };
     } else {
