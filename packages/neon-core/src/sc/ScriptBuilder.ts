@@ -180,9 +180,9 @@ export class ScriptBuilder extends StringStream {
       return this.emit(OpCode.PUSH0);
     }
     if (bn.gtn(0) && bn.lten(16)) {
-      return this.emit(
-        num2hexstring(81 /* PUSH1 */ - 1 + bn.toNumber()) as OpCode
-      );
+      return this.emit(num2hexstring(
+        81 /* PUSH1 */ - 1 + bn.toNumber()
+      ) as OpCode);
     }
     const msbSet = bn.testn(bn.byteLength() * 8 - 1);
 

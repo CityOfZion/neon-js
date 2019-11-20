@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:8-stretch
+    - image: circleci/node:10-stretch
 
 version: 2
 jobs:
@@ -18,13 +18,12 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - neon-{{ checksum "yarn.lock" }}
+            - neon-yarn-{{ checksum "yarn.lock" }}
             - neon-fallback
       - run: yarn install --cache-folder .cache/yarn
       - save_cache:
-          key: neon-{{ checksum "yarn.lock" }}
+          key: neon-yarn-{{ checksum "yarn.lock" }}
           paths:
-            - node_modules
             - .cache/yarn
       - run:
           name: Bootstrap
