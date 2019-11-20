@@ -7,7 +7,7 @@ export enum ValidationAttributes {
   SystemFee = 1 << 1,
   NetworkFee = 1 << 2,
   Script = 1 << 3,
-  All = 15
+  All = ValidUntilBlock | SystemFee | NetworkFee | Script
 }
 
 export interface ValidationSuggestion<T> {
@@ -26,7 +26,7 @@ export interface ValidationResult {
    */
   valid: boolean;
   suggestions?: {
-    validaUntilBlock?: ValidationSuggestion<number>;
+    validUntilBlock?: ValidationSuggestion<number>;
     script?: Array<string>;
     systemFee?: ValidationSuggestion<u.Fixed8>;
     networkFee?: ValidationSuggestion<u.Fixed8>;
@@ -63,17 +63,16 @@ export class TransactionValidator {
       validUntilBlock <= height ||
       validUntilBlock >= height + tx.Transaction.MAX_TRANSACTION_LIFESPAN
     ) {
-      const vub_suggestion =
-        tx.Transaction.MAX_TRANSACTION_LIFESPAN + height - 1;
+      const suggestion = tx.Transaction.MAX_TRANSACTION_LIFESPAN + height - 1;
       if (autoFix) {
-        this.transaction.validUntilBlock = vub_suggestion;
+        this.transaction.validUntilBlock = suggestion;
         return {
           valid: true,
           suggestions: {
-            validaUntilBlock: {
+            validUntilBlock: {
               fixed: true,
               prev: validUntilBlock,
-              suggestion: vub_suggestion
+              suggestion
             }
           }
         };
@@ -81,10 +80,10 @@ export class TransactionValidator {
       return {
         valid: false,
         suggestions: {
-          validaUntilBlock: {
+          validUntilBlock: {
             fixed: false,
             prev: validUntilBlock,
-            suggestion: vub_suggestion
+            suggestion
           }
         }
       };
@@ -96,7 +95,7 @@ export class TransactionValidator {
 
   private async _validateIntent(
     intent: sc.ScriptIntent
-  ): Promise<string | undefined> {
+  ): Promise<string | null> {
     const { scriptHash, operation } = intent;
     const manifest = await this.rpcClient.getContractState(scriptHash);
     if (manifest === null) {
@@ -111,7 +110,7 @@ export class TransactionValidator {
       }
     }
 
-    return undefined;
+    return null;
   }
 
   /**
