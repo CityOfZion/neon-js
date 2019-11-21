@@ -48,7 +48,7 @@ jobs:
           name: Lint
           command: |
             BASE_BRANCH=$(node helpers/getBaseBranch.js $CIRCLE_PULL_REQUEST)
-            git fetch origin $BASE_BRANCH
+            git fetch origin $BASE_BRANCH:refs/remotes/origin/$BASE_BRANCH
             echo "THis is git base revision << pipeline.git.base_revision >>"
             $HASHES=$(git diff --name-only $(git merge-base HEAD $BASE_BRANCH))
             echo "THis is git revision << pipeline.git.revision >>"
