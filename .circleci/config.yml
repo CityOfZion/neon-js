@@ -46,7 +46,11 @@ jobs:
       - run: mkdir reports && mkdir reports/lint
       - run:
           name: Lint
-          command: yarn lint --format junit -o reports/lint/lint.xml
+          command: |
+          BASE_BRANCH=$(node helpers/getBaseBranch.js $CIRCLE_PR_NUMBER)
+          git fetch origin $BASE_BRANCH
+          $FILES= git diff --name-only $(git merge-base HEAD $BASE_BRANCH) | grep '^packages/.*\.[tj]s$'
+          yarn run eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
       - store_test_results:
           path: reports
       - store_artifacts:
