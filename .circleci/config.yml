@@ -14,6 +14,7 @@ jobs:
             node --version
             npm --version
             yarn --version
+            git --version
       - checkout
       # Download and cache dependencies
       - restore_cache:
@@ -47,12 +48,12 @@ jobs:
       - run:
           name: Lint
           command: |
+            CURRENT_BRANCH=$(git symbolic-ref -q --short HEAD)
             BASE_BRANCH=$(node helpers/getBaseBranch.js $CIRCLE_PULL_REQUEST)
-            git fetch origin $BASE_BRANCH:refs/remotes/origin/$BASE_BRANCH
-            echo "THis is git base revision << pipeline.git.base_revision >>"
-            $HASHES=$(git diff --name-only $(git merge-base HEAD $BASE_BRANCH))
-            echo "THis is git revision << pipeline.git.revision >>"
-            $FILES=$(echo $HASHES | grep '^packages/.*\.[tj]s$')
+            git checkout --track origin/$BASE_BRANCH
+            git checkout $CURRENT_BRANCH
+            FILES=$(git diff --name-only $(git merge-base HEAD $BASE_BRANCH) | grep '^packages/.*\.[tj]s$')
+            echo $FILES
             yarn run eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
       - store_test_results:
           path: reports
