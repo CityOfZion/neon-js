@@ -1,7 +1,9 @@
 const axios = require("axios").default;
 
-const pullRequestNumber = process.argv[2];
-
+const pullRequestUrl = process.argv[2];
+const pullRequestNumber = /https:\/\/github.com\/.*\/.*\/pull\/(\d+)/.exec(
+  pullRequestUrl
+)[1];
 axios
   .get(
     `https://api.github.com/repos/cityofzion/neon-js/pulls/${pullRequestNumber}`

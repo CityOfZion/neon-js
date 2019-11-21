@@ -47,10 +47,13 @@ jobs:
       - run:
           name: Lint
           command: |
-          BASE_BRANCH=$(node helpers/getBaseBranch.js $CIRCLE_PR_NUMBER)
-          git fetch origin $BASE_BRANCH
-          $FILES= git diff --name-only $(git merge-base HEAD $BASE_BRANCH) | grep '^packages/.*\.[tj]s$'
-          yarn run eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
+            BASE_BRANCH=$(node helpers/getBaseBranch.js $CIRCLE_PULL_REQUEST)
+            git fetch origin $BASE_BRANCH
+            echo "THis is git base revision << pipeline.git.base_revision >>"
+            $HASHES=$(git diff --name-only $(git merge-base HEAD $BASE_BRANCH))
+            echo "THis is git revision << pipeline.git.revision >>"
+            $FILES=$(echo $HASHES | grep '^packages/.*\.[tj]s$')
+            yarn run eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
       - store_test_results:
           path: reports
       - store_artifacts:
