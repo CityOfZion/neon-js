@@ -177,7 +177,7 @@ export class ContractParam {
     const exportedValue = Array.isArray(this.value)
       ? this.value.map(cp => cp.export())
       : this.value;
-    return { type: ContractParamType[this.type], value: this.value };
+    return { type: ContractParamType[this.type], value: exportedValue };
   }
 
   public equal(other: ContractParamLike): boolean {
@@ -203,8 +203,9 @@ export function likeContractParam(cp: Partial<ContractParam>): boolean {
     return true;
   }
   return (
-    cp.type! in ContractParamType &&
-    cp.value! !== null &&
-    cp.value! !== undefined
+    cp.type !== undefined &&
+    cp.type in ContractParamType &&
+    cp.value !== null &&
+    cp.value !== undefined
   );
 }

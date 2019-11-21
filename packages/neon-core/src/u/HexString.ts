@@ -13,7 +13,7 @@ export class HexString {
    */
   private _value: string;
 
-  protected _checkValue(value: string) {
+  protected _checkValue(value: string): void {
     ensureHex(value);
   }
 
@@ -93,7 +93,7 @@ export class HexString {
    * @param str hex string
    * @param littleEndian whether `str` is little endian
    */
-  public static fromHex(str: string, littleEndian = false) {
+  public static fromHex(str: string, littleEndian = false): HexString {
     return new HexString(str, littleEndian);
   }
 
@@ -101,7 +101,7 @@ export class HexString {
    * Get HexString instance from a ASCII string
    * @param str
    */
-  public static fromAscii(str: string) {
+  public static fromAscii(str: string): HexString {
     const hex = str2hexstring(str);
     return new HexString(hex);
   }
@@ -111,7 +111,7 @@ export class HexString {
    * @param num
    * @param littleEndian whether `num` is little endian
    */
-  public static fromNumber(num: number, littleEndian = false) {
+  public static fromNumber(num: number, littleEndian = false): HexString {
     return new HexString(num2hexstring(num), littleEndian);
   }
 
@@ -123,7 +123,7 @@ export class HexString {
   public static fromArrayBuffer(
     arr: ArrayBuffer | ArrayLike<number>,
     littleEndian = false
-  ) {
+  ): HexString {
     return new HexString(ab2hexstring(arr), littleEndian);
   }
 }

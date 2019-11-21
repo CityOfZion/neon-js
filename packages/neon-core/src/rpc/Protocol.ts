@@ -1,7 +1,3 @@
-import logger from "../logging";
-
-const log = logger("protocol");
-
 export interface ProtocolLike {
   magic: number;
   addressVersion: number;

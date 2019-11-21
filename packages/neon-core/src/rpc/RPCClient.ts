@@ -302,8 +302,7 @@ export class RPCClient {
         const useragent = response.result.useragent;
         const responseLength = useragent.length;
         const strippedResponse = useragent.substring(1, responseLength - 1);
-        const [header, newVersion] = strippedResponse.split(":");
-        this.version = newVersion;
+        this.version = strippedResponse.split(":")[1];
       } else {
         throw new Error("Empty or unexpected version pattern");
       }

@@ -49,7 +49,7 @@ export function validateDeployParams(params: DeployParams): void {
 /**
  * Generates script for deploying contract
  */
-export function generateDeployScript(params: DeployParams) {
+export function generateDeployScript(params: DeployParams): ScriptBuilder {
   validateDeployParams(params);
   const sb = new ScriptBuilder();
   sb.emitPush(params.manifest)
@@ -58,7 +58,7 @@ export function generateDeployScript(params: DeployParams) {
   return sb;
 }
 
-export function generateUpdateScript(params: DeployParams) {
+export function generateUpdateScript(params: DeployParams): ScriptBuilder {
   validateDeployParams(params);
   const sb = new ScriptBuilder();
   sb.emitPush(params.manifest)
