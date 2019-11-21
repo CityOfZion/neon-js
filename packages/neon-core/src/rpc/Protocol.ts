@@ -12,7 +12,7 @@ export interface ProtocolJSON {
   SeedList: string[];
 }
 
-function compareArrays(current: any[], other: any[]): boolean {
+function compareStrings(current: string[], other: string[]): boolean {
   if (current.length !== other.length) {
     return false;
   }
@@ -58,8 +58,8 @@ export class Protocol {
     return (
       this.magic === (other.magic || other.Magic) &&
       this.addressVersion === (other.addressVersion || other.AddressVersion) &&
-      compareArrays(this.seedList, other.seedList || other.SeedList || []) &&
-      compareArrays(
+      compareStrings(this.seedList, other.seedList || other.SeedList || []) &&
+      compareStrings(
         this.standbyValidators,
         other.standbyValidators || other.StandbyValidators || []
       )
