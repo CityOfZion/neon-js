@@ -27,7 +27,7 @@ const MULTISIG_ACCOUNT = wallet.Account.createMultiSig(
   ACCOUNTS.map(account => account.publicKey)
 );
 
-const createTransactionSigner = () => {
+const createTransactionSigner = (): TransactionSigner => {
   return new TransactionSigner(
     new TransactionBuilder({
       nonce: 1,
@@ -76,7 +76,7 @@ describe("signWithAccount", () => {
 
   test("invalid signing account", () => {
     const signer = createTransactionSigner();
-    const signWithInvlidAccount = () => {
+    const signWithInvlidAccount = (): void => {
       signer.signWithAccount(new wallet.Account());
     };
     expect(signWithInvlidAccount).toThrowError();
@@ -108,7 +108,7 @@ describe("signWithWitness", () => {
 
   test("invalid witness", () => {
     const signer = createTransactionSigner();
-    const signWithInvalidWitness = () => {
+    const signWithInvalidWitness = (): void => {
       signer.signWithWitness(
         new tx.Witness({
           invocationScript: "abcd",
@@ -143,7 +143,7 @@ describe("addMultiSig", () => {
 
   test("invalid addMultiSig", () => {
     const signer = createTransactionSigner();
-    const signWithMultiAcc = () => {
+    const signWithMultiAcc = (): void => {
       signer.signWithMultiSigAccount(
         MULTISIG_ACCOUNT,
         ...ACCOUNTS_WITNESSES.map(obj => new tx.Witness(obj))
