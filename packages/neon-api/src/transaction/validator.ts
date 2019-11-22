@@ -60,7 +60,7 @@ export class TransactionValidator {
    * validate transaction attribute - validUntilBlock
    * @param autoFix will automatically fix transaction if specified as true
    */
-  async validateValidUntilBlock(autoFix = false): Promise<ValidationResult> {
+  public async validateValidUntilBlock(autoFix = false): Promise<ValidationResult> {
     const { validUntilBlock } = this.transaction;
     const height = await this.rpcClient.getBlockCount();
     if (
@@ -120,7 +120,7 @@ export class TransactionValidator {
   /**
    * Validate intents
    */
-  async validateScript(): Promise<ValidationResult> {
+  public async validateScript(): Promise<ValidationResult> {
     const intents = new sc.ScriptParser(
       this.transaction.script
     ).toScriptParams();
@@ -152,7 +152,7 @@ export class TransactionValidator {
    * validate systemFee
    * @param autoFix will automatically fix transaction if specified as true
    */
-  async validateSystemFee(autoFix = false): Promise<ValidationResult> {
+  public async validateSystemFee(autoFix = false): Promise<ValidationResult> {
     const validateIntentsResult = await this.validateScript();
     if (!validateIntentsResult.valid) {
       return validateIntentsResult;
@@ -208,7 +208,7 @@ export class TransactionValidator {
    * Validate NetworkFee
    * @param autoFix will automatically fix transaction if specified as true
    */
-  async validateNetworkFee(autoFix = false): Promise<ValidationResult> {
+  public async validateNetworkFee(autoFix = false): Promise<ValidationResult> {
     const { networkFee } = this.transaction;
     const minimumNetworkFee = getNetworkFee(this.transaction);
     if (autoFix && !minimumNetworkFee.equals(networkFee)) {
@@ -252,9 +252,9 @@ export class TransactionValidator {
     };
   }
 
-  async validate(
+  public async validate(
     attrs: ValidationAttributes,
-    autoFix: ValidationAttributes
+    autoFix: ValidationAttributes = ValidationAttributes.None
   ): Promise<ValidationResult> {
     const validationTasks: Array<Promise<ValidationResult>> = [];
     if (attrs & ValidationAttributes.ValidUntilBlock) {
