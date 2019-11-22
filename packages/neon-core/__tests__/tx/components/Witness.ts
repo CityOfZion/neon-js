@@ -3,7 +3,7 @@ import { Account } from "../../../src/wallet";
 
 describe("constructor", () => {
   test("empty", () => {
-    const f = () => new Witness(undefined);
+    const f = (): Witness => new Witness(undefined);
     expect(f).toThrow(
       "Witness requires invocationScript and verificationScript fields"
     );
@@ -74,11 +74,11 @@ describe("export", () => {
 });
 
 describe("equals", () => {
-  const obj1 = {
+  const obj1: WitnessLike = {
     invocationScript: "ab",
     verificationScript: "cd"
   };
-  const obj2 = {
+  const obj2: WitnessLike = {
     invocationScript: "fg",
     verificationScript: ""
   };
@@ -90,9 +90,12 @@ describe("equals", () => {
     ["Witness1 !== Witness2", witness1, witness2, false],
     ["Witness1 === Obj1", witness1, obj1, true],
     ["Witness1 !== Obj2", witness1, obj2, false]
-  ])("%s", (msg: string, a: Witness, b: any, cond: boolean) => {
-    expect(a.equals(b)).toBe(cond);
-  });
+  ])(
+    "%s",
+    (_msg: string, a: Witness, b: Partial<WitnessLike>, cond: boolean) => {
+      expect(a.equals(b)).toBe(cond);
+    }
+  );
 });
 
 const dataSet = [
@@ -221,14 +224,14 @@ describe("buildMultiSig", () => {
 
   test("throws if invalid signature given", () => {
     const wrongSigs = [signatures[0].replace("1", "0"), signatures[1]];
-    const throwingFunc = () =>
+    const throwingFunc = (): Witness =>
       Witness.buildMultiSig(msg, wrongSigs, verificationScript);
     expect(throwingFunc).toThrowError("Invalid signature given");
   });
 
   test("throws if insufficient signatures", () => {
     const oneSig = [signatures[1]];
-    const throwingFunc = () =>
+    const throwingFunc = (): Witness =>
       Witness.buildMultiSig(msg, oneSig, verificationScript);
     expect(throwingFunc).toThrowError("Insufficient signatures");
   });

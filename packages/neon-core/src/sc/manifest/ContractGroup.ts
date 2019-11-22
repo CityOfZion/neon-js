@@ -14,7 +14,7 @@ export class ContractGroup {
   }
 
   // TODO
-  public isValid(hash: string): boolean {
+  public isValid(_hash: string): boolean {
     return true;
   }
 

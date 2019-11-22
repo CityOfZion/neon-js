@@ -1,6 +1,4 @@
-import { logging, rpc, sc, u } from "@cityofzion/neon-core";
-
-const log = logging.default("neon-domain");
+import { rpc, sc, u } from "@cityofzion/neon-core";
 
 const operation = "resolve";
 
