@@ -32,7 +32,7 @@ function getVerificationScriptsFromWitnesses(
   return transaction.scripts.map(witness => witness.verificationScript);
 }
 
-function isMultiSig(verificationScript: string) {
+function isMultiSig(verificationScript: string): boolean {
   return (
     verificationScript.slice(verificationScript.length - 8) ===
     sc.InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG

@@ -1,5 +1,5 @@
 import { tx, rpc, u, sc } from "@cityofzion/neon-core";
-import { getNetworkFee, getScriptHashesFromTxWitnesses } from "./util";
+import { getNetworkFee } from "./util";
 
 export enum ValidationAttributes {
   None = 0,
@@ -60,7 +60,9 @@ export class TransactionValidator {
    * validate transaction attribute - validUntilBlock
    * @param autoFix will automatically fix transaction if specified as true
    */
-  public async validateValidUntilBlock(autoFix = false): Promise<ValidationResult> {
+  public async validateValidUntilBlock(
+    autoFix = false
+  ): Promise<ValidationResult> {
     const { validUntilBlock } = this.transaction;
     const height = await this.rpcClient.getBlockCount();
     if (
