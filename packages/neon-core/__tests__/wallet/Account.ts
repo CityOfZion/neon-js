@@ -76,9 +76,6 @@ describe("export", () => {
           }
         ],
         deployed: false
-      },
-      extra: {
-        a: 1
       }
     } as AccountJSON;
 

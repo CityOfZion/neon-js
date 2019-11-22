@@ -29,7 +29,6 @@ export interface AccountJSON {
     parameters: { name: string; type: string }[];
     deployed: boolean;
   };
-  extra?: { [key: string]: any };
 }
 
 /**
@@ -79,7 +78,6 @@ export class Account {
     });
   }
 
-  public extra: { [key: string]: any };
   public isDefault: boolean;
   public lock: boolean;
   public contract: {
@@ -99,7 +97,6 @@ export class Account {
   // tslint:enables:variable-name
 
   public constructor(str: string | Partial<AccountJSON> = "") {
-    this.extra = {};
     this.label = "";
     this.isDefault = false;
     this.lock = false;
@@ -109,12 +106,11 @@ export class Account {
     } else if (typeof str === "object") {
       this._encrypted = str.key;
       this._address = str.address;
-      this.label = str.label || "";
-      this.extra = str.extra || {};
-      this.isDefault = str.isDefault || false;
-      this.lock = str.lock || false;
+      this.label = str.label ?? "";
+      this.isDefault = str.isDefault ?? false;
+      this.lock = str.lock ?? false;
       this.contract =
-        str.contract || Object.assign({}, DEFAULT_ACCOUNT_CONTRACT);
+        str.contract ?? Object.assign({}, DEFAULT_ACCOUNT_CONTRACT);
     } else if (isPrivateKey(str)) {
       this._privateKey = str;
     } else if (isPublicKey(str, false)) {
@@ -155,10 +151,8 @@ export class Account {
 
   public get isMultiSig(): boolean {
     return (
-      !!this.contract &&
-      !!this.contract.script &&
-      this.contract.script.slice(this.contract.script.length - 8) ===
-        InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
+      this.contract?.script?.slice(this.contract.script.length - 8) ===
+      InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
     );
   }
 
@@ -273,17 +267,17 @@ export class Account {
   ): string {
     switch (keyType) {
       case "encrypted":
-        return this._encrypted || "";
+        return this._encrypted ?? "";
       case "WIF":
-        return this._WIF || "";
+        return this._WIF ?? "";
       case "privateKey":
-        return this._privateKey || "";
+        return this._privateKey ?? "";
       case "publicKey":
-        return this._publicKey || "";
+        return this._publicKey ?? "";
       case "scriptHash":
-        return this._scriptHash || "";
+        return this._scriptHash ?? "";
       case "address":
-        return this._address || "";
+        return this._address ?? "";
     }
   }
 
@@ -314,21 +308,17 @@ export class Account {
    * Export Account as a WalletAccount object.
    */
   public export(): AccountJSON {
-    let key = "";
     if (this._privateKey && !this._encrypted) {
       throw new Error("Encrypt private key first!");
     }
-    if (this._encrypted) {
-      key = this._encrypted;
-    }
+    const key = this._encrypted ?? "";
     return {
       address: this.address,
       label: this.label,
       isDefault: this.isDefault,
       lock: this.lock,
       key,
-      contract: this.contract,
-      extra: this.extra
+      contract: this.contract
     };
   }
 

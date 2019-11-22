@@ -57,7 +57,7 @@ export class TransactionAttribute {
   public data: string;
 
   public constructor(obj: TransactionAttributeLike) {
-    if (!obj || obj.usage === undefined || obj.data === undefined) {
+    if (!obj.usage || !obj.data) {
       throw new Error("TransactionAttribute requires usage and data fields");
     }
     const { usage, data } = obj;

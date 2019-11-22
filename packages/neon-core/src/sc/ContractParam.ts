@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fixed8, reverseHex } from "../u";
 import { getScriptHashFromAddress, isAddress } from "../wallet";
 
@@ -49,7 +50,9 @@ export class ContractParam {
   /**
    * Creates a Boolean ContractParam. Does basic checks to convert value into a boolean.
    */
-  public static boolean(value: any): ContractParam {
+  public static boolean(
+    value: boolean | string | number | object
+  ): ContractParam {
     return new ContractParam(ContractParamType.Boolean, !!value);
   }
 

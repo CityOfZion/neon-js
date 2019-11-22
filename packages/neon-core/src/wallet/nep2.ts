@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * NEP2 - Private Key Encryption based on AES.
  * This encrypts your private key with a passphrase, protecting your private key from being stolen and used.
@@ -129,9 +130,9 @@ export function decrypt(
           );
           const privateKey = hexXor(decrypted.toString(), derived1);
           const account = new Account(privateKey);
-          const newAddressHash = SHA256(SHA256(
-            enc.Latin1.parse(account.address)
-          ) as any)
+          const newAddressHash = SHA256(
+            SHA256(enc.Latin1.parse(account.address)) as any
+          )
             .toString()
             .slice(0, 8);
           if (addressHash !== newAddressHash) {

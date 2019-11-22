@@ -10,7 +10,6 @@ export interface WalletJSON {
   version: string;
   scrypt: ScryptParams;
   accounts: AccountJSON[];
-  extra: { [key: string]: any } | null;
 }
 
 /**
@@ -21,11 +20,10 @@ export class Wallet {
   public version: string;
   public scrypt: ScryptParams;
   public accounts: Account[];
-  public extra: { [key: string]: any };
 
   public constructor(obj: Partial<WalletJSON> = DEFAULT_WALLET) {
-    this.name = obj.name || "myWallet";
-    this.version = obj.version || DEFAULT_WALLET.version;
+    this.name = obj.name ?? "myWallet";
+    this.version = obj.version ?? DEFAULT_WALLET.version;
     this.scrypt = Object.assign({}, DEFAULT_SCRYPT, obj.scrypt);
     this.accounts = [];
     if (obj.accounts) {
@@ -33,7 +31,6 @@ export class Wallet {
         this.addAccount(acct);
       }
     }
-    this.extra = obj.extra || {};
 
     log.info(`New Wallet created: ${this.name}`);
   }
@@ -160,8 +157,7 @@ export class Wallet {
       name: this.name,
       version: this.version,
       scrypt: this.scrypt,
-      accounts: this.accounts.map(acct => acct.export()),
-      extra: this.extra
+      accounts: this.accounts.map(acct => acct.export())
     };
   }
 
