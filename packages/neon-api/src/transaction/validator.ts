@@ -103,14 +103,14 @@ export class TransactionValidator {
     const { scriptHash, operation } = intent;
     const manifest = await this.rpcClient.getContractState(scriptHash);
     if (manifest === null) {
-      return `Unknow contract ${scriptHash}`;
+      return `Unknown contract ${scriptHash}`;
     }
 
     if (operation) {
       if (
         manifest.abi.methods.map(method => method.name).indexOf(operation) < 0
       ) {
-        return `Unknow method ${operation} for constract ${scriptHash}`;
+        return `Unknown method ${operation} for contract ${scriptHash}`;
       }
     }
 
