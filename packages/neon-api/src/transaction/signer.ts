@@ -57,25 +57,11 @@ export class TransactionSigner {
 
   private _checkAcc(account: wallet.Account | string) {
     const acc = new wallet.Account(account);
-    this._checkScripthash(acc.scriptHash);
+    this._assertShouldSign(acc.scriptHash);
   }
 
   private _checkWitness(witness: tx.Witness) {
-    const publicKeys = wallet.getPublicKeysFromVerificationScript(
-      witness.verificationScript
-    );
-    if (publicKeys.length > 1) {
-      const threshold = wallet.getSigningThresholdFromVerificationScript(
-        witness.verificationScript
-      );
-      this._checkScripthash(
-        wallet.Account.createMultiSig(threshold, publicKeys).scriptHash
-      );
-    } else if (publicKeys.length === 1) {
-      this._checkScripthash(wallet.getScriptHashFromPublicKey(publicKeys[0]));
-    } else {
-      throw new Error("Invalid witness: Invalid verification script.");
-    }
+    this._assertShouldSign(u.reverseHex(u.hash160(witness.verificationScript)));
   }
 
   private _checkMultisigAcc(multisigAcc: wallet.Account) {
@@ -85,7 +71,7 @@ export class TransactionSigner {
       );
     }
 
-    this._checkScripthash(multisigAcc.scriptHash);
+    this._assertShouldSign(multisigAcc.scriptHash);
   }
 
   private _getSignerHashes() {
@@ -95,7 +81,7 @@ export class TransactionSigner {
     ].map(hash => u.reverseHex(hash));
   }
 
-  private _checkScripthash(scriptHash: string) {
+  private _assertShouldSign(scriptHash: string) {
     if (!this._getSignerHashes().some(hash => hash === scriptHash)) {
       throw new Error(
         `account with scripthash: ${scriptHash} is neither sender nor cosigner`
