@@ -37,12 +37,12 @@ export class Cosigner {
     this.allowedGroups = [...allowedGroups];
   }
 
-  public addAllowedContracts(...contracts: string[]) {
+  public addAllowedContracts(...contracts: string[]): void {
     this.scopes |= WitnessScope.CustomContracts;
     this.allowedContracts.push(...contracts);
   }
 
-  public addAllowedGroups(...groups: string[]) {
+  public addAllowedGroups(...groups: string[]): void {
     this.scopes |= WitnessScope.CustomGroups;
     this.allowedGroups.push(...groups);
   }
@@ -51,7 +51,8 @@ export class Cosigner {
     const account = ss.read(20);
     const scopes = parseInt(ss.read(), 16);
 
-    const readStringFromStream = (ss1: StringStream) => ss1.readVarBytes();
+    const readStringFromStream = (ss1: StringStream): string =>
+      ss1.readVarBytes();
 
     const allowedContracts =
       scopes & WitnessScope.CustomContracts

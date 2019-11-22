@@ -10,37 +10,40 @@ describe.each([
   ["5004fb711f010000", 12345.6789, 1_234_567_890_000],
   ["ffffffffffffffff", -0.00000001, -1],
   ["31e28e7915000000", 922.33720369, 92_233_720_369]
-])("from hexstring (%s)", (hex, num, raw_num) => {
-  test("fromHex", () => {
-    const result = Fixed8.fromReverseHex(hex);
-    expect(result.toNumber()).toBe(num);
-  });
+])(
+  "from hexstring (%s)",
+  (hex: string, expected: number, rawNumber: number) => {
+    test("fromHex", () => {
+      const result = Fixed8.fromReverseHex(hex);
+      expect(result.toNumber()).toBe(expected);
+    });
 
-  test("fromReverseHex", () => {
-    const result = Fixed8.fromHex(reverseHex(hex));
-    expect(result.toNumber()).toBe(num);
-  });
+    test("fromReverseHex", () => {
+      const result = Fixed8.fromHex(reverseHex(hex));
+      expect(result.toNumber()).toBe(expected);
+    });
 
-  test("toHex", () => {
-    const result = new Fixed8(num);
-    expect(result.toHex()).toBe(reverseHex(hex));
-  });
+    test("toHex", () => {
+      const result = new Fixed8(expected);
+      expect(result.toHex()).toBe(reverseHex(hex));
+    });
 
-  test("toReverseHex", () => {
-    const result = new Fixed8(num);
-    expect(result.toReverseHex()).toBe(hex);
-  });
+    test("toReverseHex", () => {
+      const result = new Fixed8(expected);
+      expect(result.toReverseHex()).toBe(hex);
+    });
 
-  test("toRawNumber", () => {
-    const result = new Fixed8(num);
-    expect(result.toRawNumber()).toEqual(new BN(raw_num));
-  });
-});
+    test("toRawNumber", () => {
+      const result = new Fixed8(expected);
+      expect(result.toRawNumber()).toEqual(new BN(rawNumber));
+    });
+  }
+);
 
 describe.each([
   ["ffffffffffffff7f", Fixed8.MAX_VALUE],
   ["0000000000000080", Fixed8.MIN_VALUE]
-])("from hexstring (%s)", (hex, num) => {
+])("from hexstring (%s)", (hex: string, num: Fixed8) => {
   test("fromHex", () => {
     const result = Fixed8.fromReverseHex(hex);
     expect(result.toString()).toBe(num.toString());
@@ -63,23 +66,17 @@ describe.each([
 });
 
 test("throws on new Fixed8", () => {
-  expect(() => {
-    const result = new Fixed8("fffffffffff", 16);
-  }).toThrowError(
+  expect(() => new Fixed8("fffffffffff", 16)).toThrowError(
     "expected input to be less than 92233720368.54775807. Got input = 17592186044415"
   );
 
-  expect(() => {
-    const result = new Fixed8(-92233720369);
-  }).toThrowError(
+  expect(() => new Fixed8(-92233720369)).toThrowError(
     "expected input to be greater than -92233720368.54775808. Got input = -92233720369"
   );
 });
 
 test("throws on new fromHex", () => {
-  expect(() => {
-    const result = Fixed8.fromHex("ffffffffffffffffff");
-  }).toThrowError(
+  expect(() => Fixed8.fromHex("ffffffffffffffffff")).toThrowError(
     "expected hex string to have length less or equal than 16: got 18 for hex = ffffffffffffffffff"
   );
 });

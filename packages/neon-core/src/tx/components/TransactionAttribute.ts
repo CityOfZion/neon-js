@@ -3,8 +3,7 @@ import {
   num2VarInt,
   StringStream,
   ensureHex,
-  str2hexstring,
-  hexstring2str
+  str2hexstring
 } from "../../u";
 import { TxAttrUsage } from "./txAttrUsage";
 

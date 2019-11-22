@@ -1,10 +1,4 @@
-import {
-  Transaction,
-  TransactionLike,
-  Witness,
-  WitnessScope,
-  TransactionAttribute
-} from "../../../src/tx";
+import { Transaction, TransactionLike, WitnessScope } from "../../../src/tx";
 import samples from "./Transaction.json";
 import { Account } from "../../../src/wallet";
 
@@ -113,7 +107,7 @@ describe("export", () => {
 });
 
 describe("equals", () => {
-  const obj1 = {
+  const obj1: Partial<TransactionLike> = {
     version: 0,
     nonce: 123,
     sender: "39e9c91012be63a58504e52b7318c1274554ae3d",
@@ -125,7 +119,7 @@ describe("equals", () => {
     script: "00"
   };
 
-  const obj2 = {
+  const obj2: Partial<TransactionLike> = {
     version: 0,
     nonce: 1234,
     sender: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
@@ -144,9 +138,17 @@ describe("equals", () => {
     ["Invocation1 !== Invocation2", tx1, tx2, false],
     ["Invocation1 === Obj1", tx1, obj1, true],
     ["Invocation1 !== Obj2", tx1, obj2, false]
-  ])("%s", (msg: string, a: Transaction, b: any, cond: boolean) => {
-    expect(a.equals(b)).toBe(cond);
-  });
+  ])(
+    "%s",
+    (
+      _msg: string,
+      a: Transaction,
+      b: Partial<TransactionLike>,
+      cond: boolean
+    ) => {
+      expect(a.equals(b)).toBe(cond);
+    }
+  );
 });
 
 describe("Add Methods", () => {
@@ -174,12 +176,11 @@ describe("Add Methods", () => {
       "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26"
     );
     expect(tx1.cosigners[0].scopes).toBe(WitnessScope.Global);
-    const addDuplicate = function() {
+    const addDuplicate = (): Transaction =>
       tx1.addCosigner({
         account: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
         scopes: WitnessScope.Global
       });
-    };
     expect(addDuplicate).toThrowError();
   });
 

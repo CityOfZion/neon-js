@@ -151,7 +151,7 @@ export class Witness {
     };
   }
 
-  public equals(other: WitnessLike): boolean {
+  public equals(other: Partial<WitnessLike>): boolean {
     return (
       this.invocationScript === other.invocationScript &&
       this.verificationScript === other.verificationScript

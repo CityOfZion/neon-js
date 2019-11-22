@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:8-stretch
+    - image: circleci/node:10-stretch
 
 version: 2
 jobs:
@@ -14,17 +14,17 @@ jobs:
             node --version
             npm --version
             yarn --version
+            git --version
       - checkout
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - neon-{{ checksum "yarn.lock" }}
+            - neon-yarn-{{ checksum "yarn.lock" }}
             - neon-fallback
       - run: yarn install --cache-folder .cache/yarn
       - save_cache:
-          key: neon-{{ checksum "yarn.lock" }}
+          key: neon-yarn-{{ checksum "yarn.lock" }}
           paths:
-            - node_modules
             - .cache/yarn
       - run:
           name: Bootstrap
@@ -47,7 +47,14 @@ jobs:
       - run: mkdir reports && mkdir reports/lint
       - run:
           name: Lint
-          command: yarn lint --format junit -o reports/lint/lint.xml
+          command: |
+            CURRENT_BRANCH=$(git symbolic-ref -q --short HEAD)
+            BASE_BRANCH=$(node helpers/getBaseBranch.js $CIRCLE_PULL_REQUEST)
+            git checkout --track origin/$BASE_BRANCH
+            git checkout $CURRENT_BRANCH
+            FILES=$(git diff --name-only $(git merge-base HEAD $BASE_BRANCH) | grep '^packages/.*\.[tj]s$')
+            echo $FILES
+            yarn run eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -147,4 +154,3 @@ workflows:
               only: next
             tags:
               only: /v[0-9]+\.[0-9]+\.[0-9]+-next.*/
-

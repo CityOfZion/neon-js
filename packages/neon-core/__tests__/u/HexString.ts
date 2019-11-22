@@ -13,9 +13,7 @@ describe("Initiator", () => {
     });
 
     test("non-hex string", () => {
-      const initHexWithNonHex = function() {
-        HexString.fromHex("h69j");
-      };
+      const initHexWithNonHex = (): HexString => HexString.fromHex("h69j");
       expect(initHexWithNonHex).toThrowError();
     });
   });
@@ -42,9 +40,7 @@ describe("Initiator", () => {
     });
 
     test("negative as param", () => {
-      const initWithNegativeNum = function() {
-        const hex = HexString.fromNumber(-9999);
-      };
+      const initWithNegativeNum = (): HexString => HexString.fromNumber(-9999);
       expect(initWithNegativeNum).toThrowError();
     });
   });
