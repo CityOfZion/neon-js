@@ -2,6 +2,7 @@ import { mocked } from "ts-jest/utils";
 import _Query from "../../src/rpc/Query";
 import RPCClient from "../../src/rpc/RPCClient";
 import { DEFAULT_RPC } from "../../src/consts";
+import { ContractManifest } from "../../src/sc";
 
 jest.mock("../../src/rpc/Query");
 
@@ -191,14 +192,16 @@ describe("RPC Methods", () => {
 
   describe("getContractState", () => {
     test("success", async () => {
-      const expected = jest.fn();
+      const expected = {};
       Query.getContractState.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest
+          .fn()
+          .mockImplementation(() => ({ result: { manifest: expected } }))
       }));
       const result = await client.getContractState("hash");
 
-      expect(result).toEqual(expected);
+      expect(result).toEqual(new ContractManifest(expected));
       expect(Query.getContractState).toBeCalledWith("hash");
     });
   });

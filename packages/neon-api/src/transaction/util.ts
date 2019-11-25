@@ -40,23 +40,25 @@ function isMultiSig(verificationScript: string): boolean {
 }
 
 export function getNetworkFee(transaction: tx.Transaction): u.Fixed8 {
-  const networkFee = new u.Fixed8(0);
+  let networkFee = new u.Fixed8(0e-8);
   const verificationScripts = getVerificationScriptsFromWitnesses(transaction);
   verificationScripts.forEach(verificationScript => {
     if (isMultiSig(verificationScript)) {
-      networkFee.add(getNetworkFeeForSig());
+      networkFee = networkFee.add(getNetworkFeeForSig());
     } else {
       const n = wallet.getPublicKeysFromVerificationScript(verificationScript)
         .length;
       const m = wallet.getSigningThresholdFromVerificationScript(
         verificationScript
       );
-      networkFee.add(getNetworkFeeForMultiSig(m, n));
+      networkFee = networkFee.add(getNetworkFeeForMultiSig(m, n));
     }
     // TODO: consider about contract verfication script
   });
   const size = transaction.serialize(true).length / 2;
-  networkFee.add(new u.Fixed8(size).multipliedBy(CONST.POLICY_FEE_PERBYTE));
+  networkFee = networkFee.add(
+    new u.Fixed8(size).multipliedBy(CONST.POLICY_FEE_PERBYTE)
+  );
   return networkFee;
 }
 

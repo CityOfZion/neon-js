@@ -149,7 +149,15 @@ describe("RPC Methods", () => {
 
   test("getContractState", async () => {
     const result = await client.getContractState(contractHash);
-    expect(Object.keys(result)).toEqual(["hash", "script", "manifest"]);
+    expect(Object.keys(result)).toEqual([
+      "groups",
+      "hasStorage",
+      "payable",
+      "abi",
+      "permissions",
+      "trusts",
+      "safeMethods"
+    ]);
   });
 
   test("getPeers", async () => {

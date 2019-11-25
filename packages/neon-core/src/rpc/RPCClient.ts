@@ -228,7 +228,7 @@ export class RPCClient {
     if (response.error) {
       return null;
     }
-    return new ContractManifest(response.result);
+    return new ContractManifest(response.result.manifest);
   }
 
   /**

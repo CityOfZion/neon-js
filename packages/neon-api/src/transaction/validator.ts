@@ -19,8 +19,12 @@ export type ValidationSuggestion<T> =
       fixed: boolean;
       prev: T;
       suggestion: T;
+      message?: T;
     }
   | {
+      fixed?: boolean;
+      prev?: T;
+      suggestion?: T;
       message: T;
     };
 
@@ -120,6 +124,7 @@ export class TransactionValidator {
   }
 
   /**
+   * // TODO: validate script oneline by invokeScript
    * Validate intents
    */
   public async validateScript(): Promise<ValidationResult> {
@@ -162,7 +167,9 @@ export class TransactionValidator {
 
     const { script, systemFee } = this.transaction;
     const { gas_consumed } = await this.rpcClient.invokeScript(script);
-    const minimumSystemFee = new u.Fixed8(parseFloat(gas_consumed)).ceil();
+    const minimumSystemFee = new u.Fixed8(
+      parseFloat(gas_consumed) * 1e-8
+    ).ceil();
     if (autoFix && !minimumSystemFee.equals(systemFee)) {
       this.transaction.systemFee = minimumSystemFee;
       return {
