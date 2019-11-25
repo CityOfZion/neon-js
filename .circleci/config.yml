@@ -52,7 +52,7 @@ jobs:
             BASE_BRANCH=$(node helpers/getBaseBranch.js $CIRCLE_PULL_REQUEST)
             git checkout --track origin/$BASE_BRANCH
             git checkout $CURRENT_BRANCH
-            FILES=$(git diff --name-only $(git merge-base HEAD $BASE_BRANCH) | grep '^packages/.*\.[tj]s$')
+            FILES=$(git diff --name-only --diff-filter=bd $(git merge-base HEAD $BASE_BRANCH) | grep '^packages/.*\.[tj]s$')
             echo $FILES
             yarn run eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
       - store_test_results:

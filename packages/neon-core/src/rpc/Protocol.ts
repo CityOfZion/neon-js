@@ -34,11 +34,11 @@ export class Protocol {
   public seedList: string[];
 
   public constructor(config: Partial<ProtocolLike & ProtocolJSON> = {}) {
-    this.magic = config.magic || config.Magic || 0;
-    this.addressVersion = config.addressVersion || config.AddressVersion || 23;
+    this.magic = config.magic ?? config.Magic ?? 0;
+    this.addressVersion = config.addressVersion ?? config.AddressVersion ?? 23;
     this.standbyValidators =
-      config.standbyValidators || config.StandbyValidators || [];
-    this.seedList = config.seedList || config.SeedList || [];
+      config.standbyValidators ?? config.StandbyValidators ?? [];
+    this.seedList = config.seedList ?? config.SeedList ?? [];
   }
 
   public get [Symbol.toStringTag](): string {
@@ -56,12 +56,12 @@ export class Protocol {
 
   public equals(other: Partial<ProtocolLike & ProtocolJSON>): boolean {
     return (
-      this.magic === (other.magic || other.Magic) &&
-      this.addressVersion === (other.addressVersion || other.AddressVersion) &&
-      compareStrings(this.seedList, other.seedList || other.SeedList || []) &&
+      this.magic === (other.magic ?? other.Magic) &&
+      this.addressVersion === (other.addressVersion ?? other.AddressVersion) &&
+      compareStrings(this.seedList, other.seedList ?? other.SeedList ?? []) &&
       compareStrings(
         this.standbyValidators,
-        other.standbyValidators || other.StandbyValidators || []
+        other.standbyValidators ?? other.StandbyValidators ?? []
       )
     );
   }

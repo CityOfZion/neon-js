@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosRequestConfig } from "axios";
 import { DEFAULT_REQ } from "../consts";
 import { compareArray } from "../helper";
@@ -16,7 +17,7 @@ export interface RPCRequest {
 export interface RPCResponse {
   jsonrpc: string;
   id: number;
-  result: any;
+  result: unknown;
   error?: RPCErrorResponse;
 }
 
@@ -239,7 +240,7 @@ export class Query {
    * This Query runs the specific script through the VM.
    * @param script
    */
-  public static invokeScript(script: string) {
+  public static invokeScript(script: string): Query {
     return new Query({
       method: "invokescript",
       params: [script]

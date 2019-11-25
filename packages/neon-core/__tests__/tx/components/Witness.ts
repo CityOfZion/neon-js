@@ -12,7 +12,7 @@ describe("constructor", () => {
   test("WitnessLike", () => {
     const testObject = {
       invocationScript: "ab",
-      verificationScript: ""
+      verificationScript: "cd"
     } as WitnessLike;
 
     const result = new Witness(testObject);
@@ -47,17 +47,6 @@ describe("ScriptHash property", () => {
       "dec317f6e4335db8a98418bd16960bf4e7fce4c7"
     );
   });
-
-  it("setter", () => {
-    const expected = "1234";
-    const testObject = new Witness({
-      invocationScript: "",
-      verificationScript: ""
-    });
-    testObject.scriptHash = expected;
-
-    expect(testObject.scriptHash).toEqual(expected);
-  });
 });
 
 describe("export", () => {
@@ -80,7 +69,7 @@ describe("equals", () => {
   };
   const obj2: WitnessLike = {
     invocationScript: "fg",
-    verificationScript: ""
+    verificationScript: "hi"
   };
   const witness1 = new Witness(obj1);
   const witness2 = new Witness(obj2);
@@ -211,8 +200,8 @@ describe("buildMultiSig", () => {
     (
       _: string,
       tx: string,
-      sigs: any,
-      vScript: any,
+      sigs: (Witness | string)[],
+      vScript: string | Account,
       expectedInvocationScript: string
     ) => {
       const result = Witness.buildMultiSig(tx, sigs, vScript);
