@@ -78,7 +78,7 @@ describe("validateScript", () => {
     expect(result.valid).toBeTruthy();
   });
 
-  test("inValid", async () => {
+  test("invalid", async () => {
     const script = sc.createScript({
       scriptHash: CONST.ASSET_ID.NEO,
       operation: "not_exist_method",
@@ -206,7 +206,7 @@ describe("validateNetworkFee", () => {
     expect(result.valid).toBeTruthy();
   });
 
-  test("inValid", async () => {
+  test("invalid", async () => {
     const transaction = new TransactionBuilder({
       scripts: [sig, multiSig],
       networkFee: 0.01
@@ -259,7 +259,7 @@ describe("validateAll", () => {
     expect(result.valid).toBeTruthy();
   });
 
-  test("inValid", async () => {
+  test("invalid", async () => {
     const script = sc.createScript({
       scriptHash: CONST.ASSET_ID.NEO,
       operation: "name",
@@ -280,41 +280,81 @@ describe("validateAll", () => {
     expect(result.valid).toBeFalsy();
   });
 
-  test("autoFix", async () => {
-    const script = sc.createScript({
-      scriptHash: CONST.ASSET_ID.NEO,
-      operation: "name",
-      args: []
-    });
-    const transaction = new TransactionBuilder({
-      validUntilBlock:
-        tx.Transaction.MAX_TRANSACTION_LIFESPAN +
-        (await rpcClient.getBlockCount()) -
-        1,
-      scripts: [sig, multiSig],
-      networkFee: 0.01,
-      script,
-      systemFee: 1.1
-    }).build();
-    const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validate(
-      ValidationAttributes.All,
-      ValidationAttributes.All
-    );
-    expect(result).toStrictEqual({
-      valid: true,
-      suggestions: {
-        systemFee: {
-          fixed: true,
-          prev: new u.Fixed8(1.1),
-          suggestion: new u.Fixed8(1)
-        },
-        networkFee: {
-          fixed: true,
-          prev: new u.Fixed8(0.01),
-          suggestion: new u.Fixed8(0.0240954)
+  describe("autoFix", () => {
+    test("fix all", async () => {
+      const script = sc.createScript({
+        scriptHash: CONST.ASSET_ID.NEO,
+        operation: "name",
+        args: []
+      });
+      const transaction = new TransactionBuilder({
+        validUntilBlock:
+          tx.Transaction.MAX_TRANSACTION_LIFESPAN +
+          (await rpcClient.getBlockCount()) -
+          1,
+        scripts: [sig, multiSig],
+        networkFee: 0.01,
+        script,
+        systemFee: 1.1
+      }).build();
+      const validator = new TransactionValidator(rpcClient, transaction);
+      const result = await validator.validate(
+        ValidationAttributes.All,
+        ValidationAttributes.All
+      );
+      expect(result).toStrictEqual({
+        valid: true,
+        suggestions: {
+          systemFee: {
+            fixed: true,
+            prev: new u.Fixed8(1.1),
+            suggestion: new u.Fixed8(1)
+          },
+          networkFee: {
+            fixed: true,
+            prev: new u.Fixed8(0.01),
+            suggestion: new u.Fixed8(0.0240954)
+          }
         }
-      }
+      });
+    });
+
+    test("fix one", async () => {
+      const script = sc.createScript({
+        scriptHash: CONST.ASSET_ID.NEO,
+        operation: "name",
+        args: []
+      });
+      const transaction = new TransactionBuilder({
+        validUntilBlock:
+          tx.Transaction.MAX_TRANSACTION_LIFESPAN +
+          (await rpcClient.getBlockCount()) -
+          1,
+        scripts: [sig, multiSig],
+        networkFee: 0.01,
+        script,
+        systemFee: 1.1
+      }).build();
+      const validator = new TransactionValidator(rpcClient, transaction);
+      const result = await validator.validate(
+        ValidationAttributes.All,
+        ValidationAttributes.SystemFee
+      );
+      expect(result).toStrictEqual({
+        valid: false,
+        suggestions: {
+          systemFee: {
+            fixed: true,
+            prev: new u.Fixed8(1.1),
+            suggestion: new u.Fixed8(1)
+          },
+          networkFee: {
+            fixed: false,
+            prev: new u.Fixed8(0.01),
+            suggestion: new u.Fixed8(0.0240954)
+          }
+        }
+      });
     });
   });
 });
