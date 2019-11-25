@@ -57,8 +57,5 @@
     "lib/",
     "typings/"
   ],
-  "gitHead": "d21633d03deca1f4bc6c3a4f4e1d32a61aec2fe3",
-  "devDependencies": {
-    "@types/node": "^12.12.11"
-  }
+  "gitHead": "d21633d03deca1f4bc6c3a4f4e1d32a61aec2fe3"
 }
