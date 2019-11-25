@@ -101,11 +101,7 @@ export class Witness {
   private _scriptHash = "";
 
   public constructor(obj: WitnessLike) {
-    if (
-      !obj ||
-      obj.invocationScript === undefined ||
-      obj.verificationScript === undefined
-    ) {
+    if (!obj || !obj.invocationScript || !obj.verificationScript) {
       throw new Error(
         "Witness requires invocationScript and verificationScript fields"
       );
@@ -125,15 +121,6 @@ export class Witness {
         "Unable to produce scriptHash from empty verificationScript"
       );
     }
-  }
-
-  public set scriptHash(value) {
-    if (this.verificationScript) {
-      throw new Error(
-        "Unable to set scriptHash when verificationScript is not empty"
-      );
-    }
-    this._scriptHash = value;
   }
 
   public serialize(): string {

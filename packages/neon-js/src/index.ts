@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import apiPlugin from "@cityofzion/neon-api";
 import * as neonCore from "@cityofzion/neon-core";
 import nepPlugin from "@cityofzion/neon-nep5";
@@ -22,9 +23,9 @@ const bootstrap: {
   [net: string]: Partial<neonCore.rpc.NetworkJSON>;
 } = defaultNetworks;
 Object.keys(bootstrap).map(key => {
-  settings.networks[key] = new rpc.Network(bootstrap[
-    key
-  ] as neonCore.rpc.NetworkJSON);
+  settings.networks[key] = new rpc.Network(
+    bootstrap[key] as neonCore.rpc.NetworkJSON
+  );
 });
 
 /**

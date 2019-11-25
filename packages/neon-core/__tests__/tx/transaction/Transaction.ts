@@ -38,7 +38,7 @@ describe("constructor", () => {
   test("Transaction", () => {
     const testObject = new Transaction({
       version: 1,
-      scripts: [{ invocationScript: "ab", verificationScript: "" }],
+      scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
       systemFee: 1,
       script: "00"
     });
@@ -97,7 +97,7 @@ describe("export", () => {
     networkFee: 13,
     validUntilBlock: 1000,
     attributes: [],
-    scripts: [{ invocationScript: "ab", verificationScript: "" }],
+    scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
     script: "00"
   } as Partial<TransactionLike>;
 
@@ -115,7 +115,7 @@ describe("equals", () => {
     networkFee: 13,
     validUntilBlock: 1000,
     attributes: [],
-    scripts: [{ invocationScript: "ab", verificationScript: "" }],
+    scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
     script: "00"
   };
 
@@ -127,7 +127,7 @@ describe("equals", () => {
     networkFee: 1,
     validUntilBlock: 1000,
     attributes: [],
-    scripts: [{ invocationScript: "ab", verificationScript: "" }],
+    scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
     script: "00"
   };
   const tx1 = new Transaction(obj1);
