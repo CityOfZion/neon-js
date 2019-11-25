@@ -166,9 +166,11 @@ export class TransactionValidator {
     }
 
     const { script, systemFee } = this.transaction;
-    const { gas_consumed } = await this.rpcClient.invokeScript(script);
+    const { gas_consumed: gasConsumed } = await this.rpcClient.invokeScript(
+      script
+    );
     const minimumSystemFee = new u.Fixed8(
-      parseFloat(gas_consumed) * 1e-8
+      parseFloat(gasConsumed) * 1e-8
     ).ceil();
     if (autoFix && !minimumSystemFee.equals(systemFee)) {
       this.transaction.systemFee = minimumSystemFee;
