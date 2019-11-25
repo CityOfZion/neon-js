@@ -7,6 +7,7 @@ import {
   getVerificationScriptFromPublicKey,
   verify
 } from "../../wallet";
+import { NeonObject } from "../../model";
 
 export interface WitnessLike {
   invocationScript: string;
@@ -18,7 +19,7 @@ export interface WitnessLike {
  *
  * For example, the most common witness is the VM Script that pushes the ECDSA signature into the VM and calling CHECKSIG to prove the authority to spend the TransactionInputs in the transaction.
  */
-export class Witness {
+export class Witness implements NeonObject<WitnessLike> {
   public static deserialize(hex: string): Witness {
     const ss = new StringStream(hex);
     return this.fromStream(ss);

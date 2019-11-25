@@ -51,12 +51,29 @@ describe("constructor", () => {
 });
 
 describe("export", () => {
-  test("export to NetworkJSON", () => {
+  test("export to NetworkLike", () => {
+    const expected = {
+      name: "UnitTestNet",
+      protocol: new Protocol({
+        magic: 123456
+      }).export(),
+      nodes: ["a", "b"],
+      extra: {
+        neoscan: "neoscanUrl"
+      }
+    };
+
+    const NetworkObj = new Network(expected);
+    const result = NetworkObj.export();
+    expect(result).toEqual(expected);
+  });
+
+  test("toConfiguration", () => {
     const expected = {
       Name: "UnitTestNet",
       ProtocolConfiguration: new Protocol({
         magic: 123456
-      }).export(),
+      }).toConfiguration(),
       Nodes: ["a", "b"],
       ExtraConfiguration: {
         neoscan: "neoscanUrl"
@@ -64,7 +81,7 @@ describe("export", () => {
     };
 
     const NetworkObj = new Network(expected);
-    const result = NetworkObj.export();
+    const result = NetworkObj.toConfiguration();
     expect(result).toEqual(expected);
   });
 });

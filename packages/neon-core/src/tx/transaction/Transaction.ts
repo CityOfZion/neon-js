@@ -32,6 +32,7 @@ import {
 } from "./main";
 import { CosignerLike, Cosigner } from "../components/Cosigner";
 import { serializeArrayOf } from "../lib";
+import { NeonObject } from "../../model";
 const log = logger("tx");
 
 export interface TransactionLike {
@@ -47,7 +48,7 @@ export interface TransactionLike {
   script: string;
 }
 
-export class Transaction {
+export class Transaction implements NeonObject<TransactionLike> {
   /**
    * Only version=0 is valid for NEO3
    */

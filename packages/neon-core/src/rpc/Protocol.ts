@@ -1,3 +1,5 @@
+import { NeonObject } from "../model";
+
 export interface ProtocolLike {
   magic: number;
   addressVersion: number;
@@ -5,6 +7,9 @@ export interface ProtocolLike {
   seedList: string[];
 }
 
+/**
+ * This is the ProtocolConfiguration field found in protocol.json
+ */
 export interface ProtocolJSON {
   Magic: number;
   AddressVersion: number;
@@ -27,7 +32,7 @@ function compareStrings(current: string[], other: string[]): boolean {
 /**
  * Model of the protocol configuration file used by the C# implementation.
  */
-export class Protocol {
+export class Protocol implements NeonObject<ProtocolLike> {
   public magic: number;
   public addressVersion: number;
   public standbyValidators: string[];
@@ -45,7 +50,16 @@ export class Protocol {
     return "Protocol";
   }
 
-  public export(): ProtocolJSON {
+  public export(): ProtocolLike {
+    return {
+      magic: this.magic,
+      addressVersion: this.addressVersion,
+      standbyValidators: this.standbyValidators,
+      seedList: this.seedList
+    };
+  }
+
+  public toConfiguration(): ProtocolJSON {
     return {
       Magic: this.magic,
       AddressVersion: this.addressVersion,
