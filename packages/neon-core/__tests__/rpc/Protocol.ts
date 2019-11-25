@@ -1,4 +1,4 @@
-import Protocol from "../../src/rpc/Protocol";
+import Protocol, { ProtocolLike, ProtocolJSON } from "../../src/rpc/Protocol";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -102,7 +102,15 @@ describe("equals", () => {
     ["Protocol1 !== Protocol2", protocol1, protocol2, false],
     ["Protocol1 === Obj1", protocol1, obj1, true],
     ["Protocol1 !== Obj2", protocol1, obj2, false]
-  ])("%s", (msg: string, a: Protocol, b: any, cond: boolean) => {
-    expect(a.equals(b)).toBe(cond);
-  });
+  ])(
+    "%s",
+    (
+      msg: string,
+      a: Protocol,
+      b: Partial<ProtocolLike & ProtocolJSON>,
+      cond: boolean
+    ) => {
+      expect(a.equals(b)).toBe(cond);
+    }
+  );
 });

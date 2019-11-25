@@ -1,5 +1,5 @@
 import { Protocol } from "../../src/rpc";
-import Network from "../../src/rpc/Network";
+import Network, { NetworkLike } from "../../src/rpc/Network";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -117,7 +117,15 @@ describe("equals", () => {
     ["Network1 !== Network2", Network1, Network2, false],
     ["Network1 === Obj1", Network1, obj1, true],
     ["Network1 !== Obj2", Network1, obj2, false]
-  ])("%s", (msg: string, a: Network, b: any, cond: boolean) => {
-    expect(a.equals(b)).toBe(cond);
-  });
+  ])(
+    "%s",
+    (
+      msg: string,
+      a: Network,
+      b: Partial<NetworkLike & NetworkJSON>,
+      cond: boolean
+    ) => {
+      expect(a.equals(b)).toBe(cond);
+    }
+  );
 });
