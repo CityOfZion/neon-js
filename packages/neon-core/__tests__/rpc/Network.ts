@@ -1,5 +1,5 @@
 import { Protocol } from "../../src/rpc";
-import Network from "../../src/rpc/Network";
+import Network, { NetworkLike } from "../../src/rpc/Network";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -51,12 +51,29 @@ describe("constructor", () => {
 });
 
 describe("export", () => {
-  test("export to NetworkJSON", () => {
+  test("export to NetworkLike", () => {
+    const expected = {
+      name: "UnitTestNet",
+      protocol: new Protocol({
+        magic: 123456
+      }).export(),
+      nodes: ["a", "b"],
+      extra: {
+        neoscan: "neoscanUrl"
+      }
+    };
+
+    const NetworkObj = new Network(expected);
+    const result = NetworkObj.export();
+    expect(result).toEqual(expected);
+  });
+
+  test("toConfiguration", () => {
     const expected = {
       Name: "UnitTestNet",
       ProtocolConfiguration: new Protocol({
         magic: 123456
-      }).export(),
+      }).toConfiguration(),
       Nodes: ["a", "b"],
       ExtraConfiguration: {
         neoscan: "neoscanUrl"
@@ -64,7 +81,7 @@ describe("export", () => {
     };
 
     const NetworkObj = new Network(expected);
-    const result = NetworkObj.export();
+    const result = NetworkObj.toConfiguration();
     expect(result).toEqual(expected);
   });
 });
@@ -100,7 +117,15 @@ describe("equals", () => {
     ["Network1 !== Network2", Network1, Network2, false],
     ["Network1 === Obj1", Network1, obj1, true],
     ["Network1 !== Obj2", Network1, obj2, false]
-  ])("%s", (msg: string, a: Network, b: any, cond: boolean) => {
-    expect(a.equals(b)).toBe(cond);
-  });
+  ])(
+    "%s",
+    (
+      msg: string,
+      a: Network,
+      b: Partial<NetworkLike & NetworkJSON>,
+      cond: boolean
+    ) => {
+      expect(a.equals(b)).toBe(cond);
+    }
+  );
 });

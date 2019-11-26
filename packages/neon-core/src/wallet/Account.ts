@@ -14,6 +14,7 @@ import {
   isWIF
 } from "./verify";
 import { InteropServiceCode } from "../sc";
+import { NeonObject } from "../model";
 
 const log = logger("wallet");
 
@@ -44,7 +45,7 @@ export interface AccountJSON {
  * const acct = new Account("L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g");
  * acct.address; // "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
  */
-export class Account {
+export class Account implements NeonObject<AccountJSON> {
   /**
    * Create a multi-sig account from a list of public keys
    * @param signingThreshold Minimum number of signatures required for verification. Must be larger than 0 and less than number of keys provided.

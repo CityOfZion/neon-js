@@ -6,6 +6,7 @@ import {
   str2hexstring
 } from "../../u";
 import { TxAttrUsage } from "./txAttrUsage";
+import { NeonObject } from "../../model";
 
 const maxTransactionAttributeSize = 65535;
 
@@ -37,7 +38,8 @@ export function toTxAttrUsage(
  *
  * For example, a remark is attached as an attribute.
  */
-export class TransactionAttribute {
+export class TransactionAttribute
+  implements NeonObject<TransactionAttributeLike> {
   public static deserialize(hex: string): TransactionAttribute {
     const ss = new StringStream(hex);
     return this.fromStream(ss);
