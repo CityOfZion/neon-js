@@ -124,14 +124,13 @@ export class TransactionValidator {
     const { state } = await this.rpcClient.invokeScript(
       this.transaction.script
     );
-    if (state.indexOf("FAULT") >= 0) {
+    if (state === "FAULT") {
       return {
         valid: false,
         suggestions: {
           script: {
             fixed: false,
-            message:
-              "Cannot give suggestion as transaction script as executing error in neoVm."
+            message: "Encountered FAULT when validating script."
           }
         }
       };
@@ -181,14 +180,13 @@ export class TransactionValidator {
       gas_consumed: gasConsumed
     } = await this.rpcClient.invokeScript(script);
 
-    if (state.indexOf("FAULT") >= 0) {
+    if (state === "FAULT") {
       return {
         valid: false,
         suggestions: {
           systemFee: {
             fixed: false,
-            message:
-              "Cannot give suggestion as transaction script as executing error in neoVm"
+            message: "Encountered FAULT when validating script."
           }
         }
       };

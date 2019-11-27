@@ -140,6 +140,32 @@ describe("validateSystemFee", () => {
       const result = await validator.validateSystemFee();
       expect(result.valid).toBeFalsy();
     });
+
+    test.only("script execution error in neoVM", async () => {
+      const addressInHash160 = sc.ContractParam.hash160(
+        "AZzpS2oDPRtPwFp6C9ric98KCXGZiic6RV"
+      );
+      const script = sc.createScript({
+        scriptHash: CONST.ASSET_ID.NEO,
+        operation: "transfer",
+        args: [addressInHash160, addressInHash160, 1]
+      });
+      const transaction = new TransactionBuilder({
+        script,
+        systemFee: 10
+      }).build();
+      const validator = new TransactionValidator(rpcClient, transaction);
+      const result = await validator.validateSystemFee();
+      expect(result).toStrictEqual({
+        valid: false,
+        suggestions: {
+          script: {
+            fixed: false,
+            message: "Encountered FAULT when validating script."
+          }
+        }
+      });
+    });
   });
 
   describe("autoFix", () => {
