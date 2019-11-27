@@ -1,4 +1,4 @@
-import Protocol from "../../src/rpc/Protocol";
+import Protocol, { ProtocolLike, ProtocolJSON } from "../../src/rpc/Protocol";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -10,7 +10,7 @@ describe("constructor", () => {
     expect(result.seedList).toEqual([]);
   });
 
-  test("ProtocolLike", () => {
+  test("ProtocolJSON", () => {
     const testObject = {
       Magic: 999999,
       AddressVersion: 99,
@@ -23,6 +23,21 @@ describe("constructor", () => {
     expect(result.addressVersion).toEqual(testObject.AddressVersion);
     expect(result.standbyValidators).toEqual(testObject.StandbyValidators);
     expect(result.seedList).toEqual(testObject.SeedList);
+  });
+
+  test("ProtocolLike", () => {
+    const testObject = {
+      magic: 12345,
+      addressVersion: 1,
+      standbyValidators: ["2", "3", "4", "5"],
+      seedList: ["a", "b", "c", "d"]
+    };
+
+    const result = new Protocol(testObject);
+    expect(result.magic).toEqual(testObject.magic);
+    expect(result.addressVersion).toEqual(testObject.addressVersion);
+    expect(result.standbyValidators).toEqual(testObject.standbyValidators);
+    expect(result.seedList).toEqual(testObject.seedList);
   });
 
   test("Protocol", () => {
@@ -39,12 +54,25 @@ describe("constructor", () => {
 });
 
 describe("export", () => {
-  test("export to ProtocolJSON", () => {
+  test("toConfiguration", () => {
     const expected = {
       Magic: 999999,
       AddressVersion: 99,
       StandbyValidators: ["1", "2", "3", "4"],
       SeedList: ["a", "b", "c", "d"]
+    };
+
+    const protocolObj = new Protocol(expected);
+    const result = protocolObj.toConfiguration();
+    expect(result).toEqual(expected);
+  });
+
+  test("export to ProtocolLike", () => {
+    const expected = {
+      magic: 4356547,
+      addressVersion: 123,
+      standbyValidators: ["5", "6", "7", "8"],
+      seedList: ["a", "b", "c", "d"]
     };
 
     const protocolObj = new Protocol(expected);
@@ -74,7 +102,15 @@ describe("equals", () => {
     ["Protocol1 !== Protocol2", protocol1, protocol2, false],
     ["Protocol1 === Obj1", protocol1, obj1, true],
     ["Protocol1 !== Obj2", protocol1, obj2, false]
-  ])("%s", (msg: string, a: Protocol, b: any, cond: boolean) => {
-    expect(a.equals(b)).toBe(cond);
-  });
+  ])(
+    "%s",
+    (
+      msg: string,
+      a: Protocol,
+      b: Partial<ProtocolLike & ProtocolJSON>,
+      cond: boolean
+    ) => {
+      expect(a.equals(b)).toBe(cond);
+    }
+  );
 });
