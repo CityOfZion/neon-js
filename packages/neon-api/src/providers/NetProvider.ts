@@ -4,40 +4,22 @@ export interface Balance {
   [index: string]: number;
 }
 
+/**
+ * NetProvider is to read on-chain info without sending transactions
+ */
 export class NetProvider {
-  private _url: string;
-  protected _rpc: rpc.RPCClient;
+  public rpcClient: rpc.RPCClient;
 
-  public constructor(url: string) {
-    this._url = url;
-    this._rpc = new rpc.RPCClient(url);
-  }
-
-  public get node() {
-    return this._url;
-  }
-
-  public set node(url: string) {
-    this._url = url;
-    this._rpc = new rpc.RPCClient(url);
+  public constructor(rpcClient: string | rpc.RPCClient) {
+    if (typeof rpcClient === 'string') {
+      this.rpcClient = new rpc.RPCClient(rpcClient);
+    } else {
+      this.rpcClient = rpcClient;
+    }
   }
 
   public getHeight(): Promise<number> {
-    return this._rpc.getBlockCount();
-  }
-
-  public async getBalance(addr: string, asset: string): Promise<number> {
-    const addrInHash160 = sc.ContractParam.hash160(addr);
-    const script = sc.createScript({
-      scriptHash: asset,
-      operation: "balanceOf",
-      args: [addrInHash160]
-    });
-    const { state, stack } = await this._rpc.invokeScript(script);
-    if (state === "FAULT") {
-      return Promise.reject(`Error Happenned!`);
-    }
-    return rpc.IntegerParser(stack[0]);
+    return this.rpcClient.getBlockCount();
   }
 
   public async getBalances(
@@ -57,8 +39,8 @@ export class NetProvider {
         };
       })
     );
-    const { state, stack } = await this._rpc.invokeScript(script);
-    if (state === "FAULT") {
+    const { state, stack } = await this.rpcClient.invokeScript(script);
+    if (state.indexOf('FAULT') >= 0) {
       return Promise.reject(`Error Happenned!`);
     }
     return stack.map((item, index) => {
@@ -68,7 +50,7 @@ export class NetProvider {
     });
   }
 
-  public async getMaxClaimAmount(
+  public async getClaimable(
     addr: string,
     untilBlockHeight?: number
   ): Promise<number> {
@@ -81,8 +63,8 @@ export class NetProvider {
       operation: "unClaimGas",
       args: [addrInHash160, untilBlockHeight]
     });
-    const { state, stack } = await this._rpc.invokeScript(script);
-    if (state === "FAULT") {
+    const { state, stack } = await this.rpcClient.invokeScript(script);
+    if (state.indexOf('FAULT') >= 0) {
       return Promise.reject(`Error Happenned!`);
     }
     return rpc.IntegerParser(stack[0]);
@@ -92,7 +74,7 @@ export class NetProvider {
     scriptsIntents: (string | sc.ScriptIntent)[]
   ): Promise<sc.StackItemLike[]> {
     const script = sc.createScript(...scriptsIntents);
-    const { state, stack } = await this._rpc.invokeScript(script);
+    const { state, stack } = await this.rpcClient.invokeScript(script);
     if (state.indexOf("FAULT") >= 0) {
       return Promise.reject(stack);
     } else {

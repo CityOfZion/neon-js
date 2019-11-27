@@ -251,7 +251,7 @@ describe("RPC Methods", () => {
     });
   });
 
-  test("sendRawTransaction", async () => {
+  test.only("sendRawTransaction", async () => {
     const account = new Account(privateKey);
     const addressInHash160 = ContractParam.hash160(account.address);
     const script = createScript({
@@ -259,6 +259,10 @@ describe("RPC Methods", () => {
       operation: "transfer",
       args: [addressInHash160, addressInHash160, 1]
     });
+
+    const invokeScriptResult = await client.invokeScript(script);
+    console.log(script);
+    console.log(invokeScriptResult);
 
     const currentHeight = await client.getBlockCount();
     const transaction = new Transaction({
@@ -275,6 +279,7 @@ describe("RPC Methods", () => {
       script: script
     }).sign(account);
     const result = await client.sendRawTransaction(transaction.serialize(true));
+    console.log(result);
     expect(typeof result).toBe("string");
   });
 

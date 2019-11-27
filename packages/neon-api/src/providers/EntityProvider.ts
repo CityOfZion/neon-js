@@ -1,10 +1,10 @@
 import NetProvider from "./NetProvider";
 import { TransactionBuilder } from "../transaction";
-import { rpc, wallet } from "@cityofzion/neon-core";
+import { rpc, wallet, tx, sc } from "@cityofzion/neon-core";
 
 export interface SendAssetIntent {
   asset: string;
-  from?: Account;
+  from?: wallet.Account;
   to: string;
   amount: number;
 }
@@ -19,19 +19,19 @@ export class EntityProvider extends NetProvider {
     } else {
       this.sender = sender;
     }
-    if (!this.sender.privateKey) {
-      throw new Error(`Sender Account must have permission to sign`);
-    }
+    this._checkAccountAccess(this.sender);
   }
 
   public async sendAssets(...intents: SendAssetIntent[]): Promise<boolean> {
-    const cosigners: CosignerWithAccount[] = [];
-    const scriptIntents: ScriptIntent[] = intents.map(intent => {
+    let cosigners: tx.CosignerLike[] = [];
+    let signers: wallet.Account[] = [];
+    const scriptIntents: sc.ScriptIntent[] = intents.map(intent => {
       const { asset, from, to, amount } = intent;
       if (from && from.address !== this.sender.address) {
+
         cosigners.push({
-          account: from,
-          scopes: WitnessScope.CalledByEntry
+          account: ,
+          scopes: tx.WitnessScope.CalledByEntry
         });
       }
       return {
@@ -66,5 +66,11 @@ export class EntityProvider extends NetProvider {
       to: account.address,
       amount: await this.getBalance(account.address, ASSET_ID.NEO)
     });
+  }
+
+  private _checkAccountAccess(account: wallet.Account) {
+    if (!account.privateKey) {
+      throw new Error(`Account with address ${account.address} doesn't have permission to sign`);
+    }
   }
 }
