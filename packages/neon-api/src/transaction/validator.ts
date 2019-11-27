@@ -121,6 +121,22 @@ export class TransactionValidator {
    * Validate intents
    */
   public async validateScript(): Promise<ValidationResult> {
+    const { state } = await this.rpcClient.invokeScript(
+      this.transaction.script
+    );
+    if (state.indexOf("FAULT") >= 0) {
+      return {
+        valid: false,
+        suggestions: {
+          script: {
+            fixed: false,
+            message:
+              "Cannot give suggestion as transaction script as executing error in neoVm."
+          }
+        }
+      };
+    }
+
     const intents = new sc.ScriptParser(
       this.transaction.script
     ).toScriptParams();
@@ -160,9 +176,24 @@ export class TransactionValidator {
     }
 
     const { script, systemFee } = this.transaction;
-    const { gas_consumed: gasConsumed } = await this.rpcClient.invokeScript(
-      script
-    );
+    const {
+      state,
+      gas_consumed: gasConsumed
+    } = await this.rpcClient.invokeScript(script);
+
+    if (state.indexOf("FAULT") >= 0) {
+      return {
+        valid: false,
+        suggestions: {
+          systemFee: {
+            fixed: false,
+            message:
+              "Cannot give suggestion as transaction script as executing error in neoVm"
+          }
+        }
+      };
+    }
+
     const minimumSystemFee = new u.Fixed8(parseFloat(gasConsumed))
       .mul(1e-8)
       .ceil();
