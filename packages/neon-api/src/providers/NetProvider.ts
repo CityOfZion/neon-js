@@ -11,7 +11,7 @@ export class NetProvider {
   public rpcClient: rpc.RPCClient;
 
   public constructor(rpcClient: string | rpc.RPCClient) {
-    if (typeof rpcClient === 'string') {
+    if (typeof rpcClient === "string") {
       this.rpcClient = new rpc.RPCClient(rpcClient);
     } else {
       this.rpcClient = rpcClient;
@@ -24,8 +24,8 @@ export class NetProvider {
 
   public async getBalances(
     addr: string,
-    ...assets: string[]
-  ): Promise<Balance[]> {
+    ...assets: Array<string>
+  ): Promise<Balance> {
     if (assets.length === 0) {
       assets = [CONST.ASSET_ID.NEO, CONST.ASSET_ID.GAS];
     }
@@ -40,14 +40,21 @@ export class NetProvider {
       })
     );
     const { state, stack } = await this.rpcClient.invokeScript(script);
-    if (state.indexOf('FAULT') >= 0) {
+    if (state.indexOf("FAULT") >= 0) {
       return Promise.reject(`Error Happenned!`);
     }
-    return stack.map((item, index) => {
-      return {
-        [assets![index]]: rpc.IntegerParser(item)
-      };
-    });
+    return stack
+      .map((item, index) => {
+        return {
+          [assets[index]]: rpc.IntegerParser(item)
+        };
+      })
+      .reduce((totalBalance, balance) => {
+        return {
+          ...totalBalance,
+          ...balance
+        };
+      });
   }
 
   public async getClaimable(
@@ -64,7 +71,7 @@ export class NetProvider {
       args: [addrInHash160, untilBlockHeight]
     });
     const { state, stack } = await this.rpcClient.invokeScript(script);
-    if (state.indexOf('FAULT') >= 0) {
+    if (state.indexOf("FAULT") >= 0) {
       return Promise.reject(`Error Happenned!`);
     }
     return rpc.IntegerParser(stack[0]);
@@ -82,5 +89,3 @@ export class NetProvider {
     }
   }
 }
-
-export default NetProvider;

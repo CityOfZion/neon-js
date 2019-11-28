@@ -1,6 +1,6 @@
-import NetProvider from "./NetProvider";
-import { TransactionBuilder } from "../transaction";
-import { rpc, wallet, tx, sc } from "@cityofzion/neon-core";
+import { NetProvider } from "./NetProvider";
+import { TransactionBuilder, TransactionSigner } from "../transaction";
+import { wallet, tx, sc, u, CONST } from "@cityofzion/neon-core";
 
 export interface SendAssetIntent {
   asset: string;
@@ -22,15 +22,16 @@ export class EntityProvider extends NetProvider {
     this._checkAccountAccess(this.sender);
   }
 
-  public async sendAssets(...intents: SendAssetIntent[]): Promise<boolean> {
-    let cosigners: tx.CosignerLike[] = [];
-    let signers: wallet.Account[] = [];
+  public async sendAssets(...intents: SendAssetIntent[]): Promise<string> {
+    const cosigners: tx.CosignerLike[] = [];
+    const signers: wallet.Account[] = [this.sender];
     const scriptIntents: sc.ScriptIntent[] = intents.map(intent => {
       const { asset, from, to, amount } = intent;
       if (from && from.address !== this.sender.address) {
-
+        this._checkAccountAccess(from);
+        signers.push(from);
         cosigners.push({
-          account: ,
+          account: u.reverseHex(from.scriptHash),
           scopes: tx.WitnessScope.CalledByEntry
         });
       }
@@ -38,39 +39,69 @@ export class EntityProvider extends NetProvider {
         scriptHash: asset,
         operation: "transfer",
         args: [
-          ContractParam.hash160(from ? from.address : this.sender.address),
-          ContractParam.hash160(to),
+          sc.ContractParam.hash160(from ? from.address : this.sender.address),
+          sc.ContractParam.hash160(to),
           amount
         ]
       };
     });
 
-    await this._txBuilder
-      .reset()
-      .addCosigners(...cosigners)
+    const transaction = new TransactionBuilder({
+      sender: u.reverseHex(this.sender.scriptHash),
+      cosigners,
+      systemFee: 1
+    })
       .addIntents(...scriptIntents)
-      .useBestValidUntilBlock();
-    await this._txBuilder.validate(true);
-    return this._txBuilder.execute();
+      .build();
+
+    const signer = new TransactionSigner(transaction);
+    signer.signWithAccount(...signers);
+
+    // const validator = new TransactionValidator(this.rpcClient, transaction);
+    // validator.validateNetworkFee(true);
+    // validator.validateValidUntilBlock(true);
+    return this.rpcClient.sendRawTransaction(transaction);
   }
 
   public async claimGas(
-    account: Account | string = this.sender
-  ): Promise<boolean> {
+    account: wallet.Account | string = this.sender
+  ): Promise<string> {
     if (typeof account === "string") {
-      account = new Account(account);
+      account = new wallet.Account(account);
     }
+    const balance = await this.getBalances(account.address, CONST.ASSET_ID.NEO);
     return this.sendAssets({
       asset: "NEO",
       from: account,
       to: account.address,
-      amount: await this.getBalance(account.address, ASSET_ID.NEO)
+      amount: balance[CONST.ASSET_ID.NEO]
     });
   }
 
-  private _checkAccountAccess(account: wallet.Account) {
+  public async writeInvoke(
+    scriptsIntents: (string | sc.ScriptIntent)[]
+  ): Promise<string> {
+    const script = sc.createScript(...scriptsIntents);
+    const transaction = new TransactionBuilder({
+      sender: u.reverseHex(this.sender.scriptHash),
+      systemFee: 1,
+      script
+    }).build();
+
+    const signer = new TransactionSigner(transaction);
+    signer.signWithAccount(this.sender);
+
+    // const validator = new TransactionValidator(this.rpcClient, transaction);
+    // validator.validateNetworkFee(true);
+    // validator.validateValidUntilBlock(true);
+    return this.rpcClient.sendRawTransaction(transaction);
+  }
+
+  private _checkAccountAccess(account: wallet.Account): void {
     if (!account.privateKey) {
-      throw new Error(`Account with address ${account.address} doesn't have permission to sign`);
+      throw new Error(
+        `Account with address ${account.address} doesn't have permission to sign`
+      );
     }
   }
 }
