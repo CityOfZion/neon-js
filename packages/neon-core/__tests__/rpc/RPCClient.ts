@@ -50,7 +50,7 @@ describe("execute", () => {
     const q = {
       req: { method: "" },
       execute: jest.fn().mockImplementation(() => expected)
-    } as any;
+    } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
     const client = new RPCClient("url");
 

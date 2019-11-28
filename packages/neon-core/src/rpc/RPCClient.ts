@@ -115,6 +115,7 @@ export class RPCClient {
   /**
    * Takes an Query object and executes it. Adds the Query object to history.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public execute(query: Query, config?: AxiosRequestConfig): Promise<any> {
     this.history.push(query);
     log.info(`RPC: ${this.net} executing Query[${query.req.method}]`);
@@ -124,6 +125,7 @@ export class RPCClient {
   /**
    * Creates a query with the given req and immediately executes it.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public query(req: object, config?: AxiosRequestConfig): Promise<any> {
     const query = new Query(req);
     return this.execute(query, config);
@@ -336,7 +338,7 @@ export class RPCClient {
   public async invokeFunction(
     scriptHash: string,
     operation: string,
-    ...params: any[]
+    ...params: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
   ): Promise<RPCVMResponse> {
     const response = await this.execute(
       Query.invokeFunction(scriptHash, operation, ...params)
