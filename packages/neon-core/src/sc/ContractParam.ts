@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fixed8, reverseHex } from "../u";
 import { getScriptHashFromAddress, isAddress } from "../wallet";
 
@@ -49,7 +50,9 @@ export class ContractParam {
   /**
    * Creates a Boolean ContractParam. Does basic checks to convert value into a boolean.
    */
-  public static boolean(value: any): ContractParam {
+  public static boolean(
+    value: boolean | string | number | object
+  ): ContractParam {
     return new ContractParam(ContractParamType.Boolean, !!value);
   }
 
@@ -177,7 +180,7 @@ export class ContractParam {
     const exportedValue = Array.isArray(this.value)
       ? this.value.map(cp => cp.export())
       : this.value;
-    return { type: ContractParamType[this.type], value: this.value };
+    return { type: ContractParamType[this.type], value: exportedValue };
   }
 
   public equal(other: ContractParamLike): boolean {
@@ -203,8 +206,9 @@ export function likeContractParam(cp: Partial<ContractParam>): boolean {
     return true;
   }
   return (
-    cp.type! in ContractParamType &&
-    cp.value! !== null &&
-    cp.value! !== undefined
+    cp.type !== undefined &&
+    cp.type in ContractParamType &&
+    cp.value !== null &&
+    cp.value !== undefined
   );
 }

@@ -1,16 +1,16 @@
-import { compareObject, compareUnsortedPlainArrays } from "../helper";
-import logger from "../logging";
 import Protocol, { ProtocolJSON, ProtocolLike } from "./Protocol";
-
-const log = logger("protocol");
+import { NeonObject } from "../model";
 
 export interface NetworkLike {
   name: string;
   protocol: Partial<ProtocolLike>;
-  nodes: any[];
+  nodes: string[];
   extra: { [key: string]: string };
 }
 
+/**
+ * This is a expanded interface of protocol.json file found in the C# implementation.
+ */
 export interface NetworkJSON {
   Name: string;
   ProtocolConfiguration: ProtocolJSON;
@@ -18,12 +18,26 @@ export interface NetworkJSON {
   ExtraConfiguration: { [key: string]: string };
 }
 
+function compareStrings(a: string[], b: string[]): boolean {
+  if (a.length !== b.length) return false;
+  return a.every(curr => b.indexOf(curr) >= 0);
+}
+
+function compareMaps(
+  a: { [key: string]: string },
+  b: { [key: string]: string }
+): boolean {
+  const keys = Array.from(a.keys ?? []);
+  if (!compareStrings(keys, Array.from(b.keys ?? []))) return false;
+  return keys.every(key => a[key] === b[key]);
+}
+
 /**
  * Network interface representing a NEO blockchain network.
  * This inherits from the network.protocol file used in the C# implementation and adds in additional configurations.
  * @param config NetworkLike JS object
  */
-export class Network {
+export class Network implements NeonObject<NetworkLike> {
   public name: string;
   public protocol: Protocol;
   public nodes: string[];
@@ -49,21 +63,33 @@ export class Network {
   /**
    * Exports the class as a JSON format.
    */
-  public export(): NetworkJSON {
+  public export(): NetworkLike {
     return {
-      ProtocolConfiguration: this.protocol.export(),
+      name: this.name,
+      protocol: this.protocol.export(),
+      extra: this.extra,
+      nodes: this.nodes
+    };
+  }
+
+  /**
+   * Exports using PascalCase convention for keys.
+   */
+  public toConfiguration(): NetworkJSON {
+    return {
       Name: this.name,
+      ProtocolConfiguration: this.protocol.toConfiguration(),
       ExtraConfiguration: this.extra,
       Nodes: this.nodes
     };
   }
 
-  public equals(other: Partial<NetworkLike & NetworkJSON>): boolean {
+  public equals(other: Partial<NetworkLike>): boolean {
     return (
       this.name === other.name &&
-      this.protocol.equals(other.protocol || {}) &&
-      compareUnsortedPlainArrays(this.nodes, other.nodes || []) &&
-      compareObject(this.extra, other.extra || {})
+      this.protocol.equals(other.protocol ?? {}) &&
+      compareStrings(this.nodes, other.nodes ?? []) &&
+      compareMaps(this.extra, other.extra ?? {})
     );
   }
 }

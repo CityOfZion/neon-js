@@ -7,6 +7,7 @@ import {
   getVerificationScriptFromPublicKey,
   verify
 } from "../../wallet";
+import { NeonObject } from "../../model";
 
 export interface WitnessLike {
   invocationScript: string;
@@ -18,7 +19,7 @@ export interface WitnessLike {
  *
  * For example, the most common witness is the VM Script that pushes the ECDSA signature into the VM and calling CHECKSIG to prove the authority to spend the TransactionInputs in the transaction.
  */
-export class Witness {
+export class Witness implements NeonObject<WitnessLike> {
   public static deserialize(hex: string): Witness {
     const ss = new StringStream(hex);
     return this.fromStream(ss);
@@ -101,11 +102,7 @@ export class Witness {
   private _scriptHash = "";
 
   public constructor(obj: WitnessLike) {
-    if (
-      !obj ||
-      obj.invocationScript === undefined ||
-      obj.verificationScript === undefined
-    ) {
+    if (!obj || !obj.invocationScript || !obj.verificationScript) {
       throw new Error(
         "Witness requires invocationScript and verificationScript fields"
       );
@@ -127,15 +124,6 @@ export class Witness {
     }
   }
 
-  public set scriptHash(value) {
-    if (this.verificationScript) {
-      throw new Error(
-        "Unable to set scriptHash when verificationScript is not empty"
-      );
-    }
-    this._scriptHash = value;
-  }
-
   public serialize(): string {
     const invoLength = num2VarInt(this.invocationScript.length / 2);
     const veriLength = num2VarInt(this.verificationScript.length / 2);
@@ -151,7 +139,7 @@ export class Witness {
     };
   }
 
-  public equals(other: WitnessLike): boolean {
+  public equals(other: Partial<WitnessLike>): boolean {
     return (
       this.invocationScript === other.invocationScript &&
       this.verificationScript === other.verificationScript

@@ -18,6 +18,10 @@ module.exports = {
       }
     ],
     "@typescript-eslint/no-non-null-assertion": ["warn"],
-    "@typescript-eslint/camelcase": 1
+    "@typescript-eslint/camelcase": 1,
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { varsIgnorePattern: "^_", argsIgnorePattern: "^_" }
+    ]
   }
 };

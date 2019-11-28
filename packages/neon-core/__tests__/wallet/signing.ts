@@ -1,29 +1,6 @@
 import { str2hexstring } from "../../src/u";
 import { sign, verify } from "../../src/wallet/signing";
 
-const dataSet = [
-  [
-    "City of Zion",
-    "a7b9775c6b9136bf89f63def7eab0c5f2d3d0c9e85492717f54386420cce5aa1",
-    "02963fc761eb7135c4593bfc6a0af96d8588b70d8f6ef3af8549181e57772181f5"
-  ],
-  [
-    "Morpheus",
-    "L2qkBc4ogTZERR4Watg4QoQq37w8fxrVZkYrPk7ZZSoRUZsr9yML",
-    "04c1a9b2d0580902a6c2d09a8febd0a7a13518a9a61d08183f09ff929b66ac7c26a4ddc2ceb4ddc55ae7b2920f79fdbfe5b91e6184d7d487e71030007a56a302f2"
-  ],
-  [
-    "我的密码",
-    "793466a3dfe3935a475d02290e37000a3e835f6740f9733e72e979d6e1166e13",
-    "04c1a9b2d0580902a6c2d09a8febd0a7a13518a9a61d08183f09ff929b66ac7c26a4ddc2ceb4ddc55ae7b2920f79fdbfe5b91e6184d7d487e71030007a56a302f2"
-  ],
-  [
-    "MyL33tP@33w0rd",
-    "L1HKLWratxFhX94XSn98JEULQYKGhRycf4nREe3Cs8EPQStF5u9E",
-    "02c1a9b2d0580902a6c2d09a8febd0a7a13518a9a61d08183f09ff929b66ac7c26"
-  ]
-];
-
 const keyCombinations = [
   [
     "privateKey & EncodedPublicKey",

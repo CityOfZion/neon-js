@@ -32,6 +32,7 @@ import {
 } from "./main";
 import { CosignerLike, Cosigner } from "../components/Cosigner";
 import { serializeArrayOf } from "../lib";
+import { NeonObject } from "../../model";
 const log = logger("tx");
 
 export interface TransactionLike {
@@ -47,7 +48,7 @@ export interface TransactionLike {
   script: string;
 }
 
-export class Transaction {
+export class Transaction implements NeonObject<TransactionLike> {
   /**
    * Only version=0 is valid for NEO3
    */
@@ -114,10 +115,10 @@ export class Transaction {
       scripts,
       script
     } = tx;
-    this.version = version || TX_VERSION;
-    this.nonce = nonce || parseInt(ab2hexstring(generateRandomArray(4)), 16);
+    this.version = version ?? TX_VERSION;
+    this.nonce = nonce ?? parseInt(ab2hexstring(generateRandomArray(4)), 16);
     this.sender = formatSender(sender);
-    this.validUntilBlock = validUntilBlock || 0;
+    this.validUntilBlock = validUntilBlock ?? 0;
     this.attributes = Array.isArray(attributes)
       ? attributes.map(a => new TransactionAttribute(a))
       : [];
@@ -191,7 +192,7 @@ export class Transaction {
     return this;
   }
 
-  public addAttribute(attr: TransactionAttributeLike) {
+  public addAttribute(attr: TransactionAttributeLike): this {
     this.attributes.push(new TransactionAttribute(attr));
     return this;
   }

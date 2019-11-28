@@ -1,11 +1,11 @@
 import { ScriptBuilder, InteropServiceCode, OpCode } from "../sc";
-import { reverseHex, StringStream, num2hexstring } from "../u";
+import { reverseHex, StringStream } from "../u";
 import { isPublicKey } from "./verify";
 
 export function constructMultiSigVerificationScript(
   signingThreshold: number,
   keys: string[]
-) {
+): string {
   if (signingThreshold > keys.length) {
     throw new Error(
       "signingThreshold must be smaller than or equal to number of keys"
@@ -31,7 +31,7 @@ export function constructMultiSigVerificationScript(
  */
 export function getPublicKeysFromVerificationScript(
   verificationScript: string
-) {
+): string[] {
   const ss = new StringStream(verificationScript);
   const keys = [] as string[];
   while (!ss.isEmpty()) {

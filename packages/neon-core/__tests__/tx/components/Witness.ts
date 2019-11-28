@@ -3,7 +3,7 @@ import { Account } from "../../../src/wallet";
 
 describe("constructor", () => {
   test("empty", () => {
-    const f = () => new Witness(undefined);
+    const f = (): Witness => new Witness(undefined);
     expect(f).toThrow(
       "Witness requires invocationScript and verificationScript fields"
     );
@@ -12,7 +12,7 @@ describe("constructor", () => {
   test("WitnessLike", () => {
     const testObject = {
       invocationScript: "ab",
-      verificationScript: ""
+      verificationScript: "cd"
     } as WitnessLike;
 
     const result = new Witness(testObject);
@@ -47,17 +47,6 @@ describe("ScriptHash property", () => {
       "dec317f6e4335db8a98418bd16960bf4e7fce4c7"
     );
   });
-
-  it("setter", () => {
-    const expected = "1234";
-    const testObject = new Witness({
-      invocationScript: "",
-      verificationScript: ""
-    });
-    testObject.scriptHash = expected;
-
-    expect(testObject.scriptHash).toEqual(expected);
-  });
 });
 
 describe("export", () => {
@@ -74,13 +63,13 @@ describe("export", () => {
 });
 
 describe("equals", () => {
-  const obj1 = {
+  const obj1: WitnessLike = {
     invocationScript: "ab",
     verificationScript: "cd"
   };
-  const obj2 = {
+  const obj2: WitnessLike = {
     invocationScript: "fg",
-    verificationScript: ""
+    verificationScript: "hi"
   };
   const witness1 = new Witness(obj1);
   const witness2 = new Witness(obj2);
@@ -90,9 +79,12 @@ describe("equals", () => {
     ["Witness1 !== Witness2", witness1, witness2, false],
     ["Witness1 === Obj1", witness1, obj1, true],
     ["Witness1 !== Obj2", witness1, obj2, false]
-  ])("%s", (msg: string, a: Witness, b: any, cond: boolean) => {
-    expect(a.equals(b)).toBe(cond);
-  });
+  ])(
+    "%s",
+    (_msg: string, a: Witness, b: Partial<WitnessLike>, cond: boolean) => {
+      expect(a.equals(b)).toBe(cond);
+    }
+  );
 });
 
 const dataSet = [
@@ -208,8 +200,8 @@ describe("buildMultiSig", () => {
     (
       _: string,
       tx: string,
-      sigs: any,
-      vScript: any,
+      sigs: (Witness | string)[],
+      vScript: string | Account,
       expectedInvocationScript: string
     ) => {
       const result = Witness.buildMultiSig(tx, sigs, vScript);
@@ -221,14 +213,14 @@ describe("buildMultiSig", () => {
 
   test("throws if invalid signature given", () => {
     const wrongSigs = [signatures[0].replace("1", "0"), signatures[1]];
-    const throwingFunc = () =>
+    const throwingFunc = (): Witness =>
       Witness.buildMultiSig(msg, wrongSigs, verificationScript);
     expect(throwingFunc).toThrowError("Invalid signature given");
   });
 
   test("throws if insufficient signatures", () => {
     const oneSig = [signatures[1]];
-    const throwingFunc = () =>
+    const throwingFunc = (): Witness =>
       Witness.buildMultiSig(msg, oneSig, verificationScript);
     expect(throwingFunc).toThrowError("Insufficient signatures");
   });

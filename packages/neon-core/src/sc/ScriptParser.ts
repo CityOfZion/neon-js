@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { reverseHex, StringStream, hexstring2str } from "../u";
 import { ScriptIntent } from "./ScriptBuilder";
 import InteropServiceCode from "./InteropServiceCode";
 
-function checkArgs(args?: any[]): void {
+/**
+ * Checks that args is [string, string, array]
+ */
+function isSystemContractCallFormat(args?: any[]): void {
   if (
     !args ||
     args.length !== 3 ||
@@ -10,7 +14,7 @@ function checkArgs(args?: any[]): void {
     typeof args[1] !== "string" ||
     typeof args[0] !== "string"
   ) {
-    throw new Error(`Script Intent Not In the right format: ${args}`);
+    throw new Error(`ScriptIntent not in the right format: ${args}`);
   }
 }
 
@@ -26,10 +30,10 @@ export class ScriptParser extends StringStream {
    * @returns A single ScriptIntent if available.
    */
   private retrieveAppCall(): ScriptIntent | null {
-    const output: ScriptIntent = {
+    const output = {
       scriptHash: "",
       operation: "",
-      args: []
+      args: [] as any[]
     };
 
     while (!this.isEmpty()) {
@@ -38,40 +42,40 @@ export class ScriptParser extends StringStream {
       switch (true) {
         /* PUSH0 or PUSHF */
         case n === 0:
-          output.args!.unshift(0);
+          output.args.unshift(0);
           break;
         /* PUSHBYTES1 or PUSHBYTES75 */
         case n <= 75:
-          output.args!.unshift(this.read(n));
+          output.args.unshift(this.read(n));
           break;
         /* PUSHDATA1 */
         case n === 76:
-          output.args!.unshift(this.read(parseInt(this.read(1), 16)));
+          output.args.unshift(this.read(parseInt(this.read(1), 16)));
           break;
         /* PUSHDATA2 */
         case n === 77:
-          output.args!.unshift(this.read(parseInt(this.read(2), 16)));
+          output.args.unshift(this.read(parseInt(this.read(2), 16)));
           break;
         /* PUSHDATA4 */
         case n === 78:
-          output.args!.unshift(this.read(parseInt(this.read(4), 16)));
+          output.args.unshift(this.read(parseInt(this.read(4), 16)));
           break;
         /* PUSHM1 */
         case n === 79:
-          output.args!.unshift(-1);
+          output.args.unshift(-1);
           break;
         /* PUSH1 ~ PUSH16 */
         case n >= 81 && n <= 96:
-          output.args!.unshift(n - 80);
+          output.args.unshift(n - 80);
           break;
         /* PACK */
         case n === 193:
-          const len = output.args!.shift();
+          const len = output.args.shift();
           const cache = [];
           for (let i = 0; i < len; i++) {
-            cache.push(output.args!.shift());
+            cache.push(output.args.shift());
           }
-          output.args!.unshift(cache);
+          output.args.unshift(cache);
           break;
         /* RET */
         case n === 102:
@@ -85,10 +89,10 @@ export class ScriptParser extends StringStream {
               `Encounter unknown interop serivce: ${interopServiceCode}`
             );
           }
-          checkArgs(output.args);
-          output.scriptHash = reverseHex(output.args!.shift());
-          output.operation = hexstring2str(output.args!.shift());
-          output.args = output.args!.shift();
+          isSystemContractCallFormat(output.args);
+          output.scriptHash = reverseHex(output.args.shift());
+          output.operation = hexstring2str(output.args.shift());
+          output.args = output.args.shift();
           return output;
         /* THROWIFNOT, neo-cli will add this op to end of script */
         case n === 241:
