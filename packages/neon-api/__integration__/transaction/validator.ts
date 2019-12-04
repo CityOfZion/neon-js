@@ -159,8 +159,10 @@ describe("validateSystemFee", () => {
       expect(result).toStrictEqual({
         valid: false,
         suggestions: {
-          script: {
+          systemFee: {
             fixed: false,
+            prev: new u.Fixed8(10),
+            suggestion: new u.Fixed8(1),
             message: "Encountered FAULT when validating script."
           }
         }

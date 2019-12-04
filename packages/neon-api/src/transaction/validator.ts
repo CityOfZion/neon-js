@@ -117,7 +117,6 @@ export class TransactionValidator {
   }
 
   /**
-   * // TODO: validate script oneline by invokeScript
    * Validate intents
    */
   public async validateScript(): Promise<ValidationResult> {
@@ -164,37 +163,11 @@ export class TransactionValidator {
     }
   }
 
-  /**
-   * validate systemFee
-   * @param autoFix will automatically fix transaction if specified as true
-   */
-  public async validateSystemFee(autoFix = false): Promise<ValidationResult> {
-    const validateIntentsResult = await this.validateScript();
-    if (!validateIntentsResult.valid) {
-      return validateIntentsResult;
-    }
-
-    const { script, systemFee } = this.transaction;
-    const {
-      state,
-      gas_consumed: gasConsumed
-    } = await this.rpcClient.invokeScript(script);
-
-    if (state === "FAULT") {
-      return {
-        valid: false,
-        suggestions: {
-          systemFee: {
-            fixed: false,
-            message: "Encountered FAULT when validating script."
-          }
-        }
-      };
-    }
-
-    const minimumSystemFee = new u.Fixed8(parseFloat(gasConsumed))
-      .mul(1e-8)
-      .ceil();
+  private _validateSystemFee(
+    minimumSystemFee: u.Fixed8,
+    autoFix = false
+  ): ValidationResult {
+    const { systemFee } = this.transaction;
     if (autoFix && !minimumSystemFee.equals(systemFee)) {
       this.transaction.systemFee = minimumSystemFee;
       return {
@@ -236,6 +209,40 @@ export class TransactionValidator {
     return {
       valid: true
     };
+  }
+
+  /**
+   * validate systemFee
+   * @param autoFix will automatically fix transaction if specified as true
+   */
+  public async validateSystemFee(autoFix = false): Promise<ValidationResult> {
+    const { script } = this.transaction;
+    const {
+      state,
+      gas_consumed: gasConsumed
+    } = await this.rpcClient.invokeScript(script);
+
+    const minimumSystemFee = new u.Fixed8(parseFloat(gasConsumed))
+      .mul(1e-8)
+      .ceil();
+    const result = this._validateSystemFee(minimumSystemFee, autoFix);
+
+    if (state === "FAULT") {
+      return {
+        valid: false,
+        suggestions: {
+          systemFee: {
+            ...{
+              fixed: false,
+              message: "Encountered FAULT when validating script."
+            },
+            ...result.suggestions?.systemFee
+          }
+        }
+      };
+    } else {
+      return result;
+    }
   }
 
   /**
