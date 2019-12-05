@@ -5,6 +5,7 @@ import { timeout } from "../settings";
 import { Transaction, TransactionLike, WitnessLike } from "../tx";
 import { RPCVMResponse } from "./parse";
 import Query from "./Query";
+import { ContractManifest } from "../sc";
 
 const log = logger("rpc");
 
@@ -114,6 +115,7 @@ export class RPCClient {
   /**
    * Takes an Query object and executes it. Adds the Query object to history.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public execute(query: Query, config?: AxiosRequestConfig): Promise<any> {
     this.history.push(query);
     log.info(`RPC: ${this.net} executing Query[${query.req.method}]`);
@@ -123,6 +125,7 @@ export class RPCClient {
   /**
    * Creates a query with the given req and immediately executes it.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public query(req: object, config?: AxiosRequestConfig): Promise<any> {
     const query = new Query(req);
     return this.execute(query, config);
@@ -220,10 +223,14 @@ export class RPCClient {
   /**
    * Gets the state of the contract at the given scriptHash.
    */
-  // TODO: parse result to manifest when contract manifest is merged
-  public async getContractState(scriptHash: string): Promise<object> {
+  public async getContractState(
+    scriptHash: string
+  ): Promise<ContractManifest | null> {
     const response = await this.execute(Query.getContractState(scriptHash));
-    return response.result;
+    if (response.error) {
+      return null;
+    }
+    return new ContractManifest(response.result.manifest);
   }
 
   /**
@@ -331,7 +338,7 @@ export class RPCClient {
   public async invokeFunction(
     scriptHash: string,
     operation: string,
-    ...params: any[]
+    ...params: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
   ): Promise<RPCVMResponse> {
     const response = await this.execute(
       Query.invokeFunction(scriptHash, operation, ...params)
