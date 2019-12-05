@@ -26,7 +26,7 @@ export interface ValidationResult {
    * Whether the transaction is valid after validation
    */
   valid: boolean;
-  suggestions?: {
+  result?: {
     validUntilBlock?: ValidationSuggestion<number>;
     script?: ValidationSuggestion<string>;
     systemFee?: ValidationSuggestion<u.Fixed8>;
@@ -71,7 +71,7 @@ export class TransactionValidator {
         this.transaction.validUntilBlock = suggestion;
         return {
           valid: true,
-          suggestions: {
+          result: {
             validUntilBlock: {
               fixed: true,
               prev: validUntilBlock,
@@ -82,7 +82,7 @@ export class TransactionValidator {
       }
       return {
         valid: false,
-        suggestions: {
+        result: {
           validUntilBlock: {
             fixed: false,
             prev: validUntilBlock,
@@ -126,7 +126,7 @@ export class TransactionValidator {
     if (state === "FAULT") {
       return {
         valid: false,
-        suggestions: {
+        result: {
           script: {
             fixed: false,
             message: "Encountered FAULT when validating script."
@@ -149,7 +149,7 @@ export class TransactionValidator {
     if (intentsRes.length > 0) {
       return {
         valid: false,
-        suggestions: {
+        result: {
           script: {
             fixed: false,
             message: intentsRes.join(";")
@@ -172,7 +172,7 @@ export class TransactionValidator {
       this.transaction.systemFee = minimumSystemFee;
       return {
         valid: true,
-        suggestions: {
+        result: {
           systemFee: {
             fixed: true,
             prev: systemFee,
@@ -186,7 +186,7 @@ export class TransactionValidator {
     ) {
       return {
         valid: false,
-        suggestions: {
+        result: {
           systemFee: {
             fixed: false,
             prev: systemFee,
@@ -197,7 +197,7 @@ export class TransactionValidator {
     } else if (minimumSystemFee.isLessThan(systemFee)) {
       return {
         valid: true,
-        suggestions: {
+        result: {
           systemFee: {
             fixed: false,
             prev: systemFee,
@@ -225,23 +225,24 @@ export class TransactionValidator {
     const minimumSystemFee = new u.Fixed8(parseFloat(gasConsumed))
       .mul(1e-8)
       .ceil();
-    const result = this._validateSystemFee(minimumSystemFee, autoFix);
+    const validation = this._validateSystemFee(minimumSystemFee, autoFix);
 
     if (state === "FAULT") {
       return {
         valid: false,
-        suggestions: {
+        result: {
           systemFee: {
             ...{
               fixed: false,
-              message: "Encountered FAULT when validating script."
+              message:
+                "Cannot get precise systemFee as script execution on node reports FAULT."
             },
-            ...result.suggestions?.systemFee
+            ...validation.result?.systemFee
           }
         }
       };
     } else {
-      return result;
+      return validation;
     }
   }
 
@@ -256,7 +257,7 @@ export class TransactionValidator {
       this.transaction.networkFee = minimumNetworkFee;
       return {
         valid: true,
-        suggestions: {
+        result: {
           networkFee: {
             fixed: true,
             prev: networkFee,
@@ -267,7 +268,7 @@ export class TransactionValidator {
     } else if (minimumNetworkFee.isGreaterThan(networkFee)) {
       return {
         valid: false,
-        suggestions: {
+        result: {
           networkFee: {
             fixed: false,
             prev: networkFee,
@@ -278,7 +279,7 @@ export class TransactionValidator {
     } else if (minimumNetworkFee.isLessThan(networkFee)) {
       return {
         valid: true,
-        suggestions: {
+        result: {
           networkFee: {
             fixed: false,
             prev: networkFee,
@@ -333,9 +334,9 @@ export class TransactionValidator {
       res.reduce((prev, cur) => {
         return {
           valid: prev.valid && cur.valid,
-          suggestions: {
-            ...prev.suggestions,
-            ...cur.suggestions
+          result: {
+            ...prev.result,
+            ...cur.result
           }
         };
       })

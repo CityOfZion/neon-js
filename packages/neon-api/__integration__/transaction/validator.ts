@@ -30,8 +30,8 @@ describe("validateValidUntilBlock", () => {
         1
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validateValidUntilBlock();
-    expect(result.valid).toBeTruthy();
+    const validation = await validator.validateValidUntilBlock();
+    expect(validation.valid).toBeTruthy();
   });
 
   test("invalid", async () => {
@@ -39,8 +39,8 @@ describe("validateValidUntilBlock", () => {
       validUntilBlock: 1
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validateValidUntilBlock();
-    expect(result.valid).toBeFalsy();
+    const validation = await validator.validateValidUntilBlock();
+    expect(validation.valid).toBeFalsy();
   });
 
   test("autoFix", async () => {
@@ -48,13 +48,13 @@ describe("validateValidUntilBlock", () => {
       validUntilBlock: 1
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validateValidUntilBlock(true);
+    const validation = await validator.validateValidUntilBlock(true);
     const {
       valid,
-      suggestions: {
+      result: {
         validUntilBlock: { fixed, prev, suggestion }
       }
-    } = result;
+    } = validation;
     expect(valid).toBeTruthy();
     expect(fixed).toBeTruthy();
     expect(prev).toBe(1);
@@ -74,8 +74,8 @@ describe("validateScript", () => {
       script
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validateScript();
-    expect(result.valid).toBeTruthy();
+    const validation = await validator.validateScript();
+    expect(validation.valid).toBeTruthy();
   });
 
   test("invalid", async () => {
@@ -88,9 +88,9 @@ describe("validateScript", () => {
       script
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validateScript();
-    expect(result.valid).toBeFalsy();
-    expect(result.suggestions.script.message).toBeDefined();
+    const validation = await validator.validateScript();
+    expect(validation.valid).toBeFalsy();
+    expect(validation.result.script.message).toBeDefined();
   });
 });
 
@@ -106,8 +106,8 @@ describe("validateSystemFee", () => {
       systemFee: 10
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validateSystemFee();
-    expect(result.valid).toBeTruthy();
+    const validation = await validator.validateSystemFee();
+    expect(validation.valid).toBeTruthy();
   });
 
   describe("invalid", () => {
@@ -122,8 +122,17 @@ describe("validateSystemFee", () => {
         systemFee: 0
       }).build();
       const validator = new TransactionValidator(rpcClient, transaction);
-      const result = await validator.validateSystemFee();
-      expect(result.valid).toBeFalsy();
+      const validation = await validator.validateSystemFee();
+      expect(validation).toStrictEqual({
+        valid: false,
+        result: {
+          systemFee: {
+            fixed: false,
+            prev: new u.Fixed8(0),
+            suggestion: new u.Fixed8(1)
+          }
+        }
+      });
     });
 
     test("precision", async () => {
@@ -137,11 +146,20 @@ describe("validateSystemFee", () => {
         systemFee: 10.1
       }).build();
       const validator = new TransactionValidator(rpcClient, transaction);
-      const result = await validator.validateSystemFee();
-      expect(result.valid).toBeFalsy();
+      const validation = await validator.validateSystemFee();
+      expect(validation).toStrictEqual({
+        valid: false,
+        result: {
+          systemFee: {
+            fixed: false,
+            prev: new u.Fixed8(10.1),
+            suggestion: new u.Fixed8(1)
+          }
+        }
+      });
     });
 
-    test.only("script execution error in neoVM", async () => {
+    test("script execution error in neoVM", async () => {
       const addressInHash160 = sc.ContractParam.hash160(
         "AZzpS2oDPRtPwFp6C9ric98KCXGZiic6RV"
       );
@@ -155,15 +173,16 @@ describe("validateSystemFee", () => {
         systemFee: 10
       }).build();
       const validator = new TransactionValidator(rpcClient, transaction);
-      const result = await validator.validateSystemFee();
-      expect(result).toStrictEqual({
+      const validation = await validator.validateSystemFee();
+      expect(validation).toStrictEqual({
         valid: false,
-        suggestions: {
+        result: {
           systemFee: {
             fixed: false,
             prev: new u.Fixed8(10),
             suggestion: new u.Fixed8(1),
-            message: "Encountered FAULT when validating script."
+            message:
+              "Cannot get precise systemFee as script execution on node reports FAULT."
           }
         }
       });
@@ -182,13 +201,13 @@ describe("validateSystemFee", () => {
         systemFee: 0
       }).build();
       const validator = new TransactionValidator(rpcClient, transaction);
-      const result = await validator.validateSystemFee(true);
+      const validation = await validator.validateSystemFee(true);
       const {
         valid,
-        suggestions: {
+        result: {
           systemFee: { fixed, prev, suggestion }
         }
-      } = result;
+      } = validation;
       expect(valid).toBeTruthy();
       expect(fixed).toBeTruthy();
       expect(prev.equals(0)).toBeTruthy();
@@ -207,13 +226,13 @@ describe("validateSystemFee", () => {
         systemFee: 10.1
       }).build();
       const validator = new TransactionValidator(rpcClient, transaction);
-      const result = await validator.validateSystemFee(true);
+      const validation = await validator.validateSystemFee(true);
       const {
         valid,
-        suggestions: {
+        result: {
           systemFee: { fixed, prev, suggestion }
         }
-      } = result;
+      } = validation;
       expect(valid).toBeTruthy();
       expect(fixed).toBeTruthy();
       expect(prev.equals(10.1)).toBeTruthy();
@@ -230,8 +249,8 @@ describe("validateNetworkFee", () => {
       networkFee: 0.0237654
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validateNetworkFee();
-    expect(result.valid).toBeTruthy();
+    const validation = await validator.validateNetworkFee();
+    expect(validation.valid).toBeTruthy();
   });
 
   test("invalid", async () => {
@@ -240,8 +259,8 @@ describe("validateNetworkFee", () => {
       networkFee: 0.01
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validateNetworkFee();
-    expect(result.valid).toBeFalsy();
+    const validation = await validator.validateNetworkFee();
+    expect(validation.valid).toBeFalsy();
   });
 
   test("autoFix", async () => {
@@ -250,13 +269,13 @@ describe("validateNetworkFee", () => {
       networkFee: 0.01
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validateNetworkFee(true);
+    const validation = await validator.validateNetworkFee(true);
     const {
       valid,
-      suggestions: {
+      result: {
         networkFee: { fixed, prev, suggestion }
       }
-    } = result;
+    } = validation;
     expect(valid).toBeTruthy();
     expect(fixed).toBeTruthy();
     expect(prev.equals(0.01)).toBeTruthy();
@@ -283,8 +302,8 @@ describe("validateAll", () => {
       systemFee: 1
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validate(ValidationAttributes.All);
-    expect(result.valid).toBeTruthy();
+    const validation = await validator.validate(ValidationAttributes.All);
+    expect(validation.valid).toBeTruthy();
   });
 
   test("invalid", async () => {
@@ -304,8 +323,8 @@ describe("validateAll", () => {
       systemFee: 1.1
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const result = await validator.validate(ValidationAttributes.All);
-    expect(result.valid).toBeFalsy();
+    const validation = await validator.validate(ValidationAttributes.All);
+    expect(validation.valid).toBeFalsy();
   });
 
   describe("autoFix", () => {
@@ -326,13 +345,13 @@ describe("validateAll", () => {
         systemFee: 1.1
       }).build();
       const validator = new TransactionValidator(rpcClient, transaction);
-      const result = await validator.validate(
+      const validation = await validator.validate(
         ValidationAttributes.All,
         ValidationAttributes.All
       );
-      expect(result).toStrictEqual({
+      expect(validation).toStrictEqual({
         valid: true,
-        suggestions: {
+        result: {
           systemFee: {
             fixed: true,
             prev: new u.Fixed8(1.1),
@@ -364,13 +383,13 @@ describe("validateAll", () => {
         systemFee: 1.1
       }).build();
       const validator = new TransactionValidator(rpcClient, transaction);
-      const result = await validator.validate(
+      const validation = await validator.validate(
         ValidationAttributes.All,
         ValidationAttributes.SystemFee
       );
-      expect(result).toStrictEqual({
+      expect(validation).toStrictEqual({
         valid: false,
-        suggestions: {
+        result: {
           systemFee: {
             fixed: true,
             prev: new u.Fixed8(1.1),
