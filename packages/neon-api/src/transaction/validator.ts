@@ -222,28 +222,23 @@ export class TransactionValidator {
       gas_consumed: gasConsumed
     } = await this.rpcClient.invokeScript(script);
 
-    const minimumSystemFee = new u.Fixed8(parseFloat(gasConsumed))
-      .mul(1e-8)
-      .ceil();
-    const validation = this._validateSystemFee(minimumSystemFee, autoFix);
-
     if (state === "FAULT") {
       return {
         valid: false,
         result: {
           systemFee: {
-            ...{
-              fixed: false,
-              message:
-                "Cannot get precise systemFee as script execution on node reports FAULT."
-            },
-            ...validation.result?.systemFee
+            fixed: false,
+            message:
+              "Cannot get precise systemFee as script execution on node reports FAULT."
           }
         }
       };
-    } else {
-      return validation;
     }
+
+    const minimumSystemFee = new u.Fixed8(parseFloat(gasConsumed))
+      .mul(1e-8)
+      .ceil();
+    return this._validateSystemFee(minimumSystemFee, autoFix);
   }
 
   /**

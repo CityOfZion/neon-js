@@ -179,8 +179,6 @@ describe("validateSystemFee", () => {
         result: {
           systemFee: {
             fixed: false,
-            prev: new u.Fixed8(10),
-            suggestion: new u.Fixed8(1),
             message:
               "Cannot get precise systemFee as script execution on node reports FAULT."
           }
