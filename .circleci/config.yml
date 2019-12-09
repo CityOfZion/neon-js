@@ -128,6 +128,8 @@ workflows:
           filters:
             branches:
               ignore: gh-pages
+            tags:
+              ignore: /.*/
       - lint:
           requires:
             - setup
@@ -138,6 +140,15 @@ workflows:
           requires:
             - lint
             - unit-test
+  publish:
+    jobs:
+      - setup:
+          filters:
+            branches:
+              ignore: gh-pages
+              only: [master, next]
+            tags:
+              only: /^v.*/
       - publish-latest:
           requires:
             - integration-test
