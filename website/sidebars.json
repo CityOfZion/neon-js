@@ -33,7 +33,7 @@
   },
   "changelog": {
     "Latest": ["changelog/latest"],
-    "Past Versions": ["changelog/v3", "changelog/v2", "changelog/v1"]
+    "Past Versions": ["changelog/v4", "changelog/v3", "changelog/v2", "changelog/v1"]
   },
   "examples": {
     "Overview": ["examples/index"],
