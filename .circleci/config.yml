@@ -128,6 +128,7 @@ workflows:
           filters:
             branches:
               ignore: gh-pages
+              only: /pull\/.*/
             tags:
               ignore: /.*/
       - lint:
@@ -145,8 +146,7 @@ workflows:
       - setup:
           filters:
             branches:
-              ignore: gh-pages
-              only: [master, next]
+              ignore: /.*/
             tags:
               only: /^v.*/
       - publish-latest:
