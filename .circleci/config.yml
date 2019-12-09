@@ -151,7 +151,7 @@ workflows:
               only: /^v.*/
       - publish-latest:
           requires:
-            - integration-test
+            - setup
           filters:
             branches:
               only: master
@@ -159,7 +159,7 @@ workflows:
               only: /v[0-9]+\.[0-9]+\.[0-9]+$/
       - publish-next:
           requires:
-            - integration-test
+            - setup
           filters:
             branches:
               only: next
