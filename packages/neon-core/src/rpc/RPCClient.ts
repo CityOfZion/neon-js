@@ -1,57 +1,30 @@
-import { AxiosRequestConfig } from "axios";
+import Axios, { AxiosRequestConfig } from "axios";
 import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from "../consts";
 import logger from "../logging";
 import { timeout } from "../settings";
-import { Transaction, TransactionLike, WitnessLike } from "../tx";
-import { RPCVMResponse } from "./parse";
-import Query from "./Query";
+import { Transaction } from "../tx";
+import {
+  Query,
+  CliPlugin,
+  GetPeersResult,
+  GetRawMemPoolResult,
+  GetRawTransactionResult,
+  InvokeResult,
+  RPCResponse
+} from "./Query";
 import { ContractManifest } from "../sc";
+import { BlockLike, BlockHeaderLike, Validator } from "../types";
 
 const log = logger("rpc");
-
-export interface Validator {
-  publickey: string;
-  votes: string;
-  active: boolean;
-}
-
-export interface BlockHeaderLike {
-  hash: string;
-  size: number;
-  version: number;
-  previousblockhash: string;
-  merkleroot: string;
-  time: number;
-  index: number;
-  nextconsensus: string;
-  witnesses: WitnessLike[];
-  confirmations: number;
-  nextblockhash: string;
-}
-
-export interface BlockLike extends BlockHeaderLike {
-  consensus_data: {
-    nonce: string;
-    primary: number;
-  };
-  tx: TransactionLike[];
-}
-
-export interface CliPlugin {
-  name: string;
-  version: string;
-  interfaces: string[];
-}
 
 /**
  * RPC Client model to query a NEO node. Contains built-in methods to query using RPC calls.
  */
 export class RPCClient {
   public net: string;
-  public history: Query[];
+  public history: Query<unknown[], unknown>[];
   public lastSeenHeight: number;
   public version: string;
-  // tslint:disable-next-line:variable-name
   private _latencies: number[];
 
   /**
@@ -102,7 +75,7 @@ export class RPCClient {
     const query = Query.getBlockCount();
     try {
       const response = await this.execute(query, { timeout: timeout.ping });
-      this.lastSeenHeight = response.result;
+      this.lastSeenHeight = response;
       const newPing = Date.now() - timeStart;
       this.latency = newPing;
       return newPing;
@@ -113,13 +86,29 @@ export class RPCClient {
   }
 
   /**
-   * Takes an Query object and executes it. Adds the Query object to history.
+   * Takes an Query object and executes it. Throws if error is encountered.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public execute(query: Query, config?: AxiosRequestConfig): Promise<any> {
-    this.history.push(query);
-    log.info(`RPC: ${this.net} executing Query[${query.req.method}]`);
-    return query.execute(this.net, config);
+  public async execute<TResponse>(
+    query: Query<unknown[], TResponse>,
+    config?: AxiosRequestConfig
+  ): Promise<TResponse> {
+    log.info(`RPC: ${this.net} executing Query[${query.method}]`);
+    const conf = Object.assign(
+      {
+        headers: {
+          "Content-Type": "application/json",
+          timeout: timeout.rpc
+        }
+      },
+      config
+    );
+
+    const response = await Axios.post(this.net, query.export(), conf);
+    const rpcResponse = response.data as RPCResponse<TResponse>;
+    if (rpcResponse.error) {
+      throw new Error(rpcResponse.error.message);
+    }
+    return rpcResponse.result;
   }
 
   /**
@@ -129,6 +118,14 @@ export class RPCClient {
   public query(req: object, config?: AxiosRequestConfig): Promise<any> {
     const query = new Query(req);
     return this.execute(query, config);
+  }
+
+  /**
+   * Get the latest block hash.
+   */
+  public async getBestBlockHash(): Promise<string> {
+    const response = await this.execute(Query.getBestBlockHash());
+    return response;
   }
 
   /**
@@ -149,8 +146,9 @@ export class RPCClient {
     indexOrHash: number | string,
     verbose?: 0 | 1
   ): Promise<string | BlockLike> {
-    const response = await this.execute(Query.getBlock(indexOrHash, verbose));
-    return response.result;
+    return verbose
+      ? await this.execute(Query.getBlock(indexOrHash, 1))
+      : await this.execute(Query.getBlock(indexOrHash, 0));
   }
 
   /**
@@ -158,15 +156,7 @@ export class RPCClient {
    */
   public async getBlockHash(index: number): Promise<string> {
     const response = await this.execute(Query.getBlockHash(index));
-    return response.result;
-  }
-
-  /**
-   * Get the latest block hash.
-   */
-  public async getBestBlockHash(): Promise<string> {
-    const response = await this.execute(Query.getBestBlockHash());
-    return response.result;
+    return response;
   }
 
   /**
@@ -174,7 +164,7 @@ export class RPCClient {
    */
   public async getBlockCount(): Promise<number> {
     const response = await this.execute(Query.getBlockCount());
-    return response.result;
+    return response;
   }
 
   /**
@@ -198,17 +188,17 @@ export class RPCClient {
     const response = await this.execute(
       Query.getBlockHeader(indexOrHash, verbose)
     );
-    return response.result;
+    return response;
   }
 
   /**
    * Get the system fees of a block.
-   * @param {number} index
-   * @return {Promise<string>} - System fees as a string.
+   * @param index Block height.
+   * @return System fees as a string.
    */
   public async getBlockSysFee(index: number): Promise<string> {
     const response = await this.execute(Query.getBlockSysFee(index));
-    return response.result;
+    return response;
   }
 
   /**
@@ -217,28 +207,23 @@ export class RPCClient {
    */
   public async getConnectionCount(): Promise<number> {
     const response = await this.execute(Query.getConnectionCount());
-    return response.result;
+    return response;
   }
 
   /**
    * Gets the state of the contract at the given scriptHash.
    */
-  public async getContractState(
-    scriptHash: string
-  ): Promise<ContractManifest | null> {
+  public async getContractState(scriptHash: string): Promise<ContractManifest> {
     const response = await this.execute(Query.getContractState(scriptHash));
-    if (response.error) {
-      return null;
-    }
-    return new ContractManifest(response.result.manifest);
+    return new ContractManifest(response.manifest);
   }
 
   /**
    * Gets a list of all peers that this node has discovered.
    */
-  public async getPeers(): Promise<object> {
+  public async getPeers(): Promise<GetPeersResult> {
     const response = await this.execute(Query.getPeers());
-    return response.result;
+    return response;
   }
 
   /**
@@ -247,13 +232,16 @@ export class RPCClient {
    * shouldGetUnverified = 0, get confirmed transaction hashes
    * shouldGetUnverified = 1, get current block height and confirmed and unconfirmed tx hash
    */
+  public async getRawMemPool(shouldGetUnverified?: 0): Promise<string[]>;
+  public async getRawMemPool(
+    shouldGetUnverified: 1
+  ): Promise<GetRawMemPoolResult>;
   public async getRawMemPool(
     shouldGetUnverified: 0 | 1 = 0
-  ): Promise<string[]> {
-    const response = await this.execute(
-      Query.getRawMemPool(shouldGetUnverified)
-    );
-    return response.result;
+  ): Promise<string[] | GetRawMemPoolResult> {
+    return shouldGetUnverified
+      ? await this.execute(Query.getRawMemPool(1))
+      : await this.execute(Query.getRawMemPool(0));
   }
 
   /**
@@ -266,13 +254,14 @@ export class RPCClient {
   public async getRawTransaction(
     txid: string,
     verbose: 1
-  ): Promise<TransactionLike>;
+  ): Promise<GetRawTransactionResult>;
   public async getRawTransaction(
     txid: string,
     verbose?: 0 | 1
-  ): Promise<string | TransactionLike> {
-    const response = await this.execute(Query.getRawTransaction(txid, verbose));
-    return response.result;
+  ): Promise<string | GetRawTransactionResult> {
+    return verbose
+      ? await this.execute(Query.getRawTransaction(txid, 1))
+      : await this.execute(Query.getRawTransaction(txid, 0));
   }
 
   /**
@@ -280,7 +269,7 @@ export class RPCClient {
    */
   public async getStorage(scriptHash: string, key: string): Promise<string> {
     const response = await this.execute(Query.getStorage(scriptHash, key));
-    return response.result;
+    return response;
   }
 
   /**
@@ -289,7 +278,7 @@ export class RPCClient {
    */
   public async getTransactionHeight(txid: string): Promise<number> {
     const response = await this.execute(Query.getTransactionHeight(txid));
-    return response.result;
+    return response;
   }
 
   /**
@@ -297,7 +286,7 @@ export class RPCClient {
    */
   public async getValidators(): Promise<Validator[]> {
     const response = await this.execute(Query.getValidators());
-    return response.result;
+    return response;
   }
   /**
    * Gets the version of the NEO node. This method will never be blocked by version. This method will also update the current Client's version to the one received.
@@ -305,8 +294,8 @@ export class RPCClient {
   public async getVersion(): Promise<string> {
     try {
       const response = await this.execute(Query.getVersion());
-      if (response && response.result && response.result.useragent) {
-        const useragent = response.result.useragent;
+      if (response?.useragent) {
+        const useragent = response.useragent;
         const responseLength = useragent.length;
         const strippedResponse = useragent.substring(1, responseLength - 1);
         this.version = strippedResponse.split(":")[1];
@@ -329,7 +318,7 @@ export class RPCClient {
    */
   public async listPlugins(): Promise<CliPlugin[]> {
     const response = await this.execute(Query.listPlugins());
-    return response.result;
+    return response;
   }
 
   /**
@@ -338,20 +327,25 @@ export class RPCClient {
   public async invokeFunction(
     scriptHash: string,
     operation: string,
-    ...params: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
-  ): Promise<RPCVMResponse> {
-    const response = await this.execute(
-      Query.invokeFunction(scriptHash, operation, ...params)
+    ...params: unknown[]
+  ): Promise<InvokeResult> {
+    if (params.length === 1 && Array.isArray(params)) {
+      return await this.execute(
+        Query.invokeFunction(scriptHash, operation, params[0])
+      );
+    }
+
+    return await this.execute(
+      Query.invokeFunction(scriptHash, operation, params)
     );
-    return response.result;
   }
 
   /**
    * Submits a script for the node to run. This method is a local invoke, results are not reflected on the blockchain.
    */
-  public async invokeScript(script: string): Promise<RPCVMResponse> {
+  public async invokeScript(script: string): Promise<InvokeResult> {
     const response = await this.execute(Query.invokeScript(script));
-    return response.result;
+    return response;
   }
 
   /**
@@ -362,7 +356,7 @@ export class RPCClient {
     transaction: Transaction | string
   ): Promise<string> {
     const response = await this.execute(Query.sendRawTransaction(transaction));
-    return response.result.hash;
+    return response.hash;
   }
 
   /**
@@ -371,7 +365,7 @@ export class RPCClient {
    */
   public async submitBlock(block: string): Promise<string> {
     const response = await this.execute(Query.submitBlock(block));
-    return response.result.hash;
+    return response.hash;
   }
 
   /**
@@ -379,7 +373,7 @@ export class RPCClient {
    */
   public async validateAddress(addr: string): Promise<boolean> {
     const response = await this.execute(Query.validateAddress(addr));
-    return response.result.isvalid;
+    return response.isvalid;
   }
 }
 

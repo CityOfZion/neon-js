@@ -166,5 +166,5 @@ describe("decryptAll", () => {
     const wallet = new Wallet(WALLET_JSON);
 
     await expect(wallet.decryptAll("passw0rd_failure")).rejects.toThrow();
-  });
+  }, 20000);
 });

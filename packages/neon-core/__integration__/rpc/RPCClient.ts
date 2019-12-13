@@ -21,8 +21,8 @@ const contractHash = "a1760976db5fcdfab2a9930e8f6ce875b2d18225";
 beforeAll(async () => {
   for (let i = 0; i < TESTNET_URLS.length; i++) {
     try {
-      await rpc.Query.getBlockCount().execute(TESTNET_URLS[i]);
       client = new rpc.RPCClient(TESTNET_URLS[i]);
+      await client.getBlockCount();
       break;
     } catch (e) {
       if (i === TESTNET_URLS.length - 1) {
@@ -229,7 +229,7 @@ describe("RPC Methods", () => {
 
   test("getVersion", async () => {
     const result = await client.getVersion();
-    expect(result).toMatch(/\d+\.\d+\.\d+/);
+    expect(result).toMatch(/\d+\.\d+\.\d+-?.*/);
   });
 
   test("listPlugins", async () => {
