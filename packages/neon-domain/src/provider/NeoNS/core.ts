@@ -39,7 +39,7 @@ export async function resolveDomain(
 
   const sb = new sc.ScriptBuilder();
   const script = sb.emitAppCall(contract, operation, args).str;
-  const res = await rpc.Query.invokeScript(script).execute(url);
+  const res = await rpc.sendQuery(url, rpc.Query.invokeScript(script));
 
   return rpc.StringParser(res.result.stack[0]);
 }

@@ -17,6 +17,25 @@ import { BlockLike, BlockHeaderLike, Validator } from "../types";
 
 const log = logger("rpc");
 
+export async function sendQuery<TResponse>(
+  url: string,
+  query: Query<unknown[], TResponse>,
+  config: AxiosRequestConfig = {}
+): Promise<RPCResponse<TResponse>> {
+  log.info(`RPC: ${url} executing Query[${query.method}]`);
+  const conf = Object.assign(
+    {
+      headers: {
+        "Content-Type": "application/json",
+        timeout: timeout.rpc
+      }
+    },
+    config
+  );
+
+  const response = await Axios.post(url, query.export(), conf);
+  return response.data as RPCResponse<TResponse>;
+}
 /**
  * RPC Client model to query a NEO node. Contains built-in methods to query using RPC calls.
  */
@@ -92,19 +111,7 @@ export class RPCClient {
     query: Query<unknown[], TResponse>,
     config?: AxiosRequestConfig
   ): Promise<TResponse> {
-    log.info(`RPC: ${this.net} executing Query[${query.method}]`);
-    const conf = Object.assign(
-      {
-        headers: {
-          "Content-Type": "application/json",
-          timeout: timeout.rpc
-        }
-      },
-      config
-    );
-
-    const response = await Axios.post(this.net, query.export(), conf);
-    const rpcResponse = response.data as RPCResponse<TResponse>;
+    const rpcResponse = await sendQuery(this.net, query, config ?? {});
     if (rpcResponse.error) {
       throw new Error(rpcResponse.error.message);
     }
