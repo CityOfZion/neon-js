@@ -41,7 +41,10 @@ export async function getTokenBalance(
   abi.balanceOf(scriptHash, address)(sb);
   const script = sb.str;
   try {
-    const res = await rpc.Query.invokeScript(script).execute(url);
+    const res = await rpc.sendQuery(url, rpc.Query.invokeScript(script));
+    if (res.error) {
+      throw new Error(res.error.message);
+    }
     const decimals = rpc.IntegerParser(res.result.stack[0]);
     return rpc
       .Fixed8Parser(res.result.stack[1])
@@ -71,7 +74,7 @@ export async function getTokenBalances(
       .emitAppCall(scriptHash, "balanceOf", [addrScriptHash]);
   });
 
-  const res = await rpc.Query.invokeScript(sb.str).execute(url);
+  const res = await rpc.sendQuery(url, rpc.Query.invokeScript(sb.str));
   const tokenList = {} as { [symbol: string]: u.Fixed8 };
   if (
     !res ||
@@ -123,17 +126,18 @@ export async function getToken(
   }
   const script = sb.str;
   try {
-    const res = await rpc.Query.invokeScript(script)
-      .parseWith(parser)
-      .execute(url);
+    const res = await rpc.sendQuery(url, rpc.Query.invokeScript(script));
+    const parsedResult = parser(res.result);
     const result: TokenInfo = {
-      name: res[0],
-      symbol: res[1],
-      decimals: res[2],
-      totalSupply: res[3].div(Math.pow(10, 8 - res[2])).toNumber()
+      name: parsedResult[0],
+      symbol: parsedResult[1],
+      decimals: parsedResult[2],
+      totalSupply: parsedResult[3]
+        .div(Math.pow(10, 8 - parsedResult[2]))
+        .toNumber()
     };
     if (address) {
-      result.balance = res[4].div(Math.pow(10, 8 - res[2]));
+      result.balance = parsedResult[4].div(Math.pow(10, 8 - parsedResult[2]));
     }
     return result;
   } catch (err) {
@@ -172,8 +176,7 @@ export async function getTokens(
           .emitAppCall(scriptHash, "totalSupply");
       }
     });
-
-    const res = await rpc.Query.invokeScript(sb.str).execute(url);
+    const res = await rpc.sendQuery(url, rpc.Query.invokeScript(sb.str));
 
     const result: TokenInfo[] = [];
     const step = address ? 5 : 4;

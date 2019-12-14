@@ -1,11 +1,5 @@
-import _axios from "axios";
-import { mocked } from "ts-jest/utils";
 import Query from "../../src/rpc/Query";
 import { Transaction } from "../../src/tx";
-
-jest.mock("axios");
-
-const axios = mocked(_axios, true);
 
 describe("constructor", () => {
   test("RPCRequest", () => {
@@ -13,7 +7,7 @@ describe("constructor", () => {
     const result = new Query({ id: 999, method: "method", params: [1, 2, 3] });
 
     expect(result instanceof Query).toBeTruthy();
-    expect(result.req).toEqual(Object.assign({ jsonrpc: "2.0" }, req));
+    expect(result.export()).toEqual(Object.assign({ jsonrpc: "2.0" }, req));
   });
 });
 
@@ -35,9 +29,12 @@ describe("equals", () => {
     ["Query1 !== Query2", query1, query2, false],
     ["Query1 === Obj1", query1, obj1, true],
     ["Query1 !== Obj2", query1, obj2, false]
-  ])("%s", (msg: string, a: Query, b: any, cond: boolean) => {
-    expect(a.equals(b)).toBe(cond);
-  });
+  ])(
+    "%s",
+    (msg: string, a: Query<unknown[], unknown>, b: unknown, cond: boolean) => {
+      expect(a.equals(b)).toBe(cond);
+    }
+  );
 });
 
 describe("static", () => {
@@ -164,13 +161,7 @@ describe("static", () => {
 
     test("multiple params", () => {
       const params = [jest.fn(), jest.fn(), jest.fn()];
-      const result = Query.invokeFunction(
-        "hash",
-        "method",
-        params[0],
-        params[1],
-        params[2]
-      );
+      const result = Query.invokeFunction("hash", "method", params);
       expect(result.method).toEqual("invokefunction");
       expect(result.params).toEqual(["hash", "method", params]);
     });
@@ -213,49 +204,5 @@ describe("static", () => {
     const result = Query.validateAddress("addr");
     expect(result.method).toEqual("validateaddress");
     expect(result.params).toEqual(["addr"]);
-  });
-});
-
-describe("execute", () => {
-  test("basic success", async () => {
-    const url = "testUrl";
-    const expected = jest.fn();
-    axios.post.mockImplementationOnce(() =>
-      Promise.resolve({ data: expected })
-    );
-    const result = await Query.getVersion().execute(url);
-    expect(result).toBe(expected);
-  });
-
-  test("basic error", async () => {
-    const url = "testUrl";
-    const expected = jest.fn();
-    axios.post.mockImplementationOnce(() =>
-      Promise.resolve({ error: { message: expected } })
-    );
-    const result = Query.getVersion().execute(url);
-    await expect(result).rejects.toThrow();
-  });
-
-  test("cannot re-query", async () => {
-    const url = "testUrl";
-    axios.post.mockImplementationOnce(() => Promise.resolve({ data: "" }));
-    const q = Query.getVersion();
-    await q.execute(url);
-    const r2 = q.execute(url);
-    await expect(r2).rejects.toThrow("This request has been sent");
-  });
-
-  test("calls parser when successful", async () => {
-    const url = "testUrl";
-    const expected = jest.fn();
-    const parser = jest.fn().mockImplementation(() => expected);
-    const q = Query.getVersion().parseWith(parser);
-    const data = { result: jest.fn() };
-    axios.post.mockImplementationOnce(() => Promise.resolve({ data }));
-
-    const result = await q.execute(url);
-    expect(result).toBe(expected);
-    expect(parser).toBeCalledWith(data.result);
   });
 });

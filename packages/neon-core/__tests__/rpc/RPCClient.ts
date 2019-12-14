@@ -1,12 +1,12 @@
+import _Axios from "axios";
 import { mocked } from "ts-jest/utils";
-import _Query from "../../src/rpc/Query";
 import RPCClient from "../../src/rpc/RPCClient";
 import { DEFAULT_RPC } from "../../src/consts";
 import { ContractManifest } from "../../src/sc";
+import Query from "../../src/rpc/Query";
 
-jest.mock("../../src/rpc/Query");
-
-const Query = mocked(_Query, true);
+jest.mock("axios");
+const Axios = mocked(_Axios, true);
 
 describe("constructor", () => {
   test("net", () => {
@@ -45,19 +45,50 @@ describe("getters", () => {
 });
 
 describe("execute", () => {
-  test("", async () => {
-    const expected = jest.fn();
-    const q = {
-      req: { method: "" },
-      execute: jest.fn().mockImplementation(() => expected)
-    } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  test("rpc success returns result", async () => {
+    const expectedQuery = new Query<[], number>({
+      params: [],
+      method: "test"
+    });
+    Axios.post.mockImplementationOnce(async (url, data) => {
+      expect(url).toEqual("url");
+      expect(data).toEqual(expectedQuery.export());
+      return {
+        data: {
+          jsonrpc: "2.0",
+          id: data.id,
+          result: "1234"
+        }
+      };
+    });
 
     const client = new RPCClient("url");
 
-    const result = await client.execute(q);
-    expect(result).toBe(expected);
-    expect(q.execute).toBeCalledWith("url", undefined);
-    expect(client.history).toEqual([q]);
+    const result = await client.execute(expectedQuery);
+    expect(result).toBe("1234");
+  });
+
+  test("rpc error will throw", async () => {
+    const expectedErrorMessage = "expectedErrorMessage";
+    const query = new Query<[], number>({
+      params: [],
+      method: "test"
+    });
+    Axios.post.mockImplementationOnce(async (url, data) => {
+      return {
+        data: {
+          jsonrpc: "2.0",
+          id: data.id,
+          error: {
+            code: 1,
+            message: expectedErrorMessage
+          }
+        }
+      };
+    });
+
+    const client = new RPCClient("url");
+    expect(client.execute(query)).rejects.toThrow(expectedErrorMessage);
   });
 });
 
@@ -70,266 +101,474 @@ describe("RPC Methods", () => {
 
   describe("getBestBlockHash", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.getBestBlockHash.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getBestBlockHash();
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getbestblockhash",
+          params: []
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: "1234"
+          }
+        };
+      });
 
-      expect(result).toEqual(expected);
-      expect(Query.getBestBlockHash).toBeCalled();
+      const result = await client.getBestBlockHash();
+      expect(result).toEqual("1234");
     });
   });
 
   describe("getBlock", () => {
     test("index with height, verbose = default 0", async () => {
-      const expected = jest.fn();
-      Query.getBlock.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getBlock(1);
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getblock",
+          params: [123, 0]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: "1234"
+          }
+        };
+      });
 
-      expect(result).toEqual(expected);
-      expect(Query.getBlock).toBeCalledWith(1, undefined);
+      const result = await client.getBlock(123);
+      expect(result).toEqual("1234");
     });
 
     test("index with hash, verbose = 1", async () => {
       const expected = jest.fn();
-      Query.getBlock.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getBlock("hash", 1);
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getblock",
+          params: ["hash", 1]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getBlock("hash", 1);
       expect(result).toEqual(expected);
-      expect(Query.getBlock).toBeCalledWith("hash", 1);
     });
   });
 
   describe("getBlockCount", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.getBlockCount.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getBlockCount();
+      const expected = 123;
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getblockcount",
+          params: []
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getBlockCount();
       expect(result).toEqual(expected);
-      expect(Query.getBlockCount).toBeCalled();
     });
   });
 
   describe("getBlockHash", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.getBlockHash.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getBlockHash(1);
+      const expected = "1234";
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getblockhash",
+          params: [123]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getBlockHash(123);
       expect(result).toEqual(expected);
-      expect(Query.getBlockHash).toBeCalledWith(1);
     });
   });
 
   describe("getBlockHeader", () => {
     test("index with height, verbose = default0", async () => {
-      const expected = jest.fn();
-      Query.getBlockHeader.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getBlockHeader(1);
+      const expected = "1234";
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getblockheader",
+          params: [234, 0]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getBlockHeader(234);
       expect(result).toEqual(expected);
-      expect(Query.getBlockHeader).toBeCalledWith(1, undefined);
     });
 
     test("index with hash, verbose = 1", async () => {
       const expected = jest.fn();
-      Query.getBlockHeader.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getBlockHeader("hash", 1);
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getblockheader",
+          params: ["hash", 1]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getBlockHeader("hash", 1);
       expect(result).toEqual(expected);
-      expect(Query.getBlockHeader).toBeCalledWith("hash", 1);
     });
   });
 
   describe("getBlockSysFee", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.getBlockSysFee.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getBlockSysFee(1);
+      const expected = 5;
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getblocksysfee",
+          params: [123]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getBlockSysFee(123);
       expect(result).toEqual(expected);
-      expect(Query.getBlockSysFee).toBeCalledWith(1);
     });
   });
 
   describe("getConnectionCount", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.getConnectionCount.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getConnectionCount();
+      const expected = 100;
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getconnectioncount",
+          params: []
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getConnectionCount();
       expect(result).toEqual(expected);
-      expect(Query.getConnectionCount).toBeCalled();
     });
   });
 
   describe("getContractState", () => {
     test("success", async () => {
-      const expected = {};
-      Query.getContractState.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest
-          .fn()
-          .mockImplementation(() => ({ result: { manifest: expected } }))
-      }));
+      const successfulResult = {
+        script: "1234",
+        hash: "5678",
+        manifest: { safeMethods: ["a", "b"] }
+      };
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getcontractstate",
+          params: ["hash"]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: successfulResult
+          }
+        };
+      });
       const result = await client.getContractState("hash");
 
-      expect(result).toEqual(new ContractManifest(expected));
-      expect(Query.getContractState).toBeCalledWith("hash");
+      expect(result).toEqual(new ContractManifest(successfulResult.manifest));
     });
   });
 
   describe("getPeers", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.getPeers.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getPeers();
+      const expected = {
+        connected: [{ address: "addressA", port: 1234 }],
+        unconnected: [{ address: "addressB", port: 2345 }],
+        bad: [{ address: "addressC", port: 3456 }]
+      };
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getpeers",
+          params: []
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getPeers();
       expect(result).toEqual(expected);
-      expect(Query.getPeers).toBeCalled();
     });
   });
 
   describe("getRawMemPool", () => {
-    test("success", async () => {
-      const expected = jest.fn();
-      Query.getRawMemPool.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getRawMemPool();
+    test("success with no verbose", async () => {
+      const expected = ["a", "b", "c"];
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getrawmempool",
+          params: [0]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getRawMemPool();
       expect(result).toEqual(expected);
-      expect(Query.getRawMemPool).toBeCalled();
+    });
+
+    test("success with verbose", async () => {
+      const expected = {
+        verified: ["a", "b", "c"],
+        unverified: ["d"],
+        height: 1234
+      };
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getrawmempool",
+          params: [1]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
+
+      const result = await client.getRawMemPool(1);
+      expect(result).toEqual(expected);
     });
   });
 
   describe("getRawTransaction", () => {
     test("verbose = 1", async () => {
       const expected = jest.fn();
-      Query.getRawTransaction.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getRawTransaction("txid", 1);
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getrawtransaction",
+          params: ["txid", 1]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getRawTransaction("txid", 1);
       expect(result).toEqual(expected);
-      expect(Query.getRawTransaction).toBeCalledWith("txid", 1);
     });
 
     test("verbose = default 0", async () => {
-      const expected = jest.fn();
-      Query.getRawTransaction.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getRawTransaction("txid");
+      const expected = "1234";
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getrawtransaction",
+          params: ["txid", 0]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getRawTransaction("txid");
       expect(result).toEqual(expected);
-      expect(Query.getRawTransaction).toBeCalledWith("txid", undefined);
     });
   });
 
   describe("getStorage", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.getStorage.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getStorage("hash", "key");
+      const expected = "expected";
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getstorage",
+          params: ["hash", "key"]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getStorage("hash", "key");
       expect(result).toEqual(expected);
-      expect(Query.getStorage).toBeCalledWith("hash", "key");
     });
   });
 
   describe("getTransactionHeight", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.getTransactionHeight.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getTransactionHeight("txid");
+      const expected = 1234;
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "gettransactionheight",
+          params: ["txid"]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getTransactionHeight("txid");
       expect(result).toEqual(expected);
-      expect(Query.getTransactionHeight).toBeCalledWith("txid");
     });
   });
 
   describe("getValidators", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.getValidators.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.getValidators();
+      const expected = [
+        {
+          publickey: "key",
+          votes: "1",
+          active: true
+        }
+      ];
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getvalidators",
+          params: []
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.getValidators();
       expect(result).toEqual(expected);
-      expect(Query.getValidators).toBeCalled();
     });
   });
 
   describe("getVersion", () => {
     test("success", async () => {
-      const versionString = "/NEO:1.2.3/";
-      const expected = "1.2.3";
-      Query.getVersion.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({
-          result: {
-            useragent: versionString
+      const versionString = "/Neo:3.0.0-preview1/";
+      const expected = "3.0.0-preview1";
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "getversion",
+          params: []
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: {
+              tcpPort: 1234,
+              wsPort: 2345,
+              nonce: 1,
+              useragent: versionString
+            }
           }
-        }))
-      }));
-      const result = await client.getVersion();
+        };
+      });
 
+      const result = await client.getVersion();
       expect(result).toEqual(expected);
-      expect(Query.getVersion).toBeCalled();
-      expect(client.version).toEqual(expected);
     });
   });
 
   describe("invokeFunction", () => {
     test("success", async () => {
+      const randomObj = jest.fn();
       const expected = jest.fn();
-      Query.invokeFunction.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const randomObj = {};
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "invokefunction",
+          params: ["hash", "method", [1, "2", randomObj]]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
+
       const result = await client.invokeFunction(
         "hash",
         "method",
@@ -337,112 +576,154 @@ describe("RPC Methods", () => {
         "2",
         randomObj
       );
-
       expect(result).toEqual(expected);
-      expect(Query.invokeFunction).toBeCalledWith(
-        "hash",
-        "method",
-        1,
-        "2",
-        randomObj
-      );
     });
 
     test("pass params as array", async () => {
+      const randomObj = jest.fn();
       const expected = jest.fn();
-      Query.invokeFunction.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const randomObj = {};
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "invokefunction",
+          params: ["hash", "method", [1, "2", randomObj]]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
+
       const result = await client.invokeFunction("hash", "method", [
         1,
         "2",
         randomObj
       ]);
-
       expect(result).toEqual(expected);
-      expect(Query.invokeFunction).toBeCalledWith("hash", "method", [
-        1,
-        "2",
-        randomObj
-      ]);
     });
   });
 
   describe("invokeScript", () => {
     test("success", async () => {
       const expected = jest.fn();
-      Query.invokeScript.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.invokeScript("script");
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "invokescript",
+          params: ["script"]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.invokeScript("script");
       expect(result).toEqual(expected);
-      expect(Query.invokeScript).toBeCalledWith("script");
     });
   });
 
   describe("listPlugins", () => {
     test("success", async () => {
       const expected = jest.fn();
-      Query.listPlugins.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
-      }));
-      const result = await client.listPlugins();
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "listplugins",
+          params: []
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: expected
+          }
+        };
+      });
 
+      const result = await client.listPlugins();
       expect(result).toEqual(expected);
-      expect(Query.invokeScript).toBeCalled();
     });
   });
 
   describe("sendRawTransaction", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.sendRawTransaction.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest
-          .fn()
-          .mockImplementation(() => ({ result: { hash: expected } }))
-      }));
-      const result = await client.sendRawTransaction("hexstring");
+      const expected = "1234";
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "sendrawtransaction",
+          params: ["hexstring"]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: {
+              hash: expected
+            }
+          }
+        };
+      });
 
+      const result = await client.sendRawTransaction("hexstring");
       expect(result).toEqual(expected);
-      expect(Query.sendRawTransaction).toBeCalledWith("hexstring");
     });
   });
 
   describe("submitBlock", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.submitBlock.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest
-          .fn()
-          .mockImplementation(() => ({ result: { hash: expected } }))
-      }));
-      const result = await client.submitBlock("hexstring");
+      const expected = "1234";
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "submitblock",
+          params: ["hexstring"]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: {
+              hash: "1234"
+            }
+          }
+        };
+      });
 
+      const result = await client.submitBlock("hexstring");
       expect(result).toEqual(expected);
-      expect(Query.submitBlock).toBeCalledWith("hexstring");
     });
   });
 
   describe("validateAddress", () => {
     test("success", async () => {
-      const expected = jest.fn();
-      Query.validateAddress.mockImplementationOnce(() => ({
-        req: { method: "" },
-        execute: jest
-          .fn()
-          .mockImplementation(() => ({ result: { isvalid: expected } }))
-      }));
-      const result = await client.validateAddress("addr");
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("testUrl");
+        expect(data).toMatchObject({
+          method: "validateaddress",
+          params: ["addr"]
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: {
+              address: "addr",
+              isvalid: true
+            }
+          }
+        };
+      });
 
-      expect(result).toEqual(expected);
-      expect(Query.validateAddress).toBeCalledWith("addr");
+      const result = await client.validateAddress("addr");
+      expect(result).toEqual(true);
     });
   });
 });
