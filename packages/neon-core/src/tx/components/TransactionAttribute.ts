@@ -1,10 +1,4 @@
-import {
-  num2hexstring,
-  num2VarInt,
-  StringStream,
-  ensureHex,
-  str2hexstring
-} from "../../u";
+import { num2hexstring, num2VarInt, StringStream, HexString } from "../../u";
 import { TxAttrUsage } from "./txAttrUsage";
 import { NeonObject } from "../../model";
 
@@ -56,16 +50,17 @@ export class TransactionAttribute
   /**
    * @description data in hex format
    */
-  public data: string;
+  public data: HexString;
 
-  public constructor(obj: TransactionAttributeLike) {
-    if (!obj || !obj.usage || !obj.data) {
+  public constructor(
+    obj: Partial<TransactionAttributeLike | TransactionAttribute> = {}
+  ) {
+    if (!obj.usage || !obj.data) {
       throw new Error("TransactionAttribute requires usage and data fields");
     }
     const { usage, data } = obj;
     this.usage = toTxAttrUsage(usage);
-    ensureHex(data);
-    this.data = data;
+    this.data = HexString.fromHex(data);
   }
 
   /**
@@ -74,7 +69,7 @@ export class TransactionAttribute
   public static Url(url: string): TransactionAttribute {
     return new TransactionAttribute({
       usage: TxAttrUsage.Url,
-      data: str2hexstring(url)
+      data: HexString.fromAscii(url)
     });
   }
 
@@ -95,13 +90,16 @@ export class TransactionAttribute
   public export(): TransactionAttributeLike {
     return {
       usage: this.usage,
-      data: this.data
+      data: this.data.toBigEndian()
     };
   }
 
-  public equals(other: TransactionAttributeLike): boolean {
+  public equals(
+    other: Partial<TransactionAttributeLike | TransactionAttribute>
+  ): boolean {
     return (
-      this.usage === toTxAttrUsage(other.usage) && this.data === other.data
+      this.usage === toTxAttrUsage(other.usage ?? 0) &&
+      this.data.equals(other.data ?? "")
     );
   }
 }

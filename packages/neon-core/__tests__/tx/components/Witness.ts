@@ -17,8 +17,12 @@ describe("constructor", () => {
 
     const result = new Witness(testObject);
     expect(result instanceof Witness).toBeTruthy();
-    expect(result.invocationScript).toEqual(testObject.invocationScript);
-    expect(result.verificationScript).toEqual(testObject.verificationScript);
+    expect(result.invocationScript.toBigEndian()).toEqual(
+      testObject.invocationScript
+    );
+    expect(result.verificationScript.toBigEndian()).toEqual(
+      testObject.verificationScript
+    );
   });
 
   test("Witness", () => {
@@ -30,7 +34,8 @@ describe("constructor", () => {
     const result = new Witness(testObject);
     expect(result instanceof Witness).toBeTruthy();
     expect(result).not.toBe(testObject);
-    expect(result).toEqual(testObject);
+    expect(result.invocationScript).toEqual(testObject.invocationScript);
+    expect(result.verificationScript).toEqual(testObject.verificationScript);
   });
 });
 
@@ -68,8 +73,8 @@ describe("equals", () => {
     verificationScript: "cd"
   };
   const obj2: WitnessLike = {
-    invocationScript: "fg",
-    verificationScript: "hi"
+    invocationScript: "ef",
+    verificationScript: "12"
   };
   const witness1 = new Witness(obj1);
   const witness2 = new Witness(obj2);
@@ -103,7 +108,7 @@ const dataSet = [
 describe("serialize", () => {
   test.each(dataSet)(
     "%s",
-    (msg: string, data: WitnessLike, expected: string) => {
+    (_msg: string, data: WitnessLike, expected: string) => {
       const result = new Witness(data);
       expect(result.serialize()).toBe(expected);
     }
@@ -113,7 +118,7 @@ describe("serialize", () => {
 describe("deserialize", () => {
   test.each(dataSet)(
     "%s",
-    (msg: string, expected: WitnessLike, data: string) => {
+    (_msg: string, expected: WitnessLike, data: string) => {
       const result = Witness.deserialize(data);
       expect(result.export()).toEqual(expected);
     }
@@ -206,8 +211,12 @@ describe("buildMultiSig", () => {
     ) => {
       const result = Witness.buildMultiSig(tx, sigs, vScript);
 
-      expect(result.verificationScript).toEqual(verificationScript);
-      expect(result.invocationScript).toEqual(expectedInvocationScript);
+      expect(result.verificationScript.toBigEndian()).toEqual(
+        verificationScript
+      );
+      expect(result.invocationScript.toBigEndian()).toEqual(
+        expectedInvocationScript
+      );
     }
   );
 
