@@ -52,7 +52,10 @@ jobs:
             BASE_BRANCH=$(node helpers/getBaseBranch.js $CIRCLE_PULL_REQUEST)
             git checkout --track origin/$BASE_BRANCH
             git checkout $CURRENT_BRANCH
-            FILES=$(git diff --name-only --diff-filter=bd $(git merge-base HEAD $BASE_BRANCH) | grep '^packages/.*\.[tj]s$')
+            echo "Finding files to lint"
+            FILES=$(git diff --name-only --diff-filter=bd $(git merge-base HEAD $BASE_BRANCH) | grep '^packages/.*\.[tj]s$') || true
+            [ -z "$FILES" ] && echo "No files found" && exit 0
+            echo "Found:"
             echo $FILES
             yarn run eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
       - store_test_results:
@@ -70,7 +73,8 @@ jobs:
       - run:
           name: Unit Tests
           environment:
-            JEST_JUNIT_OUTPUT: reports/unit/results.xml
+            JEST_JUNIT_OUTPUT_DIR: reports/unit
+            JEST_JUNIT_OUTPUT_NAME: results.xml
           command: yarn test:unit --ci --runInBand --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
@@ -87,7 +91,8 @@ jobs:
       - run:
           name: Integration Tests
           environment:
-            JEST_JUNIT_OUTPUT: reports/integration/results.xml
+            JEST_JUNIT_OUTPUT_DIR: reports/integration
+            JEST_JUNIT_OUTPUT_NAME: results.xml
           command: yarn test:integration --ci --runInBand --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
