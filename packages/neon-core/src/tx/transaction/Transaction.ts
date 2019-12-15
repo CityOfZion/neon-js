@@ -7,9 +7,9 @@ import {
   Fixed8,
   StringStream,
   num2VarInt,
-  ensureHex,
   generateRandomArray,
-  ab2hexstring
+  ab2hexstring,
+  HexString
 } from "../../u";
 import { Account, sign } from "../../wallet";
 import {
@@ -24,7 +24,6 @@ import {
   deserializeFee,
   deserializeAttributes,
   deserializeWitnesses,
-  formatSender,
   deserializeNonce,
   deserializeSender,
   deserializeValidUntilBlock,
@@ -60,7 +59,7 @@ export class Transaction implements NeonObject<TransactionLike> {
   /**
    * transation invoker in script hash in big endian
    */
-  public sender: string;
+  public sender: HexString;
 
   /**
    * Distributed to NEO holders
@@ -95,14 +94,14 @@ export class Transaction implements NeonObject<TransactionLike> {
   public attributes: TransactionAttribute[];
   public cosigners: Cosigner[];
   public scripts: Witness[];
-  public script: string;
+  public script: HexString;
 
   /**
    * @description Maximum duration in blocks that a transaction can stay valid in the mempol
    */
   public static MAX_TRANSACTION_LIFESPAN = 2102400;
 
-  public constructor(tx: Partial<TransactionLike> = {}) {
+  public constructor(tx: Partial<TransactionLike | Transaction> = {}) {
     const {
       version,
       nonce,
@@ -117,13 +116,15 @@ export class Transaction implements NeonObject<TransactionLike> {
     } = tx;
     this.version = version ?? TX_VERSION;
     this.nonce = nonce ?? parseInt(ab2hexstring(generateRandomArray(4)), 16);
-    this.sender = formatSender(sender);
+    this.sender = HexString.fromHex(sender ?? "");
     this.validUntilBlock = validUntilBlock ?? 0;
     this.attributes = Array.isArray(attributes)
-      ? attributes.map(a => new TransactionAttribute(a))
+      ? (attributes as (TransactionAttribute | TransactionAttributeLike)[]).map(
+          a => new TransactionAttribute(a)
+        )
       : [];
     this.scripts = Array.isArray(scripts)
-      ? scripts.map(a => new Witness(a))
+      ? (scripts as (Witness | WitnessLike)[]).map(a => new Witness(a))
       : [];
     this.scripts = this.scripts.sort(
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
@@ -132,7 +133,7 @@ export class Transaction implements NeonObject<TransactionLike> {
     cosigners.forEach(cosigner => this.addCosigner(cosigner));
     this.systemFee = systemFee ? new Fixed8(systemFee) : new Fixed8(0);
     this.networkFee = networkFee ? new Fixed8(networkFee) : new Fixed8(0);
-    this.script = script || "";
+    this.script = HexString.fromHex(script ?? "");
   }
 
   public get [Symbol.toStringTag](): string {
@@ -183,12 +184,13 @@ export class Transaction implements NeonObject<TransactionLike> {
     return new Transaction(txObj);
   }
 
-  public addCosigner(cosigner: CosignerLike): this {
-    const cosignerHashes = this.cosigners.map(cosigner => cosigner.account);
-    if (cosignerHashes.indexOf(cosigner.account) >= 0) {
-      throw new Error(`Cannot add duplicate cosigner: ${cosigner.account}`);
+  public addCosigner(newCosigner: CosignerLike | Cosigner): this {
+    const acctHashes = this.cosigners.map(cosigner => cosigner.account);
+    const newHash = HexString.fromHex(newCosigner.account);
+    if (acctHashes.find(hash => hash.equals(newHash))) {
+      throw new Error(`Cannot add duplicate cosigner: ${newCosigner.account}`);
     }
-    this.cosigners.push(new Cosigner(cosigner));
+    this.cosigners.push(new Cosigner(newCosigner));
     return this;
   }
 
@@ -201,7 +203,7 @@ export class Transaction implements NeonObject<TransactionLike> {
    * Adds Witness to the Transaction and automatically sorts the witnesses according to scripthash.
    * @param obj The Witness object to add as witness
    */
-  public addWitness(obj: WitnessLike): this {
+  public addWitness(obj: WitnessLike | Witness): this {
     this.scripts.push(new Witness(obj));
     this.scripts = this.scripts.sort(
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
@@ -210,7 +212,7 @@ export class Transaction implements NeonObject<TransactionLike> {
   }
 
   /**
-   * Serialize the transaction and return it as a hexstring.
+   * Serialize the transaction and return it as a hex .
    * @param {boolean} signed  - Whether to serialize the signatures. Signing requires it to be serialized without the signatures.
    * @return {string} Hexstring.
    */
@@ -218,7 +220,6 @@ export class Transaction implements NeonObject<TransactionLike> {
     if (this.version !== 0) {
       throw new Error(`Version must be 0`);
     }
-    ensureHex(this.sender);
     let out = "";
     out += num2hexstring(this.version);
     out += num2hexstring(this.nonce, 4, true);
@@ -262,14 +263,14 @@ export class Transaction implements NeonObject<TransactionLike> {
     return {
       version: this.version,
       nonce: this.nonce,
-      sender: this.sender,
+      sender: this.sender.toBigEndian(),
       systemFee: this.systemFee.toNumber(),
       networkFee: this.networkFee.toNumber(),
       validUntilBlock: this.validUntilBlock,
       attributes: this.attributes.map(a => a.export()),
       cosigners: this.cosigners.map(cosigner => cosigner.export()),
       scripts: this.scripts.map(a => a.export()),
-      script: this.script
+      script: this.script.toBigEndian()
     };
   }
 
@@ -278,7 +279,7 @@ export class Transaction implements NeonObject<TransactionLike> {
     if (hashes.indexOf(this.sender) < 0) {
       hashes.unshift(this.sender);
     }
-    return hashes.sort();
+    return hashes.map(h => h.toBigEndian()).sort();
   }
 }
 

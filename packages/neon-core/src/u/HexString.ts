@@ -13,7 +13,11 @@ export class HexString {
    */
   private _value: string;
 
-  protected _checkValue(value: string): void {
+  public get length(): number {
+    return this._value.length;
+  }
+
+  public assert(value: string): void {
     ensureHex(value);
   }
 
@@ -26,8 +30,12 @@ export class HexString {
     if (value.startsWith("0x")) {
       value = value.slice(2);
     }
-    this._checkValue(value);
+    this.assert(value);
     this._value = littleEndian ? reverseHex(value) : value;
+  }
+
+  public toString(): string {
+    return this._value;
   }
 
   /**
@@ -48,7 +56,10 @@ export class HexString {
    * Judge if 2 HexString are equal
    * @param other
    */
-  public equals(other: HexString): boolean {
+  public equals(other: HexString | string): boolean {
+    if (typeof other === "string") {
+      return this.toBigEndian() === HexString.fromHex(other).toBigEndian();
+    }
     return this.toBigEndian() === other.toBigEndian();
   }
 
@@ -93,7 +104,15 @@ export class HexString {
    * @param str hex string
    * @param littleEndian whether `str` is little endian
    */
-  public static fromHex(str: string, littleEndian = false): HexString {
+  public static fromHex(str: string, littleEndian: boolean): HexString;
+  public static fromHex(str: string | HexString): HexString;
+  public static fromHex(
+    str: string | HexString,
+    littleEndian = false
+  ): HexString {
+    if (typeof str === "object" && str instanceof HexString) {
+      return new HexString(str.toBigEndian());
+    }
     return new HexString(str, littleEndian);
   }
 

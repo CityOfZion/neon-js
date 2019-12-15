@@ -106,7 +106,7 @@ describe("setter", () => {
         }
       )
       .build();
-    expect(transaction.script).toBe(
+    expect(transaction.script.toBigEndian()).toBe(
       "525152c1047465737414f91d6b7085db7c5aaf09f19eeec1ca3c0db2c6ec68627d5b5214bd8bf7f95e33415fc242c48d143694a729172d9f51c10962616c616e63654f66149f2d1729a79436148dc442c25f41335ef9f78bbd68627d5b52"
     );
   });

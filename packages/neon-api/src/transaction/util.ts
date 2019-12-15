@@ -29,7 +29,9 @@ export function getNetworkFeeForMultiSig(
 function getVerificationScriptsFromWitnesses(
   transaction: tx.Transaction
 ): Array<string> {
-  return transaction.scripts.map(witness => witness.verificationScript);
+  return transaction.scripts.map(witness =>
+    witness.verificationScript.toBigEndian()
+  );
 }
 
 function isMultiSig(verificationScript: string): boolean {
@@ -69,7 +71,9 @@ export function getScriptHashesFromTxWitnesses(
   transaction.scripts.forEach(script =>
     scriptHashes.push(
       ...wallet
-        .getPublicKeysFromVerificationScript(script.verificationScript)
+        .getPublicKeysFromVerificationScript(
+          script.verificationScript.toBigEndian()
+        )
         .map(publicKey => wallet.getScriptHashFromPublicKey(publicKey))
     )
   );

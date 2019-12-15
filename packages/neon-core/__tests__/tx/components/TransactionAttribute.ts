@@ -26,7 +26,7 @@ describe("constructor", () => {
     const result = new TransactionAttribute(testObject);
     expect(result instanceof TransactionAttribute).toBeTruthy();
     expect(result.usage).toEqual(testObject.usage);
-    expect(result.data).toEqual(testObject.data);
+    expect(result.data.toBigEndian()).toEqual(testObject.data);
   });
 
   test("TransactionAttributeLike (str usage)", () => {
@@ -38,7 +38,7 @@ describe("constructor", () => {
     const result = new TransactionAttribute(testObject);
     expect(result instanceof TransactionAttribute).toBeTruthy();
     expect(result.usage).toEqual(129);
-    expect(result.data).toEqual(testObject.data);
+    expect(result.data.toBigEndian()).toEqual(testObject.data);
   });
 
   test("TransactionAttributeLike (data not in hex)", () => {
@@ -65,7 +65,7 @@ describe("constructor", () => {
     const result = TransactionAttribute.Url("http://url");
     expect(result instanceof TransactionAttribute).toBeTruthy();
     expect(result.usage).toEqual(129);
-    expect(result.data).toEqual("687474703a2f2f75726c");
+    expect(result.data.toBigEndian()).toEqual("687474703a2f2f75726c");
   });
 });
 
@@ -102,9 +102,9 @@ describe("equals", () => {
   ])(
     "%s",
     (
-      msg: string,
+      _msg: string,
       a: TransactionAttribute,
-      b: Partial<TransactionAttributeLike>,
+      b: TransactionAttributeLike,
       cond: boolean
     ) => {
       expect(a.equals(b)).toBe(cond);

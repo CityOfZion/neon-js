@@ -121,7 +121,7 @@ export class TransactionValidator {
    */
   public async validateScript(): Promise<ValidationResult> {
     const { state } = await this.rpcClient.invokeScript(
-      this.transaction.script
+      this.transaction.script.toBigEndian()
     );
     if (state === "FAULT") {
       return {
@@ -136,7 +136,7 @@ export class TransactionValidator {
     }
 
     const intents = new sc.ScriptParser(
-      this.transaction.script
+      this.transaction.script.toBigEndian()
     ).toScriptParams();
     const intentsRes: Array<string> = [];
     await Promise.all(
@@ -220,7 +220,7 @@ export class TransactionValidator {
     const {
       state,
       gas_consumed: gasConsumed
-    } = await this.rpcClient.invokeScript(script);
+    } = await this.rpcClient.invokeScript(script.toBigEndian());
 
     if (state === "FAULT") {
       return {

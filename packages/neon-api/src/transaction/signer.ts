@@ -61,7 +61,9 @@ export class TransactionSigner {
   }
 
   private _checkWitness(witness: tx.Witness): void {
-    this._assertShouldSign(u.reverseHex(u.hash160(witness.verificationScript)));
+    this._assertShouldSign(
+      u.reverseHex(u.hash160(witness.verificationScript.toBigEndian()))
+    );
   }
 
   private _checkMultisigAcc(multisigAcc: wallet.Account): void {
@@ -78,7 +80,7 @@ export class TransactionSigner {
     return [
       this.transaction.sender,
       ...this.transaction.cosigners.map(cosigner => cosigner.account)
-    ].map(hash => u.reverseHex(hash));
+    ].map(hash => u.reverseHex(hash.toBigEndian()));
   }
 
   private _assertShouldSign(scriptHash: string): void {

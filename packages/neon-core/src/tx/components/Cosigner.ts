@@ -1,50 +1,54 @@
 import { WitnessScope } from "./WitnessScope";
-import { StringStream, num2hexstring } from "../../u";
+import { StringStream, num2hexstring, HexString } from "../../u";
 import { deserializeArrayOf, serializeArrayOf } from "../lib";
 
 export interface CosignerLike {
   /* account scripthash in big endian */
-  account: string;
+  account: string | HexString;
   scopes: number;
-  allowedContracts?: string[];
-  allowedGroups?: string[];
+  allowedContracts?: (string | HexString)[];
+  allowedGroups?: (string | HexString)[];
 }
 
 export class Cosigner {
   /**
    * script hash of cosigner
    */
-  public account: string;
+  public account: HexString;
   public scopes: WitnessScope;
-  public allowedContracts: string[];
-  public allowedGroups: string[];
+  public allowedContracts: HexString[];
+  public allowedGroups: HexString[];
 
   /**
    * @description This limits maximum number of allowedContracts or allowedGroups here
    */
   private readonly MAX_SUB_ITEMS: number = 16;
 
-  public constructor(signer: Partial<CosignerLike> = {}) {
+  public constructor(signer: Partial<CosignerLike | Cosigner> = {}) {
     const {
       account = "",
       scopes = WitnessScope.Global,
       allowedContracts = [],
       allowedGroups = []
     } = signer;
-    this.account = account;
+    this.account = HexString.fromHex(account);
     this.scopes = scopes & 0xff;
-    this.allowedContracts = [...allowedContracts];
-    this.allowedGroups = [...allowedGroups];
+    this.allowedContracts = allowedContracts.map(i => HexString.fromHex(i));
+    this.allowedGroups = allowedGroups.map(i => HexString.fromHex(i));
   }
 
   public addAllowedContracts(...contracts: string[]): void {
     this.scopes |= WitnessScope.CustomContracts;
-    this.allowedContracts.push(...contracts);
+    contracts
+      .map(i => HexString.fromHex(i))
+      .forEach(i => this.allowedContracts.push(i));
   }
 
   public addAllowedGroups(...groups: string[]): void {
     this.scopes |= WitnessScope.CustomGroups;
-    this.allowedGroups.push(...groups);
+    groups
+      .map(i => HexString.fromHex(i))
+      .forEach(i => this.allowedGroups.push(i));
   }
 
   public static deserialize(ss: StringStream): CosignerLike {
@@ -70,10 +74,10 @@ export class Cosigner {
     out += this.account;
     out += num2hexstring(this.scopes);
     if (this.scopes & WitnessScope.CustomContracts) {
-      out += serializeArrayOf(this.allowedContracts);
+      out += serializeArrayOf(this.allowedContracts.map(i => i.toBigEndian()));
     }
     if (this.scopes & WitnessScope.CustomGroups) {
-      out += serializeArrayOf(this.allowedGroups);
+      out += serializeArrayOf(this.allowedGroups.map(i => i.toBigEndian()));
     }
 
     return out;
@@ -81,10 +85,10 @@ export class Cosigner {
 
   public export(): CosignerLike {
     return {
-      account: this.account,
+      account: this.account.toBigEndian(),
       scopes: this.scopes,
-      allowedContracts: [...this.allowedContracts],
-      allowedGroups: [...this.allowedGroups]
+      allowedContracts: [...this.allowedContracts.map(i => i.toBigEndian())],
+      allowedGroups: [...this.allowedGroups.map(i => i.toBigEndian())]
     };
   }
 }

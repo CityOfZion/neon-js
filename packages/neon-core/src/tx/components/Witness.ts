@@ -1,4 +1,10 @@
-import { hash160, num2VarInt, reverseHex, StringStream } from "../../u";
+import {
+  hash160,
+  num2VarInt,
+  reverseHex,
+  StringStream,
+  HexString
+} from "../../u";
 import {
   Account,
   getPublicKeysFromVerificationScript,
@@ -64,14 +70,14 @@ export class Witness implements NeonObject<WitnessLike> {
         orderedSigs[position] = element;
       } else if (element instanceof Witness) {
         const keys = getPublicKeysFromVerificationScript(
-          element.verificationScript
+          element.verificationScript.toBigEndian()
         );
         if (keys.length !== 1) {
           throw new Error("Given witness contains more than 1 public key!");
         }
         const position = publicKeys.indexOf(keys[0]);
         orderedSigs[position] = getSignaturesFromInvocationScript(
-          element.invocationScript
+          element.invocationScript.toBigEndian()
         )[0];
       } else {
         throw new Error("Unable to process given signature");
@@ -95,27 +101,28 @@ export class Witness implements NeonObject<WitnessLike> {
     });
   }
 
-  public invocationScript: string;
-  public verificationScript: string;
+  public invocationScript: HexString;
+  public verificationScript: HexString;
 
-  // tslint:disable-next-line:variable-name
   private _scriptHash = "";
 
-  public constructor(obj: WitnessLike) {
-    if (!obj || !obj.invocationScript || !obj.verificationScript) {
+  public constructor(obj: Partial<WitnessLike | Witness> = {}) {
+    if (!obj.invocationScript || !obj.verificationScript) {
       throw new Error(
         "Witness requires invocationScript and verificationScript fields"
       );
     }
-    this.invocationScript = obj.invocationScript;
-    this.verificationScript = obj.verificationScript;
+    this.invocationScript = HexString.fromHex(obj.invocationScript);
+    this.verificationScript = HexString.fromHex(obj.verificationScript);
   }
 
   public get scriptHash(): string {
     if (this._scriptHash) {
       return this._scriptHash;
     } else if (this.verificationScript) {
-      this._scriptHash = reverseHex(hash160(this.verificationScript));
+      this._scriptHash = reverseHex(
+        hash160(this.verificationScript.toBigEndian())
+      );
       return this._scriptHash;
     } else {
       throw new Error(
@@ -134,20 +141,22 @@ export class Witness implements NeonObject<WitnessLike> {
 
   public export(): WitnessLike {
     return {
-      invocationScript: this.invocationScript,
-      verificationScript: this.verificationScript
+      invocationScript: this.invocationScript.toBigEndian(),
+      verificationScript: this.verificationScript.toBigEndian()
     };
   }
 
-  public equals(other: Partial<WitnessLike>): boolean {
+  public equals(other: Partial<WitnessLike | Witness>): boolean {
     return (
-      this.invocationScript === other.invocationScript &&
-      this.verificationScript === other.verificationScript
+      this.invocationScript.equals(other.invocationScript ?? "") &&
+      this.verificationScript.equals(other.verificationScript ?? "")
     );
   }
 
   private generateScriptHash(): void {
-    this._scriptHash = reverseHex(hash160(this.verificationScript));
+    this._scriptHash = reverseHex(
+      hash160(this.verificationScript.toBigEndian())
+    );
   }
 }
 

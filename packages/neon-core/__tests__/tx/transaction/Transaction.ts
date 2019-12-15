@@ -12,7 +12,7 @@ describe("constructor", () => {
     expect(result.validUntilBlock).toBeDefined();
     expect(result.systemFee.toNumber()).toBe(0);
     expect(result.networkFee.toNumber()).toBe(0);
-    expect(result.script).toEqual("");
+    expect(result.script.toBigEndian()).toEqual("");
   });
 
   test("TransactionLike", () => {
@@ -32,7 +32,7 @@ describe("constructor", () => {
     expect(result.validUntilBlock).toBe(testObject.validUntilBlock);
     expect(result.systemFee.toNumber()).toBe(testObject.systemFee);
     expect(result.networkFee.toNumber()).toBe(testObject.networkFee);
-    expect(result.script).toEqual(testObject.script);
+    expect(result.script.toBigEndian()).toEqual(testObject.script);
   });
 
   test("Transaction", () => {
@@ -46,7 +46,7 @@ describe("constructor", () => {
     const result = new Transaction(testObject);
     expect(result instanceof Transaction).toBeTruthy();
     expect(result).not.toBe(testObject);
-    expect(result.script).toBe(testObject.script);
+    expect(result.script).toStrictEqual(testObject.script);
     expect(result.scripts[0]).not.toBe(testObject.scripts[0]);
   });
 });
@@ -172,7 +172,7 @@ describe("Add Methods", () => {
       account: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
       scopes: WitnessScope.Global
     });
-    expect(tx1.cosigners[0].account).toBe(
+    expect(tx1.cosigners[0].account.toBigEndian()).toBe(
       "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26"
     );
     expect(tx1.cosigners[0].scopes).toBe(WitnessScope.Global);
@@ -191,7 +191,7 @@ describe("Add Methods", () => {
       data: "72e9a2"
     });
     expect(tx1.attributes[0].usage).toBe(129);
-    expect(tx1.attributes[0].data).toBe("72e9a2");
+    expect(tx1.attributes[0].data.toBigEndian()).toBe("72e9a2");
   });
 
   test("addWitness", () => {
@@ -201,8 +201,8 @@ describe("Add Methods", () => {
       verificationScript:
         "210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba68747476aa"
     });
-    expect(tx1.scripts[0].invocationScript).toBe("ab");
-    expect(tx1.scripts[0].verificationScript).toBe(
+    expect(tx1.scripts[0].invocationScript.toBigEndian()).toBe("ab");
+    expect(tx1.scripts[0].verificationScript.toBigEndian()).toBe(
       "210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba68747476aa"
     );
   });
@@ -214,10 +214,10 @@ describe("Add Methods", () => {
     );
     tx1.scripts = [];
     tx1.sign(account);
-    expect(tx1.scripts[0].verificationScript).toBe(
+    expect(tx1.scripts[0].verificationScript.toBigEndian()).toBe(
       "210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba68747476aa"
     );
-    expect(tx1.scripts[0].invocationScript).toBe(
+    expect(tx1.scripts[0].invocationScript.toBigEndian()).toBe(
       "40ab51e521a287dfeb83a51b1444ca31fbdc88d2181c156e65d30b3423d24bed693feb5ac8511c24efd766c664a3b09ec9cf2e24588226aab16175d84dc0fcbeea"
     );
   });

@@ -27,7 +27,7 @@ const MULTISIG_ACCOUNT = wallet.Account.createMultiSig(
   ACCOUNTS.map(account => account.publicKey)
 );
 
-const createTransactionSigner = (): TransactionSigner => {
+function createTransactionSigner(): TransactionSigner {
   return new TransactionSigner(
     new TransactionBuilder({
       nonce: 1,
@@ -44,7 +44,7 @@ const createTransactionSigner = (): TransactionSigner => {
       ]
     }).build()
   );
-};
+}
 
 describe("signWithAccount", () => {
   test("single private key", () => {
