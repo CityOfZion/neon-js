@@ -198,7 +198,9 @@ export class ContractParam {
 
 export default ContractParam;
 
-export function likeContractParam(cp: Partial<ContractParam>): boolean {
+export function likeContractParam(
+  cp: Partial<ContractParamLike> | ContractParam
+): cp is ContractParamLike {
   if (cp === null || cp === undefined) {
     return false;
   }

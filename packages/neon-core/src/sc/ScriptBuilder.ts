@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import BN from "bn.js";
 import {
   ensureHex,
@@ -19,23 +18,12 @@ import { ASSET_ID } from "../consts";
 export interface ScriptIntent {
   scriptHash: string | "NEO" | "GAS" | "POLICY";
   operation?: string;
-  args?: any[];
+  args?: unknown[];
 }
 
 export interface ScriptResult {
   hex: string;
   fee: Fixed8;
-}
-
-function isValidValue(value: any): boolean {
-  if (value) {
-    return true;
-  } else if (value === 0) {
-    return true;
-  } else if (value === "") {
-    return true;
-  }
-  return false;
 }
 
 /**
@@ -65,7 +53,7 @@ export class ScriptBuilder extends StringStream {
   public emitAppCall(
     scriptHash: string,
     operation?: string,
-    args?: any[]
+    args?: unknown[]
   ): this {
     this.emitPush(args || []);
     if (operation) {
@@ -88,7 +76,7 @@ export class ScriptBuilder extends StringStream {
     return this.emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALL);
   }
 
-  public emitSysCall(service: InteropServiceCode, ...args: any[]): this {
+  public emitSysCall(service: InteropServiceCode, ...args: unknown[]): this {
     for (let i = args.length - 1; i >= 0; i--) {
       this.emitPush(args[i]);
     }
@@ -100,7 +88,7 @@ export class ScriptBuilder extends StringStream {
    * @param data
    * @return this
    */
-  public emitPush(data?: any): this {
+  public emitPush(data: unknown): this {
     switch (typeof data) {
       case "boolean":
         return this.emit(data ? OpCode.PUSHT : OpCode.PUSHF);
@@ -113,10 +101,10 @@ export class ScriptBuilder extends StringStream {
       case "object":
         if (Array.isArray(data)) {
           return this._emitArray(data);
-        } else if (likeContractParam(data)) {
-          return this._emitParam(new ContractParam(data));
         } else if (data === null) {
           return this.emitPush(false);
+        } else if (likeContractParam(data)) {
+          return this._emitParam(new ContractParam(data));
         }
         throw new Error(`Unidentified object: ${data}`);
       default:
@@ -128,7 +116,7 @@ export class ScriptBuilder extends StringStream {
    * Private method to append an array
    * @private
    */
-  private _emitArray(arr: any[]): this {
+  private _emitArray(arr: unknown[]): this {
     for (let i = arr.length - 1; i >= 0; i--) {
       this.emitPush(arr[i]);
     }
@@ -202,9 +190,6 @@ export class ScriptBuilder extends StringStream {
   private _emitParam(param: ContractParam): this {
     if (!param.type) {
       throw new Error("No type available!");
-    }
-    if (!isValidValue(param.value)) {
-      throw new Error("Invalid value provided!");
     }
     switch (param.type) {
       case ContractParamType.String:
