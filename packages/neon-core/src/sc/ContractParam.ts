@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fixed8, reverseHex } from "../u";
 import { getScriptHashFromAddress, isAddress } from "../wallet";
 
@@ -20,7 +19,7 @@ export enum ContractParamType {
 
 export interface ContractParamLike {
   type: string;
-  value: any;
+  value: string | boolean | number | ContractParamLike[];
 }
 
 function toContractParamType(
@@ -104,14 +103,17 @@ export class ContractParam {
    * @param args Additional arguments such as decimal precision
    */
   public static byteArray(
-    value: any,
+    value: string | number,
     format: string,
-    ...args: any[]
+    ...args: unknown[]
   ): ContractParam {
     if (format) {
       format = format.toLowerCase();
     }
     if (format === "address") {
+      if (typeof value !== "string") {
+        throw new Error("Expected string when format is address");
+      }
       return new ContractParam(
         ContractParamType.ByteArray,
         reverseHex(getScriptHashFromAddress(value))
@@ -119,9 +121,12 @@ export class ContractParam {
     } else if (format === "fixed8") {
       let decimals = 8;
       if (args.length === 1) {
+        if (typeof args[0] !== "number") {
+          throw new Error("Expected number when format is fixed8");
+        }
         decimals = args[0];
       }
-      if (!isFinite(value)) {
+      if (typeof value !== "number" || !isFinite(value)) {
         throw new Error(`Input should be number!`);
       }
       const divisor = new Fixed8(Math.pow(10, 8 - decimals));
@@ -131,10 +136,10 @@ export class ContractParam {
       if (!modValue.isZero()) {
         throw new Error(`wrong precision: expected ${decimals}`);
       }
-      value = fixed8Value.div(divisor);
+      const finalValue = fixed8Value.div(divisor);
       return new ContractParam(
         ContractParamType.ByteArray,
-        value.toReverseHex().slice(0, 16)
+        finalValue.toReverseHex().slice(0, 16)
       );
     } else {
       return new ContractParam(ContractParamType.ByteArray, value);
@@ -150,7 +155,7 @@ export class ContractParam {
   }
 
   public type: ContractParamType;
-  public value: any;
+  public value: string | boolean | number | ContractParam[];
 
   public constructor(
     type:
@@ -159,12 +164,15 @@ export class ContractParam {
       | ContractParamType
       | keyof typeof ContractParamType
       | number,
-    value?: any
+    value?: string | boolean | number | ContractParam[]
   ) {
     if (typeof type === "object") {
       this.type = toContractParamType(type.type);
       this.value = type.value;
     } else if (type !== undefined) {
+      if (value === undefined) {
+        throw new Error("No value provided!");
+      }
       this.type = toContractParamType(type);
       this.value = value;
     } else {

@@ -20,7 +20,7 @@ const testCases = [
     "205fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b51c10962616c616e63654f661411c4d1f4fba619f2628870d36e3a9773e874705b68627d5b52"
   ],
   [
-    "emitAppCall with nested arrarys as args",
+    "emitAppCall with nested arrays as args",
     {
       scriptHash: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
       operation: "balanceOf",

@@ -42,12 +42,11 @@ export class ScriptBuilder extends StringStream {
     return this;
   }
 
-  private _emitContractOperation(operation: string): this {
-    let hexOp = "";
-    for (let i = 0; i < operation.length; i++) {
-      hexOp += num2hexstring(operation.charCodeAt(i));
+  public emitSysCall(service: InteropServiceCode, ...args: unknown[]): this {
+    for (let i = args.length - 1; i >= 0; i--) {
+      this.emitPush(args[i]);
     }
-    return this.emitPush(hexOp);
+    return this.emit(OpCode.SYSCALL, service);
   }
 
   public emitAppCall(
@@ -57,7 +56,7 @@ export class ScriptBuilder extends StringStream {
   ): this {
     this.emitPush(args || []);
     if (operation) {
-      this._emitContractOperation(operation);
+      this._emitString(str2hexstring(operation));
     }
 
     if (scriptHash.toUpperCase() === "NEO") {
@@ -72,15 +71,8 @@ export class ScriptBuilder extends StringStream {
       throw new Error("ScriptHash should be 20 bytes long!");
     }
 
-    this.emitPush(reverseHex(scriptHash));
+    this._emitString(reverseHex(scriptHash));
     return this.emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALL);
-  }
-
-  public emitSysCall(service: InteropServiceCode, ...args: unknown[]): this {
-    for (let i = args.length - 1; i >= 0; i--) {
-      this.emitPush(args[i]);
-    }
-    return this.emit(OpCode.SYSCALL, service);
   }
 
   /**
@@ -193,19 +185,19 @@ export class ScriptBuilder extends StringStream {
     }
     switch (param.type) {
       case ContractParamType.String:
-        return this._emitString(str2hexstring(param.value));
+        return this._emitString(str2hexstring(param.value as string));
       case ContractParamType.Boolean:
         return this.emit(param.value ? OpCode.PUSHT : OpCode.PUSHF);
       case ContractParamType.Integer:
-        return this._emitNum(param.value);
+        return this._emitNum(param.value as number);
       case ContractParamType.ByteArray:
-        return this._emitString(param.value);
+        return this._emitString(param.value as string);
       case ContractParamType.Array:
-        return this._emitArray(param.value);
+        return this._emitArray(param.value as ContractParam[]);
       case ContractParamType.Hash160:
-        return this._emitString(reverseHex(param.value));
+        return this._emitString(reverseHex(param.value as string));
       case ContractParamType.PublicKey:
-        return this._emitString(str2hexstring(param.value));
+        return this._emitString(str2hexstring(param.value as string));
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }
