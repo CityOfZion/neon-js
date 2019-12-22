@@ -13,7 +13,7 @@ describe("constructor", () => {
   });
 
   test("ContractParam", () => {
-    const testObject = new ContractParam("Boolean", false);
+    const testObject = new ContractParam({ type: "Boolean", value: false });
 
     const result = new ContractParam(testObject);
     expect(result instanceof ContractParam).toBeTruthy();
@@ -23,7 +23,7 @@ describe("constructor", () => {
   });
 
   test("string type and normal value", () => {
-    const result = new ContractParam("String", "test");
+    const result = new ContractParam({ type: "String", value: "test" });
 
     expect(result instanceof ContractParam).toBeTruthy();
     expect(result.type).toBe(ContractParamType.String);
@@ -65,7 +65,7 @@ describe("Static constructors", () => {
         "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215",
         "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215"
       ]
-    ])("%s", (msg: string, data: any, expected: boolean) => {
+    ])("%s", (_msg: string, data: string | number, expected: unknown) => {
       const result = ContractParam.integer(data);
 
       expect(result instanceof ContractParam).toBeTruthy();
@@ -86,7 +86,7 @@ describe("Static constructors", () => {
         "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
         "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
       ]
-    ])("%s", (msg: string, data: any, expected: boolean) => {
+    ])("%s", (_msg: string, data: string, expected: unknown) => {
       const result = ContractParam.hash160(data);
 
       expect(result instanceof ContractParam).toBeTruthy();
@@ -94,13 +94,8 @@ describe("Static constructors", () => {
       expect(result.value).toBe(expected);
     });
 
-    test("Errors on non-string", () => {
-      const thrower = () => ContractParam.hash160(1 as any);
-      expect(thrower).toThrow();
-    });
-
     test("Errors on non-address or scripthash", () => {
-      const thrower = () => ContractParam.hash160("1");
+      const thrower = (): ContractParam => ContractParam.hash160("1");
       expect(thrower).toThrow();
     });
   });
@@ -116,7 +111,7 @@ describe("Static constructors", () => {
       ["fixed8", [100.012345678, "fixed8"], "88ba1e5402000000"],
       ["fixed8 (0 decimals)", [1, "fixed8", 0], "0100000000000000"],
       ["fixed8(4 decimals)", [222.1234, "fixed8", 4], "b2e4210000000000"]
-    ])("%s", (msg: string, data: [number, string, any], expected: boolean) => {
+    ])("%s", (_msg: string, data: [any, string, any], expected: unknown) => {
       const result = ContractParam.byteArray(...data);
 
       expect(result instanceof ContractParam).toBeTruthy();
@@ -125,9 +120,8 @@ describe("Static constructors", () => {
     });
 
     test("errors when exceeds allowed precision for fixed8", () => {
-      const thrower = () => {
+      const thrower = (): ContractParam =>
         ContractParam.byteArray(222.12345, "fixed8", 4);
-      };
       expect(thrower).toThrow("wrong precision");
     });
   });
@@ -189,7 +183,7 @@ describe("likeContractParam", () => {
       },
       true
     ],
-    ["ContractParam", new ContractParam("Integer", 1), true],
+    ["ContractParam", new ContractParam({ type: "Integer", value: 1 }), true],
     ["empty", {}, false],
     ["wrong type", { type: "", value: 1 }, false],
     ["missing value", { type: "ByteArray" }, false]
@@ -201,7 +195,10 @@ describe("likeContractParam", () => {
 
 describe("export", () => {
   test("exports properly", () => {
-    const testObject = new ContractParam(ContractParamType.Integer, 1);
+    const testObject = new ContractParam({
+      type: ContractParamType.Integer,
+      value: 1
+    });
     const result = testObject.export();
 
     expect(result).toEqual({
@@ -213,7 +210,10 @@ describe("export", () => {
 
 describe("toString", () => {
   test("emits correct string", () => {
-    const result = new ContractParam("Boolean", false).toString();
+    const result = new ContractParam({
+      type: "Boolean",
+      value: false
+    }).toString();
     expect(result).toBe("[object ContractParam:Boolean]");
   });
 });
