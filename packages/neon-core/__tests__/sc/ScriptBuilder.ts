@@ -1,6 +1,6 @@
 import ContractParam from "../../src/sc/ContractParam";
 import OpCode from "../../src/sc/OpCode";
-import ScriptBuilder from "../../src/sc/ScriptBuilder";
+import ScriptBuilder, { ScriptIntent } from "../../src/sc/ScriptBuilder";
 import { InteropServiceCode } from "../../src/sc";
 
 describe("constructor", () => {
@@ -110,11 +110,14 @@ describe("emitAppCall", () => {
       },
       "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f661411c4d1f4fba619f2628870d36e3a9773e874705b68627d5b52"
     ]
-  ])("%s", (msg: string, data: any, expected: string) => {
-    const sb = new ScriptBuilder();
-    sb.emitAppCall(data.scriptHash, data.operation, data.args);
-    expect(sb.str).toBe(expected);
-  });
+  ] as [string, ScriptIntent, string][])(
+    "%s",
+    (_msg: string, data: ScriptIntent, expected: string) => {
+      const sb = new ScriptBuilder();
+      sb.emitAppCall(data.scriptHash, data.operation, data.args);
+      expect(sb.str).toBe(expected);
+    }
+  );
 });
 
 const veryBigNumber =
@@ -179,9 +182,16 @@ describe("emitPush", () => {
         (verySmallNumberBytes.length / 2).toString(16) +
         verySmallNumberBytes
     ]
-  ])("%s", (msg: string, data: any, expected: string) => {
-    const sb = new ScriptBuilder();
-    sb.emitPush(data);
-    expect(sb.str).toBe(expected);
-  });
+  ] as [string, ContractParam | string | boolean | number, string][])(
+    "%s",
+    (
+      _msg: string,
+      data: ContractParam | string | number | boolean,
+      expected: string
+    ) => {
+      const sb = new ScriptBuilder();
+      sb.emitPush(data);
+      expect(sb.str).toBe(expected);
+    }
+  );
 });
