@@ -1,6 +1,7 @@
 import ContractParam, {
   ContractParamType,
-  likeContractParam
+  likeContractParam,
+  ContractParamLike
 } from "../../src/sc/ContractParam";
 
 describe("constructor", () => {
@@ -46,13 +47,16 @@ describe("Static constructors", () => {
       ["false", false, false],
       ["0", 0, false],
       ["0(string)", "0", true]
-    ])("%s", (msg: string, data: any, expected: boolean) => {
-      const result = ContractParam.boolean(data);
+    ])(
+      "%s",
+      (msg: string, data: string | boolean | number, expected: boolean) => {
+        const result = ContractParam.boolean(data);
 
-      expect(result instanceof ContractParam).toBeTruthy();
-      expect(result.type).toBe(ContractParamType.Boolean);
-      expect(result.value).toBe(expected);
-    });
+        expect(result instanceof ContractParam).toBeTruthy();
+        expect(result.type).toBe(ContractParamType.Boolean);
+        expect(result.value).toBe(expected);
+      }
+    );
   });
 
   describe("integer", () => {
@@ -111,13 +115,20 @@ describe("Static constructors", () => {
       ["fixed8", [100.012345678, "fixed8"], "88ba1e5402000000"],
       ["fixed8 (0 decimals)", [1, "fixed8", 0], "0100000000000000"],
       ["fixed8(4 decimals)", [222.1234, "fixed8", 4], "b2e4210000000000"]
-    ])("%s", (_msg: string, data: [any, string, any], expected: unknown) => {
-      const result = ContractParam.byteArray(...data);
+    ])(
+      "%s",
+      (
+        _msg: string,
+        data: [string | number, string, number?],
+        expected: unknown
+      ) => {
+        const result = ContractParam.byteArray(...data);
 
-      expect(result instanceof ContractParam).toBeTruthy();
-      expect(result.type).toBe(ContractParamType.ByteArray);
-      expect(result.value).toBe(expected);
-    });
+        expect(result instanceof ContractParam).toBeTruthy();
+        expect(result.type).toBe(ContractParamType.ByteArray);
+        expect(result.value).toBe(expected);
+      }
+    );
 
     test("errors when exceeds allowed precision for fixed8", () => {
       const thrower = (): ContractParam =>
@@ -187,10 +198,17 @@ describe("likeContractParam", () => {
     ["empty", {}, false],
     ["wrong type", { type: "", value: 1 }, false],
     ["missing value", { type: "ByteArray" }, false]
-  ])("%s", (msg: string, data: any, expected: boolean) => {
-    const result = likeContractParam(data);
-    expect(result).toBe(expected);
-  });
+  ])(
+    "%s",
+    (
+      msg: string,
+      data: Partial<ContractParam | ContractParamLike>,
+      expected: boolean
+    ) => {
+      const result = likeContractParam(data);
+      expect(result).toBe(expected);
+    }
+  );
 });
 
 describe("export", () => {
