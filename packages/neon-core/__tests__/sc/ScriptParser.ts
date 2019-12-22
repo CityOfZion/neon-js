@@ -31,7 +31,7 @@ const testCases = [
 ];
 
 describe("toScriptParams", () => {
-  test.each(testCases)(
+  test.each(testCases as [string, string, ScriptIntent][])(
     "%s",
     (msg: string, data: string, expected: ScriptIntent) => {
       const sr = new ScriptParser(data);
