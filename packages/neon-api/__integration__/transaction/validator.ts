@@ -3,23 +3,18 @@ import {
   TransactionValidator,
   ValidationAttributes
 } from "../../src/transaction";
-import { sc, tx, u, rpc, CONST } from "@cityofzion/neon-core";
+import { sc, tx, u, rpc, CONST, wallet } from "@cityofzion/neon-core";
 
 const TESTNET_URL = "http://seed5t.neo.org:20332";
 const rpcClient = new rpc.RPCClient(TESTNET_URL);
 
-const sig = {
-  invocationScript:
-    "40f52d1206315dfac64c14ec2dfef1edd62f4460487c23be6bbbbf9080973784ca7dbfe4dfcf4b6b82f2921b968e0d693020b76be0b20171ac56e7da50ab1c4b06",
-  verificationScript:
-    "21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c968747476aa"
-};
-const multiSig = {
-  invocationScript:
-    "40f52d1206315dfac64c14ec2dfef1edd62f4460487c23be6bbbbf9080973784ca7dbfe4dfcf4b6b82f2921b968e0d693020b76be0b20171ac56e7da50ab1c4b0640efe3ccf3a49dd670d8785a12218324f60a6b56ed5a628f15522b883a81b51ea9256c0be62008377b156eb1a76e6dc25aad776524c18eb01b0810ed833b15a1ca",
-  verificationScript:
-    "5221031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c92103767002bb9f74317035ce8d557a3aed30ce831eb16b5f636a139dad0b07916bed210329898e6e5e0a2f175e205b4019c500d6bb69203b56470ec2fc8ab0a4c065e16d5368c7c34cba"
-};
+const normalAcc = new wallet.Account();
+const multiSigAcc = wallet.Account.createMultiSig(
+  2,
+  [new wallet.Account(), new wallet.Account(), new wallet.Account()].map(
+    account => account.publicKey
+  )
+);
 
 describe("validateValidUntilBlock", () => {
   test("valid", async () => {
@@ -240,34 +235,96 @@ describe("validateSystemFee", () => {
   });
 });
 
-describe("validateNetworkFee", () => {
+describe("validateSigners", () => {
   test("valid", async () => {
     const transaction = new TransactionBuilder({
-      scripts: [sig, multiSig],
-      networkFee: 0.0237654
+      sender: u.reverseHex(normalAcc.scriptHash),
+      cosigners: [
+        {
+          account: u.reverseHex(multiSigAcc.scriptHash),
+          scopes: tx.WitnessScope.CalledByEntry
+        }
+      ]
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const validation = await validator.validateNetworkFee();
+    const validation = await validator.validateSigners([
+      normalAcc,
+      multiSigAcc
+    ]);
     expect(validation.valid).toBeTruthy();
   });
 
   test("invalid", async () => {
     const transaction = new TransactionBuilder({
-      scripts: [sig, multiSig],
+      sender: u.reverseHex(normalAcc.scriptHash),
+      cosigners: [
+        {
+          account: u.reverseHex(multiSigAcc.scriptHash),
+          scopes: tx.WitnessScope.CalledByEntry
+        }
+      ]
+    }).build();
+    const validator = new TransactionValidator(rpcClient, transaction);
+    const validation = await validator.validateSigners([normalAcc]);
+    expect(validation.valid).toBeFalsy();
+  });
+});
+
+describe("validateNetworkFee", () => {
+  test("valid", async () => {
+    const transaction = new TransactionBuilder({
+      sender: u.reverseHex(normalAcc.scriptHash),
+      cosigners: [
+        {
+          account: u.reverseHex(multiSigAcc.scriptHash),
+          scopes: tx.WitnessScope.CalledByEntry
+        }
+      ],
+      networkFee: 0.044199
+    }).build();
+    const validator = new TransactionValidator(rpcClient, transaction);
+    const validation = await validator.validateNetworkFee([
+      normalAcc,
+      multiSigAcc
+    ]);
+    expect(validation.valid).toBeTruthy();
+  });
+
+  test("invalid", async () => {
+    const transaction = new TransactionBuilder({
+      sender: u.reverseHex(normalAcc.scriptHash),
+      cosigners: [
+        {
+          account: u.reverseHex(multiSigAcc.scriptHash),
+          scopes: tx.WitnessScope.CalledByEntry
+        }
+      ],
       networkFee: 0.01
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const validation = await validator.validateNetworkFee();
+    const validation = await validator.validateNetworkFee([
+      normalAcc,
+      multiSigAcc
+    ]);
     expect(validation.valid).toBeFalsy();
   });
 
   test("autoFix", async () => {
     const transaction = new TransactionBuilder({
-      scripts: [sig, multiSig],
+      sender: u.reverseHex(normalAcc.scriptHash),
+      cosigners: [
+        {
+          account: u.reverseHex(multiSigAcc.scriptHash),
+          scopes: tx.WitnessScope.CalledByEntry
+        }
+      ],
       networkFee: 0.01
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const validation = await validator.validateNetworkFee(true);
+    const validation = await validator.validateNetworkFee(
+      [normalAcc, multiSigAcc],
+      true
+    );
     const {
       valid,
       result: {
@@ -277,7 +334,7 @@ describe("validateNetworkFee", () => {
     expect(valid).toBeTruthy();
     expect(fixed).toBeTruthy();
     expect(prev.equals(0.01)).toBeTruthy();
-    expect(suggestion.equals(0.0237654)).toBeTruthy();
+    expect(suggestion.equals(0.044199)).toBeTruthy();
     expect(transaction.networkFee.equals(suggestion)).toBeTruthy();
   });
 });
@@ -290,17 +347,26 @@ describe("validateAll", () => {
       args: []
     });
     const transaction = new TransactionBuilder({
+      sender: u.reverseHex(normalAcc.scriptHash),
+      cosigners: [
+        {
+          account: u.reverseHex(multiSigAcc.scriptHash),
+          scopes: tx.WitnessScope.CalledByEntry
+        }
+      ],
       validUntilBlock:
         tx.Transaction.MAX_TRANSACTION_LIFESPAN +
         (await rpcClient.getBlockCount()) -
         1,
-      scripts: [sig, multiSig],
       networkFee: 0.1,
       script,
       systemFee: 1
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
-    const validation = await validator.validate(ValidationAttributes.All);
+    const validation = await validator.validate(ValidationAttributes.All, [
+      normalAcc,
+      multiSigAcc
+    ]);
     expect(validation.valid).toBeTruthy();
   });
 
@@ -311,11 +377,17 @@ describe("validateAll", () => {
       args: []
     });
     const transaction = new TransactionBuilder({
+      sender: u.reverseHex(normalAcc.scriptHash),
+      cosigners: [
+        {
+          account: u.reverseHex(multiSigAcc.scriptHash),
+          scopes: tx.WitnessScope.CalledByEntry
+        }
+      ],
       validUntilBlock:
         tx.Transaction.MAX_TRANSACTION_LIFESPAN +
         (await rpcClient.getBlockCount()) -
         1,
-      scripts: [sig, multiSig],
       networkFee: 0.01,
       script,
       systemFee: 1.1
@@ -333,11 +405,17 @@ describe("validateAll", () => {
         args: []
       });
       const transaction = new TransactionBuilder({
+        sender: u.reverseHex(normalAcc.scriptHash),
+        cosigners: [
+          {
+            account: u.reverseHex(multiSigAcc.scriptHash),
+            scopes: tx.WitnessScope.CalledByEntry
+          }
+        ],
         validUntilBlock:
           tx.Transaction.MAX_TRANSACTION_LIFESPAN +
           (await rpcClient.getBlockCount()) -
           1,
-        scripts: [sig, multiSig],
         networkFee: 0.01,
         script,
         systemFee: 1.1
@@ -345,6 +423,7 @@ describe("validateAll", () => {
       const validator = new TransactionValidator(rpcClient, transaction);
       const validation = await validator.validate(
         ValidationAttributes.All,
+        [normalAcc, multiSigAcc],
         ValidationAttributes.All
       );
       expect(validation).toStrictEqual({
@@ -358,7 +437,7 @@ describe("validateAll", () => {
           networkFee: {
             fixed: true,
             prev: new u.Fixed8(0.01),
-            suggestion: new u.Fixed8(0.0240954)
+            suggestion: new u.Fixed8(0.044529)
           }
         }
       });
@@ -371,11 +450,17 @@ describe("validateAll", () => {
         args: []
       });
       const transaction = new TransactionBuilder({
+        sender: u.reverseHex(normalAcc.scriptHash),
+        cosigners: [
+          {
+            account: u.reverseHex(multiSigAcc.scriptHash),
+            scopes: tx.WitnessScope.CalledByEntry
+          }
+        ],
         validUntilBlock:
           tx.Transaction.MAX_TRANSACTION_LIFESPAN +
           (await rpcClient.getBlockCount()) -
           1,
-        scripts: [sig, multiSig],
         networkFee: 0.01,
         script,
         systemFee: 1.1
@@ -383,6 +468,7 @@ describe("validateAll", () => {
       const validator = new TransactionValidator(rpcClient, transaction);
       const validation = await validator.validate(
         ValidationAttributes.All,
+        [normalAcc, multiSigAcc],
         ValidationAttributes.SystemFee
       );
       expect(validation).toStrictEqual({
@@ -396,7 +482,7 @@ describe("validateAll", () => {
           networkFee: {
             fixed: false,
             prev: new u.Fixed8(0.01),
-            suggestion: new u.Fixed8(0.0240954)
+            suggestion: new u.Fixed8(0.044529)
           }
         }
       });

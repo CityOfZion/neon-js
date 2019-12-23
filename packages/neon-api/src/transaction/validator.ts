@@ -1,4 +1,4 @@
-import { tx, rpc, u, sc } from "@cityofzion/neon-core";
+import { tx, rpc, u, sc, wallet } from "@cityofzion/neon-core";
 import { getNetworkFee } from "./util";
 
 export enum ValidationAttributes {
@@ -7,7 +7,8 @@ export enum ValidationAttributes {
   SystemFee = 1 << 1,
   NetworkFee = 1 << 2,
   Script = 1 << 3,
-  All = ValidUntilBlock | SystemFee | NetworkFee | Script
+  Signers = 1 << 4,
+  All = ValidUntilBlock | SystemFee | NetworkFee | Script | Signers
 }
 
 export type ValidationSuggestion<T> = {
@@ -31,6 +32,7 @@ export interface ValidationResult {
     script?: ValidationSuggestion<string>;
     systemFee?: ValidationSuggestion<u.Fixed8>;
     networkFee?: ValidationSuggestion<u.Fixed8>;
+    signers?: ValidationSuggestion<string>;
   };
 }
 
@@ -242,12 +244,48 @@ export class TransactionValidator {
   }
 
   /**
+   * validate signers
+   * ATTENTION: if transaction has a multi-sig signer, do use this multi-sig account instead of the separated accounts for this validation
+   * @param signers
+   */
+  validateSigners(signers: Array<wallet.Account>): Promise<ValidationResult> {
+    const scriptHashes = this.transaction
+      .getScriptHashesForVerifying()
+      .map(hash => u.reverseHex(hash));
+    const signerScriptHashes = signers.map(signer => signer.scriptHash);
+    const diff = [...signerScriptHashes, ...scriptHashes].filter(
+      hash => !scriptHashes.includes(hash) || !signerScriptHashes.includes(hash)
+    );
+    if (diff.length > 0) {
+      return Promise.resolve({
+        valid: false,
+        result: {
+          signers: {
+            fixed: false,
+            message: "signers and transaction signers don't match"
+          }
+        }
+      });
+    }
+    return Promise.resolve({
+      valid: true
+    });
+  }
+
+  /**
    * Validate NetworkFee
    * @param autoFix will automatically fix transaction if specified as true
    */
-  public async validateNetworkFee(autoFix = false): Promise<ValidationResult> {
+  public async validateNetworkFee(
+    signers: Array<wallet.Account>,
+    autoFix = false
+  ): Promise<ValidationResult> {
     const { networkFee } = this.transaction;
-    const minimumNetworkFee = getNetworkFee(this.transaction);
+    const verificationScripts = signers.map(signer => signer.contract.script);
+    const minimumNetworkFee = getNetworkFee(
+      this.transaction,
+      verificationScripts
+    );
     if (autoFix && !minimumNetworkFee.equals(networkFee)) {
       this.transaction.networkFee = minimumNetworkFee;
       return {
@@ -291,6 +329,7 @@ export class TransactionValidator {
 
   public async validate(
     attrs: ValidationAttributes,
+    signers: Array<wallet.Account> = [],
     autoFix: ValidationAttributes = ValidationAttributes.None
   ): Promise<ValidationResult> {
     const validationTasks: Array<Promise<ValidationResult>> = [];
@@ -310,9 +349,14 @@ export class TransactionValidator {
       );
     }
 
+    if (attrs & ValidationAttributes.Signers) {
+      validationTasks.push(this.validateSigners(signers));
+    }
+
     if (attrs & ValidationAttributes.NetworkFee) {
       validationTasks.push(
         this.validateNetworkFee(
+          signers,
           Boolean(autoFix & ValidationAttributes.NetworkFee)
         )
       );
