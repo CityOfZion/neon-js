@@ -235,3 +235,52 @@ describe("toString", () => {
     expect(result).toBe("[object ContractParam:Boolean]");
   });
 });
+
+describe("equals", () => {
+  const obj1 = {
+    type: "String",
+    value: "1234"
+  };
+
+  const obj2 = {
+    type: "Array",
+    value: [
+      {
+        type: "Array",
+        value: [
+          {
+            type: "Hash160",
+            value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+          }
+        ]
+      }
+    ]
+  };
+
+  const obj3 = {
+    type: "Void"
+  };
+
+  const param1 = new ContractParam(obj1);
+  const param2 = new ContractParam(obj2);
+  const param3 = new ContractParam(obj3);
+
+  test.each([
+    ["Param1 === Param1", param1, param1, true],
+    ["Param1 !== Param2", param1, param2, false],
+    ["Param1 === Obj1", param1, obj1, true],
+    ["Param1 !== Obj2", param1, obj2, false],
+    ["Param2 === Obj2", param2, obj2, true],
+    ["Param3 === Obj3", param3, obj3, true]
+  ] as [string, ContractParam, ContractParamLike, boolean][])(
+    "%s",
+    (
+      _msg: string,
+      a: ContractParam,
+      b: ContractParamLike,
+      expected: boolean
+    ) => {
+      expect(a.equals(b)).toEqual(expected);
+    }
+  );
+});

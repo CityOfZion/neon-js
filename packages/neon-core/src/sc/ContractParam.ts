@@ -1,5 +1,6 @@
 import { Fixed8, reverseHex } from "../u";
 import { getScriptHashFromAddress, isAddress } from "../wallet";
+import { NeonObject } from "../model";
 
 export enum ContractParamType {
   Signature = 0x00,
@@ -19,7 +20,7 @@ export enum ContractParamType {
 
 export interface ContractParamLike {
   type: string;
-  value: string | boolean | number | ContractParamLike[];
+  value: string | boolean | number | ContractParamLike[] | null;
 }
 
 function toContractParamType(
@@ -38,7 +39,7 @@ function toContractParamType(
  * Contract input parameters.
  * These are mainly used as parameters to pass in for RPC test invokes.
  */
-export class ContractParam {
+export class ContractParam implements NeonObject<ContractParamLike> {
   /**
    * Creates a String ContractParam.
    */
@@ -159,20 +160,23 @@ export class ContractParam {
   }
 
   public type: ContractParamType;
-  public value: string | boolean | number | ContractParam[];
+  public value: string | boolean | number | ContractParam[] | null;
 
   public constructor(input: Partial<ContractParamLike | ContractParam>) {
     if (typeof input === "object") {
-      if (input.type === undefined || input.value === undefined) {
-        throw new Error("type and value must be populated!");
+      if (input.type === undefined) {
+        throw new Error("type must be defined!");
       }
       this.type = toContractParamType(input.type);
+      if (this.type !== ContractParamType.Void && input.value === undefined) {
+        throw new Error("value must be defined!");
+      }
       this.value =
         typeof input.value === "object"
           ? (input.value as (ContractParamLike | ContractParam)[]).map(
               cp => new ContractParam(cp)
             )
-          : input.value;
+          : input.value ?? null;
     } else {
       throw new Error("No constructor arguments provided!");
     }
@@ -189,16 +193,26 @@ export class ContractParam {
     return { type: ContractParamType[this.type], value: exportedValue };
   }
 
-  public equal(other: ContractParamLike): boolean {
-    if (
-      this.type === toContractParamType(other.type) &&
-      Array.isArray(this.value) &&
-      Array.isArray(other.value) &&
-      this.value.length === other.value.length
-    ) {
-      return this.value.every((cp, i) =>
-        cp.equal((other.value as ContractParamLike[])[i])
-      );
+  public equals(other: ContractParamLike): boolean {
+    if (this.type === toContractParamType(other.type)) {
+      switch (this.type) {
+        case ContractParamType.Array:
+        case ContractParamType.Map:
+          if (
+            Array.isArray(this.value) &&
+            Array.isArray(other.value) &&
+            this.value.length === other.value.length
+          ) {
+            return this.value.every((cp, i) =>
+              cp.equals((other.value as ContractParamLike[])[i])
+            );
+          }
+          return false;
+        case ContractParamType.Void:
+          return true;
+        default:
+          return this.value === other.value;
+      }
     }
     return false;
   }
