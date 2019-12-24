@@ -37,7 +37,7 @@ const create = {
   signature: wallet.generateSignature,
   wallet: (k: neonCore.wallet.WalletJSON) => new wallet.Wallet(k),
   contractParam: (type: keyof typeof sc.ContractParamType, value: any) =>
-    new sc.ContractParam(type, value),
+    new sc.ContractParam({ type, value }),
   script: sc.createScript,
   scriptBuilder: () => new sc.ScriptBuilder(),
   deployScript: (args: any) => sc.generateDeployScript(args),

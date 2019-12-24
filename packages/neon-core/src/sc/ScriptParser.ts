@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { reverseHex, StringStream, hexstring2str } from "../u";
 import { ScriptIntent } from "./ScriptBuilder";
 import InteropServiceCode from "./InteropServiceCode";
@@ -6,16 +5,16 @@ import InteropServiceCode from "./InteropServiceCode";
 /**
  * Checks that args is [string, string, array]
  */
-function isSystemContractCallFormat(args?: any[]): void {
-  if (
-    !args ||
-    args.length !== 3 ||
-    !Array.isArray(args[2]) ||
-    typeof args[1] !== "string" ||
-    typeof args[0] !== "string"
-  ) {
-    throw new Error(`ScriptIntent not in the right format: ${args}`);
-  }
+function isSystemContractCallFormat(
+  args?: unknown[]
+): args is [string, string, unknown[]] {
+  return !!(
+    args &&
+    args.length === 3 &&
+    Array.isArray(args[2]) &&
+    typeof args[1] === "string" &&
+    typeof args[0] === "string"
+  );
 }
 
 /**
@@ -33,7 +32,7 @@ export class ScriptParser extends StringStream {
     const output = {
       scriptHash: "",
       operation: "",
-      args: [] as any[]
+      args: [] as unknown[]
     };
 
     while (!this.isEmpty()) {
@@ -70,7 +69,7 @@ export class ScriptParser extends StringStream {
           break;
         /* PACK */
         case n === 193:
-          const len = output.args.shift();
+          const len = output.args.shift() as number;
           const cache = [];
           for (let i = 0; i < len; i++) {
             cache.push(output.args.shift());
@@ -86,13 +85,17 @@ export class ScriptParser extends StringStream {
           const interopServiceCode = this.read(4) as InteropServiceCode;
           if (interopServiceCode !== InteropServiceCode.SYSTEM_CONTRACT_CALL) {
             throw new Error(
-              `Encounter unknown interop serivce: ${interopServiceCode}`
+              `Encounter unknown interop service: ${interopServiceCode}`
             );
           }
-          isSystemContractCallFormat(output.args);
-          output.scriptHash = reverseHex(output.args.shift());
-          output.operation = hexstring2str(output.args.shift());
-          output.args = output.args.shift();
+          if (!isSystemContractCallFormat(output.args)) {
+            throw new Error(
+              `ScriptIntent not in the right format: ${output.args}`
+            );
+          }
+          output.scriptHash = reverseHex(output.args.shift() as string);
+          output.operation = hexstring2str(output.args.shift() as string);
+          output.args = output.args.shift() as unknown[];
           return output;
         /* THROWIFNOT, neo-cli will add this op to end of script */
         case n === 241:

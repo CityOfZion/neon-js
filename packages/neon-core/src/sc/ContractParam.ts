@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fixed8, reverseHex } from "../u";
 import { getScriptHashFromAddress, isAddress } from "../wallet";
+import { NeonObject } from "../model";
 
 export enum ContractParamType {
   Signature = 0x00,
@@ -20,7 +20,7 @@ export enum ContractParamType {
 
 export interface ContractParamLike {
   type: string;
-  value: any;
+  value: string | boolean | number | ContractParamLike[] | null;
 }
 
 function toContractParamType(
@@ -39,12 +39,15 @@ function toContractParamType(
  * Contract input parameters.
  * These are mainly used as parameters to pass in for RPC test invokes.
  */
-export class ContractParam {
+export class ContractParam implements NeonObject<ContractParamLike> {
   /**
    * Creates a String ContractParam.
    */
   public static string(value: string): ContractParam {
-    return new ContractParam(ContractParamType.String, value);
+    return new ContractParam({
+      type: ContractParamType.String,
+      value
+    });
   }
 
   /**
@@ -53,11 +56,14 @@ export class ContractParam {
   public static boolean(
     value: boolean | string | number | object
   ): ContractParam {
-    return new ContractParam(ContractParamType.Boolean, !!value);
+    return new ContractParam({
+      type: ContractParamType.Boolean,
+      value: !!value
+    });
   }
 
   public static publicKey(value: string): ContractParam {
-    return new ContractParam(ContractParamType.PublicKey, value);
+    return new ContractParam({ type: ContractParamType.PublicKey, value });
   }
 
   /**
@@ -66,11 +72,6 @@ export class ContractParam {
    * @return {ContractParam}
    */
   public static hash160(value: string): ContractParam {
-    if (typeof value !== "string") {
-      throw new Error(
-        `hash160 expected a string but got ${typeof value} instead.`
-      );
-    }
     if (isAddress(value)) {
       value = getScriptHashFromAddress(value);
     }
@@ -79,7 +80,7 @@ export class ContractParam {
         `hash160 expected a 40 character string but got ${value.length} chars instead.`
       );
     }
-    return new ContractParam(ContractParamType.Hash160, value);
+    return new ContractParam({ type: ContractParamType.Hash160, value });
   }
 
   /**
@@ -94,7 +95,10 @@ export class ContractParam {
       typeof value === "string"
         ? value.split(".")[0]
         : Math.round(value).toString();
-    return new ContractParam(ContractParamType.Integer, num);
+    return new ContractParam({
+      type: ContractParamType.Integer,
+      value: num
+    });
   }
 
   /**
@@ -104,24 +108,30 @@ export class ContractParam {
    * @param args Additional arguments such as decimal precision
    */
   public static byteArray(
-    value: any,
+    value: string | number,
     format: string,
-    ...args: any[]
+    ...args: unknown[]
   ): ContractParam {
     if (format) {
       format = format.toLowerCase();
     }
     if (format === "address") {
-      return new ContractParam(
-        ContractParamType.ByteArray,
-        reverseHex(getScriptHashFromAddress(value))
-      );
+      if (typeof value !== "string") {
+        throw new Error("Expected string when format is address");
+      }
+      return new ContractParam({
+        type: ContractParamType.ByteArray,
+        value: reverseHex(getScriptHashFromAddress(value))
+      });
     } else if (format === "fixed8") {
       let decimals = 8;
       if (args.length === 1) {
+        if (typeof args[0] !== "number") {
+          throw new Error("Expected number when format is fixed8");
+        }
         decimals = args[0];
       }
-      if (!isFinite(value)) {
+      if (typeof value !== "number" || !isFinite(value)) {
         throw new Error(`Input should be number!`);
       }
       const divisor = new Fixed8(Math.pow(10, 8 - decimals));
@@ -131,13 +141,13 @@ export class ContractParam {
       if (!modValue.isZero()) {
         throw new Error(`wrong precision: expected ${decimals}`);
       }
-      value = fixed8Value.div(divisor);
-      return new ContractParam(
-        ContractParamType.ByteArray,
-        value.toReverseHex().slice(0, 16)
-      );
+      const finalValue = fixed8Value.div(divisor);
+      return new ContractParam({
+        type: ContractParamType.ByteArray,
+        value: finalValue.toReverseHex().slice(0, 16)
+      });
     } else {
-      return new ContractParam(ContractParamType.ByteArray, value);
+      return new ContractParam({ type: ContractParamType.ByteArray, value });
     }
   }
 
@@ -146,27 +156,27 @@ export class ContractParam {
    * @param params params to be encapsulated in an array.
    */
   public static array(...params: ContractParam[]): ContractParam {
-    return new ContractParam(ContractParamType.Array, params);
+    return new ContractParam({ type: ContractParamType.Array, value: params });
   }
 
   public type: ContractParamType;
-  public value: any;
+  public value: string | boolean | number | ContractParam[] | null;
 
-  public constructor(
-    type:
-      | ContractParam
-      | ContractParamLike
-      | ContractParamType
-      | keyof typeof ContractParamType
-      | number,
-    value?: any
-  ) {
-    if (typeof type === "object") {
-      this.type = toContractParamType(type.type);
-      this.value = type.value;
-    } else if (type !== undefined) {
-      this.type = toContractParamType(type);
-      this.value = value;
+  public constructor(input: Partial<ContractParamLike | ContractParam>) {
+    if (typeof input === "object") {
+      if (input.type === undefined) {
+        throw new Error("type must be defined!");
+      }
+      this.type = toContractParamType(input.type);
+      if (this.type !== ContractParamType.Void && input.value === undefined) {
+        throw new Error("value must be defined!");
+      }
+      this.value =
+        typeof input.value === "object"
+          ? (input.value as (ContractParamLike | ContractParam)[]).map(
+              cp => new ContractParam(cp)
+            )
+          : input.value ?? null;
     } else {
       throw new Error("No constructor arguments provided!");
     }
@@ -183,14 +193,26 @@ export class ContractParam {
     return { type: ContractParamType[this.type], value: exportedValue };
   }
 
-  public equal(other: ContractParamLike): boolean {
-    if (
-      this.type === toContractParamType(other.type) &&
-      Array.isArray(this.value) &&
-      Array.isArray(other.value) &&
-      this.value.length === other.value.length
-    ) {
-      return this.value.every((cp, i) => cp.equal(other.value[i]));
+  public equals(other: ContractParamLike): boolean {
+    if (this.type === toContractParamType(other.type)) {
+      switch (this.type) {
+        case ContractParamType.Array:
+        case ContractParamType.Map:
+          if (
+            Array.isArray(this.value) &&
+            Array.isArray(other.value) &&
+            this.value.length === other.value.length
+          ) {
+            return this.value.every((cp, i) =>
+              cp.equals((other.value as ContractParamLike[])[i])
+            );
+          }
+          return false;
+        case ContractParamType.Void:
+          return true;
+        default:
+          return this.value === other.value;
+      }
     }
     return false;
   }
@@ -198,7 +220,9 @@ export class ContractParam {
 
 export default ContractParam;
 
-export function likeContractParam(cp: Partial<ContractParam>): boolean {
+export function likeContractParam(
+  cp: Partial<ContractParamLike | ContractParam>
+): cp is ContractParamLike {
   if (cp === null || cp === undefined) {
     return false;
   }
