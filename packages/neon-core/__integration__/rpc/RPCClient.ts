@@ -5,11 +5,11 @@ import { Account } from "../../src/wallet";
 import { reverseHex } from "../../src/u";
 
 const TESTNET_URLS = [
+  "http://seed1t.neo.org:20332",
   "http://seed2t.neo.org:20332",
   "http://seed3t.neo.org:20332",
   "http://seed4t.neo.org:20332",
-  "http://seed5t.neo.org:20332",
-  "http://seed1t.neo.org:20332"
+  "http://seed5t.neo.org:20332"
 ];
 
 let client: rpc.RPCClient;
@@ -18,19 +18,21 @@ const privateKey =
   "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69";
 const contractHash = "a1760976db5fcdfab2a9930e8f6ce875b2d18225";
 
+function safelyCheckHeight(url: string): Promise<number> {
+  return rpc
+    .sendQuery(url, rpc.Query.getBlockCount(), { timeout: 10000 })
+    .then(res => res.result)
+    .catch(_e => -1);
+}
 beforeAll(async () => {
-  for (let i = 0; i < TESTNET_URLS.length; i++) {
-    try {
-      client = new rpc.RPCClient(TESTNET_URLS[i]);
-      await client.getBlockCount();
-      break;
-    } catch (e) {
-      if (i === TESTNET_URLS.length - 1) {
-        throw new Error("Exhausted all urls but found no available RPC");
-      }
-      continue;
-    }
-  }
+  const heights = (
+    await Promise.all(TESTNET_URLS.map(url => safelyCheckHeight(url)))
+  ).map((h, i) => ({ height: h, url: TESTNET_URLS[i] }));
+  const best = heights.reduce(
+    (bestSoFar, h) => (bestSoFar.height >= h.height ? bestSoFar : h),
+    { height: -1, url: "" }
+  );
+  client = new rpc.RPCClient(best.url);
 });
 
 describe("RPC Methods", () => {
