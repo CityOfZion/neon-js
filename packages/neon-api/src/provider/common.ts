@@ -31,7 +31,12 @@ export function filterHttpsOnly(nodes: RpcNode[]): RpcNode[] {
 export async function raceToSuccess<T>(promises: Promise<T>[]): Promise<T> {
   try {
     const errors = await Promise.all(
-      promises.map(p => p.then(val => Promise.reject(val), err => err))
+      promises.map(p =>
+        p.then(
+          val => Promise.reject(val),
+          err => err
+        )
+      )
     );
     return await Promise.reject(errors);
   } catch (success) {

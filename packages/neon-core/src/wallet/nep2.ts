@@ -58,7 +58,7 @@ export async function encrypt(
     r,
     p,
     64,
-    () => {}
+    () => {} // eslint-disable-line
   );
 
   const derived = Buffer.from(key).toString("hex");
@@ -101,7 +101,7 @@ export async function decrypt(
     r,
     p,
     64,
-    () => {}
+    () => {} // eslint-disable-line
   );
   const derived = Buffer.from(key).toString("hex");
   const derived1 = derived.slice(0, 64);
