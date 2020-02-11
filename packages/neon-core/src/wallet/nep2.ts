@@ -14,9 +14,18 @@ import SHA256 from "crypto-js/sha256";
 import { scrypt } from "scrypt-js";
 import { DEFAULT_SCRYPT, NEP_FLAG, NEP_HEADER } from "../consts";
 import logging from "../logging";
-import { ab2hexstring, hexXor } from "../u";
-import Account from "./Account";
+import { ab2hexstring, hexXor, hash160, hash256 } from "../u";
+import { isWIF } from "./verify";
+import {
+  getPrivateKeyFromWIF,
+  getPublicKeyFromPrivateKey,
+  getAddressFromScriptHash,
+  getWIFFromPrivateKey,
+  getScriptHashFromPublicKey
+} from "./core";
+import base58 from "bs58";
 
+const NEO2_ADDRESS_VERSION = "17";
 const enc = {
   Latin1: latin1Encoding,
   Hex: hexEncoding
@@ -32,22 +41,16 @@ const AES_OPTIONS = { mode: ECBMode, padding: NoPadding };
 
 const log = logging("wallet");
 
-/**
- * Encrypts a WIF key using a given keyphrase under NEP-2 Standard.
- * @param wifKey WIF key to encrypt (52 chars long).
- * @param keyphrase The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
- * @param scryptParams Optional parameters for Scrypt. Defaults to NEP2 specified parameters.
- * @returns The encrypted key in Base58 (Case sensitive).
- */
-export async function encrypt(
-  wifKey: string,
+async function createNep2Key(
+  prefix: string,
+  privateKey: string,
   keyphrase: string,
-  scryptParams: ScryptParams = DEFAULT_SCRYPT
+  address: string,
+  scryptParams: ScryptParams
 ): Promise<string> {
   const { n, r, p } = scryptParams;
-  const account = new Account(wifKey);
   // SHA Salt (use the first 4 bytes)
-  const firstSha = SHA256(enc.Latin1.parse(account.address));
+  const firstSha = SHA256(enc.Latin1.parse(address));
   const addressHash = SHA256(firstSha as any)
     .toString()
     .slice(0, 8);
@@ -59,14 +62,14 @@ export async function encrypt(
     r,
     p,
     64,
-    () => {} // eslint-disable-line
+    () => { } // eslint-disable-line
   );
 
   const derived = Buffer.from(key).toString("hex");
   const derived1 = derived.slice(0, 64);
   const derived2 = derived.slice(64);
   // AES Encrypt
-  const xor = hexXor(account.privateKey, derived1);
+  const xor = hexXor(privateKey, derived1);
   const encrypted = AES.encrypt(
     enc.Hex.parse(xor),
     enc.Hex.parse(derived2),
@@ -79,22 +82,56 @@ export async function encrypt(
   return encryptedKey;
 }
 
+function getAddressFromPrivateKey(privateKey: string): string {
+  return getAddressFromScriptHash(
+    getScriptHashFromPublicKey(getPublicKeyFromPrivateKey(privateKey))
+  );
+}
+
+function getNeo2AddressFromPrivateKey(privateKey: string): string {
+  const publicKey = getPublicKeyFromPrivateKey(privateKey, true);
+  const verificationScript = "21" + publicKey + "ac";
+  const scriptHash = hash160(verificationScript);
+  const shaChecksum = hash256(NEO2_ADDRESS_VERSION + scriptHash).substr(0, 8);
+  return base58.encode(
+    Buffer.from(NEO2_ADDRESS_VERSION + scriptHash + shaChecksum, "hex")
+  );
+}
+
 /**
- * Decrypts an encrypted key using a given keyphrase under NEP-2 Standard.
- * @param encryptedKey The encrypted key (58 chars long).
+ * Encrypts a WIF key using a given keyphrase under NEP-2 Standard.
+ * @param wifKey WIF key to encrypt (52 chars long).
  * @param keyphrase The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
- * @param scryptParams Parameters for Scrypt. Defaults to NEP2 specified parameters.
- * @returns The decrypted WIF key.
+ * @param scryptParams Optional parameters for Scrypt. Defaults to NEP2 specified parameters.
+ * @returns The encrypted key in Base58 (Case sensitive).
  */
-export async function decrypt(
-  encryptedKey: string,
+export function encrypt(
+  wifKey: string,
   keyphrase: string,
   scryptParams: ScryptParams = DEFAULT_SCRYPT
+): Promise<string> {
+  const privateKey = isWIF(wifKey) ? getPrivateKeyFromWIF(wifKey) : wifKey;
+  const address = getAddressFromPrivateKey(privateKey);
+  return createNep2Key(
+    NEP_HEADER + NEP_FLAG,
+    privateKey,
+    keyphrase,
+    address,
+    scryptParams
+  );
+}
+
+async function decipherNep2Key(
+  encryptedKey: string,
+  keyphrase: string,
+  generateAddress: (privatekey: string) => string,
+  scryptParams: ScryptParams
 ): Promise<string> {
   const { n, r, p } = scryptParams;
   const assembled = ab2hexstring(bs58check.decode(encryptedKey));
   const addressHash = assembled.substr(6, 8);
   const encrypted = assembled.substr(-64);
+
   const key = await scrypt(
     Buffer.from(keyphrase.normalize("NFC"), "utf8"),
     Buffer.from(addressHash, "hex"),
@@ -102,7 +139,7 @@ export async function decrypt(
     r,
     p,
     64,
-    () => {} // eslint-disable-line
+    () => { } // eslint-disable-line
   );
   const derived = Buffer.from(key).toString("hex");
   const derived1 = derived.slice(0, 64);
@@ -118,15 +155,48 @@ export async function decrypt(
     AES_OPTIONS
   );
   const privateKey = hexXor(decrypted.toString(), derived1);
-  const account = new Account(privateKey);
-  const newAddressHash = SHA256(
-    SHA256(enc.Latin1.parse(account.address)) as any
-  )
+  const address = generateAddress(privateKey);
+  const newAddressHash = SHA256(SHA256(enc.Latin1.parse(address)) as any)
     .toString()
     .slice(0, 8);
   if (addressHash !== newAddressHash) {
     throw new Error("Wrong password or scrypt parameters!");
   }
   log.info(`Successfully decrypted ${encryptedKey}`);
-  return account.WIF;
+  return privateKey;
+}
+
+/**
+ * Decrypts an encrypted key using a given keyphrase under NEP-2 Standard.
+ * @param encryptedKey The encrypted key (58 chars long).
+ * @param keyphrase The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
+ * @param scryptParams Parameters for Scrypt. Defaults to NEP2 specified parameters.
+ * @returns The decrypted WIF key.
+ */
+export async function decrypt(
+  encryptedKey: string,
+  keyphrase: string,
+  scryptParams: ScryptParams = DEFAULT_SCRYPT
+): Promise<string> {
+  const privateKey = await decipherNep2Key(
+    encryptedKey,
+    keyphrase,
+    getAddressFromPrivateKey,
+    scryptParams
+  );
+  return getWIFFromPrivateKey(privateKey);
+}
+
+export async function decryptNeo2(
+  encryptedKey: string,
+  keyphrase: string,
+  scryptParams: ScryptParams = DEFAULT_SCRYPT
+): Promise<string> {
+  const privateKey = await decipherNep2Key(
+    encryptedKey,
+    keyphrase,
+    getNeo2AddressFromPrivateKey,
+    scryptParams
+  );
+  return getWIFFromPrivateKey(privateKey);
 }

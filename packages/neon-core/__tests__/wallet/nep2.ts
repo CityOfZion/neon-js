@@ -25,6 +25,25 @@ const simpleKeys = {
   }
 };
 
+const neo2Keys = {
+  a: {
+    wif: "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
+    passphrase: "city of zion",
+    encryptedWif: "6PYLHmDf7R4im6NUF34MwcbViPpjwfdkrPMdFjuCXnEFmmK2A7AAzVAvTa"
+  },
+  b: {
+    wif: "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
+    passphrase: "我的密码",
+    encryptedWif: "6PYWVp3xerNdVMtSELSNZDBMP1qXrM1o6NrCQHqpeWLMd3rgeUE1rQuwrm"
+  },
+  c: {
+    wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
+    passphrase: "MyL33tP@33w0rd",
+    encryptedWif: "6PYNoc1EFvW5rJD2Tg6k24xEVGZ56sY1YN5NG2sSF1qUKHy47uEwTkdcYs"
+  }
+};
+
+// This uses default scrypt params
 const testKey = {
   wif: "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
   passphrase: "city of zion",
@@ -52,27 +71,33 @@ describe("NEP2", () => {
     ["Basic", simpleKeys.a],
     ["Chinese", simpleKeys.b],
     ["Symbols", simpleKeys.c]
-  ])("%s", (msg: string, data: any) => {
-    test("encrypt", async () => {
-      const result = await NEP2.encrypt(
-        data.wif,
-        data.passphrase,
-        simpleScrypt
-      );
-      expect(isNEP2(result)).toBeTruthy();
-      expect(result).toBe(data.encryptedWif);
-    });
+  ])(
+    "%s",
+    (
+      msg: string,
+      data: { wif: string; encryptedWif: string; passphrase: string }
+    ) => {
+      test("encrypt", async () => {
+        const result = await NEP2.encrypt(
+          data.wif,
+          data.passphrase,
+          simpleScrypt
+        );
+        expect(isNEP2(result)).toBeTruthy();
+        expect(result).toBe(data.encryptedWif);
+      });
 
-    test("decrypt", async () => {
-      const result = await NEP2.decrypt(
-        data.encryptedWif,
-        data.passphrase,
-        simpleScrypt
-      );
-      expect(isWIF(result)).toBeTruthy();
-      expect(result).toBe(data.wif);
-    });
-  });
+      test("decrypt", async () => {
+        const result = await NEP2.decrypt(
+          data.encryptedWif,
+          data.passphrase,
+          simpleScrypt
+        );
+        expect(isWIF(result)).toBeTruthy();
+        expect(result).toBe(data.wif);
+      });
+    }
+  );
 
   describe("Error", () => {
     test("Errors on wrong password", () => {
@@ -93,3 +118,25 @@ describe("NEP2", () => {
     });
   });
 });
+
+describe.each([
+  ["Basic", neo2Keys.a],
+  ["Chinese", neo2Keys.b],
+  ["Symbols", neo2Keys.c]
+])(
+  "%s",
+  (
+    msg: string,
+    data: { wif: string; encryptedWif: string; passphrase: string }
+  ) => {
+    test("decrypt neo2 key", async () => {
+      const result = await NEP2.decryptNeo2(
+        data.encryptedWif,
+        data.passphrase,
+        simpleScrypt
+      );
+      expect(isWIF(result)).toBeTruthy();
+      expect(result).toBe(data.wif);
+    });
+  }
+);
