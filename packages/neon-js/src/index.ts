@@ -22,9 +22,9 @@ const bootstrap: {
   [net: string]: Partial<neonCore.rpc.NetworkJSON>;
 } = defaultNetworks;
 Object.keys(bootstrap).map(key => {
-  settings.networks[key] = new rpc.Network(bootstrap[
-    key
-  ] as neonCore.rpc.NetworkJSON);
+  settings.networks[key] = new rpc.Network(
+    bootstrap[key] as neonCore.rpc.NetworkJSON
+  );
 });
 
 /**

@@ -132,10 +132,10 @@ export class Wallet {
    */
   public async encrypt(index: number, keyphrase: string): Promise<boolean> {
     if (index < 0) {
-      return Promise.reject("Index cannot be negative!");
+      throw new Error("Index cannot be negative!");
     }
     if (index >= this.accounts.length) {
-      return Promise.reject("Index cannot larger than Accounts array!");
+      throw new Error("Index cannot larger than Accounts array!");
     }
     await this.accounts[index].encrypt(keyphrase, this.scrypt);
     return true;

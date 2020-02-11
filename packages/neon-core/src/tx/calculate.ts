@@ -13,15 +13,12 @@ export let defaultCalculationStrategy = balancedApproach;
  * @param intents List of TransactionOutputs to reduce.
  */
 export function combineIntents(intents: TransactionOutput[]) {
-  return intents.reduce(
-    (assets, intent) => {
-      assets[intent.assetId]
-        ? (assets[intent.assetId] = assets[intent.assetId].add(intent.value))
-        : (assets[intent.assetId] = intent.value);
-      return assets;
-    },
-    {} as { [assetId: string]: Fixed8 }
-  );
+  return intents.reduce((assets, intent) => {
+    assets[intent.assetId]
+      ? (assets[intent.assetId] = assets[intent.assetId].add(intent.value))
+      : (assets[intent.assetId] = intent.value);
+    return assets;
+  }, {} as { [assetId: string]: Fixed8 });
 }
 
 export function calculateInputsForAsset(
