@@ -131,7 +131,7 @@ describe("encryptAll", () => {
       "6PYVQfxBH2zBvFsJ1zBZJUUD8ykvCdWrAfZzjWw4RRskjwLAc74bkT3eQn"
     );
     expect(wallet.accounts[1].encrypted).toBe(
-      "6PYVDzdHsTKZMKVUfoCrMGWT58XJEtnS5YdS131UCu2xzXtbQK8KaGos8u"
+      "6PYTmxqFiGnZnioGDCUTkaWsgFubYuTNx4aMJ7SKNV2XAzAJHYXW8RAEgw"
     );
   }, 20000);
 });
