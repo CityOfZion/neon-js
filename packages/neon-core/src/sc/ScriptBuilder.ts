@@ -118,8 +118,10 @@ export class ScriptBuilder extends StringStream {
     args?: any[] | string | number | boolean,
     useTailCall = false
   ): this {
-    this.emitPush(args);
-    if (operation) {
+    if (args !== undefined) {
+      this.emitPush(args);
+    }
+    if (operation !== null) {
       let hexOp = "";
       for (let i = 0; i < operation.length; i++) {
         hexOp += num2hexstring(operation.charCodeAt(i));

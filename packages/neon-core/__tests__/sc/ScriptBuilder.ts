@@ -116,6 +116,13 @@ describe("emitAppCall", () => {
         useTailCall: false
       },
       "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f666711c4d1f4fba619f2628870d36e3a9773e874705b"
+    ],
+    [
+      "emitAppCall with only scriptHash",
+      {
+        scriptHash: "5b7074e873973a6ed3708862f219a6fbf4d1c411"
+      },
+      "6711c4d1f4fba619f2628870d36e3a9773e874705b"
     ]
   ])("%s", (msg: string, data: any, expected: string) => {
     const sb = new ScriptBuilder();

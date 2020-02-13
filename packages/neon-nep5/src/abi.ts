@@ -14,7 +14,7 @@ export function name(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
-    return sb.emitAppCall(scriptHash, "name");
+    return sb.emitAppCall(scriptHash, "name", []);
   };
 }
 
@@ -28,7 +28,7 @@ export function symbol(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
-    return sb.emitAppCall(scriptHash, "symbol");
+    return sb.emitAppCall(scriptHash, "symbol", []);
   };
 }
 
@@ -42,7 +42,7 @@ export function decimals(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
-    return sb.emitAppCall(scriptHash, "decimals");
+    return sb.emitAppCall(scriptHash, "decimals", []);
   };
 }
 
@@ -56,7 +56,7 @@ export function totalSupply(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
-    return sb.emitAppCall(scriptHash, "totalSupply");
+    return sb.emitAppCall(scriptHash, "totalSupply", []);
   };
 }
 
