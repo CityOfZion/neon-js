@@ -19,14 +19,14 @@ const fromAddr = randomAddress();
 test("name", () => {
   const resultFunction = abi.name(scriptHash);
   const resultScript = resultFunction().str;
-  expect(resultScript).toBe(`00046e616d6567${u.reverseHex(scriptHash)}`);
+  expect(resultScript).toBe(`00c1046e616d6567${u.reverseHex(scriptHash)}`);
 });
 
 test("decimals", () => {
   const resultFunction = abi.decimals(scriptHash);
   const resultScript = resultFunction().str;
   expect(resultScript).toBe(
-    `0008646563696d616c7367${u.reverseHex(scriptHash)}`
+    `00c108646563696d616c7367${u.reverseHex(scriptHash)}`
   );
 });
 
@@ -34,7 +34,7 @@ test("totalSupply", () => {
   const resultFunction = abi.totalSupply(scriptHash);
   const resultScript = resultFunction().str;
   expect(resultScript).toBe(
-    `000b746f74616c537570706c7967${u.reverseHex(scriptHash)}`
+    `00c10b746f74616c537570706c7967${u.reverseHex(scriptHash)}`
   );
 });
 

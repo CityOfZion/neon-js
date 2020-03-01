@@ -109,6 +109,13 @@ describe("emitAppCall", () => {
         }
       },
       "143775292229eccdf904f16fff8e83e7cffdc0f0ce51c10962616c616e63654f661411c4d1f4fba619f2628870d36e3a9773e874705b68627d5b52"
+    ],
+    [
+      "emitAppCall with only scriptHash",
+      {
+        scriptHash: "5b7074e873973a6ed3708862f219a6fbf4d1c411"
+      },
+      "1411c4d1f4fba619f2628870d36e3a9773e874705b68627d5b52"
     ]
   ] as [string, ScriptIntent, string][])(
     "%s",

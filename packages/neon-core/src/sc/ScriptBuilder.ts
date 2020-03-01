@@ -54,11 +54,12 @@ export class ScriptBuilder extends StringStream {
     operation?: string,
     args?: unknown[]
   ): this {
-    this.emitPush(args || []);
+    if (args !== undefined) {
+      this.emitPush(args || []);
+    }
     if (operation) {
       this._emitString(str2hexstring(operation));
     }
-
     if (scriptHash.toUpperCase() === "NEO") {
       scriptHash = ASSET_ID.NEO;
     } else if (scriptHash.toUpperCase() === "GAS") {
