@@ -5,3 +5,4 @@ export * from "./verify";
 export * from "./signing";
 export * from "./Wallet";
 export * from "./multisig";
+export * from "./upgrade";

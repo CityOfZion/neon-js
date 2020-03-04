@@ -1,4 +1,4 @@
-import { logging, rpc, sc, u, wallet } from "@cityofzion/neon-core";
+import { logging, rpc, sc, u } from "@cityofzion/neon-core";
 import * as abi from "./abi";
 const log = logging.default("nep5");
 
