@@ -19,6 +19,9 @@
     "lodash": "4.17.12",
     "underscore.string": "3.3.5",
     "braces": "2.3.1",
-    "js-yaml": "3.13.1"
+    "js-yaml": "3.13.1",
+    "kind-of": "6.0.3",
+    "tunnel-agent": "0.6.0",
+    "debug": "3.1.0"
   }
 }
