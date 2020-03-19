@@ -1,11 +1,18 @@
+function assertPositiveInteger(input: number, inputName: string): void {
+  if (!Number.isInteger(input) || input < 0) {
+    throw new Error(`${input} is an invalid input for ${inputName}`);
+  }
+}
+
+function to8BitHex(num: number): string {
+  const hex = num.toString(16);
+  return "0".repeat(8 - hex.length) + hex;
+}
+
 /**
  * Returns a BIP44 string specific to NEO.
  */
-export function BIP44(
-  address: number = 0,
-  change: number = 0,
-  account: number = 0
-): string {
+export function BIP44(address = 0, change = 0, account = 0): string {
   assertPositiveInteger(address, "address");
   assertPositiveInteger(change, "change");
   assertPositiveInteger(account, "account");
@@ -16,14 +23,3 @@ export function BIP44(
 }
 
 export default BIP44;
-
-function assertPositiveInteger(input: number, inputName: string) {
-  if (!Number.isInteger(input) || input < 0) {
-    throw new Error(`${input} is an invalid input for ${inputName}`);
-  }
-}
-
-function to8BitHex(num: number) {
-  const hex = num.toString(16);
-  return "0".repeat(8 - hex.length) + hex;
-}

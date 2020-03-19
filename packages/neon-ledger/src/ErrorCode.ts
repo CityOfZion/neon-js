@@ -7,8 +7,6 @@ export enum ErrorCode {
   TX_DENIED = 0x6985
 }
 
-export default ErrorCode;
-
 export interface TransportStatusError extends Error {
   name: "TransportStatusError";
   message: string;
@@ -39,3 +37,5 @@ export function evalTransportError(err: Error): Error {
   }
   return err;
 }
+
+export default ErrorCode;

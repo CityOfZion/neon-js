@@ -1,5 +1,4 @@
 import { u } from "@cityofzion/neon-core";
-import ErrorCode from "./ErrorCode";
 
 /**
  * Converts a signature in DER format to HEX format.

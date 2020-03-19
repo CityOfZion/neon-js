@@ -8,7 +8,7 @@ jest.mock("../src/utils");
 describe("getDevicePaths", () => {
   test("throws error when not supported", async () => {
     const mockLedgerLib = {
-      isSupported: jest.fn().mockImplementation(() => false)
+      isSupported: jest.fn().mockImplementation(async () => false)
     } as any;
 
     const result = getDevicePaths(mockLedgerLib);
@@ -18,8 +18,8 @@ describe("getDevicePaths", () => {
   test("returns data from list method", async () => {
     const expected = [] as ReadonlyArray<string>;
     const mockLedgerLib = {
-      isSupported: jest.fn().mockImplementation(() => true),
-      list: jest.fn().mockImplementation(() => expected)
+      isSupported: jest.fn().mockImplementation(async () => true),
+      list: jest.fn().mockImplementation(async () => expected)
     } as any;
 
     const result = await getDevicePaths(mockLedgerLib);
@@ -53,7 +53,7 @@ describe("getPublicKey", () => {
     const expectedBuffer = Buffer.from(expected, "hex");
     const bip44Input = "abcd";
     const mockLedgerLib = {
-      send: jest.fn().mockImplementation(() => expectedBuffer)
+      send: jest.fn().mockImplementation(async () => expectedBuffer)
     } as any;
 
     const result = await getPublicKey(mockLedgerLib, bip44Input);
@@ -86,7 +86,7 @@ describe("getSignature", () => {
     const inputMsg = "1".repeat(512) + "2".repeat(512);
     const bip44Input = "abcd";
     const mockLedgerLib = {
-      send: jest.fn().mockImplementation(() => {
+      send: jest.fn().mockImplementation(async () => {
         return Buffer.from("9000", "hex");
       })
     } as any;
@@ -101,14 +101,14 @@ describe("getSignature", () => {
     const mockDer = "9999";
     const expectedSig = "9876";
     const mockLedgerLib = {
-      send: jest.fn().mockImplementation((cla, ins, p1, p2, ...args) => {
+      send: jest.fn().mockImplementation(async (cla, ins, p1, p2, ...args) => {
         if (p1 === 0x80) {
           return Buffer.from(mockDer, "hex");
         }
         return Buffer.from("9000", "hex");
       })
     } as any;
-    DerToHexSignature.mockImplementation(() => expectedSig);
+    DerToHexSignature.mockImplementationOnce(() => expectedSig);
 
     const result = await getSignature(mockLedgerLib, inputMsg, bip44Input);
 

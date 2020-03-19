@@ -15,7 +15,7 @@ test("Defaults to zeroth address", () => {
 });
 
 test("Produces a string with the correct numbers", () => {
-  const randInt = () => Math.floor(Math.random() * 100);
+  const randInt = (): number => Math.floor(Math.random() * 100);
   const account = randInt();
   const change = randInt();
   const address = randInt();

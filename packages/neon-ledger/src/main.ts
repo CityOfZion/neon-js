@@ -9,6 +9,43 @@ import { DerToHexSignature } from "./utils";
 const DEFAULT_STATUSLIST = [ErrorCode.VALID_STATUS];
 
 /**
+ * Appends data to the Ledger for signature.
+ * @param msg A string up to 510 characters (256 bytes)
+ */
+async function appendDataForSignature(
+  ledger: Transport,
+  msg: string
+): Promise<Buffer> {
+  return await ledger.send(
+    0x80,
+    0x02,
+    0x00,
+    0x00,
+    Buffer.from(msg, "hex"),
+    DEFAULT_STATUSLIST
+  );
+}
+
+/**
+ * Appends data to the Ledger and returns the signature of the entire message that has been appended so far.
+ * @param ledger
+ * @param msg A string up to 510 characters (256 bytes)
+ */
+async function finalizeDataForSignature(
+  ledger: Transport,
+  msg: string
+): Promise<Buffer> {
+  return await ledger.send(
+    0x80,
+    0x02,
+    0x80,
+    0x00,
+    Buffer.from(msg, "hex"),
+    DEFAULT_STATUSLIST
+  );
+}
+
+/**
  * Returns the list of connected Ledger devices. Throw if Ledger is not supported by the computer.
  * @param ledgerLibrary
  */
@@ -82,38 +119,4 @@ export async function getSignature(
     }
     throw e;
   }
-}
-
-/**
- * Appends data to the Ledger for signature.
- * @param msg A string up to 510 characters (256 bytes)
- */
-async function appendDataForSignature(
-  ledger: Transport,
-  msg: string
-): Promise<Buffer> {
-  return await ledger.send(
-    0x80,
-    0x02,
-    0x00,
-    0x00,
-    Buffer.from(msg, "hex"),
-    DEFAULT_STATUSLIST
-  );
-}
-
-/**
- * Appends data to the Ledger and returns the signature of the entire message that has been appended so far.
- * @param ledger
- * @param msg A string up to 510 characters (256 bytes)
- */
-async function finalizeDataForSignature(ledger: Transport, msg: string) {
-  return await ledger.send(
-    0x80,
-    0x02,
-    0x80,
-    0x00,
-    Buffer.from(msg, "hex"),
-    DEFAULT_STATUSLIST
-  );
 }

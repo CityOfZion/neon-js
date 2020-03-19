@@ -7,7 +7,7 @@ const addressNumber = 0;
 
 const neoscan = new neonJs.api.neoscan.instance("TestNet");
 
-var ledgerInstance = null;
+let ledgerInstance = null;
 
 neonJs.ledger
   .getDevicePaths(nodeLedger)
@@ -38,12 +38,12 @@ neonJs.ledger
         "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
       ),
       signingFunction: async (tx, pubKey) => {
-        var sig = await neonJs.ledger.getSignature(
+        const sig = await neonJs.ledger.getSignature(
           ledgerInstance,
           tx,
           neonJs.ledger.BIP44(addressNumber)
         );
-        var witness = await neonJs.tx.Witness.fromSignature(sig, pubKey);
+        const witness = await neonJs.tx.Witness.fromSignature(sig, pubKey);
         return witness.serialize();
       }
     });
