@@ -1,6 +1,6 @@
 <p align="center">
   <img
-    src="http://res.cloudinary.com/vidsy/image/upload/v1503160820/CoZ_Icon_DARKBLUE_200x178px_oq0gxm.png"
+    src="https://raw.githubusercontent.com/CityOfZion/visual-identity/develop/_CoZ%20Branding/_Logo/_Logo%20icon/_PNG%20200x178px/CoZ_Icon_DARKBLUE_200x178px.png"
     width="125px;">
 </p>
 
@@ -62,6 +62,8 @@ var acct = Neon.create.Account("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW");
 
 # Contributing
 
+Please refer to [`CONTRIBUTING`](./CONTRIBUTING.md) for development practices.
+
 ## Setup
 
 This repository is a typescript mono-repo using Lerna and Yarn workspaces. Please ensure the following is installed:
@@ -91,7 +93,7 @@ yarn test:integration
 
 # Docs
 
-We use Docusaurus for our docs website. The docs are stores in `./docs` while the main website and its configuration is in `./website`.
+We use Docusaurus for our docs website. The docs are stored in `./docs` while the main website and its configuration is in `./website`.
 
 ```sh
 cd website

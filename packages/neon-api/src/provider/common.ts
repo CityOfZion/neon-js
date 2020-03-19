@@ -31,7 +31,12 @@ export function filterHttpsOnly(nodes: RpcNode[]): RpcNode[] {
 export async function raceToSuccess<T>(promises: Promise<T>[]): Promise<T> {
   try {
     const errors = await Promise.all(
-      promises.map(p => p.then(val => Promise.reject(val), err => err))
+      promises.map(p =>
+        p.then(
+          val => Promise.reject(val),
+          err => err
+        )
+      )
     );
     return await Promise.reject(errors);
   } catch (success) {
@@ -46,7 +51,7 @@ export async function getBestUrl(rpcs: RpcNode[]): Promise<string> {
 
 export function findGoodNodesFromHeight(
   nodes: RpcNode[],
-  tolerance: number = 1
+  tolerance = 1
 ): RpcNode[] {
   if (nodes.length === 0) {
     throw new Error("No eligible nodes found!");

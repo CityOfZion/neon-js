@@ -1,9 +1,8 @@
 {
-  "lerna": "3.4.3",
   "packages": [
     "packages/*"
   ],
-  "version": "4.5.2",
+  "version": "4.7.2",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "workspaces": [
@@ -11,10 +10,18 @@
   ],
   "command": {
     "version": {
-      "allowBranch": "master"
+      "allowBranch": [
+        "master",
+        "next",
+        "archive/*"
+      ]
     },
     "publish": {
-      "allowBranch": "master"
+      "allowBranch": [
+        "master",
+        "next",
+        "archive/*"
+      ]
     }
   }
 }

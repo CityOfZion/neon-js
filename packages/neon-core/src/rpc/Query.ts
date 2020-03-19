@@ -78,10 +78,7 @@ export class Query {
    * @param indexOrHash height or hash of block.
    * @param verbose 0 for hexstring, 1 for JSON. Defaults to 1.
    */
-  public static getBlock(
-    indexOrHash: string | number,
-    verbose: number = 1
-  ): Query {
+  public static getBlock(indexOrHash: string | number, verbose = 1): Query {
     return new Query({
       method: "getblock",
       params: [indexOrHash, verbose]
@@ -170,7 +167,7 @@ export class Query {
    * @param txid hash of the specific transaction.
    * @param verbose 0 for hexstring, 1 for JSON. Defaults to 1.
    */
-  public static getRawTransaction(txid: string, verbose: number = 1): Query {
+  public static getRawTransaction(txid: string, verbose = 1): Query {
     return new Query({
       method: "getrawtransaction",
       params: [txid, verbose]
@@ -295,6 +292,39 @@ export class Query {
   public static validateAddress(addr: string): Query {
     return new Query({
       method: "validateaddress",
+      params: [addr]
+    });
+  }
+
+  /**
+   * This Query Returns information of the unspent UTXO assets at the specified address.
+   * @param addr Address to get the UTXO
+   */
+  public static getUnspents(addr: string): Query {
+    return new Query({
+      method: "getunspents",
+      params: [addr]
+    });
+  }
+
+  /**
+   * This Query returns unclaimed GAS amount of the specified address.
+   * @param addr Address to get the unclaimed gas
+   */
+  public static getUnclaimed(addr: string): Query {
+    return new Query({
+      method: "getunclaimed",
+      params: [addr]
+    });
+  }
+
+  /**
+   * This Query returns claimable GAS information of the specified address.
+   * @param addr Address to get the claimable gas
+   */
+  public static getClaimable(addr: string): Query {
+    return new Query({
+      method: "getclaimable",
       params: [addr]
     });
   }

@@ -152,9 +152,7 @@ export abstract class BaseTransaction {
     this.inputs = inputs;
     this.outputs = this.outputs.concat(change);
     log.info(
-      `Calculated the inputs required for Transaction with Balance: ${
-        balance.address
-      }`
+      `Calculated the inputs required for Transaction with Balance: ${balance.address}`
     );
     return this;
   }
@@ -164,7 +162,7 @@ export abstract class BaseTransaction {
    * @param {boolean} signed  - Whether to serialize the signatures. Signing requires it to be serialized without the signatures.
    * @return {string} Hexstring.
    */
-  public serialize(signed: boolean = true): string {
+  public serialize(signed = true): string {
     let out = "";
     out += num2hexstring(this.type);
     out += num2hexstring(this.version);

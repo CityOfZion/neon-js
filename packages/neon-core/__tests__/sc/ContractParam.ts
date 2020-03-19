@@ -113,7 +113,7 @@ describe("Static constructors", () => {
         ["ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s", "address"],
         "35b20010db73bf86371075ddfba4e6596f1ff35d"
       ],
-      ["fixed8", [1000.12345678, "fixed8"], "4e49334917000000"],
+      ["fixed8", [100.012345678, "fixed8"], "88ba1e5402000000"],
       ["fixed8 (0 decimals)", [1, "fixed8", 0], "0100000000000000"],
       ["fixed8(4 decimals)", [222.1234, "fixed8", 4], "b2e4210000000000"]
     ])("%s", (msg: string, data: [number, string, any], expected: boolean) => {

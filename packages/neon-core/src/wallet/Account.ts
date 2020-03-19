@@ -218,7 +218,7 @@ export class Account {
   /** Retrieves the Public Key in encoded / unencoded form.
    * @param encoded Encoded or unencoded.
    */
-  public getPublicKey(encoded: boolean = true): string {
+  public getPublicKey(encoded = true): string {
     return encoded
       ? this.publicKey
       : core.getPublicKeyUnencoded(this.publicKey);

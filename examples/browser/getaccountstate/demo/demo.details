@@ -1,0 +1,4 @@
+name: getaccountstate
+description: Get the account state for a wallet address
+resources:
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js

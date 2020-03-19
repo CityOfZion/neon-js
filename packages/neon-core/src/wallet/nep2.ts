@@ -10,7 +10,7 @@ import latin1Encoding from "crypto-js/enc-latin1";
 import ECBMode from "crypto-js/mode-ecb";
 import NoPadding from "crypto-js/pad-nopadding";
 import SHA256 from "crypto-js/sha256";
-import asyncScrypt from "scrypt-js";
+import { scrypt } from "scrypt-js";
 import { DEFAULT_SCRYPT, NEP_FLAG, NEP_HEADER } from "../consts";
 import logging from "../logging";
 import { ab2hexstring, hexXor } from "../u";
@@ -38,52 +38,44 @@ const log = logging("wallet");
  * @param scryptParams Optional parameters for Scrypt. Defaults to NEP2 specified parameters.
  * @returns The encrypted key in Base58 (Case sensitive).
  */
-export function encrypt(
+export async function encrypt(
   wifKey: string,
   keyphrase: string,
   scryptParams: ScryptParams = DEFAULT_SCRYPT
 ): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const { n, r, p } = scryptParams;
-    const account = new Account(wifKey);
-    // SHA Salt (use the first 4 bytes)
-    const firstSha = SHA256(enc.Latin1.parse(account.address));
-    const addressHash = SHA256(firstSha as any)
-      .toString()
-      .slice(0, 8);
-    asyncScrypt(
-      Buffer.from(keyphrase.normalize("NFC"), "utf8"),
-      Buffer.from(addressHash, "hex"),
-      n,
-      r,
-      p,
-      64,
-      (error: Error, _: number, key: string) => {
-        if (error != null) {
-          reject(error);
-        } else if (key) {
-          const derived = Buffer.from(key).toString("hex");
-          const derived1 = derived.slice(0, 64);
-          const derived2 = derived.slice(64);
-          // AES Encrypt
-          const xor = hexXor(account.privateKey, derived1);
-          const encrypted = AES.encrypt(
-            enc.Hex.parse(xor),
-            enc.Hex.parse(derived2),
-            AES_OPTIONS
-          );
-          const assembled =
-            NEP_HEADER +
-            NEP_FLAG +
-            addressHash +
-            encrypted.ciphertext.toString();
-          const encryptedKey = bs58check.encode(Buffer.from(assembled, "hex"));
-          log.info(`Successfully encrypted key to ${encryptedKey}`);
-          resolve(encryptedKey);
-        }
-      }
-    );
-  });
+  const { n, r, p } = scryptParams;
+  const account = new Account(wifKey);
+  // SHA Salt (use the first 4 bytes)
+  const firstSha = SHA256(enc.Latin1.parse(account.address));
+  const addressHash = SHA256(firstSha as any)
+    .toString()
+    .slice(0, 8);
+
+  const key = await scrypt(
+    Buffer.from(keyphrase.normalize("NFC"), "utf8"),
+    Buffer.from(addressHash, "hex"),
+    n,
+    r,
+    p,
+    64,
+    () => {} // eslint-disable-line
+  );
+
+  const derived = Buffer.from(key).toString("hex");
+  const derived1 = derived.slice(0, 64);
+  const derived2 = derived.slice(64);
+  // AES Encrypt
+  const xor = hexXor(account.privateKey, derived1);
+  const encrypted = AES.encrypt(
+    enc.Hex.parse(xor),
+    enc.Hex.parse(derived2),
+    AES_OPTIONS
+  );
+  const assembled =
+    NEP_HEADER + NEP_FLAG + addressHash + encrypted.ciphertext.toString();
+  const encryptedKey = bs58check.encode(Buffer.from(assembled, "hex"));
+  log.info(`Successfully encrypted key to ${encryptedKey}`);
+  return encryptedKey;
 }
 
 /**
@@ -93,54 +85,47 @@ export function encrypt(
  * @param scryptParams Parameters for Scrypt. Defaults to NEP2 specified parameters.
  * @returns The decrypted WIF key.
  */
-export function decrypt(
+export async function decrypt(
   encryptedKey: string,
   keyphrase: string,
   scryptParams: ScryptParams = DEFAULT_SCRYPT
 ): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const { n, r, p } = scryptParams;
-    const assembled = ab2hexstring(bs58check.decode(encryptedKey));
-    const addressHash = assembled.substr(6, 8);
-    const encrypted = assembled.substr(-64);
-    asyncScrypt(
-      Buffer.from(keyphrase.normalize("NFC"), "utf8"),
-      Buffer.from(addressHash, "hex"),
-      n,
-      r,
-      p,
-      64,
-      (error: Error, _: number, key: string) => {
-        if (error != null) {
-          reject(error);
-        } else if (key) {
-          const derived = Buffer.from(key).toString("hex");
-          const derived1 = derived.slice(0, 64);
-          const derived2 = derived.slice(64);
-          const ciphertext = {
-            ciphertext: enc.Hex.parse(encrypted),
-            salt: "",
-            iv: ""
-          };
-          const decrypted = AES.decrypt(
-            ciphertext,
-            enc.Hex.parse(derived2),
-            AES_OPTIONS
-          );
-          const privateKey = hexXor(decrypted.toString(), derived1);
-          const account = new Account(privateKey);
-          const newAddressHash = SHA256(SHA256(
-            enc.Latin1.parse(account.address)
-          ) as any)
-            .toString()
-            .slice(0, 8);
-          if (addressHash !== newAddressHash) {
-            reject(new Error("Wrong password or scrypt parameters!"));
-          }
-          log.info(`Successfully decrypted ${encryptedKey}`);
-          resolve(account.WIF);
-        }
-      }
-    );
-  });
+  const { n, r, p } = scryptParams;
+  const assembled = ab2hexstring(bs58check.decode(encryptedKey));
+  const addressHash = assembled.substr(6, 8);
+  const encrypted = assembled.substr(-64);
+  const key = await scrypt(
+    Buffer.from(keyphrase.normalize("NFC"), "utf8"),
+    Buffer.from(addressHash, "hex"),
+    n,
+    r,
+    p,
+    64,
+    () => {} // eslint-disable-line
+  );
+  const derived = Buffer.from(key).toString("hex");
+  const derived1 = derived.slice(0, 64);
+  const derived2 = derived.slice(64);
+  const ciphertext = {
+    ciphertext: enc.Hex.parse(encrypted),
+    salt: "",
+    iv: ""
+  };
+  const decrypted = AES.decrypt(
+    ciphertext,
+    enc.Hex.parse(derived2),
+    AES_OPTIONS
+  );
+  const privateKey = hexXor(decrypted.toString(), derived1);
+  const account = new Account(privateKey);
+  const newAddressHash = SHA256(
+    SHA256(enc.Latin1.parse(account.address)) as any
+  )
+    .toString()
+    .slice(0, 8);
+  if (addressHash !== newAddressHash) {
+    throw new Error("Wrong password or scrypt parameters!");
+  }
+  log.info(`Successfully decrypted ${encryptedKey}`);
+  return account.WIF;
 }

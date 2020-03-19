@@ -10,8 +10,7 @@ export default class ApiBalancer implements Provider {
     return `${this.leftProvider.name}ApiBalancer${this.rightProvider.name}`;
   }
 
-  // tslint:disable-next-line:variable-name
-  private _preference: number = 0;
+  private _preference = 0;
   public get preference() {
     return this._preference;
   }
@@ -23,8 +22,7 @@ export default class ApiBalancer implements Provider {
     this._preference = newVal;
   }
 
-  // tslint:disable-next-line:variable-name
-  private _frozen: boolean = false;
+  private _frozen = false;
   public get frozen() {
     return this._frozen;
   }
@@ -40,7 +38,7 @@ export default class ApiBalancer implements Provider {
   public constructor(
     leftProvider: Provider,
     rightProvider: Provider,
-    preference: number = 0,
+    preference = 0,
     frozen = false
   ) {
     this.leftProvider = leftProvider;

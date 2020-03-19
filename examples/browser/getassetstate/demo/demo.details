@@ -1,0 +1,4 @@
+name: getassetstate
+description: Queries the asset information, based on the specified asset number.
+resources:
+- https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js

@@ -63,12 +63,11 @@ export async function getTokenBalances(
   scriptHashArray: string[],
   address: string
 ): Promise<{ [symbol: string]: u.Fixed8 }> {
-  const addrScriptHash = u.reverseHex(wallet.getScriptHashFromAddress(address));
   const sb = new sc.ScriptBuilder();
   scriptHashArray.forEach(scriptHash => {
-    sb.emitAppCall(scriptHash, "symbol")
-      .emitAppCall(scriptHash, "decimals")
-      .emitAppCall(scriptHash, "balanceOf", [addrScriptHash]);
+    abi.symbol(scriptHash)(sb);
+    abi.decimals(scriptHash)(sb);
+    abi.balanceOf(scriptHash, address)(sb);
   });
 
   const res = await rpc.Query.invokeScript(sb.str).execute(url);
@@ -88,7 +87,7 @@ export async function getTokenBalances(
         const decimals = rpc.IntegerParser(res.result.stack[i + 1]);
         tokenList[symbol] = rpc
           .Fixed8Parser(res.result.stack[i + 2])
-          .dividedBy(Math.pow(10, decimals));
+          .mul(Math.pow(10, 8 - decimals));
       } catch (e) {
         log.error(`single call in getTokenBalances failed with : ${e.message}`);
         throw e;
@@ -156,20 +155,12 @@ export async function getTokens(
   try {
     const sb = new sc.ScriptBuilder();
     scriptHashArray.forEach(scriptHash => {
+      abi.name(scriptHash)(sb);
+      abi.symbol(scriptHash)(sb);
+      abi.decimals(scriptHash)(sb);
+      abi.totalSupply(scriptHash)(sb);
       if (address) {
-        const addrScriptHash = u.reverseHex(
-          wallet.getScriptHashFromAddress(address)
-        );
-        sb.emitAppCall(scriptHash, "name")
-          .emitAppCall(scriptHash, "symbol")
-          .emitAppCall(scriptHash, "decimals")
-          .emitAppCall(scriptHash, "totalSupply")
-          .emitAppCall(scriptHash, "balanceOf", [addrScriptHash]);
-      } else {
-        sb.emitAppCall(scriptHash, "name")
-          .emitAppCall(scriptHash, "symbol")
-          .emitAppCall(scriptHash, "decimals")
-          .emitAppCall(scriptHash, "totalSupply");
+        abi.balanceOf(scriptHash, address)(sb);
       }
     });
 

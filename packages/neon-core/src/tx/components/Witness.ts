@@ -82,9 +82,7 @@ export class Witness {
     const validSigs = orderedSigs.filter(s => s !== "");
     if (validSigs.length < signingThreshold) {
       throw new Error(
-        `Insufficient signatures: expected ${signingThreshold} but got ${
-          validSigs.length
-        } instead`
+        `Insufficient signatures: expected ${signingThreshold} but got ${validSigs.length} instead`
       );
     }
     return new Witness({
@@ -100,7 +98,7 @@ export class Witness {
   public verificationScript: string;
 
   // tslint:disable-next-line:variable-name
-  private _scriptHash: string = "";
+  private _scriptHash = "";
 
   public constructor(obj: WitnessLike) {
     if (

@@ -37,7 +37,7 @@ export function getPublicKeyEncoded(unencodedKey: string): string {
 export function getPublicKeyUnencoded(publicKey: string): string {
   const publicKeyBuffer = Buffer.from(publicKey, "hex");
   const keyPair = curve.keyFromPublic(publicKeyBuffer, "hex");
-  return keyPair.getPublic().encode("hex");
+  return keyPair.getPublic().encode("hex", false);
 }
 
 /**
@@ -61,11 +61,11 @@ export function getWIFFromPrivateKey(privateKey: string): string {
  */
 export function getPublicKeyFromPrivateKey(
   privateKey: string,
-  encode: boolean = true
+  encode = true
 ): string {
   const privateKeyBuffer = Buffer.from(privateKey, "hex");
   const keypair = curve.keyFromPrivate(privateKeyBuffer, "hex");
-  const unencodedPubKey = keypair.getPublic().encode("hex");
+  const unencodedPubKey = keypair.getPublic().encode("hex", false);
   if (encode) {
     const tail = parseInt(unencodedPubKey.substr(64 * 2, 2), 16);
     if (tail % 2 === 1) {

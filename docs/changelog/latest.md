@@ -3,6 +3,79 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.7.2
+=====
+
+- Others
+
+  - Update dependencies to latest.
+
+- Fixes
+
+  - Fix ScriptBuilder emitting an extra `00` when calling `emitAppCall` with only scriptHash. Please note that this might break some methods. Please specify the empty args explicitly with `[]`.
+
+4.7.1
+=====
+
+- Others
+
+  - Update dev dependencies to latest.
+  - Update loglevel to latest dependency to use native typings. Removed internal shims.
+
+- Fixes
+
+  - encrypt/decrypt in Wallet return promise correctly
+
+4.7.0
+=====
+
+- Neon-core
+
+  - Add v2.10.2 RPC methods
+
+- Docs
+
+  - Add code examples
+
+- Fixes
+
+  - Fix Fixed8 overflow in nep5 transfer method
+
+4.6.1
+=====
+
+- Fixes
+
+  - Fix getTokenBalances multiplying balance wrongly.
+
+4.6.0
+=====
+
+- Neon-core
+
+  - Add parsing capabilities for RegisterTransaction and EnrollmentTransaction. At this point, all transaction types in neo 2.x are now fully supported.
+  - Update axios dependency due to minor security concern.
+
+- Docs
+
+  - Add jsfiddle docs describing neo RPC.
+
+- Others
+
+  - Update all dev dependencies to latest due to various security warnings.
+
+- Fixes
+
+  - Fix decoding of negative Fixed8 hex string
+  - Update VM status output for neo v2.10.2
+  - Update default rpc endpoints to suggestions from NGD
+
+4.5.2
+=====
+
+- patch release to fix production distribution.
+
+
 4.5.0
 =====
 

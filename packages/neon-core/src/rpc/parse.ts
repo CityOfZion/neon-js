@@ -6,7 +6,7 @@ import { Fixed8, hexstring2str } from "../u";
  */
 export interface RPCVMResponse {
   script: string;
-  state: "HALT, BREAK" | "FAULT, BREAK";
+  state: "HALT, BREAK" | "FAULT, BREAK" | "HALT" | "FAULT";
   gas_consumed: string;
   stack: StackItemLike[];
 }
@@ -24,9 +24,7 @@ export function buildParser(...args: StackItemParser[]): VMResultParser {
   return (result: RPCVMResponse) => {
     if (result.stack.length !== args.length) {
       throw new Error(
-        `Wrong number of items to parse! Expected ${args.length} but got ${
-          result.stack.length
-        }!`
+        `Wrong number of items to parse! Expected ${args.length} but got ${result.stack.length}!`
       );
     }
 

@@ -1,6 +1,8 @@
 import { mocked } from "ts-jest/utils";
 import _Query from "../../src/rpc/Query";
 import RPCClient from "../../src/rpc/RPCClient";
+import { DEFAULT_RPC } from "../../src/consts";
+import { wallet } from "../../src";
 
 jest.mock("../../src/rpc/Query");
 
@@ -9,7 +11,7 @@ const Query = mocked(_Query, true);
 describe("constructor", () => {
   test("net", () => {
     const result = new RPCClient("MainNet");
-    expect(result.net).toBe("https://seed1.neo.org:10331");
+    expect(result.net).toBe(DEFAULT_RPC.MAIN);
   });
   test("only url", () => {
     const url = "testUrl";
@@ -430,6 +432,48 @@ describe("RPC Methods", () => {
 
       expect(result).toEqual(expected);
       expect(Query.validateAddress).toBeCalledWith("addr");
+    });
+  });
+
+  describe("getUnspents", () => {
+    test("success", async () => {
+      const queryExpected = { balance: [], address: "" };
+      Query.getUnspents.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest.fn().mockImplementation(() => ({ result: queryExpected }))
+      }));
+      const result = await client.getUnspents("addr");
+
+      expect(result).toEqual(new wallet.Balance());
+      expect(Query.getUnspents).toBeCalledWith("addr");
+    });
+  });
+
+  describe("getUnclaimed", () => {
+    test("success", async () => {
+      const expected = jest.fn();
+      Query.getUnclaimed.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+      }));
+      const result = await client.getUnclaimed("addr");
+
+      expect(result).toEqual(expected);
+      expect(Query.getUnclaimed).toBeCalledWith("addr");
+    });
+  });
+
+  describe("getClaimable", () => {
+    test("success", async () => {
+      const expected = { claimable: [], address: "", unclaimed: 0 };
+      Query.getClaimable.mockImplementationOnce(() => ({
+        req: { method: "" },
+        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+      }));
+      const result = await client.getClaimable("addr");
+
+      expect(result).toBeInstanceOf(wallet.Claims);
+      expect(Query.getClaimable).toBeCalledWith("addr");
     });
   });
 });

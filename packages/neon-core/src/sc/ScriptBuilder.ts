@@ -116,10 +116,12 @@ export class ScriptBuilder extends StringStream {
     scriptHash: string,
     operation: string | null = null,
     args?: any[] | string | number | boolean,
-    useTailCall: boolean = false
+    useTailCall = false
   ): this {
-    this.emitPush(args);
-    if (operation) {
+    if (args !== undefined) {
+      this.emitPush(args);
+    }
+    if (operation !== null) {
       let hexOp = "";
       for (let i = 0; i < operation.length; i++) {
         hexOp += num2hexstring(operation.charCodeAt(i));
@@ -199,7 +201,7 @@ export class ScriptBuilder extends StringStream {
    * @param scriptHash Hexstring(BE)
    * @param useTailCall Defaults to false
    */
-  private _emitAppCall(scriptHash: string, useTailCall: boolean = false): this {
+  private _emitAppCall(scriptHash: string, useTailCall = false): this {
     ensureHex(scriptHash);
     if (scriptHash.length !== 40) {
       throw new Error("ScriptHash should be 20 bytes long!");

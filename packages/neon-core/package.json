@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-core",
   "description": "Neon-JS Core functionality",
-  "version": "4.5.2",
+  "version": "4.7.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
@@ -35,30 +35,22 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "@types/bn.js": "4.11.5",
-    "@types/bs58": "4.0.0",
+    "@types/bn.js": "4.11.6",
+    "@types/bs58": "4.0.1",
     "@types/crypto-js": "3.1.43",
-    "@types/elliptic": "6.4.6",
-    "@types/loglevel": "1.5.4",
-    "@types/node": "11.13.4",
-    "axios": "0.18.0",
+    "@types/elliptic": "6.4.12",
+    "axios": "0.19.2",
     "bignumber.js": "7.2.1",
-    "bn.js": "4.11.8",
+    "bn.js": "5.1.1",
     "bs58": "4.0.1",
     "bs58check": "2.1.2",
-    "crypto-js": "3.1.9-1",
-    "elliptic": "6.4.1",
-    "loglevel": "1.6.1",
+    "crypto-js": "3.2.0",
+    "elliptic": "6.5.2",
+    "loglevel": "1.6.7",
     "loglevel-plugin-prefix": "0.8.4",
-    "scrypt-js": "2.0.4",
-    "secure-random": "1.1.1",
+    "scrypt-js": "3.0.0",
+    "secure-random": "1.1.2",
     "wif": "2.0.6"
-  },
-  "devDependencies": {
-    "clean-webpack-plugin": "2.0.1",
-    "ts-loader": "5.3.3",
-    "webpack": "4.29.6",
-    "webpack-cli": "3.3.0"
   },
   "files": [
     "dist/",

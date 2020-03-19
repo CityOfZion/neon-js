@@ -1,0 +1,4 @@
+name: getcontractstate
+description: Queries contract information, according to the contract script hash.
+resources:
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js

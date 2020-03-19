@@ -1,0 +1,4 @@
+name: invokefunction
+description: Invokes a smart contract at specified script hash, passing in an operation and its params.
+resources:
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js

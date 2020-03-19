@@ -1,0 +1,4 @@
+name: getversion
+description: Gets version information of this node.
+resources:
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js

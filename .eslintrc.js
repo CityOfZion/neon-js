@@ -16,9 +16,8 @@ module.exports = {
         allowExpressions: true,
         allowTypedFunctionExpressions: true
       }
-    ]
-    ,"@typescript-eslint/no-object-literal-type-assertion": ["warn"],
+    ],
     "@typescript-eslint/no-non-null-assertion": ["warn"],
-    "@typescript-eslint/camelcase": false
+    "@typescript-eslint/camelcase": 1
   }
 };

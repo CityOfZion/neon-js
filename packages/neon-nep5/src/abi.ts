@@ -14,7 +14,7 @@ export function name(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
-    return sb.emitAppCall(scriptHash, "name");
+    return sb.emitAppCall(scriptHash, "name", []);
   };
 }
 
@@ -28,7 +28,7 @@ export function symbol(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
-    return sb.emitAppCall(scriptHash, "symbol");
+    return sb.emitAppCall(scriptHash, "symbol", []);
   };
 }
 
@@ -42,7 +42,7 @@ export function decimals(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
-    return sb.emitAppCall(scriptHash, "decimals");
+    return sb.emitAppCall(scriptHash, "decimals", []);
   };
 }
 
@@ -56,7 +56,7 @@ export function totalSupply(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
   return (sb = new sc.ScriptBuilder()) => {
-    return sb.emitAppCall(scriptHash, "totalSupply");
+    return sb.emitAppCall(scriptHash, "totalSupply", []);
   };
 }
 
@@ -92,7 +92,7 @@ export function transfer(
   return (sb = new sc.ScriptBuilder()) => {
     const fromHash = addressToScriptHash(fromAddr);
     const toHash = addressToScriptHash(toAddr);
-    const adjustedAmt = new u.Fixed8(amt).mul(100000000);
+    const adjustedAmt = new u.Fixed8(amt).toRawNumber();
     return sb.emitAppCall(scriptHash, "transfer", [
       fromHash,
       toHash,
