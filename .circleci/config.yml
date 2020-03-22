@@ -20,6 +20,9 @@ jobs:
           keys:
             - neon-{{ checksum "yarn.lock" }}
             - neon-fallback
+      - run:
+          name: node hid compilation requirements
+          command: sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
       - run: yarn install --cache-folder .cache/yarn
       - save_cache:
           key: neon-{{ checksum "yarn.lock" }}
