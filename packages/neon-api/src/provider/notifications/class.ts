@@ -10,20 +10,16 @@ export class Notifications {
     return `Notifications[${this.url}]`;
   }
 
-  private websocketSubscriptions: Map<string, WebSocket[]>;
+  private websocketSubscriptions: Map<string | null, WebSocket[]>;
 
   public constructor(url: string) {
-    if (settings.networks[url] && settings.networks[url].extra.notifications) {
-      this.url = settings.networks[url].extra.notifications;
-    } else {
-      this.url = url;
-    }
-    this.websocketSubscriptions = new Map<string, WebSocket[]>();
+    this.url = settings.networks[url]?.extra?.notifications ?? url;
+    this.websocketSubscriptions = new Map<string | null, WebSocket[]>();
     log.info(`Created Notifications Provider: ${this.url}`);
   }
 
-  public subscribe(contract: string, callback: (message: NotificationMessage) => void) {
-    const ws = new WebSocket(this.url + "?contract=" + contract);
+  public subscribe(contract: string | null, callback: (message: NotificationMessage) => void) {
+    const ws = new WebSocket(this.url + (contract? "?contract=" + contract : ""));
     ws.onmessage = (event: WebSocket.MessageEvent) => {
       callback(JSON.parse(event.data as string) as NotificationMessage);
     };
