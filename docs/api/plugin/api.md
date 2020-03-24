@@ -12,10 +12,11 @@ Neon.claimGas(config);
 Neon.doinvoke(config);
 
 api.neoscan.getBalance("http://www.neoscan-testnet.io/test_net/v1/", address);
+api.notifications.subscribe(contractHash, console.log);
 api.sendAsset(config);
 ```
 
-The `api` module contains all 3rd party API that is useful together with Neon. A normal NEO node does not provide us with a convenient way of retrieving the balance or claimable transactions through RPC. Thus, we rely on external services such as NeonDB and neoscan for the information required.
+The `api` module contains all 3rd party API that is useful together with Neon. A normal NEO node does not provide us with a convenient way of subscribing to smart contract events and retrieving the balance or claimable transactions through RPC. Thus, we rely on external services such as NeonDB, neoscan and notification servers for the information required.
 
 However, do note that these APIs rely on hosted nodes by 3rd party and thus use them at your own risk.
 
@@ -71,14 +72,19 @@ api
 
 Providers are external services that provide information that is not easily gathered from the RPC nodes. For example, to send NEO or GAS, we need to retrieve all the UTXO information associated with an address.
 
-The two available providers are `neoscan` and `neonDB`. They are interfaces that translates the different REST responses into uniform data structures that is used by other `neon-js` modules.
+The available providers are `neoscan`, `neonDB` and `notifications`. The first two are interfaces that translate the different REST responses into uniform data structures that are used by other `neon-js` modules, while the `notifications` interface handles subscriptions to a live feed of events being triggered inside a smart contract.
 
 ```js
 const mainNetNeoscan = api.neocan.instance("MainNet");
 const mainNetNeonDB = api.neonDB.instance("MainNet");
+const mainNetNotifications = api.notifications.instance("MainNet");
 
 const neoscanBalance = await mainNetNeoscan.getBalance(addr);
 const neonDBBalance = await mainNetNeonDB.getBalance(addr);
 
 console.log(neoscanBalance.equals(neonDBBalance)); // They should be the same datastructure with the same information
+
+mainNetNotifications.subscribe("0x314b5aac1cdd01d10661b00886197f2194c3c89b", (event) => {
+  console.log(event); // Print the events being received in real time
+})
 ```
