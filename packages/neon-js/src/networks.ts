@@ -30,7 +30,7 @@ export default {
     ExtraConfiguration: {
       neonDB: "http://api.wallet.cityofzion.io",
       neoscan: "https://api.neoscan.io/api/main_net",
-	  notifications: "wss://pubsub.main.neologin.io/event"
+      notifications: "wss://pubsub.main.neologin.io/event"
     }
   },
   TestNet: {
@@ -63,8 +63,8 @@ export default {
     },
     ExtraConfiguration: {
       neonDB: "http://testnet-api.wallet.cityofzion.io",
-	  neoscan: "https://neoscan-testnet.io/api/test_net",
-	  notifications: "wss://pubsub.test.neologin.io/event"
+      neoscan: "https://neoscan-testnet.io/api/test_net",
+      notifications: "wss://pubsub.test.neologin.io/event"
     }
   },
   CozNet: {

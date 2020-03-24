@@ -1,6 +1,6 @@
 export interface EventParam {
-	type: string;
-	value: string;
+  type: string;
+  value: string;
 }
 
 export interface NotificationMessage {

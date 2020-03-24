@@ -18,30 +18,30 @@ export class Notifications {
     } else {
       this.url = url;
     }
-	this.websocketSubscriptions = new Map<string, WebSocket[]>();
+    this.websocketSubscriptions = new Map<string, WebSocket[]>();
     log.info(`Created Notifications Provider: ${this.url}`);
   }
 
   public subscribe(contract: string, callback: (message: NotificationMessage) => void) {
-	  const ws = new WebSocket(this.url + "?contract=" + contract);
-	  ws.onmessage = (event: WebSocket.MessageEvent) => {
-		  callback(JSON.parse(event.data as string) as NotificationMessage);
-	  };
-	  if(this.websocketSubscriptions.has(contract)){
-		  this.websocketSubscriptions.get(contract)!.push(ws);
-	  } else {
-		  this.websocketSubscriptions.set(contract, [ws]);
-	  }
+    const ws = new WebSocket(this.url + "?contract=" + contract);
+    ws.onmessage = (event: WebSocket.MessageEvent) => {
+      callback(JSON.parse(event.data as string) as NotificationMessage);
+    };
+    if(this.websocketSubscriptions.has(contract)){
+      this.websocketSubscriptions.get(contract)!.push(ws);
+    } else {
+      this.websocketSubscriptions.set(contract, [ws]);
+    }
   }
 
   public unsubscribe(contract: string) {
-	  if(!this.websocketSubscriptions.has(contract)){
-		  return; // Not throwing an exception in order to allow unlimited calling of this function
-	  }
-	  for(const ws of this.websocketSubscriptions.get(contract)!){
-		  ws.close();
-	  }
-	  this.websocketSubscriptions.delete(contract);
+    if(!this.websocketSubscriptions.has(contract)){
+      return; // Not throwing an exception in order to allow unlimited calling of this function
+    }
+    for(const ws of this.websocketSubscriptions.get(contract)!){
+      ws.close();
+    }
+    this.websocketSubscriptions.delete(contract);
   }
 }
 
