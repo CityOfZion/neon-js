@@ -1,6 +1,6 @@
 import { settings, rpc } from "@cityofzion/neon-core";
 import WebSocket from 'isomorphic-ws';
-import notifications from "../../../src/provider/notifications/class";
+import notifications from "../../src/notifications/class";
 jest.mock("isomorphic-ws");
 
 const UnitTestNetUrl = "wss://testurl.com";
