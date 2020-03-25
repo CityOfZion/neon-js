@@ -1,5 +1,5 @@
 import { logging, settings } from "@cityofzion/neon-core";
-import WebSocket from 'isomorphic-ws';
+import WebSocket from "isomorphic-ws";
 import { NotificationMessage } from "./responses";
 const log = logging.default("api");
 
@@ -18,12 +18,17 @@ export class Notifications {
     log.info(`Created Notifications Provider: ${this.url}`);
   }
 
-  public subscribe(contract: string | null, callback: (message: NotificationMessage) => void) {
-    const ws = new WebSocket(this.url + (contract? "?contract=" + contract : ""));
+  public subscribe(
+    contract: string | null,
+    callback: (message: NotificationMessage) => void
+  ) {
+    const ws = new WebSocket(
+      this.url + (contract ? "?contract=" + contract : "")
+    );
     ws.onmessage = (event: WebSocket.MessageEvent) => {
       callback(JSON.parse(event.data as string) as NotificationMessage);
     };
-    if(this.websocketSubscriptions.has(contract)){
+    if (this.websocketSubscriptions.has(contract)) {
       this.websocketSubscriptions.get(contract)!.push(ws);
     } else {
       this.websocketSubscriptions.set(contract, [ws]);
@@ -31,10 +36,10 @@ export class Notifications {
   }
 
   public unsubscribe(contract: string) {
-    if(!this.websocketSubscriptions.has(contract)){
+    if (!this.websocketSubscriptions.has(contract)) {
       return; // Not throwing an exception in order to allow unlimited calling of this function
     }
-    for(const ws of this.websocketSubscriptions.get(contract)!){
+    for (const ws of this.websocketSubscriptions.get(contract)!) {
       ws.close();
     }
     this.websocketSubscriptions.delete(contract);
