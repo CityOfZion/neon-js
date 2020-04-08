@@ -1,7 +1,13 @@
 import { logging, settings } from "@cityofzion/neon-core";
 import WebSocket from "isomorphic-ws";
-import { NotificationMessage } from "./responses";
+import { NotificationMessage, CallbackFunction } from "./responses";
+import Subscription from "./subscription";
 const log = logging.default("api");
+
+interface ContractSubscriptions {
+  websocket: WebSocket;
+  callbacks: CallbackFunction[];
+}
 
 export class Notifications {
   private url: string;
@@ -10,39 +16,83 @@ export class Notifications {
     return `Notifications[${this.url}]`;
   }
 
-  private websocketSubscriptions: Map<string | null, WebSocket[]>;
+  private subscriptions: Map<string | null, ContractSubscriptions>;
 
+  /**
+   * Create a new notification service that handles contract subscriptions
+   * @param url - URL of a notifications service.
+   */
   public constructor(url: string) {
     this.url = settings.networks[url]?.extra?.notifications ?? url;
-    this.websocketSubscriptions = new Map<string | null, WebSocket[]>();
+    this.subscriptions = new Map<string | null, ContractSubscriptions>();
     log.info(`Created Notifications Provider: ${this.url}`);
   }
 
+  /**
+   * Subscribe to event notifications of a specific contract
+   * @param contract - Hash of the contract (null for all contracts) to subscribe to
+   * @param callback - Function to call when a notification is received.
+   * @return Subscription object that can be used to cancel the subscription
+   */
   public subscribe(
     contract: string | null,
-    callback: (message: NotificationMessage) => void
-  ) {
-    const ws = new WebSocket(
-      this.url + (contract ? "?contract=" + contract : "")
-    );
-    ws.onmessage = (event: WebSocket.MessageEvent) => {
-      callback(JSON.parse(event.data as string) as NotificationMessage);
-    };
-    if (this.websocketSubscriptions.has(contract)) {
-      this.websocketSubscriptions.get(contract)!.push(ws);
+    callback: CallbackFunction
+  ): Subscription {
+    if (this.subscriptions.has(contract)) {
+      this.subscriptions.get(contract)!.callbacks.push(callback);
     } else {
-      this.websocketSubscriptions.set(contract, [ws]);
+      const ws = new WebSocket(
+        this.url + (contract !== null ? "?contract=" + contract : "")
+      );
+      ws.onmessage = (event: WebSocket.MessageEvent) => {
+        for (const cb of this.subscriptions.get(contract)!.callbacks) {
+          cb(JSON.parse(event.data as string) as NotificationMessage);
+        }
+      };
+      this.subscriptions.set(contract, {
+        websocket: ws,
+        callbacks: [callback]
+      });
     }
+    const unsubscribe = () => {
+      if (!this.subscriptions.has(contract)) {
+        // Needed because user might have called unsubscribeAll() before
+        return;
+      }
+      const subscriptions = this.subscriptions.get(contract)!;
+      const index = subscriptions.callbacks.indexOf(callback);
+      if (index === -1) {
+        // Could happen if unsubscribeAll() followed by subscribe() are called on the same contract
+        return;
+      }
+      if (subscriptions.callbacks.length > 1) {
+        subscriptions.callbacks.splice(index, 1);
+      } else {
+        this.unsubscribeContract(contract);
+      }
+    };
+    return new Subscription(contract, unsubscribe);
   }
 
-  public unsubscribe(contract: string) {
-    if (!this.websocketSubscriptions.has(contract)) {
+  /**
+   * Unsubscribe all callbacks from a specific contract
+   * @param contract - Hash of the contract (null for all contracts) to unsubscribe callbacks from
+   */
+  public unsubscribeContract(contract: string | null) {
+    if (!this.subscriptions.has(contract)) {
       return; // Not throwing an exception in order to allow unlimited calling of this function
     }
-    for (const ws of this.websocketSubscriptions.get(contract)!) {
-      ws.close();
+    this.subscriptions.get(contract)!.websocket.close();
+    this.subscriptions.delete(contract);
+  }
+
+  /**
+   * Unsubscribe all callbacks from all contracts
+   */
+  public unsubscribeAll() {
+    for (const contract of this.subscriptions.keys()) {
+      this.unsubscribeContract(contract);
     }
-    this.websocketSubscriptions.delete(contract);
   }
 }
 

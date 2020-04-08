@@ -34,7 +34,7 @@ const contract = "0x314b5aac1cdd01d10661b00886197f2194c3c89b";
 describe("subscribe", () => {
   test("subscribe opens correct websocket connection", async () => {
     const subscriptions = new notifications("UnitTestNet");
-    subscriptions.subscribe(contract, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
+    subscriptions.subscribe(contract, jest.fn());
     expect(WebSocket).toBeCalledWith(UnitTestNetUrl + "?contract=" + contract);
   });
   test("subscribe relays messages properly", async () => {
@@ -73,8 +73,8 @@ describe("subscribe", () => {
 describe("unsubscribe", () => {
   test("unsubscribe closes the websocket connection", async () => {
     const subscriptions = new notifications("UnitTestNet");
-    subscriptions.subscribe(contract, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
-    subscriptions.unsubscribe(contract);
+    const subscription = subscriptions.subscribe(contract, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
+    subscription.unsubscribe();
     expect(WebSocket.mock.instances[0].close).toHaveBeenCalledTimes(1);
   });
 });

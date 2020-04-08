@@ -1,10 +1,14 @@
-export interface EventParam {
+interface EventParam {
   type: string;
   value: string;
 }
 
-export interface NotificationMessage {
+interface NotificationMessage {
   contract: string;
   txid: string;
   event: EventParam[];
 }
+
+type CallbackFunction = (message: NotificationMessage) => void;
+
+export { EventParam, NotificationMessage, CallbackFunction };
