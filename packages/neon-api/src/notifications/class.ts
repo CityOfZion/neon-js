@@ -38,22 +38,10 @@ export class Notifications {
     contract: string | null,
     callback: CallbackFunction
   ): Subscription {
-    if (this.subscriptions.has(contract)) {
-      this.subscriptions.get(contract)!.callbacks.push(callback);
-    } else {
-      const ws = new WebSocket(
-        this.url + (contract !== null ? "?contract=" + contract : "")
-      );
-      ws.onmessage = (event: WebSocket.MessageEvent) => {
-        for (const cb of this.subscriptions.get(contract)!.callbacks) {
-          cb(JSON.parse(event.data as string) as NotificationMessage);
-        }
-      };
-      this.subscriptions.set(contract, {
-        websocket: ws,
-        callbacks: [callback]
-      });
-    }
+    const contractSubscriptions =
+      this.subscriptions.get(contract) ??
+      this.createWebsocketForContract(contract);
+    contractSubscriptions.callbacks.push(callback);
     const unsubscribe = () => {
       if (!this.subscriptions.has(contract)) {
         // Needed because user might have called unsubscribeAll() before
@@ -93,6 +81,25 @@ export class Notifications {
     for (const contract of this.subscriptions.keys()) {
       this.unsubscribeContract(contract);
     }
+  }
+
+  private createWebsocketForContract(
+    contract: string | null
+  ): ContractSubscriptions {
+    const ws = new WebSocket(
+      this.url + (contract !== null ? "?contract=" + contract : "")
+    );
+    ws.onmessage = (event: WebSocket.MessageEvent) => {
+      for (const cb of this.subscriptions.get(contract)!.callbacks) {
+        cb(JSON.parse(event.data as string) as NotificationMessage);
+      }
+    };
+    const contractSubscriptions = {
+      websocket: ws,
+      callbacks: []
+    };
+    this.subscriptions.set(contract, contractSubscriptions);
+    return contractSubscriptions;
   }
 }
 
