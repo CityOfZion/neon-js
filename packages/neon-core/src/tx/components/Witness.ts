@@ -20,6 +20,13 @@ export interface WitnessLike {
   verificationScript: string;
 }
 
+export interface WitnessJson {
+  // base64 encoded
+  invocation: string;
+  // base64 encoded
+  verification: string;
+}
+
 /**
  * A Witness is a section of VM code that is ran during the verification of the transaction.
  *

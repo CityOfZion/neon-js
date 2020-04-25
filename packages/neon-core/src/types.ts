@@ -2,7 +2,7 @@
  * Interfaces of common objects used in the blockchain but is not implemented in the SDK.
  */
 
-export interface BlockHeaderLike {
+export interface BlockHeaderJson {
   hash: string;
   size: number;
   version: number;
@@ -11,17 +11,17 @@ export interface BlockHeaderLike {
   time: number;
   index: number;
   nextconsensus: string;
-  witnesses: import("./tx/components/Witness").WitnessLike[];
+  witnesses: import("./tx/components/Witness").WitnessJson[];
   confirmations: number;
   nextblockhash: string;
 }
 
-export interface BlockLike extends BlockHeaderLike {
+export interface BlockJson extends BlockHeaderJson {
   consensus_data: {
     nonce: string;
     primary: number;
   };
-  tx: import("./tx/transaction").TransactionLike[];
+  tx: import("./tx/transaction").TransactionJson[];
 }
 
 export interface Validator {

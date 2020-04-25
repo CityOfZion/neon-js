@@ -9,6 +9,11 @@ export interface TransactionAttributeLike {
   data: string;
 }
 
+export interface TransactionAttributeJson {
+  usage: string;
+  data: string;
+}
+
 export function toTxAttrUsage(
   type: TxAttrUsage | string | number
 ): TxAttrUsage {

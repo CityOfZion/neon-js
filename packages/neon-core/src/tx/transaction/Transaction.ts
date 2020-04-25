@@ -16,7 +16,9 @@ import {
   TransactionAttribute,
   TransactionAttributeLike,
   Witness,
-  WitnessLike
+  WitnessLike,
+  TransactionAttributeJson,
+  WitnessJson
 } from "../components";
 import {
   deserializeVersion,
@@ -29,7 +31,7 @@ import {
   deserializeValidUntilBlock,
   deserializeCosigners
 } from "./main";
-import { CosignerLike, Cosigner } from "../components/Cosigner";
+import { CosignerLike, Cosigner, CosignerJson } from "../components/Cosigner";
 import { serializeArrayOf } from "../lib";
 import { NeonObject } from "../../model";
 const log = logger("tx");
@@ -45,6 +47,22 @@ export interface TransactionLike {
   cosigners: CosignerLike[];
   scripts: WitnessLike[];
   script: string;
+}
+
+export interface TransactionJson {
+  hash: string;
+  size: number;
+  version: number;
+  nonce: number;
+  sender: string;
+  sys_fee: string;
+  net_fee: string;
+  valid_until_block: number;
+  attributes: TransactionAttributeJson[];
+  cosigners: CosignerJson[];
+  // base64-encoded
+  script: string;
+  witnesses: WitnessJson[];
 }
 
 export class Transaction implements NeonObject<TransactionLike> {

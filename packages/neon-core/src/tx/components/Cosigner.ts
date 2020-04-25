@@ -10,6 +10,13 @@ export interface CosignerLike {
   allowedGroups?: (string | HexString)[];
 }
 
+export interface CosignerJson {
+  account: string;
+  scopes: string;
+  allowedContracts?: string[];
+  allowedGroups?: string[];
+}
+
 export class Cosigner {
   /**
    * script hash of cosigner
