@@ -2,8 +2,8 @@ import { tx, wallet, u, sc, CONST } from "@cityofzion/neon-core";
 
 export function getNetworkFeeForSig(): number {
   return (
-    sc.OpCodePrices[sc.OpCode.PUSHBYTES64] +
-    sc.OpCodePrices[sc.OpCode.PUSHBYTES33] +
+    // sc.OpCodePrices[sc.OpCode.PUSHBYTES64] +
+    // sc.OpCodePrices[sc.OpCode.PUSHBYTES33] +
     sc.getInteropServicePrice(sc.InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY)
   );
 }
@@ -12,14 +12,13 @@ export function getNetworkFeeForMultiSig(
   signingThreshold: number,
   pubkeysNum: number
 ): number {
-  const sb = new sc.ScriptBuilder();
   return (
-    sc.OpCodePrices[sc.OpCode.PUSHBYTES64] * signingThreshold +
-    sc.OpCodePrices[
-      sb.emitPush(signingThreshold).str.slice(0, 2) as sc.OpCode
-    ] +
-    sc.OpCodePrices[sc.OpCode.PUSHBYTES33] * pubkeysNum +
-    sc.OpCodePrices[sb.emitPush(pubkeysNum).str.slice(0, 2) as sc.OpCode] +
+    // sc.OpCodePrices[sc.OpCode.PUSHBYTES64] * signingThreshold +
+    // sc.OpCodePrices[
+    //   sb.emitPush(signingThreshold).str.slice(0, 2) as sc.OpCode
+    // ] +
+    // sc.OpCodePrices[sc.OpCode.PUSHBYTES33] * pubkeysNum +
+    // sc.OpCodePrices[sb.emitPush(pubkeysNum).str.slice(0, 2) as sc.OpCode] +
     sc.getInteropServicePrice(sc.InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG, {
       size: pubkeysNum
     })

@@ -1,4 +1,4 @@
-import { ScriptBuilder, InteropServiceCode, OpCode } from "../sc";
+import { ScriptBuilder, InteropServiceCode, OpCode, fromHex } from "../sc";
 import { reverseHex, StringStream } from "../u";
 import { isPublicKey } from "./verify";
 
@@ -36,7 +36,7 @@ export function getPublicKeysFromVerificationScript(
   const keys = [] as string[];
   while (!ss.isEmpty()) {
     const byte = ss.read();
-    if (byte === OpCode.PUSHBYTES33) {
+    if (fromHex(byte) === OpCode.PUSHDATA1) {
       keys.push(ss.read(33));
     }
   }
