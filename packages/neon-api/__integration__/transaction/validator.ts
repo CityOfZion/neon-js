@@ -21,7 +21,7 @@ const multiSig = {
     "5221031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c92103767002bb9f74317035ce8d557a3aed30ce831eb16b5f636a139dad0b07916bed210329898e6e5e0a2f175e205b4019c500d6bb69203b56470ec2fc8ab0a4c065e16d5368c7c34cba"
 };
 
-describe("validateValidUntilBlock", () => {
+describe.skip("validateValidUntilBlock", () => {
   test("valid", async () => {
     const transaction = new TransactionBuilder({
       validUntilBlock:
@@ -63,7 +63,7 @@ describe("validateValidUntilBlock", () => {
   });
 });
 
-describe("validateScript", () => {
+describe.skip("validateScript", () => {
   test("valid", async () => {
     const script = sc.createScript({
       scriptHash: CONST.ASSET_ID.NEO,
@@ -94,7 +94,7 @@ describe("validateScript", () => {
   });
 });
 
-describe("validateSystemFee", () => {
+describe.skip("validateSystemFee", () => {
   test("valid", async () => {
     const script = sc.createScript({
       scriptHash: CONST.ASSET_ID.NEO,
@@ -240,7 +240,7 @@ describe("validateSystemFee", () => {
   });
 });
 
-describe("validateNetworkFee", () => {
+describe.skip("validateNetworkFee", () => {
   test("valid", async () => {
     const transaction = new TransactionBuilder({
       scripts: [sig, multiSig],
@@ -282,7 +282,7 @@ describe("validateNetworkFee", () => {
   });
 });
 
-describe("validateAll", () => {
+describe.skip("validateAll", () => {
   test("valid", async () => {
     const script = sc.createScript({
       scriptHash: CONST.ASSET_ID.NEO,
