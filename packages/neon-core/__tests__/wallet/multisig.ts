@@ -4,7 +4,7 @@ import {
   getSigningThresholdFromVerificationScript
 } from "../../src/wallet";
 
-describe("getSigningThresholdFromVerificationScript", () => {
+describe.skip("getSigningThresholdFromVerificationScript", () => {
   test.each([
     [
       1,
@@ -24,7 +24,7 @@ describe("getSigningThresholdFromVerificationScript", () => {
   });
 });
 
-describe("getPublicKeysFromVerificationScript", () => {
+describe.skip("getPublicKeysFromVerificationScript", () => {
   test.each([
     [
       1,
@@ -76,7 +76,7 @@ describe("getPublicKeysFromVerificationScript", () => {
   );
 });
 
-describe("getSignaturesFromInvocationScript", () => {
+describe.skip("getSignaturesFromInvocationScript", () => {
   test.each([
     [
       1,

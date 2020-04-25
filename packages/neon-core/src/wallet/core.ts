@@ -89,10 +89,12 @@ export const getVerificationScriptFromPublicKey = (
   publicKey: string
 ): string => {
   return (
-    OpCode.PUSHBYTES33 +
+    OpCode.PUSHDATA1 +
+    "21" + // 33 in hexstring
     publicKey +
+    OpCode.PUSHNULL +
     OpCode.SYSCALL +
-    InteropServiceCode.NEO_CRYPTO_CHECKSIG
+    InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY
   );
 };
 

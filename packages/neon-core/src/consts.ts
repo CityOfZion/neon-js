@@ -1,4 +1,4 @@
-export const ADDR_VERSION = "17";
+export const ADDR_VERSION = "35";
 
 export const NATIVE_CONTRACTS: { [key: string]: string } = {
   NEO: "NEO",

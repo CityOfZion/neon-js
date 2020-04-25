@@ -48,7 +48,7 @@ const fixedPrices = {
   [InteropServiceCode.SYSTEM_STORAGE_DELETE]: 1000000e-8,
   [InteropServiceCode.SYSTEM_STORAGECONTEXT_ASREADONLY]: 400e-8,
   [InteropServiceCode.NEO_NATIVE_DEPLOY]: 0e-8,
-  [InteropServiceCode.NEO_CRYPTO_CHECKSIG]: 1000000e-8,
+  [InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY]: 1000000e-8,
   [InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG]: undefined,
   [InteropServiceCode.NEO_HEADER_GETVERSION]: 400e-8,
   [InteropServiceCode.NEO_HEADER_GETMERKLEROOT]: 400e-8,
@@ -83,7 +83,7 @@ function getStoragePrice(size: number): number {
 }
 
 function getCheckMultiSigPrice(size: number): number {
-  return size * fixedPrices[InteropServiceCode.NEO_CRYPTO_CHECKSIG];
+  return size * fixedPrices[InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY];
 }
 
 export function getInteropServicePrice(
