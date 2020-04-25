@@ -6,8 +6,9 @@ import {
   WitnessLike
 } from "../tx";
 import { ContractManifestLike, StackItemLike } from "../sc";
-import { BlockJson, Validator } from "../types";
+import { BlockJson, Validator, BlockHeaderJson } from "../types";
 
+export type BooleanLikeParam = 0 | 1 | boolean;
 export interface QueryLike<T extends unknown[]> {
   method: string;
   params: T;
@@ -80,10 +81,10 @@ export interface GetRawTransactionResult {
 }
 
 export interface GetVersionResult {
-  tcpPort: number;
-  wsPort: number;
+  tcp_port: number;
+  ws_port: number;
   nonce: number;
-  useragent: string;
+  user_agent: string;
 }
 
 export interface NodePeer {
@@ -129,19 +130,19 @@ export class Query<TParams extends unknown[], TResponse> {
    */
   public static getBlock(
     indexOrHash: number | string,
-    verbose: 1
-  ): Query<[number | string, 1], BlockJson>;
+    verbose: 1 | true
+  ): Query<[number | string, 1 | true], BlockJson>;
   public static getBlock(
     indexOrHash: number | string,
-    verbose?: 0
-  ): Query<[number | string, 0], string>;
+    verbose?: 0 | false
+  ): Query<[number | string, 0 | false], string>;
   public static getBlock(
     indexOrHash: number | string,
-    verbose?: 0 | 1
-  ): Query<[number | string, 0 | 1], string | BlockJson> {
+    verbose: BooleanLikeParam = 0
+  ): Query<[number | string, BooleanLikeParam], string | BlockJson> {
     return new Query({
       method: "getblock",
-      params: [indexOrHash, verbose ?? 0]
+      params: [indexOrHash, verbose]
     });
   }
 
@@ -173,22 +174,19 @@ export class Query<TParams extends unknown[], TResponse> {
    */
   public static getBlockHeader(
     indexOrHash: string | number,
-    verbose: 0 | 1 = 0
-  ): Query<[string | number, 0 | 1], string> {
+    verbose: 1 | true
+  ): Query<[string | number, 1 | true], BlockHeaderJson>;
+  public static getBlockHeader(
+    indexOrHash: string | number,
+    verbose?: 0 | false
+  ): Query<[string | number, 0 | false], string>;
+  public static getBlockHeader(
+    indexOrHash: string | number,
+    verbose: BooleanLikeParam = 0
+  ): Query<[string | number, BooleanLikeParam], string | BlockHeaderJson> {
     return new Query({
       method: "getblockheader",
       params: [indexOrHash, verbose]
-    });
-  }
-
-  /**
-   * This Query returns the amount of GAS burnt as fees within a specific block.
-   * @param index height of block.
-   */
-  public static getBlockSysFee(index: number): Query<[number], string> {
-    return new Query({
-      method: "getblocksysfee",
-      params: [index]
     });
   }
 
@@ -200,6 +198,7 @@ export class Query<TParams extends unknown[], TResponse> {
       method: "getconnectioncount"
     });
   }
+
   /**
    * This Query returns information about the smart contract registered at the specific hash.
    * @param scriptHash hash of contract
@@ -230,13 +229,15 @@ export class Query<TParams extends unknown[], TResponse> {
    *
    * shouldGetUnverified = 1, get current block height and confirmed and unconfirmed tx hash
    */
-  public static getRawMemPool(shouldGetUnverified?: 0): Query<[0], string[]>;
   public static getRawMemPool(
-    shouldGetUnverified: 1
+    shouldGetUnverified?: BooleanLikeParam
+  ): Query<[0 | false], string[]>;
+  public static getRawMemPool(
+    shouldGetUnverified: 1 | true
   ): Query<[1], GetRawMemPoolResult>;
   public static getRawMemPool(
-    shouldGetUnverified: 0 | 1 = 0
-  ): Query<[0 | 1], string[] | GetRawMemPoolResult> {
+    shouldGetUnverified: BooleanLikeParam = 0
+  ): Query<[BooleanLikeParam], string[] | GetRawMemPoolResult> {
     return new Query({
       method: "getrawmempool",
       params: [shouldGetUnverified]
@@ -250,16 +251,16 @@ export class Query<TParams extends unknown[], TResponse> {
    */
   public static getRawTransaction(
     txid: string,
-    verbose?: 0
-  ): Query<[string, 0], string>;
+    verbose?: 0 | false
+  ): Query<[string, 0 | false], string>;
   public static getRawTransaction(
     txid: string,
-    verbose: 1
-  ): Query<[string, 1], GetRawTransactionResult>;
+    verbose: 1 | true
+  ): Query<[string, 1 | true], GetRawTransactionResult>;
   public static getRawTransaction(
     txid: string,
-    verbose: 0 | 1 = 0
-  ): Query<[string, 0 | 1], string | GetRawTransactionResult> {
+    verbose: BooleanLikeParam = 0
+  ): Query<[string, BooleanLikeParam], string | GetRawTransactionResult> {
     return new Query({
       method: "getrawtransaction",
       params: [txid, verbose]
