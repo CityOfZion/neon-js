@@ -4,7 +4,7 @@ export function getNetworkFeeForSig(): number {
   return (
     sc.OpCodePrices[sc.OpCode.PUSHBYTES64] +
     sc.OpCodePrices[sc.OpCode.PUSHBYTES33] +
-    sc.getInteropServicePrice(sc.InteropServiceCode.NEO_CRYPTO_CHECKSIG)
+    sc.getInteropServicePrice(sc.InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY)
   );
 }
 

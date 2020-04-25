@@ -48,9 +48,9 @@ describe("Verify: Valid", () => {
   );
 
   test.each([
-    "Adc4jT59RjDLdXbBni6xzg6SEcLVhHZ5Z9",
-    "ARCvt1d5qAGzcHqJCWA2MxvhTLQDb9dvjQ",
-    "AYYrr4GauveRr45WwAJyw6izvEMvasBBXH"
+    "NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM",
+    "NXFprNJ9tBk4ziUaq2b9b2DtWQ1Vv2uLn3",
+    "NZi95D9uTJ5j7ps2rgTaEGk1YKtzCXoTHJ"
   ])("Address: %s", (i: string) => {
     expect(verify.isAddress(i)).toBeTruthy();
   });
@@ -104,7 +104,7 @@ describe("Verify: Invalid", () => {
   });
 
   test.each([
-    "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2",
+    "NZi95D9uTJ5j7ps2rgTaEGk1YKtzCXoTHi",
     "3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy",
     "AYYrr4GauveRr45WwAJyw6izvEMvasBBXh",
     "1BoatSLRHtKNngkdXEeobR76b53LETtpyT"

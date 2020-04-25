@@ -12,6 +12,7 @@ export enum OpCode {
   PUSHBYTES9 = "09",
   PUSHBYTES10 = "0a",
   PUSHBYTES11 = "0b",
+  PUSHNULL = "0b",
   PUSHBYTES12 = "0c",
   PUSHBYTES13 = "0d",
   PUSHBYTES14 = "0e",

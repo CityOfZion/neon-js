@@ -53,7 +53,7 @@ export function getSigningThresholdFromVerificationScript(
   const checkSigInteropCode = verificationScript.slice(
     verificationScript.length - 8
   );
-  if (checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_CHECKSIG) {
+  if (checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY) {
     return 1;
   } else if (
     checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG

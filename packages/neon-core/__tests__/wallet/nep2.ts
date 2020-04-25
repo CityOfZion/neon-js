@@ -1,5 +1,6 @@
 import * as NEP2 from "../../src/wallet/nep2";
 import { isNEP2, isWIF } from "../../src/wallet/verify";
+import testKeys from "../testKeys.json";
 
 const simpleScrypt = {
   n: 256,
@@ -11,17 +12,17 @@ const simpleKeys = {
   a: {
     wif: "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
     passphrase: "city of zion",
-    encryptedWif: "6PYLPLfpCoGkGvVFeN9KjvvT6dNBoYag3c2co362y9Gge1GSjMewf5J6tc"
+    encryptedWif: "6PYMbaT44VGn9pgvo39Dc7nEYUK9MQZbiydLouCxGAntbhJWwtfvUeZWdK"
   },
   b: {
     wif: "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
     passphrase: "我的密码",
-    encryptedWif: "6PYQqmDYkjqD6D3wsh5YquFqtgWsxThLAZDni1oEXaEp1MTqJKPHzVJEaU"
+    encryptedWif: "6PYKtux8xWUpZGgnGSiPgG1ikhi7WH6zF6kKCUuF7sxmvAouEC2NibAR3A"
   },
   c: {
     wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
     passphrase: "MyL33tP@33w0rd",
-    encryptedWif: "6PYQ5fKhgWtqs2y81eBVbt1GsEWx634cRHeJcuknwUW2PyVc9itQqfLhtR"
+    encryptedWif: "6PYWKURr1KVXN5XygCKPTVWLcRCtVDEMKhT7CgFWjRmQr8vQSUMvdDTTas"
   }
 };
 
@@ -44,11 +45,8 @@ const neo2Keys = {
 };
 
 // This uses default scrypt params
-const testKey = {
-  wif: "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
-  passphrase: "city of zion",
-  encryptedWif: "6PYLPLfpCw87u1t7TP14gkNweUkuqwpso8qmMt24Kp8aona6K7fvurdsDQ"
-};
+const testKey = testKeys.a;
+
 describe("NEP2", () => {
   describe("Default", () => {
     test("encrypt", async () => {
