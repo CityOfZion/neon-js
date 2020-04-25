@@ -82,8 +82,8 @@ describe("Static constructors", () => {
     test.each([
       [
         "address",
-        "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
-        "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+        "NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM",
+        "8ed27229893fc531b1d27a115c8c820bd927692e"
       ],
       [
         "scriphash",

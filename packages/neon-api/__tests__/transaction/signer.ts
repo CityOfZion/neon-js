@@ -46,7 +46,7 @@ function createTransactionSigner(): TransactionSigner {
   );
 }
 
-describe("signWithAccount", () => {
+describe.skip("signWithAccount", () => {
   test("single private key", () => {
     const signer = createTransactionSigner();
     signer.signWithAccount(PRIVATE_KEYS[0]);
@@ -83,7 +83,7 @@ describe("signWithAccount", () => {
   });
 });
 
-describe("signWithWitness", () => {
+describe.skip("signWithWitness", () => {
   test("single witness", () => {
     const signer = createTransactionSigner();
     signer.signWithWitness(new tx.Witness(ACCOUNTS_WITNESSES[0]));
@@ -121,7 +121,7 @@ describe("signWithWitness", () => {
   });
 });
 
-describe("addMultiSig", () => {
+describe.skip("addMultiSig", () => {
   test("addMultiSig", () => {
     const signer = new TransactionSigner(
       new TransactionBuilder({
