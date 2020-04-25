@@ -1,11 +1,11 @@
 import * as C from "../../src/wallet/core";
 
 interface TestAccount {
-  address: string
-  publicKey: string
-  privateKey: string
-  scriptHash: string
-  WIF: string
+  address: string;
+  publicKey: string;
+  privateKey: string;
+  scriptHash: string;
+  WIF: string;
 }
 
 describe.each([
