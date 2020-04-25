@@ -13,7 +13,7 @@ import {
   RPCResponse
 } from "./Query";
 import { ContractManifest } from "../sc";
-import { BlockLike, BlockHeaderLike, Validator } from "../types";
+import { BlockJson, BlockHeaderJson, Validator } from "../types";
 
 const log = logger("rpc");
 
@@ -148,11 +148,11 @@ export class RPCClient {
   public async getBlock(
     indexOrHash: number | string,
     verbose: 1
-  ): Promise<BlockLike>;
+  ): Promise<BlockJson>;
   public async getBlock(
     indexOrHash: number | string,
     verbose?: 0 | 1
-  ): Promise<string | BlockLike> {
+  ): Promise<string | BlockJson> {
     return verbose
       ? await this.execute(Query.getBlock(indexOrHash, 1))
       : await this.execute(Query.getBlock(indexOrHash, 0));
@@ -187,11 +187,11 @@ export class RPCClient {
   public async getBlockHeader(
     indexOrHash: number | string,
     verbose: 1
-  ): Promise<BlockHeaderLike>;
+  ): Promise<BlockHeaderJson>;
   public async getBlockHeader(
     indexOrHash: number | string,
     verbose?: 0 | 1
-  ): Promise<string | BlockHeaderLike> {
+  ): Promise<string | BlockHeaderJson> {
     const response = await this.execute(
       Query.getBlockHeader(indexOrHash, verbose)
     );

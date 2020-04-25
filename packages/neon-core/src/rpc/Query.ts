@@ -6,7 +6,7 @@ import {
   WitnessLike
 } from "../tx";
 import { ContractManifestLike, StackItemLike } from "../sc";
-import { BlockLike, Validator } from "../types";
+import { BlockJson, Validator } from "../types";
 
 export interface QueryLike<T extends unknown[]> {
   method: string;
@@ -130,7 +130,7 @@ export class Query<TParams extends unknown[], TResponse> {
   public static getBlock(
     indexOrHash: number | string,
     verbose: 1
-  ): Query<[number | string, 1], BlockLike>;
+  ): Query<[number | string, 1], BlockJson>;
   public static getBlock(
     indexOrHash: number | string,
     verbose?: 0
@@ -138,7 +138,7 @@ export class Query<TParams extends unknown[], TResponse> {
   public static getBlock(
     indexOrHash: number | string,
     verbose?: 0 | 1
-  ): Query<[number | string, 0 | 1], string | BlockLike> {
+  ): Query<[number | string, 0 | 1], string | BlockJson> {
     return new Query({
       method: "getblock",
       params: [indexOrHash, verbose ?? 0]
