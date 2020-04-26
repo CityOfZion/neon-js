@@ -10,7 +10,8 @@ import {
   GetRawMemPoolResult,
   GetRawTransactionResult,
   InvokeResult,
-  RPCResponse
+  RPCResponse,
+  BooleanLikeParam
 } from "./Query";
 import { ContractManifest } from "../sc";
 import { BlockJson, BlockHeaderJson, Validator } from "../types";
@@ -143,15 +144,15 @@ export class RPCClient {
    */
   public async getBlock(
     indexOrHash: number | string,
-    verbose?: 0
+    verbose?: 0 | false
   ): Promise<string>;
   public async getBlock(
     indexOrHash: number | string,
-    verbose: 1
+    verbose: 1 | true
   ): Promise<BlockJson>;
   public async getBlock(
     indexOrHash: number | string,
-    verbose?: 0 | 1
+    verbose?: BooleanLikeParam
   ): Promise<string | BlockJson> {
     return verbose
       ? await this.execute(Query.getBlock(indexOrHash, 1))
@@ -192,20 +193,9 @@ export class RPCClient {
     indexOrHash: number | string,
     verbose?: 0 | 1
   ): Promise<string | BlockHeaderJson> {
-    const response = await this.execute(
-      Query.getBlockHeader(indexOrHash, verbose)
-    );
-    return response;
-  }
-
-  /**
-   * Get the system fees of a block.
-   * @param index Block height.
-   * @return System fees as a string.
-   */
-  public async getBlockSysFee(index: number): Promise<string> {
-    const response = await this.execute(Query.getBlockSysFee(index));
-    return response;
+    return verbose
+      ? await this.execute(Query.getBlockHeader(indexOrHash, 1))
+      : await this.execute(Query.getBlockHeader(indexOrHash, 0));
   }
 
   /**
@@ -239,12 +229,14 @@ export class RPCClient {
    * shouldGetUnverified = 0, get confirmed transaction hashes
    * shouldGetUnverified = 1, get current block height and confirmed and unconfirmed tx hash
    */
-  public async getRawMemPool(shouldGetUnverified?: 0): Promise<string[]>;
   public async getRawMemPool(
-    shouldGetUnverified: 1
+    shouldGetUnverified?: 0 | false
+  ): Promise<string[]>;
+  public async getRawMemPool(
+    shouldGetUnverified: 1 | true
   ): Promise<GetRawMemPoolResult>;
   public async getRawMemPool(
-    shouldGetUnverified: 0 | 1 = 0
+    shouldGetUnverified: BooleanLikeParam = 0
   ): Promise<string[] | GetRawMemPoolResult> {
     return shouldGetUnverified
       ? await this.execute(Query.getRawMemPool(1))
@@ -257,14 +249,17 @@ export class RPCClient {
    * @param verbose - 0, will query transaction in hex string; 1 will query for transaction object. defaults to 0
    * @return transaction hex or object
    */
-  public async getRawTransaction(txid: string, verbose?: 0): Promise<string>;
   public async getRawTransaction(
     txid: string,
-    verbose: 1
+    verbose?: 0 | false
+  ): Promise<string>;
+  public async getRawTransaction(
+    txid: string,
+    verbose: 1 | true
   ): Promise<GetRawTransactionResult>;
   public async getRawTransaction(
     txid: string,
-    verbose?: 0 | 1
+    verbose?: BooleanLikeParam
   ): Promise<string | GetRawTransactionResult> {
     return verbose
       ? await this.execute(Query.getRawTransaction(txid, 1))
@@ -301,13 +296,15 @@ export class RPCClient {
   public async getVersion(): Promise<string> {
     try {
       const response = await this.execute(Query.getVersion());
-      if (response?.useragent) {
-        const useragent = response.useragent;
+      if (response?.user_agent) {
+        const useragent = response.user_agent;
         const responseLength = useragent.length;
         const strippedResponse = useragent.substring(1, responseLength - 1);
         this.version = strippedResponse.split(":")[1];
       } else {
-        throw new Error("Empty or unexpected version pattern");
+        throw new Error(
+          `Empty or unexpected version pattern. Got ${JSON.stringify(response)}`
+        );
       }
       return this.version;
     } catch (err) {

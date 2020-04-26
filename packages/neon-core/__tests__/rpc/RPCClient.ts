@@ -254,29 +254,6 @@ describe("RPC Methods", () => {
     });
   });
 
-  describe("getBlockSysFee", () => {
-    test("success", async () => {
-      const expected = 5;
-      Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
-        expect(data).toMatchObject({
-          method: "getblocksysfee",
-          params: [123]
-        });
-        return {
-          data: {
-            jsonrpc: "2.0",
-            id: data.id,
-            result: expected
-          }
-        };
-      });
-
-      const result = await client.getBlockSysFee(123);
-      expect(result).toEqual(expected);
-    });
-  });
-
   describe("getConnectionCount", () => {
     test("success", async () => {
       const expected = 100;
@@ -523,8 +500,7 @@ describe("RPC Methods", () => {
 
   describe("getVersion", () => {
     test("success", async () => {
-      const versionString = "/Neo:3.0.0-preview1/";
-      const expected = "3.0.0-preview1";
+      const expected = "3.0.0-preview2-00";
       Axios.post.mockImplementationOnce(async (url, data) => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
@@ -536,10 +512,10 @@ describe("RPC Methods", () => {
             jsonrpc: "2.0",
             id: data.id,
             result: {
-              tcpPort: 1234,
-              wsPort: 2345,
-              nonce: 1,
-              useragent: versionString
+              tcp_port: 20333,
+              ws_port: 20334,
+              nonce: 288566725,
+              user_agent: "/Neo:3.0.0-preview2-00/"
             }
           }
         };

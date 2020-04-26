@@ -84,12 +84,6 @@ describe("static", () => {
     });
   });
 
-  test("getBlockSysFee", () => {
-    const result = Query.getBlockSysFee(123);
-    expect(result.method).toEqual("getblocksysfee");
-    expect(result.params).toEqual([123]);
-  });
-
   test("getConnectionCount", () => {
     const result = Query.getConnectionCount();
     expect(result.method).toEqual("getconnectioncount");
