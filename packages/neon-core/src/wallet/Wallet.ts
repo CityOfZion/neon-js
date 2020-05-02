@@ -79,6 +79,9 @@ export class Wallet {
     if (!(acct instanceof Account)) {
       acct = new Account(acct);
     }
+    if (index === 0) {
+      acct.isDefault = true;
+    }
     this.accounts.push(acct);
     try {
       const address = acct.address;

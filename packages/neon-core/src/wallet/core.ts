@@ -14,7 +14,7 @@ import { ADDR_VERSION } from "../consts";
 import { ab2hexstring, hash160, hash256, hexstring2ab, reverseHex } from "../u";
 import { generateRandomArray } from "../u/random";
 import { curve, sign } from "./signing";
-import { OpCode, InteropServiceCode } from "../sc";
+import { OpCode, InteropServiceCode, ScriptBuilder } from "../sc";
 
 /**
  * Encodes a public key.
@@ -88,14 +88,12 @@ export function getPublicKeyFromPrivateKey(
 export const getVerificationScriptFromPublicKey = (
   publicKey: string
 ): string => {
-  return (
-    OpCode.PUSHDATA1 +
-    "21" + // 33 in hexstring
-    publicKey +
-    OpCode.PUSHNULL +
-    OpCode.SYSCALL +
-    InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY
-  );
+  const sb = new ScriptBuilder();
+  return sb
+    .emit(OpCode.PUSHDATA1, "21" + publicKey)
+    .emit(OpCode.PUSHNULL)
+    .emitSysCall(InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY)
+    .build();
 };
 
 /**

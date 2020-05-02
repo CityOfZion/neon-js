@@ -1,0 +1,26 @@
+{
+  "name": null,
+  "version": "3.0",
+  "scrypt": { "n": 16384, "r": 8, "p": 8 },
+  "accounts": [
+    {
+      "address": "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
+      "label": null,
+      "isDefault": false,
+      "lock": false,
+      "key": "6PYLxXgqDZS1q1GJLQfmGchFndAoxuEtKJTxpYkZtcoty5PDtBvaTAS8qa",
+      "contract": {
+        "script": "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQQqQatQ=",
+        "parameters": [{ "name": "signature", "type": "Signature" }],
+        "deployed": false
+      },
+      "extra": {
+        "privateKey": "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69",
+        "publicKey": "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
+        "wif": "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
+        "passphrase": "我的密码"
+      }
+    }
+  ],
+  "extra": null
+}

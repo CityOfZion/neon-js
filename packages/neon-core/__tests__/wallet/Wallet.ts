@@ -1,50 +1,73 @@
 import Wallet from "../../src/wallet/Wallet";
 import Account from "../../src/wallet/Account";
 
-const PRIVATE_KEY1 =
-  "a7b9775c6b9136bf89f63def7eab0c5f2d3d0c9e85492717f54386420cce5aa1";
-const PRIVATE_KEY2 =
-  "4f0d41eda93941d106d4a26cc90b4b4fddc0e03b396ac94eb439c5d9e0cd6548";
-
-const PASSWORD = "passw0rd";
 const WALLET_JSON = {
+  name: null,
+  version: "3.0",
+  scrypt: { n: 16384, r: 8, p: 8 },
   accounts: [
     {
-      address: "NQUSutcttqQyuyrC8kRESekjG5dv95nw5w",
-      contract: {
-        deployed: false,
-        parameters: [{ name: "signature", type: "Signature" }],
-        //TODO: update this
-        script:
-          "2102963fc761eb7135c4593bfc6a0af96d8588b70d8f6ef3af8549181e57772181f568747476aa"
-      },
-      extra: {},
+      address: "NMPAXGtMfZ8s8rcfP9JhrYrNeZHG4xSVmd",
+      label: null,
       isDefault: false,
-      key: "6PYS65Tsm4WzLzdJ6mVGNCQfnFzBEs47M54wq3SBKSs9WzzpEEYwKg6eam",
-      label: "NQUSutcttqQyuyrC8kRESekjG5dv95nw5w",
-      lock: false
+      lock: false,
+      key: "6PYWdzMKHiZDc1ncwxhZJadWidj2gzca5AMiGHNKEVjsWkqJyH3fwhiSJs",
+      contract: {
+        script: "DCECAoqZgm7cDJfRjiK2kyNz2QjTI6p/kmVqd\u002Bwm6IYWme8LQQqQatQ=",
+        parameters: [{ name: "signature", type: "Signature" }],
+        deployed: false
+      },
+      extra: {
+        privateKey:
+          "7d128a6d096f0c14c3a25a2b0c41cf79661bfcb4a8cc95aaaea28bde4d732344",
+        publicKey:
+          "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
+        wif: "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g"
+      }
     },
     {
-      address: "NPsFSn9bThCKn3iycoA4NeEJx1PuMmPYGD",
-      contract: {
-        deployed: false,
-        parameters: [{ name: "signature", type: "Signature" }],
-        //TODO: update this
-        script:
-          "2103c663ba46afa8349f020eb9e8f9e1dc1c8e877b9d239e139af699049126e0f32168747476aa"
-      },
-      extra: {},
+      address: "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
+      label: null,
       isDefault: false,
-      key: "6PYUEN9mjWb6EjXc9U23DMF8BmgfxELSMpzMyikqAnjacbCeqevtF6cgWb",
-      label: "NPsFSn9bThCKn3iycoA4NeEJx1PuMmPYGD",
-      lock: false
+      lock: false,
+      key: "6PYLxXgqCV9CAc4RV1M8LfjnzXwusBhiBGcyWrjKaiAiixxuZ9W1S4biVd",
+      contract: {
+        script: "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQQqQatQ=",
+        parameters: [{ name: "signature", type: "Signature" }],
+        deployed: false
+      },
+      extra: {
+        privateKey:
+          "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69",
+        publicKey:
+          "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
+        wif: "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG"
+      }
+    },
+    {
+      address: "NTFAwXLGoiWwSMP5vJyZp8K4cBFwrzUs8m",
+      label: null,
+      isDefault: false,
+      lock: false,
+      key: "6PYRoabFnnytJHdHDr6pdAaXvPsTfN2bbfzm2ff6ZTirRAXVWBBxPcKxcV",
+      contract: {
+        script: "DCECIyzo0uIGPc4EURMYUdR0Ib/E/B2k2xFvylMCwHVkYvoLQQqQatQ=",
+        parameters: [{ name: "signature", type: "Signature" }],
+        deployed: false
+      },
+      extra: {
+        privateKey:
+          "3edee7036b8fd9cef91de47386b191dd76db2888a553e7736bb02808932a915b",
+        publicKey:
+          "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
+        wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG"
+      }
     }
   ],
-  extra: {},
-  name: "myWallet",
-  scrypt: { n: 16384, p: 8, r: 8, size: 64 },
-  version: "3.0"
+  extra: null
 };
+
+const PASSWORD = "password";
 
 describe("constructor & export", () => {
   test("constructor", () => {
@@ -82,9 +105,9 @@ describe("add account, default account", () => {
       name: "test",
       version: "1"
     });
-    wallet.addAccount(new Account(PRIVATE_KEY1));
-    wallet.addAccount(new Account(PRIVATE_KEY2));
-    expect(wallet.defaultAccount.privateKey).toBe(PRIVATE_KEY1);
+    wallet.addAccount(new Account(WALLET_JSON.accounts[0].address));
+    wallet.addAccount(new Account(WALLET_JSON.accounts[1].address));
+    expect(wallet.defaultAccount.address).toBe(WALLET_JSON.accounts[0].address);
   });
 
   test("set default account", () => {
@@ -92,8 +115,8 @@ describe("add account, default account", () => {
       name: "test",
       version: "1"
     });
-    wallet.addAccount(new Account(PRIVATE_KEY1));
-    wallet.addAccount(new Account(PRIVATE_KEY2));
+    wallet.addAccount(new Account(WALLET_JSON.accounts[0].address));
+    wallet.addAccount(new Account(WALLET_JSON.accounts[1].address));
     wallet.setDefault(1);
     expect(wallet.defaultAccount).toBe(wallet.accounts[1]);
   });
@@ -102,40 +125,32 @@ describe("add account, default account", () => {
 describe("encrypt", () => {
   test("success", async () => {
     const wallet = new Wallet();
-    wallet.addAccount(new Account(PRIVATE_KEY1));
-    wallet.addAccount(new Account(PRIVATE_KEY2));
+    wallet.addAccount(new Account(WALLET_JSON.accounts[1].extra.privateKey));
 
     const result = await wallet.encrypt(0, PASSWORD);
 
     expect(result).toBeTruthy();
-    expect(wallet.accounts[0].encrypted).toBe(
-      "6PYS65Tsm4WzLzdJ6mVGNCQfnFzBEs47M54wq3SBKSs9WzzpEEYwKg6eam"
-    );
+    expect(wallet.accounts[0].encrypted).toBe(WALLET_JSON.accounts[1].key);
   });
   test("failure", async () => {
     const wallet = new Wallet();
-    wallet.addAccount(new Account(PRIVATE_KEY1));
-    wallet.addAccount(new Account(PRIVATE_KEY2));
+    wallet.addAccount(new Account(WALLET_JSON.accounts[0].extra.privateKey));
 
-    await expect(wallet.encrypt(-1, PASSWORD)).rejects.toThrow();
+    await expect(wallet.encrypt(-1, "badPassword")).rejects.toThrow();
   });
 });
 
 describe("encryptAll", () => {
   test("success", async () => {
     const wallet = new Wallet();
-    wallet.addAccount(new Account(PRIVATE_KEY1));
-    wallet.addAccount(new Account(PRIVATE_KEY2));
+    wallet.addAccount(new Account(WALLET_JSON.accounts[0].extra.privateKey));
+    wallet.addAccount(new Account(WALLET_JSON.accounts[1].extra.privateKey));
 
     const result = await wallet.encryptAll(PASSWORD);
 
     expect(result).toStrictEqual([true, true]);
-    expect(wallet.accounts[0].encrypted).toBe(
-      "6PYS65Tsm4WzLzdJ6mVGNCQfnFzBEs47M54wq3SBKSs9WzzpEEYwKg6eam"
-    );
-    expect(wallet.accounts[1].encrypted).toBe(
-      "6PYUEN9mjWb6EjXc9U23DMF8BmgfxELSMpzMyikqAnjacbCeqevtF6cgWb"
-    );
+    expect(wallet.accounts[0].encrypted).toBe(WALLET_JSON.accounts[0].key);
+    expect(wallet.accounts[1].encrypted).toBe(WALLET_JSON.accounts[1].key);
   }, 20000);
 });
 
@@ -146,7 +161,9 @@ describe("decrypt", () => {
     const result = await wallet.decrypt(0, PASSWORD);
 
     expect(result).toBeTruthy();
-    expect(wallet.accounts[0].privateKey).toBe(PRIVATE_KEY1);
+    expect(wallet.accounts[0].privateKey).toBe(
+      WALLET_JSON.accounts[0].extra.privateKey
+    );
   });
   test("failure", async () => {
     const wallet = new Wallet(WALLET_JSON);
@@ -161,8 +178,10 @@ describe("decryptAll", () => {
 
     const result = await wallet.decryptAll(PASSWORD);
 
-    expect(result).toStrictEqual([true, true]);
-    expect(wallet.accounts[0].privateKey).toBe(PRIVATE_KEY1);
+    expect(result).toStrictEqual([true, true, true]);
+    expect(wallet.accounts[0].privateKey).toBe(
+      WALLET_JSON.accounts[0].extra.privateKey
+    );
   }, 20000);
 
   test("failure", async () => {

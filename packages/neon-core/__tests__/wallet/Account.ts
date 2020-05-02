@@ -17,12 +17,12 @@ describe("constructor", () => {
       "publicKeyUnencoded",
       "041d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c94617303f7408d9abfedfb6fbb00dd07e3e7735d918bbea7a7e2c1895ea1bc9b9"
     ],
-    ["scriptHash", "101fe52cabcfccddd477a0001c4ab6c7e9be6a7c"],
-    ["address", "NXFprNJ9tBk4ziUaq2b9b2DtWQ1Vv2uLn3"]
+    ["scriptHash", "dd05929573e68014604a742c53d3d4e5cea5e539"],
+    ["address", "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye"]
   ])("%s", (msg: string, data: string) => {
     const result = new Account(data);
     expect(result instanceof Account).toBeTruthy();
-    expect(result.address).toBe("NXFprNJ9tBk4ziUaq2b9b2DtWQ1Vv2uLn3");
+    expect(result.address).toBe("NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye");
   });
 
   test("empty", () => {
@@ -35,19 +35,14 @@ describe("constructor", () => {
 
   test("AccountJSON", () => {
     const testObject = {
-      address: "NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM",
-      label: "addressA",
-      isDefault: true,
+      address: "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
+      label: "addressB",
+      isDefault: false,
       lock: false,
-      key: "6PYMbaT43mYYXAjaRPxmDG3ui15D7xjGaGjyg8zTo79whjG76tWjXEwPRJ",
+      key: "6PYLxXgqCV9CAc4RV1M8LfjnzXwusBhiBGcyWrjKaiAiixxuZ9W1S4biVd",
       contract: {
-        script: "",
-        parameters: [
-          {
-            name: "signature",
-            type: "Signature"
-          }
-        ],
+        script: "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQQqQatQ=",
+        parameters: [{ name: "signature", type: "Signature" }],
         deployed: false
       },
       extra: null
@@ -62,19 +57,14 @@ describe("constructor", () => {
 describe("export", () => {
   test("AccountJSON", () => {
     const testObject = {
-      address: "NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM",
-      label: "addressA",
-      isDefault: true,
+      address: "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
+      label: "addressB",
+      isDefault: false,
       lock: false,
-      key: "6PYMbaT43mYYXAjaRPxmDG3ui15D7xjGaGjyg8zTo79whjG76tWjXEwPRJ",
+      key: "6PYLxXgqCV9CAc4RV1M8LfjnzXwusBhiBGcyWrjKaiAiixxuZ9W1S4biVd",
       contract: {
-        script: "",
-        parameters: [
-          {
-            name: "signature",
-            type: "Signature"
-          }
-        ],
+        script: "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQQqQatQ=",
+        parameters: [{ name: "signature", type: "Signature" }],
         deployed: false
       }
     } as AccountJSON;
@@ -153,7 +143,7 @@ describe.skip("multisig", () => {
   });
 
   test("isMultiSig returns false for normal accounts", () => {
-    const result = new Account("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW");
+    const result = new Account("NTFAwXLGoiWwSMP5vJyZp8K4cBFwrzUs8m");
     expect(result.isMultiSig).toBeFalsy();
   });
 });
