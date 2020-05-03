@@ -3,6 +3,7 @@ import { ContractParam, createScript } from "../../src/sc";
 import { Transaction, WitnessScope } from "../../src/tx";
 import { Account } from "../../src/wallet";
 import { reverseHex } from "../../src/u";
+import { RPCClient } from "../../src/rpc";
 
 const TESTNET_URLS = [
   "http://seed1t.neo.org:20332",
@@ -18,23 +19,29 @@ const privateKey =
   "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69";
 const contractHash = "101fe52cabcfccddd477a0001c4ab6c7e9be6a7c";
 
-function safelyCheckHeight(url: string): Promise<number> {
-  return rpc
-    .sendQuery(url, rpc.Query.getBlockCount(), { timeout: 10000 })
-    .then(res => res.result)
-    .catch(_e => -1);
+async function safelyCheckHeight(url: string): Promise<number> {
+  try {
+    const res = await rpc.sendQuery(url, rpc.Query.getBlockCount(), {
+      timeout: 10000
+    });
+    return res.result;
+  } catch (_e) {
+    return -1;
+  }
 }
 
 beforeAll(async () => {
-  const heights = (
-    await Promise.all(TESTNET_URLS.map(url => safelyCheckHeight(url)))
-  ).map((h, i) => ({ height: h, url: TESTNET_URLS[i] }));
+  const data = await Promise.all(
+    TESTNET_URLS.map(url => safelyCheckHeight(url))
+  );
+  const heights = data.map((h, i) => ({ height: h, url: TESTNET_URLS[i] }));
   const best = heights.reduce(
     (bestSoFar, h) => (bestSoFar.height >= h.height ? bestSoFar : h),
     { height: -1, url: "" }
   );
+  console.log(best);
   client = new rpc.RPCClient(best.url);
-});
+}, 20000);
 
 describe("RPC Methods", () => {
   const REFERENCE_BLOCK_HEADER = {
