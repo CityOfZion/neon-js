@@ -1,4 +1,4 @@
-import { Fixed8, reverseHex } from "../u";
+import { Fixed8, reverseHex, HexString } from "../u";
 import { getScriptHashFromAddress, isAddress } from "../wallet";
 import { NeonObject } from "../model";
 
@@ -160,7 +160,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
   }
 
   public type: ContractParamType;
-  public value: string | boolean | number | ContractParam[] | null;
+  public value: string | boolean | number | HexString | ContractParam[] | null;
 
   public constructor(input: Partial<ContractParamLike | ContractParam>) {
     if (typeof input === "object") {
@@ -170,6 +170,32 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       this.type = toContractParamType(input.type);
       if (this.type !== ContractParamType.Void && input.value === undefined) {
         throw new Error("value must be defined!");
+      }
+      switch (this.type) {
+        case ContractParamType.Array:
+          this.value = (input.value as (
+            | ContractParamLike
+            | ContractParam
+          )[]).map(cp => new ContractParam(cp));
+          return;
+        case ContractParamType.Boolean:
+          this.value = !!input.value;
+          return;
+        case ContractParamType.Hash160:
+        case ContractParamType.Hash256:
+        case ContractParamType.PublicKey:
+          this.value = HexString.fromHex(input.value as string);
+        case ContractParamType.Integer:
+        case ContractParamType.String:
+          this.value = input.value as number | string;
+        case ContractParamType.Any:
+          this.value =
+            typeof input.value === "object"
+              ? (input.value as (ContractParamLike | ContractParam)[]).map(
+                  cp => new ContractParam(cp)
+                )
+              : input.value ?? null;
+          return;
       }
       this.value =
         typeof input.value === "object"
@@ -187,10 +213,43 @@ export class ContractParam implements NeonObject<ContractParamLike> {
   }
 
   public export(): ContractParamLike {
-    const exportedValue = Array.isArray(this.value)
-      ? this.value.map(cp => cp.export())
-      : this.value;
-    return { type: ContractParamType[this.type], value: exportedValue };
+    switch (this.type) {
+      case ContractParamType.Void:
+        return { type: ContractParamType[this.type], value: null };
+      case ContractParamType.Hash160:
+      case ContractParamType.Hash256:
+      case ContractParamType.PublicKey:
+        return {
+          type: ContractParamType[this.type],
+          value: (this.value as HexString).toBigEndian()
+        };
+
+      case ContractParamType.Array:
+        return {
+          type: ContractParamType[this.type],
+          value: (this.value as ContractParam[]).map(cp => cp.export())
+        };
+      case ContractParamType.Boolean:
+        return {
+          type: ContractParamType[this.type],
+          value: this.value as boolean
+        };
+      case ContractParamType.Integer:
+        return {
+          type: ContractParamType[this.type],
+          value: this.value as number
+        };
+      case ContractParamType.String:
+      case ContractParamType.Signature:
+      case ContractParamType.Any:
+        return {
+          type: ContractParamType[this.type],
+          value: this.value as string
+        };
+      default:
+        //TODO: Support Map and Interop
+        throw new Error("Unsupported!");
+    }
   }
 
   public equals(other: ContractParamLike): boolean {

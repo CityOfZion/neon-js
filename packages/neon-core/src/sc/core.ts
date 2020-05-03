@@ -54,7 +54,7 @@ export function generateDeployScript(params: DeployParams): ScriptBuilder {
   const sb = new ScriptBuilder();
   sb.emitPush(params.manifest)
     .emitPush(params.script)
-    .emitSysCall(InteropServiceCode.NEO_CONTRACT_CREATE);
+    .emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CREATE);
   return sb;
 }
 
@@ -63,6 +63,6 @@ export function generateUpdateScript(params: DeployParams): ScriptBuilder {
   const sb = new ScriptBuilder();
   sb.emitPush(params.manifest)
     .emitPush(params.script)
-    .emitSysCall(InteropServiceCode.NEO_CONTRACT_UPDATE);
+    .emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_UPDATE);
   return sb;
 }

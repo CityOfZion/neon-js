@@ -2,12 +2,11 @@ import BN from "bn.js";
 import {
   ab2hexstring,
   num2hexstring,
-  reverseHex,
   str2hexstring,
   StringStream,
   Fixed8,
   int2hex,
-  ensureHex
+  HexString
 } from "../u";
 import ContractParam, {
   ContractParamType,
@@ -51,11 +50,23 @@ export class ScriptBuilder extends StringStream {
   }
 
   public emitAppCall(
-    _scriptHash: string,
-    _operation?: string,
-    _args?: unknown[]
+    scriptHash: string | HexString,
+    operation: string,
+    args: unknown[] = []
   ): this {
-    throw new Error("TO BE DELETED");
+    if (args.length === 0) {
+      this.emit(OpCode.NEWARRAY0);
+    } else {
+      args.forEach(arg => {
+        this.emitPush(arg);
+      });
+      this.emitNumber(args.length);
+      this.emit(OpCode.PACK);
+    }
+
+    return this.emitString(operation)
+      .emitHexstring(HexString.fromHex(scriptHash))
+      .emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALL);
   }
 
   public emitSysCall(service: InteropServiceCode, ...args: unknown[]): this {
@@ -83,6 +94,8 @@ export class ScriptBuilder extends StringStream {
       case "object":
         if (Array.isArray(data)) {
           return this.emitArray(data);
+        } else if (data instanceof HexString) {
+          return this.emitHexstring(data);
         } else if (data === null) {
           return this.emitPush(false);
         } else if (likeContractParam(data)) {
@@ -110,14 +123,14 @@ export class ScriptBuilder extends StringStream {
     for (let i = arr.length - 1; i >= 0; i--) {
       this.emitPush(arr[i]);
     }
-    return this.emitPush(arr.length).emit(OpCode.PACK);
+    return this.emitNumber(arr.length).emit(OpCode.PACK);
   }
 
   /**
    * Appends a bytearray.
    */
   public emitBytes(byteArray: ArrayBuffer | ArrayLike<number>): this {
-    return this.emitHexstring(ab2hexstring(byteArray));
+    return this.emitHexstring(HexString.fromArrayBuffer(byteArray, true));
   }
 
   /**
@@ -132,15 +145,24 @@ export class ScriptBuilder extends StringStream {
   /**
    * Appends a hexstring.
    */
-  public emitHexstring(hexstr: string): this {
-    ensureHex(hexstr);
-    const size = hexstr.length / 2;
+  public emitHexstring(hexstr: string | HexString): this {
+    if (typeof hexstr === "string") {
+      hexstr = HexString.fromHex(hexstr);
+    }
+    const littleEndianHex = hexstr.toLittleEndian();
+    const size = hexstr.byteLength;
     if (size < 0x100) {
-      return this.emit(OpCode.PUSHDATA1, num2hexstring(size) + hexstr);
+      return this.emit(OpCode.PUSHDATA1, num2hexstring(size) + littleEndianHex);
     } else if (size < 0x10000) {
-      return this.emit(OpCode.PUSHDATA2, num2hexstring(size, 2, true) + hexstr);
+      return this.emit(
+        OpCode.PUSHDATA2,
+        num2hexstring(size, 2, true) + littleEndianHex
+      );
     } else if (size < 0x100000000) {
-      return this.emit(OpCode.PUSHDATA4, num2hexstring(size, 4, true) + hexstr);
+      return this.emit(
+        OpCode.PUSHDATA4,
+        num2hexstring(size, 4, true) + littleEndianHex
+      );
     } else {
       throw new Error(`Data too big to emit!`);
     }
@@ -225,13 +247,13 @@ export class ScriptBuilder extends StringStream {
       case ContractParamType.Integer:
         return this.emitNumber(param.value as number | string);
       case ContractParamType.ByteArray:
-        return this.emitString(param.value as string);
+        return this.emitHexstring(param.value as string);
       case ContractParamType.Array:
         return this.emitArray(param.value as ContractParam[]);
       case ContractParamType.Hash160:
-        return this.emitHexstring(reverseHex(param.value as string));
+      case ContractParamType.Hash256:
       case ContractParamType.PublicKey:
-        return this.emitHexstring(param.value as string);
+        return this.emitHexstring(param.value as HexString);
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }

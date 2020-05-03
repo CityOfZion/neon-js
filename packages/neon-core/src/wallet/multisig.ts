@@ -12,17 +12,19 @@ export function constructMultiSigVerificationScript(
     );
   }
 
-  const ss = new ScriptBuilder();
-  ss.emitPush(signingThreshold);
+  const sb = new ScriptBuilder();
+  sb.emitPush(signingThreshold);
   keys.forEach(k => {
     if (!isPublicKey(k, true)) {
       throw new Error(`${k} is not a valid encoded public key`);
     }
-    ss.emitPush(k);
+    sb.emitHexstring(k);
   });
-  ss.emitPush(keys.length);
-  ss.emitSysCall(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG);
-  return ss.str;
+  return sb
+    .emitPush(keys.length)
+    .emit(OpCode.PUSHNULL)
+    .emitSysCall(InteropServiceCode.NEO_CRYPTO_ECDSACHECKMULTISIG)
+    .build();
 }
 
 /**
@@ -56,7 +58,7 @@ export function getSigningThresholdFromVerificationScript(
   if (checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY) {
     return 1;
   } else if (
-    checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
+    checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_ECDSACHECKMULTISIG
   ) {
     const ss = new StringStream(verificationScript);
     const byte = parseInt(ss.peek(), 16);

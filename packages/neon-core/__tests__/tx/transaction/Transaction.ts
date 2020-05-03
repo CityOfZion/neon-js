@@ -215,7 +215,7 @@ describe("Add Methods", () => {
     tx1.scripts = [];
     tx1.sign(account);
     expect(tx1.scripts[0].verificationScript.toBigEndian()).toBe(
-      "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4"
+      "0c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b410a906ad4"
     );
     expect(tx1.scripts[0].invocationScript.toBigEndian()).toBe(
       "40ab51e521a287dfeb83a51b1444ca31fbdc88d2181c156e65d30b3423d24bed693feb5ac8511c24efd766c664a3b09ec9cf2e24588226aab16175d84dc0fcbeea"

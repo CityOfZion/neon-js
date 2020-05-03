@@ -19,9 +19,12 @@ export function getNetworkFeeForMultiSig(
     // ] +
     // sc.OpCodePrices[sc.OpCode.PUSHBYTES33] * pubkeysNum +
     // sc.OpCodePrices[sb.emitPush(pubkeysNum).str.slice(0, 2) as sc.OpCode] +
-    sc.getInteropServicePrice(sc.InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG, {
-      size: pubkeysNum
-    })
+    sc.getInteropServicePrice(
+      sc.InteropServiceCode.NEO_CRYPTO_ECDSACHECKMULTISIG,
+      {
+        size: pubkeysNum
+      }
+    )
   );
 }
 
@@ -36,7 +39,7 @@ function getVerificationScriptsFromWitnesses(
 function isMultiSig(verificationScript: string): boolean {
   return (
     verificationScript.slice(verificationScript.length - 8) ===
-    sc.InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
+    sc.InteropServiceCode.NEO_CRYPTO_ECDSACHECKMULTISIG
   );
 }
 

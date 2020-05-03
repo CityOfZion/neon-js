@@ -1,7 +1,8 @@
 import ContractParam from "../../src/sc/ContractParam";
 import OpCode from "../../src/sc/OpCode";
-import ScriptBuilder from "../../src/sc/ScriptBuilder";
+import ScriptBuilder, { ScriptIntent } from "../../src/sc/ScriptBuilder";
 import { InteropServiceCode } from "../../src/sc";
+import { HexString } from "../../src/u";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -45,17 +46,51 @@ describe("emit", () => {
   });
 });
 
-//TODO: Fix syscall
-describe.skip("emitSysCall", () => {
+describe("emitSysCall", () => {
   test("emitSysCall with args", () => {
     const sb = new ScriptBuilder();
     const result = sb.emitSysCall(
-      InteropServiceCode.NEO_CONTRACT_CREATE,
-      "a45f",
-      "2bc5"
+      InteropServiceCode.SYSTEM_CONTRACT_CREATE,
+      HexString.fromHex("a45f"),
+      HexString.fromHex("2bc5")
     ).str;
-    expect(result).toBe("022bc502a45f65f66ca56e");
+    expect(result).toBe("0c02c52b0c025fa441ce352c85");
   });
+});
+
+describe("emitAppCall", () => {
+  test.each([
+    [
+      "simple emitAppCall",
+      {
+        scriptHash: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
+        operation: "name",
+        args: []
+      },
+      "c20c046e616d650c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52"
+    ],
+    [
+      "emitAppCall with args",
+      {
+        scriptHash: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
+        operation: "balanceOf",
+        args: [
+          {
+            type: "Hash160",
+            value: "a7213b15cc18d19c810f644e37411d882ee561ca"
+          }
+        ]
+      },
+      "0c14ca61e52e881d41374e640f819cd118cc153b21a711c00c0962616c616e63654f660c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52"
+    ]
+  ] as [string, ScriptIntent, string][])(
+    "%s",
+    (_msg: string, data: ScriptIntent, expected: string) => {
+      const sb = new ScriptBuilder();
+      sb.emitAppCall(data.scriptHash, data.operation, data.args);
+      expect(sb.str).toBe(expected);
+    }
+  );
 });
 
 describe("emitPush", () => {

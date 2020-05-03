@@ -7,5 +7,4 @@ export * from "./OpCodePrices";
 export * from "./InteropServiceCode";
 export * from "./InteropServicePrices";
 export * from "./StackItem";
-export * from "./NativeContractMethodPrices";
 export * from "./manifest";
