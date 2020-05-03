@@ -15,14 +15,7 @@ import ContractParam, {
 } from "./ContractParam";
 import { OpCode } from "./OpCode";
 import InteropServiceCode from "./InteropServiceCode";
-
-let textEncoder: typeof TextEncoder | undefined = undefined;
-
-if (!TextEncoder) {
-  import("util").then(util => {
-    textEncoder = util.TextEncoder;
-  });
-}
+import { TextEncoder } from "util";
 
 export interface ScriptIntent {
   scriptHash: string | "NEO" | "GAS" | "POLICY";
@@ -131,7 +124,7 @@ export class ScriptBuilder extends StringStream {
    * Appends a UTF-8 string.
    */
   public emitString(str: string): this {
-    const encoder = new textEncoder();
+    const encoder = new TextEncoder();
     const bytes = encoder.encode(str);
     return this.emitBytes(bytes);
   }
