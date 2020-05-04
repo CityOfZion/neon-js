@@ -91,7 +91,7 @@ describe("setter", () => {
     ]);
   });
 
-  test("addIntents", () => {
+  test.skip("addIntents", () => {
     const transaction = new TransactionBuilder()
       .addIntents(
         {
