@@ -1,5 +1,5 @@
 import { str2hexstring, sha256, hash160, int2hex, reverseHex } from "../u";
-import { OpCode } from ".";
+import { OpCode } from "./OpCode";
 
 export enum InteropServiceCode {
   NEO_CRYPTO_ECDSACHECKMULTISIG = "3073b3bb",

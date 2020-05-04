@@ -1,4 +1,4 @@
-import InteropServiceCode from "./InteropServiceCode";
+import { InteropServiceCode } from "./InteropServiceCode";
 
 export interface InteropServicePriceParam {
   size: number;

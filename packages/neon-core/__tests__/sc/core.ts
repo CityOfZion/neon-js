@@ -105,7 +105,7 @@ describe("generateDeployScript", () => {
     expect(order).toEqual([
       params.manifest,
       params.script,
-      InteropServiceCode.NEO_CONTRACT_CREATE
+      InteropServiceCode.SYSTEM_CONTRACT_CREATE
     ]);
   });
 });

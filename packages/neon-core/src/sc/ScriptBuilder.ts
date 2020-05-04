@@ -8,12 +8,13 @@ import {
   int2hex,
   HexString
 } from "../u";
-import ContractParam, {
+import {
+  ContractParam,
   ContractParamType,
   likeContractParam
 } from "./ContractParam";
 import { OpCode } from "./OpCode";
-import InteropServiceCode from "./InteropServiceCode";
+import { InteropServiceCode } from "./InteropServiceCode";
 import { TextEncoder } from "util";
 
 export interface ScriptIntent {

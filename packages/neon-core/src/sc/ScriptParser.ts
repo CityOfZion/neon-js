@@ -1,6 +1,6 @@
 import { reverseHex, StringStream, hexstring2str } from "../u";
 import { ScriptIntent } from "./ScriptBuilder";
-import InteropServiceCode from "./InteropServiceCode";
+import { InteropServiceCode } from "./InteropServiceCode";
 
 /**
  * Checks that args is [string, string, array]
