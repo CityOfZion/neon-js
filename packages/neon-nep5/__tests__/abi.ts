@@ -1,7 +1,7 @@
 import { u, wallet } from "@cityofzion/neon-core";
 import * as abi from "../src/abi";
 
-function randomScriptHash() {
+function randomScriptHash(): string {
   let hash = "";
   for (let i = 0; i < 40; i++) {
     hash += Math.floor(Math.random() * 16).toString(16);
@@ -9,7 +9,7 @@ function randomScriptHash() {
   return hash;
 }
 
-function randomAddress() {
+function randomAddress(): string {
   return "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
 }
 

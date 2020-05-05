@@ -58,7 +58,9 @@ describe.each([
 });
 
 test("str2ab: throw if input is non-string", () => {
-  expect(() => convert.str2ab(1 as any)).toThrow();
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  expect(() => convert.str2ab(1)).toThrow();
 });
 
 describe.each([
@@ -114,7 +116,7 @@ describe("num2hexstring", () => {
       test(`${msg}(LE) `, () => {
         const result = convert.num2hexstring(num, size, true);
         const reversedHex = hex
-          .match(/.{1,2}/g)!
+          .match(/.{1,2}/g)
           .reverse()
           .join("");
         expect(result).toBe(reversedHex);

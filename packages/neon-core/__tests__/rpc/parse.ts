@@ -11,16 +11,21 @@ import { StackItemLike } from "../../src/sc";
 describe("buildParser", () => {
   it("errors when input !== length of parsers", () => {
     const parser = buildParser(jest.fn(), jest.fn());
-    expect(() => parser({ stack: [1] } as any)).toThrow(
-      "Wrong number of items to parse!"
-    );
+    expect(() =>
+      parser({
+        script: "",
+        state: "HALT",
+        gas_consumed: "0",
+        stack: [{ type: "Integer", value: 1 }],
+      })
+    ).toThrow("Wrong number of items to parse!");
   });
 });
 
 describe("noOpParser", () => {
   it("returns value of item", () => {
-    const expected = jest.fn();
-    const result = NoOpParser({ type: "Integer", value: expected } as any);
+    const expected = 123;
+    const result = NoOpParser({ type: "Integer", value: expected });
     expect(result).toBe(expected);
   });
 });
@@ -58,17 +63,27 @@ describe("StringParser", () => {
 describe("SimpleParser", () => {
   test("parses based on type", () => {
     const result = SimpleParser({
+      script: "",
+      state: "HALT",
+      gas_consumed: "0",
       stack: [
         { type: "ByteArray", value: "525058" },
         { type: "Integer", value: "1" },
       ],
-    } as any);
+    });
     expect(result).toEqual(["RPX", 1]);
   });
 
   test("errors when meeting unknown type", () => {
     expect(() =>
-      SimpleParser({ stack: [{ type: "Weird", value: null }] } as any)
+      SimpleParser({
+        script: "",
+        state: "HALT",
+        gas_consumed: "0",
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        stack: [{ type: "Weird", value: null }],
+      })
     ).toThrow("Unknown type");
   });
 });

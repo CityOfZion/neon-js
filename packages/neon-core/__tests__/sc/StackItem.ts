@@ -65,7 +65,7 @@ describe("deserialize", () => {
     expect(resultValueArray[0].value.type).toBe(StackItemType.Integer);
     expect(resultValueArray[0].value.value).toBe("01");
     expect(resultValueArray[4].value.type).toBe(StackItemType.Array);
-    const innerArray = resultValueArray[4].value.value as any[];
+    const innerArray = resultValueArray[4].value.value as unknown[];
     expect(innerArray.length).toBe(6);
   });
 

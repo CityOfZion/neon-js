@@ -4,7 +4,7 @@ import * as plugin from "./plugin";
 function bundle<T extends typeof _Neon>(
   neonCore: T
 ): T & { domain: typeof plugin } {
-  return { ...(neonCore as any), domain: plugin };
+  return { ...neonCore, domain: plugin };
 }
 
 export default bundle;
