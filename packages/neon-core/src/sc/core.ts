@@ -14,14 +14,14 @@ export function createScript(...intents: (ScriptIntent | string)[]): string {
     if (!scriptIntent.scriptHash) {
       throw new Error("No scriptHash found!");
     }
-    const { scriptHash, operation, args = [] } = Object.assign(
+    const { scriptHash, operation, args = undefined } = Object.assign(
       { operation: null, args: undefined },
       scriptIntent
     );
 
     sb.emitAppCall(scriptHash, operation, args);
   }
-  return sb.str;
+  return sb.build();
 }
 
 export interface DeployParams {
