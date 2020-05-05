@@ -11,9 +11,9 @@ export interface RPCVMResponse {
   stack: StackItemLike[];
 }
 
-export type StackItemParser = (item: StackItemLike) => any;
+export type StackItemParser = (item: StackItemLike) => unknown;
 
-export type VMResultParser = (result: RPCVMResponse) => any[];
+export type VMResultParser = (result: RPCVMResponse) => unknown[];
 
 /**
  * Builds a parser to parse the results of the stack.
@@ -35,7 +35,7 @@ export function buildParser(...args: StackItemParser[]): VMResultParser {
 /**
  * This just returns the value of the StackItem.
  */
-export function NoOpParser(item: StackItemLike): any {
+export function NoOpParser(item: StackItemLike): unknown {
   return item.value;
 }
 
@@ -65,8 +65,8 @@ export function Fixed8Parser(item: StackItemLike): Fixed8 {
  * @param res RPC Response
  * @return Array of results
  */
-export function SimpleParser(res: RPCVMResponse): any[] {
-  return res.stack.map(item => {
+export function SimpleParser(res: RPCVMResponse): unknown[] {
+  return res.stack.map((item) => {
     switch (item.type) {
       case "ByteArray":
         return StringParser(item);

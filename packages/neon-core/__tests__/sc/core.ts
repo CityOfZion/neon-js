@@ -21,8 +21,8 @@ describe("createScript", () => {
 
   test("multiple ScriptIntents", () => {
     const intents = [testIntents[1], testIntents[2]];
-    const input = intents.map(i => i.scriptIntent);
-    const expected = intents.map(i => i.script).join("");
+    const input = intents.map((i) => i.scriptIntent);
+    const expected = intents.map((i) => i.script).join("");
     const result = createScript(...input);
     expect(result).toBe(expected);
   });

@@ -6,12 +6,12 @@ import {
   StringStream,
   Fixed8,
   int2hex,
-  HexString
+  HexString,
 } from "../u";
 import {
   ContractParam,
   ContractParamType,
-  likeContractParam
+  likeContractParam,
 } from "./ContractParam";
 import { OpCode } from "./OpCode";
 import { InteropServiceCode } from "./InteropServiceCode";
@@ -58,7 +58,7 @@ export class ScriptBuilder extends StringStream {
     if (args.length === 0) {
       this.emit(OpCode.NEWARRAY0);
     } else {
-      args.forEach(arg => {
+      args.forEach((arg) => {
         this.emitPush(arg);
       });
       this.emitNumber(args.length);

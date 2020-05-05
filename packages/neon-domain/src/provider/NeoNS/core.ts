@@ -17,12 +17,12 @@ export async function resolveDomain(
 ): Promise<string> {
   const protocol = {
     type: "String",
-    value: "addr"
+    value: "addr",
   };
 
   const empty = {
     type: "String",
-    value: ""
+    value: "",
   };
 
   const tld = domain.split(".").reverse()[0];

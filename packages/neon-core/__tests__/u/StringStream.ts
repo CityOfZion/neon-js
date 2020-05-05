@@ -41,7 +41,7 @@ describe("peek", () => {
     [3, "010203"],
     [4, "01020304"],
     [5, "0102030405"],
-    [6, "0102030405"]
+    [6, "0102030405"],
   ])(
     "peek returns number of bytes indicated",
     (num: number, expected: string) => {
@@ -74,7 +74,7 @@ describe("readVarBytes", () => {
     ["uint8", "05"],
     ["uint16", "fd0500"],
     ["uint32", "fe05000000"],
-    ["uint64", "ff0500000000000000"]
+    ["uint64", "ff0500000000000000"],
   ])("%s", (msg: string, data: string) => {
     const expected = "0102030405";
     const ss = new StringStream(data + expected);
@@ -88,7 +88,7 @@ describe("readVarInt", () => {
     ["uint8", "01", 1],
     ["uint16", "fd0102", 513],
     ["uint32", "fe01020304", 67305985],
-    ["uint64", "ff0102030405060708", 578437695752307200]
+    ["uint64", "ff0102030405060708", 578437695752307200],
   ])("%s", (msg: string, data: string, expected: number) => {
     const ss = new StringStream(data);
     const result = ss.readVarInt();

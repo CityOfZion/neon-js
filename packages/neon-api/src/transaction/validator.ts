@@ -7,7 +7,7 @@ export enum ValidationAttributes {
   SystemFee = 1 << 1,
   NetworkFee = 1 << 2,
   Script = 1 << 3,
-  All = ValidUntilBlock | SystemFee | NetworkFee | Script
+  All = ValidUntilBlock | SystemFee | NetworkFee | Script,
 }
 
 export type ValidationSuggestion<T> = {
@@ -75,9 +75,9 @@ export class TransactionValidator {
             validUntilBlock: {
               fixed: true,
               prev: validUntilBlock,
-              suggestion
-            }
-          }
+              suggestion,
+            },
+          },
         };
       }
       return {
@@ -86,13 +86,13 @@ export class TransactionValidator {
           validUntilBlock: {
             fixed: false,
             prev: validUntilBlock,
-            suggestion
-          }
-        }
+            suggestion,
+          },
+        },
       };
     }
     return {
-      valid: true
+      valid: true,
     };
   }
 
@@ -107,7 +107,7 @@ export class TransactionValidator {
 
     if (operation) {
       if (
-        manifest.abi.methods.map(method => method.name).indexOf(operation) < 0
+        manifest.abi.methods.map((method) => method.name).indexOf(operation) < 0
       ) {
         return `Unknown method ${operation} for contract ${scriptHash}`;
       }
@@ -129,9 +129,9 @@ export class TransactionValidator {
         result: {
           script: {
             fixed: false,
-            message: "Encountered FAULT when validating script."
-          }
-        }
+            message: "Encountered FAULT when validating script.",
+          },
+        },
       };
     }
 
@@ -140,8 +140,8 @@ export class TransactionValidator {
     ).toScriptParams();
     const intentsRes: Array<string> = [];
     await Promise.all(
-      intents.map(intent =>
-        this._validateIntent(intent).then(res =>
+      intents.map((intent) =>
+        this._validateIntent(intent).then((res) =>
           res ? intentsRes.push(res) : res
         )
       )
@@ -152,13 +152,13 @@ export class TransactionValidator {
         result: {
           script: {
             fixed: false,
-            message: intentsRes.join(";")
-          }
-        }
+            message: intentsRes.join(";"),
+          },
+        },
       };
     } else {
       return {
-        valid: true
+        valid: true,
       };
     }
   }
@@ -176,9 +176,9 @@ export class TransactionValidator {
           systemFee: {
             fixed: true,
             prev: systemFee,
-            suggestion: minimumSystemFee
-          }
-        }
+            suggestion: minimumSystemFee,
+          },
+        },
       };
     } else if (
       minimumSystemFee.isGreaterThan(systemFee) ||
@@ -190,9 +190,9 @@ export class TransactionValidator {
           systemFee: {
             fixed: false,
             prev: systemFee,
-            suggestion: minimumSystemFee
-          }
-        }
+            suggestion: minimumSystemFee,
+          },
+        },
       };
     } else if (minimumSystemFee.isLessThan(systemFee)) {
       return {
@@ -201,13 +201,13 @@ export class TransactionValidator {
           systemFee: {
             fixed: false,
             prev: systemFee,
-            suggestion: minimumSystemFee
-          }
-        }
+            suggestion: minimumSystemFee,
+          },
+        },
       };
     }
     return {
-      valid: true
+      valid: true,
     };
   }
 
@@ -219,7 +219,7 @@ export class TransactionValidator {
     const { script } = this.transaction;
     const {
       state,
-      gas_consumed: gasConsumed
+      gas_consumed: gasConsumed,
     } = await this.rpcClient.invokeScript(script.toBigEndian());
 
     if (state === "FAULT") {
@@ -229,9 +229,9 @@ export class TransactionValidator {
           systemFee: {
             fixed: false,
             message:
-              "Cannot get precise systemFee as script execution on node reports FAULT."
-          }
-        }
+              "Cannot get precise systemFee as script execution on node reports FAULT.",
+          },
+        },
       };
     }
 
@@ -256,9 +256,9 @@ export class TransactionValidator {
           networkFee: {
             fixed: true,
             prev: networkFee,
-            suggestion: minimumNetworkFee
-          }
-        }
+            suggestion: minimumNetworkFee,
+          },
+        },
       };
     } else if (minimumNetworkFee.isGreaterThan(networkFee)) {
       return {
@@ -267,9 +267,9 @@ export class TransactionValidator {
           networkFee: {
             fixed: false,
             prev: networkFee,
-            suggestion: minimumNetworkFee
-          }
-        }
+            suggestion: minimumNetworkFee,
+          },
+        },
       };
     } else if (minimumNetworkFee.isLessThan(networkFee)) {
       return {
@@ -278,14 +278,14 @@ export class TransactionValidator {
           networkFee: {
             fixed: false,
             prev: networkFee,
-            suggestion: minimumNetworkFee
-          }
-        }
+            suggestion: minimumNetworkFee,
+          },
+        },
       };
     }
 
     return {
-      valid: true
+      valid: true,
     };
   }
 
@@ -325,14 +325,14 @@ export class TransactionValidator {
       validationTasks.push(this.validateScript());
     }
 
-    return Promise.all(validationTasks).then(res =>
+    return Promise.all(validationTasks).then((res) =>
       res.reduce((prev, cur) => {
         return {
           valid: prev.valid && cur.valid,
           result: {
             ...prev.result,
-            ...cur.result
-          }
+            ...cur.result,
+          },
         };
       })
     );

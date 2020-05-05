@@ -1,7 +1,7 @@
 import ContractParam, {
   ContractParamType,
   likeContractParam,
-  ContractParamLike
+  ContractParamLike,
 } from "../../src/sc/ContractParam";
 
 describe("constructor", () => {
@@ -46,7 +46,7 @@ describe("Static constructors", () => {
       ["true", true, true],
       ["false", false, false],
       ["0", 0, false],
-      ["0(string)", "0", true]
+      ["0(string)", "0", true],
     ])(
       "%s",
       (msg: string, data: string | boolean | number, expected: boolean) => {
@@ -67,8 +67,8 @@ describe("Static constructors", () => {
       [
         "very big number",
         "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215",
-        "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215"
-      ]
+        "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215",
+      ],
     ])("%s", (_msg: string, data: string | number, expected: unknown) => {
       const result = ContractParam.integer(data);
 
@@ -83,13 +83,13 @@ describe("Static constructors", () => {
       [
         "address",
         "NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM",
-        "8ed27229893fc531b1d27a115c8c820bd927692e"
+        "8ed27229893fc531b1d27a115c8c820bd927692e",
       ],
       [
         "scriphash",
         "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
-        "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
-      ]
+        "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
+      ],
     ])("%s", (_msg: string, data: string, expected: unknown) => {
       const result = ContractParam.hash160(data);
 
@@ -110,11 +110,11 @@ describe("Static constructors", () => {
       [
         "address",
         ["ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s", "address"],
-        "35b20010db73bf86371075ddfba4e6596f1ff35d"
+        "35b20010db73bf86371075ddfba4e6596f1ff35d",
       ],
       ["fixed8", [100.012345678, "fixed8"], "88ba1e5402000000"],
       ["fixed8 (0 decimals)", [1, "fixed8", 0], "0100000000000000"],
-      ["fixed8(4 decimals)", [222.1234, "fixed8", 4], "b2e4210000000000"]
+      ["fixed8(4 decimals)", [222.1234, "fixed8", 4], "b2e4210000000000"],
     ])(
       "%s",
       (
@@ -169,17 +169,17 @@ describe("likeContractParam", () => {
       "basic JS object",
       {
         type: "String",
-        value: "1"
+        value: "1",
       },
-      true
+      true,
     ],
     [
       "another JS object",
       {
         type: "Hash160",
-        value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+        value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
       },
-      true
+      true,
     ],
     [
       "embedded Array",
@@ -188,16 +188,16 @@ describe("likeContractParam", () => {
         value: [
           {
             type: "Hash160",
-            value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
-          }
-        ]
+            value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
+          },
+        ],
       },
-      true
+      true,
     ],
     ["ContractParam", new ContractParam({ type: "Integer", value: 1 }), true],
     ["empty", {}, false],
     ["wrong type", { type: "", value: 1 }, false],
-    ["missing value", { type: "ByteArray" }, false]
+    ["missing value", { type: "ByteArray" }, false],
   ])(
     "%s",
     (
@@ -215,13 +215,13 @@ describe("export", () => {
   test("exports properly", () => {
     const testObject = new ContractParam({
       type: ContractParamType.Integer,
-      value: 1
+      value: 1,
     });
     const result = testObject.export();
 
     expect(result).toEqual({
       type: "Integer",
-      value: 1
+      value: 1,
     });
   });
 });
@@ -230,7 +230,7 @@ describe("toString", () => {
   test("emits correct string", () => {
     const result = new ContractParam({
       type: "Boolean",
-      value: false
+      value: false,
     }).toString();
     expect(result).toBe("[object ContractParam:Boolean]");
   });
@@ -239,7 +239,7 @@ describe("toString", () => {
 describe("equals", () => {
   const obj1 = {
     type: "String",
-    value: "1234"
+    value: "1234",
   };
 
   const obj2 = {
@@ -250,15 +250,15 @@ describe("equals", () => {
         value: [
           {
             type: "Hash160",
-            value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
-          }
-        ]
-      }
-    ]
+            value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
+          },
+        ],
+      },
+    ],
   };
 
   const obj3 = {
-    type: "Void"
+    type: "Void",
   };
 
   const param1 = new ContractParam(obj1);
@@ -271,7 +271,7 @@ describe("equals", () => {
     ["Param1 === Obj1", param1, obj1, true],
     ["Param1 !== Obj2", param1, obj2, false],
     ["Param2 === Obj2", param2, obj2, true],
-    ["Param3 === Obj3", param3, obj3, true]
+    ["Param3 === Obj3", param3, obj3, true],
   ] as [string, ContractParam, ContractParamLike, boolean][])(
     "%s",
     (

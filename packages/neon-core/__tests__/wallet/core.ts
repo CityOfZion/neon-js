@@ -18,8 +18,8 @@ describe.each([
       publicKey:
         "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
       WIF: "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
-      scriptHash: "ed5a639fd2bcdf75f97667bc3344ff3cecd11c10"
-    }
+      scriptHash: "ed5a639fd2bcdf75f97667bc3344ff3cecd11c10",
+    },
   ],
   [
     "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
@@ -30,8 +30,8 @@ describe.each([
       publicKey:
         "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
       WIF: "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
-      scriptHash: "dd05929573e68014604a742c53d3d4e5cea5e539"
-    }
+      scriptHash: "dd05929573e68014604a742c53d3d4e5cea5e539",
+    },
   ],
   [
     "NTFAwXLGoiWwSMP5vJyZp8K4cBFwrzUs8m",
@@ -42,9 +42,9 @@ describe.each([
       publicKey:
         "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
       WIF: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
-      scriptHash: "58f4339bff0ecaf6e8d785d732a118da94986a50"
-    }
-  ]
+      scriptHash: "58f4339bff0ecaf6e8d785d732a118da94986a50",
+    },
+  ],
 ])("Core: %s", (msg: string, data: TestAccount) => {
   test("WIF => privateKey", () => {
     const result = C.getPrivateKeyFromWIF(data.WIF);

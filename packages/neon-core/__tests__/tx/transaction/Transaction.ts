@@ -22,7 +22,7 @@ describe("constructor", () => {
       validUntilBlock: 1000,
       systemFee: 1,
       networkFee: 10,
-      script: "00"
+      script: "00",
     } as Partial<TransactionLike>;
 
     const result = new Transaction(testObject);
@@ -40,7 +40,7 @@ describe("constructor", () => {
       version: 1,
       scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
       systemFee: 1,
-      script: "00"
+      script: "00",
     });
 
     const result = new Transaction(testObject);
@@ -55,7 +55,7 @@ describe("getters", () => {
   test("fees", () => {
     const tx = new Transaction({
       systemFee: 2,
-      networkFee: 4
+      networkFee: 4,
     });
     expect(tx.fees).toBe(6);
   });
@@ -63,7 +63,7 @@ describe("getters", () => {
   test("hash", () => {
     const tx = new Transaction({
       nonce: 12345,
-      validUntilBlock: 1000
+      validUntilBlock: 1000,
     });
     expect(tx.hash).toBe(
       "4c5f49fd484037109d11358c6054f637c0414ee4018a91316e0925a87fe26ac0"
@@ -76,13 +76,13 @@ describe("getters", () => {
       cosigners: [
         {
           account: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
-          scopes: WitnessScope.Global
-        }
-      ]
+          scopes: WitnessScope.Global,
+        },
+      ],
     });
     expect(tx.getScriptHashesForVerifying()).toStrictEqual([
       "39e9c91012be63a58504e52b7318c1274554ae3d",
-      "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26"
+      "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
     ]);
   });
 });
@@ -98,7 +98,7 @@ describe("export", () => {
     validUntilBlock: 1000,
     attributes: [],
     scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
-    script: "00"
+    script: "00",
   } as Partial<TransactionLike>;
 
   const transaction = new Transaction(expected);
@@ -116,7 +116,7 @@ describe("equals", () => {
     validUntilBlock: 1000,
     attributes: [],
     scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
-    script: "00"
+    script: "00",
   };
 
   const obj2: Partial<TransactionLike> = {
@@ -128,7 +128,7 @@ describe("equals", () => {
     validUntilBlock: 1000,
     attributes: [],
     scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
-    script: "00"
+    script: "00",
   };
   const tx1 = new Transaction(obj1);
   const tx2 = new Transaction(obj2);
@@ -137,7 +137,7 @@ describe("equals", () => {
     ["Invocation1 === Invocation1", tx1, tx1, true],
     ["Invocation1 !== Invocation2", tx1, tx2, false],
     ["Invocation1 === Obj1", tx1, obj1, true],
-    ["Invocation1 !== Obj2", tx1, obj2, false]
+    ["Invocation1 !== Obj2", tx1, obj2, false],
   ])(
     "%s",
     (
@@ -162,7 +162,7 @@ describe("Add Methods", () => {
       validUntilBlock: 1000,
       attributes: [],
       scripts: [],
-      script: "00"
+      script: "00",
     });
   }
 
@@ -170,7 +170,7 @@ describe("Add Methods", () => {
     const tx1 = createTxforTestAddMethods();
     tx1.addCosigner({
       account: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
-      scopes: WitnessScope.Global
+      scopes: WitnessScope.Global,
     });
     expect(tx1.cosigners[0].account.toBigEndian()).toBe(
       "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26"
@@ -179,7 +179,7 @@ describe("Add Methods", () => {
     const addDuplicate = (): Transaction =>
       tx1.addCosigner({
         account: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
-        scopes: WitnessScope.Global
+        scopes: WitnessScope.Global,
       });
     expect(addDuplicate).toThrowError();
   });
@@ -188,7 +188,7 @@ describe("Add Methods", () => {
     const tx1 = createTxforTestAddMethods();
     tx1.addAttribute({
       usage: 129,
-      data: "72e9a2"
+      data: "72e9a2",
     });
     expect(tx1.attributes[0].usage).toBe(129);
     expect(tx1.attributes[0].data.toBigEndian()).toBe("72e9a2");
@@ -199,7 +199,7 @@ describe("Add Methods", () => {
     tx1.addWitness({
       invocationScript: "ab",
       verificationScript:
-        "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4"
+        "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4",
     });
     expect(tx1.scripts[0].invocationScript.toBigEndian()).toBe("ab");
     expect(tx1.scripts[0].verificationScript.toBigEndian()).toBe(
@@ -223,7 +223,7 @@ describe("Add Methods", () => {
   });
 });
 
-const dataSet = Object.keys(samples).map(k => {
+const dataSet = Object.keys(samples).map((k) => {
   const s = samples[k];
   return [s.txid, s.serialized, s.deserialized];
 });

@@ -5,7 +5,7 @@ prefix.reg(loglevel);
 loglevel.setDefaultLevel("silent");
 
 export function setAll(lvl: loglevel.LogLevelDesc): void {
-  Object.keys(loglevel.getLoggers()).map(key => {
+  Object.keys(loglevel.getLoggers()).map((key) => {
     const lg = loglevel.getLogger(key);
     lg.setLevel(lvl as loglevel.LogLevelDesc);
   });

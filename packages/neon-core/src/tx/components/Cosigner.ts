@@ -36,26 +36,26 @@ export class Cosigner {
       account = "",
       scopes = WitnessScope.Global,
       allowedContracts = [],
-      allowedGroups = []
+      allowedGroups = [],
     } = signer;
     this.account = HexString.fromHex(account);
     this.scopes = scopes & 0xff;
-    this.allowedContracts = allowedContracts.map(i => HexString.fromHex(i));
-    this.allowedGroups = allowedGroups.map(i => HexString.fromHex(i));
+    this.allowedContracts = allowedContracts.map((i) => HexString.fromHex(i));
+    this.allowedGroups = allowedGroups.map((i) => HexString.fromHex(i));
   }
 
   public addAllowedContracts(...contracts: string[]): void {
     this.scopes |= WitnessScope.CustomContracts;
     contracts
-      .map(i => HexString.fromHex(i))
-      .forEach(i => this.allowedContracts.push(i));
+      .map((i) => HexString.fromHex(i))
+      .forEach((i) => this.allowedContracts.push(i));
   }
 
   public addAllowedGroups(...groups: string[]): void {
     this.scopes |= WitnessScope.CustomGroups;
     groups
-      .map(i => HexString.fromHex(i))
-      .forEach(i => this.allowedGroups.push(i));
+      .map((i) => HexString.fromHex(i))
+      .forEach((i) => this.allowedGroups.push(i));
   }
 
   public static deserialize(ss: StringStream): CosignerLike {
@@ -81,10 +81,12 @@ export class Cosigner {
     out += this.account;
     out += num2hexstring(this.scopes);
     if (this.scopes & WitnessScope.CustomContracts) {
-      out += serializeArrayOf(this.allowedContracts.map(i => i.toBigEndian()));
+      out += serializeArrayOf(
+        this.allowedContracts.map((i) => i.toBigEndian())
+      );
     }
     if (this.scopes & WitnessScope.CustomGroups) {
-      out += serializeArrayOf(this.allowedGroups.map(i => i.toBigEndian()));
+      out += serializeArrayOf(this.allowedGroups.map((i) => i.toBigEndian()));
     }
 
     return out;
@@ -94,8 +96,8 @@ export class Cosigner {
     return {
       account: this.account.toBigEndian(),
       scopes: this.scopes,
-      allowedContracts: [...this.allowedContracts.map(i => i.toBigEndian())],
-      allowedGroups: [...this.allowedGroups.map(i => i.toBigEndian())]
+      allowedContracts: [...this.allowedContracts.map((i) => i.toBigEndian())],
+      allowedGroups: [...this.allowedGroups.map((i) => i.toBigEndian())],
     };
   }
 }

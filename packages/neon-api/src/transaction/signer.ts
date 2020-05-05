@@ -19,7 +19,7 @@ export class TransactionSigner {
    * @param accounts accounts that will sign this transaction
    */
   public signWithAccount(...accounts: (wallet.Account | string)[]): void {
-    accounts.forEach(account => {
+    accounts.forEach((account) => {
       this._checkAcc(account);
       this.transaction.sign(account);
     });
@@ -31,7 +31,7 @@ export class TransactionSigner {
    * @param witnesses witnesses that will be added to the transaction
    */
   public signWithWitness(...witnesses: tx.Witness[]): void {
-    witnesses.forEach(witness => {
+    witnesses.forEach((witness) => {
       this._checkWitness(witness);
       this.transaction.addWitness(witness);
     });
@@ -79,12 +79,12 @@ export class TransactionSigner {
   private _getSignerHashes(): Array<string> {
     return [
       this.transaction.sender,
-      ...this.transaction.cosigners.map(cosigner => cosigner.account)
-    ].map(hash => u.reverseHex(hash.toBigEndian()));
+      ...this.transaction.cosigners.map((cosigner) => cosigner.account),
+    ].map((hash) => u.reverseHex(hash.toBigEndian()));
   }
 
   private _assertShouldSign(scriptHash: string): void {
-    if (!this._getSignerHashes().some(hash => hash === scriptHash)) {
+    if (!this._getSignerHashes().some((hash) => hash === scriptHash)) {
       throw new Error(
         `account with scripthash: ${scriptHash} is neither sender nor cosigner`
       );

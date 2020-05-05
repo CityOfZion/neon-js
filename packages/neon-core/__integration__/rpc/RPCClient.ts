@@ -10,7 +10,7 @@ const TESTNET_URLS = [
   "http://seed2t.neo.org:20332",
   "http://seed3t.neo.org:20332",
   "http://seed4t.neo.org:20332",
-  "http://seed5t.neo.org:20332"
+  "http://seed5t.neo.org:20332",
 ];
 
 let client: rpc.RPCClient;
@@ -22,7 +22,7 @@ const contractHash = "101fe52cabcfccddd477a0001c4ab6c7e9be6a7c";
 async function safelyCheckHeight(url: string): Promise<number> {
   try {
     const res = await rpc.sendQuery(url, rpc.Query.getBlockCount(), {
-      timeout: 10000
+      timeout: 10000,
     });
     return res.result;
   } catch (_e) {
@@ -32,7 +32,7 @@ async function safelyCheckHeight(url: string): Promise<number> {
 
 beforeAll(async () => {
   const data = await Promise.all(
-    TESTNET_URLS.map(url => safelyCheckHeight(url))
+    TESTNET_URLS.map((url) => safelyCheckHeight(url))
   );
   const heights = data.map((h, i) => ({ height: h, url: TESTNET_URLS[i] }));
   const best = heights.reduce(
@@ -58,18 +58,18 @@ describe("RPC Methods", () => {
     witnesses: [
       {
         invocation: "",
-        verification: "EQ=="
-      }
+        verification: "EQ==",
+      },
     ],
     // do not match confirmations
     nextblockhash:
-      "0xcecd22244e794b9f97f45ed9c7b0e82262568b0cc3b285f9bcc04adc69f3b577"
+      "0xcecd22244e794b9f97f45ed9c7b0e82262568b0cc3b285f9bcc04adc69f3b577",
   };
   const REFERENCE_BLOCK = Object.assign(
     {
       consensus_data: {
         primary: 0,
-        nonce: "000000007c2bac1d"
+        nonce: "000000007c2bac1d",
       },
       tx: [
         {
@@ -88,11 +88,11 @@ describe("RPC Methods", () => {
           witnesses: [
             {
               invocation: "",
-              verification: "EQ=="
-            }
-          ]
-        }
-      ]
+              verification: "EQ==",
+            },
+          ],
+        },
+      ],
     },
     REFERENCE_BLOCK_HEADER
   );
@@ -166,7 +166,7 @@ describe("RPC Methods", () => {
       "abi",
       "permissions",
       "trusts",
-      "safeMethods"
+      "safeMethods",
     ]);
   });
 
@@ -199,7 +199,7 @@ describe("RPC Methods", () => {
             "0x95380d2d8601a0e0d97fbe95c43cbc07e1d9ba6473ea5ddc39b8c381f3e3ae85",
           // do not match confirmations
           blocktime: 1468595301000,
-          vm_state: "HALT"
+          vm_state: "HALT",
         },
         REFERENCE_BLOCK.tx[0]
       );
@@ -240,11 +240,11 @@ describe("RPC Methods", () => {
 
   test("getValidators", async () => {
     const result = await client.getValidators();
-    result.map(v =>
+    result.map((v) =>
       expect(v).toMatchObject({
         publickey: expect.any(String),
         active: expect.any(Boolean),
-        votes: expect.any(String)
+        votes: expect.any(String),
       })
     );
   });
@@ -257,11 +257,11 @@ describe("RPC Methods", () => {
   test("listPlugins", async () => {
     const result = await client.listPlugins();
     expect(result.length).toBeGreaterThan(0);
-    result.forEach(element => {
+    result.forEach((element) => {
       expect(element).toMatchObject({
         name: expect.any(String),
         version: expect.any(String),
-        interfaces: expect.any(Array)
+        interfaces: expect.any(Array),
       });
     });
   });
@@ -294,7 +294,7 @@ describe("RPC Methods", () => {
     const script = createScript({
       scriptHash: CONST.ASSET_ID.NEO,
       operation: "transfer",
-      args: [addressInHash160, addressInHash160, 1]
+      args: [addressInHash160, addressInHash160, 1],
     });
 
     const currentHeight = await client.getBlockCount();
@@ -303,13 +303,13 @@ describe("RPC Methods", () => {
       cosigners: [
         {
           account: reverseHex(account.scriptHash),
-          scopes: WitnessScope.CalledByEntry
-        }
+          scopes: WitnessScope.CalledByEntry,
+        },
       ],
       validUntilBlock: currentHeight + Transaction.MAX_TRANSACTION_LIFESPAN - 1,
       systemFee: 1,
       networkFee: 1,
-      script: script
+      script: script,
     }).sign(account);
     const result = await client.sendRawTransaction(transaction.serialize(true));
     expect(typeof result).toBe(String);

@@ -3,7 +3,7 @@ import {
   Transaction,
   TransactionAttributeLike,
   CosignerLike,
-  WitnessLike
+  WitnessLike,
 } from "../tx";
 import { ContractManifestLike, StackItemLike } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
@@ -119,7 +119,7 @@ export class Query<TParams extends unknown[], TResponse> {
    */
   public static getBestBlockHash(): Query<[], string> {
     return new Query({
-      method: "getbestblockhash"
+      method: "getbestblockhash",
     });
   }
 
@@ -142,7 +142,7 @@ export class Query<TParams extends unknown[], TResponse> {
   ): Query<[number | string, BooleanLikeParam], string | BlockJson> {
     return new Query({
       method: "getblock",
-      params: [indexOrHash, verbose]
+      params: [indexOrHash, verbose],
     });
   }
 
@@ -152,7 +152,7 @@ export class Query<TParams extends unknown[], TResponse> {
   public static getBlockCount(): Query<[], number> {
     return new Query({
       method: "getblockcount",
-      params: []
+      params: [],
     });
   }
 
@@ -163,7 +163,7 @@ export class Query<TParams extends unknown[], TResponse> {
   public static getBlockHash(index: number): Query<[number], string> {
     return new Query({
       method: "getblockhash",
-      params: [index]
+      params: [index],
     });
   }
 
@@ -186,7 +186,7 @@ export class Query<TParams extends unknown[], TResponse> {
   ): Query<[string | number, BooleanLikeParam], string | BlockHeaderJson> {
     return new Query({
       method: "getblockheader",
-      params: [indexOrHash, verbose]
+      params: [indexOrHash, verbose],
     });
   }
 
@@ -195,7 +195,7 @@ export class Query<TParams extends unknown[], TResponse> {
    */
   public static getConnectionCount(): Query<[], number> {
     return new Query({
-      method: "getconnectioncount"
+      method: "getconnectioncount",
     });
   }
 
@@ -208,7 +208,7 @@ export class Query<TParams extends unknown[], TResponse> {
   ): Query<[string], GetContractStateResult> {
     return new Query({
       method: "getcontractstate",
-      params: [scriptHash]
+      params: [scriptHash],
     });
   }
 
@@ -217,7 +217,7 @@ export class Query<TParams extends unknown[], TResponse> {
    */
   public static getPeers(): Query<[], GetPeersResult> {
     return new Query({
-      method: "getpeers"
+      method: "getpeers",
     });
   }
 
@@ -240,7 +240,7 @@ export class Query<TParams extends unknown[], TResponse> {
   ): Query<[BooleanLikeParam], string[] | GetRawMemPoolResult> {
     return new Query({
       method: "getrawmempool",
-      params: [shouldGetUnverified]
+      params: [shouldGetUnverified],
     });
   }
 
@@ -263,7 +263,7 @@ export class Query<TParams extends unknown[], TResponse> {
   ): Query<[string, BooleanLikeParam], string | GetRawTransactionResult> {
     return new Query({
       method: "getrawtransaction",
-      params: [txid, verbose]
+      params: [txid, verbose],
     });
   }
 
@@ -278,7 +278,7 @@ export class Query<TParams extends unknown[], TResponse> {
   ): Query<[string, string], string> {
     return new Query({
       method: "getstorage",
-      params: [scriptHash, key]
+      params: [scriptHash, key],
     });
   }
 
@@ -289,7 +289,7 @@ export class Query<TParams extends unknown[], TResponse> {
   public static getTransactionHeight(txid: string): Query<[string], number> {
     return new Query({
       method: "gettransactionheight",
-      params: [txid]
+      params: [txid],
     });
   }
 
@@ -299,7 +299,7 @@ export class Query<TParams extends unknown[], TResponse> {
    */
   public static getValidators(): Query<[], Validator[]> {
     return new Query({
-      method: "getvalidators"
+      method: "getvalidators",
     });
   }
 
@@ -308,7 +308,7 @@ export class Query<TParams extends unknown[], TResponse> {
    */
   public static getVersion(): Query<[], GetVersionResult> {
     return new Query({
-      method: "getversion"
+      method: "getversion",
     });
   }
 
@@ -325,7 +325,7 @@ export class Query<TParams extends unknown[], TResponse> {
   ): Query<[string, string, unknown[]], InvokeResult> {
     return new Query({
       method: "invokefunction",
-      params: [scriptHash, operation, params]
+      params: [scriptHash, operation, params],
     });
   }
 
@@ -336,7 +336,7 @@ export class Query<TParams extends unknown[], TResponse> {
   public static invokeScript(script: string): Query<[string], InvokeResult> {
     return new Query({
       method: "invokescript",
-      params: [script]
+      params: [script],
     });
   }
 
@@ -346,7 +346,7 @@ export class Query<TParams extends unknown[], TResponse> {
   public static listPlugins(): Query<[], CliPlugin[]> {
     return new Query({
       method: "listplugins",
-      params: []
+      params: [],
     });
   }
 
@@ -363,7 +363,7 @@ export class Query<TParams extends unknown[], TResponse> {
         : transaction;
     return new Query({
       method: "sendrawtransaction",
-      params: [serialized]
+      params: [serialized],
     });
   }
 
@@ -374,7 +374,7 @@ export class Query<TParams extends unknown[], TResponse> {
   public static submitBlock(block: string): Query<[string], SendResult> {
     return new Query({
       method: "submitblock",
-      params: [block]
+      params: [block],
     });
   }
 
@@ -387,7 +387,7 @@ export class Query<TParams extends unknown[], TResponse> {
   ): Query<[string], ValidateAddressResult> {
     return new Query({
       method: "validateaddress",
-      params: [addr]
+      params: [addr],
     });
   }
 
@@ -410,7 +410,7 @@ export class Query<TParams extends unknown[], TResponse> {
       params: this.params,
       jsonrpc: "2.0",
       id: this.id,
-      method: this.method
+      method: this.method,
     };
   }
 

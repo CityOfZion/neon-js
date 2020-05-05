@@ -24,5 +24,5 @@ export enum WitnessScope {
   /**
    * Custom pubkey for group members, group can be found in contract manifest
    */
-  CustomGroups = 1 << 5
+  CustomGroups = 1 << 5,
 }

@@ -15,7 +15,7 @@ export enum ContractParamType {
   Map = 0x12,
   InteropInterface = 0xf0,
   Any = 0xfe,
-  Void = 0xff
+  Void = 0xff,
 }
 
 export interface ContractParamLike {
@@ -46,7 +46,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
   public static string(value: string): ContractParam {
     return new ContractParam({
       type: ContractParamType.String,
-      value
+      value,
     });
   }
 
@@ -58,7 +58,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
   ): ContractParam {
     return new ContractParam({
       type: ContractParamType.Boolean,
-      value: !!value
+      value: !!value,
     });
   }
 
@@ -97,7 +97,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
         : Math.round(value).toString();
     return new ContractParam({
       type: ContractParamType.Integer,
-      value: num
+      value: num,
     });
   }
 
@@ -121,7 +121,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       }
       return new ContractParam({
         type: ContractParamType.ByteArray,
-        value: reverseHex(getScriptHashFromAddress(value))
+        value: reverseHex(getScriptHashFromAddress(value)),
       });
     } else if (format === "fixed8") {
       let decimals = 8;
@@ -144,7 +144,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       const finalValue = fixed8Value.div(divisor);
       return new ContractParam({
         type: ContractParamType.ByteArray,
-        value: finalValue.toReverseHex().slice(0, 16)
+        value: finalValue.toReverseHex().slice(0, 16),
       });
     } else {
       return new ContractParam({ type: ContractParamType.ByteArray, value });
@@ -176,7 +176,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
           this.value = (input.value as (
             | ContractParamLike
             | ContractParam
-          )[]).map(cp => new ContractParam(cp));
+          )[]).map((cp) => new ContractParam(cp));
           return;
         case ContractParamType.Boolean:
           this.value = !!input.value;
@@ -192,7 +192,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
           this.value =
             typeof input.value === "object"
               ? (input.value as (ContractParamLike | ContractParam)[]).map(
-                  cp => new ContractParam(cp)
+                  (cp) => new ContractParam(cp)
                 )
               : input.value ?? null;
           return;
@@ -200,7 +200,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       this.value =
         typeof input.value === "object"
           ? (input.value as (ContractParamLike | ContractParam)[]).map(
-              cp => new ContractParam(cp)
+              (cp) => new ContractParam(cp)
             )
           : input.value ?? null;
     } else {
@@ -221,30 +221,30 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       case ContractParamType.PublicKey:
         return {
           type: ContractParamType[this.type],
-          value: (this.value as HexString).toBigEndian()
+          value: (this.value as HexString).toBigEndian(),
         };
 
       case ContractParamType.Array:
         return {
           type: ContractParamType[this.type],
-          value: (this.value as ContractParam[]).map(cp => cp.export())
+          value: (this.value as ContractParam[]).map((cp) => cp.export()),
         };
       case ContractParamType.Boolean:
         return {
           type: ContractParamType[this.type],
-          value: this.value as boolean
+          value: this.value as boolean,
         };
       case ContractParamType.Integer:
         return {
           type: ContractParamType[this.type],
-          value: this.value as number
+          value: this.value as number,
         };
       case ContractParamType.String:
       case ContractParamType.Signature:
       case ContractParamType.Any:
         return {
           type: ContractParamType[this.type],
-          value: this.value as string
+          value: this.value as string,
         };
       default:
         //TODO: Support Map and Interop

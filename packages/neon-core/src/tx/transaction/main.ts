@@ -69,7 +69,7 @@ export function deserializeAttributes(
   const attributes = deserializeArrayOf(
     TransactionAttribute.fromStream,
     ss
-  ).map(i => i.export());
+  ).map((i) => i.export());
   return Object.assign(tx, { attributes });
 }
 
@@ -77,7 +77,7 @@ export function deserializeWitnesses(
   ss: StringStream,
   tx: Partial<TransactionLike>
 ): Partial<TransactionLike> {
-  const scripts = deserializeArrayOf(Witness.fromStream, ss).map(i =>
+  const scripts = deserializeArrayOf(Witness.fromStream, ss).map((i) =>
     i.export()
   );
   return Object.assign(tx, { scripts });
@@ -108,7 +108,7 @@ export function deserializeCosigners(
   const cosigners = deserializeArrayOf(Cosigner.deserialize, ss);
   if (
     !cosigners.every(
-      cosigner =>
+      (cosigner) =>
         cosigners.indexOf(cosigner) === cosigners.lastIndexOf(cosigner)
     )
   ) {

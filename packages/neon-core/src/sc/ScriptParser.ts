@@ -32,7 +32,7 @@ export class ScriptParser extends StringStream {
     const output = {
       scriptHash: "",
       operation: "",
-      args: [] as unknown[]
+      args: [] as unknown[],
     };
 
     while (!this.isEmpty()) {

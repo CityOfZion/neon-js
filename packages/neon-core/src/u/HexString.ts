@@ -4,7 +4,7 @@ import {
   num2hexstring,
   hexstring2ab,
   ab2hexstring,
-  hexstring2str
+  hexstring2str,
 } from "./convert";
 
 export class HexString {

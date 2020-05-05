@@ -382,7 +382,7 @@ export enum OpCode {
   // Returns true if the top item is of the specified type.
   ISTYPE = 0xd9,
   // Converts the top item to the specified type.
-  CONVERT = 0xdb
+  CONVERT = 0xdb,
 }
 
 export function fromHex(hexstring: string): OpCode {

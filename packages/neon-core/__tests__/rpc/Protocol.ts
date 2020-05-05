@@ -15,7 +15,7 @@ describe("constructor", () => {
       Magic: 999999,
       AddressVersion: 99,
       StandbyValidators: ["1", "2", "3", "4"],
-      SeedList: ["a", "b", "c", "d"]
+      SeedList: ["a", "b", "c", "d"],
     };
 
     const result = new Protocol(testObject);
@@ -30,7 +30,7 @@ describe("constructor", () => {
       magic: 12345,
       addressVersion: 1,
       standbyValidators: ["2", "3", "4", "5"],
-      seedList: ["a", "b", "c", "d"]
+      seedList: ["a", "b", "c", "d"],
     };
 
     const result = new Protocol(testObject);
@@ -43,7 +43,7 @@ describe("constructor", () => {
   test("Protocol", () => {
     const testObject = {
       Magic: 999999,
-      AddressVersion: 99
+      AddressVersion: 99,
     };
 
     const protocolObj = new Protocol(testObject);
@@ -59,7 +59,7 @@ describe("export", () => {
       Magic: 999999,
       AddressVersion: 99,
       StandbyValidators: ["1", "2", "3", "4"],
-      SeedList: ["a", "b", "c", "d"]
+      SeedList: ["a", "b", "c", "d"],
     };
 
     const protocolObj = new Protocol(expected);
@@ -72,7 +72,7 @@ describe("export", () => {
       magic: 4356547,
       addressVersion: 123,
       standbyValidators: ["5", "6", "7", "8"],
-      seedList: ["a", "b", "c", "d"]
+      seedList: ["a", "b", "c", "d"],
     };
 
     const protocolObj = new Protocol(expected);
@@ -86,13 +86,13 @@ describe("equals", () => {
     Magic: 999999,
     AddressVersion: 99,
     StandbyValidators: ["1", "2", "3", "4"],
-    SeedList: ["a", "b", "c", "d"]
+    SeedList: ["a", "b", "c", "d"],
   };
   const obj2 = {
     magic: 999998,
     addressVersion: 99,
     StandbyValidators: ["1", "2", "3", "4"],
-    SeedList: ["a", "b", "c", "d"]
+    SeedList: ["a", "b", "c", "d"],
   };
   const protocol1 = new Protocol(obj1);
   const protocol2 = new Protocol(obj2);
@@ -101,7 +101,7 @@ describe("equals", () => {
     ["Protocol1 === Protocol1", protocol1, protocol1, true],
     ["Protocol1 !== Protocol2", protocol1, protocol2, false],
     ["Protocol1 === Obj1", protocol1, obj1, true],
-    ["Protocol1 !== Obj2", protocol1, obj2, false]
+    ["Protocol1 !== Obj2", protocol1, obj2, false],
   ])(
     "%s",
     (

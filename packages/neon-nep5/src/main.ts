@@ -1,5 +1,6 @@
 import { logging, rpc, sc, u } from "@cityofzion/neon-core";
 import * as abi from "./abi";
+import { Fixed8 } from "@cityofzion/neon-core/src/u";
 const log = logging.default("nep5");
 
 export interface TokenInfo {
@@ -67,7 +68,7 @@ export async function getTokenBalances(
   address: string
 ): Promise<{ [symbol: string]: u.Fixed8 }> {
   const sb = new sc.ScriptBuilder();
-  scriptHashArray.forEach(scriptHash => {
+  scriptHashArray.forEach((scriptHash) => {
     abi.symbol(scriptHash)(sb);
     abi.decimals(scriptHash)(sb);
     abi.balanceOf(scriptHash, address)(sb);
@@ -128,15 +129,17 @@ export async function getToken(
     const res = await rpc.sendQuery(url, rpc.Query.invokeScript(script));
     const parsedResult = parser(res.result);
     const result: TokenInfo = {
-      name: parsedResult[0],
-      symbol: parsedResult[1],
-      decimals: parsedResult[2],
-      totalSupply: parsedResult[3]
-        .div(Math.pow(10, 8 - parsedResult[2]))
-        .toNumber()
+      name: parsedResult[0] as string,
+      symbol: parsedResult[1] as string,
+      decimals: parsedResult[2] as number,
+      totalSupply: (parsedResult[3] as Fixed8)
+        .div(Math.pow(10, 8 - (parsedResult[2] as number)))
+        .toNumber(),
     };
     if (address) {
-      result.balance = parsedResult[4].div(Math.pow(10, 8 - parsedResult[2]));
+      result.balance = (parsedResult[4] as Fixed8).div(
+        Math.pow(10, 8 - (parsedResult[2] as number))
+      );
     }
     return result;
   } catch (err) {
@@ -158,7 +161,7 @@ export async function getTokens(
 ): Promise<TokenInfo[]> {
   try {
     const sb = new sc.ScriptBuilder();
-    scriptHashArray.forEach(scriptHash => {
+    scriptHashArray.forEach((scriptHash) => {
       abi.name(scriptHash)(sb);
       abi.symbol(scriptHash)(sb);
       abi.decimals(scriptHash)(sb);
@@ -197,7 +200,7 @@ export async function getTokens(
         symbol,
         decimals,
         totalSupply,
-        balance
+        balance,
       };
 
       if (!obj.balance) {

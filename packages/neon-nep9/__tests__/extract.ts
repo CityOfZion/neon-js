@@ -1,5 +1,6 @@
 import { tx } from "@cityofzion/neon-core";
 import { extractAmount, extractAsset, extractAttributes } from "../src/extract";
+import { TransactionAttributeLike } from "@cityofzion/neon-core/lib/tx";
 
 describe("extractAsset", () => {
   test("return undefined when no asset seen", () => {
@@ -57,7 +58,7 @@ describe("extractAttributes", () => {
   test("ignores unknown attributes", () => {
     const testCase = {
       asset: "1234",
-      ecdh04: "1234"
+      ecdh04: "1234",
     };
     const result = extractAttributes(testCase);
     expect(result).toEqual([]);
@@ -65,60 +66,33 @@ describe("extractAttributes", () => {
 
   test("return array of known matchable attributes", () => {
     const testCase = {
-      ecdh02: jest.fn(),
-      ecdh03: jest.fn(),
-      script: jest.fn(),
-      hash10: jest.fn()
+      url: "expectedUrl",
     };
-    const result = extractAttributes(testCase as any);
+    const result = extractAttributes(testCase);
     expect(result.length).toEqual(4);
     expect(result).toEqual(
       expect.arrayContaining([
-        { usage: tx.TxAttrUsage.ECDH02, data: testCase.ecdh02 },
-        { usage: tx.TxAttrUsage.ECDH03, data: testCase.ecdh03 },
-        { usage: tx.TxAttrUsage.Script, data: testCase.script },
-        { usage: tx.TxAttrUsage.Hash10, data: testCase.hash10 }
+        { usage: tx.TxAttrUsage.Url, data: "expectedUrl" },
       ])
     );
   });
 
   const processingTestCases = [
     [
-      "Description",
+      "Url",
       {
-        description: "!%40%23%24%25%5E%26*()_%2B"
+        Url: "https%3A%2F%2Fcityofzion.io%2Fneon-js",
       },
       {
-        usage: tx.TxAttrUsage.Description,
-        data: "21402324255e262a28295f2b"
-      }
-    ],
-    [
-      "DescriptionUrl",
-      {
-        descriptionUrl: "https%3A%2F%2Fcityofzion.io%2Fneon-js"
+        usage: tx.TxAttrUsage.Url,
+        data: "68747470733a2f2f636974796f667a696f6e2e696f2f6e656f6e2d6a73",
       },
-      {
-        usage: tx.TxAttrUsage.DescriptionUrl,
-        data: "68747470733a2f2f636974796f667a696f6e2e696f2f6e656f6e2d6a73"
-      }
     ],
-    [
-      "Remark",
-      { remark: "what%3F" },
-      { usage: tx.TxAttrUsage.Remark, data: "776861743f" }
-    ]
   ];
 
-  for (let i = 2; i <= 15; i++) {
-    const testcase = [`Remark${i}`, {}, { data: "776861743f" }] as any;
-    testcase[1][`remark${i}`] = "what%3F";
-    testcase[2].usage = tx.TxAttrUsage[`Remark${i}`];
-    processingTestCases.push(testcase);
-  }
   test.each(processingTestCases)(
     "postprocess attribute: %s",
-    (_: string, testCase: any, expected: any) => {
+    (_: string, testCase: unknown, expected: TransactionAttributeLike) => {
       const result = extractAttributes(testCase);
       expect(result).toEqual(expect.arrayContaining([expected]));
     }

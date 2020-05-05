@@ -4,13 +4,13 @@ describe.each([
   ["", ""],
   [
     "abcdefghijklmnopqrstuwwxyz",
-    "6162636465666768696a6b6c6d6e6f707172737475777778797a"
+    "6162636465666768696a6b6c6d6e6f707172737475777778797a",
   ],
   ["1234567890", "31323334353637383930"],
   [
     "!@#$%^&*()-_=+,./;'[]<>?:\"{}",
-    "21402324255e262a28292d5f3d2b2c2e2f3b275b5d3c3e3f3a227b7d"
-  ]
+    "21402324255e262a28292d5f3d2b2c2e2f3b275b5d3c3e3f3a227b7d",
+  ],
 ])("(%s)ASCII <-> HEX(%s)", (ascii: string, hex: string) => {
   test("ASCII -> HEX", () => {
     const result = convert.str2hexstring(ascii);
@@ -28,7 +28,7 @@ describe.each([
   ["00e1f50500000000", 1],
   ["0100000000000000", 0.00000001],
   ["0080c6a47e8d0300", 10000000],
-  ["5004fb711f010000", 12345.6789]
+  ["5004fb711f010000", 12345.6789],
 ])("(%s)Fixed8 <-> Number(%d)", (fixed8: string, num: number) => {
   test("Fixed8 -> NUM", () => {
     const result = convert.fixed82num(fixed8);
@@ -44,7 +44,7 @@ describe.each([
 describe.each([
   [[], ""],
   [[84, 101, 115, 116], "Test"],
-  [Uint8Array.from([84, 101, 115, 116]), "Test"]
+  [Uint8Array.from([84, 101, 115, 116]), "Test"],
 ])("ArrayBuffer <-> ASCII", (ab: ArrayLike<number>, ascii: string) => {
   test("AB -> ASCII", () => {
     const result = convert.ab2str(ab);
@@ -58,13 +58,15 @@ describe.each([
 });
 
 test("str2ab: throw if input is non-string", () => {
-  expect(() => convert.str2ab(1 as any)).toThrow();
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  expect(() => convert.str2ab(1)).toThrow();
 });
 
 describe.each([
   [[], ""],
   [[84, 101, 115, 116], "54657374"],
-  [Uint8Array.from([84, 101, 115, 116]), "54657374"]
+  [Uint8Array.from([84, 101, 115, 116]), "54657374"],
 ])("ArrayBuffer <-> HEX", (ab: ArrayLike<number>, hex: string) => {
   test("AB -> HEX", () => {
     const result = convert.ab2hexstring(ab);
@@ -102,7 +104,7 @@ describe("num2hexstring", () => {
     [0x010000, "00010000", 4, "uint32"],
     [0xffffffff, "ffffffff", 4, "uint32(max)"],
     [0x0100000000, "0000000100000000", 8, "uint64"],
-    [Number.MAX_SAFE_INTEGER, "001fffffffffffff", 8, "uint64(max)"]
+    [Number.MAX_SAFE_INTEGER, "001fffffffffffff", 8, "uint64(max)"],
   ])(
     "(%d)INT -> HEX(%s)",
     (num: number, hex: string, size: number, msg: string) => {
@@ -114,7 +116,7 @@ describe("num2hexstring", () => {
       test(`${msg}(LE) `, () => {
         const result = convert.num2hexstring(num, size, true);
         const reversedHex = hex
-          .match(/.{1,2}/g)!
+          .match(/.{1,2}/g)
           .reverse()
           .join("");
         expect(result).toBe(reversedHex);
@@ -131,7 +133,7 @@ describe.each([
   [0x010000, "fe00000100", "uint32"],
   [0xffffffff, "feffffffff", "uint32(max)"],
   [0x0100000000, "ff0000000001000000", "uint64"],
-  [Number.MAX_SAFE_INTEGER, "ffffffffffffff1f00", "uint64(max)"]
+  [Number.MAX_SAFE_INTEGER, "ffffffffffffff1f00", "uint64(max)"],
 ])("(%d)INT -> VARINT(%s)", (num: number, varint: string, msg: string) => {
   test(msg, () => {
     const result = convert.num2VarInt(num);

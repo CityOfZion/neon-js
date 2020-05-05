@@ -15,7 +15,7 @@ describe("constructor", () => {
       sender: "",
       systemFee: 0,
       validUntilBlock: 0,
-      version: 0
+      version: 0,
     });
   });
 
@@ -25,7 +25,7 @@ describe("constructor", () => {
       script: "abcd",
       sender: "bd8bf7f95e33415fc242c48d143694a729172d9f",
       systemFee: 100,
-      networkFee: 1000
+      networkFee: 1000,
     });
     expect(txBuilder.build().export()).toEqual({
       attributes: [],
@@ -37,7 +37,7 @@ describe("constructor", () => {
       sender: "bd8bf7f95e33415fc242c48d143694a729172d9f",
       systemFee: 100,
       validUntilBlock: 0,
-      version: 0
+      version: 0,
     });
   });
 });
@@ -48,17 +48,17 @@ describe("setter", () => {
       .addAttributes(
         {
           usage: 129,
-          data: "abcd"
+          data: "abcd",
         },
         {
           usage: 129,
-          data: "dcba"
+          data: "dcba",
         }
       )
       .build();
-    expect(transaction.attributes.map(attr => attr.export())).toEqual([
+    expect(transaction.attributes.map((attr) => attr.export())).toEqual([
       { data: "abcd", usage: 129 },
-      { data: "dcba", usage: 129 }
+      { data: "dcba", usage: 129 },
     ]);
   });
 
@@ -67,27 +67,27 @@ describe("setter", () => {
       .addCosigners(
         {
           account: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
-          scopes: tx.WitnessScope.Global
+          scopes: tx.WitnessScope.Global,
         },
         {
           account: "bd8bf7f95e33415fc242c48d143694a729172d9f",
-          scopes: tx.WitnessScope.CalledByEntry
+          scopes: tx.WitnessScope.CalledByEntry,
         }
       )
       .build();
-    expect(transaction.cosigners.map(cosigner => cosigner.export())).toEqual([
+    expect(transaction.cosigners.map((cosigner) => cosigner.export())).toEqual([
       {
         account: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
         allowedContracts: [],
         allowedGroups: [],
-        scopes: 0
+        scopes: 0,
       },
       {
         account: "bd8bf7f95e33415fc242c48d143694a729172d9f",
         allowedContracts: [],
         allowedGroups: [],
-        scopes: 1
-      }
+        scopes: 1,
+      },
     ]);
   });
 
@@ -97,12 +97,12 @@ describe("setter", () => {
         {
           scriptHash: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
           operation: "test",
-          args: [1, 2]
+          args: [1, 2],
         },
         {
           scriptHash: "bd8bf7f95e33415fc242c48d143694a729172d9f",
           operation: "balanceOf",
-          args: ["bd8bf7f95e33415fc242c48d143694a729172d9f"]
+          args: ["bd8bf7f95e33415fc242c48d143694a729172d9f"],
         }
       )
       .build();

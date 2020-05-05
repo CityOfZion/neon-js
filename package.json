@@ -45,5 +45,8 @@
   "private": true,
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "prettier": {
+    "endOfLine": "auto"
+  }
 }
