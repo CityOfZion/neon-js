@@ -8,7 +8,7 @@ function bundle<T extends typeof _Neon>(
 } {
   return {
     ...neonCore,
-    api: factory
+    api: factory,
   };
 }
 

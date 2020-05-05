@@ -21,7 +21,7 @@ export class ContractGroup {
   public export(): ContractGroupLike {
     return {
       pubKey: this.pubKey,
-      signature: this.signature
+      signature: this.signature,
     };
   }
 }

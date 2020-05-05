@@ -9,7 +9,7 @@ import {
   num2VarInt,
   generateRandomArray,
   ab2hexstring,
-  HexString
+  HexString,
 } from "../../u";
 import { Account, sign } from "../../wallet";
 import {
@@ -18,7 +18,7 @@ import {
   Witness,
   WitnessLike,
   TransactionAttributeJson,
-  WitnessJson
+  WitnessJson,
 } from "../components";
 import {
   deserializeVersion,
@@ -29,7 +29,7 @@ import {
   deserializeNonce,
   deserializeSender,
   deserializeValidUntilBlock,
-  deserializeCosigners
+  deserializeCosigners,
 } from "./main";
 import { CosignerLike, Cosigner, CosignerJson } from "../components/Cosigner";
 import { serializeArrayOf } from "../lib";
@@ -130,7 +130,7 @@ export class Transaction implements NeonObject<TransactionLike> {
       attributes,
       cosigners = [],
       scripts,
-      script
+      script,
     } = tx;
     this.version = version ?? TX_VERSION;
     this.nonce = nonce ?? parseInt(ab2hexstring(generateRandomArray(4)), 16);
@@ -138,17 +138,17 @@ export class Transaction implements NeonObject<TransactionLike> {
     this.validUntilBlock = validUntilBlock ?? 0;
     this.attributes = Array.isArray(attributes)
       ? (attributes as (TransactionAttribute | TransactionAttributeLike)[]).map(
-          a => new TransactionAttribute(a)
+          (a) => new TransactionAttribute(a)
         )
       : [];
     this.scripts = Array.isArray(scripts)
-      ? (scripts as (Witness | WitnessLike)[]).map(a => new Witness(a))
+      ? (scripts as (Witness | WitnessLike)[]).map((a) => new Witness(a))
       : [];
     this.scripts = this.scripts.sort(
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
     );
     this.cosigners = [];
-    cosigners.forEach(cosigner => this.addCosigner(cosigner));
+    cosigners.forEach((cosigner) => this.addCosigner(cosigner));
     this.systemFee = systemFee ? new Fixed8(systemFee) : new Fixed8(0);
     this.networkFee = networkFee ? new Fixed8(networkFee) : new Fixed8(0);
     this.script = HexString.fromHex(script ?? "");
@@ -203,9 +203,9 @@ export class Transaction implements NeonObject<TransactionLike> {
   }
 
   public addCosigner(newCosigner: CosignerLike | Cosigner): this {
-    const acctHashes = this.cosigners.map(cosigner => cosigner.account);
+    const acctHashes = this.cosigners.map((cosigner) => cosigner.account);
     const newHash = HexString.fromHex(newCosigner.account);
-    if (acctHashes.find(hash => hash.equals(newHash))) {
+    if (acctHashes.find((hash) => hash.equals(newHash))) {
       throw new Error(`Cannot add duplicate cosigner: ${newCosigner.account}`);
     }
     this.cosigners.push(new Cosigner(newCosigner));
@@ -285,19 +285,19 @@ export class Transaction implements NeonObject<TransactionLike> {
       systemFee: this.systemFee.toNumber(),
       networkFee: this.networkFee.toNumber(),
       validUntilBlock: this.validUntilBlock,
-      attributes: this.attributes.map(a => a.export()),
-      cosigners: this.cosigners.map(cosigner => cosigner.export()),
-      scripts: this.scripts.map(a => a.export()),
-      script: this.script.toBigEndian()
+      attributes: this.attributes.map((a) => a.export()),
+      cosigners: this.cosigners.map((cosigner) => cosigner.export()),
+      scripts: this.scripts.map((a) => a.export()),
+      script: this.script.toBigEndian(),
     };
   }
 
   public getScriptHashesForVerifying(): string[] {
-    const hashes = this.cosigners.map(cosigner => cosigner.account);
+    const hashes = this.cosigners.map((cosigner) => cosigner.account);
     if (hashes.indexOf(this.sender) < 0) {
       hashes.unshift(this.sender);
     }
-    return hashes.map(h => h.toBigEndian()).sort();
+    return hashes.map((h) => h.toBigEndian()).sort();
   }
 }
 

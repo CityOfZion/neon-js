@@ -11,7 +11,7 @@ import {
   GetRawTransactionResult,
   InvokeResult,
   RPCResponse,
-  BooleanLikeParam
+  BooleanLikeParam,
 } from "./Query";
 import { ContractManifest } from "../sc";
 import { BlockJson, BlockHeaderJson, Validator } from "../types";
@@ -27,9 +27,9 @@ export async function sendQuery<TResponse>(
   const conf = Object.assign(
     {
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      timeout: timeout.rpc
+      timeout: timeout.rpc,
     },
     config
   );

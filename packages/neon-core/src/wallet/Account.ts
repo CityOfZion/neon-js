@@ -11,7 +11,7 @@ import {
   isPrivateKey,
   isPublicKey,
   isScriptHash,
-  isWIF
+  isWIF,
 } from "./verify";
 import { InteropServiceCode } from "../sc";
 import { NeonObject } from "../model";
@@ -72,10 +72,10 @@ export class Account implements NeonObject<AccountJSON> {
         script: verificationScript,
         parameters: Array(signingThreshold).map((_, i) => ({
           name: `signature${i}`,
-          type: "Signature"
+          type: "Signature",
         })),
-        deployed: false
-      }
+        deployed: false,
+      },
     });
   }
 
@@ -319,7 +319,7 @@ export class Account implements NeonObject<AccountJSON> {
       isDefault: this.isDefault,
       lock: this.lock,
       key,
-      contract: this.contract
+      contract: this.contract,
     };
   }
 

@@ -74,7 +74,7 @@ export class TransactionAttribute
   public static Url(url: string): TransactionAttribute {
     return new TransactionAttribute({
       usage: TxAttrUsage.Url,
-      data: HexString.fromAscii(url)
+      data: HexString.fromAscii(url),
     });
   }
 
@@ -95,7 +95,7 @@ export class TransactionAttribute
   public export(): TransactionAttributeLike {
     return {
       usage: this.usage,
-      data: this.data.toBigEndian()
+      data: this.data.toBigEndian(),
     };
   }
 

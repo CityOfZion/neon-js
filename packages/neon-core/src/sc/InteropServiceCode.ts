@@ -52,7 +52,7 @@ export enum InteropServiceCode {
   SYSTEM_STORAGE_GETCONTEXT = "9bf667ce",
   SYSTEM_STORAGE_GETREADONLYCONTEXT = "f6b46be2",
   SYSTEM_STORAGE_PUT = "e63f1884",
-  SYSTEM_STORAGE_PUTEX = "73e19b3a"
+  SYSTEM_STORAGE_PUTEX = "73e19b3a",
 }
 
 export default InteropServiceCode;

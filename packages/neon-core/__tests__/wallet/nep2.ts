@@ -5,43 +5,43 @@ import testKeys from "../testKeys.json";
 const simpleScrypt = {
   n: 256,
   r: 1,
-  p: 1
+  p: 1,
 };
 
 const simpleKeys = {
   a: {
     wif: "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
     passphrase: "city of zion",
-    encryptedWif: "6PYWdzMKJHcbJp6o9jLWRxGEN4ZVRqawHYi8pnuuBSnDZJv7muQZngUaCo"
+    encryptedWif: "6PYWdzMKJHcbJp6o9jLWRxGEN4ZVRqawHYi8pnuuBSnDZJv7muQZngUaCo",
   },
   b: {
     wif: "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
     passphrase: "password", //TODO: Test with chinese characters (我的密码)
-    encryptedWif: "6PYLxXgqEDjfC2Fj1pwRQnWHcUtrxwecMLhrfH3X3G9V484b6sPRJffb7M"
+    encryptedWif: "6PYLxXgqEDjfC2Fj1pwRQnWHcUtrxwecMLhrfH3X3G9V484b6sPRJffb7M",
   },
   c: {
     wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
     passphrase: "MyL33tP@33w0rd",
-    encryptedWif: "6PYRoabFo7HiYco2NcaQzAdnyHWZvD3Wdq8FGhDbozNrhtKHnQVZsgKFRF"
-  }
+    encryptedWif: "6PYRoabFo7HiYco2NcaQzAdnyHWZvD3Wdq8FGhDbozNrhtKHnQVZsgKFRF",
+  },
 };
 
 const neo2Keys = {
   a: {
     wif: "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
     passphrase: "city of zion",
-    encryptedWif: "6PYLHmDf7R4im6NUF34MwcbViPpjwfdkrPMdFjuCXnEFmmK2A7AAzVAvTa"
+    encryptedWif: "6PYLHmDf7R4im6NUF34MwcbViPpjwfdkrPMdFjuCXnEFmmK2A7AAzVAvTa",
   },
   b: {
     wif: "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
     passphrase: "我的密码",
-    encryptedWif: "6PYWVp3xerNdVMtSELSNZDBMP1qXrM1o6NrCQHqpeWLMd3rgeUE1rQuwrm"
+    encryptedWif: "6PYWVp3xerNdVMtSELSNZDBMP1qXrM1o6NrCQHqpeWLMd3rgeUE1rQuwrm",
   },
   c: {
     wif: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
     passphrase: "MyL33tP@33w0rd",
-    encryptedWif: "6PYNoc1EFvW5rJD2Tg6k24xEVGZ56sY1YN5NG2sSF1qUKHy47uEwTkdcYs"
-  }
+    encryptedWif: "6PYNoc1EFvW5rJD2Tg6k24xEVGZ56sY1YN5NG2sSF1qUKHy47uEwTkdcYs",
+  },
 };
 
 // This uses default scrypt params
@@ -68,7 +68,7 @@ describe("NEP2", () => {
   describe.each([
     ["Basic", simpleKeys.a],
     ["Chinese", simpleKeys.b],
-    ["Symbols", simpleKeys.c]
+    ["Symbols", simpleKeys.c],
   ])(
     "%s",
     (
@@ -120,7 +120,7 @@ describe("NEP2", () => {
 describe.each([
   ["Basic", neo2Keys.a],
   ["Chinese", neo2Keys.b],
-  ["Symbols", neo2Keys.c]
+  ["Symbols", neo2Keys.c],
 ])(
   "%s",
   (

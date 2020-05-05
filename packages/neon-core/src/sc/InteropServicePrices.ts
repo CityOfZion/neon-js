@@ -51,7 +51,7 @@ const fixedPrices = {
   [InteropServiceCode.SYSTEM_STORAGE_FIND]: 1000000e-8,
   [InteropServiceCode.SYSTEM_STORAGE_GET]: 1000000e-8,
   [InteropServiceCode.SYSTEM_STORAGE_GETCONTEXT]: 400e-8,
-  [InteropServiceCode.SYSTEM_STORAGE_GETREADONLYCONTEXT]: 400e-8
+  [InteropServiceCode.SYSTEM_STORAGE_GETREADONLYCONTEXT]: 400e-8,
 };
 
 function getStoragePrice(size: number): number {

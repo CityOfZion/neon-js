@@ -2,7 +2,7 @@ import { ContractGroup, ContractGroupLike } from "./ContractGroup";
 import { ContractAbi, ContractAbiLike } from "./ContractAbi";
 import {
   ContractPermission,
-  ContractPermissionLike
+  ContractPermissionLike,
 } from "./ContractPermission";
 
 export interface ContractManifestLike {
@@ -34,14 +34,14 @@ export class ContractManifest {
       abi = {},
       permissions = [],
       trusts = "*",
-      safeMethods = "*"
+      safeMethods = "*",
     } = obj;
-    this.groups = groups.map(group => new ContractGroup(group));
+    this.groups = groups.map((group) => new ContractGroup(group));
     this.hasStorage = storage;
     this.payable = payable;
     this.abi = new ContractAbi(abi);
     this.permissions = permissions.map(
-      permission => new ContractPermission(permission)
+      (permission) => new ContractPermission(permission)
     );
     this.trusts = trusts;
     this.safeMethods = safeMethods;
@@ -52,14 +52,14 @@ export class ContractManifest {
   }
 
   public canCall(manifest: ContractManifest, method: string): boolean {
-    return this.permissions.some(permission => {
+    return this.permissions.some((permission) => {
       const { contract, methods } = permission;
       if (permission.isHash) {
         if (contract !== manifest.hash) {
           return false;
         }
       } else if (permission.isGroup) {
-        if (manifest.groups.every(group => group.pubKey !== contract)) {
+        if (manifest.groups.every((group) => group.pubKey !== contract)) {
           return false;
         }
       }
@@ -75,15 +75,15 @@ export class ContractManifest {
 
   public export(): ContractManifestLike {
     return {
-      groups: this.groups.map(group => group.export()),
+      groups: this.groups.map((group) => group.export()),
       features: {
         storage: this.hasStorage,
-        payable: this.payable
+        payable: this.payable,
       },
       abi: this.abi.export(),
-      permissions: this.permissions.map(permission => permission.export()),
+      permissions: this.permissions.map((permission) => permission.export()),
       trusts: this.trusts,
-      safeMethods: this.safeMethods
+      safeMethods: this.safeMethods,
     };
   }
 

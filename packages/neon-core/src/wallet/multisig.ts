@@ -14,7 +14,7 @@ export function constructMultiSigVerificationScript(
 
   const sb = new ScriptBuilder();
   sb.emitPush(signingThreshold);
-  keys.forEach(k => {
+  keys.forEach((k) => {
     if (!isPublicKey(k, true)) {
       throw new Error(`${k} is not a valid encoded public key`);
     }

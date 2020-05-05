@@ -48,7 +48,7 @@ describe("execute", () => {
   test("rpc success returns result", async () => {
     const expectedQuery = new Query<[], number>({
       params: [],
-      method: "test"
+      method: "test",
     });
     Axios.post.mockImplementationOnce(async (url, data) => {
       expect(url).toEqual("url");
@@ -57,8 +57,8 @@ describe("execute", () => {
         data: {
           jsonrpc: "2.0",
           id: data.id,
-          result: "1234"
-        }
+          result: "1234",
+        },
       };
     });
 
@@ -72,7 +72,7 @@ describe("execute", () => {
     const expectedErrorMessage = "expectedErrorMessage";
     const query = new Query<[], number>({
       params: [],
-      method: "test"
+      method: "test",
     });
     Axios.post.mockImplementationOnce(async (url, data) => {
       return {
@@ -81,9 +81,9 @@ describe("execute", () => {
           id: data.id,
           error: {
             code: 1,
-            message: expectedErrorMessage
-          }
-        }
+            message: expectedErrorMessage,
+          },
+        },
       };
     });
 
@@ -105,14 +105,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getbestblockhash",
-          params: []
+          params: [],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: "1234"
-          }
+            result: "1234",
+          },
         };
       });
 
@@ -127,14 +127,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getblock",
-          params: [123, 0]
+          params: [123, 0],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: "1234"
-          }
+            result: "1234",
+          },
         };
       });
 
@@ -148,14 +148,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getblock",
-          params: ["hash", 1]
+          params: ["hash", 1],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -171,14 +171,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getblockcount",
-          params: []
+          params: [],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -194,14 +194,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getblockhash",
-          params: [123]
+          params: [123],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -217,14 +217,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getblockheader",
-          params: [234, 0]
+          params: [234, 0],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -238,14 +238,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getblockheader",
-          params: ["hash", 1]
+          params: ["hash", 1],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -261,14 +261,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getconnectioncount",
-          params: []
+          params: [],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -282,20 +282,20 @@ describe("RPC Methods", () => {
       const successfulResult = {
         script: "1234",
         hash: "5678",
-        manifest: { safeMethods: ["a", "b"] }
+        manifest: { safeMethods: ["a", "b"] },
       };
       Axios.post.mockImplementationOnce(async (url, data) => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getcontractstate",
-          params: ["hash"]
+          params: ["hash"],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: successfulResult
-          }
+            result: successfulResult,
+          },
         };
       });
       const result = await client.getContractState("hash");
@@ -309,20 +309,20 @@ describe("RPC Methods", () => {
       const expected = {
         connected: [{ address: "addressA", port: 1234 }],
         unconnected: [{ address: "addressB", port: 2345 }],
-        bad: [{ address: "addressC", port: 3456 }]
+        bad: [{ address: "addressC", port: 3456 }],
       };
       Axios.post.mockImplementationOnce(async (url, data) => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getpeers",
-          params: []
+          params: [],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -338,14 +338,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getrawmempool",
-          params: [0]
+          params: [0],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -357,20 +357,20 @@ describe("RPC Methods", () => {
       const expected = {
         verified: ["a", "b", "c"],
         unverified: ["d"],
-        height: 1234
+        height: 1234,
       };
       Axios.post.mockImplementationOnce(async (url, data) => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getrawmempool",
-          params: [1]
+          params: [1],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -386,14 +386,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getrawtransaction",
-          params: ["txid", 1]
+          params: ["txid", 1],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -407,14 +407,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getrawtransaction",
-          params: ["txid", 0]
+          params: ["txid", 0],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -430,14 +430,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getstorage",
-          params: ["hash", "key"]
+          params: ["hash", "key"],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -453,14 +453,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "gettransactionheight",
-          params: ["txid"]
+          params: ["txid"],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -475,21 +475,21 @@ describe("RPC Methods", () => {
         {
           publickey: "key",
           votes: "1",
-          active: true
-        }
+          active: true,
+        },
       ];
       Axios.post.mockImplementationOnce(async (url, data) => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getvalidators",
-          params: []
+          params: [],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -505,7 +505,7 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "getversion",
-          params: []
+          params: [],
         });
         return {
           data: {
@@ -515,9 +515,9 @@ describe("RPC Methods", () => {
               tcp_port: 20333,
               ws_port: 20334,
               nonce: 288566725,
-              user_agent: "/Neo:3.0.0-preview2-00/"
-            }
-          }
+              user_agent: "/Neo:3.0.0-preview2-00/",
+            },
+          },
         };
       });
 
@@ -534,14 +534,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "invokefunction",
-          params: ["hash", "method", [1, "2", randomObj]]
+          params: ["hash", "method", [1, "2", randomObj]],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -562,21 +562,21 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "invokefunction",
-          params: ["hash", "method", [1, "2", randomObj]]
+          params: ["hash", "method", [1, "2", randomObj]],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
       const result = await client.invokeFunction("hash", "method", [
         1,
         "2",
-        randomObj
+        randomObj,
       ]);
       expect(result).toEqual(expected);
     });
@@ -589,14 +589,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "invokescript",
-          params: ["script"]
+          params: ["script"],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -612,14 +612,14 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "listplugins",
-          params: []
+          params: [],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: expected
-          }
+            result: expected,
+          },
         };
       });
 
@@ -635,16 +635,16 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "sendrawtransaction",
-          params: ["hexstring"]
+          params: ["hexstring"],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
             result: {
-              hash: expected
-            }
-          }
+              hash: expected,
+            },
+          },
         };
       });
 
@@ -660,16 +660,16 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "submitblock",
-          params: ["hexstring"]
+          params: ["hexstring"],
         });
         return {
           data: {
             jsonrpc: "2.0",
             id: data.id,
             result: {
-              hash: "1234"
-            }
-          }
+              hash: "1234",
+            },
+          },
         };
       });
 
@@ -684,7 +684,7 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "validateaddress",
-          params: ["addr"]
+          params: ["addr"],
         });
         return {
           data: {
@@ -692,9 +692,9 @@ describe("RPC Methods", () => {
             id: data.id,
             result: {
               address: "addr",
-              isvalid: true
-            }
-          }
+              isvalid: true,
+            },
+          },
         };
       });
 

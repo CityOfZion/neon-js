@@ -3,7 +3,7 @@ import {
   num2VarInt,
   reverseHex,
   StringStream,
-  HexString
+  HexString,
 } from "../../u";
 import {
   Account,
@@ -11,7 +11,7 @@ import {
   getSignaturesFromInvocationScript,
   getSigningThresholdFromVerificationScript,
   getVerificationScriptFromPublicKey,
-  verify
+  verify,
 } from "../../wallet";
 import { NeonObject } from "../../model";
 
@@ -68,9 +68,11 @@ export class Witness implements NeonObject<WitnessLike> {
 
     const publicKeys = getPublicKeysFromVerificationScript(verificationScript);
     const orderedSigs = Array(publicKeys.length).fill("");
-    sigs.forEach(element => {
+    sigs.forEach((element) => {
       if (typeof element === "string") {
-        const position = publicKeys.findIndex(key => verify(tx, element, key));
+        const position = publicKeys.findIndex((key) =>
+          verify(tx, element, key)
+        );
         if (position === -1) {
           throw new Error(`Invalid signature given: ${element}`);
         }
@@ -93,7 +95,7 @@ export class Witness implements NeonObject<WitnessLike> {
     const signingThreshold = getSigningThresholdFromVerificationScript(
       verificationScript
     );
-    const validSigs = orderedSigs.filter(s => s !== "");
+    const validSigs = orderedSigs.filter((s) => s !== "");
     if (validSigs.length < signingThreshold) {
       throw new Error(
         `Insufficient signatures: expected ${signingThreshold} but got ${validSigs.length} instead`
@@ -102,9 +104,9 @@ export class Witness implements NeonObject<WitnessLike> {
     return new Witness({
       invocationScript: validSigs
         .slice(0, signingThreshold)
-        .map(s => "40" + s)
+        .map((s) => "40" + s)
         .join(""),
-      verificationScript
+      verificationScript,
     });
   }
 
@@ -149,7 +151,7 @@ export class Witness implements NeonObject<WitnessLike> {
   public export(): WitnessLike {
     return {
       invocationScript: this.invocationScript.toBigEndian(),
-      verificationScript: this.verificationScript.toBigEndian()
+      verificationScript: this.verificationScript.toBigEndian(),
     };
   }
 

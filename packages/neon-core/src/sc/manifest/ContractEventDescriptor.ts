@@ -18,7 +18,7 @@ export class ContractEventDescriptor {
   public export(): ContractEventDescriptorLike {
     return {
       name: this.name,
-      parameters: [...this.parameters]
+      parameters: [...this.parameters],
     };
   }
 }

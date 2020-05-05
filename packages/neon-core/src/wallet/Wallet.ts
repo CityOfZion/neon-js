@@ -160,7 +160,7 @@ export class Wallet {
       name: this.name,
       version: this.version,
       scrypt: this.scrypt,
-      accounts: this.accounts.map(acct => acct.export())
+      accounts: this.accounts.map((acct) => acct.export()),
     };
   }
 

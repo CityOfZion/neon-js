@@ -22,7 +22,7 @@ export function getNetworkFeeForMultiSig(
     sc.getInteropServicePrice(
       sc.InteropServiceCode.NEO_CRYPTO_ECDSACHECKMULTISIG,
       {
-        size: pubkeysNum
+        size: pubkeysNum,
       }
     )
   );
@@ -31,7 +31,7 @@ export function getNetworkFeeForMultiSig(
 function getVerificationScriptsFromWitnesses(
   transaction: tx.Transaction
 ): Array<string> {
-  return transaction.scripts.map(witness =>
+  return transaction.scripts.map((witness) =>
     witness.verificationScript.toBigEndian()
   );
 }
@@ -46,7 +46,7 @@ function isMultiSig(verificationScript: string): boolean {
 export function getNetworkFee(transaction: tx.Transaction): u.Fixed8 {
   let networkFee = new u.Fixed8(0e-8);
   const verificationScripts = getVerificationScriptsFromWitnesses(transaction);
-  verificationScripts.forEach(verificationScript => {
+  verificationScripts.forEach((verificationScript) => {
     if (isMultiSig(verificationScript)) {
       networkFee = networkFee.add(getNetworkFeeForSig());
     } else {
@@ -70,13 +70,13 @@ export function getScriptHashesFromTxWitnesses(
   transaction: tx.Transaction
 ): string[] {
   const scriptHashes: string[] = [];
-  transaction.scripts.forEach(script =>
+  transaction.scripts.forEach((script) =>
     scriptHashes.push(
       ...wallet
         .getPublicKeysFromVerificationScript(
           script.verificationScript.toBigEndian()
         )
-        .map(publicKey => wallet.getScriptHashFromPublicKey(publicKey))
+        .map((publicKey) => wallet.getScriptHashFromPublicKey(publicKey))
     )
   );
   return scriptHashes;

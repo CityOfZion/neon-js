@@ -9,7 +9,7 @@ describe("constructor", () => {
       name: "RandomNet",
       protocol: new Protocol(),
       nodes: [],
-      extra: {}
+      extra: {},
     });
   });
 
@@ -17,12 +17,12 @@ describe("constructor", () => {
     const testObject = {
       name: "UnitTestNet",
       protocol: {
-        magic: 123456
+        magic: 123456,
       },
       nodes: ["a", "b"],
       extra: {
-        neoscan: "neoscanUrl"
-      }
+        neoscan: "neoscanUrl",
+      },
     };
 
     const result = new Network(testObject);
@@ -33,12 +33,12 @@ describe("constructor", () => {
     const testObject = {
       name: "UnitTestNet",
       protocol: {
-        magic: 123456
+        magic: 123456,
       },
       nodes: ["a", "b"],
       extra: {
-        neoscan: "neoscanUrl"
-      }
+        neoscan: "neoscanUrl",
+      },
     };
 
     const NetworkObj = new Network(testObject);
@@ -55,12 +55,12 @@ describe("export", () => {
     const expected = {
       name: "UnitTestNet",
       protocol: new Protocol({
-        magic: 123456
+        magic: 123456,
       }).export(),
       nodes: ["a", "b"],
       extra: {
-        neoscan: "neoscanUrl"
-      }
+        neoscan: "neoscanUrl",
+      },
     };
 
     const NetworkObj = new Network(expected);
@@ -72,12 +72,12 @@ describe("export", () => {
     const expected = {
       Name: "UnitTestNet",
       ProtocolConfiguration: new Protocol({
-        magic: 123456
+        magic: 123456,
       }).toConfiguration(),
       Nodes: ["a", "b"],
       ExtraConfiguration: {
-        neoscan: "neoscanUrl"
-      }
+        neoscan: "neoscanUrl",
+      },
     };
 
     const NetworkObj = new Network(expected);
@@ -92,22 +92,22 @@ describe("equals", () => {
     protocol: {
       magic: 123456,
       addressVersion: 99,
-      systemFee: {}
+      systemFee: {},
     },
     nodes: ["a", "b"],
     extra: {
-      neoscan: "neoscanUrl"
-    }
+      neoscan: "neoscanUrl",
+    },
   };
   const obj2 = {
     name: "UnitTestNet",
     protocol: {
-      magic: 654321
+      magic: 654321,
     },
     nodes: ["a", "b"],
     extra: {
-      neoscan: "neoscanUrl"
-    }
+      neoscan: "neoscanUrl",
+    },
   };
   const Network1 = new Network(obj1);
   const Network2 = new Network(obj2);
@@ -116,7 +116,7 @@ describe("equals", () => {
     ["Network1 === Network1", Network1, Network1, true],
     ["Network1 !== Network2", Network1, Network2, false],
     ["Network1 === Obj1", Network1, obj1, true],
-    ["Network1 !== Obj2", Network1, obj2, false]
+    ["Network1 !== Obj2", Network1, obj2, false],
   ])(
     "%s",
     (

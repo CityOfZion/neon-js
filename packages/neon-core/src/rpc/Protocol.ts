@@ -55,7 +55,7 @@ export class Protocol implements NeonObject<ProtocolLike> {
       magic: this.magic,
       addressVersion: this.addressVersion,
       standbyValidators: this.standbyValidators,
-      seedList: this.seedList
+      seedList: this.seedList,
     };
   }
 
@@ -64,7 +64,7 @@ export class Protocol implements NeonObject<ProtocolLike> {
       Magic: this.magic,
       AddressVersion: this.addressVersion,
       StandbyValidators: this.standbyValidators,
-      SeedList: this.seedList
+      SeedList: this.seedList,
     };
   }
 

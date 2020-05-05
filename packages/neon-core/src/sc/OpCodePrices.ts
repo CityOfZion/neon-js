@@ -85,5 +85,5 @@ export const OpCodePrices = {
   [OpCode.HASKEY]: 270000e-8,
   [OpCode.KEYS]: 500e-8,
   [OpCode.VALUES]: 7000e-8,
-  [OpCode.THROW]: 30e-8
+  [OpCode.THROW]: 30e-8,
 };

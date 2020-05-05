@@ -7,8 +7,8 @@ const testCases = [
     {
       scriptHash: "dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f",
       operation: "name",
-      args: []
-    }
+      args: [],
+    },
   ],
   [
     "emitAppCall with args",
@@ -16,8 +16,10 @@ const testCases = [
     {
       scriptHash: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
       operation: "balanceOf",
-      args: ["5fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b"]
-    }
+      args: [
+        "5fe459481de7b82f0636542ffe5445072f9357a1261515d6d3173c07c762743b",
+      ],
+    },
   ],
   [
     "emitAppCall with nested arrays as args",
@@ -25,9 +27,13 @@ const testCases = [
     {
       scriptHash: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
       operation: "balanceOf",
-      args: ["54686973", ["54686973", "6973", ["3412", "54686973"]], "74657374"]
-    }
-  ]
+      args: [
+        "54686973",
+        ["54686973", "6973", ["3412", "54686973"]],
+        "74657374",
+      ],
+    },
+  ],
 ];
 
 describe("toScriptParams", () => {

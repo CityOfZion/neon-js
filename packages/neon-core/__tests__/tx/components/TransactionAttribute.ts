@@ -1,5 +1,5 @@
 import TransactionAttribute, {
-  TransactionAttributeLike
+  TransactionAttributeLike,
 } from "../../../src/tx/components/TransactionAttribute";
 
 describe("constructor", () => {
@@ -12,7 +12,7 @@ describe("constructor", () => {
   test("TransactionAttributeLike (wrong usage)", () => {
     const testObject = {
       usage: 240,
-      data: "2f75726c"
+      data: "2f75726c",
     } as TransactionAttributeLike;
     expect(() => new TransactionAttribute(testObject)).toThrow();
   });
@@ -20,7 +20,7 @@ describe("constructor", () => {
   test("TransactionAttributeLike (int usage)", () => {
     const testObject = {
       usage: 129,
-      data: "2f75726c"
+      data: "2f75726c",
     } as TransactionAttributeLike;
 
     const result = new TransactionAttribute(testObject);
@@ -32,7 +32,7 @@ describe("constructor", () => {
   test("TransactionAttributeLike (str usage)", () => {
     const testObject = {
       usage: "Url",
-      data: "2f75726c"
+      data: "2f75726c",
     } as TransactionAttributeLike;
 
     const result = new TransactionAttribute(testObject);
@@ -44,7 +44,7 @@ describe("constructor", () => {
   test("TransactionAttributeLike (data not in hex)", () => {
     const testObject = {
       usage: 129,
-      data: "test"
+      data: "test",
     };
 
     expect(() => new TransactionAttribute(testObject)).toThrow();
@@ -53,7 +53,7 @@ describe("constructor", () => {
   test("TransactionAttribute", () => {
     const testObject = new TransactionAttribute({
       usage: 129,
-      data: "2f75726c"
+      data: "2f75726c",
     });
 
     const result = new TransactionAttribute(testObject);
@@ -73,7 +73,7 @@ describe("export", () => {
   test("export to TransactionAttributeLike", () => {
     const expected = {
       usage: 129,
-      data: "2f75726c"
+      data: "2f75726c",
     };
 
     const txAttr = new TransactionAttribute(expected);
@@ -85,11 +85,11 @@ describe("export", () => {
 describe("equals", () => {
   const obj1 = {
     usage: 129,
-    data: "2f75726c"
+    data: "2f75726c",
   };
   const obj2 = {
     usage: 129,
-    data: "703a2f"
+    data: "703a2f",
   };
   const attr1 = new TransactionAttribute(obj1);
   const attr2 = new TransactionAttribute(obj2);
@@ -98,7 +98,7 @@ describe("equals", () => {
     ["Attr1 === Attr1", attr1, attr1, true],
     ["Attr1 !== Attr2", attr1, attr2, false],
     ["Attr1 === Obj1", attr1, obj1, true],
-    ["Attr1 !== Obj2", attr1, obj2, false]
+    ["Attr1 !== Obj2", attr1, obj2, false],
   ])(
     "%s",
     (
@@ -117,17 +117,17 @@ const dataSet = [
     "Cosigner",
     {
       usage: 129,
-      data: "2f75726c"
+      data: "2f75726c",
     },
-    "81042f75726c"
-  ]
+    "81042f75726c",
+  ],
 ];
 
 describe("serialize", () => {
   test("errors if data too big", () => {
     const result = new TransactionAttribute({
       usage: 129,
-      data: "0".repeat(1000000)
+      data: "0".repeat(1000000),
     });
 
     expect(result.serialize).toThrow();

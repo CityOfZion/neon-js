@@ -1,7 +1,7 @@
 import {
   ContractManifest,
   ContractManifestLike,
-  ContractParamType
+  ContractParamType,
 } from "../../../src/sc";
 
 const defaultManifestLike: ContractManifestLike = {
@@ -9,20 +9,20 @@ const defaultManifestLike: ContractManifestLike = {
     entryPoint: {
       name: "",
       parameters: [],
-      returnType: ContractParamType.Any
+      returnType: ContractParamType.Any,
     },
     events: [],
     hash: "",
-    methods: []
+    methods: [],
   },
   features: {
     payable: false,
-    storage: false
+    storage: false,
   },
   groups: [],
   permissions: [],
   safeMethods: "*",
-  trusts: "*"
+  trusts: "*",
 };
 
 const definedManifestLike: ContractManifestLike = {
@@ -32,18 +32,18 @@ const definedManifestLike: ContractManifestLike = {
       parameters: [
         {
           name: "from",
-          type: ContractParamType.Hash160
+          type: ContractParamType.Hash160,
         },
         {
           name: "to",
-          type: ContractParamType.Hash160
+          type: ContractParamType.Hash160,
         },
         {
           name: "amount",
-          type: ContractParamType.Integer
-        }
+          type: ContractParamType.Integer,
+        },
       ],
-      returnType: ContractParamType.Boolean
+      returnType: ContractParamType.Boolean,
     },
     events: [
       {
@@ -51,18 +51,18 @@ const definedManifestLike: ContractManifestLike = {
         parameters: [
           {
             name: "from",
-            type: ContractParamType.Hash160
+            type: ContractParamType.Hash160,
           },
           {
             name: "to",
-            type: ContractParamType.Hash160
+            type: ContractParamType.Hash160,
           },
           {
             name: "amount",
-            type: ContractParamType.Integer
-          }
-        ]
-      }
+            type: ContractParamType.Integer,
+          },
+        ],
+      },
     ],
     hash: "43cf98eddbe047e198a3e5d57006311442a0ca15",
     methods: [
@@ -71,39 +71,39 @@ const definedManifestLike: ContractManifestLike = {
         parameters: [
           {
             name: "from",
-            type: ContractParamType.Hash160
+            type: ContractParamType.Hash160,
           },
           {
             name: "to",
-            type: ContractParamType.Hash160
+            type: ContractParamType.Hash160,
           },
           {
             name: "amount",
-            type: ContractParamType.Integer
-          }
+            type: ContractParamType.Integer,
+          },
         ],
-        returnType: ContractParamType.Boolean
-      }
-    ]
+        returnType: ContractParamType.Boolean,
+      },
+    ],
   },
   features: {
     payable: false,
-    storage: false
+    storage: false,
   },
   groups: [
     {
       pubKey: "this_is_a_public_key",
-      signature: "this_is_a_signature"
-    }
+      signature: "this_is_a_signature",
+    },
   ],
   permissions: [
     {
       contract: "a1760976db5fcdfab2a9930e8f6ce875b2d18225",
-      methods: ["balanceOf"]
-    }
+      methods: ["balanceOf"],
+    },
   ],
   safeMethods: "*",
-  trusts: "*"
+  trusts: "*",
 };
 
 describe("constructor & export", () => {
@@ -147,9 +147,9 @@ describe("canCall", () => {
           {
             contract:
               "03ff12614a7f6f370fb22260061be9da8b320ff33207aa10118b2bb2e717f5159d",
-            methods: ["balanceOf"]
-          }
-        ]
+            methods: ["balanceOf"],
+          },
+        ],
       })
     );
     const manifest2 = new ContractManifest(definedManifestLike);
@@ -163,9 +163,9 @@ describe("canCall", () => {
           {
             contract:
               "03ff12614a7f6f370fb22260061be9da8b320ff33207aa10118b2bb2e717f5159d",
-            methods: ["balanceOf"]
-          }
-        ]
+            methods: ["balanceOf"],
+          },
+        ],
       })
     );
     const manifest2 = new ContractManifest(
@@ -174,9 +174,9 @@ describe("canCall", () => {
           {
             pubKey:
               "03ff12614a7f6f370fb22260061be9da8b320ff33207aa10118b2bb2e717f5159d",
-            signature: "this_is_a_signature"
-          }
-        ]
+            signature: "this_is_a_signature",
+          },
+        ],
       })
     );
     expect(manifest1.canCall(manifest2, "balanceOf")).toBeTruthy();
@@ -199,12 +199,12 @@ describe("parse", () => {
           pubKey:
             "03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c",
           signature:
-            "41414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141"
-        }
+            "41414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141",
+        },
       ],
       features: {
         storage: true,
-        payable: true
+        payable: true,
       },
       abi: {
         hash:
@@ -214,26 +214,26 @@ describe("parse", () => {
           parameters: [
             {
               name: "operation",
-              type: "String"
+              type: "String",
             },
             {
               name: "args",
-              type: "Array"
-            }
+              type: "Array",
+            },
           ],
-          returnType: "Any"
+          returnType: "Any",
         },
         methods: [],
-        events: []
+        events: [],
       },
       permissions: [
         {
           contract: "0000000000000000000000000000000000000000",
-          methods: ["method1", "method2"]
-        }
+          methods: ["method1", "method2"],
+        },
       ],
       trusts: [],
-      safeMethods: []
+      safeMethods: [],
     };
     const manifest = ContractManifest.parse(neoManifestInString);
     expect(manifest.export()).toStrictEqual(neoManifestInJson);

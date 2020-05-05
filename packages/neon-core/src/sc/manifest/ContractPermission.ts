@@ -43,7 +43,7 @@ export class ContractPermission {
   public export(): ContractPermissionLike {
     return {
       contract: this.contract,
-      methods: this.methods
+      methods: this.methods,
     };
   }
 }

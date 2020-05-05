@@ -3,7 +3,7 @@ import {
   getToken,
   getTokenBalance,
   getTokenBalances,
-  getTokens
+  getTokens,
 } from "../src/main";
 import { getUrl } from "../../../helpers/urls";
 
@@ -49,7 +49,7 @@ describe("getTokenBalances", () => {
         CONST.CONTRACTS.TEST_RPX,
         CONST.CONTRACTS.TEST_RHTT4,
         CONST.CONTRACTS.TEST_LWTF,
-        CONST.CONTRACTS.TEST_NXT
+        CONST.CONTRACTS.TEST_NXT,
       ],
       "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
     );
@@ -104,10 +104,10 @@ describe("getTokens", () => {
     const tokensInfo = await getTokens(TESTNET_URL, [
       CONST.CONTRACTS.TEST_RPX,
       CONST.CONTRACTS.TEST_LWTF,
-      CONST.CONTRACTS.TEST_NXT
+      CONST.CONTRACTS.TEST_NXT,
     ]);
 
-    Object.keys(tokensInfo).map(key => {
+    Object.keys(tokensInfo).map((key) => {
       const info = tokensInfo[key];
 
       expect(typeof info.name).toBe("string");
@@ -125,14 +125,14 @@ describe("getTokens", () => {
       [
         CONST.CONTRACTS.TEST_RPX,
         CONST.CONTRACTS.TEST_LWTF,
-        CONST.CONTRACTS.TEST_NXT
+        CONST.CONTRACTS.TEST_NXT,
       ],
       "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
     );
 
     expect(tokensInfo.length).toBe(3);
 
-    Object.keys(tokensInfo).map(key => {
+    Object.keys(tokensInfo).map((key) => {
       const info = tokensInfo[key];
 
       expect(typeof info.name).toBe("string");

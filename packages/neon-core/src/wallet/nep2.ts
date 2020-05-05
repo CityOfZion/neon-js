@@ -21,14 +21,14 @@ import {
   getPublicKeyFromPrivateKey,
   getAddressFromScriptHash,
   getWIFFromPrivateKey,
-  getScriptHashFromPublicKey
+  getScriptHashFromPublicKey,
 } from "./core";
 import base58 from "bs58";
 
 const NEO2_ADDRESS_VERSION = "17";
 const enc = {
   Latin1: latin1Encoding,
-  Hex: hexEncoding
+  Hex: hexEncoding,
 };
 
 export interface ScryptParams {
@@ -147,7 +147,7 @@ async function decipherNep2Key(
   const ciphertext = {
     ciphertext: enc.Hex.parse(encrypted),
     salt: "",
-    iv: ""
+    iv: "",
   };
   const decrypted = AES.decrypt(
     ciphertext,

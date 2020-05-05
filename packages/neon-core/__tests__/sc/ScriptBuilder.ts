@@ -65,9 +65,9 @@ describe("emitAppCall", () => {
       {
         scriptHash: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
         operation: "name",
-        args: []
+        args: [],
       },
-      "c20c046e616d650c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52"
+      "c20c046e616d650c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52",
     ],
     [
       "emitAppCall with args",
@@ -77,12 +77,12 @@ describe("emitAppCall", () => {
         args: [
           {
             type: "Hash160",
-            value: "a7213b15cc18d19c810f644e37411d882ee561ca"
-          }
-        ]
+            value: "a7213b15cc18d19c810f644e37411d882ee561ca",
+          },
+        ],
       },
-      "0c14ca61e52e881d41374e640f819cd118cc153b21a711c00c0962616c616e63654f660c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52"
-    ]
+      "0c14ca61e52e881d41374e640f819cd118cc153b21a711c00c0962616c616e63654f660c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52",
+    ],
   ] as [string, ScriptIntent, string][])(
     "%s",
     (_msg: string, data: ScriptIntent, expected: string) => {
@@ -101,16 +101,16 @@ describe("emitPush", () => {
     [
       "ContractParam(integer) 1",
       ContractParam.integer(1),
-      (0x10 + 1).toString(16)
+      (0x10 + 1).toString(16),
     ],
     ["ContractParam(integer) 256", ContractParam.integer(256), "010001"],
     [
       "ContractParam(integer) 14256661",
       ContractParam.integer(14256661),
-      "02158ad900"
+      "02158ad900",
     ],
     ["ContractParam(integer) -1", ContractParam.integer(-1), "0f"],
-    ["ContractParam(integer) -12345", ContractParam.integer(-12345), "01c7cf"]
+    ["ContractParam(integer) -12345", ContractParam.integer(-12345), "01c7cf"],
   ] as [string, ContractParam | string | boolean | number, string][])(
     "%s",
     (
@@ -128,7 +128,7 @@ describe("emitPush", () => {
 describe("emitBoolean", () => {
   test.each([
     ["true", true, "11"],
-    ["false", false, "10"]
+    ["false", false, "10"],
   ])("%s", (_msg: string, data: boolean, expected: string) => {
     const sb = new ScriptBuilder();
     sb.emitBoolean(data);
@@ -142,14 +142,14 @@ describe("emitString", () => {
     [
       "simple string",
       "simple string",
-      "0c" + "0d" + "73696d706c6520737472696e67"
+      "0c" + "0d" + "73696d706c6520737472696e67",
     ],
     ["256 byte string", "a".repeat(0x100), "0d" + "0001" + "61".repeat(0x100)],
     [
       "65536 byte string",
       "a".repeat(0x10000),
-      "0e" + "00000100" + "61".repeat(0x10000)
-    ]
+      "0e" + "00000100" + "61".repeat(0x10000),
+    ],
   ])("%s", (_msg: string, data: string, expected: string) => {
     const sb = new ScriptBuilder();
     sb.emitString(data);
@@ -178,7 +178,7 @@ describe("emitNumber", () => {
     ["uint max", 4294967295, "03ffffffff00000000"],
     ["long min", "-9223372036854775808", "030000000000000080"],
     ["long max", "9223372036854775807", "03ffffffffffffff7f"],
-    ["ulong max", "18446744073709551615", "04ffffffffffffffff0000000000000000"]
+    ["ulong max", "18446744073709551615", "04ffffffffffffffff0000000000000000"],
   ])("%s", (_msg: string, data: number | string, expected: string) => {
     const sb = new ScriptBuilder();
     sb.emitNumber(data);
@@ -191,9 +191,9 @@ describe("emitContractParam", () => {
     [
       "ContractParam(integer) 1",
       ContractParam.integer(1),
-      (0x10 + 1).toString(16)
+      (0x10 + 1).toString(16),
     ],
-    ["ContractParam(integer) 256", ContractParam.integer(256), "010001"]
+    ["ContractParam(integer) 256", ContractParam.integer(256), "010001"],
   ])("%s", (_msg: string, data: ContractParam, expected: string) => {
     const sb = new ScriptBuilder();
     sb.emitContractParam(data);

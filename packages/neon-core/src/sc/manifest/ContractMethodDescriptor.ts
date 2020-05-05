@@ -16,7 +16,7 @@ export class ContractMethodDescriptor {
     const {
       name = "",
       parameters = [],
-      returnType = ContractParamType.Any
+      returnType = ContractParamType.Any,
     } = obj;
     this.name = name;
     this.parameters = [...parameters];
@@ -27,7 +27,7 @@ export class ContractMethodDescriptor {
     return {
       name: this.name,
       parameters: [...this.parameters],
-      returnType: this.returnType
+      returnType: this.returnType,
     };
   }
 }

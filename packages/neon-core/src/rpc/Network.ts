@@ -20,7 +20,7 @@ export interface NetworkJSON {
 
 function compareStrings(a: string[], b: string[]): boolean {
   if (a.length !== b.length) return false;
-  return a.every(curr => b.indexOf(curr) >= 0);
+  return a.every((curr) => b.indexOf(curr) >= 0);
 }
 
 function compareMaps(
@@ -29,7 +29,7 @@ function compareMaps(
 ): boolean {
   const keys = Array.from(a.keys ?? []);
   if (!compareStrings(keys, Array.from(b.keys ?? []))) return false;
-  return keys.every(key => a[key] === b[key]);
+  return keys.every((key) => a[key] === b[key]);
 }
 
 /**
@@ -68,7 +68,7 @@ export class Network implements NeonObject<NetworkLike> {
       name: this.name,
       protocol: this.protocol.export(),
       extra: this.extra,
-      nodes: this.nodes
+      nodes: this.nodes,
     };
   }
 
@@ -80,7 +80,7 @@ export class Network implements NeonObject<NetworkLike> {
       Name: this.name,
       ProtocolConfiguration: this.protocol.toConfiguration(),
       ExtraConfiguration: this.extra,
-      Nodes: this.nodes
+      Nodes: this.nodes,
     };
   }
 
