@@ -40,7 +40,7 @@
   "dependencies": {
     "@types/bn.js": "4.11.6",
     "@types/bs58": "4.0.1",
-    "@types/crypto-js": "3.1.43",
+    "@types/crypto-js": "3.1.45",
     "@types/elliptic": "6.4.12",
     "axios": "0.19.2",
     "bignumber.js": "7.2.1",
@@ -49,7 +49,7 @@
     "bs58check": "2.1.2",
     "crypto-js": "3.2.0",
     "elliptic": "6.5.2",
-    "loglevel": "1.6.7",
+    "loglevel": "1.6.8",
     "loglevel-plugin-prefix": "0.8.4",
     "scrypt-js": "3.0.0",
     "secure-random": "1.1.2",
