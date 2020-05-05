@@ -125,7 +125,7 @@ describe("deserialize", () => {
   );
 });
 
-describe("buildMultiSig", () => {
+describe.skip("buildMultiSig", () => {
   const msg = "1234";
   const signatures = [
     "e634f503454fc99d72aa3ab6048cb0cf33ed2afec8c9f38a6c4b87126f0da6c62e39205c86178d95a191ec76fb09b2380b8df1074ea62e02cb9d4a5e1c6372a2",

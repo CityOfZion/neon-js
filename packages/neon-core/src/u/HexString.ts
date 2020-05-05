@@ -17,6 +17,10 @@ export class HexString {
     return this._value.length;
   }
 
+  public get byteLength(): number {
+    return this._value.length / 2;
+  }
+
   public assert(value: string): void {
     ensureHex(value);
   }

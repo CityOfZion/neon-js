@@ -1,19 +1,21 @@
 import BN from "bn.js";
 import {
-  ensureHex,
+  ab2hexstring,
   num2hexstring,
-  reverseHex,
   str2hexstring,
   StringStream,
-  Fixed8
+  Fixed8,
+  int2hex,
+  HexString
 } from "../u";
-import ContractParam, {
+import {
+  ContractParam,
   ContractParamType,
   likeContractParam
 } from "./ContractParam";
-import OpCode from "./OpCode";
-import InteropServiceCode from "./InteropServiceCode";
-import { ASSET_ID } from "../consts";
+import { OpCode } from "./OpCode";
+import { InteropServiceCode } from "./InteropServiceCode";
+import { TextEncoder } from "util";
 
 export interface ScriptIntent {
   scriptHash: string | "NEO" | "GAS" | "POLICY";
@@ -32,14 +34,40 @@ export interface ScriptResult {
  */
 export class ScriptBuilder extends StringStream {
   /**
+   * Returns a copy of the script.
+   */
+  public build(): string {
+    return this.str.slice(0);
+  }
+  /**
    * Appends an Opcode, followed by args
    */
   public emit(op: OpCode, args?: string): this {
-    this.str += op;
+    this.str += int2hex(op);
     if (args) {
       this.str += args;
     }
     return this;
+  }
+
+  public emitAppCall(
+    scriptHash: string | HexString,
+    operation: string,
+    args: unknown[] = []
+  ): this {
+    if (args.length === 0) {
+      this.emit(OpCode.NEWARRAY0);
+    } else {
+      args.forEach(arg => {
+        this.emitPush(arg);
+      });
+      this.emitNumber(args.length);
+      this.emit(OpCode.PACK);
+    }
+
+    return this.emitString(operation)
+      .emitHexstring(HexString.fromHex(scriptHash))
+      .emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALL);
   }
 
   public emitSysCall(service: InteropServiceCode, ...args: unknown[]): this {
@@ -47,33 +75,6 @@ export class ScriptBuilder extends StringStream {
       this.emitPush(args[i]);
     }
     return this.emit(OpCode.SYSCALL, service);
-  }
-
-  public emitAppCall(
-    scriptHash: string,
-    operation?: string,
-    args?: unknown[]
-  ): this {
-    if (args !== undefined) {
-      this.emitPush(args || []);
-    }
-    if (operation) {
-      this._emitString(str2hexstring(operation));
-    }
-    if (scriptHash.toUpperCase() === "NEO") {
-      scriptHash = ASSET_ID.NEO;
-    } else if (scriptHash.toUpperCase() === "GAS") {
-      scriptHash = ASSET_ID.GAS;
-    } else if (scriptHash.toUpperCase() === "POLICY") {
-      scriptHash = ASSET_ID.POLICY;
-    }
-    ensureHex(scriptHash);
-    if (scriptHash.length !== 40) {
-      throw new Error("ScriptHash should be 20 bytes long!");
-    }
-
-    this._emitString(reverseHex(scriptHash));
-    return this.emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALL);
   }
 
   /**
@@ -84,20 +85,22 @@ export class ScriptBuilder extends StringStream {
   public emitPush(data: unknown): this {
     switch (typeof data) {
       case "boolean":
-        return this.emit(data ? OpCode.PUSHT : OpCode.PUSHF);
+        return this.emitBoolean(data as boolean);
       case "string":
-        return this._emitString(data as string);
+        return this.emitString(data as string);
       case "number":
-        return this._emitNum(data as number);
+        return this.emitNumber(data as number);
       case "undefined":
         return this.emitPush(false);
       case "object":
         if (Array.isArray(data)) {
-          return this._emitArray(data);
+          return this.emitArray(data);
+        } else if (data instanceof HexString) {
+          return this.emitHexstring(data);
         } else if (data === null) {
           return this.emitPush(false);
         } else if (likeContractParam(data)) {
-          return this._emitParam(new ContractParam(data));
+          return this.emitContractParam(new ContractParam(data));
         }
         throw new Error(`Unidentified object: ${data}`);
       default:
@@ -105,100 +108,153 @@ export class ScriptBuilder extends StringStream {
     }
   }
 
+  //TODO: Add EmitJump
+
+  //TODO: Add EmitCall(offset)
+
+  public emitBoolean(bool: boolean): this {
+    return this.emit(bool ? OpCode.PUSH1 : OpCode.PUSH0);
+  }
+
   /**
    * Private method to append an array
    * @private
    */
-  private _emitArray(arr: unknown[]): this {
+  private emitArray(arr: unknown[]): this {
     for (let i = arr.length - 1; i >= 0; i--) {
       this.emitPush(arr[i]);
     }
-    return this.emitPush(arr.length).emit(OpCode.PACK);
+    return this.emitNumber(arr.length).emit(OpCode.PACK);
   }
 
   /**
-   * Private method to append a hexstring.
-   * @private
-   * @param hexstring Hexstring(BE)
-   * @return this
+   * Appends a bytearray.
    */
-  private _emitString(hexstring: string): this {
-    ensureHex(hexstring);
-    const size = hexstring.length / 2;
-    if (size <= 75 /* PUSHBYTES75 */) {
-      // this is actually pushing opcode PUSHBYTES1-75, will generate fee.
-      this.str += num2hexstring(size);
-      this.str += hexstring;
-    } else if (size < 0x100) {
-      this.emit(OpCode.PUSHDATA1);
-      this.str += num2hexstring(size);
-      this.str += hexstring;
+  public emitBytes(byteArray: ArrayBuffer | ArrayLike<number>): this {
+    return this.emitHexstring(HexString.fromArrayBuffer(byteArray, true));
+  }
+
+  /**
+   * Appends a UTF-8 string.
+   */
+  public emitString(str: string): this {
+    const encoder = new TextEncoder();
+    const bytes = encoder.encode(str);
+    return this.emitBytes(bytes);
+  }
+
+  /**
+   * Appends a hexstring.
+   */
+  public emitHexstring(hexstr: string | HexString): this {
+    if (typeof hexstr === "string") {
+      hexstr = HexString.fromHex(hexstr);
+    }
+    const littleEndianHex = hexstr.toLittleEndian();
+    const size = hexstr.byteLength;
+    if (size < 0x100) {
+      return this.emit(OpCode.PUSHDATA1, num2hexstring(size) + littleEndianHex);
     } else if (size < 0x10000) {
-      this.emit(OpCode.PUSHDATA2);
-      this.str += num2hexstring(size, 2, true);
-      this.str += hexstring;
+      return this.emit(
+        OpCode.PUSHDATA2,
+        num2hexstring(size, 2, true) + littleEndianHex
+      );
     } else if (size < 0x100000000) {
-      this.emit(OpCode.PUSHDATA4);
-      this.str += num2hexstring(size, 4, true);
-      this.str += hexstring;
+      return this.emit(
+        OpCode.PUSHDATA4,
+        num2hexstring(size, 4, true) + littleEndianHex
+      );
     } else {
-      throw new Error(`String too big to emit!`);
+      throw new Error(`Data too big to emit!`);
     }
-    return this;
   }
 
   /**
-   * Private method to append a number.
-   * @private
-   * @param num
+   * Appends a number. Maximum number possible is ulong(256 bits of data).
+   * @param num For numbers beyond MAX_INT, please pass in a string instead of a javascript number.
    * @return this
    */
-  private _emitNum(num: number | string): this {
-    const bn = new BN(num);
-    if (bn.eqn(-1)) {
-      return this.emit(OpCode.PUSHM1);
+  public emitNumber(num: number | string): this {
+    const bn = new BN(num, 10, "be");
+    if (bn.gten(-1) && bn.lten(16)) {
+      return this.emit(OpCode.PUSH0 + bn.toNumber());
     }
-    if (bn.eqn(0)) {
-      return this.emit(OpCode.PUSH0);
-    }
-    if (bn.gtn(0) && bn.lten(16)) {
-      return this.emit(
-        num2hexstring(81 /* PUSH1 */ - 1 + bn.toNumber()) as OpCode
-      );
-    }
+    const negative = bn.isNeg();
     const msbSet = bn.testn(bn.byteLength() * 8 - 1);
+    const occupiedBytes = bn.byteLength();
+    const targetBytes = this.roundToBestIntSize(
+      !negative && msbSet ? occupiedBytes + 1 : occupiedBytes
+    );
 
-    const hex = bn
-      .toTwos(bn.byteLength() * 8)
-      .toString(16, bn.byteLength() * 2);
-    const paddedHex = !bn.isNeg() && msbSet ? "00" + hex : hex;
+    // Catch case 64
+    if (targetBytes > 32) {
+      throw new Error(`Number too long to be emitted: ${num.toString()}`);
+    }
 
-    return this.emitPush(reverseHex(paddedHex));
+    const hex = ab2hexstring(
+      bn.toTwos(bn.byteLength() * 8).toArray("le", targetBytes)
+    );
+
+    switch (targetBytes) {
+      case 1:
+        return this.emit(OpCode.PUSHINT8, hex);
+      case 2:
+        return this.emit(OpCode.PUSHINT16, hex);
+      case 4:
+        return this.emit(OpCode.PUSHINT32, hex);
+      case 8:
+        return this.emit(OpCode.PUSHINT64, hex);
+      case 16:
+        return this.emit(OpCode.PUSHINT128, hex);
+      case 32:
+        return this.emit(OpCode.PUSHINT256, hex);
+      default:
+        // Will not reach
+        throw new Error();
+    }
+  }
+
+  private roundToBestIntSize(n: number): 1 | 2 | 4 | 8 | 16 | 32 | 64 {
+    switch (true) {
+      case n == 1:
+        return 1;
+      case n == 2:
+        return 2;
+      case n <= 4:
+        return 4;
+      case n <= 8:
+        return 8;
+      case n <= 16:
+        return 16;
+      case n <= 32:
+        return 32;
+      default:
+        return 64;
+    }
   }
 
   /**
    * Private method to append a ContractParam
-   * @private
    */
-  private _emitParam(param: ContractParam): this {
+  public emitContractParam(param: ContractParam): this {
     if (!param.type) {
       throw new Error("No type available!");
     }
     switch (param.type) {
       case ContractParamType.String:
-        return this._emitString(str2hexstring(param.value as string));
+        return this.emitString(str2hexstring(param.value as string));
       case ContractParamType.Boolean:
-        return this.emit(param.value ? OpCode.PUSHT : OpCode.PUSHF);
+        return this.emitBoolean(param.value as boolean);
       case ContractParamType.Integer:
-        return this._emitNum(param.value as number);
+        return this.emitNumber(param.value as number | string);
       case ContractParamType.ByteArray:
-        return this._emitString(param.value as string);
+        return this.emitHexstring(param.value as string);
       case ContractParamType.Array:
-        return this._emitArray(param.value as ContractParam[]);
+        return this.emitArray(param.value as ContractParam[]);
       case ContractParamType.Hash160:
-        return this._emitString(reverseHex(param.value as string));
+      case ContractParamType.Hash256:
       case ContractParamType.PublicKey:
-        return this._emitString(str2hexstring(param.value as string));
+        return this.emitHexstring(param.value as HexString);
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }

@@ -1,5 +1,5 @@
-import ScriptBuilder, { ScriptIntent } from "./ScriptBuilder";
-import InteropServiceCode from "./InteropServiceCode";
+import { ScriptBuilder, ScriptIntent } from "./ScriptBuilder";
+import { InteropServiceCode } from "./InteropServiceCode";
 import { ContractManifest } from "./manifest";
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
@@ -14,14 +14,14 @@ export function createScript(...intents: (ScriptIntent | string)[]): string {
     if (!scriptIntent.scriptHash) {
       throw new Error("No scriptHash found!");
     }
-    const { scriptHash, operation, args = [] } = Object.assign(
+    const { scriptHash, operation, args = undefined } = Object.assign(
       { operation: null, args: undefined },
       scriptIntent
     );
 
     sb.emitAppCall(scriptHash, operation, args);
   }
-  return sb.str;
+  return sb.build();
 }
 
 export interface DeployParams {
@@ -54,7 +54,7 @@ export function generateDeployScript(params: DeployParams): ScriptBuilder {
   const sb = new ScriptBuilder();
   sb.emitPush(params.manifest)
     .emitPush(params.script)
-    .emitSysCall(InteropServiceCode.NEO_CONTRACT_CREATE);
+    .emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CREATE);
   return sb;
 }
 
@@ -63,6 +63,6 @@ export function generateUpdateScript(params: DeployParams): ScriptBuilder {
   const sb = new ScriptBuilder();
   sb.emitPush(params.manifest)
     .emitPush(params.script)
-    .emitSysCall(InteropServiceCode.NEO_CONTRACT_UPDATE);
+    .emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_UPDATE);
   return sb;
 }

@@ -2,17 +2,15 @@ export const ADDR_VERSION = "35";
 
 export const NATIVE_CONTRACTS: { [key: string]: string } = {
   NEO: "NEO",
-  "43cf98eddbe047e198a3e5d57006311442a0ca15": "NEO",
+  "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789": "NEO",
   GAS: "GAS",
-  a1760976db5fcdfab2a9930e8f6ce875b2d18225: "GAS",
-  POLICY: "POLICY",
-  "9c5699b260bd468e2160dd5d45dfd2686bba8b77": "POLICY"
+  "8c23f196d8a1bfd103a9dcb1f9ccf0c611377d3b": "GAS",
+  POLICY: "3209d09120465bf181ced70693b897ec6ea4619a"
 };
 
 export const ASSET_ID: { [key: string]: string } = {
-  NEO: "43cf98eddbe047e198a3e5d57006311442a0ca15",
-  GAS: "a1760976db5fcdfab2a9930e8f6ce875b2d18225",
-  POLICY: "9c5699b260bd468e2160dd5d45dfd2686bba8b77"
+  NEO: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
+  GAS: "8c23f196d8a1bfd103a9dcb1f9ccf0c611377d3b"
 };
 
 export const ASSET_TYPE: { [key: string]: number } = {

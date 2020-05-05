@@ -153,7 +153,7 @@ export class Account implements NeonObject<AccountJSON> {
   public get isMultiSig(): boolean {
     return (
       this.contract?.script?.slice(this.contract.script.length - 8) ===
-      InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
+      InteropServiceCode.NEO_CRYPTO_ECDSACHECKMULTISIG
     );
   }
 
