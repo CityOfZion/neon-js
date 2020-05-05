@@ -1,9 +1,6 @@
-import { createScript, generateDeployScript } from "../../src/sc/core";
-import _ScriptBuilder, { ScriptIntent } from "../../src/sc/ScriptBuilder";
+import { createScript } from "../../src/sc/core";
 import * as _u from "../../src/u";
 import testIntents from "./scriptIntents.json";
-import { Fixed8 } from "../../src/u";
-import { InteropServiceCode, ScriptBuilder } from "../../src/sc";
 
 beforeEach(() => {
   jest.clearAllMocks();
