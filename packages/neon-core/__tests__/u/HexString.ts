@@ -56,6 +56,20 @@ describe("Initiator", () => {
       expect(hex.toBigEndian()).toBe("59222d0c");
     });
   });
+
+  describe("fromBase64", () => {
+    test("default", () => {
+      const hex = HexString.fromBase64("bmVv");
+      expect(hex.toBigEndian()).toBe("6e656f");
+      expect(hex.toAscii()).toBe("neo");
+    });
+
+    test("little endian", () => {
+      const hex = HexString.fromBase64("bmVv", true);
+      expect(hex.toBigEndian()).toBe("6f656e");
+      expect(hex.toAscii()).toBe("oen");
+    });
+  });
 });
 
 describe("Export methods", () => {
@@ -99,6 +113,20 @@ describe("Export methods", () => {
       const arr = hex.toArrayBuffer(true);
       expect(arr[0]).toBe(194);
       expect(arr[1]).toBe(164);
+    });
+  });
+
+  describe("toBase64", () => {
+    test("default", () => {
+      const hex = HexString.fromAscii("neo");
+      const b64 = hex.toBase64();
+      expect(b64).toBe("bmVv");
+    });
+
+    test("little endian", () => {
+      const hex = HexString.fromAscii("oen");
+      const b64 = hex.toBase64(true);
+      expect(b64).toBe("bmVv");
     });
   });
 });

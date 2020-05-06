@@ -6,6 +6,7 @@ import {
   ab2hexstring,
   hexstring2str,
 } from "./convert";
+import { base642hex, hex2base64 } from "./base64";
 
 export class HexString {
   /**
@@ -104,6 +105,16 @@ export class HexString {
   }
 
   /**
+   * Export as a base64-encoded string.
+   * @param asLittleEndian Whether to encode as little endian, default to be false
+   */
+  public toBase64(asLittleEndian = false): string {
+    return hex2base64(
+      asLittleEndian ? this.toLittleEndian() : this.toBigEndian()
+    );
+  }
+
+  /**
    * Get HexString instance from a hex string
    * @param str hex string
    * @param littleEndian whether `str` is little endian
@@ -148,5 +159,17 @@ export class HexString {
     littleEndian = false
   ): HexString {
     return new HexString(ab2hexstring(arr), littleEndian);
+  }
+
+  /**
+   * Get HexString instance from a Base64-encoded string
+   * @param encodedString
+   * @param littleEndian Whether the decoded hexstring is little endian
+   */
+  public static fromBase64(
+    encodedString: string,
+    littleEndian = false
+  ): HexString {
+    return new HexString(base642hex(encodedString), littleEndian);
   }
 }
