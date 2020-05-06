@@ -1,17 +1,19 @@
-import { base64Encode, base64Decode } from "../../src/u/base64";
+import { base642hex, hex2base64 } from "../../src/u/base64";
 
 const testCases = [
-  ["NEO", "TkVP"],
-  ["neo", "bmVv"],
+  ["4e454f", "TkVP"], // NEO
+  ["6e656f", "bmVv"], // neo
+  ["11", "EQ=="],
+  ["41123e7fe8", "QRI+f+g="],
 ];
 describe("base64", () => {
-  test.each(testCases)("base64Encode %s", (input: string, expected: string) => {
-    const result = base64Encode(input);
+  test.each(testCases)("hex2base64 %s", (input: string, expected: string) => {
+    const result = hex2base64(input);
     expect(result).toBe(expected);
   });
 
-  test.each(testCases)("base64Decode %s", (expected: string, input: string) => {
-    const result = base64Decode(input);
+  test.each(testCases)("base642hex %s", (expected: string, input: string) => {
+    const result = base642hex(input);
     expect(result).toBe(expected);
   });
 });
