@@ -1,83 +1,53 @@
 {
   "1": {
-    "txid": "5add3958bc4bc31254112c099f42c806da95d288c7882140cbb05a0a30fea9c7",
+    "txid": "1e16f97be7fe8e9e2136dfdea37207fc27d2bc42661dd1feb6f37381233c44ad",
     "serialized":
-      "000100000039e9c91012be63a58504e52b7318c1274554ae3d00e1f5050000000000e1f50500000000d20400000001dec317f6e4335db8a98418bd16960bf4e7fce4c731021443cf98eddbe047e198a3e5d57006311442a0ca1514a1760976db5fcdfab2a9930e8f6ce875b2d182250221031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c92102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef53080100000000000000143775292229eccdf904f16fff8e83e7cffdc0f0ce1435b20010db73bf86371075ddfba4e6596f1ff35d53c1087472616e736665726754a64cac1b1073e662933ef3e30b007cd98d67d701414092191e575a3413b8591a24ecc73d8a455c034d553337de78f72816f49abf16777b0bffcda14c7e03ed3e237b09d135a0ca5de7f2ac6f797b54ccbc0ce1589fba2321031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9ac",
+      "0000000000ca61e52e881d41374e640f819cd118cc153b21a7000000000000000000000000000000000000000000000541123e7fe801000111",
     "deserialized": {
+      "size": 57,
       "version": 0,
-      "nonce": 1,
-      "sender": "39e9c91012be63a58504e52b7318c1274554ae3d",
-      "cosigners": [
-        {
-          "account": "dec317f6e4335db8a98418bd16960bf4e7fce4c7",
-          "scopes": 49,
-          "allowedContracts": [
-            "43cf98eddbe047e198a3e5d57006311442a0ca15",
-            "a1760976db5fcdfab2a9930e8f6ce875b2d18225"
-          ],
-          "allowedGroups": [
-            "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
-            "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef"
-          ]
-        }
-      ],
-      "validUntilBlock": 1234,
+      "nonce": 0,
+      "sender": "NeN4xPMn4kHoj7G8Lciq9oorgLTvqt4qi1",
+      "sys_fee": "0",
+      "net_fee": "0",
+      "valid_until_block": 0,
       "attributes": [],
-      "scripts": [
-        {
-          "invocationScript":
-            "4092191e575a3413b8591a24ecc73d8a455c034d553337de78f72816f49abf16777b0bffcda14c7e03ed3e237b09d135a0ca5de7f2ac6f797b54ccbc0ce1589fba",
-          "verificationScript":
-            "21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9ac"
-        }
-      ],
-      "script":
-        "080100000000000000143775292229eccdf904f16fff8e83e7cffdc0f0ce1435b20010db73bf86371075ddfba4e6596f1ff35d53c1087472616e736665726754a64cac1b1073e662933ef3e30b007cd98d67d7",
-      "systemFee": 1,
-      "networkFee": 1
+      "cosigners": [],
+      "script": "QRI+f+g=",
+      "witnesses": [
+          {
+              "invocation": "",
+              "verification": "EQ=="
+          }
+      ]
     }
   },
   "2": {
-    "txid": "1602f4d4468952784f4843f60f26df2a8b699c08bca9708cf67004a2544bfb01",
+    "txid": "50dafac34a0ec0702883a64cb9dfc6559ac87a392a3b7d4c5c25bdbc3fc6880c",
     "serialized":
-      "000100000039e9c91012be63a58504e52b7318c1274554ae3d00e1f5050000000000ca9a3b00000000d20400000002dec317f6e4335db8a98418bd16960bf4e7fce4c710021443cf98eddbe047e198a3e5d57006311442a0ca1514a1760976db5fcdfab2a9930e8f6ce875b2d18225dec317f6e4335db8a98418bd16a60bf4e7fce4c7200221031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c92102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef165767b7040c106561763ce38c0ce658a946e5d1b381db01414062be27b6f89b9a40922fe10d4a0e07e99d5d0b60de3212de6be6627b09cc3d6b18bc8999916d99cc5c333a2b094e06128af6a566a18fa4c68938a20594c82b47232103b0602f36a556b70e6c205398e58ce85193c769a250552fd1ee58b17b1a173712ac",
+      "00b1ddc50554a6cb279fbcedc66162ad4ad5d1d9202b92743ec272890000000000466a1300000000005d162000000154a6cb279fbcedc66162ad4ad5d1d9202b92743e015d030080f420e6b500000c14fe1730efb257db1565b05bfdef0746f030a4a4040c1454a6cb279fbcedc66162ad4ad5d1d9202b92743e13c00c087472616e736665720c143b7d3711c6f0ccf9b1dca903d1bfa1d896f1238c41627d5b523801420c40517a548f14df9a21b2649db60dca8ca9e4cb48ce03f3210b10396eabe5793cbe39d6750f56230831c5ffd9639c71adcb620bcd9edfad41a4fabc27b5f72c8c3c290c2103b0212cf4abb5d171ee8d8178a36d09ef31c26f53c9b315b4946ff43faf2696f00b410a906ad4",
     "deserialized": {
+      "size": 272,
       "version": 0,
-      "nonce": 1,
-      "sender": "39e9c91012be63a58504e52b7318c1274554ae3d",
-      "cosigners": [
-        {
-          "account": "dec317f6e4335db8a98418bd16960bf4e7fce4c7",
-          "scopes": 16,
-          "allowedContracts": [
-            "43cf98eddbe047e198a3e5d57006311442a0ca15",
-            "a1760976db5fcdfab2a9930e8f6ce875b2d18225"
-          ],
-          "allowedGroups": []
-        },
-        {
-          "account": "dec317f6e4335db8a98418bd16a60bf4e7fce4c7",
-          "scopes": 32,
-          "allowedContracts": [],
-          "allowedGroups": [
-            "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
-            "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef"
-          ]
-        }
-      ],
-      "validUntilBlock": 1234,
-      "script": "5767b7040c106561763ce38c0ce658a946e5d1b381db",
-      "systemFee": 1,
-      "networkFee": 10,
+      "nonce": 96853425,
+      "sender": "NTdZktbQ2TdeeEpkiqNRubyQBmFxesJHbY",
+      "sys_fee": "9007810",
+      "net_fee": "1272390",
+      "valid_until_block": 2102877,
       "attributes": [],
-      "scripts": [
-        {
-          "invocationScript":
-            "4062be27b6f89b9a40922fe10d4a0e07e99d5d0b60de3212de6be6627b09cc3d6b18bc8999916d99cc5c333a2b094e06128af6a566a18fa4c68938a20594c82b47",
-          "verificationScript":
-            "2103b0602f36a556b70e6c205398e58ce85193c769a250552fd1ee58b17b1a173712ac"
-        }
+      "cosigners": [
+          {
+              "account": "0x3e74922b20d9d1d54aad6261c6edbc9f27cba654",
+              "scopes": "CalledByEntry"
+          }
+      ],
+      "script": "AwCA9CDmtQAADBT+FzDvslfbFWWwW/3vB0bwMKSkBAwUVKbLJ5+87cZhYq1K1dHZICuSdD4TwAwIdHJhbnNmZXIMFDt9NxHG8Mz5sdypA9G/odiW8SOMQWJ9W1I4",
+      "witnesses": [
+          {
+              "invocation": "DEBRelSPFN+aIbJknbYNyoyp5MtIzgPzIQsQOW6r5Xk8vjnWdQ9WIwgxxf/ZY5xxrctiC82e361BpPq8J7X3LIw8",
+              "verification": "DCEDsCEs9Ku10XHujYF4o20J7zHCb1PJsxW0lG/0P68mlvALQQqQatQ="
+          }
       ]
-    }
+  }
   }
 }

@@ -1,4 +1,4 @@
-import { TX_VERSION } from "../../consts";
+import { TX_VERSION, MAGIC_NUMBER } from "../../consts";
 import logger from "../../logging";
 import {
   hash256,
@@ -11,7 +11,12 @@ import {
   ab2hexstring,
   HexString,
 } from "../../u";
-import { Account, sign } from "../../wallet";
+import {
+  Account,
+  sign,
+  getAddressFromScriptHash,
+  getScriptHashFromAddress,
+} from "../../wallet";
 import {
   TransactionAttribute,
   TransactionAttributeLike,
@@ -45,12 +50,12 @@ export interface TransactionLike {
   validUntilBlock: number;
   attributes: TransactionAttributeLike[];
   cosigners: CosignerLike[];
-  scripts: WitnessLike[];
+  witnesses: WitnessLike[];
   script: string;
 }
 
 export interface TransactionJson {
-  hash: string;
+  hash?: string;
   size: number;
   version: number;
   nonce: number;
@@ -111,13 +116,28 @@ export class Transaction implements NeonObject<TransactionLike> {
   public validUntilBlock: number;
   public attributes: TransactionAttribute[];
   public cosigners: Cosigner[];
-  public scripts: Witness[];
+  public witnesses: Witness[];
   public script: HexString;
 
   /**
    * @description Maximum duration in blocks that a transaction can stay valid in the mempol
    */
   public static MAX_TRANSACTION_LIFESPAN = 2102400;
+
+  public static fromJson(input: TransactionJson): Transaction {
+    return new Transaction({
+      version: input.version,
+      nonce: input.nonce,
+      sender: HexString.fromHex(getScriptHashFromAddress(input.sender)),
+      systemFee: new Fixed8(input.sys_fee).div(100000000),
+      networkFee: new Fixed8(input.net_fee).div(100000000),
+      validUntilBlock: input.valid_until_block,
+      attributes: input.attributes.map((a) => TransactionAttribute.fromJson(a)),
+      cosigners: input.cosigners.map((c) => Cosigner.fromJson(c)),
+      script: HexString.fromBase64(input.script),
+      witnesses: input.witnesses.map((w) => Witness.fromJson(w)),
+    });
+  }
 
   public constructor(tx: Partial<TransactionLike | Transaction> = {}) {
     const {
@@ -129,7 +149,7 @@ export class Transaction implements NeonObject<TransactionLike> {
       validUntilBlock,
       attributes,
       cosigners = [],
-      scripts,
+      witnesses,
       script,
     } = tx;
     this.version = version ?? TX_VERSION;
@@ -141,10 +161,10 @@ export class Transaction implements NeonObject<TransactionLike> {
           (a) => new TransactionAttribute(a)
         )
       : [];
-    this.scripts = Array.isArray(scripts)
-      ? (scripts as (Witness | WitnessLike)[]).map((a) => new Witness(a))
+    this.witnesses = Array.isArray(witnesses)
+      ? (witnesses as (Witness | WitnessLike)[]).map((a) => new Witness(a))
       : [];
-    this.scripts = this.scripts.sort(
+    this.witnesses = this.witnesses.sort(
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
     );
     this.cosigners = [];
@@ -160,8 +180,24 @@ export class Transaction implements NeonObject<TransactionLike> {
   /**
    * Transaction hash.
    */
-  public get hash(): string {
-    return reverseHex(hash256(this.serialize(false)));
+  public hash(networkMagic: number): string {
+    return reverseHex(
+      hash256(num2hexstring(networkMagic, 4) + this.serialize(false))
+    );
+  }
+
+  public get size(): number {
+    return (
+      this.headerSize +
+      num2VarInt(this.attributes.length).length / 2 +
+      this.attributes.reduce((sum, a) => sum + a.size, 0) +
+      num2VarInt(this.cosigners.length).length / 2 +
+      this.cosigners.reduce((sum, c) => sum + c.size, 0) +
+      num2VarInt(this.script.byteLength).length / 2 +
+      this.script.byteLength +
+      num2VarInt(this.witnesses.length).length / 2 +
+      this.witnesses.reduce((sum, w) => sum + w.size, 0)
+    );
   }
 
   public get fees(): number {
@@ -222,8 +258,8 @@ export class Transaction implements NeonObject<TransactionLike> {
    * @param obj The Witness object to add as witness
    */
   public addWitness(obj: WitnessLike | Witness): this {
-    this.scripts.push(new Witness(obj));
-    this.scripts = this.scripts.sort(
+    this.witnesses.push(new Witness(obj));
+    this.witnesses = this.witnesses.sort(
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
     );
     return this;
@@ -241,16 +277,16 @@ export class Transaction implements NeonObject<TransactionLike> {
     let out = "";
     out += num2hexstring(this.version);
     out += num2hexstring(this.nonce, 4, true);
-    out += this.sender;
+    out += this.sender.toLittleEndian();
     out += this.systemFee.toReverseHex();
     out += this.networkFee.toReverseHex();
     out += num2hexstring(this.validUntilBlock, 4, true);
     out += serializeArrayOf(this.attributes);
     out += serializeArrayOf(this.cosigners);
-    out += num2VarInt(this.script.length / 2);
-    out += this.script;
+    out += num2VarInt(this.script.byteLength);
+    out += this.script.toString();
     if (signed) {
-      out += serializeArrayOf(this.scripts);
+      out += serializeArrayOf(this.witnesses);
     }
     return out;
   }
@@ -258,13 +294,20 @@ export class Transaction implements NeonObject<TransactionLike> {
   /**
    * Signs a transaction.
    * @param {Account|string} signer - Account, privateKey or WIF
+   * @param {number} networkMagic Magic number of network found in protocol.json.
    * @return {Transaction} this
    */
-  public sign(signer: Account | string): this {
+  public sign(
+    signer: Account | string,
+    networkMagic: number = MAGIC_NUMBER.MainNet
+  ): this {
     if (typeof signer === "string") {
       signer = new Account(signer);
     }
-    const signature = sign(this.serialize(false), signer.privateKey);
+    const signature = sign(
+      num2hexstring(networkMagic, 4) + this.serialize(false),
+      signer.privateKey
+    );
     log.info(`Signed Transaction with Account: ${signer.label}`);
     this.addWitness(Witness.fromSignature(signature, signer.publicKey));
     return this;
@@ -272,9 +315,9 @@ export class Transaction implements NeonObject<TransactionLike> {
 
   public equals(other: Partial<TransactionLike>): boolean {
     if (other instanceof Transaction) {
-      return this.hash === other.hash;
+      return this.hash(0) === other.hash(0);
     }
-    return this.hash === new Transaction(other).hash;
+    return this.hash(0) === new Transaction(other).hash(0);
   }
 
   public export(): TransactionLike {
@@ -287,8 +330,24 @@ export class Transaction implements NeonObject<TransactionLike> {
       validUntilBlock: this.validUntilBlock,
       attributes: this.attributes.map((a) => a.export()),
       cosigners: this.cosigners.map((cosigner) => cosigner.export()),
-      scripts: this.scripts.map((a) => a.export()),
+      witnesses: this.witnesses.map((a) => a.export()),
       script: this.script.toBigEndian(),
+    };
+  }
+
+  public toJson(): TransactionJson {
+    return {
+      size: this.size,
+      version: this.version,
+      nonce: this.nonce,
+      sender: getAddressFromScriptHash(this.sender.toBigEndian()),
+      sys_fee: this.systemFee.toRawNumber().toString(),
+      net_fee: this.networkFee.toRawNumber().toString(),
+      valid_until_block: this.validUntilBlock,
+      attributes: this.attributes.map((a) => a.toJson()),
+      cosigners: this.cosigners.map((c) => c.toJson()),
+      script: this.script.toBase64(),
+      witnesses: this.witnesses.map((w) => w.toJson()),
     };
   }
 

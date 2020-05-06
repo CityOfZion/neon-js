@@ -1,4 +1,9 @@
-import { Transaction, TransactionLike, WitnessScope } from "../../../src/tx";
+import {
+  Transaction,
+  TransactionLike,
+  WitnessScope,
+  TransactionJson,
+} from "../../../src/tx";
 import samples from "./Transaction.json";
 import { Account } from "../../../src/wallet";
 
@@ -38,7 +43,7 @@ describe("constructor", () => {
   test("Transaction", () => {
     const testObject = new Transaction({
       version: 1,
-      scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
+      witnesses: [{ invocationScript: "ab", verificationScript: "cd" }],
       systemFee: 1,
       script: "00",
     });
@@ -47,7 +52,7 @@ describe("constructor", () => {
     expect(result instanceof Transaction).toBeTruthy();
     expect(result).not.toBe(testObject);
     expect(result.script).toStrictEqual(testObject.script);
-    expect(result.scripts[0]).not.toBe(testObject.scripts[0]);
+    expect(result.witnesses[0]).not.toBe(testObject.witnesses[0]);
   });
 });
 
@@ -97,7 +102,7 @@ describe("export", () => {
     networkFee: 13,
     validUntilBlock: 1000,
     attributes: [],
-    scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
+    witnesses: [{ invocationScript: "ab", verificationScript: "cd" }],
     script: "00",
   } as Partial<TransactionLike>;
 
@@ -115,7 +120,7 @@ describe("equals", () => {
     networkFee: 13,
     validUntilBlock: 1000,
     attributes: [],
-    scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
+    witnesses: [{ invocationScript: "ab", verificationScript: "cd" }],
     script: "00",
   };
 
@@ -127,7 +132,7 @@ describe("equals", () => {
     networkFee: 1,
     validUntilBlock: 1000,
     attributes: [],
-    scripts: [{ invocationScript: "ab", verificationScript: "cd" }],
+    witnesses: [{ invocationScript: "ab", verificationScript: "cd" }],
     script: "00",
   };
   const tx1 = new Transaction(obj1);
@@ -161,7 +166,7 @@ describe("Add Methods", () => {
       networkFee: 13,
       validUntilBlock: 1000,
       attributes: [],
-      scripts: [],
+      witnesses: [],
       script: "00",
     });
   }
@@ -201,8 +206,8 @@ describe("Add Methods", () => {
       verificationScript:
         "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4",
     });
-    expect(tx1.scripts[0].invocationScript.toBigEndian()).toBe("ab");
-    expect(tx1.scripts[0].verificationScript.toBigEndian()).toBe(
+    expect(tx1.witnesses[0].invocationScript.toBigEndian()).toBe("ab");
+    expect(tx1.witnesses[0].verificationScript.toBigEndian()).toBe(
       "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4"
     );
   });
@@ -212,13 +217,13 @@ describe("Add Methods", () => {
     const account = new Account(
       "9600debdb033bae62179baadb439c65088a450d5eecff782f641778fab23e21d"
     );
-    tx1.scripts = [];
+    tx1.witnesses = [];
     tx1.sign(account);
-    expect(tx1.scripts[0].verificationScript.toBigEndian()).toBe(
+    expect(tx1.witnesses[0].verificationScript.toBigEndian()).toBe(
       "0c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b410a906ad4"
     );
-    expect(tx1.scripts[0].invocationScript.toBigEndian()).toBe(
-      "40ab51e521a287dfeb83a51b1444ca31fbdc88d2181c156e65d30b3423d24bed693feb5ac8511c24efd766c664a3b09ec9cf2e24588226aab16175d84dc0fcbeea"
+    expect(tx1.witnesses[0].invocationScript.toBigEndian()).toBe(
+      "40fa815c5d09d985e1a083a6a8492b42c1bfe769bd792134b3dacac14020c089792bac252f73781658a2c0828fa0c132de9e8a0946293ab9b4750d5d38936f39d4"
     );
   });
 });
@@ -229,30 +234,22 @@ const dataSet = Object.keys(samples).map((k) => {
 });
 
 describe.each(dataSet)(
-  "%s",
-  (
-    txid: string,
-    serialized: string,
-    deserialized: Partial<TransactionLike>
-  ) => {
-    let tx: Transaction;
-    test("Serialize properly", () => {
-      tx = new Transaction(deserialized);
-      expect(tx.serialize()).toBe(serialized);
+  "transform %s",
+  (_: string, serialized: string, json: TransactionJson) => {
+    const neonObj = Transaction.fromJson(json);
+    const deserialized = Transaction.deserialize(serialized);
+    test("deserialize", () => {
+      expect(deserialized).toEqual(neonObj);
     });
 
-    test("Deserialize properly", () => {
-      tx = Transaction.deserialize(serialized);
-      expect(tx instanceof Transaction).toBeTruthy();
+    test("toJson", () => {
+      const result = deserialized.toJson();
+      expect(result).toEqual(json);
     });
 
-    test("exports properly", () => {
-      const result = tx.export();
-      expect(result).toEqual(deserialized);
-    });
-
-    test("produce correct hash", () => {
-      expect(tx.hash).toEqual(txid);
+    test("serialize", () => {
+      const result = deserialized.serialize(true);
+      expect(result).toEqual(serialized);
     });
   }
 );

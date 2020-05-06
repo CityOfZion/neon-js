@@ -2,7 +2,7 @@ import { num2hexstring, num2VarInt, StringStream, HexString } from "../../u";
 import { TxAttrUsage } from "./txAttrUsage";
 import { NeonObject } from "../../model";
 
-const maxTransactionAttributeSize = 65535;
+const maxTransactionAttributeSize = 252;
 
 export interface TransactionAttributeLike {
   usage: number | string;
@@ -10,7 +10,9 @@ export interface TransactionAttributeLike {
 }
 
 export interface TransactionAttributeJson {
+  // Name of TransactionAttributeUsage in English
   usage: string;
+  // Base64-encoded data
   data: string;
 }
 
@@ -44,9 +46,21 @@ export class TransactionAttribute
     return this.fromStream(ss);
   }
 
+  public static fromJson(
+    input: TransactionAttributeJson
+  ): TransactionAttribute {
+    return new TransactionAttribute({
+      usage: toTxAttrUsage(input.usage),
+      data: HexString.fromBase64(input.data, true),
+    });
+  }
+
   public static fromStream(ss: StringStream): TransactionAttribute {
     const usage = parseInt(ss.read(1), 16);
     const data: string = ss.readVarBytes();
+    if (data.length > maxTransactionAttributeSize * 2) {
+      throw new Error("Data too big! Only 252 bytes allowed in data");
+    }
     return new TransactionAttribute({ usage, data });
   }
 
@@ -68,6 +82,12 @@ export class TransactionAttribute
     this.data = HexString.fromHex(data);
   }
 
+  public get size(): number {
+    return (
+      1 + num2VarInt(this.data.byteLength).length / 2 + this.data.byteLength
+    );
+  }
+
   /**
    * @param url url string in ASCII format
    */
@@ -87,7 +107,7 @@ export class TransactionAttribute
       throw new Error(`Data size too big!`);
     }
     let out = num2hexstring(this.usage);
-    out += num2VarInt(this.data.length / 2);
+    out += num2VarInt(this.data.byteLength);
     out += this.data;
     return out;
   }
@@ -96,6 +116,13 @@ export class TransactionAttribute
     return {
       usage: this.usage,
       data: this.data.toBigEndian(),
+    };
+  }
+
+  public toJson(): TransactionAttributeJson {
+    return {
+      usage: TxAttrUsage[this.usage],
+      data: this.data.toBase64(true),
     };
   }
 

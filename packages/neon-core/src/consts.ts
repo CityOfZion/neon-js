@@ -1,5 +1,10 @@
 export const ADDR_VERSION = "35";
 
+export const MAGIC_NUMBER = {
+  MainNet: 5195086,
+  TestNet: 1951352142,
+};
+
 export const NATIVE_CONTRACTS: { [key: string]: string } = {
   NEO: "NEO",
   "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789": "NEO",

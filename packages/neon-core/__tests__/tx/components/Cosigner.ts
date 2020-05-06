@@ -1,6 +1,46 @@
-import { CosignerLike, Cosigner } from "../../../src/tx/components/Cosigner";
+import {
+  CosignerLike,
+  Cosigner,
+  CosignerJson,
+} from "../../../src/tx/components/Cosigner";
 import { WitnessScope } from "../../../src/tx/components/WitnessScope";
 import { StringStream } from "../../../src/u";
+
+const data: [string, string, CosignerJson][] = [
+  [
+    "default",
+    "000000000000000000000000000000000000000000",
+    { account: "0x0000000000000000000000000000000000000000", scopes: "Global" },
+  ],
+  [
+    "simple",
+    "010000000000000000000000000000000000000001",
+    {
+      account: "0x0000000000000000000000000000000000000001",
+      scopes: "CalledByEntry",
+    },
+  ],
+  [
+    "CustomContracts",
+    "010000000000000000000000000000000000000010010200000000000000000000000000000000000000",
+    {
+      account: "0x0000000000000000000000000000000000000001",
+      scopes: "CustomContracts",
+      allowedContracts: ["0x0000000000000000000000000000000000000002"],
+    },
+  ],
+  [
+    "CustomGroups",
+    "0100000000000000000000000000000000000000200103b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c",
+    {
+      account: "0x0000000000000000000000000000000000000001",
+      scopes: "CustomGroups",
+      allowedGroups: [
+        "03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c",
+      ],
+    },
+  ],
+];
 
 const defaultCosigner: CosignerLike = {
   account: "",
@@ -24,9 +64,6 @@ const fullCosigner: CosignerLike = {
     "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
   ],
 };
-
-const fullCosignerSerialized =
-  "dec317f6e4335db8a98418bd16960bf4e7fce4c731021443cf98eddbe047e198a3e5d57006311442a0ca1514a1760976db5fcdfab2a9930e8f6ce875b2d182250221031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c92102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef";
 
 describe("constructor & export", () => {
   test("default constructor & export", () => {
@@ -72,15 +109,23 @@ describe("add methods", () => {
   });
 });
 
-describe("serialize & deserialize", () => {
-  test("serialize", () => {
-    const cosigner = new Cosigner(fullCosigner);
-    expect(cosigner.serialize()).toBe(fullCosignerSerialized);
-  });
+describe.each(data)(
+  "transform %s",
+  (_: string, serialized: string, json: CosignerJson) => {
+    const neonObj = Cosigner.fromJson(json);
+    const deserialized = Cosigner.deserialize(new StringStream(serialized));
+    test("deserialize", () => {
+      expect(deserialized).toEqual(neonObj);
+    });
 
-  test("deserialize", () => {
-    expect(
-      Cosigner.deserialize(new StringStream(fullCosignerSerialized))
-    ).toStrictEqual(fullCosigner);
-  });
-});
+    test("toJson", () => {
+      const result = deserialized.toJson();
+      expect(result).toEqual(json);
+    });
+
+    test("serialize", () => {
+      const result = deserialized.serialize();
+      expect(result).toEqual(serialized);
+    });
+  }
+);

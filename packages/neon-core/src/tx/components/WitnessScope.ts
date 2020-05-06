@@ -26,3 +26,27 @@ export enum WitnessScope {
    */
   CustomGroups = 1 << 5,
 }
+
+export function parse(stringFlags: string): WitnessScope {
+  const flags = stringFlags.split(/\,/g);
+  return flags.reduce(
+    (p, c) => p | WitnessScope[c.trim() as keyof typeof WitnessScope],
+    WitnessScope.Global
+  );
+}
+
+function getEnums(): WitnessScope[] {
+  return Object.values(WitnessScope).filter(
+    (k) => typeof k === "number"
+  ) as WitnessScope[];
+}
+
+export function toString(flags: WitnessScope): string {
+  if (flags === WitnessScope.Global) {
+    return "Global";
+  }
+  return getEnums()
+    .filter((f) => flags & f)
+    .map((f) => WitnessScope[f])
+    .join(",");
+}

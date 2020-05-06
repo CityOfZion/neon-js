@@ -1,4 +1,8 @@
-import { WitnessScope } from "./WitnessScope";
+import {
+  WitnessScope,
+  parse as parseWitnessScope,
+  toString,
+} from "./WitnessScope";
 import { StringStream, num2hexstring, HexString } from "../../u";
 import { deserializeArrayOf, serializeArrayOf } from "../lib";
 
@@ -11,25 +15,40 @@ export interface CosignerLike {
 }
 
 export interface CosignerJson {
+  // Scripthash of the account (BE & Ox)
   account: string;
+  // Comma-delimited flags in English
   scopes: string;
+  // Array of scripthashes (BE & Ox)
   allowedContracts?: string[];
+  // Array of public keys (BE)
   allowedGroups?: string[];
 }
 
 export class Cosigner {
   /**
-   * script hash of cosigner
+   * scripthash of cosigner
    */
   public account: HexString;
+
   public scopes: WitnessScope;
+  /**
+   * List of scripthashes of allowed contracts. Only present when WitnessScope.CustomContracts is present in scopes.
+   */
   public allowedContracts: HexString[];
+  /**
+   * List of public keys of allowed groups. Only present when WitnessScope.CustomGroups is present in scopes.
+   */
   public allowedGroups: HexString[];
 
-  /**
-   * @description This limits maximum number of allowedContracts or allowedGroups here
-   */
-  private readonly MAX_SUB_ITEMS: number = 16;
+  public static fromJson(input: CosignerJson): Cosigner {
+    return new Cosigner({
+      account: input.account,
+      scopes: parseWitnessScope(input.scopes),
+      allowedContracts: input.allowedContracts ?? [],
+      allowedGroups: input.allowedGroups ?? [],
+    });
+  }
 
   public constructor(signer: Partial<CosignerLike | Cosigner> = {}) {
     const {
@@ -42,6 +61,18 @@ export class Cosigner {
     this.scopes = scopes & 0xff;
     this.allowedContracts = allowedContracts.map((i) => HexString.fromHex(i));
     this.allowedGroups = allowedGroups.map((i) => HexString.fromHex(i));
+  }
+
+  /**
+   * Returns the number of bytes this object will take when serialized.
+   */
+  public get size(): number {
+    return (
+      20 +
+      1 +
+      this.allowedContracts.length * 20 +
+      this.allowedGroups.length * 33
+    );
   }
 
   public addAllowedContracts(...contracts: string[]): void {
@@ -58,31 +89,28 @@ export class Cosigner {
       .forEach((i) => this.allowedGroups.push(i));
   }
 
-  public static deserialize(ss: StringStream): CosignerLike {
-    const account = ss.read(20);
+  public static deserialize(ss: StringStream): Cosigner {
+    const account = HexString.fromHex(ss.read(20), true);
     const scopes = parseInt(ss.read(), 16);
-
-    const readStringFromStream = (ss1: StringStream): string =>
-      ss1.readVarBytes();
 
     const allowedContracts =
       scopes & WitnessScope.CustomContracts
-        ? deserializeArrayOf(readStringFromStream, ss)
+        ? deserializeArrayOf((s) => HexString.fromHex(s.read(20), true), ss)
         : [];
     const allowedGroups =
       scopes & WitnessScope.CustomGroups
-        ? deserializeArrayOf(readStringFromStream, ss)
+        ? deserializeArrayOf((s) => HexString.fromHex(s.read(33)), ss)
         : [];
-    return { account, scopes, allowedContracts, allowedGroups };
+    return new Cosigner({ account, scopes, allowedContracts, allowedGroups });
   }
 
   public serialize(): string {
     let out = "";
-    out += this.account;
-    out += num2hexstring(this.scopes);
+    out += this.account.toLittleEndian();
+    out += num2hexstring(this.scopes, 1);
     if (this.scopes & WitnessScope.CustomContracts) {
       out += serializeArrayOf(
-        this.allowedContracts.map((i) => i.toBigEndian())
+        this.allowedContracts.map((i) => i.toLittleEndian())
       );
     }
     if (this.scopes & WitnessScope.CustomGroups) {
@@ -99,6 +127,24 @@ export class Cosigner {
       allowedContracts: [...this.allowedContracts.map((i) => i.toBigEndian())],
       allowedGroups: [...this.allowedGroups.map((i) => i.toBigEndian())],
     };
+  }
+
+  public toJson(): CosignerJson {
+    const output: CosignerJson = {
+      account: "0x" + this.account.toBigEndian(),
+      scopes: toString(this.scopes),
+    };
+    if (this.scopes & WitnessScope.CustomContracts) {
+      output.allowedContracts = [
+        ...this.allowedContracts.map((i) => "0x" + i.toBigEndian()),
+      ];
+    }
+    if (this.scopes & WitnessScope.CustomGroups) {
+      output.allowedGroups = [
+        ...this.allowedGroups.map((i) => i.toBigEndian()),
+      ];
+    }
+    return output;
   }
 }
 

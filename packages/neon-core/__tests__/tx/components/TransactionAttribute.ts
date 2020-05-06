@@ -1,6 +1,10 @@
-import TransactionAttribute, {
+import {
+  TransactionAttribute,
   TransactionAttributeLike,
+  TransactionAttributeJson,
 } from "../../../src/tx/components/TransactionAttribute";
+import { TxAttrUsage } from "../../../src/tx/components/txAttrUsage";
+import { HexString } from "../../../src/u";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -148,6 +152,47 @@ describe("deserialize", () => {
     (_msg: string, expected: TransactionAttributeLike, data: string) => {
       const result = TransactionAttribute.deserialize(data);
       expect(result.export()).toEqual(expected);
+    }
+  );
+});
+
+const jsonTestCases = [
+  [
+    "simple",
+    {
+      usage: "Url",
+      data: "d3d3LmV4YW1wbGUuY29t", // www.example.com
+    },
+    new TransactionAttribute({
+      usage: TxAttrUsage.Url,
+      data: HexString.fromHex("7777772e6578616d706c652e636f6d", true),
+    }),
+  ],
+];
+describe("JSON", () => {
+  test.each(jsonTestCases)(
+    "fromJson %s",
+    (
+      _: string,
+      json: TransactionAttributeJson,
+      neonObj: TransactionAttribute
+    ) => {
+      const result = TransactionAttribute.fromJson(json);
+
+      expect(result.usage).toBe(neonObj.usage);
+      expect(result.data.toBigEndian()).toBe(neonObj.data.toBigEndian());
+    }
+  );
+
+  test.each(jsonTestCases)(
+    "toJson %s",
+    (
+      _: string,
+      json: TransactionAttributeJson,
+      neonObj: TransactionAttribute
+    ) => {
+      const result = neonObj.toJson();
+      expect(result).toEqual(json);
     }
   );
 });

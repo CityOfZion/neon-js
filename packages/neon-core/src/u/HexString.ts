@@ -12,14 +12,14 @@ export class HexString {
   /**
    * Will store value in big endian
    */
-  private _value: string;
+  #value: string;
 
   public get length(): number {
-    return this._value.length;
+    return this.#value.length;
   }
 
   public get byteLength(): number {
-    return this._value.length / 2;
+    return this.#value.length / 2;
   }
 
   public assert(value: string): void {
@@ -36,25 +36,25 @@ export class HexString {
       value = value.slice(2);
     }
     this.assert(value);
-    this._value = littleEndian ? reverseHex(value) : value;
+    this.#value = littleEndian ? reverseHex(value) : value;
   }
 
   public toString(): string {
-    return this._value;
+    return this.#value;
   }
 
   /**
    * Export as big endian string
    */
   public toBigEndian(): string {
-    return this._value;
+    return this.#value;
   }
 
   /**
    * Export as little endian string
    */
   public toLittleEndian(): string {
-    return reverseHex(this._value);
+    return reverseHex(this.#value);
   }
 
   /**
