@@ -63,8 +63,8 @@ export class Notifications {
   }
 
   /**
-   * Unsubscribe all callbacks from a specific contract
-   * @param contract - Hash of the contract (null for all contracts) to unsubscribe callbacks from
+   * Unsubscribe all subscriptions associated with a specific contract
+   * @param contract - Hash of the contract (or null for subscriptions to all contracts) to unsubscribe callbacks from
    */
   public unsubscribeContract(contract: string | null) {
     if (!this.subscriptions.has(contract)) {
@@ -75,7 +75,7 @@ export class Notifications {
   }
 
   /**
-   * Unsubscribe all callbacks from all contracts
+   * Unsubscribe all subscriptions (equivalent to calling unsubscribeContract() once for every contract)
    */
   public unsubscribeAll() {
     for (const contract of this.subscriptions.keys()) {
