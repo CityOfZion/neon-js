@@ -182,7 +182,7 @@ export class Transaction implements NeonObject<TransactionLike> {
    */
   public hash(networkMagic: number): string {
     return reverseHex(
-      hash256(num2hexstring(networkMagic, 4) + this.serialize(false))
+      hash256(num2hexstring(networkMagic, 4, true) + this.serialize(false))
     );
   }
 

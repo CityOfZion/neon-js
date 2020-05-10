@@ -6,6 +6,7 @@ import {
 } from "../../../src/tx";
 import samples from "./Transaction.json";
 import { Account } from "../../../src/wallet";
+import { MAGIC_NUMBER } from "../../../src/consts";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -63,16 +64,6 @@ describe("getters", () => {
       networkFee: 4,
     });
     expect(tx.fees).toBe(6);
-  });
-
-  test("hash", () => {
-    const tx = new Transaction({
-      nonce: 12345,
-      validUntilBlock: 1000,
-    });
-    expect(tx.hash).toBe(
-      "4c5f49fd484037109d11358c6054f637c0414ee4018a91316e0925a87fe26ac0"
-    );
   });
 
   test("signers", () => {
@@ -235,7 +226,7 @@ const dataSet = Object.keys(samples).map((k) => {
 
 describe.each(dataSet)(
   "transform %s",
-  (_: string, serialized: string, json: TransactionJson) => {
+  (txid: string, serialized: string, json: TransactionJson) => {
     const neonObj = Transaction.fromJson(json);
     const deserialized = Transaction.deserialize(serialized);
     test("deserialize", () => {
@@ -250,6 +241,11 @@ describe.each(dataSet)(
     test("serialize", () => {
       const result = deserialized.serialize(true);
       expect(result).toEqual(serialized);
+    });
+
+    test("hash", () => {
+      const result = neonObj.hash(MAGIC_NUMBER.TestNet);
+      expect(result).toEqual(txid);
     });
   }
 );
