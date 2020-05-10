@@ -6,11 +6,12 @@ const log = logging.default("api");
 
 interface ContractSubscriptions {
   websocket: WebSocket;
-  callbacks: CallbackFunction[];
+  callbacks: Map<number, CallbackFunction>;
 }
 
 export class Notifications {
   private url: string;
+  private uniqueIdentifier: number;
 
   public get name(): string {
     return `Notifications[${this.url}]`;
@@ -23,6 +24,7 @@ export class Notifications {
    * @param url - URL of a notifications service.
    */
   public constructor(url: string) {
+    this.uniqueIdentifier = 0;
     this.url = settings.networks[url]?.extra?.notifications ?? url;
     this.subscriptions = new Map<string | null, ContractSubscriptions>();
     log.info(`Created Notifications Provider: ${this.url}`);
@@ -38,23 +40,19 @@ export class Notifications {
     contract: string | null,
     callback: CallbackFunction
   ): Subscription {
+    const subscriptionIdentifier = this.uniqueIdentifier++;
     const contractSubscriptions =
       this.subscriptions.get(contract) ??
       this.createWebsocketForContract(contract);
-    contractSubscriptions.callbacks.push(callback);
+    contractSubscriptions.callbacks.set(subscriptionIdentifier, callback);
     const unsubscribe = () => {
-      if (!this.subscriptions.has(contract)) {
-        // Needed because user might have called unsubscribeAll() before
+      const callbacksMaps = this.subscriptions.get(contract)?.callbacks;
+      if (!callbacksMaps?.get(subscriptionIdentifier)) {
+        // Check if the subscription hasn't been killed before
         return;
       }
-      const subscriptions = this.subscriptions.get(contract)!;
-      const index = subscriptions.callbacks.indexOf(callback);
-      if (index === -1) {
-        // Could happen if unsubscribeAll() followed by subscribe() are called on the same contract
-        return;
-      }
-      if (subscriptions.callbacks.length > 1) {
-        subscriptions.callbacks.splice(index, 1);
+      if (callbacksMaps.size > 1) {
+        callbacksMaps.delete(subscriptionIdentifier);
       } else {
         this.unsubscribeContract(contract);
       }
@@ -90,13 +88,13 @@ export class Notifications {
       this.url + (contract !== null ? "?contract=" + contract : "")
     );
     ws.onmessage = (event: WebSocket.MessageEvent) => {
-      for (const cb of this.subscriptions.get(contract)!.callbacks) {
+      for (const cb of this.subscriptions.get(contract)!.callbacks.values()) {
         cb(JSON.parse(event.data as string) as NotificationMessage);
       }
     };
     const contractSubscriptions = {
       websocket: ws,
-      callbacks: []
+      callbacks: new Map<number, CallbackFunction>()
     };
     this.subscriptions.set(contract, contractSubscriptions);
     return contractSubscriptions;
