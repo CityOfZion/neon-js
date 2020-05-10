@@ -87,6 +87,15 @@ describe("subscribe", () => {
     triggerWebsocketSampleEvent();
     expect(callback).toBeCalledTimes(2);
   });
+  test("subscription name is correct", async () => {
+    const subscriptions = new notifications("UnitTestNet");
+    const subscription = subscriptions.subscribe(contract, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
+    expect(subscription.name).toBe(`Subscription[${contract}]`);
+  });
+  test("null subscription is accepted", async () => {
+    const subscriptions = new notifications("UnitTestNet");
+    subscriptions.subscribe(null, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
+  });
 });
 
 describe("unsubscribe", () => {
