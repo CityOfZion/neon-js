@@ -38,6 +38,13 @@ export class Witness implements NeonObject<WitnessLike> {
     return this.fromStream(ss);
   }
 
+  public static fromJson(input: WitnessJson): Witness {
+    return new Witness({
+      invocationScript: HexString.fromBase64(input.invocation),
+      verificationScript: HexString.fromBase64(input.verification),
+    });
+  }
+
   public static fromStream(ss: StringStream): Witness {
     const invocationScript = ss.readVarBytes();
     const verificationScript = ss.readVarBytes();
@@ -113,10 +120,13 @@ export class Witness implements NeonObject<WitnessLike> {
   public invocationScript: HexString;
   public verificationScript: HexString;
 
-  private _scriptHash = "";
+  #scriptHash = "";
 
   public constructor(obj: Partial<WitnessLike | Witness> = {}) {
-    if (!obj.invocationScript || !obj.verificationScript) {
+    if (
+      typeof obj.invocationScript === "undefined" ||
+      typeof obj.verificationScript === "undefined"
+    ) {
       throw new Error(
         "Witness requires invocationScript and verificationScript fields"
       );
@@ -125,14 +135,23 @@ export class Witness implements NeonObject<WitnessLike> {
     this.verificationScript = HexString.fromHex(obj.verificationScript);
   }
 
+  public get size(): number {
+    return (
+      num2VarInt(this.invocationScript.byteLength).length / 2 +
+      num2VarInt(this.verificationScript.byteLength).length / 2 +
+      this.verificationScript.byteLength +
+      this.invocationScript.byteLength
+    );
+  }
+
   public get scriptHash(): string {
-    if (this._scriptHash) {
-      return this._scriptHash;
+    if (this.#scriptHash) {
+      return this.#scriptHash;
     } else if (this.verificationScript) {
-      this._scriptHash = reverseHex(
+      this.#scriptHash = reverseHex(
         hash160(this.verificationScript.toBigEndian())
       );
-      return this._scriptHash;
+      return this.#scriptHash;
     } else {
       throw new Error(
         "Unable to produce scriptHash from empty verificationScript"
@@ -141,10 +160,13 @@ export class Witness implements NeonObject<WitnessLike> {
   }
 
   public serialize(): string {
-    const invoLength = num2VarInt(this.invocationScript.length / 2);
-    const veriLength = num2VarInt(this.verificationScript.length / 2);
+    const invoLength = num2VarInt(this.invocationScript.byteLength);
+    const veriLength = num2VarInt(this.verificationScript.byteLength);
     return (
-      invoLength + this.invocationScript + veriLength + this.verificationScript
+      invoLength +
+      this.invocationScript.toBigEndian() +
+      veriLength +
+      this.verificationScript.toBigEndian()
     );
   }
 
@@ -152,6 +174,13 @@ export class Witness implements NeonObject<WitnessLike> {
     return {
       invocationScript: this.invocationScript.toBigEndian(),
       verificationScript: this.verificationScript.toBigEndian(),
+    };
+  }
+
+  public toJson(): WitnessJson {
+    return {
+      invocation: this.invocationScript.toBase64(),
+      verification: this.verificationScript.toBase64(),
     };
   }
 
@@ -163,7 +192,7 @@ export class Witness implements NeonObject<WitnessLike> {
   }
 
   private generateScriptHash(): void {
-    this._scriptHash = reverseHex(
+    this.#scriptHash = reverseHex(
       hash160(this.verificationScript.toBigEndian())
     );
   }

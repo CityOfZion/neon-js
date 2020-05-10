@@ -1,4 +1,10 @@
-import { StringStream, fixed82num, ensureHex, reverseHex } from "../../u";
+import {
+  StringStream,
+  fixed82num,
+  ensureHex,
+  reverseHex,
+  HexString,
+} from "../../u";
 import { TransactionAttribute, Witness, Cosigner } from "../components";
 import { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
@@ -31,7 +37,7 @@ export function deserializeSender(
   ss: StringStream,
   tx: Partial<TransactionLike> = {}
 ): Partial<TransactionLike> {
-  return Object.assign(tx, { sender: ss.read(20) });
+  return Object.assign(tx, { sender: HexString.fromHex(ss.read(20), true) });
 }
 
 export function deserializeScript(
@@ -77,10 +83,10 @@ export function deserializeWitnesses(
   ss: StringStream,
   tx: Partial<TransactionLike>
 ): Partial<TransactionLike> {
-  const scripts = deserializeArrayOf(Witness.fromStream, ss).map((i) =>
+  const witnesses = deserializeArrayOf(Witness.fromStream, ss).map((i) =>
     i.export()
   );
-  return Object.assign(tx, { scripts });
+  return Object.assign(tx, { witnesses });
 }
 
 export function formatSender(sender: string | undefined): string {

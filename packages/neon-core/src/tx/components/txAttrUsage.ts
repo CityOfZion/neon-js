@@ -3,7 +3,7 @@
  * @enum {number}
  */
 export enum TxAttrUsage {
-  Url = 129,
+  Url = 0x81,
 }
 
 export default TxAttrUsage;

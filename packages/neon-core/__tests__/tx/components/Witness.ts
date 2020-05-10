@@ -1,4 +1,7 @@
-import Witness, { WitnessLike } from "../../../src/tx/components/Witness";
+import Witness, {
+  WitnessLike,
+  WitnessJson,
+} from "../../../src/tx/components/Witness";
 import { Account } from "../../../src/wallet";
 
 describe("constructor", () => {
@@ -233,4 +236,53 @@ describe.skip("buildMultiSig", () => {
       Witness.buildMultiSig(msg, oneSig, verificationScript);
     expect(throwingFunc).toThrowError("Insufficient signatures");
   });
+});
+
+describe("JSON", () => {
+  const jsonTestCases = [
+    [
+      "simple",
+      {
+        invocation: "",
+        verification: "EQ==",
+      },
+      new Witness({ invocationScript: "", verificationScript: "11" }),
+    ],
+    [
+      "default signature",
+      {
+        invocation:
+          "DECqoD8xx+zU9VPhMCmlISYva0FF0BeCkuKgwW2VoxW4L9CcNNoxlXpYJtiizHQ+6J5xRnVeaRQkKv/mCFnKuNWA",
+        verification:
+          "DCEDsCEs9Ku10XHujYF4o20J7zHCb1PJsxW0lG/0P68mlvALQQqQatQ=",
+      },
+      new Witness({
+        invocationScript:
+          "0c40aaa03f31c7ecd4f553e13029a521262f6b4145d0178292e2a0c16d95a315b82fd09c34da31957a5826d8a2cc743ee89e7146755e6914242affe60859cab8d580",
+        verificationScript:
+          "0c2103b0212cf4abb5d171ee8d8178a36d09ef31c26f53c9b315b4946ff43faf2696f00b410a906ad4",
+      }),
+    ],
+  ];
+
+  test.each(jsonTestCases)(
+    "fromJson %s",
+    (_: string, json: WitnessJson, neonObj: Witness) => {
+      const result = Witness.fromJson(json);
+      expect(result.invocationScript.toBigEndian()).toBe(
+        neonObj.invocationScript.toBigEndian()
+      );
+      expect(result.verificationScript.toBigEndian()).toBe(
+        neonObj.verificationScript.toBigEndian()
+      );
+    }
+  );
+
+  test.each(jsonTestCases)(
+    "toJson %s",
+    (_: string, json: WitnessJson, neonObj: Witness) => {
+      const result = neonObj.toJson();
+      expect(result).toEqual(json);
+    }
+  );
 });
