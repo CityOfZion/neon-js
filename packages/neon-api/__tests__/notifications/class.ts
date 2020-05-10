@@ -55,10 +55,10 @@ const sampleEvent = {
   txid: "0xd6f5185a19abad3f3bbea88ac4ec63b449ac38908bd7761dce75e445502bc76f"
 };
 
-function triggerWebsocketSampleEvent(){
-    WebSocket.mock.instances[0].onmessage({
-      data: JSON.stringify(sampleEvent)
-    });
+function triggerWebsocketSampleEvent() {
+  WebSocket.mock.instances[0].onmessage({
+    data: JSON.stringify(sampleEvent)
+  });
 }
 
 describe("subscribe", () => {

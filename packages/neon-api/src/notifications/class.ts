@@ -103,12 +103,12 @@ export class Notifications {
   }
 
   private normalizeContract(contract: string | null): string | null {
-    if(contract === null){
+    if (contract === null) {
       return null;
-    } else if (contract.slice(0,2)==="0x"){
+    } else if (contract.slice(0, 2) === "0x") {
       return contract;
     } else {
-      return "0x"+contract;
+      return "0x" + contract;
     }
   }
 }
