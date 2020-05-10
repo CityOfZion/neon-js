@@ -40,6 +40,7 @@ export class Notifications {
     contract: string | null,
     callback: CallbackFunction
   ): Subscription {
+    contract = this.normalizeContract(contract);
     const subscriptionIdentifier = this.uniqueIdentifier++;
     const contractSubscriptions =
       this.subscriptions.get(contract) ??
@@ -65,6 +66,7 @@ export class Notifications {
    * @param contract - Hash of the contract (or null for subscriptions to all contracts) to unsubscribe callbacks from
    */
   public unsubscribeContract(contract: string | null) {
+    contract = this.normalizeContract(contract);
     if (!this.subscriptions.has(contract)) {
       return; // Not throwing an exception in order to allow unlimited calling of this function
     }
@@ -98,6 +100,16 @@ export class Notifications {
     };
     this.subscriptions.set(contract, contractSubscriptions);
     return contractSubscriptions;
+  }
+
+  private normalizeContract(contract: string | null): string | null {
+    if(contract === null){
+      return null;
+    } else if (contract.slice(0,2)==="0x"){
+      return contract;
+    } else {
+      return "0x"+contract;
+    }
   }
 }
 
