@@ -93,8 +93,10 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - run: |
-        curl -d '{"jsonrpc": "2.0","method": "getversion", "params": [],"id": 3}' -H 'Content-Type: application/json' http://localhost:20332
+      - run:
+          name: Test privatenet
+          command: |
+            curl -d '{"jsonrpc": "2.0","method": "getversion", "params": [],"id": 3}' -H 'Content-Type: application/json' http://localhost:20332
       - run: mkdir reports
       - run:
           name: Integration Tests
