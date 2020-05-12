@@ -3,6 +3,12 @@ defaults: &defaults
   docker:
     - image: circleci/node:10-stretch
 
+integration: &integration
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:10-stretch
+      - image: snowypowers/neo-privatenet:v3.0.0-preview2
+
 version: 2
 jobs:
   setup:
@@ -82,11 +88,12 @@ jobs:
           path: reports
 
   integration-test:
-    <<: *defaults
+    <<: *integration
     steps:
       - checkout
       - attach_workspace:
           at: .
+      - run: curl -d '{"jsonrpc": "2.0","method": "getversion", "params": [],"id": 3}' -H 'Content-Type: application/json' http://localhost:20332
       - run: mkdir reports
       - run:
           name: Integration Tests
