@@ -12,7 +12,6 @@ Neon.claimGas(config);
 Neon.doinvoke(config);
 
 api.neoscan.getBalance("http://www.neoscan-testnet.io/test_net/v1/", address);
-api.notifications.subscribe(contractHash, console.log);
 api.sendAsset(config);
 ```
 
@@ -84,7 +83,9 @@ const neonDBBalance = await mainNetNeonDB.getBalance(addr);
 
 console.log(neoscanBalance.equals(neonDBBalance)); // They should be the same datastructure with the same information
 
-mainNetNotifications.subscribe("0x314b5aac1cdd01d10661b00886197f2194c3c89b", (event) => {
+const subscription = mainNetNotifications.subscribe("0x314b5aac1cdd01d10661b00886197f2194c3c89b", (event) => {
   console.log(event); // Print the events being received in real time
-})
+});
+
+subscription.unsubscribe(); // Unsubscribe the previous subscription
 ```

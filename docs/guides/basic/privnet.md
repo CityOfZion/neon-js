@@ -60,7 +60,7 @@ privateNetNeoscan.getBalance(address).then(res => console.log(res));
 
 We should be able to see a printout of the balance of the address if it is successful.
 
-Finally, if you want to have access to event notifications, you'll have to run the notification server locally and add it's url to the network configuration:
+Finally, if you want to have access to event notifications, you'll have to run the notification server locally and add its url to the network configuration:
 
 ```js
 const config = {
