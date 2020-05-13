@@ -38,6 +38,8 @@
 			- [getvalidators](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getvalidators/demo)
 		- [Get Version](#get-version)
 			- [getversion](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getassetstate/demo)
+		- [Subscribe to Notifications](#subscribe-notifications)
+			- [subscribe](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/subscribenotifications/demo)
 		- [Invoke](#invoke)
 			- [doinvoke](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/doinvoke/demo)
 		- [Invoke Function](#invoke-function)
@@ -239,6 +241,16 @@ Gets version information of this node.
 JSFiddle: [getversion](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/getversion/demo)
 
 API Ref: https://docs.neo.org/en-us/node/cli/2.9.0/api/getversion.html
+
+#### Subscribe Notifications
+
+subscribe(scriptHash, callback)
+
+Subscribe to receive event notifications from a contract.
+
+JSFiddle: [invoke](https://jsfiddle.net/gh/get/jquery/3.0/cityofzion/neon-js/tree/master/examples/browser/subscribenotifications/demo)
+
+API Ref: https://github.com/corollari/neo-PubSub
 
 #### Invoke
 
