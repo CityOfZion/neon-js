@@ -38,9 +38,8 @@ They operate by taking in a configuration object which contains all the informat
 ```js
 const provider = new Neon.api.neoscan.instance('TestNet')
 const config = {
-  provider: provider,
-  address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW',
-  privateKey: '7d128a6d096f0c14c3a25a2b0c41cf79661bfcb4a8cc95aaaea28bde4d732344'
+  api: provider,
+  account: new Neon.wallet.Account('MY_ADDRESS_PRIVATE_KEY')
 }
 Neon.api.claimGas(config)
 .then((conf) => {
