@@ -37,9 +37,9 @@ There are 3 core methods that covers majority of the functionality that is requi
 They operate by taking in a configuration object which contains all the information necessary to request, construct and send a transaction. At the end, the same configuration object is returned and you may inspect the `response` property to check for the success of your transaction.
 
 ```js
-const provider = Neon.api.neoscan.instance('TestNet')
+const provider = new Neon.api.neoscan.instance('TestNet')
 const config = {
-  provider: 'TestNet'
+  provider: provider,
   address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW',
   privateKey: '7d128a6d096f0c14c3a25a2b0c41cf79661bfcb4a8cc95aaaea28bde4d732344'
 }
@@ -75,9 +75,9 @@ Providers are external services that provide information that is not easily gath
 The available providers are `neoscan`, `neonDB` and `notifications`. The first two are interfaces that translate the different REST responses into uniform data structures that are used by other `neon-js` modules, while the `notifications` interface handles subscriptions to a live feed of events being triggered inside a smart contract.
 
 ```js
-const mainNetNeoscan = api.neocan.instance("MainNet");
-const mainNetNeonDB = api.neonDB.instance("MainNet");
-const mainNetNotifications = api.notifications.instance("MainNet");
+const mainNetNeoscan = new api.neocan.instance("MainNet");
+const mainNetNeonDB = new api.neonDB.instance("MainNet");
+const mainNetNotifications = new api.notifications.instance("MainNet");
 
 const neoscanBalance = await mainNetNeoscan.getBalance(addr);
 const neonDBBalance = await mainNetNeonDB.getBalance(addr);
