@@ -13,11 +13,15 @@ const TESTNET_URLS = [
   "http://seed5t.neo.org:20332",
 ];
 
+const LOCALNET_URLS = ["http://localhost:20332"];
+
 let client: rpc.RPCClient;
 const address = "NXFprNJ9tBk4ziUaq2b9b2DtWQ1Vv2uLn3";
 const privateKey =
   "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69";
-const contractHash = "101fe52cabcfccddd477a0001c4ab6c7e9be6a7c";
+
+// NEO contract hash. Should be same across TestNet or LocalNet.
+const contractHash = "8c23f196d8a1bfd103a9dcb1f9ccf0c611377d3b";
 
 async function safelyCheckHeight(url: string): Promise<number> {
   try {
@@ -31,9 +35,12 @@ async function safelyCheckHeight(url: string): Promise<number> {
 }
 
 beforeAll(async () => {
-  const data = await Promise.all(
-    TESTNET_URLS.map((url) => safelyCheckHeight(url))
-  );
+  console.log(global["__TARGETNET__"]);
+  const urls =
+    (global["__TARGETNET__"] as string).toLowerCase() === "testnet"
+      ? TESTNET_URLS
+      : LOCALNET_URLS;
+  const data = await Promise.all(urls.map((url) => safelyCheckHeight(url)));
   const heights = data.map((h, i) => ({ height: h, url: TESTNET_URLS[i] }));
   const best = heights.reduce(
     (bestSoFar, h) => (bestSoFar.height >= h.height ? bestSoFar : h),
@@ -100,22 +107,34 @@ describe("RPC Methods", () => {
   describe("getBlock", () => {
     test("height as index, verbose = 0", async () => {
       const result = await client.getBlock(0);
-      expect(result).toBe(
-        "00000000000000000000000000000000000000000000000000000000000000000000000042f5f271197611e4abafd359cec7094203878ebcd1856ab2288a0ce27daeea9788ea19ef550100000000000042218a992bdd8b981607766347e1ae195c3959cd0100011102001dac2b7c000000000000000000ca61e52e881d41374e640f819cd118cc153b21a7000000000000000000000000000000000000000000000541123e7fe801000111"
-      );
+      expect(result).toBeDefined();
     });
 
     test("height as index, verbose = true", async () => {
       const result = await client.getBlock(0, true);
-      expect(result).toMatchObject(REFERENCE_BLOCK);
+      expect(Object.keys(result).sort()).toEqual(
+        [
+          "hash",
+          "size",
+          "version",
+          "previousblockhash",
+          "merkleroot",
+          "time",
+          "index",
+          "nextconsensus",
+          "witnesses",
+          "consensus_data",
+          "tx",
+          "confirmations",
+          "nextblockhash",
+        ].sort()
+      );
     });
 
     test("hash as index, verbose = 1", async () => {
-      const result = await client.getBlock(
-        "95380d2d8601a0e0d97fbe95c43cbc07e1d9ba6473ea5ddc39b8c381f3e3ae85",
-        1
-      );
-      expect(result).toMatchObject(REFERENCE_BLOCK);
+      const reference = await client.getBlock(0, 1);
+      const result = await client.getBlock(reference.hash, 1);
+      expect(result.hash).toEqual(reference.hash);
     });
   });
 

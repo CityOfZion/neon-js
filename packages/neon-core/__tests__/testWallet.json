@@ -1,0 +1,107 @@
+{
+    "name": null,
+    "version": "3.0",
+    "scrypt": {
+        "n": 16384,
+        "r": 8,
+        "p": 8
+    },
+    "accounts": [
+        {
+            "address": "NMPAXGtMfZ8s8rcfP9JhrYrNeZHG4xSVmd",
+            "label": "A",
+            "isDefault": false,
+            "lock": false,
+            "key": "6PYWdzMKJ1tAAPFFqR3ZtWGf6EyvbzZRCMcH7346uDV1u2vBmKvMYTosR6",
+            "contract": {
+                "script": "DCECAoqZgm7cDJfRjiK2kyNz2QjTI6p/kmVqd\u002Bwm6IYWme8LQQqQatQ=",
+                "parameters": [
+                    {
+                        "name": "signature",
+                        "type": "Signature"
+                    }
+                ],
+                "deployed": false
+            },
+            "extra": null
+        },
+        {
+            "address": "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
+            "label": "B",
+            "isDefault": false,
+            "lock": false,
+            "key": "6PYLxXgqE788BiHt59NZUqyVpj5i8QxVkPNjMGnsHAfnud4oMcXHwkVbuM",
+            "contract": {
+                "script": "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQQqQatQ=",
+                "parameters": [
+                    {
+                        "name": "signature",
+                        "type": "Signature"
+                    }
+                ],
+                "deployed": false
+            },
+            "extra": null
+        },
+        {
+            "address": "NTFAwXLGoiWwSMP5vJyZp8K4cBFwrzUs8m",
+            "label": "C",
+            "isDefault": false,
+            "lock": false,
+            "key": "6PYRoabFowVfTfNBCFWANiXm3Ct6oeRSMVHXQEVZChJWsrMiDAVraubp7v",
+            "contract": {
+                "script": "DCECIyzo0uIGPc4EURMYUdR0Ib/E/B2k2xFvylMCwHVkYvoLQQqQatQ=",
+                "parameters": [
+                    {
+                        "name": "signature",
+                        "type": "Signature"
+                    }
+                ],
+                "deployed": false
+            },
+            "extra": null
+        },
+        {
+            "address": "NePKgynuBvFdRYAiiY1nt7q7gnn8st7E4b",
+            "label": "origin multisig",
+            "isDefault": false,
+            "lock": false,
+            "key": "6PYWdzMKJ1tAAPFFqR3ZtWGf6EyvbzZRCMcH7346uDV1u2vBmKvMYTosR6",
+            "contract": {
+                "script": "EQwhAgKKmYJu3AyX0Y4itpMjc9kI0yOqf5JlanfsJuiGFpnvEQtBMHOzuw==",
+                "parameters": [
+                    {
+                        "name": "parameter0",
+                        "type": "Signature"
+                    }
+                ],
+                "deployed": false
+            },
+            "extra": {
+                "description": " This is the origin address which all the NEO/GAS will start. This account is a multisig account of only 1 key. "
+            }
+        },
+        {
+            "address": "NPAMBaHW6RU9Kn3PhGg7WxjMEJNdpukdUo",
+            "label": "origin base",
+            "isDefault": false,
+            "lock": false,
+            "key": "6PYSjL4R5tRioqmERJK1F4jpgNHv45VeWDYDAcUs8DdL86pahDn2AHT276",
+            "contract": {
+                "script": "DCEDEYoreWL6Aib6Naz10iSFW2kcfql40a/ixThjHV976F4LQQqQatQ=",
+                "parameters": [
+                    {
+                        "name": "signature",
+                        "type": "Signature"
+                    }
+                ],
+                "deployed": false
+            },
+            "extra": null
+        }
+    ],
+    "extra": {
+        "password": "wallet",
+        "description": "seed wallet for solonet 3.0.0-preview2-00"
+    }
+}

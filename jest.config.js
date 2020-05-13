@@ -3,21 +3,22 @@ module.exports = {
   globals: {
     "ts-jest": {
       tsConfig: "<rootDir>/tsconfig-test.json",
-      diagnostics: false
-    }
+      diagnostics: false,
+    },
+    __TARGETNET__: "LocalNet",
   },
   watchPlugins: [
     "jest-watch-typeahead/filename",
-    "jest-watch-typeahead/testname"
+    "jest-watch-typeahead/testname",
   ],
   transform: {
-    "^.+\\.tsx?$": "ts-jest"
+    "^.+\\.tsx?$": "ts-jest",
   },
   coveragePathIgnorePatterns: [
     "<rootDir>/packages/.*/lib/",
-    "<rootDir>/packages/.*/dist/"
+    "<rootDir>/packages/.*/dist/",
   ],
   testRegex:
     "(/packages/.*/__(tests|integration)__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"]
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 };
