@@ -10,7 +10,7 @@ const mockProvider: Provider = {
   getHeight: jest.fn(),
   getMaxClaimAmount: jest.fn(),
   getRPCEndpoint: jest.fn(),
-  getTransactionHistory: jest.fn()
+  getTransactionHistory: jest.fn(),
 };
 
 describe("checkProperty", () => {
@@ -39,7 +39,7 @@ describe("modifyTransactionForEmptyTransaction", () => {
       api: mockProvider,
       account: new wallet.Account("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"),
       tx: new tx.InvocationTransaction(),
-      script: ""
+      script: "",
     };
 
     const result = await common.modifyTransactionForEmptyTransaction(config);
@@ -51,8 +51,8 @@ describe("modifyTransactionForEmptyTransaction", () => {
       api: mockProvider,
       account: new wallet.Account("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"),
       tx: new tx.ContractTransaction({
-        inputs: [{ prevHash: "", prevIndex: 0 }]
-      })
+        inputs: [{ prevHash: "", prevIndex: 0 }],
+      }),
     };
 
     const result = await common.modifyTransactionForEmptyTransaction(config);
@@ -67,12 +67,12 @@ describe("getVerificationSignatureForSmartContract", () => {
     const smartContractScriptHash = "1234";
     const mockExecute = jest.fn(() => ({
       result: {
-        parameters: [1, 2]
-      }
+        parameters: [1, 2],
+      },
     }));
     const mockGetContractState = jest.fn().mockImplementation(() => {
       return {
-        execute: mockExecute
+        execute: mockExecute,
       };
     });
     rpc.Query.getContractState = mockGetContractState;
@@ -85,7 +85,7 @@ describe("getVerificationSignatureForSmartContract", () => {
     expect(result).toEqual(
       expect.objectContaining({
         invocationScript: "0000",
-        verificationScript: ""
+        verificationScript: "",
       })
     );
     expect(mockGetContractState).toBeCalledWith(smartContractScriptHash);
@@ -100,8 +100,8 @@ describe("extractDump", () => {
       address: "nonsensitive",
       nested: {
         a: 1,
-        b: 2
-      }
+        b: 2,
+      },
     };
     const result = common.extractDump(config);
 
@@ -117,8 +117,8 @@ describe("extractDump", () => {
       address: "nonsensitive",
       nested: {
         a: 1,
-        b: 2
-      }
+        b: 2,
+      },
     };
     const result = common.extractDump(config);
 

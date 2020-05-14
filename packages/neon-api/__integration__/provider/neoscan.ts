@@ -10,8 +10,8 @@ const addr = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
 neonJs.settings.networks[net] = new rpc.Network({
   Name: "MainNet",
   ExtraConfiguration: {
-    neoscan: "https://api.neoscan.io/api/main_net"
-  }
+    neoscan: "https://api.neoscan.io/api/main_net",
+  },
 });
 
 const provider = new neonJs.api.neoscan.instance("MainNet");

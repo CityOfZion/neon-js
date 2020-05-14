@@ -42,7 +42,7 @@ export class TransactionInput {
   public export(): TransactionInputLike {
     return {
       prevHash: this.prevHash,
-      prevIndex: this.prevIndex
+      prevIndex: this.prevIndex,
     };
   }
 

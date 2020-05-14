@@ -6,7 +6,7 @@ const nodes = [
   { height: 3, url: "https://url3.com/bv/adsf/" },
   { height: 4, url: "http://url4.io" },
   { height: 5, url: "https://www.url5.com" },
-  { height: 6, url: "url6:2134" }
+  { height: 6, url: "url6:2134" },
 ];
 
 describe("filterHttpsOnly", () => {

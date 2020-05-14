@@ -2,7 +2,7 @@ import {
   balancedApproach,
   biggestFirst,
   calculationStrategyFunction,
-  smallestFirst
+  smallestFirst,
 } from "../../src/tx/strategy";
 import { Fixed8 } from "../../src/u";
 import { AssetBalance } from "../../src/wallet/components";
@@ -20,10 +20,10 @@ describe("Strategy", () => {
       new Coin({ txid: "4", value: 4 }),
       new Coin({ txid: "5", value: 5 }),
       new Coin({ txid: "6", value: 6 }),
-      new Coin({ txid: "7", value: 7 })
+      new Coin({ txid: "7", value: 7 }),
     ];
     assetBalance = new AssetBalance({
-      unspent: coins.slice(0)
+      unspent: coins.slice(0),
     });
   });
 
@@ -31,7 +31,7 @@ describe("Strategy", () => {
     test.each([
       ["smallestFirst", smallestFirst],
       ["biggestFirst", biggestFirst],
-      ["balancedApproach", balancedApproach]
+      ["balancedApproach", balancedApproach],
     ])("%s", (msg: string, func: calculationStrategyFunction) => {
       const f = () => func(assetBalance, new Fixed8(100));
       expect(f).toThrow("Insufficient assets");
@@ -73,7 +73,7 @@ describe("Strategy", () => {
           coins[1],
           coins[2],
           coins[3],
-          coins[4]
+          coins[4],
         ])
       );
     });
@@ -88,7 +88,7 @@ describe("Strategy", () => {
           coins[3],
           coins[4],
           coins[5],
-          coins[6]
+          coins[6],
         ])
       );
     });

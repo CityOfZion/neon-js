@@ -14,13 +14,13 @@ const WALLET_JSON = {
         deployed: false,
         parameters: [{ name: "signature", type: "Signature" }],
         script:
-          "2102963fc761eb7135c4593bfc6a0af96d8588b70d8f6ef3af8549181e57772181f5ac"
+          "2102963fc761eb7135c4593bfc6a0af96d8588b70d8f6ef3af8549181e57772181f5ac",
       },
       extra: {},
       isDefault: false,
       key: "6PYVQfxBH2zBvFsJ1zBZJUUD8ykvCdWrAfZzjWw4RRskjwLAc74bkT3eQn",
       label: "Adc4jT59RjDLdXbBni6xzg6SEcLVhHZ5Z9",
-      lock: false
+      lock: false,
     },
     {
       address: "ARCvt1d5qAGzcHqJCWA2MxvhTLQDb9dvjQ",
@@ -28,26 +28,26 @@ const WALLET_JSON = {
         deployed: false,
         parameters: [{ name: "signature", type: "Signature" }],
         script:
-          "2103c663ba46afa8349f020eb9e8f9e1dc1c8e877b9d239e139af699049126e0f321ac"
+          "2103c663ba46afa8349f020eb9e8f9e1dc1c8e877b9d239e139af699049126e0f321ac",
       },
       extra: {},
       isDefault: false,
       key: "6PYTmxqFiGnZnioGDCUTkaWsgFubYuTNx4aMJ7SKNV2XAzAJHYXW8RAEgw",
       label: "ARCvt1d5qAGzcHqJCWA2MxvhTLQDb9dvjQ",
-      lock: false
-    }
+      lock: false,
+    },
   ],
   extra: {},
   name: "myWallet",
   scrypt: { n: 16384, p: 8, r: 8, size: 64 },
-  version: "1.0"
+  version: "1.0",
 };
 
 describe("constructor & export", () => {
   test("constructor", () => {
     const wallet = new Wallet({
       name: "test",
-      version: "1"
+      version: "1",
     });
     expect(wallet.name).toBe("test");
     expect(wallet.version).toBe("1");
@@ -56,7 +56,7 @@ describe("constructor & export", () => {
   test("export", () => {
     const wallet = new Wallet({
       name: "test",
-      version: "1"
+      version: "1",
     });
     const exported = wallet.export();
     expect(exported.name).toBe("test");
@@ -68,7 +68,7 @@ describe("add account, default account", () => {
   test("add account", () => {
     const wallet = new Wallet({
       name: "test",
-      version: "1"
+      version: "1",
     });
     wallet.addAccount(new Account(ADDRESS1));
     expect(wallet.accounts[0].address).toBe(ADDRESS1);
@@ -77,7 +77,7 @@ describe("add account, default account", () => {
   test("default account", () => {
     const wallet = new Wallet({
       name: "test",
-      version: "1"
+      version: "1",
     });
     wallet.addAccount(new Account(PRIVATE_KEY1));
     wallet.addAccount(new Account(PRIVATE_KEY2));
@@ -87,7 +87,7 @@ describe("add account, default account", () => {
   test("set default account", () => {
     const wallet = new Wallet({
       name: "test",
-      version: "1"
+      version: "1",
     });
     wallet.addAccount(new Account(PRIVATE_KEY1));
     wallet.addAccount(new Account(PRIVATE_KEY2));

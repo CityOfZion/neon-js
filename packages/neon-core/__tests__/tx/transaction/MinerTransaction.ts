@@ -1,6 +1,6 @@
 import { Transaction, TransactionLike, TransactionType } from "../../../src/tx";
 import MinerTransaction, {
-  MinerTransactionLike
+  MinerTransactionLike,
 } from "../../../src/tx/transaction/MinerTransaction";
 
 import { BaseTransaction } from "../../../src/tx/transaction/BaseTransaction";
@@ -21,15 +21,15 @@ describe("constructor", () => {
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
       scripts: [{ invocationScript: "ab", verificationScript: "" }],
-      nonce: 1234
+      nonce: 1234,
     } as Partial<TransactionLike>;
 
     const result = new MinerTransaction(testObject);
     expect(result instanceof MinerTransaction).toBeTruthy();
     expect(result.type).toBe(TransactionType.MinerTransaction);
     expect(result.version).toBe(testObject.version);
-    expect(result.inputs.map(i => i.export())).toEqual(testObject.inputs);
-    expect(result.outputs.map(i => i.export())).toEqual(testObject.outputs);
+    expect(result.inputs.map((i) => i.export())).toEqual(testObject.inputs);
+    expect(result.outputs.map((i) => i.export())).toEqual(testObject.outputs);
   });
 
   test("Transaction", () => {
@@ -37,7 +37,7 @@ describe("constructor", () => {
       version: 1,
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-      scripts: [{ invocationScript: "ab", verificationScript: "" }]
+      scripts: [{ invocationScript: "ab", verificationScript: "" }],
     });
 
     const result = new MinerTransaction(testObject);
@@ -74,7 +74,7 @@ describe("export", () => {
     attributes: [],
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-    scripts: [{ invocationScript: "ab", verificationScript: "" }]
+    scripts: [{ invocationScript: "ab", verificationScript: "" }],
   } as Partial<TransactionLike>;
 
   const MinerTx = new MinerTransaction(expected);
@@ -89,13 +89,13 @@ describe("equals", () => {
     nonce: 123456,
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "12", value: 1, scriptHash: "1234" }],
-    scripts: [{ invocationScript: "ab", verificationScript: "" }]
+    scripts: [{ invocationScript: "ab", verificationScript: "" }],
   };
 
   const obj2 = {
     type: 0x00,
     version: 1,
-    inputs: [{ prevHash: "12", prevIndex: 1 }]
+    inputs: [{ prevHash: "12", prevIndex: 1 }],
   };
   const Miner1 = new MinerTransaction(obj1);
   const Miner2 = new MinerTransaction(obj2);
@@ -104,13 +104,13 @@ describe("equals", () => {
     ["Miner1 === Miner1", Miner1, Miner1, true],
     ["Miner1 !== Miner2", Miner1, Miner2, false],
     ["Miner1 === Obj1", Miner1, obj1, true],
-    ["Miner1 !== Obj2", Miner1, obj2, false]
+    ["Miner1 !== Obj2", Miner1, obj2, false],
   ])("%s", (msg: string, a: MinerTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
 });
 
-const dataSet = Object.keys(samples).map(k => {
+const dataSet = Object.keys(samples).map((k) => {
   const s = samples[k];
   return [s.txid, s.serialized, s.deserialized];
 });

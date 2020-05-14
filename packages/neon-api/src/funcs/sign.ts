@@ -20,7 +20,7 @@ export async function signTx<
     config.account!.publicKey
   );
   if (signatures instanceof Array) {
-    signatures.forEach(sig => {
+    signatures.forEach((sig) => {
       addSignature(config.tx!, sig);
     });
   } else {

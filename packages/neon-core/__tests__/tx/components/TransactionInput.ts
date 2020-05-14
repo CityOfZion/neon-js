@@ -1,5 +1,5 @@
 import TransactionInput, {
-  TransactionInputLike
+  TransactionInputLike,
 } from "../../../src/tx/components/TransactionInput";
 
 describe("constructor", () => {
@@ -13,7 +13,7 @@ describe("constructor", () => {
   test("TransactionInputLike", () => {
     const testObject = {
       prevHash: "1234",
-      prevIndex: 1
+      prevIndex: 1,
     } as TransactionInputLike;
 
     const result = new TransactionInput(testObject);
@@ -25,7 +25,7 @@ describe("constructor", () => {
   test("TransactionInput", () => {
     const testObject = new TransactionInput({
       prevHash: "1234",
-      prevIndex: 1
+      prevIndex: 1,
     });
 
     const result = new TransactionInput(testObject);
@@ -39,7 +39,7 @@ describe("export", () => {
   test("export to TransactionInputLike", () => {
     const expected = {
       prevHash: "1234",
-      prevIndex: 1
+      prevIndex: 1,
     };
 
     const txAttr = new TransactionInput(expected);
@@ -51,11 +51,11 @@ describe("export", () => {
 describe("equals", () => {
   const obj1 = {
     prevHash: "1234",
-    prevIndex: 1
+    prevIndex: 1,
   };
   const obj2 = {
     prevHash: "5678",
-    prevIndex: 2
+    prevIndex: 2,
   };
   const input1 = new TransactionInput(obj1);
   const input2 = new TransactionInput(obj2);
@@ -64,7 +64,7 @@ describe("equals", () => {
     ["Input1 === Input1", input1, input1, true],
     ["Input1 !== Input2", input1, input2, false],
     ["Input1 === Obj1", input1, obj1, true],
-    ["Input1 !== Obj2", input1, obj2, false]
+    ["Input1 !== Obj2", input1, obj2, false],
   ])("%s", (msg: string, a: TransactionInput, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
@@ -76,10 +76,10 @@ const dataSet = [
     {
       prevHash:
         "22555bfe765497956f4194d40c0e8cf8068b97517799061e450ad2468db2a7c4",
-      prevIndex: 1
+      prevIndex: 1,
     },
-    "c4a7b28d46d20a451e06997751978b06f88c0e0cd494416f95975476fe5b55220100"
-  ]
+    "c4a7b28d46d20a451e06997751978b06f88c0e0cd494416f95975476fe5b55220100",
+  ],
 ];
 
 describe("serialize", () => {

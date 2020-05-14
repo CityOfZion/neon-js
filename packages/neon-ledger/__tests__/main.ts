@@ -8,7 +8,7 @@ jest.mock("../src/utils");
 describe("getDevicePaths", () => {
   test("throws error when not supported", async () => {
     const mockLedgerLib = {
-      isSupported: jest.fn().mockImplementation(async () => false)
+      isSupported: jest.fn().mockImplementation(async () => false),
     } as any;
 
     const result = getDevicePaths(mockLedgerLib);
@@ -19,7 +19,7 @@ describe("getDevicePaths", () => {
     const expected = [] as ReadonlyArray<string>;
     const mockLedgerLib = {
       isSupported: jest.fn().mockImplementation(async () => true),
-      list: jest.fn().mockImplementation(async () => expected)
+      list: jest.fn().mockImplementation(async () => expected),
     } as any;
 
     const result = await getDevicePaths(mockLedgerLib);
@@ -35,10 +35,10 @@ describe("getPublicKey", () => {
     const mockLedgerLib = {
       send: jest.fn().mockImplementation(() => {
         return Promise.reject(thrownError);
-      })
+      }),
     } as any;
 
-    evalTransportError.mockImplementationOnce(e => {
+    evalTransportError.mockImplementationOnce((e) => {
       if (e === thrownError) {
         return expectedError;
       }
@@ -53,7 +53,7 @@ describe("getPublicKey", () => {
     const expectedBuffer = Buffer.from(expected, "hex");
     const bip44Input = "abcd";
     const mockLedgerLib = {
-      send: jest.fn().mockImplementation(async () => expectedBuffer)
+      send: jest.fn().mockImplementation(async () => expectedBuffer),
     } as any;
 
     const result = await getPublicKey(mockLedgerLib, bip44Input);
@@ -69,10 +69,10 @@ describe("getSignature", () => {
     const mockLedgerLib = {
       send: jest.fn().mockImplementation(() => {
         return Promise.reject(thrownError);
-      })
+      }),
     } as any;
 
-    evalTransportError.mockImplementationOnce(e => {
+    evalTransportError.mockImplementationOnce((e) => {
       if (e === thrownError) {
         return expectedError;
       }
@@ -88,7 +88,7 @@ describe("getSignature", () => {
     const mockLedgerLib = {
       send: jest.fn().mockImplementation(async () => {
         return Buffer.from("9000", "hex");
-      })
+      }),
     } as any;
 
     const result = getSignature(mockLedgerLib, inputMsg, bip44Input);
@@ -106,7 +106,7 @@ describe("getSignature", () => {
           return Buffer.from(mockDer, "hex");
         }
         return Buffer.from("9000", "hex");
-      })
+      }),
     } as any;
     DerToHexSignature.mockImplementationOnce(() => expectedSig);
 

@@ -6,7 +6,7 @@ import {
   findGoodNodesFromHeight,
   getBestUrl,
   PastTransaction,
-  RpcNode
+  RpcNode,
 } from "../common";
 import {
   NeoscanBalance,
@@ -16,28 +16,28 @@ import {
   NeoscanV1GetBalanceResponse,
   NeoscanV1GetClaimableResponse,
   NeoscanV1GetHeightResponse,
-  NeoscanV1GetUnclaimedResponse
+  NeoscanV1GetUnclaimedResponse,
 } from "./responses";
 const log = logging.default("api");
 
 function parseUnspent(unspentArr: NeoscanTx[]): wallet.CoinLike[] {
-  return unspentArr.map(coin => {
+  return unspentArr.map((coin) => {
     return {
       index: coin.n,
       txid: coin.txid,
-      value: coin.value
+      value: coin.value,
     };
   });
 }
 function parseClaims(claimArr: NeoscanClaim[]): wallet.ClaimItemLike[] {
-  return claimArr.map(c => {
+  return claimArr.map((c) => {
     return {
       start: c.start_height,
       end: c.end_height,
       index: c.n,
       claim: c.unclaimed,
       txid: c.txid,
-      value: c.value
+      value: c.value,
     };
   });
 }
@@ -48,10 +48,10 @@ function getChange(
   assetId: string
 ): u.Fixed8 {
   const totalOut = vin
-    .filter(i => i.asset === assetId)
+    .filter((i) => i.asset === assetId)
     .reduce((p, c) => p.add(c.value), new u.Fixed8(0));
   const totalIn = vout
-    .filter(i => i.asset === assetId)
+    .filter((i) => i.asset === assetId)
     .reduce((p, c) => p.add(c.value), new u.Fixed8(0));
 
   return totalIn.minus(totalOut);
@@ -61,21 +61,21 @@ function parseTxHistory(
   rawTxs: NeoscanPastTx[],
   address: string
 ): PastTransaction[] {
-  return rawTxs.map(tx => {
+  return rawTxs.map((tx) => {
     const vin = tx.vin
-      .filter(i => i.address_hash === address)
-      .map(i => ({ asset: i.asset, value: i.value }));
+      .filter((i) => i.address_hash === address)
+      .map((i) => ({ asset: i.asset, value: i.value }));
     const vout = tx.vouts
-      .filter(o => o.address_hash === address)
-      .map(i => ({ asset: i.asset, value: i.value }));
+      .filter((o) => o.address_hash === address)
+      .map((i) => ({ asset: i.asset, value: i.value }));
     const change = {
       NEO: getChange(vin, vout, CONST.ASSET_ID.NEO),
-      GAS: getChange(vin, vout, CONST.ASSET_ID.GAS)
+      GAS: getChange(vin, vout, CONST.ASSET_ID.GAS),
     };
     return {
       txid: tx.txid,
       blockHeight: tx.block_height,
-      change
+      change,
     };
   });
 }
@@ -113,13 +113,13 @@ export async function getBalance(
   }
   const bal = new wallet.Balance({
     net: url,
-    address: data.address
+    address: data.address,
   });
   const neoscanBalances = data.balance as NeoscanBalance[];
   for (const b of neoscanBalances) {
     if (b.amount > 0 && b.unspent.length > 0) {
       bal.addAsset(b.asset, {
-        unspent: parseUnspent(b.unspent)
+        unspent: parseUnspent(b.unspent),
       } as Partial<wallet.AssetBalanceLike>);
     } else {
       bal.addToken(b.asset, b.amount);
@@ -149,7 +149,7 @@ export async function getClaims(
   return new wallet.Claims({
     net: url,
     address: data.address,
-    claims
+    claims,
   });
 }
 

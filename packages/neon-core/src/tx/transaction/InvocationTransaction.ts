@@ -63,7 +63,7 @@ export class InvocationTransaction extends BaseTransaction {
   public export(): InvocationTransactionLike {
     return Object.assign(super.export(), {
       script: this.script,
-      gas: this.gas.toNumber()
+      gas: this.gas.toNumber(),
     });
   }
 }

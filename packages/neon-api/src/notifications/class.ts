@@ -98,7 +98,7 @@ export class Notifications {
     };
     const contractSubscriptions = {
       websocket: ws,
-      callbacks: new Map<number, CallbackFunction>()
+      callbacks: new Map<number, CallbackFunction>(),
     };
     this.subscriptions.set(contract, contractSubscriptions);
     return contractSubscriptions;

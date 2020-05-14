@@ -1,6 +1,6 @@
 import { Transaction, TransactionLike, TransactionType } from "../../../src/tx";
 import InvocationTransaction, {
-  InvocationTransactionLike
+  InvocationTransactionLike,
 } from "../../../src/tx/transaction/InvocationTransaction";
 
 import { Fixed8 } from "../../../src/u";
@@ -23,15 +23,15 @@ describe("constructor", () => {
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
       scripts: [{ invocationScript: "ab", verificationScript: "" }],
       gas: 1,
-      script: "00"
+      script: "00",
     } as Partial<TransactionLike>;
 
     const result = new InvocationTransaction(testObject);
     expect(result instanceof InvocationTransaction).toBeTruthy();
     expect(result.type).toBe(TransactionType.InvocationTransaction);
     expect(result.version).toBe(testObject.version);
-    expect(result.inputs.map(i => i.export())).toEqual(testObject.inputs);
-    expect(result.outputs.map(i => i.export())).toEqual(testObject.outputs);
+    expect(result.inputs.map((i) => i.export())).toEqual(testObject.inputs);
+    expect(result.outputs.map((i) => i.export())).toEqual(testObject.outputs);
   });
 
   test("Transaction", () => {
@@ -41,7 +41,7 @@ describe("constructor", () => {
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
       scripts: [{ invocationScript: "ab", verificationScript: "" }],
       gas: 1,
-      script: "00"
+      script: "00",
     });
 
     const result = new InvocationTransaction(testObject);
@@ -56,7 +56,7 @@ describe("constructor", () => {
 describe("getters", () => {
   test("fees", () => {
     const tx = new InvocationTransaction({
-      gas: 2
+      gas: 2,
     });
     expect(tx.fees).toBe(2);
   });
@@ -81,7 +81,7 @@ describe("export", () => {
     outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
     scripts: [{ invocationScript: "ab", verificationScript: "" }],
     gas: 1,
-    script: "00"
+    script: "00",
   } as Partial<TransactionLike>;
 
   const InvocationTx = new InvocationTransaction(expected);
@@ -96,14 +96,14 @@ describe("equals", () => {
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "12", value: 1, scriptHash: "1234" }],
     scripts: [{ invocationScript: "ab", verificationScript: "" }],
-    gas: 1
+    gas: 1,
   };
 
   const obj2 = {
     type: 0xd1,
     version: 1,
     inputs: [{ prevHash: "12", prevIndex: 1 }],
-    script: "12"
+    script: "12",
   };
   const Invocation1 = new InvocationTransaction(obj1);
   const Invocation2 = new InvocationTransaction(obj2);
@@ -112,13 +112,13 @@ describe("equals", () => {
     ["Invocation1 === Invocation1", Invocation1, Invocation1, true],
     ["Invocation1 !== Invocation2", Invocation1, Invocation2, false],
     ["Invocation1 === Obj1", Invocation1, obj1, true],
-    ["Invocation1 !== Obj2", Invocation1, obj2, false]
+    ["Invocation1 !== Obj2", Invocation1, obj2, false],
   ])("%s", (msg: string, a: InvocationTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
 });
 
-const dataSet = Object.keys(samples).map(k => {
+const dataSet = Object.keys(samples).map((k) => {
   const s = samples[k];
   return [s.txid, s.serialized, s.deserialized];
 });

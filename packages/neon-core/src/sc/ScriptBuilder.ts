@@ -5,11 +5,11 @@ import {
   num2hexstring,
   reverseHex,
   str2hexstring,
-  StringStream
+  StringStream,
 } from "../u";
 import ContractParam, {
   ContractParamType,
-  likeContractParam
+  likeContractParam,
 } from "./ContractParam";
 import OpCode from "./OpCode";
 
@@ -41,7 +41,7 @@ function isValidValue(value: any): boolean {
 function retrieveAppCall(sb: ScriptBuilder): ScriptIntent | null {
   const output: ScriptIntent = {
     scriptHash: "",
-    args: []
+    args: [],
   };
 
   while (!sb.isEmpty()) {

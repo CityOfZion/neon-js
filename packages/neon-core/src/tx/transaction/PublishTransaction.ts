@@ -7,7 +7,7 @@ import {
   num2hexstring,
   num2VarInt,
   str2hexstring,
-  StringStream
+  StringStream,
 } from "../../u";
 import { BaseTransaction, TransactionLike } from "./BaseTransaction";
 import TransactionType from "./TransactionType";
@@ -86,7 +86,7 @@ export class PublishTransaction extends BaseTransaction {
       codeVersion,
       author,
       email,
-      description
+      description,
     });
   }
 
@@ -112,7 +112,7 @@ export class PublishTransaction extends BaseTransaction {
       codeVersion: this.codeVersion,
       author: this.author,
       email: this.email,
-      description: this.description
+      description: this.description,
     };
   }
 
@@ -176,7 +176,7 @@ export class PublishTransaction extends BaseTransaction {
       codeVersion: this.codeVersion,
       author: this.author,
       email: this.email,
-      description: this.description
+      description: this.description,
     });
   }
 }

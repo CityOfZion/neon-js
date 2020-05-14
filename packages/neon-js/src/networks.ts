@@ -11,27 +11,27 @@ export default {
         "02ca0e27697b9c248f6f16e085fd0061e26f44da85b58ee835c110caa5ec3ba554",
         "024c7b7fb6c310fccf1ba33b082519d82964ea93868d676662d4a59ad548df0e7d",
         "02aaec38470f6aad0042c6e877cfd8087d2676b0f516fddd362801b9bd3936399e",
-        "02486fd15702c4490a26703112a5cc1d0923fd697a33406bd5a1c00e0013b09a70"
+        "02486fd15702c4490a26703112a5cc1d0923fd697a33406bd5a1c00e0013b09a70",
       ],
       SeedList: [
         "seed1.neo.org:10333",
         "seed2.neo.org:10333",
         "seed3.neo.org:10333",
         "seed4.neo.org:10333",
-        "seed5.neo.org:10333"
+        "seed5.neo.org:10333",
       ],
       SystemFee: {
         EnrollmentTransaction: 1000,
         IssueTransaction: 500,
         PublishTransaction: 500,
-        RegisterTransaction: 10000
-      }
+        RegisterTransaction: 10000,
+      },
     },
     ExtraConfiguration: {
       neonDB: "http://api.wallet.cityofzion.io",
       neoscan: "https://api.neoscan.io/api/main_net",
-      notifications: "wss://pubsub.main.neologin.io/event"
-    }
+      notifications: "wss://pubsub.main.neologin.io/event",
+    },
   },
   TestNet: {
     Name: "TestNet",
@@ -45,27 +45,27 @@ export default {
         "039dafd8571a641058ccc832c5e2111ea39b09c0bde36050914384f7a48bce9bf9",
         "038dddc06ce687677a53d54f096d2591ba2302068cf123c1f2d75c2dddc5425579",
         "02d02b1873a0863cd042cc717da31cea0d7cf9db32b74d4c72c01b0011503e2e22",
-        "034ff5ceeac41acf22cd5ed2da17a6df4dd8358fcb2bfb1a43208ad0feaab2746b"
+        "034ff5ceeac41acf22cd5ed2da17a6df4dd8358fcb2bfb1a43208ad0feaab2746b",
       ],
       SeedList: [
         "seed1.neo.org:20333",
         "seed2.neo.org:20333",
         "seed3.neo.org:20333",
         "seed4.neo.org:20333",
-        "seed5.neo.org:20333"
+        "seed5.neo.org:20333",
       ],
       SystemFee: {
         EnrollmentTransaction: 10,
         IssueTransaction: 5,
         PublishTransaction: 5,
-        RegisterTransaction: 100
-      }
+        RegisterTransaction: 100,
+      },
     },
     ExtraConfiguration: {
       neonDB: "http://testnet-api.wallet.cityofzion.io",
       neoscan: "https://neoscan-testnet.io/api/test_net",
-      notifications: "wss://pubsub.test.neologin.io/event"
-    }
+      notifications: "wss://pubsub.test.neologin.io/event",
+    },
   },
   CozNet: {
     Name: "CozNet",
@@ -76,23 +76,23 @@ export default {
         "032d9e51c7d48b0f5cc63d63deb89767685832cf69eb7113900290f217ae0504ee",
         "022a5b7ccf03166a95e1750f0c350c734c34fe7aac66622eecdb5a529d2e69b1df",
         "03c478d43271c297696ee3ab5a7946ee60287015c7dca6cba867819c7f271bc4ea",
-        "0393ef777d01fb60eef1da3474b975c6a393b464bcfe588e2ad7dbc4dbdfa2c244"
+        "0393ef777d01fb60eef1da3474b975c6a393b464bcfe588e2ad7dbc4dbdfa2c244",
       ],
       SeedList: [
         "188.68.34.29:10330",
         "188.68.34.29:10332",
         "188.68.34.29:10334",
-        "188.68.34.29:10336"
+        "188.68.34.29:10336",
       ],
       SystemFee: {
         EnrollmentTransaction: 1000,
         IssueTransaction: 500,
         PublishTransaction: 500,
-        RegisterTransaction: 10000
-      }
+        RegisterTransaction: 10000,
+      },
     },
     ExtraConfiguration: {
-      neoscan: "https://coz.neoscan-testnet.io/api/main_net"
-    }
-  }
+      neoscan: "https://coz.neoscan-testnet.io/api/main_net",
+    },
+  },
 };

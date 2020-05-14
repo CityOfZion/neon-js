@@ -17,7 +17,7 @@ const requiresProcessing = [
   tx.TxAttrUsage.Remark12,
   tx.TxAttrUsage.Remark13,
   tx.TxAttrUsage.Remark14,
-  tx.TxAttrUsage.Remark15
+  tx.TxAttrUsage.Remark15,
 ];
 
 export function extractAsset(params: {
@@ -53,24 +53,24 @@ function matchAttribute(
   key: string,
   data: string
 ): tx.TransactionAttributeLike | undefined {
-  const camelCasedKey = key.replace(/^[a-z]/, c => c.toUpperCase());
+  const camelCasedKey = key.replace(/^[a-z]/, (c) => c.toUpperCase());
   if (camelCasedKey in tx.TxAttrUsage) {
     const usage = tx.TxAttrUsage[camelCasedKey as keyof typeof tx.TxAttrUsage];
     return {
       usage,
-      data: requiresProcessing.indexOf(usage) >= 0 ? processAscii(data) : data
+      data: requiresProcessing.indexOf(usage) >= 0 ? processAscii(data) : data,
     };
   }
   switch (key) {
     case "ecdh02":
       return {
         usage: tx.TxAttrUsage.ECDH02,
-        data
+        data,
       };
     case "ecdh03":
       return {
         usage: tx.TxAttrUsage.ECDH03,
-        data
+        data,
       };
     default:
       return undefined;
@@ -80,8 +80,8 @@ function matchAttribute(
 export function extractAttributes(params: {
   [key: string]: string;
 }): tx.TransactionAttributeLike[] {
-  const attributes = Object.keys(params).map(key =>
+  const attributes = Object.keys(params).map((key) =>
     matchAttribute(key, params[key])
   );
-  return attributes.filter(a => a) as tx.TransactionAttributeLike[];
+  return attributes.filter((a) => a) as tx.TransactionAttributeLike[];
 }

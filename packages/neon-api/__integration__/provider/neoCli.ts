@@ -20,7 +20,7 @@ const NEOCLI_URLS = [
   "https://seed0.cityofzion.io:443",
   "https://seed1.cityofzion.io:443",
   "https://seed2.cityofzion.io:443",
-  "https://seed3.cityofzion.io:443"
+  "https://seed3.cityofzion.io:443",
 ];
 
 let provider: import("../../src/provider/neoCli/class").NeoCli;

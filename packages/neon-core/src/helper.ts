@@ -8,7 +8,7 @@ export function compareNeonObjectArray(arr1: NeonObject[], arr2: any[] = []) {
     return false;
   }
   for (const c of arr1) {
-    if (!arr2.find(cl => c.equals(c))) {
+    if (!arr2.find((cl) => c.equals(c))) {
       return false;
     }
   }

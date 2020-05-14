@@ -49,7 +49,7 @@ describe("execute", () => {
     const expected = jest.fn();
     const q = {
       req: { method: "" },
-      execute: jest.fn().mockImplementation(() => expected)
+      execute: jest.fn().mockImplementation(() => expected),
     } as any;
 
     const client = new RPCClient("url");
@@ -74,7 +74,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getAccountState.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getAccountState(address);
 
@@ -94,7 +94,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getBlock.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getBlock(1, 0);
 
@@ -106,7 +106,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getBlock.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getBlock(1);
 
@@ -120,7 +120,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getBlockHash.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getBlockHash(1);
 
@@ -134,7 +134,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getBlockCount.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getBlockCount();
 
@@ -148,7 +148,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getBlockSysFee.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getBlockSysFee(1);
 
@@ -162,7 +162,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getConnectionCount.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getConnectionCount();
 
@@ -176,7 +176,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getContractState.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getContractState("hash");
 
@@ -190,7 +190,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getPeers.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getPeers();
 
@@ -204,7 +204,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getRawMemPool.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getRawMemPool();
 
@@ -218,7 +218,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getRawTransaction.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getRawTransaction("txid", 0);
 
@@ -230,7 +230,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getRawTransaction.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getRawTransaction("txid");
 
@@ -244,7 +244,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getStorage.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getStorage("hash", "key");
 
@@ -258,7 +258,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getTxOut.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getTxOut("txid", 1);
 
@@ -272,7 +272,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getValidators.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getValidators();
 
@@ -289,9 +289,9 @@ describe("RPC Methods", () => {
         req: { method: "" },
         execute: jest.fn().mockImplementation(() => ({
           result: {
-            useragent: versionString
-          }
-        }))
+            useragent: versionString,
+          },
+        })),
       }));
       const result = await client.getVersion();
 
@@ -306,7 +306,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.invoke.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const randomObj = {};
       const result = await client.invoke("hash", 1, "2", randomObj);
@@ -319,7 +319,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.invoke.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const randomObj = {};
       const result = await client.invoke("hash", [1, "2", randomObj]);
@@ -334,7 +334,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.invokeFunction.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const randomObj = {};
       const result = await client.invokeFunction(
@@ -359,20 +359,20 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.invokeFunction.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const randomObj = {};
       const result = await client.invokeFunction("hash", "method", [
         1,
         "2",
-        randomObj
+        randomObj,
       ]);
 
       expect(result).toEqual(expected);
       expect(Query.invokeFunction).toBeCalledWith("hash", "method", [
         1,
         "2",
-        randomObj
+        randomObj,
       ]);
     });
   });
@@ -382,7 +382,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.invokeScript.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.invokeScript("script");
 
@@ -396,7 +396,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.sendRawTransaction.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.sendRawTransaction("hexstring");
 
@@ -410,7 +410,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.submitBlock.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.submitBlock("hexstring");
 
@@ -426,7 +426,7 @@ describe("RPC Methods", () => {
         req: { method: "" },
         execute: jest
           .fn()
-          .mockImplementation(() => ({ result: { isvalid: expected } }))
+          .mockImplementation(() => ({ result: { isvalid: expected } })),
       }));
       const result = await client.validateAddress("addr");
 
@@ -440,7 +440,9 @@ describe("RPC Methods", () => {
       const queryExpected = { balance: [], address: "" };
       Query.getUnspents.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: queryExpected }))
+        execute: jest
+          .fn()
+          .mockImplementation(() => ({ result: queryExpected })),
       }));
       const result = await client.getUnspents("addr");
 
@@ -454,7 +456,7 @@ describe("RPC Methods", () => {
       const expected = jest.fn();
       Query.getUnclaimed.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getUnclaimed("addr");
 
@@ -468,7 +470,7 @@ describe("RPC Methods", () => {
       const expected = { claimable: [], address: "", unclaimed: 0 };
       Query.getClaimable.mockImplementationOnce(() => ({
         req: { method: "" },
-        execute: jest.fn().mockImplementation(() => ({ result: expected }))
+        execute: jest.fn().mockImplementation(() => ({ result: expected })),
       }));
       const result = await client.getClaimable("addr");
 

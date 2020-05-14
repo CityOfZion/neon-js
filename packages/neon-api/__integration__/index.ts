@@ -14,7 +14,7 @@ test("Plugin", () => {
       "u",
       "CONST",
       "settings",
-      "logging"
+      "logging",
     ])
   );
 });

@@ -67,7 +67,7 @@ export class EnrollmentTransaction extends BaseTransaction {
 
   public export(): EnrollmentTransactionLike {
     return Object.assign(super.export(), {
-      publicKey: this.publicKey
+      publicKey: this.publicKey,
     });
   }
 

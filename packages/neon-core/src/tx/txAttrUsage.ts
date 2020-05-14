@@ -40,7 +40,7 @@ export enum TxAttrUsage {
   Remark12 = 252,
   Remark13 = 253,
   Remark14 = 254,
-  Remark15 = 255
+  Remark15 = 255,
 }
 
 export default TxAttrUsage;

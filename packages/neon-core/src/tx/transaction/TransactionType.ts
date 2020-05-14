@@ -7,7 +7,7 @@ export enum TransactionType {
   ContractTransaction = 0x80,
   StateTransaction = 0x90,
   PublishTransaction = 0xd0,
-  InvocationTransaction = 0xd1
+  InvocationTransaction = 0xd1,
 }
 
 export default TransactionType;

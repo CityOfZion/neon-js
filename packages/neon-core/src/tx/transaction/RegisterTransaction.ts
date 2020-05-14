@@ -7,7 +7,7 @@ import {
   num2VarInt,
   reverseHex,
   str2hexstring,
-  StringStream
+  StringStream,
 } from "../../u";
 import { getPublicKeyEncoded, getPublicKeyUnencoded } from "../../wallet/core";
 import { BaseTransaction, TransactionLike } from "./BaseTransaction";
@@ -72,7 +72,7 @@ export class RegisterTransaction extends BaseTransaction {
       amount,
       precision,
       owner,
-      admin
+      admin,
     });
   }
 
@@ -102,7 +102,7 @@ export class RegisterTransaction extends BaseTransaction {
       amount: this.amount,
       precision: this.precision,
       owner: this.owner,
-      admin: this.admin
+      admin: this.admin,
     };
   }
 
@@ -134,7 +134,7 @@ export class RegisterTransaction extends BaseTransaction {
       amount: this.amount.toNumber(),
       precision: this.precision,
       owner: this.owner,
-      admin: this.admin
+      admin: this.admin,
     });
   }
 

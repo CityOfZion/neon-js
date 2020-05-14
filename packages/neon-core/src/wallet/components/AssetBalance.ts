@@ -23,11 +23,11 @@ export class AssetBalance implements NeonObject {
 
   public constructor(abLike: Partial<AssetBalanceLike> = {}) {
     this.unspent = abLike.unspent
-      ? abLike.unspent.map(coin => new Coin(coin))
+      ? abLike.unspent.map((coin) => new Coin(coin))
       : [];
-    this.spent = abLike.spent ? abLike.spent.map(coin => new Coin(coin)) : [];
+    this.spent = abLike.spent ? abLike.spent.map((coin) => new Coin(coin)) : [];
     this.unconfirmed = abLike.unconfirmed
-      ? abLike.unconfirmed.map(coin => new Coin(coin))
+      ? abLike.unconfirmed.map((coin) => new Coin(coin))
       : [];
   }
 
@@ -38,9 +38,9 @@ export class AssetBalance implements NeonObject {
   public export(): AssetBalanceLike {
     return {
       balance: this.balance.toNumber(),
-      unspent: this.unspent.map(c => c.export()),
-      spent: this.spent.map(c => c.export()),
-      unconfirmed: this.unconfirmed.map(c => c.export())
+      unspent: this.unspent.map((c) => c.export()),
+      spent: this.spent.map((c) => c.export()),
+      unconfirmed: this.unconfirmed.map((c) => c.export()),
     };
   }
 

@@ -8,7 +8,7 @@ describe("constructor", () => {
     expect(result).toEqual({
       index: 0,
       txid: "",
-      value: new Fixed8(0)
+      value: new Fixed8(0),
     });
   });
 
@@ -16,7 +16,7 @@ describe("constructor", () => {
     const testObject = {
       index: 1,
       txid: "id",
-      value: 1.2345
+      value: 1.2345,
     } as CoinLike;
 
     const result = new Coin(testObject);
@@ -50,12 +50,12 @@ describe("equals", () => {
   const object1 = {
     index: 1,
     txid: "object1",
-    value: 1.23
+    value: 1.23,
   };
   const object2 = {
     index: 2,
     txid: "object2",
-    value: 2.34
+    value: 2.34,
   };
 
   const coin1 = new Coin(object1);
@@ -65,7 +65,7 @@ describe("equals", () => {
     ["Coin1 === Coin1", coin1, coin1, true],
     ["Coin1 !== Coin2", coin1, coin2, false],
     ["Coin1 === object1", coin1, object1, true],
-    ["Coin1 === object2", coin1, object2, false]
+    ["Coin1 === object2", coin1, object2, false],
   ])("%s", (msg: string, a: Coin, b: any, cond: boolean) => {
     expect(a.equals(b) === cond).toBeTruthy();
   });

@@ -64,7 +64,7 @@ export class Protocol {
       AddressVersion: this.addressVersion,
       StandbyValidators: this.standbyValidators,
       SeedList: this.seedList,
-      SystemFee: this.systemFee
+      SystemFee: this.systemFee,
     };
   }
 

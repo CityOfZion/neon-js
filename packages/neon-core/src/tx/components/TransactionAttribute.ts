@@ -86,7 +86,7 @@ export class TransactionAttribute {
   public export(): TransactionAttributeLike {
     return {
       usage: this.usage,
-      data: this.data
+      data: this.data,
     };
   }
 

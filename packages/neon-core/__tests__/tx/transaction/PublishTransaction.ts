@@ -1,7 +1,7 @@
 import { Transaction, TransactionLike, TransactionType } from "../../../src/tx";
 import { BaseTransaction } from "../../../src/tx/transaction/BaseTransaction";
 import PublishTransaction, {
-  PublishTransactionLike
+  PublishTransactionLike,
 } from "../../../src/tx/transaction/PublishTransaction";
 import { Fixed8 } from "../../../src/u";
 import samples from "./publishTx.json";
@@ -20,15 +20,15 @@ describe("constructor", () => {
       version: 0,
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-      scripts: [{ invocationScript: "ab", verificationScript: "" }]
+      scripts: [{ invocationScript: "ab", verificationScript: "" }],
     } as Partial<TransactionLike>;
 
     const result = new PublishTransaction(testObject);
     expect(result instanceof PublishTransaction).toBeTruthy();
     expect(result.type).toBe(TransactionType.PublishTransaction);
     expect(result.version).toBe(testObject.version);
-    expect(result.inputs.map(i => i.export())).toEqual(testObject.inputs);
-    expect(result.outputs.map(i => i.export())).toEqual(testObject.outputs);
+    expect(result.inputs.map((i) => i.export())).toEqual(testObject.inputs);
+    expect(result.outputs.map((i) => i.export())).toEqual(testObject.outputs);
   });
 
   test("Transaction", () => {
@@ -36,7 +36,7 @@ describe("constructor", () => {
       version: 0,
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-      scripts: [{ invocationScript: "ab", verificationScript: "" }]
+      scripts: [{ invocationScript: "ab", verificationScript: "" }],
     });
 
     const result = new PublishTransaction(testObject);
@@ -65,7 +65,7 @@ describe("getters", () => {
       codeVersion: "",
       author: "",
       email: "",
-      description: ""
+      description: "",
     });
   });
 
@@ -91,7 +91,7 @@ describe("export", () => {
     codeVersion: "v1",
     author: "author",
     email: "email",
-    description: "desc"
+    description: "desc",
   } as Partial<TransactionLike>;
 
   const RegisterTx = new PublishTransaction(expected);
@@ -105,7 +105,7 @@ describe("equals", () => {
     version: 0,
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "12", value: 1, scriptHash: "1234" }],
-    scripts: [{ invocationScript: "ab", verificationScript: "" }]
+    scripts: [{ invocationScript: "ab", verificationScript: "" }],
   };
 
   const obj2 = {
@@ -120,7 +120,7 @@ describe("equals", () => {
     codeVersion: "v1",
     author: "author",
     email: "email",
-    description: "desc"
+    description: "desc",
   };
   const Publish1 = new PublishTransaction(obj1);
   const Publish2 = new PublishTransaction(obj2);
@@ -129,13 +129,13 @@ describe("equals", () => {
     ["Publish1 === Publish1", Publish1, Publish1, true],
     ["Publish1 !== Publish2", Publish1, Publish2, false],
     ["Publish1 === Obj1", Publish1, obj1, true],
-    ["Publish1 !== Obj2", Publish1, obj2, false]
+    ["Publish1 !== Obj2", Publish1, obj2, false],
   ])("%s", (msg: string, a: PublishTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
 });
 
-const dataSet = Object.keys(samples).map(k => {
+const dataSet = Object.keys(samples).map((k) => {
   const s = samples[k];
   return [s.txid, s.serialized, s.deserialized];
 });

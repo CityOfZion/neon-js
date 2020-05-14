@@ -14,7 +14,7 @@ function assignSettings(
         },
         set(val) {
           newSettings[key] = val;
-        }
+        },
       });
     }
   }

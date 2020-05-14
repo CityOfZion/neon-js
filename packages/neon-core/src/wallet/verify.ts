@@ -13,7 +13,7 @@ import { ab2hexstring, hash256, isHex, reverseHex } from "../u";
 import {
   getAddressFromScriptHash,
   getPublicKeyEncoded,
-  getPublicKeyUnencoded
+  getPublicKeyUnencoded,
 } from "./core";
 
 /**

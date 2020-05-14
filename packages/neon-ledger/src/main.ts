@@ -2,7 +2,7 @@ import Transport from "@ledgerhq/hw-transport";
 import {
   ErrorCode,
   evalTransportError,
-  TransportStatusError
+  TransportStatusError,
 } from "./ErrorCode";
 import { DerToHexSignature } from "./utils";
 

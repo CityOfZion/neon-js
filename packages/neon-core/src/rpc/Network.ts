@@ -54,7 +54,7 @@ export class Network {
       ProtocolConfiguration: this.protocol.export(),
       Name: this.name,
       ExtraConfiguration: this.extra,
-      Nodes: this.nodes
+      Nodes: this.nodes,
     };
   }
 

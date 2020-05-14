@@ -4,7 +4,7 @@ import {
   ClaimGasConfig,
   DoInvokeConfig,
   ManagedApiBasicConfig,
-  SendAssetConfig
+  SendAssetConfig,
 } from "./types";
 
 /**

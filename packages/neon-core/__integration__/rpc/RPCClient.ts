@@ -8,7 +8,7 @@ const TESTNET_URLS = [
   "https://test3.cityofzion.io:443",
   "http://seed3.neo.org:20332",
   "http://seed4.neo.org:20332",
-  "http://seed5.neo.org:20332"
+  "http://seed5.neo.org:20332",
 ];
 
 let client: rpc.RPCClient;
@@ -39,7 +39,7 @@ describe("RPC Methods", () => {
         "script_hash",
         "frozen",
         "votes",
-        "balances"
+        "balances",
       ])
     );
   });
@@ -61,7 +61,7 @@ describe("RPC Methods", () => {
         "admin",
         "issuer",
         "expiration",
-        "frozen"
+        "frozen",
       ])
     );
   });
@@ -83,7 +83,7 @@ describe("RPC Methods", () => {
           "script",
           "tx",
           "confirmations",
-          "nextblockhash"
+          "nextblockhash",
         ])
       );
     });
@@ -106,7 +106,7 @@ describe("RPC Methods", () => {
           "script",
           "tx",
           "confirmations",
-          "nextblockhash"
+          "nextblockhash",
         ])
       );
     });
@@ -175,7 +175,7 @@ describe("RPC Methods", () => {
           "scripts",
           "blockhash",
           "confirmations",
-          "blocktime"
+          "blocktime",
         ])
       );
     });
@@ -210,11 +210,11 @@ describe("RPC Methods", () => {
 
   test("getValidators", async () => {
     const result = await client.getValidators();
-    result.map(v =>
+    result.map((v) =>
       expect(v).toMatchObject({
         publickey: expect.any(String),
         active: expect.any(Boolean),
-        votes: expect.any(String)
+        votes: expect.any(String),
       })
     );
   });

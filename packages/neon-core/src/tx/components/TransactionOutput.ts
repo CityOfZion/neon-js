@@ -70,7 +70,7 @@ export class TransactionOutput {
     return {
       assetId: this.assetId,
       value: this.value.toNumber(),
-      scriptHash: this.scriptHash
+      scriptHash: this.scriptHash,
     };
   }
 }

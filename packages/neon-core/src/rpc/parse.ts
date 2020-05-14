@@ -66,7 +66,7 @@ export function Fixed8Parser(item: StackItemLike): Fixed8 {
  * @return Array of results
  */
 export function SimpleParser(res: RPCVMResponse): any[] {
-  return res.stack.map(item => {
+  return res.stack.map((item) => {
     switch (item.type) {
       case "ByteArray":
         return StringParser(item);

@@ -11,7 +11,7 @@ beforeEach(() => {
   jest.resetModules();
   settings.networks.UnitTestNet = new rpc.Network({
     name: "UnitTestNet",
-    extra: { neonDB: testUrl, neoscan: "http://wrongurl.com" }
+    extra: { neonDB: testUrl, neoscan: "http://wrongurl.com" },
   });
 });
 
@@ -20,12 +20,12 @@ describe("getRPCEndpoint", () => {
     const allNodes = [
       { height: 5, url: "http://url1" },
       { height: 5, url: "http://url2" },
-      { height: 1, url: "http://url3" }
+      { height: 1, url: "http://url3" },
     ];
     const goodNodes = [allNodes[0], allNodes[1]];
     const getCall = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
-        data: allNodes
+        data: allNodes,
       })
     );
     axios.get = getCall;
@@ -47,13 +47,13 @@ describe("getRPCEndpoint", () => {
     const allNodes = [
       { height: 5, url: "http://url1" },
       { height: 5, url: "https://url2" },
-      { height: 1, url: "https://url3" }
+      { height: 1, url: "https://url3" },
     ];
     const filteredNodes = [allNodes[1], allNodes[2]];
     const goodNodes = [allNodes[1]];
     const getCall = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
-        data: allNodes
+        data: allNodes,
       })
     );
     axios.get = getCall;
@@ -86,16 +86,16 @@ describe("getBalance", () => {
             {
               unspent: [{ value: 2, txid: "1", n: 1 }],
               asset: "NEO",
-              amount: 2
+              amount: 2,
             },
             {
               unspent: [{ value: 5, txid: "1", n: 1 }],
               asset: "GAS",
-              amount: 5
-            }
+              amount: 5,
+            },
           ],
-          address: "address"
-        }
+          address: "address",
+        },
       })
     );
     axios.get = httpCall;
@@ -107,17 +107,17 @@ describe("getBalance", () => {
         assets: {
           NEO: {
             unspent: [{ value: 2, txid: "1", index: 1 }],
-            balance: 2
+            balance: 2,
           } as wallet.AssetBalanceLike,
           GAS: {
             unspent: [{ value: 5, txid: "1", index: 1 }],
-            balance: 5
-          } as wallet.AssetBalanceLike
+            balance: 5,
+          } as wallet.AssetBalanceLike,
         },
         tokenSymbols: ["TEST"],
         tokens: {
-          TEST: 100
-        }
+          TEST: 100,
+        },
       } as wallet.BalanceLike)
     );
     expect(httpCall).toBeCalledWith(testUrl + "/v1/get_balance/address");
@@ -130,15 +130,15 @@ describe("getBalance", () => {
           txids: null,
           claimed: null,
           balance: null,
-          address: "not found"
-        }
+          address: "not found",
+        },
       })
     );
     axios.get = httpCall;
     expect(await neoscan.getBalance(testUrl, "address")).toEqual(
       new wallet.Balance({
         net: testUrl,
-        address: "address"
+        address: "address",
       } as wallet.BalanceLike)
     );
   });
@@ -159,11 +159,11 @@ describe("getClaims", () => {
               start_height: 5,
               n: 2,
               generated: 0.1,
-              end_height: 11
-            }
+              end_height: 11,
+            },
           ],
-          address: "address"
-        }
+          address: "address",
+        },
       })
     );
     axios.get = httpCall;
@@ -172,8 +172,8 @@ describe("getClaims", () => {
         net: testUrl,
         address: "address",
         claims: [
-          { claim: 1, txid: "1", index: 2, value: 10, start: 5, end: 11 }
-        ]
+          { claim: 1, txid: "1", index: 2, value: 10, start: 5, end: 11 },
+        ],
       } as wallet.ClaimsLike)
     );
     expect(httpCall).toBeCalledWith(testUrl + "/v1/get_claimable/address");
@@ -185,15 +185,15 @@ describe("getClaims", () => {
         data: {
           unclaimed: 0,
           claimable: [],
-          address: "address"
-        }
+          address: "address",
+        },
       })
     );
     axios.get = httpCall;
     expect(await neoscan.getClaims(testUrl, "address")).toEqual(
       new wallet.Claims({
         net: testUrl,
-        address: "address"
+        address: "address",
       } as wallet.ClaimsLike)
     );
   });
@@ -205,8 +205,8 @@ describe("getMaxClaimAmount", () => {
       Promise.resolve({
         data: {
           address: "address",
-          unclaimed: 1
-        }
+          unclaimed: 1,
+        },
       })
     );
     axios.get = httpCall;
@@ -222,8 +222,8 @@ describe("getHeight", () => {
     const httpCall = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
         data: {
-          height: 123
-        }
+          height: 123,
+        },
       })
     );
     axios.get = httpCall;
@@ -245,7 +245,7 @@ describe("getTransactionHistory", () => {
                 n: 1,
                 asset:
                   "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-                address_hash: "otherAddress"
+                address_hash: "otherAddress",
               },
               {
                 value: 0.023,
@@ -253,7 +253,7 @@ describe("getTransactionHistory", () => {
                 n: 2,
                 asset:
                   "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-                address_hash: "otherAddress"
+                address_hash: "otherAddress",
               },
               {
                 value: 5,
@@ -261,8 +261,8 @@ describe("getTransactionHistory", () => {
                 n: 3,
                 asset:
                   "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-                address_hash: "otherAddress"
-              }
+                address_hash: "otherAddress",
+              },
             ],
             vouts: [
               {
@@ -270,15 +270,15 @@ describe("getTransactionHistory", () => {
                 transaction_id: 14236119,
                 asset:
                   "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-                address_hash: "address"
+                address_hash: "address",
               },
               {
                 value: 5,
                 transaction_id: 14236119,
                 asset:
                   "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-                address_hash: "address"
-              }
+                address_hash: "address",
+              },
             ],
             block_height: 11,
             txid: "1",
@@ -292,7 +292,7 @@ describe("getTransactionHistory", () => {
             claims: null,
             block_hash:
               "08ab749682b5cd5135ad36780abfc1ded6681c2772e39b53b69ed916ea02cdd7",
-            asset: null
+            asset: null,
           },
           {
             vin: [
@@ -302,7 +302,7 @@ describe("getTransactionHistory", () => {
                 n: 1,
                 asset:
                   "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-                address_hash: "address"
+                address_hash: "address",
               },
               {
                 value: 6,
@@ -310,8 +310,8 @@ describe("getTransactionHistory", () => {
                 n: 2,
                 asset:
                   "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-                address_hash: "address"
-              }
+                address_hash: "address",
+              },
             ],
             vouts: [
               {
@@ -319,15 +319,15 @@ describe("getTransactionHistory", () => {
                 transaction_id: 13244443,
                 asset:
                   "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-                address_hash: "otherAddress"
+                address_hash: "otherAddress",
               },
               {
                 value: 6,
                 transaction_id: 13244443,
                 asset:
                   "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-                address_hash: "otherAddress"
-              }
+                address_hash: "otherAddress",
+              },
             ],
             block_height: 12,
             txid: "2",
@@ -341,7 +341,7 @@ describe("getTransactionHistory", () => {
             claims: null,
             block_hash:
               "08ab749682b5cd5135ad36780abfc1ded6681c2772e39a53b69ed916ea02cdd9",
-            asset: null
+            asset: null,
           },
           {
             vouts: [
@@ -350,8 +350,8 @@ describe("getTransactionHistory", () => {
                 transaction_id: 12243317,
                 asset:
                   "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-                address_hash: "address"
-              }
+                address_hash: "address",
+              },
             ],
             vin: [],
             type: "ClaimTransaction",
@@ -369,7 +369,7 @@ describe("getTransactionHistory", () => {
                 n: 0,
                 asset:
                   "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-                address_hash: "address"
+                address_hash: "address",
               },
               {
                 value: 546,
@@ -377,7 +377,7 @@ describe("getTransactionHistory", () => {
                 n: 4,
                 asset:
                   "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-                address_hash: "address"
+                address_hash: "address",
               },
               {
                 value: 654,
@@ -385,15 +385,15 @@ describe("getTransactionHistory", () => {
                 n: 0,
                 asset:
                   "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
-                address_hash: "address"
-              }
+                address_hash: "address",
+              },
             ],
             block_height: 13,
             block_hash:
               "9c63a314dbb2584deca9361cf4d4be79232694cffc075a78eeae38d2a20a2bd5",
-            asset: null
-          }
-        ]
+            asset: null,
+          },
+        ],
       })
     );
     axios.get = httpCall;
@@ -401,18 +401,18 @@ describe("getTransactionHistory", () => {
       {
         txid: "1",
         blockHeight: 11,
-        change: { GAS: new u.Fixed8(0.123), NEO: new u.Fixed8(5) }
+        change: { GAS: new u.Fixed8(0.123), NEO: new u.Fixed8(5) },
       },
       {
         txid: "2",
         blockHeight: 12,
-        change: { GAS: new u.Fixed8(-0.456), NEO: new u.Fixed8(-6) }
+        change: { GAS: new u.Fixed8(-0.456), NEO: new u.Fixed8(-6) },
       },
       {
         txid: "3",
         blockHeight: 13,
-        change: { GAS: new u.Fixed8(0.789), NEO: new u.Fixed8(0) }
-      }
+        change: { GAS: new u.Fixed8(0.789), NEO: new u.Fixed8(0) },
+      },
     ]);
     expect(httpCall).toBeCalledWith(
       testUrl + "/v1/get_last_transactions_by_address/address"

@@ -64,7 +64,7 @@ export async function getTokenBalances(
   address: string
 ): Promise<{ [symbol: string]: u.Fixed8 }> {
   const sb = new sc.ScriptBuilder();
-  scriptHashArray.forEach(scriptHash => {
+  scriptHashArray.forEach((scriptHash) => {
     abi.symbol(scriptHash)(sb);
     abi.decimals(scriptHash)(sb);
     abi.balanceOf(scriptHash, address)(sb);
@@ -129,7 +129,7 @@ export async function getToken(
       name: res[0],
       symbol: res[1],
       decimals: res[2],
-      totalSupply: res[3].div(Math.pow(10, 8 - res[2])).toNumber()
+      totalSupply: res[3].div(Math.pow(10, 8 - res[2])).toNumber(),
     };
     if (address) {
       result.balance = res[4].div(Math.pow(10, 8 - res[2]));
@@ -154,7 +154,7 @@ export async function getTokens(
 ): Promise<TokenInfo[]> {
   try {
     const sb = new sc.ScriptBuilder();
-    scriptHashArray.forEach(scriptHash => {
+    scriptHashArray.forEach((scriptHash) => {
       abi.name(scriptHash)(sb);
       abi.symbol(scriptHash)(sb);
       abi.decimals(scriptHash)(sb);
@@ -194,7 +194,7 @@ export async function getTokens(
         symbol,
         decimals,
         totalSupply,
-        balance
+        balance,
       };
 
       if (!obj.balance) {

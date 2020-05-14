@@ -22,8 +22,8 @@ describe("constructor", () => {
         EnrollmentTransaction: 1000,
         IssueTransaction: 500,
         PublishTransaction: 500,
-        RegisterTransaction: 10000
-      }
+        RegisterTransaction: 10000,
+      },
     };
 
     const result = new Protocol(testObject);
@@ -37,7 +37,7 @@ describe("constructor", () => {
   test("Protocol", () => {
     const testObject = {
       Magic: 999999,
-      AddressVersion: 99
+      AddressVersion: 99,
     };
 
     const protocolObj = new Protocol(testObject);
@@ -59,8 +59,8 @@ describe("export", () => {
         EnrollmentTransaction: 1000,
         IssueTransaction: 500,
         PublishTransaction: 500,
-        RegisterTransaction: 10000
-      }
+        RegisterTransaction: 10000,
+      },
     };
 
     const protocolObj = new Protocol(expected);
@@ -79,8 +79,8 @@ describe("equals", () => {
       EnrollmentTransaction: 1000,
       IssueTransaction: 500,
       PublishTransaction: 500,
-      RegisterTransaction: 10000
-    }
+      RegisterTransaction: 10000,
+    },
   };
   const obj2 = {
     magic: 999998,
@@ -91,8 +91,8 @@ describe("equals", () => {
       EnrollmentTransaction: 1000,
       IssueTransaction: 500,
       PublishTransaction: 500,
-      RegisterTransaction: 10000
-    }
+      RegisterTransaction: 10000,
+    },
   };
   const protocol1 = new Protocol(obj1);
   const protocol2 = new Protocol(obj2);
@@ -101,7 +101,7 @@ describe("equals", () => {
     ["Protocol1 === Protocol1", protocol1, protocol1, true],
     ["Protocol1 !== Protocol2", protocol1, protocol2, false],
     ["Protocol1 === Obj1", protocol1, obj1, true],
-    ["Protocol1 !== Obj2", protocol1, obj2, false]
+    ["Protocol1 !== Obj2", protocol1, obj2, false],
   ])("%s", (msg: string, a: Protocol, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });

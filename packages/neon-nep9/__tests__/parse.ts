@@ -9,7 +9,7 @@ describe("parse", () => {
     [
       "Address only",
       "neo:AeNkbJdiMx49kBStQdDih7BzfDwyTNVRfb",
-      { attributes: [], address: "AeNkbJdiMx49kBStQdDih7BzfDwyTNVRfb" }
+      { attributes: [], address: "AeNkbJdiMx49kBStQdDih7BzfDwyTNVRfb" },
     ],
     [
       "Address with asset name",
@@ -18,8 +18,8 @@ describe("parse", () => {
         attributes: [],
         address: "AeNkbJdiMx49kBStQdDih7BzfDwyTNVRfb",
         asset:
-          "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"
-      }
+          "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
+      },
     ],
     [
       "Address with assetId",
@@ -28,8 +28,8 @@ describe("parse", () => {
         attributes: [],
         address: "AeNkbJdiMx49kBStQdDih7BzfDwyTNVRfb",
         asset:
-          "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"
-      }
+          "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
+      },
     ],
     [
       "Address with amount only",
@@ -37,8 +37,8 @@ describe("parse", () => {
       {
         attributes: [],
         address: "AeNkbJdiMx49kBStQdDih7BzfDwyTNVRfb",
-        amount: 123.456
-      }
+        amount: 123.456,
+      },
     ],
     [
       "Address with asset and amount",
@@ -48,16 +48,16 @@ describe("parse", () => {
         address: "AeNkbJdiMx49kBStQdDih7BzfDwyTNVRfb",
         asset:
           "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-        amount: 123.456
-      }
+        amount: 123.456,
+      },
     ],
     [
       "Address with attributes only",
       "neo:AeNkbJdiMx49kBStQdDih7BzfDwyTNVRfb?description=Donate%20To%20Me!",
       {
         attributes: [{ usage: 144, data: "446f6e61746520546f204d6521" }],
-        address: "AeNkbJdiMx49kBStQdDih7BzfDwyTNVRfb"
-      }
+        address: "AeNkbJdiMx49kBStQdDih7BzfDwyTNVRfb",
+      },
     ],
     [
       "Address with asset, amount and attributes",
@@ -67,9 +67,9 @@ describe("parse", () => {
         address: "AeNkbJdiMx49kBStQdDih7BzfDwyTNVRfb",
         asset:
           "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-        amount: 456.123
-      }
-    ]
+        amount: 456.123,
+      },
+    ],
   ])("%s", (_: string, uri: string, expected: NEP9Intent) => {
     const result = parse(uri);
     expect(result).toMatchObject(expected);

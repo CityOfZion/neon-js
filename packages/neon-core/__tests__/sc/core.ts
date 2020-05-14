@@ -44,18 +44,18 @@ describe("createScript", () => {
       return { str: expected, emitAppCall: mockEmitAppCall };
     });
     const intents = [1, 2, 3, 4, 5].map(
-      i =>
+      (i) =>
         ({
           scriptHash: jest.fn(),
           operation: jest.fn(),
           args: jest.fn(),
-          useTailCall: jest.fn()
+          useTailCall: jest.fn(),
         } as any)
     );
     const result = createScript(...intents);
     expect(result).toBe(expected);
     expect(mockEmitAppCall.mock.calls).toEqual(
-      intents.map(i => [i.scriptHash, i.operation, i.args, i.useTailCall])
+      intents.map((i) => [i.scriptHash, i.operation, i.args, i.useTailCall])
     );
   });
 });
@@ -66,19 +66,19 @@ describe("generateDeployScript", () => {
   beforeEach(() => {
     order = [];
     const mock = {
-      emitPush: jest.fn().mockImplementation(i => {
+      emitPush: jest.fn().mockImplementation((i) => {
         order.push(i);
         return mock;
       }),
-      emitSysCall: jest.fn().mockImplementation(i => {
+      emitSysCall: jest.fn().mockImplementation((i) => {
         order.push(i);
         return mock;
-      })
+      }),
     };
     ScriptBuilder.mockImplementationOnce(() => {
       return mock;
     });
-    u.str2hexstring.mockImplementation(i => i);
+    u.str2hexstring.mockImplementation((i) => i);
   });
 
   test("full params", () => {
@@ -91,7 +91,7 @@ describe("generateDeployScript", () => {
       description: jest.fn(),
       needsStorage: jest.fn(),
       returnType: jest.fn(),
-      parameterList: jest.fn()
+      parameterList: jest.fn(),
     } as any;
 
     const result = generateDeployScript(params);
@@ -100,7 +100,7 @@ describe("generateDeployScript", () => {
       [params.email],
       [params.author],
       [params.version],
-      [params.name]
+      [params.name],
     ]);
     expect(order).toEqual([
       params.description,
@@ -112,7 +112,7 @@ describe("generateDeployScript", () => {
       params.returnType,
       params.parameterList,
       params.script,
-      "Neo.Contract.Create"
+      "Neo.Contract.Create",
     ]);
   });
 
@@ -124,7 +124,7 @@ describe("generateDeployScript", () => {
       author: jest.fn(),
       email: jest.fn(),
       description: jest.fn(),
-      parameterList: jest.fn()
+      parameterList: jest.fn(),
     } as any;
 
     const result = generateDeployScript(params);
@@ -133,7 +133,7 @@ describe("generateDeployScript", () => {
       [params.email],
       [params.author],
       [params.version],
-      [params.name]
+      [params.name],
     ]);
     expect(order).toEqual([
       params.description,
@@ -145,7 +145,7 @@ describe("generateDeployScript", () => {
       "ff00",
       params.parameterList,
       params.script,
-      "Neo.Contract.Create"
+      "Neo.Contract.Create",
     ]);
   });
 });

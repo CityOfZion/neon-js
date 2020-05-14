@@ -29,14 +29,14 @@ describe("getBalance", () => {
                     txid:
                       "0917f5cbfeccbe9c385965e7884bd10450c652325c7aa7bd8c61b0f52a019b7f",
                     n: 0,
-                    value: 24088
-                  }
+                    value: 24088,
+                  },
                 ],
                 asset_hash:
                   "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
                 asset: "GAS",
                 asset_symbol: "GAS",
-                amount: 24088
+                amount: 24088,
               },
               {
                 unspent: [
@@ -44,19 +44,19 @@ describe("getBalance", () => {
                     txid:
                       "94f11dd277dd48cf1fccef8c02664adacdd9890410aaed8ddb01535433b3fc41",
                     n: 0,
-                    value: 100000000
-                  }
+                    value: 100000000,
+                  },
                 ],
                 asset_hash:
                   "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
                 asset: "NEO",
                 asset_symbol: "NEO",
-                amount: 100000000
-              }
+                amount: 100000000,
+              },
             ],
-            address: testAddress
-          }
-        }
+            address: testAddress,
+          },
+        },
       })
     );
 
@@ -74,10 +74,10 @@ describe("getBalance", () => {
                 value: 100000000,
                 txid:
                   "94f11dd277dd48cf1fccef8c02664adacdd9890410aaed8ddb01535433b3fc41",
-                index: 0
-              }
+                index: 0,
+              },
             ],
-            balance: 100000000
+            balance: 100000000,
           } as wallet.AssetBalanceLike,
           GAS: {
             unspent: [
@@ -85,12 +85,12 @@ describe("getBalance", () => {
                 value: 24088,
                 txid:
                   "0917f5cbfeccbe9c385965e7884bd10450c652325c7aa7bd8c61b0f52a019b7f",
-                index: 0
-              }
+                index: 0,
+              },
             ],
-            balance: 24088
-          } as wallet.AssetBalanceLike
-        }
+            balance: 24088,
+          } as wallet.AssetBalanceLike,
+        },
       })
     );
   });
@@ -102,9 +102,9 @@ describe("getBalance", () => {
           id: 5,
           result: {
             balance: [],
-            address: testAddress
-          }
-        }
+            address: testAddress,
+          },
+        },
       })
     );
 
@@ -113,7 +113,7 @@ describe("getBalance", () => {
     expect(await neoCli.getBalance(testUrl, testAddress)).toEqual(
       new wallet.Balance({
         net: testUrl,
-        address: testAddress
+        address: testAddress,
       })
     );
   });
@@ -125,9 +125,9 @@ describe("getBalance", () => {
           id: 5,
           error: {
             code: -32602,
-            message: "Invalid params"
-          }
-        }
+            message: "Invalid params",
+          },
+        },
       })
     );
     axios.post = httpCall;
@@ -146,7 +146,7 @@ describe("getClaims", () => {
       sys_fee: 0,
       txid: "dc44739e2f97743f2ed258988327560e2185ed13eec0097938eef4aea584bf04",
       unclaimed: 1464,
-      value: 100000000
+      value: 100000000,
     };
     const httpCall = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
@@ -156,9 +156,9 @@ describe("getClaims", () => {
           result: {
             address: testAddress,
             claimable: [testClaim],
-            unclaimed: 1464
-          }
-        }
+            unclaimed: 1464,
+          },
+        },
       })
     );
 
@@ -175,9 +175,9 @@ describe("getClaims", () => {
             index: testClaim.n,
             value: testClaim.value,
             start: testClaim.start_height,
-            end: testClaim.end_height
-          }
-        ]
+            end: testClaim.end_height,
+          },
+        ],
       })
     );
   });
@@ -190,9 +190,9 @@ describe("getClaims", () => {
           result: {
             claimable: [],
             address: testAddress,
-            unclaimed: 0
-          }
-        }
+            unclaimed: 0,
+          },
+        },
       })
     );
 
@@ -202,7 +202,7 @@ describe("getClaims", () => {
       new wallet.Claims({
         net: testUrl,
         address: testAddress,
-        claims: []
+        claims: [],
       })
     );
   });
@@ -214,9 +214,9 @@ describe("getClaims", () => {
           id: 5,
           error: {
             code: -32602,
-            message: "Invalid params"
-          }
-        }
+            message: "Invalid params",
+          },
+        },
       })
     );
     axios.post = httpCall;
@@ -230,15 +230,15 @@ describe("getMaxClaimAmount", () => {
     const testValues = {
       available: 100,
       unavailable: 200,
-      unclaimed: 300
+      unclaimed: 300,
     };
     const httpCall = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
         data: {
           jsonrpc: "2.0",
           id: 5,
-          result: testValues
-        }
+          result: testValues,
+        },
       })
     );
 
@@ -257,9 +257,9 @@ describe("getMaxClaimAmount", () => {
           id: 5,
           error: {
             code: -32602,
-            message: "Invalid params"
-          }
-        }
+            message: "Invalid params",
+          },
+        },
       })
     );
     axios.post = httpCall;

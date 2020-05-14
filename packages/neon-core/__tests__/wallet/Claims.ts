@@ -9,7 +9,7 @@ describe("constructor", () => {
     expect(result).toMatchObject({
       address: "",
       net: "NoNet",
-      claims: []
+      claims: [],
     });
   });
 
@@ -22,15 +22,15 @@ describe("constructor", () => {
           claim: 1,
           txid: "tx1",
           index: 0,
-          value: 1
+          value: 1,
         },
         {
           claim: 2,
           txid: "tx2",
           index: 1,
-          value: 2
-        }
-      ]
+          value: 2,
+        },
+      ],
     };
 
     const result = new Claims(testObject);
@@ -52,15 +52,15 @@ describe("constructor", () => {
           claim: 1,
           txid: "tx1",
           index: 0,
-          value: 1
+          value: 1,
         },
         {
           claim: 2,
           txid: "tx2",
           index: 1,
-          value: 2
-        }
-      ]
+          value: 2,
+        },
+      ],
     });
 
     const result = new Claims(testObject);
@@ -85,15 +85,15 @@ describe("export", () => {
           claim: 1,
           txid: "tx1",
           index: 0,
-          value: 1
+          value: 1,
         },
         {
           claim: 2,
           txid: "tx2",
           index: 1,
-          value: 2
-        }
-      ]
+          value: 2,
+        },
+      ],
     };
 
     const claimsObj = new Claims(expected);
@@ -111,27 +111,27 @@ describe("slice", () => {
         claim: 1,
         txid: "tx1",
         index: 1,
-        value: 1
+        value: 1,
       },
       {
         claim: 2,
         txid: "tx2",
         index: 2,
-        value: 2
+        value: 2,
       },
       {
         claim: 3,
         txid: "tx3",
         index: 3,
-        value: 3
+        value: 3,
       },
       {
         claim: 4,
         txid: "tx4",
         index: 4,
-        value: 4
-      }
-    ]
+        value: 4,
+      },
+    ],
   });
   const result = testObject.slice(1, 3);
   expect(result instanceof Claims).toBeTruthy();

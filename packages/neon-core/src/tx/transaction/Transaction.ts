@@ -15,7 +15,7 @@ import {
   deserializeOutputs,
   deserializeType,
   deserializeVersion,
-  deserializeWitnesses
+  deserializeWitnesses,
 } from "./main";
 
 function getType(type: number): any {

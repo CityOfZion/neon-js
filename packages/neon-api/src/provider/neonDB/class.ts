@@ -6,7 +6,7 @@ import {
   getHeight,
   getMaxClaimAmount,
   getRPCEndpoint,
-  getTransactionHistory
+  getTransactionHistory,
 } from "./core";
 const log = logging.default("api");
 

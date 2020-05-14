@@ -3,12 +3,12 @@ import {
   num2hexstring,
   num2VarInt,
   str2hexstring,
-  StringStream
+  StringStream,
 } from "../../u";
 
 export enum StateType {
   Account = 0x40,
-  Validator = 0x48
+  Validator = 0x48,
 }
 
 export interface StateDescriptorLike {
@@ -79,7 +79,7 @@ export class StateDescriptor {
       type: this.type,
       key: this.key,
       field: this.field,
-      value: this.value
+      value: this.value,
     };
   }
 

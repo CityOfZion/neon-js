@@ -7,7 +7,7 @@ jest.mock("../../src/funcs/common");
 describe("addAttributeIfExecutingAsSmartContract", () => {
   test("skip if not sendingFromSmartContract", async () => {
     const config = {
-      tx: { addAttribute: jest.fn() }
+      tx: { addAttribute: jest.fn() },
     } as any;
 
     const result = await smartcontract.addAttributeIfExecutingAsSmartContract(
@@ -19,10 +19,10 @@ describe("addAttributeIfExecutingAsSmartContract", () => {
   test("add attribute if sendingFromSmartContract", async () => {
     const config = {
       account: {
-        scriptHash: "abcd"
+        scriptHash: "abcd",
       },
       sendingFromSmartContract: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
-      tx: { addAttribute: jest.fn() }
+      tx: { addAttribute: jest.fn() },
     } as any;
 
     const result = await smartcontract.addAttributeIfExecutingAsSmartContract(
@@ -38,7 +38,7 @@ describe("addAttributeIfExecutingAsSmartContract", () => {
 describe("addSignatureIfExecutingAsSmartContract", () => {
   test("skip if not sendingFromSmartContract", async () => {
     const config = {
-      tx: { addAttribute: jest.fn() }
+      tx: { addAttribute: jest.fn() },
     } as any;
 
     const result = await smartcontract.addSignatureIfExecutingAsSmartContract(
@@ -53,10 +53,10 @@ describe("addSignatureIfExecutingAsSmartContract", () => {
     const config = {
       url: "mockUrl",
       account: {
-        scriptHash: "abcd"
+        scriptHash: "abcd",
       },
       sendingFromSmartContract: "5b7074e873973a6ed3708862f219a6fbf4d1c411",
-      tx: { addWitness: jest.fn(), addAttribute: jest.fn(), scripts: [] }
+      tx: { addWitness: jest.fn(), addAttribute: jest.fn(), scripts: [] },
     } as any;
     getVerificationSignatureForSmartContract.mockResolvedValueOnce(
       mockSignature

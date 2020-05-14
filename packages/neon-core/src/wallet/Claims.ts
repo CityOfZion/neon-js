@@ -21,7 +21,9 @@ export class Claims {
   public constructor(config: Partial<ClaimsLike> = {}) {
     this.address = config.address || "";
     this.net = config.net || "NoNet";
-    this.claims = config.claims ? config.claims.map(c => new ClaimItem(c)) : [];
+    this.claims = config.claims
+      ? config.claims.map((c) => new ClaimItem(c))
+      : [];
   }
 
   public get [Symbol.toStringTag](): string {
@@ -29,7 +31,7 @@ export class Claims {
   }
 
   public [inspect](): string {
-    const claimsDump = this.claims.map(c => {
+    const claimsDump = this.claims.map((c) => {
       return `${c.txid} <${c.index}>: ${c.claim.toString()}`;
     });
     return `[Claims(${this.net}): ${this.address}]\n${JSON.stringify(
@@ -43,7 +45,7 @@ export class Claims {
     return {
       address: this.address,
       net: this.net,
-      claims: this.claims.map(c => c.export())
+      claims: this.claims.map((c) => c.export()),
     };
   }
 
@@ -54,7 +56,7 @@ export class Claims {
     return new Claims({
       address: this.address,
       net: this.net,
-      claims: this.claims.slice(start, end)
+      claims: this.claims.slice(start, end),
     });
   }
 }

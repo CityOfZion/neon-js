@@ -1,6 +1,6 @@
 import ContractParam, {
   ContractParamType,
-  likeContractParam
+  likeContractParam,
 } from "../../src/sc/ContractParam";
 
 describe("constructor", () => {
@@ -45,7 +45,7 @@ describe("Static constructors", () => {
       ["true", true, true],
       ["false", false, false],
       ["0", 0, false],
-      ["0(string)", "0", true]
+      ["0(string)", "0", true],
     ])("%s", (msg: string, data: any, expected: boolean) => {
       const result = ContractParam.boolean(data);
 
@@ -63,8 +63,8 @@ describe("Static constructors", () => {
       [
         "very big number",
         "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215",
-        "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215"
-      ]
+        "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215",
+      ],
     ])("%s", (msg: string, data: any, expected: boolean) => {
       const result = ContractParam.integer(data);
 
@@ -79,13 +79,13 @@ describe("Static constructors", () => {
       [
         "address",
         "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
-        "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+        "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
       ],
       [
         "scriphash",
         "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
-        "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
-      ]
+        "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
+      ],
     ])("%s", (msg: string, data: any, expected: boolean) => {
       const result = ContractParam.hash160(data);
 
@@ -111,11 +111,11 @@ describe("Static constructors", () => {
       [
         "address",
         ["ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s", "address"],
-        "35b20010db73bf86371075ddfba4e6596f1ff35d"
+        "35b20010db73bf86371075ddfba4e6596f1ff35d",
       ],
       ["fixed8", [100.012345678, "fixed8"], "88ba1e5402000000"],
       ["fixed8 (0 decimals)", [1, "fixed8", 0], "0100000000000000"],
-      ["fixed8(4 decimals)", [222.1234, "fixed8", 4], "b2e4210000000000"]
+      ["fixed8(4 decimals)", [222.1234, "fixed8", 4], "b2e4210000000000"],
     ])("%s", (msg: string, data: [number, string, any], expected: boolean) => {
       const result = ContractParam.byteArray(...data);
 
@@ -152,17 +152,17 @@ describe("likeContractParam", () => {
       "basic JS object",
       {
         type: "String",
-        value: "1"
+        value: "1",
       },
-      true
+      true,
     ],
     [
       "another JS object",
       {
         type: "Hash160",
-        value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+        value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
       },
-      true
+      true,
     ],
     [
       "embedded Array",
@@ -171,16 +171,16 @@ describe("likeContractParam", () => {
         value: [
           {
             type: "Hash160",
-            value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
-          }
-        ]
+            value: "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
+          },
+        ],
       },
-      true
+      true,
     ],
     ["ContractParam", new ContractParam("Integer", 1), true],
     ["empty", {}, false],
     ["wrong type", { type: "", value: 1 }, false],
-    ["missing value", { type: "ByteArray" }, false]
+    ["missing value", { type: "ByteArray" }, false],
   ])("%s", (msg: string, data: any, expected: boolean) => {
     const result = likeContractParam(data);
     expect(result).toBe(expected);
@@ -194,7 +194,7 @@ describe("export", () => {
 
     expect(result).toEqual({
       type: "Integer",
-      value: 1
+      value: 1,
     });
   });
 });

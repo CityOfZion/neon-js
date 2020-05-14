@@ -1,6 +1,6 @@
 import { Transaction, TransactionLike, TransactionType } from "../../../src/tx";
 import StateTransaction, {
-  StateTransactionLike
+  StateTransactionLike,
 } from "../../../src/tx/transaction/StateTransaction";
 import samples from "./stateTx.json";
 
@@ -23,18 +23,18 @@ describe("constructor", () => {
           type: 0x40,
           field: "Votes",
           key: "",
-          value: ""
-        }
-      ]
+          value: "",
+        },
+      ],
     };
 
     const result = new StateTransaction(testObject);
     expect(result instanceof StateTransaction).toBeTruthy();
     expect(result.type).toBe(TransactionType.StateTransaction);
-    expect(result.inputs.map(i => i.export())).toEqual(testObject.inputs);
-    expect(result.outputs.map(i => i.export())).toEqual(testObject.outputs);
-    expect(result.scripts.map(i => i.export())).toEqual(testObject.scripts);
-    expect(result.descriptors.map(i => i.export())).toEqual(
+    expect(result.inputs.map((i) => i.export())).toEqual(testObject.inputs);
+    expect(result.outputs.map((i) => i.export())).toEqual(testObject.outputs);
+    expect(result.scripts.map((i) => i.export())).toEqual(testObject.scripts);
+    expect(result.descriptors.map((i) => i.export())).toEqual(
       testObject.descriptors
     );
   });
@@ -49,9 +49,9 @@ describe("constructor", () => {
           type: 0x40,
           field: "Votes",
           key: "",
-          value: ""
-        }
-      ]
+          value: "",
+        },
+      ],
     });
 
     const result = new StateTransaction(testObject);
@@ -83,7 +83,7 @@ describe("export", () => {
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
     scripts: [{ invocationScript: "ab", verificationScript: "" }],
-    descriptors: [{ type: 0x40, value: "ab", field: "Votes", key: "ab" }]
+    descriptors: [{ type: 0x40, value: "ab", field: "Votes", key: "ab" }],
   } as Partial<StateTransactionLike>;
 
   const stateTx = new StateTransaction(expected);
@@ -98,14 +98,14 @@ describe("equals", () => {
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "12", value: 1, scriptHash: "1234" }],
     scripts: [{ invocationScript: "ab", verificationScript: "" }],
-    descriptors: [{ type: 0x40, value: "ab", field: "Votes", key: "ab" }]
+    descriptors: [{ type: 0x40, value: "ab", field: "Votes", key: "ab" }],
   };
 
   const obj2 = {
     type: 0x90,
     version: 0,
     inputs: [{ prevHash: "12", prevIndex: 1 }],
-    descriptors: [{ type: 0x48, value: "cd", field: "Votes", key: "cd" }]
+    descriptors: [{ type: 0x48, value: "cd", field: "Votes", key: "cd" }],
   };
   const State1 = new StateTransaction(obj1);
   const State2 = new StateTransaction(obj2);
@@ -114,13 +114,13 @@ describe("equals", () => {
     ["State1 === State1", State1, State1, true],
     ["State1 !== State2", State1, State2, false],
     ["State1 === Obj1", State1, obj1, true],
-    ["State1 !== Obj2", State1, obj2, false]
+    ["State1 !== Obj2", State1, obj2, false],
   ])("%s", (msg: string, a: StateTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
 });
 
-const dataSet = Object.keys(samples).map(k => {
+const dataSet = Object.keys(samples).map((k) => {
   const s = samples[k];
   return [s.txid, s.serialized, s.deserialized];
 });

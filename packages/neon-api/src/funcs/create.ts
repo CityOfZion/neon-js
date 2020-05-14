@@ -4,7 +4,7 @@ import {
   ClaimGasConfig,
   DoInvokeConfig,
   SendAssetConfig,
-  SetupVoteConfig
+  SetupVoteConfig,
 } from "./types";
 
 export async function createClaimTx(
@@ -40,7 +40,7 @@ export async function createInvocationTx(
       {
         outputs: config.intents || [],
         script: processedScript,
-        gas: config.gas || 0
+        gas: config.gas || 0,
       },
       config.override
     )
@@ -62,8 +62,8 @@ export async function createStateTx(
       key: u.reverseHex(config.account.scriptHash),
       field: "Votes",
       value:
-        u.int2hex(config.candidateKeys.length) + config.candidateKeys.join("")
-    })
+        u.int2hex(config.candidateKeys.length) + config.candidateKeys.join(""),
+    }),
   ];
   config.tx = new tx.StateTransaction({ descriptors });
   return config;

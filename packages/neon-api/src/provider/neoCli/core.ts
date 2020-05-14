@@ -5,7 +5,7 @@ import {
   NeoCliGetClaimableResponse,
   NeoCliGetUnclaimedResponse,
   NeoCliGetUnspentsResponse,
-  NeoCliTx
+  NeoCliTx,
 } from "./responses";
 const log = logging.default("api");
 
@@ -30,7 +30,7 @@ function convertNeoCliClaimable(c: NeoCliClaimable): wallet.ClaimItemLike {
     index: c.n,
     value: c.value,
     start: c.start_height,
-    end: c.end_height
+    end: c.end_height,
   };
 }
 
@@ -54,7 +54,7 @@ export async function getBalance(
   }
   const bal = new wallet.Balance({
     net: url,
-    address: data.result.address
+    address: data.result.address,
   });
   for (const assetBalance of data.result.balance) {
     if (assetBalance.amount === 0) {
@@ -62,7 +62,7 @@ export async function getBalance(
     }
     if (assetBalance.unspent.length > 0) {
       bal.addAsset(assetBalance.asset_symbol, {
-        unspent: assetBalance.unspent.map(convertNeoCliTx)
+        unspent: assetBalance.unspent.map(convertNeoCliTx),
       });
     } else {
       bal.addToken(assetBalance.asset_symbol, assetBalance.amount);
@@ -87,7 +87,7 @@ export async function getClaims(
   return new wallet.Claims({
     net: url,
     address: data.result.address,
-    claims: data.result.claimable.map(convertNeoCliClaimable)
+    claims: data.result.claimable.map(convertNeoCliClaimable),
   });
 }
 

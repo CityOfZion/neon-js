@@ -1,6 +1,6 @@
 import Fixed8 from "../../../src/u/Fixed8";
 import AssetBalance, {
-  AssetBalanceLike
+  AssetBalanceLike,
 } from "../../../src/wallet/components/AssetBalance";
 import Coin from "../../../src/wallet/components/Coin";
 
@@ -9,17 +9,17 @@ const dataSet = [
     balance: 1,
     unspent: [{ index: 0, txid: "coin1", value: 1 }],
     spent: [{ index: 1, txid: "coin2", value: 1.2 }],
-    unconfirmed: [{ index: 2, txid: "coin3", value: 3 }]
+    unconfirmed: [{ index: 2, txid: "coin3", value: 3 }],
   },
   {
     balance: 7,
     unspent: [
       { index: 0, txid: "coin1", value: 1 },
-      { index: 1, txid: "coin1", value: 6 }
+      { index: 1, txid: "coin1", value: 6 },
     ],
     spent: [{ index: 1, txid: "coin2", value: 1.2 }],
-    unconfirmed: [{ index: 3, txid: "coin3", value: 0.1 }]
-  }
+    unconfirmed: [{ index: 3, txid: "coin3", value: 0.1 }],
+  },
 ];
 describe("constructor", () => {
   test("empty", () => {
@@ -28,7 +28,7 @@ describe("constructor", () => {
     expect(result).toMatchObject({
       unspent: [],
       spent: [],
-      unconfirmed: []
+      unconfirmed: [],
     });
   });
 
@@ -95,7 +95,7 @@ describe("equals", () => {
     ["assetBalance1 === assetBalance1", assetBalance1, assetBalance1, true],
     ["assetBalance1 !== assetBalance2", assetBalance1, assetBalance2, false],
     ["assetBalance1 === object1", assetBalance1, object1, true],
-    ["assetBalance1 === object2", assetBalance1, object2, false]
+    ["assetBalance1 === object2", assetBalance1, object2, false],
   ])("%s", (msg: string, a: AssetBalance, b: any, cond: boolean) => {
     expect(a.equals(b) === cond).toBeTruthy();
   });

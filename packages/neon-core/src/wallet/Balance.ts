@@ -29,7 +29,7 @@ async function verifyCoin(url: string, c: Coin): Promise<boolean> {
  * @param coinArr Coins to verify.
  */
 async function verifyCoins(url: string, coinArr: Coin[]): Promise<boolean[]> {
-  const promises = coinArr.map(c => verifyCoin(url, c));
+  const promises = coinArr.map((c) => verifyCoin(url, c));
   return await Promise.all(promises);
 }
 
@@ -46,7 +46,7 @@ async function verifyAssetBalance(
     balance: new Fixed8(0),
     spent: [] as Coin[],
     unspent: [] as Coin[],
-    unconfirmed: [] as Coin[]
+    unconfirmed: [] as Coin[],
   };
   const validCoins = await verifyCoins(url, assetBalance.unspent);
   validCoins.forEach((valid, i) => {
@@ -74,7 +74,7 @@ function exportAssets(assets: {
 
 function exportTokens(tokens: { [sym: string]: Fixed8 }) {
   const out: { [sym: string]: number } = {};
-  Object.keys(tokens).forEach(symbol => {
+  Object.keys(tokens).forEach((symbol) => {
     out[symbol] = tokens[symbol].toNumber();
   });
   return out;
@@ -234,7 +234,7 @@ export class Balance {
       assetSymbols: this.assetSymbols,
       assets: exportAssets(this.assets),
       tokenSymbols: this.tokenSymbols,
-      tokens: exportTokens(this.tokens)
+      tokens: exportTokens(this.tokens),
     };
   }
 
@@ -247,11 +247,11 @@ export class Balance {
   public verifyAssets(url: string): Promise<this> {
     const promises: Promise<AssetBalance>[] = [];
     const symbols = this.assetSymbols;
-    symbols.map(key => {
+    symbols.map((key) => {
       const assetBalance = this.assets[key];
       promises.push(verifyAssetBalance(url, assetBalance));
     });
-    return Promise.all(promises).then(newBalances => {
+    return Promise.all(promises).then((newBalances) => {
       symbols.map((sym, i) => {
         this.assets[sym] = newBalances[i];
       });

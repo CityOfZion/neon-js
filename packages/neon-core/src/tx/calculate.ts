@@ -40,15 +40,15 @@ export function calculateInputsForAsset(
       new TransactionOutput({
         assetId,
         value: selectedAmt.sub(requiredAmt),
-        scriptHash: getScriptHashFromAddress(address)
+        scriptHash: getScriptHashFromAddress(address),
       })
     );
   }
   // Format inputs
-  const inputs = selectedInputs.map(input => {
+  const inputs = selectedInputs.map((input) => {
     return new TransactionInput({
       prevHash: input.txid,
-      prevIndex: input.index
+      prevIndex: input.index,
     });
   });
   return { inputs, change };
@@ -79,13 +79,13 @@ export function calculateInputs(
       new TransactionOutput({
         assetId: ASSET_ID.GAS,
         value: fees,
-        scriptHash: getScriptHashFromAddress(balances.address)
+        scriptHash: getScriptHashFromAddress(balances.address),
       })
     );
   }
 
   const requiredAssets = combineIntents(intents);
-  const inputsAndChange = Object.keys(requiredAssets).map(assetId => {
+  const inputsAndChange = Object.keys(requiredAssets).map((assetId) => {
     const requiredAmt = requiredAssets[assetId];
     const assetSymbol = ASSETS[assetId];
     if (balances.assetSymbols.indexOf(assetSymbol) === -1) {
@@ -112,7 +112,7 @@ export function calculateInputs(
     (prev, curr) => {
       return {
         inputs: prev.inputs.concat(curr.inputs),
-        change: prev.change.concat(curr.change)
+        change: prev.change.concat(curr.change),
       };
     },
     { inputs: [], change: [] }

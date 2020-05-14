@@ -2,7 +2,7 @@ import {
   Transaction,
   TransactionLike,
   TransactionType,
-  Witness
+  Witness,
 } from "../../../src/tx";
 import ContractTransaction from "../../../src/tx/transaction/ContractTransaction";
 
@@ -21,15 +21,15 @@ describe("constructor", () => {
       version: 1,
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-      scripts: [{ invocationScript: "ab", verificationScript: "" }]
+      scripts: [{ invocationScript: "ab", verificationScript: "" }],
     } as Partial<TransactionLike>;
 
     const result = new ContractTransaction(testObject);
     expect(result instanceof ContractTransaction).toBeTruthy();
     expect(result.type).toBe(TransactionType.ContractTransaction);
     expect(result.version).toBe(testObject.version);
-    expect(result.inputs.map(i => i.export())).toEqual(testObject.inputs);
-    expect(result.outputs.map(i => i.export())).toEqual(testObject.outputs);
+    expect(result.inputs.map((i) => i.export())).toEqual(testObject.inputs);
+    expect(result.outputs.map((i) => i.export())).toEqual(testObject.outputs);
   });
 
   test("Transaction", () => {
@@ -37,7 +37,7 @@ describe("constructor", () => {
       version: 1,
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-      scripts: [{ invocationScript: "ab", verificationScript: "" }]
+      scripts: [{ invocationScript: "ab", verificationScript: "" }],
     });
 
     const result = new ContractTransaction(testObject);
@@ -73,7 +73,7 @@ describe("export", () => {
     attributes: [],
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-    scripts: [{ invocationScript: "ab", verificationScript: "" }]
+    scripts: [{ invocationScript: "ab", verificationScript: "" }],
   } as Partial<TransactionLike>;
 
   const contractTx = new ContractTransaction(expected);
@@ -87,13 +87,13 @@ describe("equals", () => {
     version: 1,
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "12", value: 1, scriptHash: "1234" }],
-    scripts: [{ invocationScript: "ab", verificationScript: "" }]
+    scripts: [{ invocationScript: "ab", verificationScript: "" }],
   };
 
   const obj2 = {
     type: 0x80,
     version: 1,
-    inputs: [{ prevHash: "12", prevIndex: 1 }]
+    inputs: [{ prevHash: "12", prevIndex: 1 }],
   };
   const contract1 = new ContractTransaction(obj1);
   const contract2 = new ContractTransaction(obj2);
@@ -102,13 +102,13 @@ describe("equals", () => {
     ["Contract1 === Contract1", contract1, contract1, true],
     ["Contract1 !== Contract2", contract1, contract2, false],
     ["Contract1 === Obj1", contract1, obj1, true],
-    ["Contract1 !== Obj2", contract1, obj2, false]
+    ["Contract1 !== Obj2", contract1, obj2, false],
   ])("%s", (msg: string, a: ContractTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
 });
 
-const dataSet = Object.keys(samples).map(k => {
+const dataSet = Object.keys(samples).map((k) => {
   const s = samples[k];
   return [s.txid, s.serialized, s.deserialized];
 });
@@ -142,7 +142,7 @@ describe("AddWitness", () => {
     const expected = new Witness({
       invocationScript: "",
       verificationScript:
-        "21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9ac"
+        "21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9ac",
     });
     const tx = new ContractTransaction();
     tx.addWitness(expected);
@@ -154,7 +154,7 @@ describe("AddWitness", () => {
   test("Add empty Witness for smart contract", () => {
     const expected = new Witness({
       invocationScript: "0000",
-      verificationScript: ""
+      verificationScript: "",
     });
     expected.scriptHash = "5b7074e873973a6ed3708862f219a6fbf4d1c411";
     const tx = new ContractTransaction();
@@ -170,12 +170,12 @@ describe("AddWitness", () => {
   test("arrange witnesses according to scriptHash", () => {
     const witness1 = new Witness({
       invocationScript: "0000",
-      verificationScript: ""
+      verificationScript: "",
     });
     witness1.scriptHash = "01";
     const witness2 = new Witness({
       invocationScript: "0000",
-      verificationScript: ""
+      verificationScript: "",
     });
     witness2.scriptHash = "02";
 

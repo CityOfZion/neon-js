@@ -1,5 +1,5 @@
 import TransactionAttribute, {
-  TransactionAttributeLike
+  TransactionAttributeLike,
 } from "../../../src/tx/components/TransactionAttribute";
 
 describe("constructor", () => {
@@ -11,7 +11,7 @@ describe("constructor", () => {
   test("TransactionAttributeLike (int usage)", () => {
     const testObject = {
       usage: 240,
-      data: "test"
+      data: "test",
     } as TransactionAttributeLike;
 
     const result = new TransactionAttribute(testObject);
@@ -23,7 +23,7 @@ describe("constructor", () => {
   test("TransactionAttributeLike (str usage)", () => {
     const testObject = {
       usage: "Remark",
-      data: "test"
+      data: "test",
     } as TransactionAttributeLike;
 
     const result = new TransactionAttribute(testObject);
@@ -35,7 +35,7 @@ describe("constructor", () => {
   test("TransactionAttribute", () => {
     const testObject = new TransactionAttribute({
       usage: 240,
-      data: "test"
+      data: "test",
     });
 
     const result = new TransactionAttribute(testObject);
@@ -48,7 +48,7 @@ describe("export", () => {
   test("export to TransactionAttributeLike", () => {
     const expected = {
       usage: 240,
-      data: "test"
+      data: "test",
     };
 
     const txAttr = new TransactionAttribute(expected);
@@ -60,11 +60,11 @@ describe("export", () => {
 describe("equals", () => {
   const obj1 = {
     usage: 240,
-    data: "obj1"
+    data: "obj1",
   };
   const obj2 = {
     usage: 241,
-    data: "obj2"
+    data: "obj2",
   };
   const attr1 = new TransactionAttribute(obj1);
   const attr2 = new TransactionAttribute(obj2);
@@ -73,7 +73,7 @@ describe("equals", () => {
     ["Attr1 === Attr1", attr1, attr1, true],
     ["Attr1 !== Attr2", attr1, attr2, false],
     ["Attr1 === Obj1", attr1, obj1, true],
-    ["Attr1 !== Obj2", attr1, obj2, false]
+    ["Attr1 !== Obj2", attr1, obj2, false],
   ])("%s", (msg: string, a: TransactionAttribute, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
@@ -85,17 +85,17 @@ const dataSet = [
     {
       usage: parseInt("f0", 16),
       // This is a remark
-      data: "5468697320697320612072656d61726b"
+      data: "5468697320697320612072656d61726b",
     },
-    "f0105468697320697320612072656d61726b"
-  ]
+    "f0105468697320697320612072656d61726b",
+  ],
 ];
 
 describe("serialize", () => {
   test("errors if data too big", () => {
     const result = new TransactionAttribute({
       usage: 0,
-      data: "0".repeat(999999)
+      data: "0".repeat(999999),
     });
 
     expect(result.serialize).toThrow();
