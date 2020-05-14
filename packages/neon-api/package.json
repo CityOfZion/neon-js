@@ -36,7 +36,8 @@
     "@cityofzion/neon-core": "^4.7.2",
     "@types/node": "13.7.0",
     "axios": "0.19.2",
-    "isomorphic-ws": "^4.0.1"
+    "isomorphic-ws": "^4.0.1",
+    "ws": "^7.3.0"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "^4.0.0"
@@ -45,7 +46,6 @@
     "dist/",
     "lib/"
   ],
-  "gitHead": "d21633d03deca1f4bc6c3a4f4e1d32a61aec2fe3",
   "devDependencies": {
     "@types/ws": "^7.2.3"
   }
