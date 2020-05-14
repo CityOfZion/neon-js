@@ -67,7 +67,7 @@ jobs:
           name: Unit Tests
           environment:
             JEST_JUNIT_OUTPUT: reports/unit/results.xml
-          command: yarn test:unit --ci --runInBand --reporters="jest-junit" --reporters="default"
+          command: yarn test:unit --ci --runInBand --detectOpenHandles --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -84,7 +84,7 @@ jobs:
           name: Integration Tests
           environment:
             JEST_JUNIT_OUTPUT: reports/integration/results.xml
-          command: yarn test:integration --ci --runInBand --reporters="jest-junit" --reporters="default"
+          command: yarn test:integration --ci --runInBand --detectOpenHandles --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
       - store_artifacts:
