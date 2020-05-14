@@ -29,9 +29,21 @@ const apiCli = new api.neoCli.instance(
 );
 ```
 
+### With Notifications API
+
+```javascript
+const { api } = require("@cityofzion/neon-js");
+
+const NETWORK = "MainNet"; // or "TestNet"
+const notificationsProvider = new api.notifications.instance(
+  "wss://pubsub.main.neologin.io/event"
+  //or "wss://pubsub.test.neologin.io/event" for TestNet
+);
+```
+
 ## Initiate PrivateNet Instance
 
-### Using Neoscan API
+### Using Neoscan and notifications API
 
 ```javascript
 const { default: Neon, rpc, api } = require("@cityofzion/neon-js");
@@ -46,7 +58,9 @@ const privateNetConfig = {
   ], // Optional
   extra: {
     // Neoscan URL
-    neoscan: "http://localhost:4000/api/main_net"
+    neoscan: "http://localhost:4000/api/main_net",
+    // Notifications URL
+    notifications: "ws://localhost:8080/event"
   }
 };
 

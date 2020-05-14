@@ -60,6 +60,18 @@ privateNetNeoscan.getBalance(address).then(res => console.log(res));
 
 We should be able to see a printout of the balance of the address if it is successful.
 
+Finally, if you want to have access to event notifications, you'll have to run the notification server locally and add its url to the network configuration:
+
+```js
+const config = {
+  name: "PrivateNet",
+  extra: {
+    neoscan: "http://localhost:4000/api/main_net",
+    notifications: "ws://localhost:8080/event"
+  }
+};
+```
+
 ## Notes
 
 - If you are using docker to host everything (for example, relying on neoscan docker), the urls from `getRPCEndpoint` will not be reliable as they are local urls.

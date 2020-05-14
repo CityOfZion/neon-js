@@ -15,7 +15,7 @@ api.neoscan.getBalance("http://www.neoscan-testnet.io/test_net/v1/", address);
 api.sendAsset(config);
 ```
 
-The `api` module contains all 3rd party API that is useful together with Neon. A normal NEO node does not provide us with a convenient way of retrieving the balance or claimable transactions through RPC. Thus, we rely on external services such as NeonDB and neoscan for the information required.
+The `api` module contains all 3rd party API that is useful together with Neon. A normal NEO node does not provide us with a convenient way of subscribing to smart contract events and retrieving the balance or claimable transactions through RPC. Thus, we rely on external services such as NeonDB, neoscan and notification servers for the information required.
 
 However, do note that these APIs rely on hosted nodes by 3rd party and thus use them at your own risk.
 
@@ -36,11 +36,10 @@ There are 3 core methods that covers majority of the functionality that is requi
 They operate by taking in a configuration object which contains all the information necessary to request, construct and send a transaction. At the end, the same configuration object is returned and you may inspect the `response` property to check for the success of your transaction.
 
 ```js
-const provider = Neon.api.neoscan.instance('TestNet')
+const provider = new Neon.api.neoscan.instance('TestNet')
 const config = {
-  provider: 'TestNet'
-  address: 'ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW',
-  privateKey: '7d128a6d096f0c14c3a25a2b0c41cf79661bfcb4a8cc95aaaea28bde4d732344'
+  api: provider,
+  account: new Neon.wallet.Account('MY_ADDRESS_PRIVATE_KEY')
 }
 Neon.api.claimGas(config)
 .then((conf) => {
@@ -71,14 +70,21 @@ api
 
 Providers are external services that provide information that is not easily gathered from the RPC nodes. For example, to send NEO or GAS, we need to retrieve all the UTXO information associated with an address.
 
-The two available providers are `neoscan` and `neonDB`. They are interfaces that translates the different REST responses into uniform data structures that is used by other `neon-js` modules.
+The available providers are `neoscan`, `neonDB` and `notifications`. The first two are interfaces that translate the different REST responses into uniform data structures that are used by other `neon-js` modules, while the `notifications` interface handles subscriptions to a live feed of events being triggered inside a smart contract.
 
 ```js
-const mainNetNeoscan = api.neocan.instance("MainNet");
-const mainNetNeonDB = api.neonDB.instance("MainNet");
+const mainNetNeoscan = new api.neocan.instance("MainNet");
+const mainNetNeonDB = new api.neonDB.instance("MainNet");
+const mainNetNotifications = new api.notifications.instance("MainNet");
 
 const neoscanBalance = await mainNetNeoscan.getBalance(addr);
 const neonDBBalance = await mainNetNeonDB.getBalance(addr);
 
 console.log(neoscanBalance.equals(neonDBBalance)); // They should be the same datastructure with the same information
+
+const subscription = mainNetNotifications.subscribe("0x314b5aac1cdd01d10661b00886197f2194c3c89b", (event) => {
+  console.log(event); // Print the events being received in real time
+});
+
+subscription.unsubscribe(); // Unsubscribe the previous subscription
 ```
