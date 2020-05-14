@@ -65,19 +65,20 @@ export class Notifications {
    * Unsubscribe all subscriptions associated with a specific contract
    * @param contract - Hash of the contract (or null for subscriptions to all contracts) to unsubscribe callbacks from
    */
-  public unsubscribeContract(contract: string | null) {
+  public unsubscribeContract(contract: string | null): void {
     contract = this.normalizeContract(contract);
-    if (!this.subscriptions.has(contract)) {
+    const subscriptionObj = this.subscriptions.get(contract);
+    if (!subscriptionObj) {
       return; // Not throwing an exception in order to allow unlimited calling of this function
     }
-    this.subscriptions.get(contract)!.websocket.close();
+    subscriptionObj.websocket.close();
     this.subscriptions.delete(contract);
   }
 
   /**
    * Unsubscribe all subscriptions (equivalent to calling unsubscribeContract() once for every contract)
    */
-  public unsubscribeAll() {
+  public unsubscribeAll(): void {
     for (const contract of this.subscriptions.keys()) {
       this.unsubscribeContract(contract);
     }
@@ -90,7 +91,8 @@ export class Notifications {
       this.url + (contract !== null ? "?contract=" + contract : "")
     );
     ws.onmessage = (event: WebSocket.MessageEvent) => {
-      for (const cb of this.subscriptions.get(contract)!.callbacks.values()) {
+      const callbackArray = this.subscriptions.get(contract)?.callbacks ?? [];
+      for (const cb of callbackArray.values()) {
         cb(JSON.parse(event.data as string) as NotificationMessage);
       }
     };
