@@ -7,18 +7,18 @@ describe("constructor", () => {
     ["WIF", "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG"],
     [
       "privateKey",
-      "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69"
+      "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69",
     ],
     [
       "publicKey",
-      "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9"
+      "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
     ],
     [
       "publicKeyUnencoded",
-      "041d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c94617303f7408d9abfedfb6fbb00dd07e3e7735d918bbea7a7e2c1895ea1bc9b9"
+      "041d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c94617303f7408d9abfedfb6fbb00dd07e3e7735d918bbea7a7e2c1895ea1bc9b9",
     ],
     ["scriptHash", "5df31f6f59e6a4fbdd75103786bf73db1000b235"],
-    ["address", "ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s"]
+    ["address", "ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s"],
   ])("%s", (msg: string, data: string) => {
     const result = new Account(data);
     expect(result instanceof Account).toBeTruthy();
@@ -45,12 +45,12 @@ describe("constructor", () => {
         parameters: [
           {
             name: "signature",
-            type: "Signature"
-          }
+            type: "Signature",
+          },
         ],
-        deployed: false
+        deployed: false,
       },
-      extra: null
+      extra: null,
     } as AccountJSON;
 
     const result = new Account(testObject);
@@ -72,14 +72,14 @@ describe("export", () => {
         parameters: [
           {
             name: "signature",
-            type: "Signature"
-          }
+            type: "Signature",
+          },
         ],
-        deployed: false
+        deployed: false,
       },
       extra: {
-        a: 1
-      }
+        a: 1,
+      },
     } as AccountJSON;
 
     const acct = new Account(testObject);
@@ -94,7 +94,7 @@ describe("multisig", () => {
     const publicKeys = [
       "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
       "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
-      "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa"
+      "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
     ];
 
     const result = Account.createMultiSig(threshold, publicKeys);
@@ -127,7 +127,7 @@ describe("multisig", () => {
       "03c73ce19147500f30bc075f134d2ad715ce4dfa5d6c13c8e5584816438b7529fb",
       "02de3a4cfa86aa62ab4784be7b08d3528cf52f19781dc4f043bceed407536ef97a",
       "03f85d0cbd392dac4647a313564d9426016f42a0ba89cf2fc0f6903528ec2d92e8",
-      "03ff7fd8eccae93001919460e5cae6325f0ff832e8977e3276efd155ba3a27f6e7"
+      "03ff7fd8eccae93001919460e5cae6325f0ff832e8977e3276efd155ba3a27f6e7",
     ];
 
     const result = Account.createMultiSig(threshold, publicKeys);
@@ -146,10 +146,10 @@ describe("multisig", () => {
           "522102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c92102232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa53ae",
         parameters: [
           { name: "parameter0", type: "Signature" },
-          { name: "parameter1", type: "Signature" }
+          { name: "parameter1", type: "Signature" },
         ],
-        deployed: false
-      }
+        deployed: false,
+      },
     });
 
     expect(result.isMultiSig).toBeTruthy();

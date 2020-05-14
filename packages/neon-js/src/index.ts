@@ -15,13 +15,13 @@ export const {
   CONST,
   u,
   tx,
-  logging
+  logging,
 } = neonJs;
 import defaultNetworks from "./networks";
 const bootstrap: {
   [net: string]: Partial<neonCore.rpc.NetworkJSON>;
 } = defaultNetworks;
-Object.keys(bootstrap).map(key => {
+Object.keys(bootstrap).map((key) => {
   settings.networks[key] = new rpc.Network(
     bootstrap[key] as neonCore.rpc.NetworkJSON
   );
@@ -48,7 +48,7 @@ const create = {
   query: (req: neonCore.rpc.RPCRequest) => new rpc.Query(req),
   network: (net: Partial<neonCore.rpc.NetworkJSON>) => new rpc.Network(net),
   stringStream: (str?: string) => new u.StringStream(str),
-  fixed8: (i?: string | number) => new u.Fixed8(i)
+  fixed8: (i?: string | number) => new u.Fixed8(i),
 };
 
 /**
@@ -60,7 +60,7 @@ const is = {
   encryptedKey: wallet.isNEP2,
   privateKey: wallet.isPrivateKey,
   wif: wallet.isWIF,
-  scriptHash: wallet.isScriptHash
+  scriptHash: wallet.isScriptHash,
 };
 
 /**
@@ -71,7 +71,7 @@ const deserialize = {
   input: tx.TransactionInput.deserialize,
   output: tx.TransactionOutput.deserialize,
   script: tx.Witness.deserialize,
-  tx: tx.Transaction.deserialize
+  tx: tx.Transaction.deserialize,
 };
 
 /**
@@ -82,7 +82,7 @@ const sign = {
   message: (msg: string, privateKey: string) => {
     const hex = u.str2hexstring(msg);
     return wallet.sign(hex, privateKey);
-  }
+  },
 };
 
 /**
@@ -93,7 +93,7 @@ const verify = {
   message: (msg: string, sig: string, publicKey: string) => {
     const hex = u.str2hexstring(msg);
     return wallet.verify(hex, sig, publicKey);
-  }
+  },
 };
 
 export default {
@@ -107,10 +107,10 @@ export default {
   sign,
   verify,
   encrypt: {
-    privateKey: wallet.encrypt
+    privateKey: wallet.encrypt,
   },
   decrypt: {
-    privateKey: wallet.decrypt
+    privateKey: wallet.decrypt,
   },
   add: {
     network: (network: neonCore.rpc.Network, override = false) => {
@@ -119,7 +119,7 @@ export default {
       }
       settings.networks[network.name] = network;
       return true;
-    }
+    },
   },
   remove: {
     network: (name: string): boolean => {
@@ -128,8 +128,8 @@ export default {
         return true;
       }
       return false;
-    }
+    },
   },
   u,
-  CONST
+  CONST,
 };

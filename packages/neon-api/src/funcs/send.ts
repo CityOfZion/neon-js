@@ -3,7 +3,7 @@ import { checkProperty } from "./common";
 import {
   DoInvokeConfig,
   ManagedApiBasicConfig,
-  SendAssetConfig
+  SendAssetConfig,
 } from "./types";
 
 const log = logging.default("api");

@@ -5,7 +5,7 @@ import { mocked } from "ts-jest/utils";
 const logging = mocked(_logging, true);
 const rpc = mocked(_rpc, true);
 logging.default.mockImplementation(() => ({
-  error: jest.fn()
+  error: jest.fn(),
 }));
 
 import * as send from "../../src/funcs/send";
@@ -16,11 +16,11 @@ describe("sendTx", () => {
     const config = {
       url: "mockUrl",
       account: { address: "mockAddress" },
-      tx: { serialize: jest.fn() } as any
+      tx: { serialize: jest.fn() } as any,
     } as SendAssetConfig;
     const mockExecute = jest.fn().mockResolvedValueOnce({ result: false });
     rpc.Query.sendRawTransaction.mockImplementationOnce(() => ({
-      execute: mockExecute
+      execute: mockExecute,
     }));
     const result = await send.sendTx(config);
     expect(config).toHaveProperty("response");
@@ -34,18 +34,18 @@ describe("sendTx", () => {
       url: "mockUrl",
       tx: {
         serialize: jest.fn(),
-        hash: jest.fn()
-      } as any
+        hash: jest.fn(),
+      } as any,
     } as SendAssetConfig;
     const mockExecute = jest.fn().mockResolvedValueOnce({ result: true });
     rpc.Query.sendRawTransaction.mockImplementationOnce(() => ({
-      execute: mockExecute
+      execute: mockExecute,
     }));
     const result = await send.sendTx(config);
     expect(config).toHaveProperty("response");
     expect(config.response!).toEqual({
       result: true,
-      txid: config.tx!.hash
+      txid: config.tx!.hash,
     });
     expect(rpc.Query.sendRawTransaction).toBeCalledWith(config.tx);
     expect(mockExecute).toBeCalledWith(config.url);
@@ -56,7 +56,7 @@ describe("applyTxToBalance", () => {
   test("skips if result is false", async () => {
     const config = {
       response: { result: false },
-      balance: { applyTx: jest.fn() } as any
+      balance: { applyTx: jest.fn() } as any,
     } as SendAssetConfig;
 
     const result = await send.applyTxToBalance(config);
@@ -67,7 +67,7 @@ describe("applyTxToBalance", () => {
     const config = {
       response: { result: true },
       tx: jest.fn() as any,
-      balance: { applyTx: jest.fn() } as any
+      balance: { applyTx: jest.fn() } as any,
     } as SendAssetConfig;
 
     const result = await send.applyTxToBalance(config);

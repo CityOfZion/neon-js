@@ -6,13 +6,13 @@ import {
   findGoodNodesFromHeight,
   getBestUrl,
   PastTransaction,
-  RpcNode
+  RpcNode,
 } from "../common";
 import {
   NeonDbBalance,
   NeonDbClaims,
   NeonDbHistory,
-  NeonDbNode
+  NeonDbNode,
 } from "./responses";
 const log = logging.default("api");
 
@@ -25,8 +25,8 @@ export async function getRPCEndpoint(url: string): Promise<string> {
   const response = await axios.get(url + "/v2/network/nodes");
   const data = response.data.nodes as NeonDbNode[];
   let nodes = data
-    .filter(d => d.status)
-    .map(d => ({ height: d.block_height, url: d.url } as RpcNode));
+    .filter((d) => d.status)
+    .map((d) => ({ height: d.block_height, url: d.url } as RpcNode));
 
   if (internalSettings.httpsOnly) {
     nodes = filterHttpsOnly(nodes);
@@ -71,21 +71,21 @@ export async function getClaims(
 ): Promise<wallet.Claims> {
   const response = await axios.get(url + "/v2/address/claims/" + address);
   const data = response.data as NeonDbClaims;
-  const claims = data.claims.map(c => {
+  const claims = data.claims.map((c) => {
     return {
       claim: new u.Fixed8(c.claim || 0).div(100000000),
       index: c.index,
       txid: c.txid,
       start: c.start || 0,
       end: c.end || 0,
-      value: c.value
+      value: c.value,
     };
   });
   log.info(`Retrieved Claims for ${address} from neonDB ${url}`);
   return new wallet.Claims({
     net: url,
     address,
-    claims
+    claims,
   } as wallet.ClaimsLike);
 }
 
@@ -122,14 +122,14 @@ export async function getTransactionHistory(
   const response = await axios.get(url + "/v2/address/history/" + address);
   const data = response.data as NeonDbHistory;
   log.info(`Retrieved History for ${address} from neonDB ${url}`);
-  return data.history.map(rawTx => {
+  return data.history.map((rawTx) => {
     return {
       change: {
         NEO: new u.Fixed8(rawTx.NEO || 0),
-        GAS: new u.Fixed8(rawTx.GAS || 0)
+        GAS: new u.Fixed8(rawTx.GAS || 0),
       },
       blockHeight: rawTx.block_index,
-      txid: rawTx.txid
+      txid: rawTx.txid,
     };
   });
 }

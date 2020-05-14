@@ -12,7 +12,7 @@ export enum ContractParamType {
   String = 0x07,
   Array = 0x10,
   InteropInterface = 0xf0,
-  Void = 0xff
+  Void = 0xff,
 }
 
 export interface ContractParamLike {
@@ -169,7 +169,7 @@ export class ContractParam {
 
   public export(): ContractParamLike {
     const exportedValue = Array.isArray(this.value)
-      ? this.value.map(cp => cp.export())
+      ? this.value.map((cp) => cp.export())
       : this.value;
     return { type: ContractParamType[this.type], value: this.value };
   }

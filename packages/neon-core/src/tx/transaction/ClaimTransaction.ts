@@ -4,7 +4,7 @@ import { Claims, getScriptHashFromAddress } from "../../wallet";
 import {
   TransactionInput,
   TransactionInputLike,
-  TransactionOutput
+  TransactionOutput,
 } from "../components";
 import { BaseTransaction, TransactionLike } from "./BaseTransaction";
 import { serializeArrayOf } from "./main";
@@ -30,7 +30,7 @@ export class ClaimTransaction extends BaseTransaction {
     tx: Partial<TransactionLike>
   ): Partial<ClaimTransactionLike> {
     const out = {
-      claims: [] as TransactionInput[]
+      claims: [] as TransactionInput[],
     };
     const claimLength = ss.readVarInt();
     for (let i = 0; i < claimLength; i++) {
@@ -47,12 +47,12 @@ export class ClaimTransaction extends BaseTransaction {
       new TransactionOutput({
         assetId: ASSET_ID.GAS,
         value: totalClaim,
-        scriptHash: getScriptHashFromAddress(claim.address)
-      })
+        scriptHash: getScriptHashFromAddress(claim.address),
+      }),
     ];
-    const claims = claim.claims.map(c => ({
+    const claims = claim.claims.map((c) => ({
       prevHash: c.txid,
-      prevIndex: c.index
+      prevIndex: c.index,
     }));
     return new ClaimTransaction({ outputs, claims });
   }
@@ -71,7 +71,9 @@ export class ClaimTransaction extends BaseTransaction {
   public constructor(obj: Partial<ClaimTransactionLike> = {}) {
     super(Object.assign({ version: TX_VERSION.CLAIM }, obj));
     this.claims = Array.isArray(obj.claims)
-      ? obj.claims.slice(0, MAX_CLAIMS_LENGTH).map(c => new TransactionInput(c))
+      ? obj.claims
+          .slice(0, MAX_CLAIMS_LENGTH)
+          .map((c) => new TransactionInput(c))
       : [];
   }
 
@@ -86,14 +88,14 @@ export class ClaimTransaction extends BaseTransaction {
       new TransactionOutput({
         assetId: ASSET_ID.GAS,
         value: totalClaim,
-        scriptHash: getScriptHashFromAddress(claim.address)
+        scriptHash: getScriptHashFromAddress(claim.address),
       })
     );
     this.claims = claim.claims.map(
-      c =>
+      (c) =>
         new TransactionInput({
           prevHash: c.txid,
-          prevIndex: c.index
+          prevIndex: c.index,
         })
     );
     return this;
@@ -115,7 +117,7 @@ export class ClaimTransaction extends BaseTransaction {
 
   public export(): ClaimTransactionLike {
     return Object.assign(super.export(), {
-      claims: this.claims.map(c => c.export())
+      claims: this.claims.map((c) => c.export()),
     });
   }
 }

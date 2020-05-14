@@ -8,7 +8,7 @@ beforeEach(() => {
   jest.resetModules();
   settings.networks.UnitTestNet = new rpc.Network({
     name: "UnitTestNet",
-    extra: { neoscan: UnitTestNetUrl, neonDB: "http://wrongurl.com" }
+    extra: { neoscan: UnitTestNetUrl, neonDB: "http://wrongurl.com" },
   });
 });
 

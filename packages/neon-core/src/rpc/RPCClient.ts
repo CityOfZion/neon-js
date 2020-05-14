@@ -354,15 +354,15 @@ export class RPCClient {
             index: rawClaim.n,
             value: rawClaim.value,
             start: rawClaim.start_height,
-            end: rawClaim.end_height
+            end: rawClaim.end_height,
           })
-      )
+      ),
     });
   }
 
   private parseUnspentsToBalance(getUnspentsResult: any): Balance {
     const bal = new Balance({
-      address: getUnspentsResult.address
+      address: getUnspentsResult.address,
     });
 
     for (const assetBalance of getUnspentsResult.balance) {
@@ -376,9 +376,9 @@ export class RPCClient {
               new Coin({
                 index: utxo.n,
                 txid: utxo.txid,
-                value: utxo.value
+                value: utxo.value,
               })
-          )
+          ),
         });
       } else {
         bal.addToken(assetBalance.asset_symbol, assetBalance.amount);

@@ -3,7 +3,7 @@ import {
   TransactionAttribute,
   TransactionInput,
   TransactionOutput,
-  Witness
+  Witness,
 } from "../components";
 import { TransactionLike } from "./BaseTransaction";
 
@@ -20,7 +20,7 @@ export function deserializeArrayOf<T>(
 }
 
 export function serializeArrayOf(prop: any[]): string {
-  return num2VarInt(prop.length) + prop.map(p => p.serialize()).join("");
+  return num2VarInt(prop.length) + prop.map((p) => p.serialize()).join("");
 }
 
 export function deserializeType(
@@ -46,7 +46,7 @@ export function deserializeAttributes(
   const attributes = deserializeArrayOf(
     TransactionAttribute.fromStream,
     ss
-  ).map(i => i.export());
+  ).map((i) => i.export());
   return Object.assign(tx, { attributes });
 }
 
@@ -54,7 +54,7 @@ export function deserializeInputs(
   ss: StringStream,
   tx: Partial<TransactionLike>
 ): Partial<TransactionLike> {
-  const inputs = deserializeArrayOf(TransactionInput.fromStream, ss).map(i =>
+  const inputs = deserializeArrayOf(TransactionInput.fromStream, ss).map((i) =>
     i.export()
   );
   return Object.assign(tx, { inputs });
@@ -64,9 +64,10 @@ export function deserializeOutputs(
   ss: StringStream,
   tx: Partial<TransactionLike>
 ): Partial<TransactionLike> {
-  const outputs = deserializeArrayOf(TransactionOutput.fromStream, ss).map(i =>
-    i.export()
-  );
+  const outputs = deserializeArrayOf(
+    TransactionOutput.fromStream,
+    ss
+  ).map((i) => i.export());
   return Object.assign(tx, { outputs });
 }
 
@@ -74,7 +75,7 @@ export function deserializeWitnesses(
   ss: StringStream,
   tx: Partial<TransactionLike>
 ): Partial<TransactionLike> {
-  const scripts = deserializeArrayOf(Witness.fromStream, ss).map(i =>
+  const scripts = deserializeArrayOf(Witness.fromStream, ss).map((i) =>
     i.export()
   );
   return Object.assign(tx, { scripts });

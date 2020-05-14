@@ -11,7 +11,7 @@ import {
   isPrivateKey,
   isPublicKey,
   isScriptHash,
-  isWIF
+  isWIF,
 } from "./verify";
 
 const log = logger("wallet");
@@ -71,10 +71,10 @@ export class Account {
         script: verificationScript,
         parameters: Array(signingThreshold).map((_, i) => ({
           name: `signature${i}`,
-          type: "Signature"
+          type: "Signature",
         })),
-        deployed: false
-      }
+        deployed: false,
+      },
     });
   }
 
@@ -293,8 +293,8 @@ export class Account {
     scryptParams: ScryptParams = DEFAULT_SCRYPT
   ): Promise<this> {
     return Promise.resolve()
-      .then(_ => encrypt(this.privateKey, keyphrase, scryptParams))
-      .then(encrypted => {
+      .then((_) => encrypt(this.privateKey, keyphrase, scryptParams))
+      .then((encrypted) => {
         this._encrypted = encrypted;
         return this;
       });
@@ -308,8 +308,8 @@ export class Account {
     scryptParams: ScryptParams = DEFAULT_SCRYPT
   ): Promise<this> {
     return Promise.resolve()
-      .then(_ => decrypt(this.encrypted, keyphrase, scryptParams))
-      .then(wif => {
+      .then((_) => decrypt(this.encrypted, keyphrase, scryptParams))
+      .then((wif) => {
         this._WIF = wif;
         this._updateContractScript();
         return this;
@@ -334,7 +334,7 @@ export class Account {
       lock: this.lock,
       key,
       contract: this.contract,
-      extra: this.extra
+      extra: this.extra,
     };
   }
 

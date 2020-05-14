@@ -18,7 +18,7 @@ export class StateTransaction extends BaseTransaction {
     tx: Partial<TransactionLike>
   ): Partial<StateTransactionLike> {
     const out = {
-      descriptors: [] as StateDescriptor[]
+      descriptors: [] as StateDescriptor[],
     };
     const descLength = ss.readVarInt();
     for (let i = 0; i < descLength; i++) {
@@ -41,13 +41,13 @@ export class StateTransaction extends BaseTransaction {
   public constructor(obj: Partial<StateTransactionLike> = {}) {
     super(Object.assign({ version: TX_VERSION.STATE }, obj));
     this.descriptors = obj.descriptors
-      ? obj.descriptors.map(d => new StateDescriptor(d))
+      ? obj.descriptors.map((d) => new StateDescriptor(d))
       : [];
   }
 
   public serializeExclusive(): string {
     let out = num2VarInt(this.descriptors.length);
-    out += this.descriptors.map(d => d.serialize()).join("");
+    out += this.descriptors.map((d) => d.serialize()).join("");
     return out;
   }
 
@@ -63,7 +63,7 @@ export class StateTransaction extends BaseTransaction {
 
   public export(): StateTransactionLike {
     return Object.assign(super.export(), {
-      descriptors: this.descriptors.map(d => d.export())
+      descriptors: this.descriptors.map((d) => d.export()),
     });
   }
 }

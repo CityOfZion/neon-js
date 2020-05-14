@@ -43,7 +43,7 @@ export class MinerTransaction extends BaseTransaction {
 
   public export(): MinerTransactionLike {
     return Object.assign(super.export(), {
-      nonce: this.nonce
+      nonce: this.nonce,
     });
   }
 

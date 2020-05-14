@@ -1,7 +1,7 @@
 import { Transaction, TransactionLike, TransactionType } from "../../../src/tx";
 import { BaseTransaction } from "../../../src/tx/transaction/BaseTransaction";
 import RegisterTransaction, {
-  RegisterTransactionLike
+  RegisterTransactionLike,
 } from "../../../src/tx/transaction/RegisterTransaction";
 import { Fixed8 } from "../../../src/u";
 import samples from "./registerTx.json";
@@ -20,15 +20,15 @@ describe("constructor", () => {
       version: 0,
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-      scripts: [{ invocationScript: "ab", verificationScript: "" }]
+      scripts: [{ invocationScript: "ab", verificationScript: "" }],
     } as Partial<TransactionLike>;
 
     const result = new RegisterTransaction(testObject);
     expect(result instanceof RegisterTransaction).toBeTruthy();
     expect(result.type).toBe(TransactionType.RegisterTransaction);
     expect(result.version).toBe(testObject.version);
-    expect(result.inputs.map(i => i.export())).toEqual(testObject.inputs);
-    expect(result.outputs.map(i => i.export())).toEqual(testObject.outputs);
+    expect(result.inputs.map((i) => i.export())).toEqual(testObject.inputs);
+    expect(result.outputs.map((i) => i.export())).toEqual(testObject.outputs);
   });
 
   test("Transaction", () => {
@@ -36,7 +36,7 @@ describe("constructor", () => {
       version: 0,
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-      scripts: [{ invocationScript: "ab", verificationScript: "" }]
+      scripts: [{ invocationScript: "ab", verificationScript: "" }],
     });
 
     const result = new RegisterTransaction(testObject);
@@ -62,7 +62,7 @@ describe("getters", () => {
       amount: new Fixed8(0),
       precision: 0,
       owner: "",
-      admin: ""
+      admin: "",
     });
   });
 
@@ -85,7 +85,7 @@ describe("export", () => {
     amount: 0,
     precision: 0,
     owner: "",
-    admin: ""
+    admin: "",
   } as Partial<TransactionLike>;
 
   const RegisterTx = new RegisterTransaction(expected);
@@ -99,7 +99,7 @@ describe("equals", () => {
     version: 0,
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "12", value: 1, scriptHash: "1234" }],
-    scripts: [{ invocationScript: "ab", verificationScript: "" }]
+    scripts: [{ invocationScript: "ab", verificationScript: "" }],
   };
 
   const obj2 = {
@@ -111,7 +111,7 @@ describe("equals", () => {
     amount: new Fixed8(0),
     precision: 0,
     owner: "ab",
-    admin: "ab"
+    admin: "ab",
   };
   const Register1 = new RegisterTransaction(obj1);
   const Register2 = new RegisterTransaction(obj2);
@@ -120,13 +120,13 @@ describe("equals", () => {
     ["Register1 === Register1", Register1, Register1, true],
     ["Register1 !== Register2", Register1, Register2, false],
     ["Register1 === Obj1", Register1, obj1, true],
-    ["Register1 !== Obj2", Register1, obj2, false]
+    ["Register1 !== Obj2", Register1, obj2, false],
   ])("%s", (msg: string, a: RegisterTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
 });
 
-const dataSet = Object.keys(samples).map(k => {
+const dataSet = Object.keys(samples).map((k) => {
   const s = samples[k];
   return [s.txid, s.serialized, s.deserialized];
 });

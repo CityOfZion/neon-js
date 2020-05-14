@@ -4,7 +4,7 @@ import {
   IntegerParser,
   NoOpParser,
   SimpleParser,
-  StringParser
+  StringParser,
 } from "../../src/rpc/parse";
 import { StackItemLike } from "../../src/sc";
 
@@ -28,7 +28,7 @@ describe("noOpParser", () => {
 describe("IntegerParser", () => {
   test.each([
     ["empty string", { type: "ByteArray", value: "" }, 0],
-    ["random integer", { type: "Integer", value: "9" }, 9]
+    ["random integer", { type: "Integer", value: "9" }, 9],
   ])("%s", (msg: string, item: StackItemLike, expected: number) => {
     const result = IntegerParser(item);
     expect(result).toBe(expected);
@@ -38,7 +38,7 @@ describe("IntegerParser", () => {
 describe("Fixed8Parser", () => {
   test.each([
     ["0", { type: "ByteArray", value: "" }],
-    ["40000", { type: "ByteArray", value: "00409452a303" }]
+    ["40000", { type: "ByteArray", value: "00409452a303" }],
   ])("%s", (msg: string, item: StackItemLike) => {
     const result = Fixed8Parser(item);
     expect(result.toString()).toBe(msg);
@@ -48,7 +48,7 @@ describe("Fixed8Parser", () => {
 describe("StringParser", () => {
   test.each([
     ["RPX", { type: "ByteArray", value: "525058" }],
-    ["Qlink Token", { type: "ByteArray", value: "516c696e6b20546f6b656e" }]
+    ["Qlink Token", { type: "ByteArray", value: "516c696e6b20546f6b656e" }],
   ])("%s", (msg: string, item: StackItemLike) => {
     const result = StringParser(item);
     expect(result).toBe(msg);
@@ -60,8 +60,8 @@ describe("SimpleParser", () => {
     const result = SimpleParser({
       stack: [
         { type: "ByteArray", value: "525058" },
-        { type: "Integer", value: "1" }
-      ]
+        { type: "Integer", value: "1" },
+      ],
     } as any);
     expect(result).toEqual(["RPX", 1]);
   });

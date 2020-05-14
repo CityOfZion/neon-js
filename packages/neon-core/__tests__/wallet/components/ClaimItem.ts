@@ -1,6 +1,6 @@
 import Fixed8 from "../../../src/u/Fixed8";
 import ClaimItem, {
-  ClaimItemLike
+  ClaimItemLike,
 } from "../../../src/wallet/components/ClaimItem";
 
 describe("constructor", () => {
@@ -11,7 +11,7 @@ describe("constructor", () => {
       claim: new Fixed8(0),
       txid: "",
       index: 0,
-      value: 0
+      value: 0,
     });
   });
 
@@ -20,7 +20,7 @@ describe("constructor", () => {
       claim: 0.12345,
       index: 1,
       txid: "id",
-      value: 100
+      value: 100,
     } as ClaimItemLike;
 
     const result = new ClaimItem(testObject);
@@ -49,7 +49,7 @@ describe("export", () => {
       index: 1,
       txid: "12345678",
       value: 1,
-      start: 10000
+      start: 10000,
     };
     const c = new ClaimItem(expected);
     const result = c.export();
@@ -62,13 +62,13 @@ describe("equals", () => {
     claim: 0.1234,
     index: 1,
     txid: "object1",
-    value: 1.23
+    value: 1.23,
   };
   const object2 = {
     claim: 0.1234,
     index: 2,
     txid: "object2",
-    value: 2.34
+    value: 2.34,
   };
 
   const claim1 = new ClaimItem(object1);
@@ -78,7 +78,7 @@ describe("equals", () => {
     ["ClaimItem1 === ClaimItem1", claim1, claim1, true],
     ["ClaimItem1 !== ClaimItem2", claim1, claim2, false],
     ["ClaimItem1 === object1", claim1, object1, true],
-    ["ClaimItem1 === object2", claim1, object2, false]
+    ["ClaimItem1 === object2", claim1, object2, false],
   ])("%s", (msg: string, a: ClaimItem, b: any, cond: boolean) => {
     expect(a.equals(b) === cond).toBeTruthy();
   });

@@ -1,6 +1,6 @@
 import StateDescriptor, {
   StateDescriptorLike,
-  StateType
+  StateType,
 } from "../../../src/tx/components/StateDescriptor";
 
 describe("Constructor", () => {
@@ -18,7 +18,7 @@ describe("Constructor", () => {
       type: "Validator",
       key: "testKey",
       field: "testField",
-      value: "testValue"
+      value: "testValue",
     };
 
     const result = new StateDescriptor(testObject);
@@ -34,7 +34,7 @@ describe("Constructor", () => {
       type: 0x48,
       key: "testKey",
       field: "testField",
-      value: "testValue"
+      value: "testValue",
     };
 
     const result = new StateDescriptor(testObject);
@@ -50,7 +50,7 @@ describe("Constructor", () => {
       type: 0x48,
       key: "testKey",
       field: "testField",
-      value: "testValue"
+      value: "testValue",
     });
 
     const result = new StateDescriptor(testObject);
@@ -65,7 +65,7 @@ describe("export", () => {
       type: 0x40,
       key: "testKey",
       field: "testField",
-      value: "testValue"
+      value: "testValue",
     };
 
     const stateDescriptor = new StateDescriptor(testObject);
@@ -79,14 +79,14 @@ describe("equals", () => {
     type: 0x48,
     key: "key1",
     field: "field1",
-    value: "value1"
+    value: "value1",
   };
 
   const obj2 = {
     type: 0x40,
     key: "key2",
     field: "field2",
-    value: "value2"
+    value: "value2",
   };
 
   const desc1 = new StateDescriptor(obj1);
@@ -96,7 +96,7 @@ describe("equals", () => {
     ["Desc1 === Desc1", desc1, desc1, true],
     ["Desc1 !== Desc2", desc1, desc2, false],
     ["Desc1 === Obj1", desc1, obj1, true],
-    ["Desc1 !== Obj2", desc1, obj2, false]
+    ["Desc1 !== Obj2", desc1, obj2, false],
   ])("%s", (msg: string, a: StateDescriptor, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
@@ -110,10 +110,10 @@ const dataSet = [
       key: "3775292229eccdf904f16fff8e83e7cffdc0f0ce",
       field: "Votes",
       value:
-        "02030ef96257401b803da5dd201233e2be828795672b775dd674d69df83f7aec1e360327da12b5c40200e9f65569476bbff2218da4f32548ff43b6387ec1416a231ee8"
+        "02030ef96257401b803da5dd201233e2be828795672b775dd674d69df83f7aec1e360327da12b5c40200e9f65569476bbff2218da4f32548ff43b6387ec1416a231ee8",
     },
-    "40143775292229eccdf904f16fff8e83e7cffdc0f0ce05566f7465734302030ef96257401b803da5dd201233e2be828795672b775dd674d69df83f7aec1e360327da12b5c40200e9f65569476bbff2218da4f32548ff43b6387ec1416a231ee8"
-  ]
+    "40143775292229eccdf904f16fff8e83e7cffdc0f0ce05566f7465734302030ef96257401b803da5dd201233e2be828795672b775dd674d69df83f7aec1e360327da12b5c40200e9f65569476bbff2218da4f32548ff43b6387ec1416a231ee8",
+  ],
 ];
 describe("serialize", () => {
   test.each(dataSet)(

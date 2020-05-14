@@ -18,7 +18,7 @@ import Account from "./Account";
 
 const enc = {
   Latin1: latin1Encoding,
-  Hex: hexEncoding
+  Hex: hexEncoding,
 };
 
 export interface ScryptParams {
@@ -109,7 +109,7 @@ export async function decrypt(
   const ciphertext = {
     ciphertext: enc.Hex.parse(encrypted),
     salt: "",
-    iv: ""
+    iv: "",
   };
   const decrypted = AES.decrypt(
     ciphertext,

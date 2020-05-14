@@ -5,7 +5,7 @@ import {
   ClaimGasConfig,
   DoInvokeConfig,
   SendAssetConfig,
-  SetupVoteConfig
+  SetupVoteConfig,
 } from "../../src/funcs/types";
 
 jest.mock("@cityofzion/neon-core");
@@ -20,11 +20,11 @@ describe("createClaimTx", () => {
       api: {} as any,
       account: { address: "address" },
       claims: new wallet.Claims(),
-      override: {}
+      override: {},
     } as ClaimGasConfig;
     const addClaimsFunc = jest.fn();
     const claimTx = {
-      addClaims: addClaimsFunc
+      addClaims: addClaimsFunc,
     };
     tx.ClaimTransaction.mockImplementationOnce(() => claimTx);
     const result = await create.createClaimTx(config);
@@ -40,11 +40,11 @@ describe("createContractTx", () => {
       balance: new wallet.Balance(),
       intents: [],
       override: {},
-      fees: 0
+      fees: 0,
     } as SendAssetConfig;
     const calculateFunc = jest.fn();
     const contractTx = {
-      calculate: calculateFunc
+      calculate: calculateFunc,
     };
     tx.ContractTransaction.mockImplementationOnce(() => contractTx);
     const result = await create.createContractTx(config);
@@ -66,11 +66,11 @@ describe("createInvocationTx", () => {
       intents: [],
       script: "abcd",
       gas: 0,
-      fees: 0
+      fees: 0,
     } as DoInvokeConfig;
     const calculateFunc = jest.fn();
     const invocationTx = {
-      calculate: calculateFunc
+      calculate: calculateFunc,
     };
     tx.InvocationTransaction.mockImplementationOnce(() => invocationTx);
     const result = await create.createInvocationTx(config);
@@ -88,13 +88,13 @@ describe("createStateTx", () => {
     const config = {
       api: {} as any,
       account: {
-        scriptHash: "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+        scriptHash: "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
       } as wallet.Account,
       balance: new wallet.Balance(),
       candidateKeys: [
         "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
-        "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9"
-      ]
+        "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
+      ],
     } as SetupVoteConfig;
     u.reverseHex.mockImplementation(
       () => "3775292229eccdf904f16fff8e83e7cffdc0f0ce"
@@ -112,10 +112,10 @@ describe("createStateTx", () => {
       type: 0x40,
       field: "Votes",
       key: "3775292229eccdf904f16fff8e83e7cffdc0f0ce",
-      value: "02" + config.candidateKeys[0] + config.candidateKeys[1]
+      value: "02" + config.candidateKeys[0] + config.candidateKeys[1],
     });
     expect(tx.StateTransaction).toBeCalledWith({
-      descriptors: [expectedDescriptor]
+      descriptors: [expectedDescriptor],
     });
   });
 });

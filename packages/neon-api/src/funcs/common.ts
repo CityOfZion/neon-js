@@ -77,7 +77,7 @@ export async function getVerificationSignatureForSmartContract(
   const { parameters } = contractState.result;
   const witness = new tx.Witness({
     invocationScript: "00".repeat(parameters.length),
-    verificationScript: ""
+    verificationScript: "",
   });
 
   witness.scriptHash = smartContractScriptHash;

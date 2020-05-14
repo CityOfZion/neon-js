@@ -96,7 +96,7 @@ export function transfer(
     return sb.emitAppCall(scriptHash, "transfer", [
       fromHash,
       toHash,
-      sc.ContractParam.integer(adjustedAmt.toString())
+      sc.ContractParam.integer(adjustedAmt.toString()),
     ]);
   };
 }

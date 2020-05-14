@@ -9,7 +9,7 @@ describe.each([
   ["0080c6a47e8d0300", 10000000, 1000_000_000_000_000],
   ["5004fb711f010000", 12345.6789, 1_234_567_890_000],
   ["ffffffffffffffff", -0.00000001, -1],
-  ["31e28e7915000000", 922.33720369, 92_233_720_369]
+  ["31e28e7915000000", 922.33720369, 92_233_720_369],
 ])("from hexstring (%s)", (hex, num, raw_num) => {
   test("fromHex", () => {
     const result = Fixed8.fromReverseHex(hex);
@@ -39,7 +39,7 @@ describe.each([
 
 describe.each([
   ["ffffffffffffff7f", Fixed8.MAX_VALUE],
-  ["0000000000000080", Fixed8.MIN_VALUE]
+  ["0000000000000080", Fixed8.MIN_VALUE],
 ])("from hexstring (%s)", (hex, num) => {
   test("fromHex", () => {
     const result = Fixed8.fromReverseHex(hex);
@@ -87,7 +87,7 @@ test("throws on new fromHex", () => {
 describe.each([
   ["string", "1", 1],
   ["number", 1.234, 1.234],
-  ["Fixd8", new Fixed8(2), 2]
+  ["Fixd8", new Fixed8(2), 2],
 ])("constructor", (type, data, expected) => {
   test(`${type}`, () => {
     const result = new Fixed8(data);

@@ -41,7 +41,7 @@ export async function queryRPC(
   const conf = Object.assign(
     {
       headers: { "Content-Type": "application/json" },
-      timeout: timeout.rpc
+      timeout: timeout.rpc,
     },
     config
   );
@@ -59,7 +59,7 @@ export class Query {
   public static getAccountState(addr: string): Query {
     return new Query({
       method: "getaccountstate",
-      params: [addr]
+      params: [addr],
     });
   }
 
@@ -69,7 +69,7 @@ export class Query {
   public static getAssetState(assetId: string): Query {
     return new Query({
       method: "getassetstate",
-      params: [assetId]
+      params: [assetId],
     });
   }
 
@@ -81,7 +81,7 @@ export class Query {
   public static getBlock(indexOrHash: string | number, verbose = 1): Query {
     return new Query({
       method: "getblock",
-      params: [indexOrHash, verbose]
+      params: [indexOrHash, verbose],
     });
   }
 
@@ -92,7 +92,7 @@ export class Query {
   public static getBlockHash(index: number): Query {
     return new Query({
       method: "getblockhash",
-      params: [index]
+      params: [index],
     });
   }
 
@@ -101,7 +101,7 @@ export class Query {
    */
   public static getBestBlockHash(): Query {
     return new Query({
-      method: "getbestblockhash"
+      method: "getbestblockhash",
     });
   }
 
@@ -110,7 +110,7 @@ export class Query {
    */
   public static getBlockCount(): Query {
     return new Query({
-      method: "getblockcount"
+      method: "getblockcount",
     });
   }
 
@@ -121,7 +121,7 @@ export class Query {
   public static getBlockSysFee(index: number): Query {
     return new Query({
       method: "getblocksysfee",
-      params: [index]
+      params: [index],
     });
   }
 
@@ -130,7 +130,7 @@ export class Query {
    */
   public static getConnectionCount(): Query {
     return new Query({
-      method: "getconnectioncount"
+      method: "getconnectioncount",
     });
   }
   /**
@@ -140,7 +140,7 @@ export class Query {
   public static getContractState(scriptHash: string): Query {
     return new Query({
       method: "getcontractstate",
-      params: [scriptHash]
+      params: [scriptHash],
     });
   }
 
@@ -149,7 +149,7 @@ export class Query {
    */
   public static getPeers(): Query {
     return new Query({
-      method: "getpeers"
+      method: "getpeers",
     });
   }
 
@@ -158,7 +158,7 @@ export class Query {
    */
   public static getRawMemPool(): Query {
     return new Query({
-      method: "getrawmempool"
+      method: "getrawmempool",
     });
   }
 
@@ -170,7 +170,7 @@ export class Query {
   public static getRawTransaction(txid: string, verbose = 1): Query {
     return new Query({
       method: "getrawtransaction",
-      params: [txid, verbose]
+      params: [txid, verbose],
     });
   }
 
@@ -182,7 +182,7 @@ export class Query {
   public static getStorage(scriptHash: string, key: string): Query {
     return new Query({
       method: "getstorage",
-      params: [scriptHash, key]
+      params: [scriptHash, key],
     });
   }
 
@@ -194,7 +194,7 @@ export class Query {
   public static getTxOut(txid: string, index: number): Query {
     return new Query({
       method: "gettxout",
-      params: [txid, index]
+      params: [txid, index],
     });
   }
 
@@ -204,7 +204,7 @@ export class Query {
    */
   public static getValidators(): Query {
     return new Query({
-      method: "getvalidators"
+      method: "getvalidators",
     });
   }
 
@@ -213,7 +213,7 @@ export class Query {
    */
   public static getVersion(): Query {
     return new Query({
-      method: "getversion"
+      method: "getversion",
     });
   }
 
@@ -225,7 +225,7 @@ export class Query {
   public static invoke(scriptHash: string, ...params: any[]): Query {
     return new Query({
       method: "invoke",
-      params: [scriptHash, params]
+      params: [scriptHash, params],
     });
   }
 
@@ -242,7 +242,7 @@ export class Query {
   ): Query {
     return new Query({
       method: "invokefunction",
-      params: [scriptHash, operation, params]
+      params: [scriptHash, operation, params],
     });
   }
 
@@ -253,7 +253,7 @@ export class Query {
   public static invokeScript(script: string) {
     return new Query({
       method: "invokescript",
-      params: [script]
+      params: [script],
     });
   }
 
@@ -270,7 +270,7 @@ export class Query {
         : transaction;
     return new Query({
       method: "sendrawtransaction",
-      params: [serialized]
+      params: [serialized],
     });
   }
 
@@ -281,7 +281,7 @@ export class Query {
   public static submitBlock(block: string): Query {
     return new Query({
       method: "submitblock",
-      params: [block]
+      params: [block],
     });
   }
 
@@ -292,7 +292,7 @@ export class Query {
   public static validateAddress(addr: string): Query {
     return new Query({
       method: "validateaddress",
-      params: [addr]
+      params: [addr],
     });
   }
 
@@ -303,7 +303,7 @@ export class Query {
   public static getUnspents(addr: string): Query {
     return new Query({
       method: "getunspents",
-      params: [addr]
+      params: [addr],
     });
   }
 
@@ -314,7 +314,7 @@ export class Query {
   public static getUnclaimed(addr: string): Query {
     return new Query({
       method: "getunclaimed",
-      params: [addr]
+      params: [addr],
     });
   }
 
@@ -325,7 +325,7 @@ export class Query {
   public static getClaimable(addr: string): Query {
     return new Query({
       method: "getclaimable",
-      params: [addr]
+      params: [addr],
     });
   }
 
@@ -389,12 +389,12 @@ export class Query {
 
   public export(): RPCRequest {
     return Object.assign({}, this.req, {
-      params: this.req.params.map(p => {
+      params: this.req.params.map((p) => {
         if (typeof p === "object") {
           return JSON.parse(JSON.stringify(p));
         }
         return p;
-      })
+      }),
     });
   }
 

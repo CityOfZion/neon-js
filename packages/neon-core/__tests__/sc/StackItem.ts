@@ -1,7 +1,7 @@
 import StackItem, {
   hasChildren,
   StackItemMap,
-  StackItemType
+  StackItemType,
 } from "../../src/sc/StackItem";
 import data from "./serializedData.json";
 

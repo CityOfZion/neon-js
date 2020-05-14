@@ -34,7 +34,7 @@ describe("equals", () => {
     ["Query1 === Query1", query1, query1, true],
     ["Query1 !== Query2", query1, query2, false],
     ["Query1 === Obj1", query1, obj1, true],
-    ["Query1 !== Obj2", query1, obj2, false]
+    ["Query1 !== Obj2", query1, obj2, false],
   ])("%s", (msg: string, a: Query, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });

@@ -53,7 +53,7 @@ export function parse(uri: string): NEP9Intent {
     address: path,
     asset: extractAsset(params),
     amount: extractAmount(params),
-    attributes: extractAttributes(params)
+    attributes: extractAttributes(params),
   };
 }
 

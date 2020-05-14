@@ -37,7 +37,7 @@ export class ClaimItem {
       index: this.index,
       value: this.value,
       start: this.start,
-      end: this.end
+      end: this.end,
     };
   }
 

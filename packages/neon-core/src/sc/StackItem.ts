@@ -7,7 +7,7 @@ export enum StackItemType {
   "InteropInterface" = 0x04,
   "Array" = 0x80,
   "Struct" = 0x81,
-  "Map" = 0x82
+  "Map" = 0x82,
 }
 
 export type StackItemValue =
@@ -96,7 +96,7 @@ export class StackItem {
         for (let i = 0; i < l; i++) {
           item.value.push({
             key: this._deserialize(ss),
-            value: this._deserialize(ss)
+            value: this._deserialize(ss),
           });
         }
         break;
@@ -121,11 +121,13 @@ export class StackItem {
       this.value = getDefaultValue(this.type);
     } else if (Array.isArray(obj.value)) {
       if (this.type === StackItemType.Array) {
-        this.value = (obj.value as StackItemLike[]).map(v => new StackItem(v));
+        this.value = (obj.value as StackItemLike[]).map(
+          (v) => new StackItem(v)
+        );
       } else if (this.type === StackItemType.Map) {
-        this.value = (obj.value as StackItemMapLike[]).map(v => ({
+        this.value = (obj.value as StackItemMapLike[]).map((v) => ({
           key: new StackItem(v.key),
-          value: new StackItem(v.value)
+          value: new StackItem(v.value),
         }));
       }
       throw new Error(`Encountered array for value but invalid type`);
@@ -141,15 +143,15 @@ export class StackItem {
       case StackItemType.Struct:
         return {
           type,
-          value: (this.value as StackItem[]).map(i => i.export())
+          value: (this.value as StackItem[]).map((i) => i.export()),
         };
       case StackItemType.Map:
         return {
           type,
-          value: (this.value as StackItemMap[]).map(kv => ({
+          value: (this.value as StackItemMap[]).map((kv) => ({
             key: kv.key.export(),
-            value: kv.value.export()
-          }))
+            value: kv.value.export(),
+          })),
         };
       default:
         return { type, value: this.value };

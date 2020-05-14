@@ -4,13 +4,13 @@ describe.each([
   [
     "",
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "9c1185a5c5e9fc54612808977ee8f548b2258d31"
+    "9c1185a5c5e9fc54612808977ee8f548b2258d31",
   ],
   [
     "000102030405060708090a0b0c0d0e0f",
     "be45cb2605bf36bebde684841a28f0fd43c69850a3dce5fedba69928ee3a8991",
-    "696c7528a3545e25bec296e0d39b5f898bec97f7"
-  ]
+    "696c7528a3545e25bec296e0d39b5f898bec97f7",
+  ],
   // [
   //   "00f54a5851e9372b87810a8e60cdd2e7cfd80b6e31",
   //   "ad3c854da227c7e99c4abfad4ea41d71311160df2e415e713318c70d67c6b41c",
@@ -44,13 +44,13 @@ describe.each([
     // Random hash
     "54657374",
     "c60907e990745f7d91c4423713764d2724571269d3db4856d37c6302792c59a6",
-    "0d6d086ce847371e069db7f67c5de45ed9ef1e54"
+    "0d6d086ce847371e069db7f67c5de45ed9ef1e54",
   ],
   [
     "000102030405060708090a0b0c0d0e0f",
     "fc793c641b354b10b9a264ad4f541f6efe8445a0d05fe39336a126252b166e8b",
-    "7a91e1b6ef1be3631b154ac8763a017eb03dc1b0"
-  ]
+    "7a91e1b6ef1be3631b154ac8763a017eb03dc1b0",
+  ],
 ])("Advanced hash", (data: string, hash256Out: string, hash160Out: string) => {
   test(`hash256: ${data}`, () => {
     const result = hash.hash256(data);

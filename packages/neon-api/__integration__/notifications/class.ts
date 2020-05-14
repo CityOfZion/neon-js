@@ -14,8 +14,8 @@ afterEach(() => {
 });
 
 describe("notifications", () => {
-  test("smoke test", done => {
-    notificationsClient.subscribe(null, response => {
+  test("smoke test", (done) => {
+    notificationsClient.subscribe(null, (response) => {
       expect(response.contract).toBeDefined();
       expect(response.event).toBeDefined();
       expect(response.txid).toBeDefined();

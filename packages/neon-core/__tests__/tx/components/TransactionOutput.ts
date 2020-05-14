@@ -1,5 +1,5 @@
 import TransactionOutput, {
-  TransactionOutputLike
+  TransactionOutputLike,
 } from "../../../src/tx/components/TransactionOutput";
 
 describe("constructor", () => {
@@ -14,7 +14,7 @@ describe("constructor", () => {
     const testObject = {
       assetId: "1234",
       value: 1,
-      scriptHash: "abcd"
+      scriptHash: "abcd",
     } as TransactionOutputLike;
 
     const result = new TransactionOutput(testObject);
@@ -28,7 +28,7 @@ describe("constructor", () => {
     const testObject = new TransactionOutput({
       assetId: "1234",
       value: 1,
-      scriptHash: "abcd"
+      scriptHash: "abcd",
     });
 
     const result = new TransactionOutput(testObject);
@@ -43,7 +43,7 @@ describe("export", () => {
     const expected = {
       assetId: "1234",
       value: 1,
-      scriptHash: "abcd"
+      scriptHash: "abcd",
     };
 
     const txAttr = new TransactionOutput(expected);
@@ -56,12 +56,12 @@ describe("equals", () => {
   const obj1 = {
     assetId: "1234",
     value: 1,
-    scriptHash: "abcd"
+    scriptHash: "abcd",
   };
   const obj2 = {
     assetId: "4321",
     value: 2,
-    scriptHash: "dcba"
+    scriptHash: "dcba",
   };
   const output1 = new TransactionOutput(obj1);
   const output2 = new TransactionOutput(obj2);
@@ -70,7 +70,7 @@ describe("equals", () => {
     ["Output1 === Output1", output1, output1, true],
     ["Output1 !== Output2", output1, output2, false],
     ["Output1 === Obj1", output1, obj1, true],
-    ["Output1 !== Obj2", output1, obj2, false]
+    ["Output1 !== Obj2", output1, obj2, false],
   ])("%s", (msg: string, a: TransactionOutput, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
@@ -83,9 +83,9 @@ const dataSet = [
       assetId:
         "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
       value: 1,
-      scriptHash: "cef0c0fdcfe7838eff6ff104f9cdec2922297537"
+      scriptHash: "cef0c0fdcfe7838eff6ff104f9cdec2922297537",
     },
-    "9b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc500e1f505000000003775292229eccdf904f16fff8e83e7cffdc0f0ce"
+    "9b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc500e1f505000000003775292229eccdf904f16fff8e83e7cffdc0f0ce",
   ],
   [
     "Large Output",
@@ -93,10 +93,10 @@ const dataSet = [
       assetId:
         "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
       value: 4714,
-      scriptHash: "5df31f6f59e6a4fbdd75103786bf73db1000b235"
+      scriptHash: "5df31f6f59e6a4fbdd75103786bf73db1000b235",
     },
-    "9b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc5002aa1c16d00000035b20010db73bf86371075ddfba4e6596f1ff35d"
-  ]
+    "9b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc5002aa1c16d00000035b20010db73bf86371075ddfba4e6596f1ff35d",
+  ],
 ];
 
 describe("serialize", () => {

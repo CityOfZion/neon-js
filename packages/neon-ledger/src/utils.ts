@@ -18,7 +18,7 @@ export function DerToHexSignature(response: string): string {
   const s = ss.readVarBytes();
 
   // We will need to ensure both integers are 32 bytes long
-  const integers = [r, s].map(i => {
+  const integers = [r, s].map((i) => {
     if (i.length < 64) {
       i = "0".repeat(i.length - 64) + i;
     }

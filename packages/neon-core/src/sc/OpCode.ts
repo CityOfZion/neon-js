@@ -111,7 +111,7 @@ export enum OpCode {
   CALL_ET = 227,
   CALL_EDT = 228,
   THROW = 240,
-  THROWIFNOT = 241
+  THROWIFNOT = 241,
 }
 
 export default OpCode;

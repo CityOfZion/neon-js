@@ -1,6 +1,6 @@
 import { Transaction, TransactionLike, TransactionType } from "../../../src/tx";
 import EnrollmentTransaction, {
-  EnrollmentTransactionLike
+  EnrollmentTransactionLike,
 } from "../../../src/tx/transaction/EnrollmentTransaction";
 
 import { BaseTransaction } from "../../../src/tx/transaction/BaseTransaction";
@@ -20,15 +20,15 @@ describe("constructor", () => {
       version: 0,
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-      scripts: [{ invocationScript: "ab", verificationScript: "" }]
+      scripts: [{ invocationScript: "ab", verificationScript: "" }],
     } as Partial<TransactionLike>;
 
     const result = new EnrollmentTransaction(testObject);
     expect(result instanceof EnrollmentTransaction).toBeTruthy();
     expect(result.type).toBe(TransactionType.EnrollmentTransaction);
     expect(result.version).toBe(testObject.version);
-    expect(result.inputs.map(i => i.export())).toEqual(testObject.inputs);
-    expect(result.outputs.map(i => i.export())).toEqual(testObject.outputs);
+    expect(result.inputs.map((i) => i.export())).toEqual(testObject.inputs);
+    expect(result.outputs.map((i) => i.export())).toEqual(testObject.outputs);
   });
 
   test("Transaction", () => {
@@ -36,7 +36,7 @@ describe("constructor", () => {
       version: 0,
       inputs: [{ prevHash: "ab", prevIndex: 0 }],
       outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-      scripts: [{ invocationScript: "ab", verificationScript: "" }]
+      scripts: [{ invocationScript: "ab", verificationScript: "" }],
     });
 
     const result = new EnrollmentTransaction(testObject);
@@ -73,7 +73,7 @@ describe("export", () => {
     attributes: [],
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "id", value: 1, scriptHash: "hash" }],
-    scripts: [{ invocationScript: "ab", verificationScript: "" }]
+    scripts: [{ invocationScript: "ab", verificationScript: "" }],
   } as Partial<TransactionLike>;
 
   const enrollmentTx = new EnrollmentTransaction(expected);
@@ -87,12 +87,12 @@ describe("equals", () => {
     version: 0,
     inputs: [{ prevHash: "ab", prevIndex: 0 }],
     outputs: [{ assetId: "12", value: 1, scriptHash: "1234" }],
-    scripts: [{ invocationScript: "ab", verificationScript: "" }]
+    scripts: [{ invocationScript: "ab", verificationScript: "" }],
   };
 
   const obj2 = {
     version: 0,
-    inputs: [{ prevHash: "12", prevIndex: 1 }]
+    inputs: [{ prevHash: "12", prevIndex: 1 }],
   };
   const enrollment1 = new EnrollmentTransaction(obj1);
   const enrollment2 = new EnrollmentTransaction(obj2);
@@ -101,13 +101,13 @@ describe("equals", () => {
     ["Enrollemnt1 === Enrollemnt1", enrollment1, enrollment1, true],
     ["Enrollemnt1 !== Enrollemnt2", enrollment1, enrollment2, false],
     ["Enrollemnt1 === Obj1", enrollment1, obj1, true],
-    ["Enrollemnt1 !== Obj2", enrollment1, obj2, false]
+    ["Enrollemnt1 !== Obj2", enrollment1, obj2, false],
   ])("%s", (msg: string, a: EnrollmentTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
 });
 
-const dataSet = Object.keys(samples).map(k => {
+const dataSet = Object.keys(samples).map((k) => {
   const s = samples[k];
   return [s.txid, s.serialized, s.deserialized];
 });

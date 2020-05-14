@@ -24,7 +24,7 @@ export class Coin {
     return {
       index: this.index,
       txid: this.txid,
-      value: this.value.toNumber()
+      value: this.value.toNumber(),
     };
   }
 

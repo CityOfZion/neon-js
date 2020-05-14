@@ -26,7 +26,7 @@ export class IssueTransaction extends BaseTransaction {
     }
     if (
       this.outputs.every(
-        p => p.assetId === ASSET_ID.NEO || p.assetId === ASSET_ID.GAS
+        (p) => p.assetId === ASSET_ID.NEO || p.assetId === ASSET_ID.GAS
       )
     ) {
       return 0;

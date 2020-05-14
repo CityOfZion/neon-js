@@ -6,7 +6,7 @@ import {
   num2hexstring,
   reverseHex,
   str2hexstring,
-  StringStream
+  StringStream,
 } from "../../u";
 import { Account, Balance, sign } from "../../wallet";
 import { calculateInputs } from "../calculate";
@@ -18,7 +18,7 @@ import {
   TransactionOutput,
   TransactionOutputLike,
   Witness,
-  WitnessLike
+  WitnessLike,
 } from "../components";
 import { calculationStrategyFunction } from "../strategy";
 import TxAttrUsage from "../txAttrUsage";
@@ -46,16 +46,16 @@ export abstract class BaseTransaction {
   public constructor(tx: Partial<TransactionLike> = {}) {
     this.version = tx.version || TX_VERSION.CONTRACT;
     this.attributes = Array.isArray(tx.attributes)
-      ? tx.attributes.map(a => new TransactionAttribute(a))
+      ? tx.attributes.map((a) => new TransactionAttribute(a))
       : [];
     this.inputs = Array.isArray(tx.inputs)
-      ? tx.inputs.map(a => new TransactionInput(a))
+      ? tx.inputs.map((a) => new TransactionInput(a))
       : [];
     this.outputs = Array.isArray(tx.outputs)
-      ? tx.outputs.map(a => new TransactionOutput(a))
+      ? tx.outputs.map((a) => new TransactionOutput(a))
       : [];
     this.scripts = Array.isArray(tx.scripts)
-      ? tx.scripts.map(a => new Witness(a))
+      ? tx.scripts.map((a) => new Witness(a))
       : [];
   }
 
@@ -195,10 +195,10 @@ export abstract class BaseTransaction {
     return {
       type: this.type,
       version: this.version,
-      attributes: this.attributes.map(a => a.export()),
-      inputs: this.inputs.map(a => a.export()),
-      outputs: this.outputs.map(a => a.export()),
-      scripts: this.scripts.map(a => a.export())
+      attributes: this.attributes.map((a) => a.export()),
+      inputs: this.inputs.map((a) => a.export()),
+      outputs: this.outputs.map((a) => a.export()),
+      scripts: this.scripts.map((a) => a.export()),
     };
   }
 }

@@ -12,7 +12,7 @@ describe("constructor", () => {
       assetSymbols: [],
       tokenSymbols: [],
       assets: {},
-      tokens: {}
+      tokens: {},
     });
   });
 
@@ -23,9 +23,9 @@ describe("constructor", () => {
       assetSymbols: ["ASS"],
       tokenSymbols: ["TOK"],
       assets: {
-        ASS: {} as AssetBalanceLike
+        ASS: {} as AssetBalanceLike,
       },
-      tokens: { TOK: 1 }
+      tokens: { TOK: 1 },
     } as BalanceLike;
 
     const result = new Balance(testObject);
@@ -48,10 +48,10 @@ describe("constructor", () => {
       assets: {
         ASS: {
           balance: 1,
-          unspent: [{ index: 0, txid: "coin1", value: 1 }]
-        } as Partial<AssetBalanceLike>
+          unspent: [{ index: 0, txid: "coin1", value: 1 }],
+        } as Partial<AssetBalanceLike>,
       },
-      tokens: { TOK: 1 }
+      tokens: { TOK: 1 },
     });
 
     const result = new Balance(testObject);
@@ -73,10 +73,10 @@ describe("export", () => {
           balance: 1,
           unspent: [{ index: 0, txid: "a", value: 1 }],
           spent: [],
-          unconfirmed: []
-        } as AssetBalanceLike
+          unconfirmed: [],
+        } as AssetBalanceLike,
       },
-      tokens: { TOK: 1 }
+      tokens: { TOK: 1 },
     };
 
     const balanceObj = new Balance(expected);

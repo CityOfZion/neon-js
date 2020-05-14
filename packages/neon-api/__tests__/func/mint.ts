@@ -14,7 +14,7 @@ const getVerificationSignatureForSmartContract = mocked(
 describe("addAttributeForMintToken", () => {
   test("skips if no script object present", async () => {
     const config = {
-      tx: new tx.ContractTransaction({} as any)
+      tx: new tx.ContractTransaction({} as any),
     } as DoInvokeConfig;
 
     const result = await mint.addAttributeForMintToken(config);
@@ -26,9 +26,9 @@ describe("addAttributeForMintToken", () => {
     const config = {
       script: {
         operation: "mintTokens",
-        scriptHash: "abcd"
+        scriptHash: "abcd",
       },
-      tx: new tx.ContractTransaction({} as any)
+      tx: new tx.ContractTransaction({} as any),
     } as DoInvokeConfig;
 
     const result = await mint.addAttributeForMintToken(config);
@@ -37,7 +37,7 @@ describe("addAttributeForMintToken", () => {
     expect(
       result.tx!.attributes[0].equals({
         usage: tx.TxAttrUsage.Script,
-        data: "cdab"
+        data: "cdab",
       })
     ).toBeTruthy();
   });
@@ -46,7 +46,7 @@ describe("addAttributeForMintToken", () => {
 describe("addSignatureForMintToken", () => {
   test("skips if no script object present", async () => {
     const config = {
-      tx: new tx.ContractTransaction({} as any)
+      tx: new tx.ContractTransaction({} as any),
     } as DoInvokeConfig;
 
     const result = await mint.addSignatureForMintToken(config);
@@ -59,13 +59,13 @@ describe("addSignatureForMintToken", () => {
     const config = {
       url: "mockUrl",
       account: {
-        scriptHash: "abce"
+        scriptHash: "abce",
       },
       script: {
         operation: "mintTokens",
-        scriptHash: "abcd"
+        scriptHash: "abcd",
       },
-      tx: new tx.ContractTransaction({} as any)
+      tx: new tx.ContractTransaction({} as any),
     } as DoInvokeConfig;
 
     getVerificationSignatureForSmartContract.mockImplementationOnce(

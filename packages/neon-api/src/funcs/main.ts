@@ -4,7 +4,7 @@ import {
   createClaimTx,
   createContractTx,
   createInvocationTx,
-  createStateTx
+  createStateTx,
 } from "./create";
 import { fillBalance, fillClaims, fillSigningFunction, fillUrl } from "./fill";
 import { addAttributeForMintToken, addSignatureForMintToken } from "./mint";
@@ -12,13 +12,13 @@ import { applyTxToBalance, sendTx } from "./send";
 import { signTx } from "./sign";
 import {
   addAttributeIfExecutingAsSmartContract,
-  addSignatureIfExecutingAsSmartContract
+  addSignatureIfExecutingAsSmartContract,
 } from "./smartcontract";
 import {
   ClaimGasConfig,
   DoInvokeConfig,
   SendAssetConfig,
-  SetupVoteConfig
+  SetupVoteConfig,
 } from "./types";
 
 const log = logging.default("api");
@@ -135,11 +135,11 @@ export function makeIntent(
   address: string
 ): tx.TransactionOutput[] {
   const acct = new wallet.Account(address);
-  return Object.keys(assetAmts).map(key => {
+  return Object.keys(assetAmts).map((key) => {
     return new tx.TransactionOutput({
       assetId: CONST.ASSET_ID[key],
       value: assetAmts[key],
-      scriptHash: acct.scriptHash
+      scriptHash: acct.scriptHash,
     });
   });
 }

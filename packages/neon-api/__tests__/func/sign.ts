@@ -9,13 +9,13 @@ describe("signTx", () => {
     const mockSignature = jest.fn();
     const config = {
       account: {
-        publicKey: "mockKey"
+        publicKey: "mockKey",
       },
       signingFunction: jest.fn().mockImplementationOnce(() => mockSignature),
       tx: {
         scripts: [],
-        serialize: jest.fn().mockImplementationOnce(() => mockSerialize)
-      }
+        serialize: jest.fn().mockImplementationOnce(() => mockSerialize),
+      },
     } as any;
     tx.Witness.deserialize.mockImplementationOnce(() => mockSignature);
 
@@ -33,13 +33,13 @@ describe("signTx", () => {
     const mockSignatures = [jest.fn(), jest.fn()];
     const config = {
       account: {
-        publicKey: "mockKey"
+        publicKey: "mockKey",
       },
       signingFunction: jest.fn().mockImplementationOnce(() => mockSignatures),
       tx: {
         scripts: [],
-        serialize: jest.fn().mockImplementationOnce(() => mockSerialize)
-      }
+        serialize: jest.fn().mockImplementationOnce(() => mockSerialize),
+      },
     } as any;
     tx.Witness.deserialize
       .mockImplementationOnce(() => mockSignatures[0])
@@ -60,7 +60,7 @@ describe("signWithPrivateKey", () => {
     const expected = jest.fn();
     const mockSignature = jest.fn();
     const mockWitness = {
-      serialize: jest.fn().mockImplementationOnce(() => expected)
+      serialize: jest.fn().mockImplementationOnce(() => expected),
     };
     const mockTx = jest.fn();
     const mockPublicKey = jest.fn();

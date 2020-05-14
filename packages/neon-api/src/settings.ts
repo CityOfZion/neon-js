@@ -1,9 +1,9 @@
 export const settings: { [key: string]: any } = {
-  httpsOnly: false
+  httpsOnly: false,
 };
 
 export function set(newSettings: { [key: string]: any }) {
-  Object.keys(settings).forEach(key => {
+  Object.keys(settings).forEach((key) => {
     if (newSettings.hasOwnProperty(key)) {
       settings[key] = !!newSettings[key];
     }

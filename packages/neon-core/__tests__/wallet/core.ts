@@ -10,8 +10,8 @@ describe.each([
       privateKey:
         "a7b9775c6b9136bf89f63def7eab0c5f2d3d0c9e85492717f54386420cce5aa1",
       scriptHash: "77f807a219d340423a307310ac15c1d179dc77ef",
-      WIF: "L2qkBc4ogTZERR4Watg4QoQq37w8fxrVZkYrPk7ZZSoRUZsr9yML"
-    }
+      WIF: "L2qkBc4ogTZERR4Watg4QoQq37w8fxrVZkYrPk7ZZSoRUZsr9yML",
+    },
   ],
   [
     "ARCvt1d5qAGzcHqJCWA2MxvhTLQDb9dvjQ",
@@ -22,8 +22,8 @@ describe.each([
       privateKey:
         "4f0d41eda93941d106d4a26cc90b4b4fddc0e03b396ac94eb439c5d9e0cd6548",
       scriptHash: "f5cf63dfe3821b4d17302aeb8551b219d83a7667",
-      WIF: "KysNqEuLb3wmZJ6PsxbA9Bh6ewTybEda4dEiN9X7X48dJPkLWZ5a"
-    }
+      WIF: "KysNqEuLb3wmZJ6PsxbA9Bh6ewTybEda4dEiN9X7X48dJPkLWZ5a",
+    },
   ],
   [
     "AYYrr4GauveRr45WwAJyw6izvEMvasBBXH",
@@ -34,9 +34,9 @@ describe.each([
       privateKey:
         "793466a3dfe3935a475d02290e37000a3e835f6740f9733e72e979d6e1166e13",
       scriptHash: "e485d31067646f5d43f0b8328edf31e8fa0f04b8",
-      WIF: "L1HKLWratxFhX94XSn98JEULQYKGhRycf4nREe3Cs8EPQStF5u9E"
-    }
-  ]
+      WIF: "L1HKLWratxFhX94XSn98JEULQYKGhRycf4nREe3Cs8EPQStF5u9E",
+    },
+  ],
 ])("Core: %s", (msg: string, data: any) => {
   test("WIF => privateKey", () => {
     const result = C.getPrivateKeyFromWIF(data.WIF);

@@ -1,7 +1,7 @@
 import {
   ContractTransaction,
   InvocationTransaction,
-  Transaction
+  Transaction,
 } from "../../../src/tx";
 
 describe("deserialize", () => {

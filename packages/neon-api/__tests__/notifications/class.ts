@@ -12,8 +12,8 @@ beforeEach(() => {
     extra: {
       neoscan: "http://wrongurl.com",
       neonDB: "http://wrongurl.com",
-      notifications: UnitTestNetUrl
-    }
+      notifications: UnitTestNetUrl,
+    },
   });
 });
 
@@ -36,28 +36,28 @@ const sampleEvent = {
   event: [
     {
       type: "ByteArray",
-      value: "7472616e73666572"
+      value: "7472616e73666572",
     },
     {
       type: "ByteArray",
-      value: "30074a2d88bab26f74142c188231e92ad401dbf6"
+      value: "30074a2d88bab26f74142c188231e92ad401dbf6",
     },
     {
       type: "ByteArray",
-      value: "8ba6205856117b0f3909cd88209aa919ec9c14b8"
+      value: "8ba6205856117b0f3909cd88209aa919ec9c14b8",
     },
     {
       type: "ByteArray",
-      value: "00c39dd000"
-    }
+      value: "00c39dd000",
+    },
   ],
   contract,
-  txid: "0xd6f5185a19abad3f3bbea88ac4ec63b449ac38908bd7761dce75e445502bc76f"
+  txid: "0xd6f5185a19abad3f3bbea88ac4ec63b449ac38908bd7761dce75e445502bc76f",
 };
 
 function triggerWebsocketSampleEvent() {
   WebSocket.mock.instances[0].onmessage({
-    data: JSON.stringify(sampleEvent)
+    data: JSON.stringify(sampleEvent),
   });
 }
 

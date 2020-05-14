@@ -14,10 +14,10 @@ describe("fillUrl", () => {
     const expectedUrl = "http://localhost.com";
     const config = {
       api: {
-        getRPCEndpoint: jest.fn()
+        getRPCEndpoint: jest.fn(),
       } as any,
       account: {},
-      url: expectedUrl
+      url: expectedUrl,
     } as SendAssetConfig;
 
     const result = await fill.fillUrl(config);
@@ -30,8 +30,8 @@ describe("fillUrl", () => {
     const expectedUrl = "http://localhost.com";
     const config = {
       api: {
-        getRPCEndpoint: jest.fn().mockImplementationOnce(() => expectedUrl)
-      } as any
+        getRPCEndpoint: jest.fn().mockImplementationOnce(() => expectedUrl),
+      } as any,
     } as any;
 
     const result = await fill.fillUrl(config);
@@ -46,9 +46,9 @@ describe("fillBalance", () => {
     const expectedBalance = new wallet.Balance();
     const config = {
       api: {
-        getBalance: jest.fn()
+        getBalance: jest.fn(),
       } as any,
-      balance: expectedBalance
+      balance: expectedBalance,
     } as SendAssetConfig;
 
     const result = await fill.fillBalance(config);
@@ -61,11 +61,11 @@ describe("fillBalance", () => {
     const expectedBalance = new wallet.Balance();
     const config = {
       api: {
-        getBalance: jest.fn().mockImplementationOnce(() => expectedBalance)
+        getBalance: jest.fn().mockImplementationOnce(() => expectedBalance),
       } as any,
       account: {
-        address: "address"
-      }
+        address: "address",
+      },
     } as SendAssetConfig;
 
     const result = await fill.fillBalance(config);
@@ -79,7 +79,7 @@ describe("fillSigningFunction", () => {
   test("skips if signingFunction present", async () => {
     const expectedFunc = jest.fn() as any;
     const config = {
-      signingFunction: expectedFunc
+      signingFunction: expectedFunc,
     } as SendAssetConfig;
 
     const result = await fill.fillSigningFunction(config);
@@ -93,8 +93,8 @@ describe("fillSigningFunction", () => {
     signWithPrivateKey.mockImplementationOnce(() => expectedFunc);
     const config = {
       account: {
-        privateKey: mockKey
-      }
+        privateKey: mockKey,
+      },
     } as SendAssetConfig;
 
     const result = await fill.fillSigningFunction(config);
@@ -115,10 +115,10 @@ describe("fillSigningFunction", () => {
 describe("fillClaims", () => {
   test("skips if claims present", async () => {
     const expectedClaims = new wallet.Claims({
-      claims: [new wallet.ClaimItem()]
+      claims: [new wallet.ClaimItem()],
     });
     const config = {
-      claims: expectedClaims
+      claims: expectedClaims,
     } as ClaimGasConfig;
 
     const result = await fill.fillClaims(config);
@@ -127,16 +127,16 @@ describe("fillClaims", () => {
 
   test("fills if claims not present", async () => {
     const expectedClaims = new wallet.Claims({
-      claims: [new wallet.ClaimItem()]
+      claims: [new wallet.ClaimItem()],
     });
     const config = {
       net: "UnitTestNet",
       account: {
-        address: "address"
+        address: "address",
       } as any,
       api: {
-        getClaims: jest.fn().mockImplementationOnce(() => expectedClaims)
-      } as any
+        getClaims: jest.fn().mockImplementationOnce(() => expectedClaims),
+      } as any,
     } as ClaimGasConfig;
 
     const result = await fill.fillClaims(config);
@@ -149,11 +149,11 @@ describe("fillClaims", () => {
     const config = {
       net: "UnitTestNet",
       account: {
-        address: jest.fn()
+        address: jest.fn(),
       },
       api: {
-        getClaims: jest.fn().mockImplementationOnce(() => expectedClaims)
-      } as any
+        getClaims: jest.fn().mockImplementationOnce(() => expectedClaims),
+      } as any,
     } as any;
 
     expect(fill.fillClaims(config)).rejects.toThrow("No Claims found");
