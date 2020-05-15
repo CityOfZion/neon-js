@@ -4,6 +4,7 @@ import {
   TransactionAttributeLike,
   CosignerLike,
   WitnessLike,
+  TransactionJson,
 } from "../tx";
 import { ContractManifestLike, StackItemLike } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
@@ -60,24 +61,14 @@ export interface GetRawMemPoolResult {
   unverified: string[];
 }
 
-export interface GetRawTransactionResult {
+export interface GetRawTransactionResult extends TransactionJson {
   hash: string;
-  size: number;
-  version: number;
-  nonce: number;
-  sender: string;
-  sys_fee: string;
-  net_fee: string;
-  valid_until_block: number;
-  attributes: TransactionAttributeLike[];
-  cosigners: CosignerLike[];
-  script: string;
-  witnesses: WitnessLike[];
   blockhash: string;
   /** Number of blocks that has been confirmed between blocktime and now. */
   confirmations: number;
   /** Unix timestamp in milliseconds. */
   blocktime: number;
+  vm_state: "HALT" | "FAULT";
 }
 
 export interface GetVersionResult {

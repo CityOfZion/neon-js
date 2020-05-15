@@ -58,9 +58,9 @@ export class ScriptBuilder extends StringStream {
     if (args.length === 0) {
       this.emit(OpCode.NEWARRAY0);
     } else {
-      args.forEach((arg) => {
-        this.emitPush(arg);
-      });
+      for (let i = args.length - 1; i >= 0; i--) {
+        this.emitPush(args[i]);
+      }
       this.emitNumber(args.length);
       this.emit(OpCode.PACK);
     }

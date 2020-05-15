@@ -1,9 +1,11 @@
-import { rpc, CONST } from "../../src/index";
-import { ContractParam, createScript } from "../../src/sc";
+import { rpc } from "../../src/index";
+import { ContractParam, createScript, ScriptBuilder } from "../../src/sc";
 import { Transaction, WitnessScope } from "../../src/tx";
-import { Account } from "../../src/wallet";
-import { reverseHex } from "../../src/u";
-import { RPCClient } from "../../src/rpc";
+import { Wallet } from "../../src/wallet";
+import { HexString } from "../../src/u";
+import testWallet from "../../__tests__/testWallet.json";
+
+const wallet = new Wallet(testWallet);
 
 const TESTNET_URLS = [
   "http://seed1t.neo.org:20332",
@@ -16,12 +18,12 @@ const TESTNET_URLS = [
 const LOCALNET_URLS = ["http://localhost:20332"];
 
 let client: rpc.RPCClient;
-const address = "NXFprNJ9tBk4ziUaq2b9b2DtWQ1Vv2uLn3";
-const privateKey =
-  "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69";
+const address = wallet.accounts[0].address;
 
 // NEO contract hash. Should be same across TestNet or LocalNet.
-const contractHash = "8c23f196d8a1bfd103a9dcb1f9ccf0c611377d3b";
+const contractHash = "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789";
+let txid: string;
+let blockhash: string;
 
 async function safelyCheckHeight(url: string): Promise<number> {
   try {
@@ -34,76 +36,29 @@ async function safelyCheckHeight(url: string): Promise<number> {
   }
 }
 
+function isLocalNet(): boolean {
+  return (global["__TARGETNET__"] as string).toLowerCase() === "testnet";
+}
+
 beforeAll(async () => {
-  console.log(global["__TARGETNET__"]);
-  const urls =
-    (global["__TARGETNET__"] as string).toLowerCase() === "testnet"
-      ? TESTNET_URLS
-      : LOCALNET_URLS;
+  await wallet.decryptAll("wallet");
+  const urls = isLocalNet() ? TESTNET_URLS : LOCALNET_URLS;
   const data = await Promise.all(urls.map((url) => safelyCheckHeight(url)));
-  const heights = data.map((h, i) => ({ height: h, url: TESTNET_URLS[i] }));
+  const heights = data.map((h, i) => ({ height: h, url: urls[i] }));
   const best = heights.reduce(
     (bestSoFar, h) => (bestSoFar.height >= h.height ? bestSoFar : h),
     { height: -1, url: "" }
   );
   console.log(best);
   client = new rpc.RPCClient(best.url);
+
+  const firstBlock = await client.getBlock(0, true);
+  expect(firstBlock.tx.length).toBe(1);
+  blockhash = firstBlock.hash;
+  txid = firstBlock.tx[0].hash;
 }, 20000);
 
 describe("RPC Methods", () => {
-  const REFERENCE_BLOCK_HEADER = {
-    hash: "0x95380d2d8601a0e0d97fbe95c43cbc07e1d9ba6473ea5ddc39b8c381f3e3ae85",
-    size: 171,
-    version: 0,
-    previousblockhash:
-      "0x0000000000000000000000000000000000000000000000000000000000000000",
-    merkleroot:
-      "0x97eaae7de20c8a28b26a85d1bc8e87034209c7ce59d3afabe411761971f2f542",
-    time: 1468595301000,
-    index: 0,
-    nextconsensus: "NRwdxuyAw559S3qomjSptn77EAJeVRcguV",
-    witnesses: [
-      {
-        invocation: "",
-        verification: "EQ==",
-      },
-    ],
-    // do not match confirmations
-    nextblockhash:
-      "0xcecd22244e794b9f97f45ed9c7b0e82262568b0cc3b285f9bcc04adc69f3b577",
-  };
-  const REFERENCE_BLOCK = Object.assign(
-    {
-      consensus_data: {
-        primary: 0,
-        nonce: "000000007c2bac1d",
-      },
-      tx: [
-        {
-          hash:
-            "0x1e16f97be7fe8e9e2136dfdea37207fc27d2bc42661dd1feb6f37381233c44ad",
-          size: 57,
-          version: 0,
-          nonce: 0,
-          sender: "NeN4xPMn4kHoj7G8Lciq9oorgLTvqt4qi1",
-          sys_fee: "0",
-          net_fee: "0",
-          valid_until_block: 0,
-          attributes: [],
-          cosigners: [],
-          script: "QRI+f+g=",
-          witnesses: [
-            {
-              invocation: "",
-              verification: "EQ==",
-            },
-          ],
-        },
-      ],
-    },
-    REFERENCE_BLOCK_HEADER
-  );
-
   describe("getBlock", () => {
     test("height as index, verbose = 0", async () => {
       const result = await client.getBlock(0);
@@ -132,9 +87,8 @@ describe("RPC Methods", () => {
     });
 
     test("hash as index, verbose = 1", async () => {
-      const reference = await client.getBlock(0, 1);
-      const result = await client.getBlock(reference.hash, 1);
-      expect(result.hash).toEqual(reference.hash);
+      const result = await client.getBlock(blockhash, 1);
+      expect(result.hash).toEqual(blockhash);
     });
   });
 
@@ -156,17 +110,27 @@ describe("RPC Methods", () => {
   describe("getBlockHeader", () => {
     test("height as index, verbose = 0", async () => {
       const result = await client.getBlockHeader(0);
-      expect(result).toBe(
-        "00000000000000000000000000000000000000000000000000000000000000000000000042f5f271197611e4abafd359cec7094203878ebcd1856ab2288a0ce27daeea9788ea19ef550100000000000042218a992bdd8b981607766347e1ae195c3959cd0100011100"
-      );
+      expect(result).toBeDefined();
+      expect(typeof result).toBe("string");
+      expect(result.length).toBeGreaterThan(0);
     });
 
     test("hash as index, verbose = 1", async () => {
-      const result = await client.getBlock(
-        "0x95380d2d8601a0e0d97fbe95c43cbc07e1d9ba6473ea5ddc39b8c381f3e3ae85",
-        1
-      );
-      expect(result).toMatchObject(REFERENCE_BLOCK_HEADER);
+      const result = await client.getBlockHeader(blockhash, 1);
+      expect(result.hash).toBe(blockhash);
+      expect(Object.keys(result)).toEqual([
+        "hash",
+        "size",
+        "version",
+        "previousblockhash",
+        "merkleroot",
+        "time",
+        "index",
+        "nextconsensus",
+        "witnesses",
+        "confirmations",
+        "nextblockhash",
+      ]);
     });
   });
 
@@ -176,7 +140,7 @@ describe("RPC Methods", () => {
   });
 
   // TODO: Find a contract on neo3
-  test.skip("getContractState", async () => {
+  test("getContractState", async () => {
     const result = await client.getContractState(contractHash);
     expect(Object.keys(result)).toEqual([
       "groups",
@@ -212,31 +176,18 @@ describe("RPC Methods", () => {
 
   describe("getRawTransaction", () => {
     test("verbose", async () => {
-      const REFERENCE_TX = Object.assign(
-        {
-          blockhash:
-            "0x95380d2d8601a0e0d97fbe95c43cbc07e1d9ba6473ea5ddc39b8c381f3e3ae85",
-          // do not match confirmations
-          blocktime: 1468595301000,
-          vm_state: "HALT",
-        },
-        REFERENCE_BLOCK.tx[0]
-      );
-      const result = await client.getRawTransaction(
-        "1e16f97be7fe8e9e2136dfdea37207fc27d2bc42661dd1feb6f37381233c44ad",
-        1
-      );
-
-      expect(result).toMatchObject(REFERENCE_TX);
+      const result = await client.getRawTransaction(txid, 1);
+      expect(result).toBeDefined();
+      const tx = Transaction.fromJson(result);
+      expect(tx).toBeDefined();
     });
 
     test("non-verbose", async () => {
-      const result = await client.getRawTransaction(
-        "1e16f97be7fe8e9e2136dfdea37207fc27d2bc42661dd1feb6f37381233c44ad"
-      );
-      expect(result).toBe(
-        "0000000000ca61e52e881d41374e640f819cd118cc153b21a7000000000000000000000000000000000000000000000541123e7fe801000111"
-      );
+      const result = await client.getRawTransaction(txid);
+      expect(typeof result).toBe("string");
+
+      const deserializedTx = Transaction.deserialize(result);
+      expect(deserializedTx).toBeDefined();
     });
   });
 
@@ -251,9 +202,7 @@ describe("RPC Methods", () => {
   });
 
   test("getTransactionHeight", async () => {
-    const result = await client.getTransactionHeight(
-      "1e16f97be7fe8e9e2136dfdea37207fc27d2bc42661dd1feb6f37381233c44ad"
-    );
+    const result = await client.getTransactionHeight(txid);
     expect(result).toBe(0);
   });
 
@@ -285,7 +234,7 @@ describe("RPC Methods", () => {
     });
   });
 
-  describe.skip("Invocation methods", () => {
+  describe("Invocation methods", () => {
     test("invokeFunction", async () => {
       const result = await client.invokeFunction(contractHash, "name");
 
@@ -293,45 +242,58 @@ describe("RPC Methods", () => {
         expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
       );
       expect(result.state).toContain("HALT");
-      expect(result.stack[0].value).toEqual("474153");
     });
 
     test("invokeScript", async () => {
       const result = await client.invokeScript(
-        "14c7e4fce7f40b9616bd1884a9b85d33e4f617c3de51c10962616c616e63654f66142582d1b275e86c8f0e93a9b2facd5fdb760976a168627d5b52"
+        new ScriptBuilder()
+          .emitAppCall(contractHash, "name")
+          .emitAppCall(contractHash, "symbol")
+          .build()
       );
       expect(Object.keys(result)).toEqual(
         expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
       );
       expect(result.state).toContain("HALT");
+      expect(result.stack.length).toEqual(2);
+      expect(result.stack[0].value).toEqual(
+        HexString.fromAscii("NEO").toBase64()
+      );
+      expect(result.stack[1].value).toEqual(
+        HexString.fromAscii("neo").toBase64()
+      );
     });
   });
 
-  test.skip("sendRawTransaction", async () => {
-    const account = new Account(privateKey);
-    const addressInHash160 = ContractParam.hash160(account.address);
+  test("sendRawTransaction", async () => {
+    const fromAccount = wallet.accounts[0];
+    const toAccount = wallet.accounts[1];
     const script = createScript({
-      scriptHash: CONST.ASSET_ID.NEO,
+      scriptHash: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
       operation: "transfer",
-      args: [addressInHash160, addressInHash160, 1],
+      args: [
+        ContractParam.hash160(fromAccount.address),
+        ContractParam.hash160(toAccount.address),
+        1,
+      ],
     });
 
     const currentHeight = await client.getBlockCount();
     const transaction = new Transaction({
-      sender: reverseHex(account.scriptHash),
+      sender: fromAccount.scriptHash,
       cosigners: [
         {
-          account: reverseHex(account.scriptHash),
+          account: fromAccount.scriptHash,
           scopes: WitnessScope.CalledByEntry,
         },
       ],
-      validUntilBlock: currentHeight + Transaction.MAX_TRANSACTION_LIFESPAN - 1,
+      validUntilBlock: currentHeight + 1000000,
       systemFee: 1,
       networkFee: 1,
       script: script,
-    }).sign(account);
+    }).sign(fromAccount, 1234567890);
     const result = await client.sendRawTransaction(transaction.serialize(true));
-    expect(typeof result).toBe(String);
+    expect(typeof result).toBe("string");
   }, 10000);
 
   test.skip("submitBlock", () => {

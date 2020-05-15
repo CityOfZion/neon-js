@@ -52,7 +52,7 @@ export class Witness implements NeonObject<WitnessLike> {
   }
 
   public static fromSignature(sig: string, publicKey: string): Witness {
-    const invocationScript = "40" + sig;
+    const invocationScript = "0c40" + sig;
     const verificationScript = getVerificationScriptFromPublicKey(publicKey);
     return new Witness({ invocationScript, verificationScript });
   }
