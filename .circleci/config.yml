@@ -27,6 +27,9 @@ jobs:
           keys:
             - neon-yarn-{{ checksum "yarn.lock" }}
             - neon-fallback
+      - run:
+          name: node hid compilation requirements
+          command: sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
       - run: yarn install --cache-folder .cache/yarn
       - save_cache:
           key: neon-yarn-{{ checksum "yarn.lock" }}
@@ -81,7 +84,7 @@ jobs:
           environment:
             JEST_JUNIT_OUTPUT_DIR: reports/unit
             JEST_JUNIT_OUTPUT_NAME: results.xml
-          command: yarn test:unit --ci --runInBand --reporters="jest-junit" --reporters="default"
+          command: yarn test:unit --ci --runInBand --detectOpenHandles --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -103,7 +106,7 @@ jobs:
           environment:
             JEST_JUNIT_OUTPUT_DIR: reports/integration
             JEST_JUNIT_OUTPUT_NAME: results.xml
-          command: yarn test:integration --ci --runInBand --reporters="jest-junit" --reporters="default"
+          command: yarn test:integration --ci --runInBand --detectOpenHandles --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
       - store_artifacts:

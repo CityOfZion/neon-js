@@ -1,0 +1,4 @@
+name: subscribeNotifications
+description: Subscribe to receive event notifications from a contract.
+resources:
+  - https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js

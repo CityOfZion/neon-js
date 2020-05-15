@@ -1,7 +1,7 @@
 {
-  "name": "@cityofzion/neon-api",
-  "description": "Neon-API module: High level API for neon-js",
-  "version": "5.0.0-next.2",
+  "name": "@cityofzion/neon-ledger",
+  "description": "Neon Ledger integration for Node.js",
+  "version": "4.8.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
@@ -25,27 +25,29 @@
     "dist:prod": "tsc -m commonjs --outDir dist",
     "clean": "rimraf ./lib ./dist tsconfig.tsbuildinfo",
     "prepublishOnly": "yarn clean && yarn build && yarn dist:prod",
-    "lint": "eslint src/**/*.ts __tests__/**/*.ts __integration__/**/*.ts",
+    "lint": "eslint src/**/*.ts __tests__/**/*.ts",
     "pretty": "prettier --write --loglevel=warn \"./{src,__{tests,integration}__}/**/*.ts\"",
     "start": "jest --watch",
     "test": "jest",
     "test:integration": "jest /packages/.*/__integration__/.*",
-    "test:unit": "jest /packages/.*/__tests__/.*"
+    "test:unit": "jest /packages/.*/__tests__/.*",
+    "test:node": "node test.node.js"
   },
   "dependencies": {
-    "@cityofzion/neon-core": "^5.0.0-next.2",
-    "axios": "0.19.2",
-    "isomorphic-ws": "^4.0.1",
-    "ws": "^7.3.0"
+    "@ledgerhq/hw-transport": "5.15.0",
+    "@types/ledgerhq__hw-transport": "4.21.2"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "^4.0.0"
   },
   "files": [
-    "dist/",
-    "lib/"
+    "lib/",
+    "typings/"
   ],
   "devDependencies": {
-    "@types/ws": "^7.2.3"
+    "@cityofzion/neon-js": "^4.8.0",
+    "@ledgerhq/hw-transport-node-hid": "5.15.0",
+    "@ledgerhq/hw-transport-u2f": "5.15.0",
+    "@types/ledgerhq__hw-transport-node-hid": "4.22.1"
   }
 }

@@ -46,6 +46,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "devDependencies": {
+    "@types/ws": "^7.2.3"
+  },
   "prettier": {
     "endOfLine": "auto"
   }

@@ -9,7 +9,7 @@
     "rename-version": "./node_modules/.bin/docusaurus-rename-version"
   },
   "dependencies": {
-    "docusaurus": "^1.5.1",
-    "ljs2": "^1.0.3"
+    "docusaurus": "^1.14.4",
+    "ljs2": "^2.0.3"
   }
 }
