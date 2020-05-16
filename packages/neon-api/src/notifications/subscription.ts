@@ -18,7 +18,7 @@ export class Subscription {
   /**
    * Unsubscribe a specific function from a contract
    */
-  public unsubscribe() {
+  public unsubscribe(): void {
     this.unsubscribeFunction();
   }
 }

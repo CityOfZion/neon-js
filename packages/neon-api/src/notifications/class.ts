@@ -46,7 +46,7 @@ export class Notifications {
       this.subscriptions.get(contract) ??
       this.createWebsocketForContract(contract);
     contractSubscriptions.callbacks.set(subscriptionIdentifier, callback);
-    const unsubscribe = () => {
+    const unsubscribe = (): void => {
       const callbacksMaps = this.subscriptions.get(contract)?.callbacks;
       if (!callbacksMaps?.get(subscriptionIdentifier)) {
         // Check if the subscription hasn't been killed before
@@ -65,23 +65,46 @@ export class Notifications {
    * Unsubscribe all subscriptions associated with a specific contract
    * @param contract - Hash of the contract (or null for subscriptions to all contracts) to unsubscribe callbacks from
    */
-  public unsubscribeContract(contract: string | null): void {
+  public unsubscribeContract(contract: string | null): Promise<void> {
     contract = this.normalizeContract(contract);
     const subscriptionObj = this.subscriptions.get(contract);
-    if (!subscriptionObj) {
-      return; // Not throwing an exception in order to allow unlimited calling of this function
+    if (
+      !subscriptionObj ||
+      subscriptionObj.websocket.readyState >= WebSocket.CLOSING
+    ) {
+      return Promise.resolve(); // Not throwing an exception in order to allow unlimited calling of this function
     }
-    subscriptionObj.websocket.close();
-    this.subscriptions.delete(contract);
+
+    const closingPromise: Promise<void> = new Promise((resolve) => {
+      subscriptionObj.websocket.onclose = () => {
+        this.subscriptions.delete(contract);
+        resolve();
+      };
+      subscriptionObj.websocket.close();
+    });
+
+    const terminatePromise = new Promise((resolve) =>
+      setTimeout(resolve, 5000)
+    ).then(() => {
+      if (subscriptionObj.websocket.readyState != WebSocket.CLOSED) {
+        log.warn(
+          `Websocket for Subscription[${contract}] did not close in time (was in state ${subscriptionObj.websocket.readyState}). Force terminating.`
+        );
+        subscriptionObj.websocket.terminate();
+      }
+    });
+    return Promise.race([closingPromise, terminatePromise]);
   }
 
   /**
    * Unsubscribe all subscriptions (equivalent to calling unsubscribeContract() once for every contract)
    */
-  public unsubscribeAll(): void {
+  public unsubscribeAll(): Promise<void> {
+    const closingPromises: Promise<void>[] = [];
     for (const contract of this.subscriptions.keys()) {
-      this.unsubscribeContract(contract);
+      closingPromises.push(this.unsubscribeContract(contract));
     }
+    return Promise.all(closingPromises).then();
   }
 
   private createWebsocketForContract(
