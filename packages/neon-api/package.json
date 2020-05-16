@@ -33,10 +33,10 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "@cityofzion/neon-core": "^5.0.0-next.2",
+    "@types/node": "13.7.0",
     "axios": "0.19.2",
-    "isomorphic-ws": "^4.0.1",
-    "ws": "^7.3.0"
+    "isomorphic-ws": "4.0.1",
+    "ws": "7.3.0"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "^4.0.0"
@@ -46,6 +46,6 @@
     "lib/"
   ],
   "devDependencies": {
-    "@types/ws": "^7.2.3"
+    "@types/ws": "7.2.4"
   }
 }

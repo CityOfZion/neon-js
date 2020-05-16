@@ -9,9 +9,9 @@ beforeAll(() => {
   );
 });
 
-afterEach(() => {
-  notificationsClient.unsubscribeAll();
-});
+afterEach(async () => {
+  await notificationsClient.unsubscribeAll();
+}, 10000);
 
 describe("notifications", () => {
   test("smoke test", (done) => {
