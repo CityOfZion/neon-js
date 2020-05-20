@@ -1,11 +1,5 @@
 import { DEFAULT_REQ } from "../consts";
-import {
-  Transaction,
-  TransactionAttributeLike,
-  CosignerLike,
-  WitnessLike,
-  TransactionJson,
-} from "../tx";
+import { Transaction, TransactionJson } from "../tx";
 import { ContractManifestLike, StackItemLike } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 

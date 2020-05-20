@@ -1,7 +1,6 @@
 import { ScriptBuilder, ScriptIntent } from "./ScriptBuilder";
 import { InteropServiceCode } from "./InteropServiceCode";
 import { ContractManifest } from "./manifest";
-import OpCode from "./OpCode";
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
  */
@@ -22,7 +21,6 @@ export function createScript(...intents: (ScriptIntent | string)[]): string {
 
     sb.emitAppCall(scriptHash, operation, args);
   }
-  sb.emit(OpCode.ASSERT);
   return sb.build();
 }
 
