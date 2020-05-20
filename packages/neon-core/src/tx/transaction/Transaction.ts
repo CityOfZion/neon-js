@@ -305,7 +305,7 @@ export class Transaction implements NeonObject<TransactionLike> {
       signer = new Account(signer);
     }
     const signature = sign(
-      num2hexstring(networkMagic, 4) + this.serialize(false),
+      num2hexstring(networkMagic, 4, true) + this.serialize(false),
       signer.privateKey
     );
     log.info(`Signed Transaction with Account: ${signer.label}`);
