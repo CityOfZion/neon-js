@@ -214,7 +214,7 @@ describe("Add Methods", () => {
       "0c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b410a906ad4"
     );
     expect(tx1.witnesses[0].invocationScript.toBigEndian()).toBe(
-      "40fa815c5d09d985e1a083a6a8492b42c1bfe769bd792134b3dacac14020c089792bac252f73781658a2c0828fa0c132de9e8a0946293ab9b4750d5d38936f39d4"
+      "0c4063b1a773314058d3990c9553db44f259bcc6faf11fc6eaa3454de868ba3e63ea05fbb4b2eca4f61d0e24586d4197774c827712b2742fa147dcbae34ca898e52d"
     );
   });
 });
