@@ -100,6 +100,7 @@ jobs:
           name: Test privatenet
           command: |
             curl -d '{"jsonrpc": "2.0","method": "getversion", "params": [],"id": 3}' -H 'Content-Type: application/json' http://localhost:20332
+            curl -d '{"jsonrpc": "2.0","method": "getnep5transfers", "params": ["NMPAXGtMfZ8s8rcfP9JhrYrNeZHG4xSVmd"],"id": 3}' -H 'Content-Type: application/json' http://localhost:20332
       - run: mkdir reports
       - run:
           name: Integration Tests
