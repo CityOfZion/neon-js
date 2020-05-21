@@ -1,18 +1,68 @@
-defaults: &defaults
+node10: &env-node10
   working_directory: ~/repo
   docker:
     - image: circleci/node:10-stretch
 
-integration: &integration
+node12: &env-node12
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:12-stretch
+
+integration: &env-integration10
   working_directory: ~/repo
   docker:
     - image: circleci/node:10-stretch
     - image: snowypowers/neo-privatenet:v3.0.0-preview2
 
+integration: &env-integration12
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:12-stretch
+    - image: snowypowers/neo-privatenet:v3.0.0-preview2
+
+run-unittest: &run-unittest
+  steps:
+    - checkout
+    - attach_workspace:
+        at: .
+    - run: mkdir reports
+    - run:
+        name: Unit Tests
+        environment:
+          JEST_JUNIT_OUTPUT_DIR: reports/unit
+          JEST_JUNIT_OUTPUT_NAME: results.xml
+        command: yarn test:unit --ci --runInBand --detectOpenHandles --reporters="jest-junit" --reporters="default"
+    - store_test_results:
+        path: reports
+    - store_artifacts:
+        path: reports
+
+run-integrationtest: &run-integrationtest
+  steps:
+    - checkout
+    - attach_workspace:
+        at: .
+    - run:
+        name: Test privatenet
+        command: |
+          curl -d '{"jsonrpc": "2.0","method": "getversion", "params": [],"id": 3}' -H 'Content-Type: application/json' http://localhost:20332
+          curl -d '{"jsonrpc": "2.0","method": "getnep5transfers", "params": ["NMPAXGtMfZ8s8rcfP9JhrYrNeZHG4xSVmd"],"id": 3}' -H 'Content-Type: application/json' http://localhost:20332
+    - run: mkdir reports
+    - run:
+        name: Integration Tests
+        environment:
+          JEST_JUNIT_OUTPUT_DIR: reports/integration
+          JEST_JUNIT_OUTPUT_NAME: results.xml
+        command: yarn test:integration --ci --runInBand --detectOpenHandles --reporters="jest-junit" --reporters="default"
+    - store_test_results:
+        path: reports
+    - store_artifacts:
+        path: reports
+
 version: 2
 jobs:
   setup:
-    <<: *defaults
+    <<: *env-node10
     steps:
       - run:
           name: "Versions"
@@ -48,7 +98,7 @@ jobs:
             - packages
 
   lint:
-    <<: *defaults
+    <<: *env-node10
     steps:
       - checkout
       - attach_workspace:
@@ -72,49 +122,20 @@ jobs:
       - store_artifacts:
           path: reports
 
-  unit-test:
-    <<: *defaults
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run: mkdir reports
-      - run:
-          name: Unit Tests
-          environment:
-            JEST_JUNIT_OUTPUT_DIR: reports/unit
-            JEST_JUNIT_OUTPUT_NAME: results.xml
-          command: yarn test:unit --ci --runInBand --detectOpenHandles --reporters="jest-junit" --reporters="default"
-      - store_test_results:
-          path: reports
-      - store_artifacts:
-          path: reports
+  unittest-node10:
+    <<: [*env-node10,*run-unittest]
 
-  integration-test:
-    <<: *integration
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Test privatenet
-          command: |
-            curl -d '{"jsonrpc": "2.0","method": "getversion", "params": [],"id": 3}' -H 'Content-Type: application/json' http://localhost:20332
-            curl -d '{"jsonrpc": "2.0","method": "getnep5transfers", "params": ["NMPAXGtMfZ8s8rcfP9JhrYrNeZHG4xSVmd"],"id": 3}' -H 'Content-Type: application/json' http://localhost:20332
-      - run: mkdir reports
-      - run:
-          name: Integration Tests
-          environment:
-            JEST_JUNIT_OUTPUT_DIR: reports/integration
-            JEST_JUNIT_OUTPUT_NAME: results.xml
-          command: yarn test:integration --ci --runInBand --detectOpenHandles --reporters="jest-junit" --reporters="default"
-      - store_test_results:
-          path: reports
-      - store_artifacts:
-          path: reports
+    unittest-node12:
+    <<: [*env-node12,*run-unittest]
+
+  integrationtest-node10:
+    <<: [*env-integration10, *run-integrationtest]
+
+    integrationtest-node10:
+      <<: [*env-integration12, *run-integrationtest]
 
   publish-latest:
-    <<: *defaults
+    <<: *env-node10
     steps:
       - checkout
       - attach_workspace:
@@ -127,7 +148,7 @@ jobs:
           command: yarn release:latest --yes
 
   publish-next:
-    <<: *defaults
+    <<: *env-node10
     steps:
       - checkout
       - attach_workspace:
@@ -153,13 +174,17 @@ workflows:
       - lint:
           requires:
             - setup
-      - unit-test:
+      - unittest-node10:
           requires:
             - setup
-      - integration-test:
+      - unittest-node12:
+          requires:
+            - setup
+      - integrationtest:
           requires:
             - lint
-            - unit-test
+            - unittest-node10
+
   publish:
     jobs:
       - setup:
