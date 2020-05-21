@@ -48,7 +48,6 @@
     "elliptic": "6.5.2",
     "loglevel": "1.6.7",
     "loglevel-plugin-prefix": "0.8.4",
-    "scrypt-js": "3.0.0",
     "secure-random": "1.1.2",
     "wif": "2.0.6"
   },

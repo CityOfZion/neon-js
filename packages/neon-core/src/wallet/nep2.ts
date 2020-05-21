@@ -10,7 +10,7 @@ import latin1Encoding from "crypto-js/enc-latin1";
 import ECBMode from "crypto-js/mode-ecb";
 import NoPadding from "crypto-js/pad-nopadding";
 import SHA256 from "crypto-js/sha256";
-import { scrypt } from "scrypt-js";
+import { scrypt } from "crypto";
 import { DEFAULT_SCRYPT, NEP_FLAG, NEP_HEADER } from "../consts";
 import logging from "../logging";
 import { ab2hexstring, hexXor } from "../u";
@@ -22,7 +22,7 @@ const enc = {
 };
 
 export interface ScryptParams {
-  n: number;
+  N: number;
   r: number;
   p: number;
 }
@@ -43,7 +43,6 @@ export async function encrypt(
   keyphrase: string,
   scryptParams: ScryptParams = DEFAULT_SCRYPT
 ): Promise<string> {
-  const { n, r, p } = scryptParams;
   const account = new Account(wifKey);
   // SHA Salt (use the first 4 bytes)
   const firstSha = SHA256(enc.Latin1.parse(account.address));
@@ -54,10 +53,8 @@ export async function encrypt(
   const key = await scrypt(
     Buffer.from(keyphrase.normalize("NFC"), "utf8"),
     Buffer.from(addressHash, "hex"),
-    n,
-    r,
-    p,
     64,
+    scryptParams,
     () => {} // eslint-disable-line
   );
 
@@ -90,17 +87,14 @@ export async function decrypt(
   keyphrase: string,
   scryptParams: ScryptParams = DEFAULT_SCRYPT
 ): Promise<string> {
-  const { n, r, p } = scryptParams;
   const assembled = ab2hexstring(bs58check.decode(encryptedKey));
   const addressHash = assembled.substr(6, 8);
   const encrypted = assembled.substr(-64);
   const key = await scrypt(
     Buffer.from(keyphrase.normalize("NFC"), "utf8"),
     Buffer.from(addressHash, "hex"),
-    n,
-    r,
-    p,
     64,
+    scryptParams,
     () => {} // eslint-disable-line
   );
   const derived = Buffer.from(key).toString("hex");

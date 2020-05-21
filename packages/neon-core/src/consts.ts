@@ -43,7 +43,7 @@ export const DEFAULT_REQ = {
 };
 
 export const DEFAULT_SCRYPT = {
-  n: 16384,
+  N: 16384,
   r: 8,
   p: 8,
   size: 64,
