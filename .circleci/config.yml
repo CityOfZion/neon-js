@@ -136,12 +136,12 @@ jobs:
       - run-unittest
 
   integrationtest-node10:
-    executor: env-node10
+    executor: env-integration10
     steps:
       - run-integrationtest
 
   integrationtest-node12:
-    executor: env-node12
+    executor: env-integration12
     steps:
       - run-integrationtest
 
@@ -191,10 +191,14 @@ workflows:
       - unittest-node12:
           requires:
             - setup
-      - integrationtest:
+      - integrationtest-node10:
           requires:
             - lint
             - unittest-node10
+      - integrationtest-node12:
+          requires:
+            - lint
+            - unittest-node12
 
   publish:
     jobs:
