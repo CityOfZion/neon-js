@@ -1,20 +1,20 @@
-node10: &env-node10
+env-node10: &env-node10
   working_directory: ~/repo
   docker:
     - image: circleci/node:10-stretch
 
-node12: &env-node12
+env-node12: &env-node12
   working_directory: ~/repo
   docker:
     - image: circleci/node:12-stretch
 
-integration: &env-integration10
+env-integration10: &env-integration10
   working_directory: ~/repo
   docker:
     - image: circleci/node:10-stretch
     - image: snowypowers/neo-privatenet:v3.0.0-preview2
 
-integration: &env-integration12
+env-integration12: &env-integration12
   working_directory: ~/repo
   docker:
     - image: circleci/node:12-stretch
@@ -123,16 +123,16 @@ jobs:
           path: reports
 
   unittest-node10:
-    <<: [*env-node10,*run-unittest]
+    <<: [*env-node10, *run-unittest]
 
-    unittest-node12:
-    <<: [*env-node12,*run-unittest]
+  unittest-node12:
+    <<: [*env-node12, *run-unittest]
 
   integrationtest-node10:
     <<: [*env-integration10, *run-integrationtest]
 
-    integrationtest-node10:
-      <<: [*env-integration12, *run-integrationtest]
+  integrationtest-node10:
+    <<: [*env-integration12, *run-integrationtest]
 
   publish-latest:
     <<: *env-node10
