@@ -54,14 +54,14 @@ const privateNetConfig = {
     "neo-cli-privatenet-1:20333",
     "neo-cli-privatenet-2:20334",
     "neo-cli-privatenet-3:20335",
-    "neo-cli-privatenet-4:20336"
+    "neo-cli-privatenet-4:20336",
   ], // Optional
   extra: {
     // Neoscan URL
     neoscan: "http://localhost:4000/api/main_net",
     // Notifications URL
-    notifications: "ws://localhost:8080/event"
-  }
+    notifications: "ws://localhost:8080/event",
+  },
 };
 
 // Add network config to neon-js

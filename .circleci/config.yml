@@ -120,6 +120,9 @@ jobs:
             echo "Found:"
             echo $FILES
             yarn run eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
+      - run:
+          name: Format docs
+          command: yarn lint:docs
       - store_test_results:
           path: reports
       - store_artifacts:

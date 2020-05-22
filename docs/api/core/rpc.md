@@ -11,7 +11,10 @@ const client = Neon.create.rpcClient(URL);
 const alternative = new rpc.rpcClient(URL);
 ```
 
-This module contains the classes and interfaces to interact with the RPC endpoints supplied by the current C# neo implementation. It also contains the classes for `Network` and `Protocol` which are configurations that provide us details about a network.
+This module contains the classes and interfaces to interact with the RPC
+endpoints supplied by the current C# neo implementation. It also contains the
+classes for `Network` and `Protocol` which are configurations that provide us
+details about a network.
 
 ---
 
@@ -19,13 +22,18 @@ This module contains the classes and interfaces to interact with the RPC endpoin
 
 ### RPCClient
 
-The RPC Client acts as a model for a specific NEO Node. RPC Calls are methods which external applications can interact with the NEO network easily without sending a transaction.
+The RPC Client acts as a model for a specific NEO Node. RPC Calls are methods
+which external applications can interact with the NEO network easily without
+sending a transaction.
 
-It provides built-in RPC methods for easy calling. Previous queries can be retrieved from the `history` property.
+It provides built-in RPC methods for easy calling. Previous queries can be
+retrieved from the `history` property.
 
-RPC methods mirror the API reference found in the official NEO documentation. All RPC methods return a Promise.
+RPC methods mirror the API reference found in the official NEO documentation.
+All RPC methods return a Promise.
 
-Do note that method names follow the JS convention of camelCase instead of all lowercase.
+Do note that method names follow the JS convention of camelCase instead of all
+lowercase.
 
 ```js
 // Creates a RPCClient that will talk to http://seed1.neo.org:10332
@@ -46,7 +54,8 @@ client.execute(query);
 
 ### Query
 
-A Query object is a simple wrapper around a request/response pair. It allows us to generate queries quickly without being dependent on a client.
+A Query object is a simple wrapper around a request/response pair. It allows us
+to generate queries quickly without being dependent on a client.
 
 Custom queries can be created by passing in the necessary parameters.
 
@@ -63,7 +72,10 @@ const response = rpc.Query.getBlock(1).execute("http://seed1.neo.org:10332");
 
 ### Network
 
-The Network class is a configuration object that contains the information required to connect to a blockchain. The default networks avaialble in `neon-js` can be found in the global settings object. This class can be used to add support for a private network to `neon-js`.
+The Network class is a configuration object that contains the information
+required to connect to a blockchain. The default networks avaialble in `neon-js`
+can be found in the global settings object. This class can be used to add
+support for a private network to `neon-js`.
 
 ```js
 const newNet = new rpc.Network({ name: "NewNet" });
@@ -83,7 +95,8 @@ class Network {
 }
 ```
 
-However, this class will export as a JSON that follows the C# convention in order to maintain compatibility with the main implementation:
+However, this class will export as a JSON that follows the C# convention in
+order to maintain compatibility with the main implementation:
 
 ```ts
 interface NetworkJSON {
@@ -94,7 +107,8 @@ interface NetworkJSON {
 }
 ```
 
-Similarly, the constructor is compatible with the protocol files from C#. Once imported, proceed to follow javascript conventions.
+Similarly, the constructor is compatible with the protocol files from C#. Once
+imported, proceed to follow javascript conventions.
 
 ```js
 const javascriptStyle = new rpc.Network({ name: "camelCaseNet" });
@@ -106,11 +120,14 @@ CSharpStyle.name; //PascalCaseNet
 
 ### Protocol
 
-The Protocol class is the interface and class representing the configuration of the network itself. Details such as the magic number, seedlist and validators are found in this class.
+The Protocol class is the interface and class representing the configuration of
+the network itself. Details such as the magic number, seedlist and validators
+are found in this class.
 
 This class is not exposed in the fluent API.
 
-Similar to the `Network` class, this class maintains C# compatibility for the constructor and `export()` method.
+Similar to the `Network` class, this class maintains C# compatibility for the
+constructor and `export()` method.
 
 ```js
 const protocol = new rpc.Protocol({ magic: 23 });

@@ -3,7 +3,8 @@ id: smart_contract
 title: Smart Contract
 ---
 
-> You can refer to **Precondition** part to check the initiation of `apiProvider`, `myWallet` and `myAccount`
+> You can refer to **Precondition** part to check the initiation of
+> `apiProvider`, `myWallet` and `myAccount`
 
 ## Invocation Transaction
 
@@ -26,16 +27,16 @@ const config = {
   account: myAccount, // Your Account
   script: script, // The Smart Contract invocation script
   gas: 0, // Optional, system fee
-  fees: 0 // Optional, network fee
+  fees: 0, // Optional, network fee
 };
 
 // Neon API
 Neon.doInvoke(config)
-  .then(config => {
+  .then((config) => {
     console.log("\n\n--- Response ---");
     console.log(config.response);
   })
-  .catch(config => {
+  .catch((config) => {
     console.log(config);
   });
 ```
@@ -49,7 +50,7 @@ const { default: Neon, tx, rpc, u } = require("@cityofzion/neon-js");
 const props = {
   scriptHash: "80de34fbe3e6488ce316b722c5455387b001df31",
   operation: "name",
-  args: []
+  args: [],
 };
 
 const script = Neon.create.script(props);
@@ -59,7 +60,7 @@ async function createTxByNeoScan() {
   let balance = await apiProvider.getBalance(myAccount.address);
   let transaction = new tx.InvocationTransaction({
     script: script,
-    gas: 0
+    gas: 0,
   });
 
   transaction.addAttribute(
@@ -73,13 +74,13 @@ async function createTxByNeoScan() {
 
 // Send raw transaction
 const client = new rpc.RPCClient("http://rpc.url:portNum");
-createTxByNeoScan().then(transaction => {
+createTxByNeoScan().then((transaction) => {
   client
     .sendRawTransaction(transaction)
-    .then(res => {
+    .then((res) => {
       console.log(res);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 });
@@ -93,14 +94,14 @@ const { default: Neon, tx, wallet, rpc, u } = require("@cityofzion/neon-js");
 const props = {
   scriptHash: "80de34fbe3e6488ce316b722c5455387b001df31",
   operation: "symbol",
-  args: []
+  args: [],
 };
 const script = Neon.create.script(props);
 
 // create raw invocation transaction
 let rawTransaction = new tx.InvocationTransaction({
   script: script,
-  gas: 0
+  gas: 0,
 });
 
 // Build input objects and output objects.
@@ -124,10 +125,10 @@ rawTransaction.addWitness(
 const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
   .sendRawTransaction(rawTransaction)
-  .then(res => {
+  .then((res) => {
     console.log(res);
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });
 ```
@@ -147,35 +148,46 @@ const script = sb.str;
 // Using RPC Query to do local invocation
 rpc.Query.invokeScript(script)
   .execute("http://rpc.url:portNum")
-  .then(res => {
+  .then((res) => {
     console.log(res.result);
   })
-  .catch(config => {
+  .catch((config) => {
     console.log(config);
   });
 ```
+
 ## Witdraw - Receive NEO/GAS from Contract
 
 You have to deposit some NEO/GAS to contract address in advance.
 
-> When you want to extract NEO/GAS from a smart contract, the verification trigger of the smart contract must be satisfied. It's hard to customize high level API as the verification trigger may be different from case to case.
+> When you want to extract NEO/GAS from a smart contract, the verification
+> trigger of the smart contract must be satisfied. It's hard to customize high
+> level API as the verification trigger may be different from case to case.
 
-> In below example, verification trigger of the invoked smart contract will check the signature from contract owner
+> In below example, verification trigger of the invoked smart contract will
+> check the signature from contract owner
 
 ```javascript
-const { default: Neon, wallet, tx, u, rpc, CONST } = require("@cityofzion/neon-js");
+const {
+  default: Neon,
+  wallet,
+  tx,
+  u,
+  rpc,
+  CONST,
+} = require("@cityofzion/neon-js");
 
 // The unspent tx from contract
 const inputObj = {
   prevHash: "95cfeed6a101babe5df8903c72952b59e239880f3be41ab2a65fb8269284765d",
-  prevIndex: 0
+  prevIndex: 0,
 };
 
 // Output to owner
 const outPutObj = {
   assetId: CONST.ASSET_ID.NEO,
   value: "100",
-  scriptHash: ownerAccount.scriptHash
+  scriptHash: ownerAccount.scriptHash,
 };
 
 // Create raw transaction
@@ -197,7 +209,7 @@ sb.emitPush(u.str2hexstring("haha"));
 
 let witnessObj = {
   invocationScript: sb.str,
-  verificationScript: ""
+  verificationScript: "",
 };
 let witness = new tx.Witness(witnessObj);
 witness.scriptHash = "f3418e5385d450fe7c2126a6e2943";
@@ -219,10 +231,10 @@ rawTransaction.addWitness(
 const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
   .sendRawTransaction(rawTransaction)
-  .then(res => {
+  .then((res) => {
     console.log(res);
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });
 ```

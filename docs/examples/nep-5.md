@@ -3,7 +3,8 @@ id: nep5
 title: NEP-5
 ---
 
-> You can refer to **Precondition** part to check the initiation of `apiProvider`, `myWallet` and `myAccount`
+> You can refer to **Precondition** part to check the initiation of
+> `apiProvider`, `myWallet` and `myAccount`
 
 ## Get Balance
 
@@ -21,10 +22,10 @@ const script = scBuilder().str;
 // local invocation
 rpc.Query.invokeScript(script)
   .execute("http://rpc.url:portNum")
-  .then(res => {
+  .then((res) => {
     console.log(res);
   })
-  .catch(config => {
+  .catch((config) => {
     console.log(config);
   });
 ```
@@ -38,7 +39,12 @@ const { default: Neon, api, sc } = require("@cityofzion/neon-js");
 
 const contractScriptHash = "80de34fbe3e6488ce316b722c5455387b001df31";
 const to_addr = "AN6nd3B7iQxKK23DWAFSzgykbyTjMdieXD";
-const scBuilder =  nep5.abi.transfer(contractScriptHash, myAccount.address, to_addr , 100);
+const scBuilder = nep5.abi.transfer(
+  contractScriptHash,
+  myAccount.address,
+  to_addr,
+  100
+);
 const script = scBuilder().str;
 
 const config = {
@@ -47,16 +53,16 @@ const config = {
   account: myAccount, // Your Account
   script: script, // The Smart Contract invocation script
   gas: 0, // Optional, system fee.
-  fees: 0 // Optional, network fee
+  fees: 0, // Optional, network fee
 };
 
 // Neon API
 Neon.doInvoke(config)
-  .then(config => {
+  .then((config) => {
     console.log("\n\n--- Response ---");
     console.log(config.response);
   })
-  .catch(config => {
+  .catch((config) => {
     console.log(config);
   });
 ```
@@ -64,7 +70,15 @@ Neon.doInvoke(config)
 ### Low Level
 
 ```javascript
-const { default: Neon, api, sc, wallet, tx, u, rpc } = require("@cityofzion/neon-js");
+const {
+  default: Neon,
+  api,
+  sc,
+  wallet,
+  tx,
+  u,
+  rpc,
+} = require("@cityofzion/neon-js");
 
 // Receiver address
 const RECEIVER_ADDRESS = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
@@ -86,7 +100,7 @@ const param_amount = Neon.create.contractParam("Integer", 100 * 1e8);
 const props = {
   scriptHash: "80de34fbe3e6488ce316b722c5455387b001df31",
   operation: "transfer",
-  args: [param_sending_address, param_receiving_address, param_amount]
+  args: [param_sending_address, param_receiving_address, param_amount],
 };
 
 const script = Neon.create.script(props);
@@ -96,7 +110,7 @@ async function createTxByNeoScan() {
   let balance = await apiProvider.getBalance(myAccount.address);
   let transaction = new tx.InvocationTransaction({
     script: script,
-    gas: 0
+    gas: 0,
   });
 
   transaction.addAttribute(
@@ -110,13 +124,13 @@ async function createTxByNeoScan() {
 
 // send transaction
 const client = new rpc.RPCClient("http://rpc.url:portNum");
-createTxByNeoScan().then(transaction => {
+createTxByNeoScan().then((transaction) => {
   client
     .sendRawTransaction(transaction)
-    .then(res => {
+    .then((res) => {
       console.log(res);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 });
@@ -125,7 +139,14 @@ createTxByNeoScan().then(transaction => {
 ### Raw Level
 
 ```javascript
-const { default: Neon, sc, wallet, tx, u, rpc } = require("@cityofzion/neon-js");
+const {
+  default: Neon,
+  sc,
+  wallet,
+  tx,
+  u,
+  rpc,
+} = require("@cityofzion/neon-js");
 
 // Receiver address
 const RECEIVER_ADDRESS = "AaEvSJVCD3yvoWYR75fLwNutmDKKUzaV6w";
@@ -145,7 +166,7 @@ const param_amount = Neon.create.contractParam("Integer", 100 * 1e8);
 const props = {
   scriptHash: "80de34fbe3e6488ce316b722c5455387b001df31",
   operation: "transfer",
-  args: [param_sending_address, param_receiving_address, param_amount]
+  args: [param_sending_address, param_receiving_address, param_amount],
 };
 
 const script = Neon.create.script(props);
@@ -153,7 +174,7 @@ const script = Neon.create.script(props);
 // Create transaction object
 let rawTransaction = new tx.InvocationTransaction({
   script: script,
-  gas: 0
+  gas: 0,
 });
 
 // Build input objects and output objects.
@@ -177,10 +198,10 @@ rawTransaction.addWitness(
 const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
   .sendRawTransaction(rawTransaction)
-  .then(res => {
+  .then((res) => {
     console.log(res);
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });
 ```
@@ -205,7 +226,7 @@ const intent = api.makeIntent({ NEO: 1 }, CONTRACT_ADDRESS);
 const props = {
   scriptHash: "db62ff35f42f3418e5385d450fe7c2126a6e2943",
   operation: "mintTokens",
-  args: []
+  args: [],
 };
 
 const script = Neon.create.script(props);
@@ -215,16 +236,16 @@ const config = {
   url: "http://rpc.url:portNum", // RPC URL
   account: senderAccount, // Sender's Account
   intents: intent,
-  script: script
+  script: script,
 };
 
 // Neon API
 Neon.doInvoke(config)
-  .then(res => {
+  .then((res) => {
     console.log("\n\n--- Response ---");
     console.log(res);
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });
 ```
@@ -244,7 +265,7 @@ const CONTRACT_ADDRESS = "AMtzZ3mfbXvgEDMokitAsEGbPHEgNTTbhA";
 const props = {
   scriptHash: "db62ff35f42f3418e5385d450fe7c2126a6e2943",
   operation: "mintTokens",
-  args: []
+  args: [],
 };
 
 const script = Neon.create.script(props);
@@ -254,7 +275,7 @@ async function createTxByNeoScan() {
   let balance = await apiProvider.getBalance(senderAccount.address);
   let transaction = new tx.InvocationTransaction({
     script: script,
-    gas: 0
+    gas: 0,
   });
 
   // Add intent
@@ -267,13 +288,13 @@ async function createTxByNeoScan() {
 
 // Send transaction
 const client = new rpc.RPCClient("http://rpc.url:portNum");
-createTxByNeoScan().then(transaction => {
+createTxByNeoScan().then((transaction) => {
   client
     .sendRawTransaction(transaction)
-    .then(res => {
+    .then((res) => {
       console.log(res);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 });
@@ -282,35 +303,41 @@ createTxByNeoScan().then(transaction => {
 ### Raw Level
 
 ```javascript
-const { default: Neon, wallet, tx, rpc, CONST } = require("@cityofzion/neon-js");
+const {
+  default: Neon,
+  wallet,
+  tx,
+  rpc,
+  CONST,
+} = require("@cityofzion/neon-js");
 
 const CONTRACT_ADDRESS = "AMtzZ3mfbXvgEDMokitAsEGbPHEgNTTbhA";
 
 // Your NEO unspent tx
 const inputObj = {
   prevHash: "afc2db042aa9d732e3e14694a1925512741178a44b2ac854476b6eeac53e070f",
-  prevIndex: 1
+  prevIndex: 1,
 };
 
 // Output to contract address
 const outPutObj1 = {
   assetId: CONST.ASSET_ID.NEO,
   value: "1",
-  scriptHash: "db62ff35f42f3418e5385d450fe7c2126a6e2943"
+  scriptHash: "db62ff35f42f3418e5385d450fe7c2126a6e2943",
 };
 
 // The rest NEO
 const outPutObj2 = {
   assetId: CONST.ASSET_ID.NEO,
   value: "494",
-  scriptHash: senderAccount.scriptHash
+  scriptHash: senderAccount.scriptHash,
 };
 
 // Build contract script
 const props = {
   scriptHash: "db62ff35f42f3418e5385d450fe7c2126a6e2943",
   operation: "mintTokens",
-  args: []
+  args: [],
 };
 
 const script = Neon.create.script(props);
@@ -318,7 +345,7 @@ const script = Neon.create.script(props);
 // Create transaction object
 let rawTransaction = new tx.InvocationTransaction({
   script: script,
-  gas: 0
+  gas: 0,
 });
 
 // Add inputs/outputs
@@ -341,10 +368,10 @@ rawTransaction.addWitness(
 const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
   .sendRawTransaction(rawTransaction)
-  .then(res => {
+  .then((res) => {
     console.log(res);
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });
 ```

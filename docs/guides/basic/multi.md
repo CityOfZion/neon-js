@@ -3,12 +3,17 @@ id: multi
 title: Basic - Signing with a multi-sig account
 ---
 
-This tutorial aims to show how to sign with a multi-sig account. This will be done by sending some assets from a multi-sig account.
+This tutorial aims to show how to sign with a multi-sig account. This will be
+done by sending some assets from a multi-sig account.
 
-A multi-sig Account can be identified by its verification script. It uses the `CHECKMULTISIG` OpCode (`ae` in hexstring). Thus, if you see any verification scripts ending with `ae`, it is likely to be a multi-sig Account.
+A multi-sig Account can be identified by its verification script. It uses the
+`CHECKMULTISIG` OpCode (`ae` in hexstring). Thus, if you see any verification
+scripts ending with `ae`, it is likely to be a multi-sig Account.
 
 ## Setup
-Here I will assume that you have already sent some assets over to the multi-sig account.
+
+Here I will assume that you have already sent some assets over to the multi-sig
+account.
 
 ```js
 const { default: Neon, api, wallet, tx, rpc } = require("@cityofzion/neon-js");
@@ -19,9 +24,9 @@ const neoscan = new api.neoscan.instance(
 const rpcNodeUrl = "http://seed2.neo.org:20332";
 ```
 
-Our multi-sig account in this example is made up of 3 keys with a signing threshold of 2.
-Do note that the order of keys in the array matters. A different order will generate a totally different address.
-
+Our multi-sig account in this example is made up of 3 keys with a signing
+threshold of 2. Do note that the order of keys in the array matters. A different
+order will generate a totally different address.
 
 ```js
 const keyA = new wallet.Account(
@@ -37,20 +42,23 @@ const keyC = new wallet.Account(
 const multisigAcct = wallet.Account.createMultiSig(2, [
   keyA.publicKey,
   keyB.publicKey,
-  keyC.publicKey
+  keyC.publicKey,
 ]);
 
 console.log("\n\n--- Multi-sig ---");
 console.log(`My multi-sig address is ${multisigAcct.address}`);
-console.log(`My multi-sig verificationScript is ${multisigAcct.contract.script}`);
+console.log(
+  `My multi-sig verificationScript is ${multisigAcct.contract.script}`
+);
 ```
 
 ## Construct Transaction
-Similar to how we setup a transaction for a normal account transfer, we also do the same for our transfer from a multi-sig account.
 
+Similar to how we setup a transaction for a normal account transfer, we also do
+the same for our transfer from a multi-sig account.
 
 ```js
-var constructTx = neoscan.getBalance(multisigAcct.address).then(balance => {
+var constructTx = neoscan.getBalance(multisigAcct.address).then((balance) => {
   const transaction = Neon.create
     .contractTx()
     .addIntent("NEO", 1, keyA.address)
@@ -62,11 +70,14 @@ var constructTx = neoscan.getBalance(multisigAcct.address).then(balance => {
 ```
 
 ## Sign Transaction
-The only difference is in the signing of transactions. We need to sign the transaction individually by each key first. Then, we combine the signatures together to form a multi-sig witness. We should only see 1 witness attached to the transaction.
 
+The only difference is in the signing of transactions. We need to sign the
+transaction individually by each key first. Then, we combine the signatures
+together to form a multi-sig witness. We should only see 1 witness attached to
+the transaction.
 
 ```js
-const signTx = constructTx.then(transaction => {
+const signTx = constructTx.then((transaction) => {
   const txHex = transaction.serialize(false);
 
   // This can be any 2 out of the 3 keys.
@@ -85,27 +96,28 @@ const signTx = constructTx.then(transaction => {
   console.log(JSON.stringify(transaction.export(), undefined, 2));
 
   console.log("\n\n--- Transaction hash---");
-  console.log(transaction.hash)
+  console.log(transaction.hash);
 
-  console.log("\n\n--- Transaction string ---")
+  console.log("\n\n--- Transaction string ---");
   console.log(transaction.serialize(true));
   return transaction;
 });
 ```
 
 ## Send Transaction
-We send off the transaction using sendrawtransaction RPC call like any other normal transaction.
 
+We send off the transaction using sendrawtransaction RPC call like any other
+normal transaction.
 
 ```js
 const sendTx = signTx
-  .then(transaction => {
+  .then((transaction) => {
     const client = new rpc.RPCClient(rpcNodeUrl);
     return client.sendRawTransaction(transaction.serialize(true));
   })
-  .then(res => {
+  .then((res) => {
     console.log("\n\n--- Response ---");
     console.log(res);
   })
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
 ```
