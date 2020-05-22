@@ -5,6 +5,78 @@ title: Changelog (v5)
 
 # 5.0.0
 
+## Preview2:
+
+```
+neo-cli: v3.0.0-preview2
+neon-js: v5.0.0-next3
+```
+
+Key blockchain changes:
+
+- Change of address prefix. Now all addresses produced will start with `N`.
+- Total revamp of OpCode and InteropServiceCode. All previous scripts are
+  invalid.
+- Signing of transaction now involves the magic number of the network. This
+  makes transaction witnesses unique across the different networks (You cannot
+  take a transaction from MainNet and replay it on TestNet. This was possible
+  when UTXO was removed.)
+-
+
+SDK changes:
+
+Due to the large number of changes ongoing, only `neon-core` will be fully
+functional and maintained.
+
+- Misc
+
+  - Establish testing for Node 10 and Node 12.
+  -
+
+- tx
+
+  - Renamed `scripts` field to `witnesses` field
+  - `Transaction.sign` now takes an optional magic number argument to sign.
+  - Add support for reading JSON outputs from neo RPC endpoints.
+  -
+
+- sc
+
+  - `OpCode` is now an int enum (previously string)
+  - `ScriptBuilder.emitString` now accepts a UTF8 string instead of hexstring.
+    Please use `emitHexstring` for hex. This makes the distinction when emitting
+    strings clearer.
+  - Make public the various methods on ScriptBuilder for emitting different data
+    types. Please avoid `emitPush` as it is too overloaded and may cause
+    unexpected consequences.
+  - Add a `ScriptBuilder.build` function to return a copy of the script
+    (replaces the `.str` getter)
+
+- rpc
+
+  - Update methods to match preview2 methods. This removes getBlockSysFee. The
+    rest received some data structure changes.
+  - Optional verbose paramters now accepts booleans.
+  - Amend getVersion to read the keys correctly.
+
+- wallet
+
+  - Account generation now uses the new address prefix of `0x35`.
+  - Witness generation is updated to use the new OpCodes.
+  - VerificationScript generation is also updated to match preview2.
+
+* u
+
+  - Add support for encoding and decoding between hexstrings and base64. This is
+    used to send data over RPC.
+
+## Preview1:
+
+```
+neo-cli: v3.0.0-preview1
+neon-js: v5.0.0-next2
+```
+
 Key blockchain changes:
 
 - Removal of the UTXO system coupled with the integration of additional RPC
