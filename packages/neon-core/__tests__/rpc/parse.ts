@@ -34,7 +34,7 @@ describe("IntegerParser", () => {
   test.each([
     ["empty string", { type: "ByteArray", value: "" }, 0],
     ["random integer", { type: "Integer", value: "9" }, 9],
-  ])("%s", (msg: string, item: StackItemLike, expected: number) => {
+  ])("%s", (_msg: string, item: StackItemLike, expected: number) => {
     const result = IntegerParser(item);
     expect(result).toBe(expected);
   });
@@ -80,7 +80,7 @@ describe("SimpleParser", () => {
         script: "",
         state: "HALT",
         gas_consumed: "0",
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         stack: [{ type: "Weird", value: null }],
       })

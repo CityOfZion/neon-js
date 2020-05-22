@@ -21,7 +21,7 @@ export type VMResultParser = (result: RPCVMResponse) => unknown[];
  * @returns parser function
  */
 export function buildParser(...args: StackItemParser[]): VMResultParser {
-  return (result: RPCVMResponse) => {
+  return (result: RPCVMResponse): unknown[] => {
     if (result.stack.length !== args.length) {
       throw new Error(
         `Wrong number of items to parse! Expected ${args.length} but got ${result.stack.length}!`

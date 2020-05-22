@@ -12,6 +12,7 @@ import {
   InvokeResult,
   RPCResponse,
   BooleanLikeParam,
+  QueryLike,
 } from "./Query";
 import { ContractManifest } from "../sc";
 import { BlockJson, BlockHeaderJson, Validator } from "../types";
@@ -80,7 +81,7 @@ export class RPCClient {
     );
   }
 
-  public set latency(lat) {
+  public set latency(lat: number) {
     if (this._latencies.length > 4) {
       this._latencies.shift();
     }
@@ -122,8 +123,10 @@ export class RPCClient {
   /**
    * Creates a query with the given req and immediately executes it.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public query(req: object, config?: AxiosRequestConfig): Promise<any> {
+  public query(
+    req: QueryLike<unknown[]>,
+    config?: AxiosRequestConfig
+  ): Promise<unknown> {
     const query = new Query(req);
     return this.execute(query, config);
   }

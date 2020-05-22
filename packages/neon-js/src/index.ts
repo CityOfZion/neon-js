@@ -104,7 +104,7 @@ export default {
     privateKey: wallet.decrypt,
   },
   add: {
-    network: (network: neonCore.rpc.Network, override = false) => {
+    network: (network: neonCore.rpc.Network, override = false): boolean => {
       if (override && settings.networks[network.name]) {
         return false;
       }

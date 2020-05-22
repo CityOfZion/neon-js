@@ -13,7 +13,7 @@ function addressToScriptHash(address: string): string {
 export function name(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
-  return (sb = new sc.ScriptBuilder()) => {
+  return (sb = new sc.ScriptBuilder()): sc.ScriptBuilder => {
     return sb.emitAppCall(scriptHash, "name", []);
   };
 }
@@ -27,7 +27,7 @@ export function name(
 export function symbol(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
-  return (sb = new sc.ScriptBuilder()) => {
+  return (sb = new sc.ScriptBuilder()): sc.ScriptBuilder => {
     return sb.emitAppCall(scriptHash, "symbol", []);
   };
 }
@@ -41,7 +41,7 @@ export function symbol(
 export function decimals(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
-  return (sb = new sc.ScriptBuilder()) => {
+  return (sb = new sc.ScriptBuilder()): sc.ScriptBuilder => {
     return sb.emitAppCall(scriptHash, "decimals", []);
   };
 }
@@ -55,7 +55,7 @@ export function decimals(
 export function totalSupply(
   scriptHash: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
-  return (sb = new sc.ScriptBuilder()) => {
+  return (sb = new sc.ScriptBuilder()): sc.ScriptBuilder => {
     return sb.emitAppCall(scriptHash, "totalSupply", []);
   };
 }
@@ -70,7 +70,7 @@ export function balanceOf(
   scriptHash: string,
   addr: string
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
-  return (sb = new sc.ScriptBuilder()) => {
+  return (sb = new sc.ScriptBuilder()): sc.ScriptBuilder => {
     const addressHash = addressToScriptHash(addr);
     return sb.emitAppCall(scriptHash, "balanceOf", [addressHash]);
   };
@@ -89,7 +89,7 @@ export function transfer(
   toAddr: string,
   amt: u.Fixed8 | number
 ): (sb?: sc.ScriptBuilder) => sc.ScriptBuilder {
-  return (sb = new sc.ScriptBuilder()) => {
+  return (sb = new sc.ScriptBuilder()): sc.ScriptBuilder => {
     const fromHash = addressToScriptHash(fromAddr);
     const toHash = addressToScriptHash(toAddr);
     const adjustedAmt = new u.Fixed8(amt).toRawNumber();

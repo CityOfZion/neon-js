@@ -17,7 +17,7 @@ describe("hexXor", () => {
 
 describe("reverseArray", () => {
   test("throws if not array", () => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     expect(() => misc.reverseArray(1)).toThrow();
   });
