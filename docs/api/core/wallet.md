@@ -14,7 +14,8 @@ Neon.is.address(string);
 wallet.isAddress(string);
 ```
 
-The `wallet` module contains methods for manipulating keys, creating signatures and verifying keys.
+The `wallet` module contains methods for manipulating keys, creating signatures
+and verifying keys.
 
 ---
 
@@ -39,7 +40,9 @@ class Account {
 }
 ```
 
-The `Account` class is used to store and transform keys to its various formats. It can be instantiated with any key format and is smart enough to recognise the format and store it appropriately.
+The `Account` class is used to store and transform keys to its various formats.
+It can be instantiated with any key format and is smart enough to recognise the
+format and store it appropriately.
 
 ```js
 const a = Neon.create.Account("ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s");
@@ -51,7 +54,12 @@ const b = new wallet.Account(
 console.log(b.privateKey); // 9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69
 ```
 
-The class enables us to easily retrieve keys in any derivable format without needing to remember any methods. However, we can only retrieve formats that can be derived from our input. For example, we cannot retrieve any formats other than address and scripthash from `a` because we instantiated it with an address. However, we can get any format from `b` because it was instantiated with a private key, which is the lowest level key available.
+The class enables us to easily retrieve keys in any derivable format without
+needing to remember any methods. However, we can only retrieve formats that can
+be derived from our input. For example, we cannot retrieve any formats other
+than address and scripthash from `a` because we instantiated it with an address.
+However, we can get any format from `b` because it was instantiated with a
+private key, which is the lowest level key available.
 
 ```js
 console.log(a.publicKey); // throws an error
@@ -67,11 +75,16 @@ The order of the keys are:
 1. scriptHash
 1. address
 
-When you instantiate an `Account` with a key, you can retrieve any format that is below it in the list. For example, if we instantiate with a public key, we can get the publc key, scriptHash and address but not the private key.
+When you instantiate an `Account` with a key, you can retrieve any format that
+is below it in the list. For example, if we instantiate with a public key, we
+can get the publc key, scriptHash and address but not the private key.
 
-The Account class can be instantiated from encrypted key, private key, public key, address or ScriptHash.
+The Account class can be instantiated from encrypted key, private key, public
+key, address or ScriptHash.
 
-The `encryptedKey` is special as it is the lowest level key but requires the user to unlock it first before we can derive anything from it. This can be done through the `decrypt` method.
+The `encryptedKey` is special as it is the lowest level key but requires the
+user to unlock it first before we can derive anything from it. This can be done
+through the `decrypt` method.
 
 ```js
 const c = new wallet.Account(
@@ -82,13 +95,15 @@ console.log(c.address); // throws error
 c.decrypt("city of zion").then(() => console.log(c.address)); // ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW
 ```
 
-You can encrypt the key by using the `encrypt` method. This is necessary if you want to export this key to a JSON file.
+You can encrypt the key by using the `encrypt` method. This is necessary if you
+want to export this key to a JSON file.
 
 ```ts
 c.encrypt("new password").then(() => c.export());
 ```
 
-This action will encrypt the private key with the provided password and replace any old NEP2 key.
+This action will encrypt the private key with the provided password and replace
+any old NEP2 key.
 
 ### Balance
 
@@ -113,20 +128,22 @@ class Balance {
 }
 ```
 
-The Balance class stores the balance of the account. It is usually retrieved using a 3rd party API as NEO nodes do not have a RPC call to easily retrieve this information with a single call.
+The Balance class stores the balance of the account. It is usually retrieved
+using a 3rd party API as NEO nodes do not have a RPC call to easily retrieve
+this information with a single call.
 
 ```js
 // This creates a balance object but it is empty and not really useful
 Neon.create.balance({
   net: "TestNet",
-  address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+  address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
 });
 
 import { wallet } from "@cityofzion/neon-js";
 // This form is useless as it is an empty balance.
 const balance = new wallet.Balance({
   net: "TestNet",
-  address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
+  address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
 });
 
 // This contains all symbols of assets available in this balance
@@ -137,9 +154,13 @@ const neoCoins = filledBalance.assets["NEO"].unspent;
 filledBalance.verifyAssets("https://seed1.neo.org:20332");
 ```
 
-The class is used to track the unspent coins available to construct transactions with. `verifyAssets` is a handy method to make sure the unspent coins provided by the 3rd party API is really unspent by verifying them against a NEO node. However, this is an expensive operation so use sparingly.
+The class is used to track the unspent coins available to construct transactions
+with. `verifyAssets` is a handy method to make sure the unspent coins provided
+by the 3rd party API is really unspent by verifying them against a NEO node.
+However, this is an expensive operation so use sparingly.
 
-The constructor is a handy method to convert a Balance-like javascript object into a `neon-js` Balance.
+The constructor is a handy method to convert a Balance-like javascript object
+into a `neon-js` Balance.
 
 ### Claims
 
@@ -153,19 +174,29 @@ class Claims {
 }
 ```
 
-The Claims class is a collection of claims data belonging to an account. It is usually retrieved from a 3rd part API. We do not recommend you craft your own Claims manually. This class is here for completeness in terms of high level objects.
+The Claims class is a collection of claims data belonging to an account. It is
+usually retrieved from a 3rd part API. We do not recommend you craft your own
+Claims manually. This class is here for completeness in terms of high level
+objects.
 
-Like Balance, the constructor is the way to convert a Claims-like object into a `neon-js` Claims object. This is the primary method we use to convert the claims object we get from 3rd party API.
+Like Balance, the constructor is the way to convert a Claims-like object into a
+`neon-js` Claims object. This is the primary method we use to convert the claims
+object we get from 3rd party API.
 
-NEO generates GAS when held. When NEO is spent, the gas that it generates is unlocked and made claimable through ClaimTransaction. The formula for calcuating the claim per transaction is:
+NEO generates GAS when held. When NEO is spent, the gas that it generates is
+unlocked and made claimable through ClaimTransaction. The formula for calcuating
+the claim per transaction is:
 
     claim = ((start - end) * 8 + sysfee) * value
 
 ### Wallet
 
-The `Wallet` class implements the NEP-6 convention which is a standard way set by NEO council on how to export keys in a JSON file. By doing this, we can move keys across different software providers without worry.
+The `Wallet` class implements the NEP-6 convention which is a standard way set
+by NEO council on how to export keys in a JSON file. By doing this, we can move
+keys across different software providers without worry.
 
-The `Wallet` class is essentially a collection of encrypted keys as well as the parameters used to encrypt them.
+The `Wallet` class is essentially a collection of encrypted keys as well as the
+parameters used to encrypt them.
 
 ```js
 import Neon, { wallet } from "cityofzion/neon-js";
@@ -190,21 +221,27 @@ w1.addAccount(a);
 w1.addAccount(b);
 ```
 
-If your Account is not encrypted, it is still possible to add it to the Wallet. However, you will be unable to export the wallet until you encrypt it. The Wallet class provides some helper methods to quickly encrypt or decrypt all accounts.
+If your Account is not encrypted, it is still possible to add it to the Wallet.
+However, you will be unable to export the wallet until you encrypt it. The
+Wallet class provides some helper methods to quickly encrypt or decrypt all
+accounts.
 
 ```js
 // encrypting Account a will fail as it has not been unlocked.
-w1.encryptAll("lousypassword").then(results => console.log(results)); // returns [false, true]
+w1.encryptAll("lousypassword").then((results) => console.log(results)); // returns [false, true]
 
 // we will decrypt a (account at array position 0)
-w1.decrypt(0, "city of zion").then(result => console.log(result)); // returns true
+w1.decrypt(0, "city of zion").then((result) => console.log(result)); // returns true
 // so we can encrypt everything with the same password
-w1.encrypt(0, "lousypassword").then(result => console.log(result)); // returns true
+w1.encrypt(0, "lousypassword").then((result) => console.log(result)); // returns true
 ```
 
-Similar methods for decryption (`wallet.decrypt`, `wallet.decryptAll`) is available. Encryption and decryption methods will return booleans which corresponds to the success or failure of the action.
+Similar methods for decryption (`wallet.decrypt`, `wallet.decryptAll`) is
+available. Encryption and decryption methods will return booleans which
+corresponds to the success or failure of the action.
 
-Do note that decrypting does not mean that you cannot export the wallet. Decryption does not erase the old encryption but merely exposes your keys.
+Do note that decrypting does not mean that you cannot export the wallet.
+Decryption does not erase the old encryption but merely exposes your keys.
 
 Once encrypted, you can proceed to export your wallet through `export`.
 
@@ -213,16 +250,21 @@ Once encrypted, you can proceed to export your wallet through `export`.
 const walletString = w1.export();
 
 // Decryption failed for account[0]
-w2.decryptAll("lousypassword").then(results => console.log(results)); // returns [true, true]
+w2.decryptAll("lousypassword").then((results) => console.log(results)); // returns [true, true]
 ```
 
 ## Methods
 
 ### Core
 
-The core methods available are methods to convert key formats and generate new private keys.
+The core methods available are methods to convert key formats and generate new
+private keys.
 
-Do note that the methods available is not the full set but only the minimum required. Generally, there is a method to retrieve the lower key from the higher key. For example, `getPublicKeyFromPrivateKey` exists but not `getAddressFromPrivatKey` or `getPrivateKeyFromPublicKey`. For conversions across all formats, you are encouraged to use the `Account` class.
+Do note that the methods available is not the full set but only the minimum
+required. Generally, there is a method to retrieve the lower key from the higher
+key. For example, `getPublicKeyFromPrivateKey` exists but not
+`getAddressFromPrivatKey` or `getPrivateKeyFromPublicKey`. For conversions
+across all formats, you are encouraged to use the `Account` class.
 
 ```js
 const privateKey = Neon.create.privateKey();
@@ -236,32 +278,39 @@ const scriptHash = wallet.getScriptHashFromPublicKey(publicKey);
 const address = wallet.getAddressFromScriptHash(scriptHash);
 ```
 
-There are no checks in place for this set of methods to ensure the inputs are proper. Errors may be thrown when conversion fails for certain methods.
+There are no checks in place for this set of methods to ensure the inputs are
+proper. Errors may be thrown when conversion fails for certain methods.
 
 ### Components
 
-These are methods used to convert JS objects into their respective `neon-js` implementation.
+These are methods used to convert JS objects into their respective `neon-js`
+implementation.
 
-These methods are exposed for completeness but you are encouraged to use the constructors of the main objects `Balance` and `Claims` instead of manually recreating your own objects.
+These methods are exposed for completeness but you are encouraged to use the
+constructors of the main objects `Balance` and `Claims` instead of manually
+recreating your own objects.
 
 ### NEP2
 
-The NEP2 standard describes the procedure to encrypt or decrypt a private key. The encryption method accepts either a WIF or HEX private key. However, the decryption method will always return a WIF for consistency.
+The NEP2 standard describes the procedure to encrypt or decrypt a private key.
+The encryption method accepts either a WIF or HEX private key. However, the
+decryption method will always return a WIF for consistency.
 
-Do note that the encryption/decryption takes a long time and might not work very nicely in browsers.
+Do note that the encryption/decryption takes a long time and might not work very
+nicely in browsers.
 
 ```js
-const privateKey = Neon.create.privateKey()
-const WIF = Neon.get.WIFFromPrivateKey(privateKey)
-const nep2Key = await Neon.encrypt(privateKey, 'myPassword')
-const decryptedKey = await Neon.decrypt(nep2Key, 'myPassword')
-WIF === decryptedKey // true
+const privateKey = Neon.create.privateKey();
+const WIF = Neon.get.WIFFromPrivateKey(privateKey);
+const nep2Key = await Neon.encrypt(privateKey, "myPassword");
+const decryptedKey = await Neon.decrypt(nep2Key, "myPassword");
+WIF === decryptedKey; // true
 
-const privateKey = wallet.generatePrivateKey()
-const WIF = new wallet.Account(privateKey).WIF
-const nep2Key = await wallet.encrypt(WIF, 'myPassword')
-const decryptedKey = await wallet.decrypt(nep2Key, 'myPassword')
-WIF === decryptedKey // true
+const privateKey = wallet.generatePrivateKey();
+const WIF = new wallet.Account(privateKey).WIF;
+const nep2Key = await wallet.encrypt(WIF, "myPassword");
+const decryptedKey = await wallet.decrypt(nep2Key, "myPassword");
+WIF === decryptedKey; // true
 ```
 
 ### Verify
@@ -284,4 +333,5 @@ wallet.isWIF(wifStr);
 wallet.isScriptHash(scriptHashStr);
 ```
 
-These methods will return a boolean regarding the key format. No errors will be thrown.
+These methods will return a boolean regarding the key format. No errors will be
+thrown.

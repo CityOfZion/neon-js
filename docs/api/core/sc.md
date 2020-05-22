@@ -11,7 +11,9 @@ const sb = Neon.create.scriptBuilder();
 const alternative = new sc.scriptBuilder();
 ```
 
-In NEO, users interact with smart contracts through InvocationTransactions. These transactions carry the hex output from scriptBuilder and assets involved to the network for processing.
+In NEO, users interact with smart contracts through InvocationTransactions.
+These transactions carry the hex output from scriptBuilder and assets involved
+to the network for processing.
 
 To test out smart contracts, you are better off using RPC calls:
 
@@ -19,11 +21,18 @@ To test out smart contracts, you are better off using RPC calls:
 - `invokefunction`
 - `invokescript`
 
-These are implemented in v2.3.3. These RPC calls execute the provided script and returns the result based on the current blockchain state. However, it is not actually recorded on the chain. Thus, their purpose is to test out the script to ensure validity and find out the gas cost required.
+These are implemented in v2.3.3. These RPC calls execute the provided script and
+returns the result based on the current blockchain state. However, it is not
+actually recorded on the chain. Thus, their purpose is to test out the script to
+ensure validity and find out the gas cost required.
 
-For example, in the NEP5 token standard, we do not require an actual transaction to retrieve the name or symbol of the token. Thus, it is better to use a `invoke` RPC call instead of a real invocationTransaction.
+For example, in the NEP5 token standard, we do not require an actual transaction
+to retrieve the name or symbol of the token. Thus, it is better to use a
+`invoke` RPC call instead of a real invocationTransaction.
 
-We will use a transaction when we want to effect a state change. For example, we want to transfer tokens from address A to B. We will use invoke to ensure the script is valid before sending the actual transaction.
+We will use a transaction when we want to effect a state change. For example, we
+want to transfer tokens from address A to B. We will use invoke to ensure the
+script is valid before sending the actual transaction.
 
 ---
 
@@ -31,7 +40,8 @@ We will use a transaction when we want to effect a state change. For example, we
 
 ### ScriptBuilder
 
-The `ScriptBuilder` is an object that converts a smart contract method call into a hexstring that can be sent to the network with a InvocationTransaction.
+The `ScriptBuilder` is an object that converts a smart contract method call into
+a hexstring that can be sent to the network with a InvocationTransaction.
 
 ```js
 const sb = Neon.create.scriptBuilder();
@@ -45,7 +55,8 @@ rpc.Query.invokeScript(sb.str).execute(nodeURL);
 const tx = Neon.create.invocationTx(publicKey, {}, {}, sb.str, 0);
 ```
 
-You may chain multiple calls together in a single VM script. The results will be returned in order.
+You may chain multiple calls together in a single VM script. The results will be
+returned in order.
 
 ```js
 const sb = Neon.create.scriptBuilder();
@@ -54,7 +65,7 @@ sb.emitAppCall(scriptHash, "name").emitAppCall(scriptHash, "symbol");
 // Returns name, symbol
 rpc.Query.invokeScript(sb.str)
   .execute(Neon.CONST.DEFAULT_RPC.MAIN)
-  .then(res => {
+  .then((res) => {
     console.log(res);
   });
 ```
@@ -65,13 +76,16 @@ A simple wrapper method is provided for convenience.
 const props = {
   scriptHash: Neon.CONST.CONTRACTS.TEST_RPX,
   operation: "name",
-  args: []
+  args: [],
 };
 // Returns a hexstring
 const vmScript = Neon.create.script(props);
 ```
 
-The ScriptBuilder can also reverse scripts back to its arguments. However, this process is not a complete reverse engineer due to the varied nature of arguments. The arguments are returned as hexstrings and it is left to the developer to parse them meaningfully.
+The ScriptBuilder can also reverse scripts back to its arguments. However, this
+process is not a complete reverse engineer due to the varied nature of
+arguments. The arguments are returned as hexstrings and it is left to the
+developer to parse them meaningfully.
 
 ```js
 const sb = new sb.ScriptBuilder(
@@ -83,16 +97,18 @@ params = [
     scriptHash: "dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f",
     args: [
       "6e616d65", // 'name' in hexstring
-      []
+      [],
     ],
-    useTailCall: false
-  }
+    useTailCall: false,
+  },
 ];
 ```
 
 ### ContractParam
 
-ContractParam objects provide a convenient way to construct calls for `invoke` and `invokefunction`. These RPC calls utilise a JSON struct for arguments and can be messy to create by hand:
+ContractParam objects provide a convenient way to construct calls for `invoke`
+and `invokefunction`. These RPC calls utilise a JSON struct for arguments and
+can be messy to create by hand:
 
 ```js
   {
@@ -101,7 +117,8 @@ ContractParam objects provide a convenient way to construct calls for `invoke` a
   }
 ```
 
-ContractParam currently supports creating string, boolean, integer, bytearray and array.
+ContractParam currently supports creating string, boolean, integer, bytearray
+and array.
 
 ```js
 const param1 = Neon.create.contractParam("String", "balanceOf");
@@ -115,9 +132,10 @@ rpc.Query.invoke(
   CONST.CONTRACTS.TEST_RPX,
   param1,
   sc.ContractParam.array(param2)
-).then(res => {
+).then((res) => {
   console.log(res);
 });
 ```
 
-ContractParams are compatible with ScriptBuilder so it is fine to pass them in as arguments directly.
+ContractParams are compatible with ScriptBuilder so it is fine to pass them in
+as arguments directly.

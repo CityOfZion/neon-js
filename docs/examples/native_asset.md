@@ -3,7 +3,8 @@ id: native_asset
 title: Native Asset
 ---
 
-> You can refer to **Precondition** part to check the initiation of `apiProvider`, `myWallet` and `myAccount`
+> You can refer to **Precondition** part to check the initiation of
+> `apiProvider`, `myWallet` and `myAccount`
 
 ## Get Balance
 
@@ -14,7 +15,7 @@ const { default: Neon, api } = require("@cityofzion/neon-js");
 
 apiProvider
   .getBalance(myWallet.accounts[1].address)
-  .then(res =>
+  .then((res) =>
     console.log(
       `NEO: ${res.assets["NEO"].balance.toNumber()},
        GAS: ${res.assets["GAS"].balance.toNumber()}`
@@ -30,7 +31,7 @@ const { rpc } = require("@cityofzion/neon-js");
 
 rpc.Query.getAccountState(myWallet.accounts[1].address)
   .execute("http://rpc.url:portNum")
-  .then(response => {
+  .then((response) => {
     console.log(
       `NEO: ${response.result.balances[0].value},
        GAS: ${response.result.balances[1].value}`
@@ -57,16 +58,16 @@ const config = {
   account: myAccount, // Your Account
   intents: intent, // Where you want to send assets to.
   gas: 0, // Optional, system fee
-  fees: 0 // Optional, network fee
+  fees: 0, // Optional, network fee
 };
 
 // Neon API
 Neon.sendAsset(config)
-  .then(config => {
+  .then((config) => {
     console.log("\n\n--- Response ---");
     console.log(config.response);
   })
-  .catch(config => {
+  .catch((config) => {
     console.log(config);
   });
 ```
@@ -92,14 +93,14 @@ async function createTxWithNeoScan() {
 
 // Send raw transaction
 const client = new rpc.RPCClient("http://rpc.url:portNum");
-createTxWithNeoScan().then(transaction => {
+createTxWithNeoScan().then((transaction) => {
   console.log(transaction);
   client
     .sendRawTransaction(transaction)
-    .then(res => {
+    .then((res) => {
       console.log(res);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 });
@@ -108,7 +109,13 @@ createTxWithNeoScan().then(transaction => {
 ### Raw Level
 
 ```javascript
-const { default: Neon, wallet, rpc, tx, CONST } = require("@cityofzion/neon-js");
+const {
+  default: Neon,
+  wallet,
+  rpc,
+  tx,
+  CONST,
+} = require("@cityofzion/neon-js");
 
 const toAccount = new wallet.Account("AT27F9e1HaUHi6LNhxafVFMDrajtWVksNq");
 
@@ -118,20 +125,20 @@ let rawTransaction = Neon.create.contractTx();
 // Build input objects and output objects.
 let inputObj = {
   prevHash: "0bb047ad9161984806a9a1ebbac34bc9fbabd1c1e42165f9f5bf8ebbebf5b83c",
-  prevIndex: 0
+  prevIndex: 0,
 };
 
 // note: you need to calculate the balance of your account
 let outPutObj1 = {
   assetId: CONST.ASSET_ID.NEO,
   value: "99999899",
-  scriptHash: myAccount.scriptHash
+  scriptHash: myAccount.scriptHash,
 };
 
 let outPutObj2 = {
   assetId: CONST.ASSET_ID.NEO,
   value: "100",
-  scriptHash: toAccount.scriptHash
+  scriptHash: toAccount.scriptHash,
 };
 
 // Add transaction inputs and outputs
@@ -154,10 +161,10 @@ rawTransaction.addWitness(
 const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
   .sendRawTransaction(rawTransaction)
-  .then(response => {
+  .then((response) => {
     console.log(response);
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });
 ```
@@ -173,21 +180,21 @@ const { default: Neon, api } = require("@cityofzion/neon-js");
 const config = {
   api: apiProvider, // Network
   url: "http://rpc.url:portNum", // RPC URL
-  account: myAccount // Your Account
+  account: myAccount, // Your Account
 };
 
 // Neon API
 Neon.claimGas(config)
-  .then(config => {
+  .then((config) => {
     console.log("\n\n--- Response ---");
     console.log(config.response);
   })
-  .catch(config => {
+  .catch((config) => {
     console.log(config);
   });
 ```
 
-### Low Level 
+### Low Level
 
 ```javascript
 const { default: Neon, rpc, api } = require("@cityofzion/neon-js");
@@ -202,14 +209,14 @@ async function createTxWithNeoScan() {
 
 // Send raw transaction
 const client = new rpc.RPCClient("http://rpc.url:portNum");
-createTxWithNeoScan().then(transaction => {
+createTxWithNeoScan().then((transaction) => {
   console.log(transaction);
   client
     .sendRawTransaction(transaction)
-    .then(res => {
+    .then((res) => {
       console.log(res);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 });
@@ -218,32 +225,38 @@ createTxWithNeoScan().then(transaction => {
 ### Raw Level
 
 ```javascript
-const { default: Neon, wallet, rpc, tx, CONST } = require("@cityofzion/neon-js");
+const {
+  default: Neon,
+  wallet,
+  rpc,
+  tx,
+  CONST,
+} = require("@cityofzion/neon-js");
 
 // RPC: getclaimable()
 let claimObj1 = {
   prevHash: "2d19bf5816c514a2f1744a30705c58b7e6656f67e26f7cc4e76b7a91ee390199",
-  prevIndex: 1
+  prevIndex: 1,
 };
 
 let claimObj2 = {
   prevHash: "987821606da61c9cd8ab4df15d8b81b8053f107b0455f5f820a5716e00e97ea4",
-  prevIndex: 1
+  prevIndex: 1,
 };
 
 let outPutObj1 = {
   assetId: CONST.ASSET_ID.GAS,
   value: "29011.99940376", // RPC: getunclaimed()
-  scriptHash: myAccount.scriptHash
+  scriptHash: myAccount.scriptHash,
 };
 
 let claims = [
   new tx.TransactionInput(claimObj1),
-  new tx.TransactionInput(claimObj2)
+  new tx.TransactionInput(claimObj2),
 ];
 
 const claimsObj = {
-  claims: claims
+  claims: claims,
 };
 
 let rawTransaction = new tx.ClaimTransaction(claimsObj);
@@ -266,10 +279,10 @@ rawTransaction.addWitness(
 const client = new rpc.RPCClient("http://rpc.url:portNum");
 client
   .sendRawTransaction(rawTransaction)
-  .then(res => {
+  .then((res) => {
     console.log(res);
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });
 ```

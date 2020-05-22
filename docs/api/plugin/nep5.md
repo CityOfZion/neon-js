@@ -18,20 +18,25 @@ api.nep5.getTokenBalance("http://seed1.neo.org:20332", rpxScriptHash);
 api.nep5.getToken("http://seed1.neo.org:20332", rpxScriptHash, address);
 ```
 
-The NEP5 Standard describes a set of methods to implement as a token in a smart contract. This is the NEO equivalent of the ERC-20 token standard in Ethereum.
+The NEP5 Standard describes a set of methods to implement as a token in a smart
+contract. This is the NEO equivalent of the ERC-20 token standard in Ethereum.
 
 This package offers 2 sets of methods:
 
 1. The ABI as functions to easily generate scripts for the functions.
-2. High level API that offer common functionality. (This set of methods rely on the NEO node having version >= 2.3.3.)
+2. High level API that offer common functionality. (This set of methods rely on
+   the NEO node having version >= 2.3.3.)
 
 ---
 
 ## ABI
 
-The ABI functions follow the standard as proposed in the NEP-5 document. Each function is named after its respective contract method and is initialized with the scripthash of the NEP-5 contract followed by any arguments necessary.
+The ABI functions follow the standard as proposed in the NEP-5 document. Each
+function is named after its respective contract method and is initialized with
+the scripthash of the NEP-5 contract followed by any arguments necessary.
 
-The initialization function returns a function that is primed to generate the script. This function takes an optional ScriptBuilder to attach the script to.
+The initialization function returns a function that is primed to generate the
+script. This function takes an optional ScriptBuilder to attach the script to.
 
 ```ts
 import { nep5, sc } from "@cityofzion/neon-js";
@@ -48,11 +53,15 @@ console.log(sb.str); // script for getting balance of <addr> from contract <scri
 
 The 2 main methods available are `getToken` and `getTokenBalance`.
 
-`getToken` returns an object containing the various information about the token such as name, symbol, etc. You may put in an optional address and the balance of the address is also returned in the object.
+`getToken` returns an object containing the various information about the token
+such as name, symbol, etc. You may put in an optional address and the balance of
+the address is also returned in the object.
 
-`getTokenBalance` returns only the balance of the address for the specified smart contract.
+`getTokenBalance` returns only the balance of the address for the specified
+smart contract.
 
-Do note that both methods are adjusted for the number of decimals available for the token in question.
+Do note that both methods are adjusted for the number of decimals available for
+the token in question.
 
 ```ts
 import { nep5 } from "@cityofzion/neon-js";

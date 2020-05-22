@@ -6,6 +6,7 @@
     "dist": "lerna run dist",
     "dist:prod": "lerna run dist:prod",
     "lint": "eslint packages/**/src/**/*.ts packages/**/__tests__/**/*.ts packages/**/__integration__/**/*.ts",
+    "lint:docs": "prettier docs/**/*.md --write",
     "precommit": "yarn lint && yarn pretty",
     "prestart": "yarn build && yarn dist",
     "prepublishOnly": "lerna run prepublishOnly",
@@ -48,6 +49,7 @@
     "packages/*"
   ],
   "prettier": {
-    "endOfLine": "auto"
+    "endOfLine": "auto",
+    "proseWrap": "always"
   }
 }

@@ -18,6 +18,8 @@ const blockchainAddress = provider.resolveDomain(
 );
 ```
 
-The module's purpose is to integrate the common functionality of translating a human-readable address to a blockchain address.
+The module's purpose is to integrate the common functionality of translating a
+human-readable address to a blockchain address.
 
-This package is not included in `neon-js` by default. Consumers are required to include this package in by themselves.
+This package is not included in `neon-js` by default. Consumers are required to
+include this package in by themselves.
