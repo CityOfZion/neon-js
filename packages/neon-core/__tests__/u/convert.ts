@@ -58,7 +58,7 @@ describe.each([
 });
 
 test("str2ab: throw if input is non-string", () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   expect(() => convert.str2ab(1)).toThrow();
 });
