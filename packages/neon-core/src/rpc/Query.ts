@@ -302,26 +302,32 @@ export class Query<TParams extends unknown[], TResponse> {
    * @param scriptHash hash of contract to test.
    * @param operation name of operation to call (first argument)
    * @param params parameters to pass (second argument)
+   * @param checkedWitnessHashes Scripthashes of witnesses that should sign the transaction containing this script.
    */
   public static invokeFunction(
     scriptHash: string,
     operation: string,
-    params: unknown[] = []
-  ): Query<[string, string, unknown[]], InvokeResult> {
+    params: unknown[] = [],
+    checkedWitnessHashes: string[] = []
+  ): Query<[string, string, unknown[], string[]], InvokeResult> {
     return new Query({
       method: "invokefunction",
-      params: [scriptHash, operation, params],
+      params: [scriptHash, operation, params, checkedWitnessHashes],
     });
   }
 
   /**
    * This Query runs the specific script through the VM.
-   * @param script
+   * @param script VM script as a hexstring.
+   * @param checkedWitnessHashes Scripthashes of witnesses that should sign the transaction containing this script.
    */
-  public static invokeScript(script: string): Query<[string], InvokeResult> {
+  public static invokeScript(
+    script: string,
+    checkedWitnessHashes: string[] = []
+  ): Query<[string, string[]], InvokeResult> {
     return new Query({
       method: "invokescript",
-      params: [script],
+      params: [script, checkedWitnessHashes],
     });
   }
 

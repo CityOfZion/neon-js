@@ -334,25 +334,22 @@ export class RPCClient {
   public async invokeFunction(
     scriptHash: string,
     operation: string,
-    ...params: unknown[]
+    params: unknown[] = [],
+    checkedWitnessHashes: string[] = []
   ): Promise<InvokeResult> {
-    if (params.length === 1 && Array.isArray(params)) {
-      return await this.execute(
-        Query.invokeFunction(scriptHash, operation, params[0])
-      );
-    }
-
     return await this.execute(
-      Query.invokeFunction(scriptHash, operation, params)
+      Query.invokeFunction(scriptHash, operation, params, checkedWitnessHashes)
     );
   }
 
   /**
    * Submits a script for the node to run. This method is a local invoke, results are not reflected on the blockchain.
    */
-  public async invokeScript(script: string): Promise<InvokeResult> {
-    const response = await this.execute(Query.invokeScript(script));
-    return response;
+  public async invokeScript(
+    script: string,
+    checkedWitnessHashes: string[] = []
+  ): Promise<InvokeResult> {
+    return await this.execute(Query.invokeScript(script, checkedWitnessHashes));
   }
 
   /**

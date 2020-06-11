@@ -150,21 +150,43 @@ describe("static", () => {
     test("no params", () => {
       const result = Query.invokeFunction("hash", "method");
       expect(result.method).toEqual("invokefunction");
-      expect(result.params).toEqual(["hash", "method", []]);
+      expect(result.params).toEqual(["hash", "method", [], []]);
     });
 
     test("multiple params", () => {
       const params = [jest.fn(), jest.fn(), jest.fn()];
       const result = Query.invokeFunction("hash", "method", params);
       expect(result.method).toEqual("invokefunction");
-      expect(result.params).toEqual(["hash", "method", params]);
+      expect(result.params).toEqual(["hash", "method", params, []]);
+    });
+
+    test("multiple params with checkedWitnessHashes", () => {
+      const params = [jest.fn(), jest.fn(), jest.fn()];
+      const result = Query.invokeFunction("hash", "method", params, [
+        "abcdabcdabcdabcdabcd",
+      ]);
+      expect(result.method).toEqual("invokefunction");
+      expect(result.params).toEqual([
+        "hash",
+        "method",
+        params,
+        ["abcdabcdabcdabcdabcd"],
+      ]);
     });
   });
 
   describe("invokeScript", () => {
-    const result = Query.invokeScript("script");
-    expect(result.method).toEqual("invokescript");
-    expect(result.params).toEqual(["script"]);
+    test("script", () => {
+      const result = Query.invokeScript("script");
+      expect(result.method).toEqual("invokescript");
+      expect(result.params).toEqual(["script", []]);
+    });
+
+    test("script with checkWitnessHashes", () => {
+      const result = Query.invokeScript("script", ["abcdabcdabcdabcdabcd"]);
+      expect(result.method).toEqual("invokescript");
+      expect(result.params).toEqual(["script", ["abcdabcdabcdabcdabcd"]]);
+    });
   });
 
   describe("listPlugins", () => {
