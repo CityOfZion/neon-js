@@ -244,6 +244,26 @@ describe("RPC Methods", () => {
       expect(result.state).toContain("HALT");
     });
 
+    test("invokeFunction with checkedWitness", async () => {
+      const fromAccount = wallet.accounts[0];
+      const toAccount = wallet.accounts[1];
+      const result = await client.invokeFunction(
+        contractHash,
+        "transfer",
+        [
+          ContractParam.hash160(fromAccount.address),
+          ContractParam.hash160(toAccount.address),
+          ContractParam.integer(1),
+        ],
+        [wallet.accounts[0].scriptHash]
+      );
+
+      expect(Object.keys(result)).toEqual(
+        expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
+      );
+      expect(result.state).toContain("HALT");
+    });
+
     test("invokeScript", async () => {
       const result = await client.invokeScript(
         new ScriptBuilder()
@@ -263,6 +283,29 @@ describe("RPC Methods", () => {
         HexString.fromAscii("neo").toBase64()
       );
     });
+
+    test("invokeScript with checkedWitness", async () => {
+      const fromAccount = wallet.accounts[0];
+      const toAccount = wallet.accounts[1];
+      const script = createScript({
+        scriptHash: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
+        operation: "transfer",
+        args: [
+          ContractParam.hash160(fromAccount.address),
+          ContractParam.hash160(toAccount.address),
+          ContractParam.integer(1),
+        ],
+      });
+
+      const result = await client.invokeScript(script, [
+        fromAccount.scriptHash,
+      ]);
+
+      expect(Object.keys(result)).toEqual(
+        expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
+      );
+      expect(result.state).toContain("HALT");
+    });
   });
 
   test("sendRawTransaction", async () => {
@@ -274,7 +317,7 @@ describe("RPC Methods", () => {
       args: [
         ContractParam.hash160(fromAccount.address),
         ContractParam.hash160(toAccount.address),
-        1,
+        ContractParam.integer(1),
       ],
     });
 
