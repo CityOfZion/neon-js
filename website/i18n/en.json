@@ -32,18 +32,6 @@
       "api/index": {
         "title": "API"
       },
-      "api/plugin/api": {
-        "title": "api"
-      },
-      "api/plugin/domain": {
-        "title": "neon-domain"
-      },
-      "api/plugin/nep5": {
-        "title": "NEP5"
-      },
-      "api/plugin/nep9": {
-        "title": "NEP9"
-      },
       "changelog/latest": {
         "title": "Changelog (v5)"
       },
@@ -59,47 +47,8 @@
       "changelog/v4": {
         "title": "Changelog (v4)"
       },
-      "examples/index": {
-        "title": "Overview"
-      },
-      "examples/native_asset": {
-        "title": "Native Asset"
-      },
-      "examples/nep5": {
-        "title": "NEP-5"
-      },
-      "examples/network": {
-        "title": "Network"
-      },
-      "examples/smart_contract": {
-        "title": "Smart Contract"
-      },
-      "examples/wallet": {
-        "title": "Wallet"
-      },
-      "guides/adv/apicore": {
-        "title": "Advanced - API Core Components"
-      },
-      "guides/adv/multitx": {
-        "title": "Advanced - Sending multiple transactions in a block"
-      },
-      "guides/basic/claimgas": {
-        "title": "Basic - Claiming Gas"
-      },
-      "guides/basic/createscript": {
-        "title": "Basic - Create Smart Contract Script"
-      },
-      "guides/basic/doinvoke": {
-        "title": "Basic - Invoking a Smart Contract"
-      },
-      "guides/basic/multi": {
-        "title": "Basic - Signing with a multi-sig account"
-      },
-      "guides/basic/privnet": {
-        "title": "Basic - Using a Private Net"
-      },
-      "guides/basic/sendasset": {
-        "title": "Basic - Sending assets"
+      "guides/basic/transfer": {
+        "title": "Performing a basic transaction"
       },
       "installation": {
         "title": "Installation"
@@ -114,7 +63,7 @@
     "links": {
       "Docs": "Docs",
       "API": "API",
-      "Examples": "Examples",
+      "Guides": "Guides",
       "Changelog": "Changelog",
       "Help": "Help"
     },
@@ -122,13 +71,8 @@
       "Getting Started": "Getting Started",
       "Guides": "Guides",
       "Overview": "Overview",
-      "Core Modules": "Core Modules",
-      "Plugin Modules": "Plugin Modules",
       "Latest": "Latest",
-      "Past Versions": "Past Versions",
-      "Precondition": "Precondition",
-      "Native Asset": "Native Asset",
-      "Smart Contract": "Smart Contract"
+      "Past Versions": "Past Versions"
     }
   },
   "pages-strings": {
@@ -141,9 +85,6 @@
     "Need help?|no description given": "Need help?",
     "This project is maintained by a dedicated group of people.|statement made to reader": "This project is maintained by a dedicated group of people.",
     "Get Started|no description given": "Get Started",
-    "Tutorial|no description given": "Tutorial",
-    "API|no description given": "API",
-    "Examples|no description given": "Examples",
     "Key generation, manipulation and encryption|no description given": "Key generation, manipulation and encryption",
     "Help Translate|recruit community translators for your project": "Help Translate",
     "Edit this Doc|recruitment message asking to edit the doc source": "Edit",

@@ -26,7 +26,7 @@ const siteConfig = {
   headerLinks: [
     { doc: 'installation', label: 'Docs' },
     { doc: 'api/index', label: 'API' },
-    { doc: 'examples/index', label: 'Examples' },
+    { doc: 'guides/basic/transfer', label: 'Guides' },
     { doc: 'changelog/latest', label: 'Changelog' },
     { page: 'help', label: 'Help' }
   ],
