@@ -534,7 +534,12 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "invokefunction",
-          params: ["hash", "method", [1, "2", randomObj]],
+          params: [
+            "hash",
+            "method",
+            [1, "2", randomObj],
+            ["abcdabcdabcdabcdabcd"],
+          ],
         });
         return {
           data: {
@@ -548,36 +553,9 @@ describe("RPC Methods", () => {
       const result = await client.invokeFunction(
         "hash",
         "method",
-        1,
-        "2",
-        randomObj
+        [1, "2", randomObj],
+        ["abcdabcdabcdabcdabcd"]
       );
-      expect(result).toEqual(expected);
-    });
-
-    test("pass params as array", async () => {
-      const randomObj = jest.fn();
-      const expected = jest.fn();
-      Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
-        expect(data).toMatchObject({
-          method: "invokefunction",
-          params: ["hash", "method", [1, "2", randomObj]],
-        });
-        return {
-          data: {
-            jsonrpc: "2.0",
-            id: data.id,
-            result: expected,
-          },
-        };
-      });
-
-      const result = await client.invokeFunction("hash", "method", [
-        1,
-        "2",
-        randomObj,
-      ]);
       expect(result).toEqual(expected);
     });
   });
@@ -589,7 +567,7 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "invokescript",
-          params: ["script"],
+          params: ["script", ["abcdabcdabcdabcdabcd"]],
         });
         return {
           data: {
@@ -600,7 +578,9 @@ describe("RPC Methods", () => {
         };
       });
 
-      const result = await client.invokeScript("script");
+      const result = await client.invokeScript("script", [
+        "abcdabcdabcdabcdabcd",
+      ]);
       expect(result).toEqual(expected);
     });
   });
