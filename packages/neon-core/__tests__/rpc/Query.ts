@@ -150,7 +150,7 @@ describe("static", () => {
     test("no params", () => {
       const result = Query.invokeFunction("hash", "method");
       expect(result.method).toEqual("invokefunction");
-      expect(result.params).toEqual(["hash", "method", []]);
+      expect(result.params).toEqual(["hash", "method", [], []]);
     });
 
     test("multiple params", () => {
