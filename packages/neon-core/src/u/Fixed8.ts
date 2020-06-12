@@ -19,6 +19,7 @@ const TOTAL_FIXED8_HEX = new BN(2).pow(64);
  * A fixed point notation used widely in the NEO system for representing decimals.
  * It uses a signed 64-bit integer divided by 10^8. This allows it to accurately represent 8 decimal places.
  * Supports up to 8 decimals and is 8 bytes long.
+ *
  * @example
  * const zero = new Fixed8();
  * const fromNumber = new Fixed8(12345);
@@ -56,6 +57,28 @@ export class Fixed8 extends BN {
 
   public static fromReverseHex(hex: string): Fixed8 {
     return this.fromHex(reverseHex(hex));
+  }
+
+  /**
+   * Creates a new Fixed8 from a number that is too large to fit in a Fixed8.
+   *
+   * The constructor of Fixed8 only accepts input between the MAX_VALUE and MIN_VALUE.
+   * However, some inputs from RPC are larger than that due to them sending the raw value over.
+   * This method allows the creation of the Fixed8 by stating the number of decimals to shift.
+   * If after shifting the number is still out of range, this method will throw.
+   * @param input A string or number that represents a number too big for a Fixed8.
+   * @param decimals The number of decimals to shift by. We will simply divide the number by 10^decimals. Defaults to 8.
+   *
+   * @example
+   * const rawValue = "922337203680"; // RPC may send this value representing 9223.37203680 GAS.
+   *
+   * const safe = Fixed8.fromRawNumber(rawValue, 8);
+   * console.log(safe.toString()); // 9223.37203680
+   *
+   * const willThrow = new Fixed8(rawValue);
+   */
+  public static fromRawNumber(input: string | number, decimals = 8): Fixed8 {
+    return new Fixed8(new BN(input).div(new BN(10).pow(decimals)));
   }
 
   public constructor(input?: number | string | BN, base = 10) {
