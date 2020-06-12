@@ -23,6 +23,11 @@ describe.each([
       expect(result.toNumber()).toBe(expected);
     });
 
+    test("fromRawNumber", () => {
+      const result = Fixed8.fromRawNumber(rawNumber);
+      expect(result.toNumber()).toBe(expected);
+    });
+
     test("toHex", () => {
       const result = new Fixed8(expected);
       expect(result.toHex()).toBe(reverseHex(hex));
