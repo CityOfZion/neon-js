@@ -3,7 +3,7 @@
   "localized-strings": {
     "next": "Next",
     "previous": "Previous",
-    "tagline": "JS SDK for NEO blockchain",
+    "tagline": "JS SDK for NEO3 blockchain",
     "docs": {
       "api/core/const": {
         "title": "Constants"
@@ -45,7 +45,7 @@
         "title": "NEP9"
       },
       "changelog/latest": {
-        "title": "Changelog (v4)"
+        "title": "Changelog (v5)"
       },
       "changelog/v1": {
         "title": "Changelog (v1)"
@@ -55,6 +55,9 @@
       },
       "changelog/v3": {
         "title": "Changelog (v3)"
+      },
+      "changelog/v4": {
+        "title": "Changelog (v4)"
       },
       "examples/index": {
         "title": "Overview"
