@@ -1,44 +1,28 @@
 {
   "docs": {
-    "Getting Started": ["overview", "installation", "structure"],
+    "Getting Started": [
+      "overview",
+      "installation",
+      "structure"
+    ],
     "Guides": [
-      "guides/basic/sendasset",
-      "guides/basic/claimgas",
-      "guides/basic/createscript",
-      "guides/basic/doinvoke",
-      "guides/basic/privnet",
-      "guides/basic/multi",
-      "guides/adv/multitx",
-      "guides/adv/apicore"
+      "guides/basic/transfer"
     ]
   },
   "api": {
-    "Overview": ["api/index"],
-    "Core Modules": [
-      "api/core/wallet",
-      "api/core/tx",
-      "api/core/rpc",
-      "api/core/sc",
-      "api/core/u",
-      "api/core/const",
-      "api/core/settings",
-      "api/core/logging"
-    ],
-    "Plugin Modules": [
-      "api/plugin/api",
-      "api/plugin/nep5",
-      "api/plugin/nep9",
-      "api/plugin/domain"
+    "Overview": [
+      "api/index"
     ]
   },
   "changelog": {
-    "Latest": ["changelog/latest"],
-    "Past Versions": ["changelog/v4", "changelog/v3", "changelog/v2", "changelog/v1"]
-  },
-  "examples": {
-    "Overview": ["examples/index"],
-    "Precondition": ["examples/network", "examples/wallet"],
-    "Native Asset": ["examples/native_asset"],
-    "Smart Contract":["examples/smart_contract", "examples/nep5"]
+    "Latest": [
+      "changelog/latest"
+    ],
+    "Past Versions": [
+      "changelog/v4",
+      "changelog/v3",
+      "changelog/v2",
+      "changelog/v1"
+    ]
   }
 }
