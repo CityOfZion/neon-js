@@ -1,7 +1,7 @@
 /**
 ---
-id: neo3-guides-transfer
-title: [neo3] Performing a basic transaction
+id: transfer
+title: Performing a basic transaction
 ---
 
 In this tutorial, we will be performing a basic transfer of NEO from an address to another address.

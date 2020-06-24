@@ -1,6 +1,6 @@
 ---
-id: neo3-guides-transfer
-title: [neo3] Performing a basic transaction
+id: transfer
+title: Performing a basic transaction
 ---
 
 In this tutorial, we will be performing a basic transfer of NEO from an address to another address.
@@ -13,7 +13,7 @@ the NEP-5 interface. They are still considered native assets but operate very
 similarly to how NEP-5 tokens work in Neo2.
 
 First, some setup:
- 
+
 
 ```js
 const { rpc, sc, wallet, tx, u } = require("@cityofzion/neon-core");
@@ -43,7 +43,7 @@ We will perform the following checks:
 3. The amount of GAS for fees exists on fromAccount.
 
 All these checks can be performed through RPC calls to a NEO node.
- 
+
 
 ```js
 const rpcClient = new rpc.RPCClient(inputs.nodeUrl);
@@ -95,7 +95,7 @@ async function createTransaction() {
 First, we check that the token exists. We perform an invokeFunction RPC call
 which calls the `name` method of the contract. The VM should exit successfully
 with `HALT` and give us the token name if it exists.
- 
+
 
 ```js
 async function checkToken() {
@@ -122,7 +122,7 @@ We check the required systemFee for this transaction. System Fees pays for the
 storage of the transaction itself in the network. It is proportional to the
 number of bytes of the serialized transaction. Not very clear on the networkFees
 at the moment.
- 
+
 
 ```js
 async function checkFees() {
@@ -152,7 +152,7 @@ async function checkFees() {
 We will also need to check that the inital address has sufficient funds for the transfer.
 We look for both funds of the token we intend to transfer and GAS required to pay for the transaction.
 For this, we rely on the NEP5Tracker plugin. Hopefully, the node we select has the plugin installed.
- 
+
 
 ```js
 async function checkBalance() {
@@ -203,7 +203,7 @@ async function checkBalance() {
 ```
 
 And finally, to send it off to network.
- 
+
 
 ```js
 async function performTransfer() {
@@ -229,4 +229,4 @@ createTransaction()
 
 You should be able to see the transaction hash printed in the console log.
 After waiting for the network to process the transaction, you can check on your new account balance.
- 
+
