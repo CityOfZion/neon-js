@@ -241,13 +241,10 @@ workflows:
     jobs:
       - approve-update:
           type: approval
-          #filters:
-          #  branches:
-          #    only: next
+          filters:
+            branches:
+              only: next
       - publish-docs:
           context: aws
           requires:
             - approve-update
-          #filters:
-          #  branches:
-          #    only: next
