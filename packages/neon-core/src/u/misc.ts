@@ -24,8 +24,9 @@ export function ensureHex(str: string): void {
 
 /**
  * XORs two hexstrings
- * @param str1 HEX string
- * @param str2 HEX string
+ *
+ * @param str1 - HEX string
+ * @param str2 - HEX string
  * @returns XOR output as a HEX string
  */
 export function hexXor(str1: string, str2: string): string {
@@ -48,6 +49,7 @@ export function hexXor(str1: string, str2: string): string {
 
 /**
  * Reverses an array.
+ *
  * @example
  * reverseArray('abcd') = 'dcba'
  */
@@ -64,6 +66,7 @@ export function reverseArray<T>(arr: ArrayLike<T>): T[] {
 
 /**
  * Reverses a HEX string, treating 2 chars as a byte.
+ *
  * @example
  * reverseHex('abcdef') = 'efcdab'
  */

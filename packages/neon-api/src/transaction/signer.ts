@@ -14,9 +14,9 @@ export class TransactionSigner {
   }
 
   /**
-   * Sign a transaction with Accounts or Private Keys
-   * @description This is used when you have full access to signer accounts
-   * @param accounts accounts that will sign this transaction
+   * Sign a transaction with Accounts or Private Keys.
+   * This is used when you have full access to signer accounts
+   * @param accounts - accounts that will sign this transaction
    */
   public signWithAccount(...accounts: (wallet.Account | string)[]): void {
     accounts.forEach((account) => {
@@ -26,9 +26,9 @@ export class TransactionSigner {
   }
 
   /**
-   * Sign a transaction with Witnesses
-   * @description This can be used when you accept a signature from someone else
-   * @param witnesses witnesses that will be added to the transaction
+   * Sign a transaction with Witnesses.
+   * This can be used when you accept a signature from someone else
+   * @param witnesses - witnesses that will be added to the transaction
    */
   public signWithWitness(...witnesses: tx.Witness[]): void {
     witnesses.forEach((witness) => {
@@ -39,8 +39,8 @@ export class TransactionSigner {
 
   /**
    * Sign a transaction with multi-signatures for multi-sig account
-   * @param multisigAccount multisig account
-   * @param witnesses signatures from accounts within the multisig-account
+   * @param multisigAccount - multisig account
+   * @param witnesses - signatures from accounts within the multisig-account
    */
   public signWithMultiSigAccount(
     multisigAccount: wallet.Account,

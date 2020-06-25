@@ -53,9 +53,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
   /**
    * Creates a Boolean ContractParam. Does basic checks to convert value into a boolean.
    */
-  public static boolean(
-    value: boolean | string | number | object
-  ): ContractParam {
+  public static boolean(value: boolean | string | number): ContractParam {
     return new ContractParam({
       type: ContractParamType.Boolean,
       value: !!value,
@@ -68,8 +66,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
 
   /**
    * Creates a Hash160 ContractParam. This is used for containing a scriptHash. Do not reverse the input if using this format.
-   * @param {string} value - A 40 character long hexstring. Automatically converts an address to scripthash if provided.
-   * @return {ContractParam}
+   * @param value - A 40 character long hexstring. Automatically converts an address to scripthash if provided.
    */
   public static hash160(value: string): ContractParam {
     if (isAddress(value)) {
@@ -85,7 +82,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
 
   /**
    * Creates an Integer ContractParam. This is converted into an BigInteger in NeoVM.
-   * @param {string | number } value - A value that can be parsed to an BigInteger. Numbers or numeric strings are accepted.
+   * @param value - A value that can be parsed to an BigInteger. Numbers or numeric strings are accepted.
    * @example
    * ContractParam.integer(128)
    * ContractParam.integer("128")
@@ -103,9 +100,9 @@ export class ContractParam implements NeonObject<ContractParamLike> {
 
   /**
    * Creates a ByteArray ContractParam.
-   * @param value
-   * @param format The format that this value represents. Different formats are parsed differently.
-   * @param args Additional arguments such as decimal precision
+   * @param value - the raw data as a string or number
+   * @param format - the format that this value represents. Different formats are parsed differently.
+   * @param args - additional arguments such as decimal precision
    */
   public static byteArray(
     value: string | number,
@@ -153,7 +150,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
 
   /**
    * Creates an Array ContractParam.
-   * @param params params to be encapsulated in an array.
+   * @param params - params to be encapsulated in an array.
    */
   public static array(...params: ContractParam[]): ContractParam {
     return new ContractParam({ type: ContractParamType.Array, value: params });

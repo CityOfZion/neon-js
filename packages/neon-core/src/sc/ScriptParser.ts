@@ -19,7 +19,6 @@ function isSystemContractCallFormat(
 
 /**
  * Read a script to readable contract invocations.
- * @extends StringStream
  */
 export class ScriptParser extends StringStream {
   /**
@@ -113,7 +112,7 @@ export class ScriptParser extends StringStream {
   /**
    * Reverse engineer a script back to its params.
    * A script may have multiple invocations so a list is always returned.
-   * @return A list of ScriptIntents[].
+   * @returns A list of ScriptIntents[].
    */
   public toScriptParams(): ScriptIntent[] {
     this.reset();

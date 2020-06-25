@@ -9,7 +9,6 @@ export class TransactionBuilder {
 
   /**
    * Add cosigners
-   * @param cosigners
    */
   public addCosigners(...cosigners: tx.CosignerLike[]): this {
     this._config.cosigners = [...(this._config.cosigners || []), ...cosigners];
@@ -18,7 +17,6 @@ export class TransactionBuilder {
 
   /**
    * You can add multiple intents to the transaction
-   * @param intents
    */
   public addIntents(...intents: sc.ScriptIntent[]): this {
     this._config.script =
@@ -28,8 +26,8 @@ export class TransactionBuilder {
 
   /**
    * Add an attribute.
-   * @param usage The usage type. Do refer to txAttrUsage enum values for all available options.
-   * @param data The data as hexstring.
+   * @param usage - The usage type. Do refer to txAttrUsage enum values for all available options.
+   * @param data - The data as hexstring.
    */
   public addAttributes(...attrs: tx.TransactionAttributeLike[]): this {
     this._config.attributes = [...(this._config.attributes || []), ...attrs];

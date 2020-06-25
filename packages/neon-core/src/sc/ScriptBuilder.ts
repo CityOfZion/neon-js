@@ -30,7 +30,6 @@ export interface ScriptResult {
 
 /**
  * Builds a VM script in hexstring. Used for constructing smart contract method calls.
- * @extends StringStream
  */
 export class ScriptBuilder extends StringStream {
   /**
@@ -79,8 +78,6 @@ export class ScriptBuilder extends StringStream {
 
   /**
    * Appends data depending on type. Used to append params/array lengths.
-   * @param data
-   * @return this
    */
   public emitPush(data: unknown): this {
     switch (typeof data) {
@@ -118,7 +115,6 @@ export class ScriptBuilder extends StringStream {
 
   /**
    * Private method to append an array
-   * @private
    */
   private emitArray(arr: unknown[]): this {
     for (let i = arr.length - 1; i >= 0; i--) {
@@ -171,8 +167,7 @@ export class ScriptBuilder extends StringStream {
 
   /**
    * Appends a number. Maximum number possible is ulong(256 bits of data).
-   * @param num For numbers beyond MAX_INT, please pass in a string instead of a javascript number.
-   * @return this
+   * @param num - for numbers beyond MAX_INT, please pass in a string instead of a javascript number.
    */
   public emitNumber(num: number | string): this {
     const bn = new BN(num, 10, "be");

@@ -67,7 +67,7 @@ export class TransactionAttribute
   public usage: TxAttrUsage;
 
   /**
-   * @description data in hex format
+   * data in hex format
    */
   public data: HexString;
 
@@ -89,7 +89,8 @@ export class TransactionAttribute
   }
 
   /**
-   * @param url url string in ASCII format
+   * Constructs a Url Attribute
+   * @param url - URL string in ASCII
    */
   public static Url(url: string): TransactionAttribute {
     return new TransactionAttribute({

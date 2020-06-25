@@ -17,7 +17,7 @@ export interface TransportStatusError extends Error {
 
 /**
  * Evaluates Transport Error thrown and rewrite the error message to be more user friendly.
- * @return error with modified message if found.
+ * @returns error with modified message if found.
  */
 export function evalTransportError(err: Error): Error {
   const transportErr = err as TransportStatusError;

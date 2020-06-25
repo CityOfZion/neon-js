@@ -71,8 +71,8 @@ export class Wallet {
 
   /**
    * Adds an account.
-   * @param acct Account or WalletAccount object.
-   * @return Index position of Account in array.
+   * @param acct - Account or WalletAccount object.
+   * @returns index position of Account in array.
    */
   public addAccount(acct: Account | AccountJSON): number {
     const index = this.accounts.length;
@@ -96,9 +96,9 @@ export class Wallet {
 
   /**
    * Attempts to decrypt Account at index in array.
-   * @param index Index of Account in array.
-   * @param keyphrase keyphrase
-   * @return Promise of decryption success/failure.
+   * @param index - index of Account in array.
+   * @param keyphrase - keyphrase
+   * @returns Promise of decryption success/failure.
    */
   public async decrypt(index: number, keyphrase: string): Promise<boolean> {
     if (index < 0) {
@@ -115,8 +115,7 @@ export class Wallet {
 
   /**
    * Attempts to decrypt all accounts with keyphrase.
-   * @param keyphrase
-   * @return Promise of accounts decryption success/failure .
+   * @returns Promise of accounts decryption success/failure .
    */
   public decryptAll(keyphrase: string): Promise<boolean[]> {
     return Promise.all(
@@ -126,9 +125,9 @@ export class Wallet {
 
   /**
    * Attempts to encrypt Account at index in array.
-   * @param index Index of Account in array.
-   * @param keyphrase
-   * @return Promise of encryption success/failure.
+   * @param index - index of Account in array.
+   * @param keyphrase - keyphrase
+   * @returns Promise of encryption success/failure.
    */
   public async encrypt(index: number, keyphrase: string): Promise<boolean> {
     if (index < 0) {
@@ -143,8 +142,8 @@ export class Wallet {
 
   /**
    * Attempts to encrypt all accounts with keyphrase.
-   * @param keyphrase
-   * @return Promise of accounts encryption success/failure.
+   * @param keyphrase - keyphrase
+   * @returns Promise of accounts encryption success/failure.
    */
   public encryptAll(keyphrase: string): Promise<boolean[]> {
     return Promise.all(
@@ -166,8 +165,7 @@ export class Wallet {
 
   /**
    * Set Account at index in array to be default account.
-   * @param index The index of the Account in accounts array.
-   * @return this
+   * @param index - index of the Account in accounts array.
    */
   public setDefault(index: number): this {
     for (let i = 0; i < this.accounts.length; i++) {

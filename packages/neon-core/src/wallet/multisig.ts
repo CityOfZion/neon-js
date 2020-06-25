@@ -29,7 +29,7 @@ export function constructMultiSigVerificationScript(
 
 /**
  * Returns the list of public keys found in the verification script.
- * @param verificationScript Verification Script of an Account.
+ * @param verificationScript - verification Script of an Account.
  */
 export function getPublicKeysFromVerificationScript(
   verificationScript: string
@@ -47,7 +47,7 @@ export function getPublicKeysFromVerificationScript(
 
 /**
  * Returns the number of signatures required for signing for a verification Script.
- * @param verificationScript Verification Script of a multi-sig Account.
+ * @param verificationScript - verification Script of a multi-sig Account.
  */
 export function getSigningThresholdFromVerificationScript(
   verificationScript: string
@@ -77,7 +77,7 @@ export function getSigningThresholdFromVerificationScript(
 
 /**
  * Extract signatures from invocationScript
- * @param invocationScript InvocationScript of a Witness.
+ * @param invocationScript - invocationScript of a Witness.
  */
 export function getSignaturesFromInvocationScript(
   invocationScript: string

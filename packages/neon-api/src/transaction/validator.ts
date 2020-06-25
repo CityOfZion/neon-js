@@ -55,7 +55,7 @@ export class TransactionValidator {
 
   /**
    * validate transaction attribute - validUntilBlock
-   * @param autoFix will automatically fix transaction if specified as true
+   * @param autoFix - will automatically fix transaction if specified as true
    */
   public async validateValidUntilBlock(
     autoFix = false
@@ -213,7 +213,7 @@ export class TransactionValidator {
 
   /**
    * validate systemFee
-   * @param autoFix will automatically fix transaction if specified as true
+   * @param autoFix - will automatically fix transaction if specified as true
    */
   public async validateSystemFee(autoFix = false): Promise<ValidationResult> {
     const { script } = this.transaction;
@@ -243,7 +243,7 @@ export class TransactionValidator {
 
   /**
    * Validate NetworkFee
-   * @param autoFix will automatically fix transaction if specified as true
+   * @param autoFix - will automatically fix transaction if specified as true
    */
   public async validateNetworkFee(autoFix = false): Promise<ValidationResult> {
     const { networkFee } = this.transaction;

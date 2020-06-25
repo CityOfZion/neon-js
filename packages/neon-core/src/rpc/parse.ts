@@ -17,7 +17,7 @@ export type VMResultParser = (result: RPCVMResponse) => unknown[];
 
 /**
  * Builds a parser to parse the results of the stack.
- * @param args A list of functions to parse arguments. Each function is mapped to its corresponding StackItem in the result.
+ * @param args - A list of functions to parse arguments. Each function is mapped to its corresponding StackItem in the result.
  * @returns parser function
  */
 export function buildParser(...args: StackItemParser[]): VMResultParser {
@@ -62,8 +62,8 @@ export function Fixed8Parser(item: StackItemLike): Fixed8 {
 
 /**
  * Parses the VM Stack and returns human readable strings. The types are inferred based on the StackItem type.
- * @param res RPC Response
- * @return Array of results
+ * @param res - RPC Response
+ * @returns Array of results
  */
 export function SimpleParser(res: RPCVMResponse): unknown[] {
   return res.stack.map((item) => {

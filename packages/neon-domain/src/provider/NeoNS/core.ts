@@ -7,7 +7,7 @@ const operation = "resolve";
  * @param url - URL of an NEO RPC service.
  * @param contract - the contract used to resolve
  * @param domain - the domain to resolve.
- * @return public address as string
+ * @returns public address as string
  */
 
 export async function resolveDomain(

@@ -23,6 +23,7 @@ export class StringStream {
 
   /**
    * Checks if reached the end of the stream. Does not mean stream is actually empty (this.str is not empty).
+   *
    * @example
    * const ss = new StringStream("01020304");
    * ss.isEmpty(); // false
@@ -36,6 +37,7 @@ export class StringStream {
   /**
    * Peek at the next bytes on the string but does not move the pointer.
    * May return less than intended bytes if reached end of stream.
+   *
    * @example
    * const ss = new StringStream("0102");
    * ss.peek();  // "01"
@@ -50,7 +52,8 @@ export class StringStream {
 
   /**
    * Reads some bytes off the stream.
-   * @param bytes Number of bytes to read
+   * @param bytes - number of bytes to read
+   *
    * @example
    * const ss = new StringStream("01020304");
    * ss.read(); // "01"
@@ -68,6 +71,7 @@ export class StringStream {
   /**
    * Reads some bytes off the stream.
    * A variable-length integer is first read off the stream and then bytes equal to the integer is read off and returned.
+   *
    * @example
    * const ss = new StringStream("03010203040506")
    * const result = ss.readVarBytes(); //010203
@@ -80,6 +84,7 @@ export class StringStream {
    * Reads an integer of variable bytelength. May consume up to 9 bytes.
    * The first byte read indicates if more bytes need to be read off.
    * The bytes are read and converted from little endian hexadecimal to number.
+   *
    * @example
    * const ss = new StringStream("01");
    * const r1 = ss.readVarInt();
@@ -107,6 +112,7 @@ export class StringStream {
 
   /**
    * Resets the pointer to start of string.
+   *
    * @example
    * const ss = new StringStream("010203");
    * ss.read(); //"01"
