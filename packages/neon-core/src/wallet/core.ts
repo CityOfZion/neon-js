@@ -1,6 +1,10 @@
 /**
- * @file Core methods for manipulating keys
+ * Core methods for manipulating keys
+ *
+ * ```
  * NEP2 <=> WIF <=> Private => Public => ScriptHash <=> Address
+ * ```
+ *
  * Keys are arranged in order of derivation.
  * Arrows determine the direction.
  *
@@ -18,8 +22,8 @@ import { OpCode, InteropServiceCode, ScriptBuilder } from "../sc";
 
 /**
  * Encodes a public key.
- * @param unencodedKey unencoded public key
- * @return encoded public key
+ * @param unencodedKey - unencoded public key
+ * @returns encoded public key
  */
 export function getPublicKeyEncoded(unencodedKey: string): string {
   const publicKeyArray = new Uint8Array(hexstring2ab(unencodedKey));
@@ -32,8 +36,8 @@ export function getPublicKeyEncoded(unencodedKey: string): string {
 
 /**
  * Unencodes a public key.
- * @param  publicKey Encoded public key
- * @return decoded public key
+ * @param publicKey - Encoded public key
+ * @returns decoded public key
  */
 export function getPublicKeyUnencoded(publicKey: string): string {
   const publicKeyBuffer = Buffer.from(publicKey, "hex");
@@ -57,8 +61,8 @@ export function getWIFFromPrivateKey(privateKey: string): string {
 
 /**
  * Converts a private key to public key.
- * @param privateKey
- * @param encode Returns the encoded form if true.
+ * @param privateKey - 64 bit private key
+ * @param encode - returns the encoded form if true.
  */
 export function getPublicKeyFromPrivateKey(
   privateKey: string,
@@ -129,9 +133,9 @@ export const getScriptHashFromAddress = (address: string): string => {
 
 /**
  * Generates a signature of the transaction based on given private key.
- * @param tx Serialized unsigned transaction.
- * @param privateKey Private Key.
- * @return Signature. Does not include tx.
+ * @param tx - serialized unsigned transaction
+ * @param privateKey - private Key
+ * @returns Signature. Does not include tx.
  */
 export const generateSignature = (tx: string, privateKey: string): string => {
   return sign(tx, privateKey);

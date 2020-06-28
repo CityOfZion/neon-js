@@ -110,8 +110,8 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query returns the specified block either as a hexstring or human readable JSON.
-   * @param indexOrHash height or hash of block.
-   * @param verbose 0 for hexstring, 1 for JSON. Defaults to 0.
+   * @param indexOrHash - height or hash of block.
+   * @param verbose - 0 for hexstring, 1 for JSON. Defaults to 0.
    */
   public static getBlock(
     indexOrHash: number | string,
@@ -143,7 +143,7 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query returns the hash of a specific block.
-   * @param {number} index height of block.
+   * @param index - height of block.
    */
   public static getBlockHash(index: number): Query<[number], string> {
     return new Query({
@@ -154,8 +154,8 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query Returns the corresponding block header information according to the specified script hash.
-   * @param indexOrHash height or hash of block.
-   * @param verbose Optional, the default value of verbose is 0. When verbose is 0, the serialized information of the block is returned, represented by a hexadecimal string. If you need to get detailed information, you will need to use the SDK for deserialization. When verbose is 1, detailed information of the corresponding block in Json format string, is returned.
+   * @param indexOrHash - height or hash of block.
+   * @param verbose - Optional, the default value of verbose is 0. When verbose is 0, the serialized information of the block is returned, represented by a hexadecimal string. If you need to get detailed information, you will need to use the SDK for deserialization. When verbose is 1, detailed information of the corresponding block in Json format string, is returned.
    */
   public static getBlockHeader(
     indexOrHash: string | number,
@@ -186,7 +186,7 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query returns information about the smart contract registered at the specific hash.
-   * @param scriptHash hash of contract
+   * @param scriptHash - hash of contract
    */
   public static getContractState(
     scriptHash: string
@@ -208,7 +208,7 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query returns the transaction hashes of the transactions confirmed or unconfirmed.
-   * @param shouldGetUnverified Optional. Default is 0.
+   * @param shouldGetUnverified - Optional. Default is 0.
    *
    * shouldGetUnverified = 0, get confirmed transaction hashes
    *
@@ -231,8 +231,8 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query returns information about a specific transaction in either hexstring or human readable JSON.
-   * @param txid hash of the specific transaction.
-   * @param verbose 0 for hexstring, 1 for JSON. Defaults to 0.
+   * @param txid - hash of the specific transaction.
+   * @param verbose - 0 for hexstring, 1 for JSON. Defaults to 0.
    */
   public static getRawTransaction(
     txid: string,
@@ -254,8 +254,8 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query returns the raw value stored at the specific key under a specific contract.
-   * @param scriptHash hash of contract.
-   * @param key
+   * @param scriptHash - hash of contract.
+   * @param key - the storage key
    */
   public static getStorage(
     scriptHash: string,
@@ -269,7 +269,7 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query returns the block index in which the transaction is found.
-   * @param txid hash of the specific transaction.
+   * @param txid - hash of the specific transaction.
    */
   public static getTransactionHeight(txid: string): Query<[string], number> {
     return new Query({
@@ -280,7 +280,7 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * Gets the list of candidates available for voting.
-   * @return List of validators
+   * @returns list of validators
    */
   public static getValidators(): Query<[], Validator[]> {
     return new Query({
@@ -289,7 +289,7 @@ export class Query<TParams extends unknown[], TResponse> {
   }
 
   /**
-   * This Query returns the node version.
+   * Returns the node version.
    */
   public static getVersion(): Query<[], GetVersionResult> {
     return new Query({
@@ -299,10 +299,10 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query invokes the VM to run the specific contract with the provided operation and params. Do note that this function only suits contracts with a Main(string, args[]) entry method.
-   * @param scriptHash hash of contract to test.
-   * @param operation name of operation to call (first argument)
-   * @param params parameters to pass (second argument)
-   * @param checkedWitnessHashes Scripthashes of witnesses that should sign the transaction containing this script.
+   * @param scriptHash - hash of contract to test.
+   * @param operation - name of operation to call (first argument)
+   * @param params - parameters to pass (second argument)
+   * @param checkedWitnessHashes - scripthashes of witnesses that should sign the transaction containing this script.
    */
   public static invokeFunction(
     scriptHash: string,
@@ -318,8 +318,8 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query runs the specific script through the VM.
-   * @param script VM script as a hexstring.
-   * @param checkedWitnessHashes Scripthashes of witnesses that should sign the transaction containing this script.
+   * @param script -VM script as a hexstring.
+   * @param checkedWitnessHashes - scripthashes of witnesses that should sign the transaction containing this script.
    */
   public static invokeScript(
     script: string,
@@ -343,7 +343,7 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query transmits the specific transaction to the node. On success, the node will return the transaction hash.
-   * @param transaction Transaction as a Transaction object or hexstring.
+   * @param transaction - transaction as a Transaction object or hexstring.
    */
   public static sendRawTransaction(
     transaction: Transaction | string
@@ -360,7 +360,7 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query submits a block for processing.
-   * @param block
+   * @param block - a serialized block
    */
   public static submitBlock(block: string): Query<[string], SendResult> {
     return new Query({
@@ -371,7 +371,7 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query submits an address for validation.
-   * @param addr Address to validate.
+   * @param addr - address to validate.
    */
   public static validateAddress(
     addr: string

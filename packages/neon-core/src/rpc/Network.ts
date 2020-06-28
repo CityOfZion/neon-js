@@ -35,7 +35,7 @@ function compareMaps(
 /**
  * Network interface representing a NEO blockchain network.
  * This inherits from the network.protocol file used in the C# implementation and adds in additional configurations.
- * @param config NetworkLike JS object
+ * @param config - NetworkLike JS object
  */
 export class Network implements NeonObject<NetworkLike> {
   public name: string;

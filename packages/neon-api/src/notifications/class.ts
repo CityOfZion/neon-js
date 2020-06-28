@@ -34,7 +34,7 @@ export class Notifications {
    * Subscribe to event notifications of a specific contract
    * @param contract - Hash of the contract (null for all contracts) to subscribe to
    * @param callback - Function to call when a notification is received.
-   * @return Subscription object that can be used to cancel the subscription
+   * @returns Subscription object that can be used to cancel the subscription
    */
   public subscribe(
     contract: string | null,

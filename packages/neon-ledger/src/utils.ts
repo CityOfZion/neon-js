@@ -2,7 +2,7 @@ import { u } from "@cityofzion/neon-core";
 
 /**
  * Converts a signature in DER format to HEX format.
- * @param response Signature in DER format
+ * @param response - signature in DER format
  * @returns Signature in HEX format (64 bytes)
  */
 export function DerToHexSignature(response: string): string {

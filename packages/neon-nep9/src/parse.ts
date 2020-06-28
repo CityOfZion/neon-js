@@ -35,7 +35,7 @@ function reduceParamsToDict(params: string): { [k: string]: string } {
 
 /**
  * Parses an NEP9 URI string into a consumable intent object. This function does not check for runtime validity conditions (eg address or contract validity).
- * @param uri Case sensitive URI string.
+ * @param uri - case sensitive URI string.
  */
 export function parse(uri: string): NEP9Intent {
   const [scheme, uriBody] = uri.split(":", 2);

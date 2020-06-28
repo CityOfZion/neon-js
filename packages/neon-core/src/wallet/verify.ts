@@ -71,8 +71,8 @@ export function isPrivateKey(key: string): boolean {
 
 /**
  * Checks if hexstring is a valid Public Key. Accepts both encoded and unencoded forms.
- * @param key
- * @param  encoded Optional parameter to specify for a specific form. If this is omitted, this function will return true for both forms. If this parameter is provided, this function will only return true for the specific form.
+ * @param key - encoded or unencoded public key
+ * @param encoded - optional parameter to specify for a specific form. If this is omitted, this function will return true for both forms. If this parameter is provided, this function will only return true for the specific form.
  */
 export function isPublicKey(key: string, encoded?: boolean): boolean {
   try {

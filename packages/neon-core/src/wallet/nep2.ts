@@ -100,9 +100,9 @@ function getNeo2AddressFromPrivateKey(privateKey: string): string {
 
 /**
  * Encrypts a WIF key using a given keyphrase under NEP-2 Standard.
- * @param wifKey WIF key to encrypt (52 chars long).
- * @param keyphrase The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
- * @param scryptParams Optional parameters for Scrypt. Defaults to NEP2 specified parameters.
+ * @param wifKey - WIF key to encrypt (52 chars long).
+ * @param keyphrase - password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
+ * @param scryptParams - optional parameters for Scrypt. Defaults to NEP2 specified parameters.
  * @returns The encrypted key in Base58 (Case sensitive).
  */
 export function encrypt(
@@ -168,9 +168,9 @@ async function decipherNep2Key(
 
 /**
  * Decrypts an encrypted key using a given keyphrase under NEP-2 Standard.
- * @param encryptedKey The encrypted key (58 chars long).
- * @param keyphrase The password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
- * @param scryptParams Parameters for Scrypt. Defaults to NEP2 specified parameters.
+ * @param encryptedKey - tThe encrypted key (58 chars long).
+ * @param keyphrase - the password will be encoded as UTF-8 and normalized using Unicode Normalization Form C (NFC).
+ * @param scryptParams - parameters for Scrypt. Defaults to NEP2 specified parameters.
  * @returns The decrypted WIF key.
  */
 export async function decrypt(

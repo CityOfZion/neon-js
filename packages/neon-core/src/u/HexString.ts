@@ -28,8 +28,8 @@ export class HexString {
 
   /**
    * Initiate a HexString
-   * @param value
-   * @param littleEndian tell whether value is little endian or not. default to be false.
+   * @param value - a string that contains only [1-9a-f]. Can be prefixed with 0x.
+   * @param littleEndian - indicate whether value is little endian or not. default to be false.
    */
   protected constructor(value: string, littleEndian = false) {
     if (value.startsWith("0x")) {
@@ -59,7 +59,6 @@ export class HexString {
 
   /**
    * Judge if 2 HexString are equal
-   * @param other
    */
   public equals(other: HexString | string): boolean {
     if (typeof other === "string") {
@@ -70,7 +69,6 @@ export class HexString {
 
   /**
    * XOR with another HexString to get a new one.
-   * @param other
    */
   public xor(other: HexString): HexString {
     return HexString.fromHex(hexXor(this.toBigEndian(), other.toBigEndian()));
@@ -85,7 +83,7 @@ export class HexString {
 
   /**
    * Export as number
-   * @param asLittleEndian whether export as little endian number, default to be false
+   * @param asLittleEndian - whether export as little endian number, default to be false
    */
   public toNumber(asLittleEndian = false): number {
     return parseInt(
@@ -96,7 +94,7 @@ export class HexString {
 
   /**
    * Export to ArrayBuffer in Uint8Array
-   * @param asLittleEndian whether export as little endian array, default to be false
+   * @param asLittleEndian - whether export as little endian array, default to be false
    */
   public toArrayBuffer(asLittleEndian = false): Uint8Array {
     return hexstring2ab(
@@ -106,7 +104,7 @@ export class HexString {
 
   /**
    * Export as a base64-encoded string.
-   * @param asLittleEndian Whether to encode as little endian, default to be false
+   * @param asLittleEndian - whether to encode as little endian, default to be false
    */
   public toBase64(asLittleEndian = false): string {
     return hex2base64(
@@ -116,8 +114,8 @@ export class HexString {
 
   /**
    * Get HexString instance from a hex string
-   * @param str hex string
-   * @param littleEndian whether `str` is little endian
+   * @param str - hexstring
+   * @param littleEndian - whether `str` is little endian
    */
   public static fromHex(str: string, littleEndian: boolean): HexString;
   public static fromHex(str: string | HexString): HexString;
@@ -133,7 +131,6 @@ export class HexString {
 
   /**
    * Get HexString instance from a ASCII string
-   * @param str
    */
   public static fromAscii(str: string): HexString {
     const hex = str2hexstring(str);
@@ -142,8 +139,7 @@ export class HexString {
 
   /**
    * Get HexString instance from a number
-   * @param num
-   * @param littleEndian whether `num` is little endian
+   * @param littleEndian - whether `num` is little endian
    */
   public static fromNumber(num: number, littleEndian = false): HexString {
     return new HexString(num2hexstring(num), littleEndian);
@@ -151,8 +147,7 @@ export class HexString {
 
   /**
    * Get HexString instance from array buffer
-   * @param arr
-   * @param littleEndian whether `arr` is little endian
+   * @param littleEndian - whether `arr` is little endian
    */
   public static fromArrayBuffer(
     arr: ArrayBuffer | ArrayLike<number>,
@@ -163,8 +158,7 @@ export class HexString {
 
   /**
    * Get HexString instance from a Base64-encoded string
-   * @param encodedString
-   * @param littleEndian Whether the decoded hexstring is little endian
+   * @param littleEndian - whether the decoded hexstring is little endian
    */
   public static fromBase64(
     encodedString: string,

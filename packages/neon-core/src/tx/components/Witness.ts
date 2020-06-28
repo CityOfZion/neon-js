@@ -59,9 +59,9 @@ export class Witness implements NeonObject<WitnessLike> {
 
   /**
    * Builds a multi-sig Witness object.
-   * @param tx Hexstring to be signed.
-   * @param sigs Unordered list of signatures.
-   * @param acctOrVerificationScript Account or verification script. Account needs to be the multi-sig account and not one of the public keys.
+   * @param tx - hexstring to be signed.
+   * @param sigs - unordered list of signatures.
+   * @param acctOrVerificationScript - account or verification script. Account needs to be the multi-sig account and not one of the public keys.
    */
   public static buildMultiSig(
     tx: string,

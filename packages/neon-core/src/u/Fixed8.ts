@@ -62,12 +62,14 @@ export class Fixed8 extends BN {
   /**
    * Creates a new Fixed8 from a number that is too large to fit in a Fixed8.
    *
+   * @remarks
    * The constructor of Fixed8 only accepts input between the MAX_VALUE and MIN_VALUE.
    * However, some inputs from RPC are larger than that due to them sending the raw value over.
    * This method allows the creation of the Fixed8 by stating the number of decimals to shift.
    * If after shifting the number is still out of range, this method will throw.
-   * @param input A string or number that represents a number too big for a Fixed8.
-   * @param decimals The number of decimals to shift by. We will simply divide the number by 10^decimals. Defaults to 8.
+   *
+   * @param input - a string or number that represents a number too big for a Fixed8.
+   * @param decimals - the number of decimals to shift by. We will simply divide the number by 10^decimals. Defaults to 8.
    *
    * @example
    * const rawValue = "922337203680"; // RPC may send this value representing 9223.37203680 GAS.
@@ -151,8 +153,8 @@ export class Fixed8 extends BN {
    * Returns a Fixed8 rounded to the nearest dp decimal places according to rounding mode rm.
    * If dp is null, round to whole number.
    * If rm is null, round according to default rounding mode.
-   * @param dp Number of decimal places to keep. Defaults to 0.
-   * @param rm Rounding mode.
+   * @param dp - number of decimal places to keep. Defaults to 0.
+   * @param rm - rounding mode.
    */
   public round(dp = 0, rm?: BN.RoundingMode): Fixed8 {
     return new Fixed8(super.decimalPlaces(dp, rm));
@@ -160,48 +162,56 @@ export class Fixed8 extends BN {
 
   /**
    * Returns a Fixed8 whose value is the value of this Fixed8 divided by `n`
-   * @alias div
    */
   public dividedBy(n: string | number | BN, base?: number): Fixed8 {
     return new Fixed8(super.dividedBy(n, base));
   }
 
+  /**
+   * {@inheritDoc Fixed8.dividedBy}
+   */
   public div(n: string | number | BN, base?: number): Fixed8 {
     return this.dividedBy(n, base);
   }
 
   /**
    * Returns a Fixed8 whose value is the value of this Fixed8 multipled by `n`
-   * @alias mul
    */
   public times(n: string | number | BN, base?: number): Fixed8 {
     return new Fixed8(super.times(n, base));
   }
 
+  /**
+   * {@inheritDoc Fixed8.times}
+   */
   public mul(n: string | number | BN, base?: number): Fixed8 {
     return this.times(n, base);
   }
 
   /**
    * Returns a Fixed8 whose value is the value of this Fixed8 plus `n`
-   * @alias add
    */
   public plus(n: string | number | BN, base?: number): Fixed8 {
     return new Fixed8(super.plus(n, base));
   }
 
+  /**
+   * {@inheritDoc Fixed8.plus}
+   */
   public add(n: string | number | BN, base?: number): Fixed8 {
     return this.plus(n, base);
   }
 
   /**
    * Returns a Fixed8 whose value is the value of this Fixed8 minus `n`
-   * @alias sub
    */
   public minus(n: string | number | BN, base?: number): Fixed8 {
     return new Fixed8(super.minus(n, base));
   }
 
+  /**
+   * {@inheritDoc Fixed8.minus}
+   */
   public sub(n: string | number | BN, base?: number): Fixed8 {
     return this.minus(n, base);
   }

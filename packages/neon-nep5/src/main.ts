@@ -28,9 +28,9 @@ const parseTokenInfoAndBalance = rpc.buildParser(
 
 /**
  * Get the balance of a single token for a single address.
- * @param url Url of the NEO node to query.
- * @param scriptHash ScriptHash of the NEP5 contract.
- * @param address the Address to query for the balance.
+ * @param url - url of the NEO node to query.
+ * @param scriptHash - ScriptHash of the NEP5 contract.
+ * @param address - the Address to query for the balance.
  */
 export async function getTokenBalance(
   url: string,
@@ -58,9 +58,9 @@ export async function getTokenBalance(
 
 /**
  * Get token balances for an address.
- * @param url URL of the NEO node to query.
- * @param scriptHashArray Array of contract scriptHashes.
- * @param address Address to query for balance of tokens.
+ * @param url - URL of the NEO node to query.
+ * @param scriptHashArray - array of contract scriptHashes.
+ * @param address - address to query for balance of tokens.
  */
 export async function getTokenBalances(
   url: string,
@@ -106,9 +106,9 @@ export async function getTokenBalances(
 
 /**
  * Retrieves the complete information about a token.
- * @param url RPC Node url to query.
- * @param scriptHash ScriptHash of the NEP5 contract.
- * @param address Optional address to query the balance for. If provided, the returned object will include the balance property.
+ * @param url - RPC Node url to query.
+ * @param scriptHash - scriptHash of the NEP5 contract.
+ * @param address - optional address to query the balance for. If provided, the returned object will include the balance property.
  */
 export async function getToken(
   url: string,
@@ -150,9 +150,9 @@ export async function getToken(
 
 /**
  * Retrieves the complete information about a list of tokens.
- * @param url RPC Node url to query.
- * @param scriptHashArray Array of NEP5 contract scriptHashes.
- * @param address Optional address to query the balance for. If provided, the returned object will include the balance property.
+ * @param url - RPC Node url to query.
+ * @param scriptHashArray - array of NEP5 contract scriptHashes.
+ * @param address - optional address to query the balance for. If provided, the returned object will include the balance property.
  */
 export async function getTokens(
   url: string,

@@ -38,9 +38,12 @@ export interface AccountJSON {
  * Key formats are derived from each other lazily and stored for future access.
  * If the previous key (one level higher) is not found, it will attempt to generate it or throw an Error if insufficient information was provided (eg. trying to generate private key when only address was given.)
  *
+ * ```
  * NEP2 <=> WIF <=> Private => Public => ScriptHash <=> Address
+ * ```
  *
- * @param str WIF/ Private Key / Public Key / Address or a Wallet Account object.
+ * @param str - WIF/ Private Key / Public Key / Address or a Wallet Account object.
+ *
  * @example
  * const acct = new Account("L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g");
  * acct.address; // "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"
@@ -48,8 +51,8 @@ export interface AccountJSON {
 export class Account implements NeonObject<AccountJSON> {
   /**
    * Create a multi-sig account from a list of public keys
-   * @param signingThreshold Minimum number of signatures required for verification. Must be larger than 0 and less than number of keys provided.
-   * @param publicKeys List of public keys to form the account. 2-16 keys allowed. Order is important.
+   * @param signingThreshold - Minimum number of signatures required for verification. Must be larger than 0 and less than number of keys provided.
+   * @param publicKeys - list of public keys to form the account. 2-16 keys allowed. Order is important.
    * @example
    * const threshold = 2;
    * const publicKeys = [
@@ -159,6 +162,7 @@ export class Account implements NeonObject<AccountJSON> {
 
   /**
    * Key encrypted according to NEP2 standard.
+   *
    * @example 6PYLHmDf6AjF4AsVtosmxHuPYeuyJL3SLuw7J1U8i7HxKAnYNsp61HYRfF
    */
   public get encrypted(): string {
@@ -171,6 +175,7 @@ export class Account implements NeonObject<AccountJSON> {
 
   /**
    * Case sensitive key of 52 characters long.
+   *
    * @example L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g
    */
   public get WIF(): string {
@@ -184,6 +189,7 @@ export class Account implements NeonObject<AccountJSON> {
 
   /**
    * Key of 64 hex characters.
+   *
    * @example 7d128a6d096f0c14c3a25a2b0c41cf79661bfcb4a8cc95aaaea28bde4d732344
    */
   public get privateKey(): string {
@@ -200,7 +206,9 @@ export class Account implements NeonObject<AccountJSON> {
   }
 
   /**
-   * Returns the public key in encoded form. This is the form that is the short version (starts with 02 or 03). If you require the unencoded form, do use the publicKey method instead of this getter.
+   * Returns the public key in encoded form. This is the form that is the short version (starts with 02 or 03).
+   * If you require the unencoded form, do use the publicKey method instead of this getter.
+   *
    * @example 02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef
    */
   public get publicKey(): string {
@@ -213,7 +221,8 @@ export class Account implements NeonObject<AccountJSON> {
   }
 
   /** Retrieves the Public Key in encoded / unencoded form.
-   * @param encoded Encoded or unencoded.
+   *
+   * @param encoded - Encoded or unencoded.
    */
   public getPublicKey(encoded = true): string {
     return encoded

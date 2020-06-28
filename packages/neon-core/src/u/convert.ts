@@ -40,8 +40,7 @@ export function hexstring2ab(str: string): Uint8Array {
 }
 
 /**
- * @param arr
- * @returns HEX string
+ * Converts an arraybuffer to hexstring.
  */
 export function ab2hexstring(arr: ArrayBuffer | ArrayLike<number>): string {
   if (typeof arr !== "object") {
@@ -58,24 +57,21 @@ export function ab2hexstring(arr: ArrayBuffer | ArrayLike<number>): string {
 }
 
 /**
- * @param str ASCII string
- * @returns HEX string
+ * Converts an ascii string to hexstring.
  */
 export function str2hexstring(str: string): string {
   return ab2hexstring(str2ab(str));
 }
 
 /**
- * @param hexstring HEX string
- * @returns ASCII string
+ * Converts a hexstring to ascii string.
  */
 export function hexstring2str(hexstring: string): string {
   return ab2str(hexstring2ab(hexstring));
 }
 
 /**
- * convert an integer to big endian hex and add leading zeros
- * @param num Integer.
+ * convert an integer to big endian hex and add leading zeros.
  */
 export function int2hex(num: number): string {
   if (typeof num !== "number") {
@@ -87,9 +83,9 @@ export function int2hex(num: number): string {
 
 /**
  * Converts a number to a big endian hexstring of a suitable size, optionally little endian
- * @param num A positive integer.
- * @param size The required size in bytes, eg 1 for Uint8, 2 for Uint16. Defaults to 1.
- * @param littleEndian Encode the hex in little endian form
+ * @param num - a positive integer.
+ * @param size - the required size in bytes, eg 1 for Uint8, 2 for Uint16. Defaults to 1.
+ * @param littleEndian - encode the hex in little endian form
  */
 export function num2hexstring(
   num: number,
@@ -130,9 +126,9 @@ export function num2hexstring(
 
 /**
  * Converts a number to a Fixed8 format hex string
- * @param  num
- * @param size output size in bytes
- * @return number in Fixed8 representation.
+ * @param num - the value to convert
+ * @param size - output size in bytes
+ * @returns number in Fixed8 representation.
  */
 export function num2fixed8(num: number, size = 8): string {
   if (typeof num !== "number") {
@@ -150,7 +146,7 @@ export function num2fixed8(num: number, size = 8): string {
 
 /**
  * Converts a Fixed8 hex string to its original number
- * @param fixed8hex number in Fixed8 representation
+ * @param fixed8hex - number in Fixed8 representation
  */
 export function fixed82num(fixed8hex: string): number {
   ensureHex(fixed8hex);
@@ -162,8 +158,6 @@ export function fixed82num(fixed8hex: string): number {
 
 /**
  * Converts a number to a variable length Int. Used for array length header
- * @param num
- * @returns hexstring of int.
  */
 export function num2VarInt(num: number): string {
   if (num < 0xfd) {

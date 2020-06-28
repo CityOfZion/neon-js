@@ -46,8 +46,8 @@
   ],
   "devDependencies": {
     "@cityofzion/neon-js": "^4.8.0",
-    "@ledgerhq/hw-transport-node-hid": "5.15.0",
-    "@ledgerhq/hw-transport-u2f": "5.15.0",
+    "@ledgerhq/hw-transport-node-hid": "5.17.0",
+    "@ledgerhq/hw-transport-u2f": "5.17.0",
     "@types/ledgerhq__hw-transport-node-hid": "4.22.1"
   }
 }

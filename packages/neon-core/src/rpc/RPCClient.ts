@@ -49,8 +49,8 @@ export class RPCClient {
   private _latencies: number[];
 
   /**
-   * @param net 'MainNet' or 'TestNet' will query the default RPC address found in consts. You may provide a custom URL.
-   * @param version Version of NEO node. Used to check if RPC methods have been implemented. it will default to DEFAULT_RPC found in CONST
+   * @param net - 'MainNet' or 'TestNet' will query the default RPC address found in consts. You may provide a custom URL.
+   * @param version - version of NEO node. Used to check if RPC methods have been implemented. it will default to DEFAULT_RPC found in CONST
    */
   public constructor(net: string, version = RPC_VERSION) {
     if (net === NEO_NETWORK.MAIN) {
@@ -203,7 +203,6 @@ export class RPCClient {
 
   /**
    * Gets the number of peers this node is connected to.
-   * @return {Promise<number>}
    */
   public async getConnectionCount(): Promise<number> {
     const response = await this.execute(Query.getConnectionCount());
@@ -228,7 +227,7 @@ export class RPCClient {
 
   /**
    * This Query returns the transaction hashes of the transactions confirmed or unconfirmed.
-   * @param shouldGetUnverified Optional. Default is 0.
+   * @param shouldGetUnverified - shouldGetUnverified Optional. Default is 0.
    * shouldGetUnverified = 0, get confirmed transaction hashes
    * shouldGetUnverified = 1, get current block height and confirmed and unconfirmed tx hash
    */
@@ -250,7 +249,7 @@ export class RPCClient {
    * Gets a transaction based on its hash.
    * @param txid - transaction id
    * @param verbose - 0, will query transaction in hex string; 1 will query for transaction object. defaults to 0
-   * @return transaction hex or object
+   * @returns transaction hex or object
    */
   public async getRawTransaction(
     txid: string,
@@ -279,7 +278,7 @@ export class RPCClient {
 
   /**
    * Gets the block index in which the transaction is found.
-   * @param txid hash of the specific transaction.
+   * @param txid - hash of the specific transaction.
    */
   public async getTransactionHeight(txid: string): Promise<number> {
     const response = await this.execute(Query.getTransactionHeight(txid));
@@ -354,7 +353,7 @@ export class RPCClient {
 
   /**
    * Sends a serialized transaction to the network.
-   * @return transaction id
+   * @returns transaction id
    */
   public async sendRawTransaction(
     transaction: Transaction | string
@@ -365,7 +364,7 @@ export class RPCClient {
 
   /**
    * Submits a serialized block to the network.
-   * @return block hash if success
+   * @returns block hash if success
    */
   public async submitBlock(block: string): Promise<string> {
     const response = await this.execute(Query.submitBlock(block));

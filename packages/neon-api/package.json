@@ -46,6 +46,6 @@
     "lib/"
   ],
   "devDependencies": {
-    "@types/ws": "7.2.4"
+    "@types/ws": "7.2.5"
   }
 }

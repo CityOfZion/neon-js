@@ -85,28 +85,28 @@ export class Transaction implements NeonObject<TransactionLike> {
   public sender: HexString;
 
   /**
-   * Distributed to NEO holders
    * systemFee is calculated by summarizing prices of all the opcodes and interopServices used while executing transaction script in vm.
+   *
+   * @remarks
+   * The most reliable way to calculate minimum systemFee is to use invokeScript method to test, as it's hard to know what the contract will do.
+   * If transaction only invokes native contracts, systemFee can be calculated offline. It is distributed to NEO holders.
    *
    * @example
    * const systemFee = SUM(OpCodePrices + InteropServiceCodePrices)
-   *
-   * @description
-   * The most reliable way to calculate minimum systemFee is to use invokeScript method to test, as it's hard to know what the contract will do.
-   * If transaction only invokes native contracts, systemFee can be calculated offline.
    */
   public systemFee: Fixed8;
 
   /**
-   * Distributed to consensus nodes
    * networkFee is calculated according to transaction size and verificationScript cost in witnesses.
+   *
+   * @remarks
+   * First part of networkFee is counted by transaction size by unit price `FeePerByte`
+   * `verificationScriptCost` is calculated by summing up opcodes and interopService prices, like `systemFee`; contract verificationScript may need to be run in the VM to get the exact price.
+   * It is distributed to consensus nodes.
    *
    * @example
    * const networkFee = FeePerByte * txSize + SUM(verificationScriptCost)
    *
-   * @description
-   * First part of networkFee is counted by transaction size by unit price `FeePerByte`
-   * `verificationScriptCost` is calculated by summing up opcodes and interopService prices, like `systemFee`; contract verificationScript may need to be run in the VM to get the exact price.
    */
   public networkFee: Fixed8;
 
@@ -120,7 +120,7 @@ export class Transaction implements NeonObject<TransactionLike> {
   public script: HexString;
 
   /**
-   * @description Maximum duration in blocks that a transaction can stay valid in the mempol
+   * Maximum duration in blocks that a transaction can stay valid in the mempol
    */
   public static MAX_TRANSACTION_LIFESPAN = 2102400;
 
@@ -220,7 +220,7 @@ export class Transaction implements NeonObject<TransactionLike> {
 
   /**
    * Deserializes a hexstring into a Transaction object.
-   * @param {string} hexstring - Hexstring of the transaction.
+   * @param hexstring - hexstring of the transaction.
    */
   public static deserialize(hex: string): Transaction {
     const ss = new StringStream(hex);
@@ -255,7 +255,7 @@ export class Transaction implements NeonObject<TransactionLike> {
 
   /**
    * Adds Witness to the Transaction and automatically sorts the witnesses according to scripthash.
-   * @param obj The Witness object to add as witness
+   * @param obj - Witness object to add as witness
    */
   public addWitness(obj: WitnessLike | Witness): this {
     this.witnesses.push(new Witness(obj));
@@ -266,9 +266,8 @@ export class Transaction implements NeonObject<TransactionLike> {
   }
 
   /**
-   * Serialize the transaction and return it as a hex .
-   * @param {boolean} signed  - Whether to serialize the signatures. Signing requires it to be serialized without the signatures.
-   * @return {string} Hexstring.
+   * Serialize the transaction and return it as a hexstring.
+   * @param signed - whether to serialize the signatures. Signing requires it to be serialized without the signatures.
    */
   public serialize(signed = true): string {
     if (this.version !== 0) {
@@ -293,9 +292,8 @@ export class Transaction implements NeonObject<TransactionLike> {
 
   /**
    * Signs a transaction.
-   * @param {Account|string} signer - Account, privateKey or WIF
-   * @param {number} networkMagic Magic number of network found in protocol.json.
-   * @return {Transaction} this
+   * @param signer - Account, privateKey or WIF
+   * @param networkMagic - Magic number of network found in protocol.json.
    */
   public sign(
     signer: Account | string,

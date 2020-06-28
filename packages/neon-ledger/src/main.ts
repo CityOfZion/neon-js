@@ -10,7 +10,7 @@ const DEFAULT_STATUSLIST = [ErrorCode.VALID_STATUS];
 
 /**
  * Appends data to the Ledger for signature.
- * @param msg A string up to 510 characters (256 bytes)
+ * @param msg - string up to 510 characters (256 bytes)
  */
 async function appendDataForSignature(
   ledger: Transport,
@@ -28,8 +28,8 @@ async function appendDataForSignature(
 
 /**
  * Appends data to the Ledger and returns the signature of the entire message that has been appended so far.
- * @param ledger
- * @param msg A string up to 510 characters (256 bytes)
+ * @param ledger - Ledger instance
+ * @param msg - string up to 510 characters (256 bytes)
  */
 async function finalizeDataForSignature(
   ledger: Transport,
@@ -47,7 +47,7 @@ async function finalizeDataForSignature(
 
 /**
  * Returns the list of connected Ledger devices. Throw if Ledger is not supported by the computer.
- * @param ledgerLibrary
+ * @param ledgerLibrary - Ledger library
  */
 export async function getDevicePaths(
   ledgerLibrary: typeof Transport
@@ -61,8 +61,8 @@ export async function getDevicePaths(
 
 /**
  * Requests the public key of a requested address from the Ledger.
- * @param ledger The Ledger Transport.
- * @param bip44String The BIP44 string (40 bytes)
+ * @param ledger - Ledger instance
+ * @param bip44String - BIP44 string (40 bytes)
  * @returns An unencoded public key (65 bytes)
  */
 export async function getPublicKey(
@@ -89,9 +89,9 @@ export async function getPublicKey(
 
 /**
  * Requests the device to sign a message using the NEO application.
- * @param ledger The Ledger Transport.
- * @param hex The message to sign as a hexstring.
- * @param bip44String The BIP44 string (40 bytes)
+ * @param ledger - Ledger instance
+ * @param hex - message to sign as a hexstring.
+ * @param bip44String - BIP44 string (40 bytes)
  * @returns Signature as a hexstring (64 bytes)
  */
 export async function getSignature(

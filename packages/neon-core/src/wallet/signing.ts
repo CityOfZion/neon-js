@@ -18,8 +18,8 @@ function getSignatureFromHex(signatureHex: string): { r: BN; s: BN } {
 
 /**
  * Generates a ECDSA signature from a hexstring using the given private key.
- * @param hex Hexstring to hash.
- * @param privateKey Hexstring or WIF format.
+ * @param hex - hexstring to hash.
+ * @param privateKey - hexstring or WIF format.
  */
 export function sign(hex: string, privateKey: string): string {
   if (isWIF(privateKey)) {
@@ -35,9 +35,9 @@ export function sign(hex: string, privateKey: string): string {
 
 /**
  * Verifies that the message, signature and signing key matches.
- * @param hex Message that was signed.
- * @param sig ECDSA signature.
- * @param publicKey encoded/unencoded public key of the signing key.
+ * @param hex - message that was signed.
+ * @param sig - ECDSA signature.
+ * @param publicKey - encoded/unencoded public key of the signing key.
  */
 export function verify(hex: string, sig: string, publicKey: string): boolean {
   if (!isPublicKey(publicKey)) {
