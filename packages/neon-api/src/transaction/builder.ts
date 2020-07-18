@@ -8,10 +8,10 @@ export class TransactionBuilder {
   }
 
   /**
-   * Add cosigners
+   * Add signers
    */
-  public addCosigners(...cosigners: tx.CosignerLike[]): this {
-    this._config.cosigners = [...(this._config.cosigners || []), ...cosigners];
+  public addSigners(...signers: tx.SignerLike[]): this {
+    this._config.signers = [...(this._config.signers || []), ...signers];
     return this;
   }
 

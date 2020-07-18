@@ -11,12 +11,7 @@ import {
   ab2hexstring,
   HexString,
 } from "../../u";
-import {
-  Account,
-  sign,
-  getAddressFromScriptHash,
-  getScriptHashFromAddress,
-} from "../../wallet";
+import { Account, sign, getAddressFromScriptHash } from "../../wallet";
 import {
   TransactionAttribute,
   TransactionAttributeLike,
@@ -24,6 +19,9 @@ import {
   WitnessLike,
   TransactionAttributeJson,
   WitnessJson,
+  SignerLike,
+  Signer,
+  SignerJson,
 } from "../components";
 import {
   deserializeVersion,
@@ -32,11 +30,9 @@ import {
   deserializeAttributes,
   deserializeWitnesses,
   deserializeNonce,
-  deserializeSender,
   deserializeValidUntilBlock,
-  deserializeCosigners,
+  deserializeSigners,
 } from "./main";
-import { CosignerLike, Cosigner, CosignerJson } from "../components/Cosigner";
 import { serializeArrayOf } from "../lib";
 import { NeonObject } from "../../model";
 const log = logger("tx");
@@ -44,12 +40,11 @@ const log = logger("tx");
 export interface TransactionLike {
   version: number;
   nonce: number;
-  sender: string;
   systemFee: Fixed8 | number;
   networkFee: Fixed8 | number;
   validUntilBlock: number;
+  signers: SignerLike[];
   attributes: TransactionAttributeLike[];
-  cosigners: CosignerLike[];
   witnesses: WitnessLike[];
   script: string;
 }
@@ -63,8 +58,8 @@ export interface TransactionJson {
   sys_fee: string;
   net_fee: string;
   valid_until_block: number;
+  signers: SignerJson[];
   attributes: TransactionAttributeJson[];
-  cosigners: CosignerJson[];
   // base64-encoded
   script: string;
   witnesses: WitnessJson[];
@@ -82,7 +77,9 @@ export class Transaction implements NeonObject<TransactionLike> {
   /**
    * transation invoker in script hash in big endian
    */
-  public sender: HexString;
+  public get sender(): HexString {
+    return this.signers[0].account;
+  }
 
   /**
    * systemFee is calculated by summarizing prices of all the opcodes and interopServices used while executing transaction script in vm.
@@ -115,7 +112,7 @@ export class Transaction implements NeonObject<TransactionLike> {
    */
   public validUntilBlock: number;
   public attributes: TransactionAttribute[];
-  public cosigners: Cosigner[];
+  public signers: Signer[];
   public witnesses: Witness[];
   public script: HexString;
 
@@ -128,12 +125,11 @@ export class Transaction implements NeonObject<TransactionLike> {
     return new Transaction({
       version: input.version,
       nonce: input.nonce,
-      sender: HexString.fromHex(getScriptHashFromAddress(input.sender)),
       systemFee: new Fixed8(input.sys_fee).div(100000000),
       networkFee: new Fixed8(input.net_fee).div(100000000),
       validUntilBlock: input.valid_until_block,
       attributes: input.attributes.map((a) => TransactionAttribute.fromJson(a)),
-      cosigners: input.cosigners.map((c) => Cosigner.fromJson(c)),
+      signers: input.signers.map((c) => Signer.fromJson(c)),
       script: HexString.fromBase64(input.script),
       witnesses: input.witnesses.map((w) => Witness.fromJson(w)),
     });
@@ -143,18 +139,16 @@ export class Transaction implements NeonObject<TransactionLike> {
     const {
       version,
       nonce,
-      sender,
       systemFee,
       networkFee,
       validUntilBlock,
       attributes,
-      cosigners = [],
+      signers = [],
       witnesses,
       script,
     } = tx;
     this.version = version ?? TX_VERSION;
     this.nonce = nonce ?? parseInt(ab2hexstring(generateRandomArray(4)), 16);
-    this.sender = HexString.fromHex(sender ?? "");
     this.validUntilBlock = validUntilBlock ?? 0;
     this.attributes = Array.isArray(attributes)
       ? (attributes as (TransactionAttribute | TransactionAttributeLike)[]).map(
@@ -167,8 +161,8 @@ export class Transaction implements NeonObject<TransactionLike> {
     this.witnesses = this.witnesses.sort(
       (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
     );
-    this.cosigners = [];
-    cosigners.forEach((cosigner) => this.addCosigner(cosigner));
+    this.signers = [];
+    signers.forEach((s) => this.addSigner(s));
     this.systemFee = systemFee ? new Fixed8(systemFee) : new Fixed8(0);
     this.networkFee = networkFee ? new Fixed8(networkFee) : new Fixed8(0);
     this.script = HexString.fromHex(script ?? "");
@@ -191,8 +185,8 @@ export class Transaction implements NeonObject<TransactionLike> {
       this.headerSize +
       num2VarInt(this.attributes.length).length / 2 +
       this.attributes.reduce((sum, a) => sum + a.size, 0) +
-      num2VarInt(this.cosigners.length).length / 2 +
-      this.cosigners.reduce((sum, c) => sum + c.size, 0) +
+      num2VarInt(this.signers.length).length / 2 +
+      this.signers.reduce((sum, c) => sum + c.size, 0) +
       num2VarInt(this.script.byteLength).length / 2 +
       this.script.byteLength +
       num2VarInt(this.witnesses.length).length / 2 +
@@ -226,11 +220,10 @@ export class Transaction implements NeonObject<TransactionLike> {
     const ss = new StringStream(hex);
     let txObj = deserializeVersion(ss);
     txObj = deserializeNonce(ss, txObj);
-    txObj = deserializeSender(ss, txObj);
     txObj = deserializeFee(ss, txObj);
     txObj = deserializeValidUntilBlock(ss, txObj);
+    txObj = deserializeSigners(ss, txObj);
     txObj = deserializeAttributes(ss, txObj);
-    txObj = deserializeCosigners(ss, txObj);
     txObj = deserializeScript(ss, txObj);
     if (!ss.isEmpty()) {
       txObj = deserializeWitnesses(ss, txObj);
@@ -238,13 +231,13 @@ export class Transaction implements NeonObject<TransactionLike> {
     return new Transaction(txObj);
   }
 
-  public addCosigner(newCosigner: CosignerLike | Cosigner): this {
-    const acctHashes = this.cosigners.map((cosigner) => cosigner.account);
-    const newHash = HexString.fromHex(newCosigner.account);
+  public addSigner(newSigner: SignerLike | Signer): this {
+    const acctHashes = this.signers.map((signer) => signer.account);
+    const newHash = HexString.fromHex(newSigner.account);
     if (acctHashes.find((hash) => hash.equals(newHash))) {
-      throw new Error(`Cannot add duplicate cosigner: ${newCosigner.account}`);
+      throw new Error(`Cannot add duplicate cosigner: ${newSigner.account}`);
     }
-    this.cosigners.push(new Cosigner(newCosigner));
+    this.signers.push(new Signer(newSigner));
     return this;
   }
 
@@ -276,12 +269,11 @@ export class Transaction implements NeonObject<TransactionLike> {
     let out = "";
     out += num2hexstring(this.version);
     out += num2hexstring(this.nonce, 4, true);
-    out += this.sender.toLittleEndian();
     out += this.systemFee.toReverseHex();
     out += this.networkFee.toReverseHex();
     out += num2hexstring(this.validUntilBlock, 4, true);
+    out += serializeArrayOf(this.signers);
     out += serializeArrayOf(this.attributes);
-    out += serializeArrayOf(this.cosigners);
     out += num2VarInt(this.script.byteLength);
     out += this.script.toString();
     if (signed) {
@@ -292,22 +284,25 @@ export class Transaction implements NeonObject<TransactionLike> {
 
   /**
    * Signs a transaction.
-   * @param signer - Account, privateKey or WIF
+   * @param signingKey - Account, privateKey or WIF
    * @param networkMagic - Magic number of network found in protocol.json.
+   * @param k - optional nonce for signature generation. Setting this causes the signature to be deterministic.
    */
   public sign(
-    signer: Account | string,
-    networkMagic: number = MAGIC_NUMBER.MainNet
+    signingKey: Account | string,
+    networkMagic: number = MAGIC_NUMBER.MainNet,
+    k?: string | number
   ): this {
-    if (typeof signer === "string") {
-      signer = new Account(signer);
+    if (typeof signingKey === "string") {
+      signingKey = new Account(signingKey);
     }
     const signature = sign(
       num2hexstring(networkMagic, 4, true) + this.serialize(false),
-      signer.privateKey
+      signingKey.privateKey,
+      k
     );
-    log.info(`Signed Transaction with Account: ${signer.label}`);
-    this.addWitness(Witness.fromSignature(signature, signer.publicKey));
+    log.info(`Signed Transaction with Account: ${signingKey.label}`);
+    this.addWitness(Witness.fromSignature(signature, signingKey.publicKey));
     return this;
   }
 
@@ -322,12 +317,11 @@ export class Transaction implements NeonObject<TransactionLike> {
     return {
       version: this.version,
       nonce: this.nonce,
-      sender: this.sender.toBigEndian(),
       systemFee: this.systemFee.toNumber(),
       networkFee: this.networkFee.toNumber(),
       validUntilBlock: this.validUntilBlock,
       attributes: this.attributes.map((a) => a.export()),
-      cosigners: this.cosigners.map((cosigner) => cosigner.export()),
+      signers: this.signers.map((s) => s.export()),
       witnesses: this.witnesses.map((a) => a.export()),
       script: this.script.toBigEndian(),
     };
@@ -343,18 +337,14 @@ export class Transaction implements NeonObject<TransactionLike> {
       net_fee: this.networkFee.toRawNumber().toString(),
       valid_until_block: this.validUntilBlock,
       attributes: this.attributes.map((a) => a.toJson()),
-      cosigners: this.cosigners.map((c) => c.toJson()),
+      signers: this.signers.map((c) => c.toJson()),
       script: this.script.toBase64(),
       witnesses: this.witnesses.map((w) => w.toJson()),
     };
   }
 
   public getScriptHashesForVerifying(): string[] {
-    const hashes = this.cosigners.map((cosigner) => cosigner.account);
-    if (hashes.indexOf(this.sender) < 0) {
-      hashes.unshift(this.sender);
-    }
-    return hashes.map((h) => h.toBigEndian()).sort();
+    return this.signers.map((s) => s.account.toBigEndian());
   }
 }
 

@@ -12,7 +12,7 @@
       "net_fee": "0",
       "valid_until_block": 0,
       "attributes": [],
-      "cosigners": [],
+      "signers": [],
       "script": "QRI+f+g=",
       "witnesses": [
           {
@@ -35,7 +35,7 @@
       "net_fee": "1272390",
       "valid_until_block": 2102877,
       "attributes": [],
-      "cosigners": [
+      "signers": [
           {
               "account": "0x3e74922b20d9d1d54aad6261c6edbc9f27cba654",
               "scopes": "CalledByEntry"

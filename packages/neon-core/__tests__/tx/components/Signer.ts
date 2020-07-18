@@ -1,12 +1,12 @@
 import {
-  CosignerLike,
-  Cosigner,
-  CosignerJson,
-} from "../../../src/tx/components/Cosigner";
+  SignerLike,
+  Signer,
+  SignerJson,
+} from "../../../src/tx/components/Signer";
 import { WitnessScope } from "../../../src/tx/components/WitnessScope";
 import { StringStream } from "../../../src/u";
 
-const data: [string, string, CosignerJson][] = [
+const data: [string, string, SignerJson][] = [
   [
     "default",
     "000000000000000000000000000000000000000000",
@@ -42,14 +42,12 @@ const data: [string, string, CosignerJson][] = [
   ],
 ];
 
-const defaultCosigner: CosignerLike = {
+const defaultCosigner: SignerLike = {
   account: "",
   scopes: 0,
-  allowedContracts: [],
-  allowedGroups: [],
 };
 
-const fullCosigner: CosignerLike = {
+const fullCosigner: SignerLike = {
   account: "dec317f6e4335db8a98418bd16960bf4e7fce4c7",
   scopes:
     WitnessScope.CalledByEntry |
@@ -67,19 +65,19 @@ const fullCosigner: CosignerLike = {
 
 describe("constructor & export", () => {
   test("default constructor & export", () => {
-    const cosigner = new Cosigner();
+    const cosigner = new Signer();
     expect(cosigner.export()).toStrictEqual(defaultCosigner);
   });
 
   test("constructor with obj & export", () => {
-    const cosigner = new Cosigner(fullCosigner);
+    const cosigner = new Signer(fullCosigner);
     expect(cosigner.export()).toStrictEqual(fullCosigner);
   });
 });
 
 describe("add methods", () => {
   test("addAllowedContracts", () => {
-    const cosigner = new Cosigner();
+    const cosigner = new Signer();
     expect(cosigner.scopes & WitnessScope.CustomContracts).toBeFalsy();
     cosigner.addAllowedContracts(
       "43cf98eddbe047e198a3e5d57006311442a0ca15",
@@ -95,7 +93,7 @@ describe("add methods", () => {
   });
 
   test("addAllowedGroups", () => {
-    const cosigner = new Cosigner();
+    const cosigner = new Signer();
     expect(!!(cosigner.scopes & WitnessScope.CustomGroups)).toBeFalsy();
     cosigner.addAllowedGroups(
       "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
@@ -111,9 +109,9 @@ describe("add methods", () => {
 
 describe.each(data)(
   "transform %s",
-  (_: string, serialized: string, json: CosignerJson) => {
-    const neonObj = Cosigner.fromJson(json);
-    const deserialized = Cosigner.deserialize(new StringStream(serialized));
+  (_: string, serialized: string, json: SignerJson) => {
+    const neonObj = Signer.fromJson(json);
+    const deserialized = Signer.deserialize(new StringStream(serialized));
     test("deserialize", () => {
       expect(deserialized).toEqual(neonObj);
     });

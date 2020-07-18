@@ -7,12 +7,11 @@ describe("constructor", () => {
     const txBuilder = new TransactionBuilder({ nonce: 1 });
     expect(txBuilder.build().export()).toEqual({
       attributes: [],
-      cosigners: [],
+      signers: [],
       networkFee: 0,
       nonce: 1,
       script: "",
       witnesses: [],
-      sender: "",
       systemFee: 0,
       validUntilBlock: 0,
       version: 0,
@@ -23,18 +22,16 @@ describe("constructor", () => {
     const txBuilder = new TransactionBuilder({
       nonce: 1,
       script: "abcd",
-      sender: "bd8bf7f95e33415fc242c48d143694a729172d9f",
       systemFee: 100,
       networkFee: 1000,
     });
     expect(txBuilder.build().export()).toEqual({
       attributes: [],
-      cosigners: [],
+      signers: [],
       networkFee: 1000,
       nonce: 1,
       script: "abcd",
       witnesses: [],
-      sender: "bd8bf7f95e33415fc242c48d143694a729172d9f",
       systemFee: 100,
       validUntilBlock: 0,
       version: 0,
@@ -62,9 +59,9 @@ describe("setter", () => {
     ]);
   });
 
-  test("addCosigners", () => {
+  test("addSigner", () => {
     const transaction = new TransactionBuilder()
-      .addCosigners(
+      .addSigners(
         {
           account: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
           scopes: tx.WitnessScope.Global,
@@ -75,20 +72,19 @@ describe("setter", () => {
         }
       )
       .build();
-    expect(transaction.cosigners.map((cosigner) => cosigner.export())).toEqual([
+    expect(transaction.signers.map((s) => s.export())).toEqual([
       {
         account: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
-        allowedContracts: [],
-        allowedGroups: [],
         scopes: 0,
       },
       {
         account: "bd8bf7f95e33415fc242c48d143694a729172d9f",
-        allowedContracts: [],
-        allowedGroups: [],
         scopes: 1,
       },
     ]);
+    expect(transaction.sender.toBigEndian()).toBe(
+      "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9"
+    );
   });
 
   test.skip("addIntents", () => {

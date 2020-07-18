@@ -79,7 +79,7 @@ export class TransactionSigner {
   private _getSignerHashes(): Array<string> {
     return [
       this.transaction.sender,
-      ...this.transaction.cosigners.map((cosigner) => cosigner.account),
+      ...this.transaction.signers.map((cosigner) => cosigner.account),
     ].map((hash) => u.reverseHex(hash.toBigEndian()));
   }
 
