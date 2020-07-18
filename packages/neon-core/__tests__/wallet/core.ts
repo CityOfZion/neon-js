@@ -10,39 +10,39 @@ interface TestAccount {
 
 describe.each([
   [
-    "NMPAXGtMfZ8s8rcfP9JhrYrNeZHG4xSVmd",
+    "NNWAo5vdVJz1oyCuNiaTBA3amBHnWCF4Yk",
     {
-      address: "NMPAXGtMfZ8s8rcfP9JhrYrNeZHG4xSVmd",
+      address: "NNWAo5vdVJz1oyCuNiaTBA3amBHnWCF4Yk",
       privateKey:
         "7d128a6d096f0c14c3a25a2b0c41cf79661bfcb4a8cc95aaaea28bde4d732344",
       publicKey:
         "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
       WIF: "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
-      scriptHash: "ed5a639fd2bcdf75f97667bc3344ff3cecd11c10",
+      scriptHash: "36a6e6a7c4658acf096f5d288cc81129c815681c",
     },
   ],
   [
-    "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
+    "NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV",
     {
-      address: "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
+      address: "NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV",
       privateKey:
         "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69",
       publicKey:
         "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
       WIF: "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
-      scriptHash: "dd05929573e68014604a742c53d3d4e5cea5e539",
+      scriptHash: "5461c33e9bbc7de7076754540ba9e62b255ea9fc",
     },
   ],
   [
-    "NTFAwXLGoiWwSMP5vJyZp8K4cBFwrzUs8m",
+    "NTWHAzB82LRGWNuuqjVyyzpGvF3WxbbPoG",
     {
-      address: "NTFAwXLGoiWwSMP5vJyZp8K4cBFwrzUs8m",
+      address: "NTWHAzB82LRGWNuuqjVyyzpGvF3WxbbPoG",
       privateKey:
         "3edee7036b8fd9cef91de47386b191dd76db2888a553e7736bb02808932a915b",
       publicKey:
         "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
       WIF: "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
-      scriptHash: "58f4339bff0ecaf6e8d785d732a118da94986a50",
+      scriptHash: "a38db239bb36ace1a69eb727a5b0157baa094653",
     },
   ],
 ])("Core: %s", (msg: string, data: TestAccount) => {

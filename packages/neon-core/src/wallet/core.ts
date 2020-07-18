@@ -91,7 +91,7 @@ export const getVerificationScriptFromPublicKey = (
   return sb
     .emit(OpCode.PUSHDATA1, "21" + publicKey)
     .emit(OpCode.PUSHNULL)
-    .emitSysCall(InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY)
+    .emitSysCall(InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1)
     .build();
 };
 

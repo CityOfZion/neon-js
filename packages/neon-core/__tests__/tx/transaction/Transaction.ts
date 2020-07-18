@@ -252,7 +252,7 @@ describe("Add Methods", () => {
     tx1.witnesses = [];
     tx1.sign(account, 1024);
     expect(tx1.witnesses[0].verificationScript.toBigEndian()).toBe(
-      "0c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b410a906ad4"
+      "0c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b4195440d78"
     );
     expect(tx1.witnesses[0].invocationScript.toBigEndian()).toBe(
       "0c40aaba2aa8245dcc92a457ba5aa164e371a9eca6ba6511c9233bba05e0952ea65f8ea71bad48206ffcbf382fd1d699f8d6a47d19e2b6c54bf3c97d7f15a18d7f87"
