@@ -14,7 +14,7 @@ afterEach(async () => {
 }, 10000);
 
 describe("notifications", () => {
-  test("smoke test", (done) => {
+  test.skip("smoke test", (done) => {
     notificationsClient.subscribe(null, (response) => {
       expect(response.contract).toBeDefined();
       expect(response.event).toBeDefined();
