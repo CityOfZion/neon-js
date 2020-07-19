@@ -1,4 +1,5 @@
 export * from "./misc";
+export * from "./curve";
 export * from "./convert";
 export * from "./hash";
 export * from "./Fixed8";

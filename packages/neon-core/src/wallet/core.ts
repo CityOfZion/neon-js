@@ -15,11 +15,20 @@ import base58 from "bs58";
 import { Buffer } from "buffer";
 import WIF from "wif";
 import { ADDR_VERSION } from "../consts";
-import { ab2hexstring, hash160, hash256, hexstring2ab, reverseHex } from "../u";
-import { generateRandomArray } from "../u/random";
-import { curve, sign } from "./signing";
+import {
+  ab2hexstring,
+  hash160,
+  hash256,
+  hexstring2ab,
+  reverseHex,
+  generateRandomArray,
+  getCurve,
+  EllipticCurvePreset,
+} from "../u";
+import { sign } from "./signing";
 import { OpCode, InteropServiceCode, ScriptBuilder } from "../sc";
 
+const curve = getCurve(EllipticCurvePreset.SECP256R1);
 /**
  * Encodes a public key.
  * @param unencodedKey - unencoded public key
@@ -40,9 +49,7 @@ export function getPublicKeyEncoded(unencodedKey: string): string {
  * @returns decoded public key
  */
 export function getPublicKeyUnencoded(publicKey: string): string {
-  const publicKeyBuffer = Buffer.from(publicKey, "hex");
-  const keyPair = curve.keyFromPublic(publicKeyBuffer, "hex");
-  return keyPair.getPublic().encode("hex", false);
+  return curve.decodePublicKey(publicKey);
 }
 
 /**
@@ -68,19 +75,7 @@ export function getPublicKeyFromPrivateKey(
   privateKey: string,
   encode = true
 ): string {
-  const privateKeyBuffer = Buffer.from(privateKey, "hex");
-  const keypair = curve.keyFromPrivate(privateKeyBuffer, "hex");
-  const unencodedPubKey = keypair.getPublic().encode("hex", false);
-  if (encode) {
-    const tail = parseInt(unencodedPubKey.substr(64 * 2, 2), 16);
-    if (tail % 2 === 1) {
-      return "03" + unencodedPubKey.substr(2, 64);
-    } else {
-      return "02" + unencodedPubKey.substr(2, 64);
-    }
-  } else {
-    return unencodedPubKey;
-  }
+  return curve.getPublicKey(privateKey, encode);
 }
 
 /**

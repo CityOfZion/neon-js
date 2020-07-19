@@ -1,15 +1,13 @@
 import BN from "bn.js";
-import { ec as EC } from "elliptic";
-import { sha256 } from "../u";
+import { sha256, getCurve, EllipticCurvePreset, EcdsaSignature } from "../u";
 import { getPrivateKeyFromWIF, getPublicKeyUnencoded } from "./core";
 import { isPublicKey, isWIF } from "./verify";
 
-export const curve = new EC("p256");
-
+const curve = getCurve(EllipticCurvePreset.SECP256R1);
 /**
  * Converts signatureHex to a signature object with r & s.
  */
-function getSignatureFromHex(signatureHex: string): { r: BN; s: BN } {
+function getSignatureFromHex(signatureHex: string): EcdsaSignature {
   const signatureBuffer = Buffer.from(signatureHex, "hex");
   const r = new BN(signatureBuffer.slice(0, 32).toString("hex"), 16, "be");
   const s = new BN(signatureBuffer.slice(32).toString("hex"), 16, "be");
@@ -26,10 +24,7 @@ export function sign(hex: string, privateKey: string): string {
     privateKey = getPrivateKeyFromWIF(privateKey);
   }
   const msgHash = sha256(hex);
-  const msgHashHex = Buffer.from(msgHash, "hex");
-  const privateKeyBuffer = Buffer.from(privateKey, "hex");
-
-  const sig = curve.sign(msgHashHex, privateKeyBuffer);
+  const sig = curve.sign(msgHash, privateKey);
   return sig.r.toString("hex", 32) + sig.s.toString("hex", 32);
 }
 
@@ -46,8 +41,7 @@ export function verify(hex: string, sig: string, publicKey: string): boolean {
   if (!isPublicKey(publicKey, true)) {
     publicKey = getPublicKeyUnencoded(publicKey);
   }
-  const sigObj = (getSignatureFromHex(sig) as unknown) as EC.SignatureOptions;
+  const sigObj = getSignatureFromHex(sig);
   const messageHash = sha256(hex);
-  const publicKeyBuffer = Buffer.from(publicKey, "hex");
-  return curve.verify(messageHash, sigObj, publicKeyBuffer, "hex");
+  return curve.verify(messageHash, sigObj, publicKey);
 }
