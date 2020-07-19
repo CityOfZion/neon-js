@@ -31,7 +31,7 @@ describe("Key combinations", () => {
     "%s",
     (msg: string, priKey: string, pubKey: string) => {
       const hex = str2hexstring(msg);
-      const sig = sign(hex, priKey);
+      const sig = sign(hex, priKey, 1024);
       const result = verify(hex, sig, pubKey);
       expect(result).toBe(true);
     }
@@ -45,7 +45,7 @@ describe("Different messages", () => {
     "02963fc761eb7135c4593bfc6a0af96d8588b70d8f6ef3af8549181e57772181f5";
   test.each(messages)("%s", (msg: string) => {
     const hex = str2hexstring(msg);
-    const sig = sign(hex, priKey);
+    const sig = sign(hex, priKey, 1024);
     const result = verify(hex, sig, pubKey);
     expect(result).toBe(true);
   });

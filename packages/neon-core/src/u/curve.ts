@@ -13,11 +13,27 @@ export class EllipticCurve {
     this.curve = new EC(preset);
   }
 
-  public sign(message: string, privateKey: string): EcdsaSignature {
-    return this.curve.sign(
-      Buffer.from(message, "hex"),
-      Buffer.from(privateKey, "hex")
-    );
+  public sign(
+    message: string,
+    privateKey: string,
+    k?: number | string
+  ): EcdsaSignature {
+    const signature =
+      k !== undefined
+        ? this.curve.sign(
+            Buffer.from(message, "hex"),
+            Buffer.from(privateKey, "hex"),
+            { k: (i: number) => new BN(k).divn(i + 1) } as any
+          )
+        : this.curve.sign(
+            Buffer.from(message, "hex"),
+            Buffer.from(privateKey, "hex")
+          );
+    return signature;
+    // return {
+    //   r: signature.r.toString("hex", 32),
+    //   s: signature.s.toString("hex", 32),
+    // };
   }
 
   public verify(
@@ -27,7 +43,10 @@ export class EllipticCurve {
   ): boolean {
     return this.curve.verify(
       messageHash,
-      signature,
+      {
+        r: new BN(signature.r, 16, "be"),
+        s: new BN(signature.s, 16, "be"),
+      },
       Buffer.from(publicKey, "hex"),
       "hex"
     );

@@ -18,20 +18,25 @@ function getSignatureFromHex(signatureHex: string): EcdsaSignature {
  * Generates a ECDSA signature from a hexstring using the given private key.
  * @param hex - hexstring to hash.
  * @param privateKey - hexstring or WIF format.
+ * @returns a 64 byte hexstring made from (r+s)
  */
-export function sign(hex: string, privateKey: string): string {
+export function sign(
+  hex: string,
+  privateKey: string,
+  k?: number | string
+): string {
   if (isWIF(privateKey)) {
     privateKey = getPrivateKeyFromWIF(privateKey);
   }
   const msgHash = sha256(hex);
-  const sig = curve.sign(msgHash, privateKey);
+  const sig = curve.sign(msgHash, privateKey, k);
   return sig.r.toString("hex", 32) + sig.s.toString("hex", 32);
 }
 
 /**
  * Verifies that the message, signature and signing key matches.
  * @param hex - message that was signed.
- * @param sig - ECDSA signature.
+ * @param sig - ECDSA signature in the form of a 64 byte hexstring (r+s).
  * @param publicKey - encoded/unencoded public key of the signing key.
  */
 export function verify(hex: string, sig: string, publicKey: string): boolean {
@@ -41,7 +46,7 @@ export function verify(hex: string, sig: string, publicKey: string): boolean {
   if (!isPublicKey(publicKey, true)) {
     publicKey = getPublicKeyUnencoded(publicKey);
   }
-  const sigObj = getSignatureFromHex(sig);
+  const ecdsaSignature = getSignatureFromHex(sig);
   const messageHash = sha256(hex);
-  return curve.verify(messageHash, sigObj, publicKey);
+  return curve.verify(messageHash, ecdsaSignature, publicKey);
 }
