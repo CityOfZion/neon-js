@@ -76,5 +76,48 @@ describe("EllipticCurve", () => {
         );
       }
     );
+
+    describe("signing", () => {
+      const privateKey = curveData[0][0];
+      const publicKey = curveData[0][1];
+      const msg = "123456";
+
+      test("signs and verifies successfully", () => {
+        const sig = curve.sign(msg, privateKey);
+        const verificationResult = curve.verify(msg, sig, publicKey);
+        expect(verificationResult).toBeTruthy();
+      });
+
+      test("no k provided, signature is different but verifies correctly", () => {
+        const sig1 = curve.sign(msg, privateKey);
+        const sig2 = curve.sign(msg, privateKey);
+        expect(sig1).not.toBe(sig2);
+        expect(curve.verify(msg, sig1, publicKey)).toBeTruthy();
+        expect(curve.verify(msg, sig2, publicKey)).toBeTruthy();
+      });
+
+      test("provided k makes signature deterministic", () => {
+        const sig1 = curve.sign(msg, privateKey, "123456");
+        const sig2 = curve.sign(msg, privateKey, "123456");
+        expect(sig1).toStrictEqual(sig2);
+        expect(curve.verify(msg, sig1, publicKey)).toBeTruthy();
+      });
+
+      test("k <=0 throws error", () => {
+        expect(() => curve.sign(msg, privateKey, -1)).toThrowError(
+          "k must be a positive number"
+        );
+        expect(() => curve.sign(msg, privateKey, 0)).toThrowError(
+          "k must be a positive number"
+        );
+      });
+
+      test("k >= n throws error", () => {
+        const largerThanN = "f".repeat(64);
+        expect(() => curve.sign(msg, privateKey, largerThanN)).toThrowError(
+          "k must be smaller"
+        );
+      });
+    });
   });
 });
