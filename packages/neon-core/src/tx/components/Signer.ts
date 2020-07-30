@@ -6,7 +6,7 @@ import {
 import { StringStream, num2hexstring, HexString } from "../../u";
 import { deserializeArrayOf, serializeArrayOf } from "../lib";
 
-export interface CosignerLike {
+export interface SignerLike {
   /* account scripthash in big endian */
   account: string | HexString;
   scopes: number;
@@ -14,7 +14,7 @@ export interface CosignerLike {
   allowedGroups?: (string | HexString)[];
 }
 
-export interface CosignerJson {
+export interface SignerJson {
   // Scripthash of the account (BE & Ox)
   account: string;
   // Comma-delimited flags in English
@@ -25,7 +25,7 @@ export interface CosignerJson {
   allowedGroups?: string[];
 }
 
-export class Cosigner {
+export class Signer {
   /**
    * scripthash of cosigner
    */
@@ -41,8 +41,8 @@ export class Cosigner {
    */
   public allowedGroups: HexString[];
 
-  public static fromJson(input: CosignerJson): Cosigner {
-    return new Cosigner({
+  public static fromJson(input: SignerJson): Signer {
+    return new Signer({
       account: input.account,
       scopes: parseWitnessScope(input.scopes),
       allowedContracts: input.allowedContracts ?? [],
@@ -50,7 +50,7 @@ export class Cosigner {
     });
   }
 
-  public constructor(signer: Partial<CosignerLike | Cosigner> = {}) {
+  public constructor(signer: Partial<SignerLike | Signer> = {}) {
     const {
       account = "",
       scopes = WitnessScope.Global,
@@ -89,7 +89,7 @@ export class Cosigner {
       .forEach((i) => this.allowedGroups.push(i));
   }
 
-  public static deserialize(ss: StringStream): Cosigner {
+  public static deserialize(ss: StringStream): Signer {
     const account = HexString.fromHex(ss.read(20), true);
     const scopes = parseInt(ss.read(), 16);
 
@@ -101,7 +101,7 @@ export class Cosigner {
       scopes & WitnessScope.CustomGroups
         ? deserializeArrayOf((s) => HexString.fromHex(s.read(33)), ss)
         : [];
-    return new Cosigner({ account, scopes, allowedContracts, allowedGroups });
+    return new Signer({ account, scopes, allowedContracts, allowedGroups });
   }
 
   public serialize(): string {
@@ -120,17 +120,26 @@ export class Cosigner {
     return out;
   }
 
-  public export(): CosignerLike {
-    return {
+  public export(): SignerLike {
+    const output: SignerLike = {
       account: this.account.toBigEndian(),
       scopes: this.scopes,
-      allowedContracts: [...this.allowedContracts.map((i) => i.toBigEndian())],
-      allowedGroups: [...this.allowedGroups.map((i) => i.toBigEndian())],
     };
+    if (this.scopes & WitnessScope.CustomContracts) {
+      output.allowedContracts = [
+        ...this.allowedContracts.map((i) => i.toBigEndian()),
+      ];
+    }
+    if (this.scopes & WitnessScope.CustomGroups) {
+      output.allowedGroups = [
+        ...this.allowedGroups.map((i) => i.toBigEndian()),
+      ];
+    }
+    return output;
   }
 
-  public toJson(): CosignerJson {
-    const output: CosignerJson = {
+  public toJson(): SignerJson {
+    const output: SignerJson = {
       account: "0x" + this.account.toBigEndian(),
       scopes: toString(this.scopes),
     };
@@ -148,4 +157,4 @@ export class Cosigner {
   }
 }
 
-export default Cosigner;
+export default Signer;

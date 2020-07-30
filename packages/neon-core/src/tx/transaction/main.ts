@@ -1,11 +1,5 @@
-import {
-  StringStream,
-  fixed82num,
-  ensureHex,
-  reverseHex,
-  HexString,
-} from "../../u";
-import { TransactionAttribute, Witness, Cosigner } from "../components";
+import { StringStream, fixed82num, ensureHex, reverseHex } from "../../u";
+import { TransactionAttribute, Witness, Signer } from "../components";
 import { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
 import logger from "../../logging";
@@ -31,13 +25,6 @@ export function deserializeNonce(
 ): Partial<TransactionLike> {
   const nonce = parseInt(reverseHex(ss.read(4)), 16);
   return Object.assign(tx, { nonce });
-}
-
-export function deserializeSender(
-  ss: StringStream,
-  tx: Partial<TransactionLike> = {}
-): Partial<TransactionLike> {
-  return Object.assign(tx, { sender: HexString.fromHex(ss.read(20), true) });
 }
 
 export function deserializeScript(
@@ -107,18 +94,13 @@ export function formatSender(sender: string | undefined): string {
   }
 }
 
-export function deserializeCosigners(
+export function deserializeSigners(
   ss: StringStream,
   tx: Partial<TransactionLike>
 ): Partial<TransactionLike> {
-  const cosigners = deserializeArrayOf(Cosigner.deserialize, ss);
-  if (
-    !cosigners.every(
-      (cosigner) =>
-        cosigners.indexOf(cosigner) === cosigners.lastIndexOf(cosigner)
-    )
-  ) {
-    log.warn("Cosigner should not duplicate.");
+  const signers = deserializeArrayOf(Signer.deserialize, ss);
+  if (!signers.every((s) => signers.indexOf(s) === signers.lastIndexOf(s))) {
+    log.warn("Signer should not duplicate.");
   }
-  return Object.assign(tx, { cosigners });
+  return Object.assign(tx, { signers });
 }
