@@ -23,7 +23,7 @@ export function constructMultiSigVerificationScript(
   return sb
     .emitPush(keys.length)
     .emit(OpCode.PUSHNULL)
-    .emitSysCall(InteropServiceCode.NEO_CRYPTO_ECDSACHECKMULTISIG)
+    .emitSysCall(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256R1)
     .build();
 }
 
@@ -55,10 +55,14 @@ export function getSigningThresholdFromVerificationScript(
   const checkSigInteropCode = verificationScript.slice(
     verificationScript.length - 8
   );
-  if (checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY) {
+  if (
+    checkSigInteropCode ===
+    InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
+  ) {
     return 1;
   } else if (
-    checkSigInteropCode === InteropServiceCode.NEO_CRYPTO_ECDSACHECKMULTISIG
+    checkSigInteropCode ===
+    InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256R1
   ) {
     const ss = new StringStream(verificationScript);
     const byte = parseInt(ss.peek(), 16);

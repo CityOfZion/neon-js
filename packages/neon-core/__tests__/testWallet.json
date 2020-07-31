@@ -8,13 +8,13 @@
     },
     "accounts": [
         {
-            "address": "NMPAXGtMfZ8s8rcfP9JhrYrNeZHG4xSVmd",
+            "address": "NNWAo5vdVJz1oyCuNiaTBA3amBHnWCF4Yk",
             "label": "A",
             "isdefault": false,
             "lock": false,
-            "key": "6PYWdzMKJ1tAAPFFqR3ZtWGf6EyvbzZRCMcH7346uDV1u2vBmKvMYTosR6",
+            "key": "6PYSeMMbHPpzD9jFvtytPLatcDJA1qraaKaxrkMDxxvN4XV5VZe2tdus8e",
             "contract": {
-                "script": "DCECAoqZgm7cDJfRjiK2kyNz2QjTI6p/kmVqd\u002Bwm6IYWme8LQQqQatQ=",
+                "script": "DCECAoqZgm7cDJfRjiK2kyNz2QjTI6p/kmVqd\u002Bwm6IYWme8LQZVEDXg=",
                 "parameters": [
                     {
                         "name": "signature",
@@ -23,16 +23,19 @@
                 ],
                 "deployed": false
             },
-            "extra": null
+            "extra": {
+                "WIF": "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
+                "publicKey": "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef"
+            }
         },
         {
-            "address": "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
+            "address": "NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV",
             "label": "B",
             "isdefault": false,
             "lock": false,
-            "key": "6PYLxXgqE788BiHt59NZUqyVpj5i8QxVkPNjMGnsHAfnud4oMcXHwkVbuM",
+            "key": "6PYKWKaq5Wd6vEH3f56ELyqWVPNsSaF6wftEqV2z53iuLGJUfyXnmWv3uf",
             "contract": {
-                "script": "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQQqQatQ=",
+                "script": "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQZVEDXg=",
                 "parameters": [
                     {
                         "name": "signature",
@@ -41,16 +44,19 @@
                 ],
                 "deployed": false
             },
-            "extra": null
+            "extra": {
+                "WIF": "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
+                "publicKey": "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9"
+            }
         },
         {
-            "address": "NTFAwXLGoiWwSMP5vJyZp8K4cBFwrzUs8m",
+            "address": "NTWHAzB82LRGWNuuqjVyyzpGvF3WxbbPoG",
             "label": "C",
             "isdefault": false,
             "lock": false,
-            "key": "6PYRoabFowVfTfNBCFWANiXm3Ct6oeRSMVHXQEVZChJWsrMiDAVraubp7v",
+            "key": "6PYSzKoJD7E6Do6vrPP4MfUDpCS3pw4ZWPcpPxBSkaRwRa44uEceCCGsTf",
             "contract": {
-                "script": "DCECIyzo0uIGPc4EURMYUdR0Ib/E/B2k2xFvylMCwHVkYvoLQQqQatQ=",
+                "script": "DCECIyzo0uIGPc4EURMYUdR0Ib/E/B2k2xFvylMCwHVkYvoLQZVEDXg=",
                 "parameters": [
                     {
                         "name": "signature",
@@ -59,16 +65,19 @@
                 ],
                 "deployed": false
             },
-            "extra": null
+            "extra": {
+                "WIF": "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
+                "publicKey": "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa"
+            }
         },
         {
-            "address": "NePKgynuBvFdRYAiiY1nt7q7gnn8st7E4b",
+            "address": "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV",
             "label": "origin multisig",
             "isdefault": false,
             "lock": false,
-            "key": "6PYWdzMKJ1tAAPFFqR3ZtWGf6EyvbzZRCMcH7346uDV1u2vBmKvMYTosR6",
+            "key": "6PYR6RrPk7JKXgv9ofCBtebsKSkUMMHJ1pk1tW235wTqVh4w6xahehZF9N",
             "contract": {
-                "script": "EQwhAgKKmYJu3AyX0Y4itpMjc9kI0yOqf5JlanfsJuiGFpnvEQtBMHOzuw==",
+                "script": "EQwhAxGKK3li\u002BgIm\u002BjWs9dIkhVtpHH6peNGv4sU4Yx1fe\u002BheEQtBE43vrw==",
                 "parameters": [
                     {
                         "name": "parameter0",
@@ -78,17 +87,17 @@
                 "deployed": false
             },
             "extra": {
-                "description": " This is the origin address which all the NEO/GAS will start. This account is a multisig account of only 1 key. "
+                "publicKey": "03118a2b7962fa0226fa35acf5d224855b691c7ea978d1afe2c538631d5f7be85e"
             }
         },
         {
-            "address": "NPAMBaHW6RU9Kn3PhGg7WxjMEJNdpukdUo",
+            "address": "NZcX6tJCGQreJbNZXewMC9TcKaa5LRsNJx",
             "label": "origin base",
             "isdefault": false,
             "lock": false,
-            "key": "6PYSjL4R5tRioqmERJK1F4jpgNHv45VeWDYDAcUs8DdL86pahDn2AHT276",
+            "key": "6PYR6RrPk7JKXgv9ofCBtebsKSkUMMHJ1pk1tW235wTqVh4w6xahehZF9N",
             "contract": {
-                "script": "DCEDEYoreWL6Aib6Naz10iSFW2kcfql40a/ixThjHV976F4LQQqQatQ=",
+                "script": "DCEDEYoreWL6Aib6Naz10iSFW2kcfql40a/ixThjHV976F4LQZVEDXg=",
                 "parameters": [
                     {
                         "name": "signature",
@@ -97,11 +106,13 @@
                 ],
                 "deployed": false
             },
-            "extra": null
+            "extra": {
+                "publicKey": "03118a2b7962fa0226fa35acf5d224855b691c7ea978d1afe2c538631d5f7be85e"
+            }
         }
     ],
     "extra": {
         "password": "wallet",
-        "description": "seed wallet for solonet 3.0.0-preview2-00"
+        "description": "seed wallet for solonet 3.0.0-preview3"
     }
 }

@@ -7,8 +7,14 @@ export interface InteropServicePriceParam {
 
 const GAS_PER_BYTE = 100000e-8;
 const fixedPrices = {
-  [InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY]: 1000000e-8,
+  [InteropServiceCode.NEO_CRYPTO_RIPEMD160]: 1000000e-8,
+  [InteropServiceCode.NEO_CRYPTO_SHA256]: 1000000e-8,
+  [InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256K1]: 1000000e-8,
+  [InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1]: 1000000e-8,
+  [InteropServiceCode.NEO_NATIVE_CALL]: 0e-8,
   [InteropServiceCode.NEO_NATIVE_DEPLOY]: 0e-8,
+  [InteropServiceCode.SYSTEM_BINARY_BASE64DECODE]: 100000e-8,
+  [InteropServiceCode.SYSTEM_BINARY_BASE64ENCODE]: 100000e-8,
   [InteropServiceCode.SYSTEM_BINARY_DESERIALIZE]: 500000e-8,
   [InteropServiceCode.SYSTEM_BINARY_SERIALIZE]: 100000e-8,
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETBLOCK]: 2500000e-8,
@@ -17,6 +23,10 @@ const fixedPrices = {
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETTRANSACTION]: 1000000e-8,
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETTRANSACTIONFROMBLOCK]: 1000000e-8,
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETTRANSACTIONHEIGHT]: 1000000e-8,
+  [InteropServiceCode.SYSTEM_CALLBACK_CREATE]: 400e-8,
+  [InteropServiceCode.SYSTEM_CALLBACK_CREATEFROMMETHOD]: 1000000e-8,
+  [InteropServiceCode.SYSTEM_CALLBACK_CREATEFROMSYSCALL]: 400e-8,
+  [InteropServiceCode.SYSTEM_CALLBACK_INVOKE]: 1000000e-8,
   [InteropServiceCode.SYSTEM_CONTRACT_CALL]: 1000000e-8,
   [InteropServiceCode.SYSTEM_CONTRACT_CALLEX]: 1000000e-8,
   [InteropServiceCode.SYSTEM_CONTRACT_CREATESTANDARDACCOUNT]: 10000e-8,
@@ -59,7 +69,9 @@ function getStoragePrice(size: number): number {
 }
 
 function getCheckMultiSigPrice(size: number): number {
-  return size * fixedPrices[InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY];
+  return (
+    size * fixedPrices[InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1]
+  );
 }
 
 type fixedPriceInteropServiceCode = keyof typeof fixedPrices;
@@ -87,7 +99,8 @@ export function getInteropServicePrice(
     );
   }
   switch (service) {
-    case InteropServiceCode.NEO_CRYPTO_ECDSACHECKMULTISIG:
+    case InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256R1:
+    case InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256K1:
       return getCheckMultiSigPrice(param.size);
     case InteropServiceCode.SYSTEM_STORAGE_PUT:
     case InteropServiceCode.SYSTEM_STORAGE_PUTEX:

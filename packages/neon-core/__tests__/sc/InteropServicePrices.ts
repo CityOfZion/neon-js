@@ -3,7 +3,9 @@ import { getInteropServicePrice, InteropServiceCode } from "../../src/sc";
 describe("getInteropServicePrice", () => {
   test("Fixed Price Service", () => {
     expect(
-      getInteropServicePrice(InteropServiceCode.NEO_CRYPTO_ECDSAVERIFY)
+      getInteropServicePrice(
+        InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
+      )
     ).toBe(1000000e-8);
   });
 

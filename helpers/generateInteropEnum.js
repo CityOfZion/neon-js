@@ -3,6 +3,8 @@ const sc = require("@cityofzion/neon-core").sc;
 const interopMethods = {
   "System.Binary.Serialize": 100000,
   "System.Binary.Deserialize": 500000,
+  "System.Binary.Base64Encode": 100000,
+  "System.Binary.Base64Decode": 100000,
 
   "System.Blockchain.GetHeight": 400,
   "System.Blockchain.GetBlock": 2500000,
@@ -10,6 +12,11 @@ const interopMethods = {
   "System.Blockchain.GetTransactionHeight": 1000000,
   "System.Blockchain.GetTransactionFromBlock": 1000000,
   "System.Blockchain.GetContract": 1000000,
+
+  "System.Callback.Create": 400,
+  "System.Callback.CreateFromMethod": 1000000,
+  "System.Callback.CreateFromSyscall": 400,
+  "System.Callback.Invoke": 1000000,
 
   "System.Contract.Create": -1,
   "System.Contract.Update": -1,
@@ -20,8 +27,12 @@ const interopMethods = {
   "System.Contract.GetCallFlags": 30000,
   "System.Contract.CreateStandardAccount": 10000,
 
-  "Neo.Crypto.ECDsaVerify": 1000000,
-  "Neo.Crypto.ECDsaCheckMultiSig": -1,
+  "Neo.Crypto.RIPEMD160": 1000000,
+  "Neo.Crypto.SHA256": 1000000,
+  "Neo.Crypto.VerifyWithECDsaSecp256r1": 1000000,
+  "Neo.Crypto.VerifyWithECDsaSecp256k1": 1000000,
+  "Neo.Crypto.CheckMultisigWithECDsaSecp256r1": -1,
+  "Neo.Crypto.CheckMultisigWithECDsaSecp256k1": -1,
 
   "System.Enumerator.Create": 400,
   "System.Enumerator.Next": 1000000,
@@ -38,6 +49,7 @@ const interopMethods = {
   "System.Json.Deserialize": 500000,
 
   "Neo.Native.Deploy": 0,
+  "Neo.Native.Call": 0,
 
   "System.Runtime.Platform": 250,
   "System.Runtime.GetTrigger": 250,
@@ -60,14 +72,14 @@ const interopMethods = {
   "System.Storage.Find": 1000000,
   "System.Storage.Put": -1,
   "System.Storage.PutEx": -1,
-  "System.Storage.Delete": -1
+  "System.Storage.Delete": -1,
 };
 
 const { opcodes, prices } = Object.keys(interopMethods)
-  .map(k => [
+  .map((k) => [
     k.toUpperCase().replace(/\./g, "_"),
     sc.generateInteropServiceCode(k),
-    interopMethods[k]
+    interopMethods[k],
   ])
   .reduce(
     (prev, curr) => {
@@ -80,13 +92,13 @@ const { opcodes, prices } = Object.keys(interopMethods)
 
 Object.entries(opcodes)
   .sort()
-  .forEach(i => console.log(`${i[0]} = "${i[1]}",`));
+  .forEach((i) => console.log(`${i[0]} = "${i[1]}",`));
 
 console.log("\n\n ---PRICES---");
 
 Object.entries(prices)
   .sort()
-  .forEach(i => {
+  .forEach((i) => {
     if (i[1] !== -1) {
       console.log(`[InteropServiceCode.${i[0]}] : ${i[1]}e-8,`);
     }

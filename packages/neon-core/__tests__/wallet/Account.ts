@@ -17,12 +17,12 @@ describe("constructor", () => {
       "publicKeyUnencoded",
       "041d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c94617303f7408d9abfedfb6fbb00dd07e3e7735d918bbea7a7e2c1895ea1bc9b9",
     ],
-    ["scriptHash", "dd05929573e68014604a742c53d3d4e5cea5e539"],
-    ["address", "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye"],
+    ["scriptHash", "5461c33e9bbc7de7076754540ba9e62b255ea9fc"],
+    ["address", "NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV"],
   ])("%s", (msg: string, data: string) => {
     const result = new Account(data);
     expect(result instanceof Account).toBeTruthy();
-    expect(result.address).toBe("NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye");
+    expect(result.address).toBe("NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV");
   });
 
   test("empty", () => {
@@ -35,13 +35,13 @@ describe("constructor", () => {
 
   test("AccountJSON", () => {
     const testObject = {
-      address: "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
+      address: "NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV",
       label: "addressB",
       isdefault: false,
       lock: false,
-      key: "6PYLxXgqCV9CAc4RV1M8LfjnzXwusBhiBGcyWrjKaiAiixxuZ9W1S4biVd",
+      key: "6PYKWKaq5Wd6vEH3f56ELyqWVPNsSaF6wftEqV2z53iuLGJUfyXnmWv3uf",
       contract: {
-        script: "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQQqQatQ=",
+        script: "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQZVEDXg==",
         parameters: [{ name: "signature", type: "Signature" }],
         deployed: false,
       },
@@ -57,13 +57,13 @@ describe("constructor", () => {
 describe("export", () => {
   test("AccountJSON", () => {
     const testObject = {
-      address: "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
+      address: "NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV",
       label: "addressB",
       isdefault: false,
       lock: false,
-      key: "6PYLxXgqCV9CAc4RV1M8LfjnzXwusBhiBGcyWrjKaiAiixxuZ9W1S4biVd",
+      key: "6PYKWKaq5Wd6vEH3f56ELyqWVPNsSaF6wftEqV2z53iuLGJUfyXnmWv3uf",
       contract: {
-        script: "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQQqQatQ=",
+        script: "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQZVEDXg==",
         parameters: [{ name: "signature", type: "Signature" }],
         deployed: false,
       },
