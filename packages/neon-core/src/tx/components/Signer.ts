@@ -20,9 +20,9 @@ export interface SignerJson {
   // Comma-delimited flags in English
   scopes: string;
   // Array of scripthashes (BE & Ox)
-  allowedContracts?: string[];
+  allowedcontracts?: string[];
   // Array of public keys (BE)
-  allowedGroups?: string[];
+  allowedgroups?: string[];
 }
 
 export class Signer {
@@ -45,8 +45,8 @@ export class Signer {
     return new Signer({
       account: input.account,
       scopes: parseWitnessScope(input.scopes),
-      allowedContracts: input.allowedContracts ?? [],
-      allowedGroups: input.allowedGroups ?? [],
+      allowedContracts: input.allowedcontracts ?? [],
+      allowedGroups: input.allowedgroups ?? [],
     });
   }
 
@@ -144,12 +144,12 @@ export class Signer {
       scopes: toString(this.scopes),
     };
     if (this.scopes & WitnessScope.CustomContracts) {
-      output.allowedContracts = [
+      output.allowedcontracts = [
         ...this.allowedContracts.map((i) => "0x" + i.toBigEndian()),
       ];
     }
     if (this.scopes & WitnessScope.CustomGroups) {
-      output.allowedGroups = [
+      output.allowedgroups = [
         ...this.allowedGroups.map((i) => i.toBigEndian()),
       ];
     }

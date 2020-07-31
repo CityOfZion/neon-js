@@ -10,7 +10,7 @@
         {
             "address": "NMPAXGtMfZ8s8rcfP9JhrYrNeZHG4xSVmd",
             "label": "A",
-            "isDefault": false,
+            "isdefault": false,
             "lock": false,
             "key": "6PYWdzMKJ1tAAPFFqR3ZtWGf6EyvbzZRCMcH7346uDV1u2vBmKvMYTosR6",
             "contract": {
@@ -28,7 +28,7 @@
         {
             "address": "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
             "label": "B",
-            "isDefault": false,
+            "isdefault": false,
             "lock": false,
             "key": "6PYLxXgqE788BiHt59NZUqyVpj5i8QxVkPNjMGnsHAfnud4oMcXHwkVbuM",
             "contract": {
@@ -46,7 +46,7 @@
         {
             "address": "NTFAwXLGoiWwSMP5vJyZp8K4cBFwrzUs8m",
             "label": "C",
-            "isDefault": false,
+            "isdefault": false,
             "lock": false,
             "key": "6PYRoabFowVfTfNBCFWANiXm3Ct6oeRSMVHXQEVZChJWsrMiDAVraubp7v",
             "contract": {
@@ -64,7 +64,7 @@
         {
             "address": "NePKgynuBvFdRYAiiY1nt7q7gnn8st7E4b",
             "label": "origin multisig",
-            "isDefault": false,
+            "isdefault": false,
             "lock": false,
             "key": "6PYWdzMKJ1tAAPFFqR3ZtWGf6EyvbzZRCMcH7346uDV1u2vBmKvMYTosR6",
             "contract": {
@@ -84,7 +84,7 @@
         {
             "address": "NPAMBaHW6RU9Kn3PhGg7WxjMEJNdpukdUo",
             "label": "origin base",
-            "isDefault": false,
+            "isdefault": false,
             "lock": false,
             "key": "6PYSjL4R5tRioqmERJK1F4jpgNHv45VeWDYDAcUs8DdL86pahDn2AHT276",
             "contract": {

@@ -26,7 +26,7 @@ const data: [string, string, SignerJson][] = [
     {
       account: "0x0000000000000000000000000000000000000001",
       scopes: "CustomContracts",
-      allowedContracts: ["0x0000000000000000000000000000000000000002"],
+      allowedcontracts: ["0x0000000000000000000000000000000000000002"],
     },
   ],
   [
@@ -35,7 +35,7 @@ const data: [string, string, SignerJson][] = [
     {
       account: "0x0000000000000000000000000000000000000001",
       scopes: "CustomGroups",
-      allowedGroups: [
+      allowedgroups: [
         "03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c",
       ],
     },

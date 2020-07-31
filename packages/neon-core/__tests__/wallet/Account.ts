@@ -37,7 +37,7 @@ describe("constructor", () => {
     const testObject = {
       address: "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
       label: "addressB",
-      isDefault: false,
+      isdefault: false,
       lock: false,
       key: "6PYLxXgqCV9CAc4RV1M8LfjnzXwusBhiBGcyWrjKaiAiixxuZ9W1S4biVd",
       contract: {
@@ -59,7 +59,7 @@ describe("export", () => {
     const testObject = {
       address: "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
       label: "addressB",
-      isDefault: false,
+      isdefault: false,
       lock: false,
       key: "6PYLxXgqCV9CAc4RV1M8LfjnzXwusBhiBGcyWrjKaiAiixxuZ9W1S4biVd",
       contract: {

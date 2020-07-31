@@ -9,7 +9,7 @@ const WALLET_JSON = {
     {
       address: "NMPAXGtMfZ8s8rcfP9JhrYrNeZHG4xSVmd",
       label: null,
-      isDefault: false,
+      isdefault: false,
       lock: false,
       key: "6PYWdzMKHiZDc1ncwxhZJadWidj2gzca5AMiGHNKEVjsWkqJyH3fwhiSJs",
       contract: {
@@ -28,7 +28,7 @@ const WALLET_JSON = {
     {
       address: "NRC6oteucWYXq7aASD6YWe5rNeXAw1ehye",
       label: null,
-      isDefault: false,
+      isdefault: false,
       lock: false,
       key: "6PYLxXgqCV9CAc4RV1M8LfjnzXwusBhiBGcyWrjKaiAiixxuZ9W1S4biVd",
       contract: {
@@ -47,7 +47,7 @@ const WALLET_JSON = {
     {
       address: "NTFAwXLGoiWwSMP5vJyZp8K4cBFwrzUs8m",
       label: null,
-      isDefault: false,
+      isdefault: false,
       lock: false,
       key: "6PYRoabFnnytJHdHDr6pdAaXvPsTfN2bbfzm2ff6ZTirRAXVWBBxPcKxcV",
       contract: {

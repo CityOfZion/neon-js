@@ -41,7 +41,7 @@ export class Wallet {
 
   /**
    * Returns the default Account according to the following rules:
-   * 1. First Account where isDefault is true.
+   * 1. First Account where isdefault is true.
    * 2. First Account with a decrypted private key.
    * 3. First Account with an encrypted private key.
    * 4. First Account in the array.
