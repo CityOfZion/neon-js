@@ -17,7 +17,7 @@ export interface BlockHeaderJson {
 }
 
 export interface BlockJson extends BlockHeaderJson {
-  consensus_data: {
+  consensusdata: {
     nonce: string;
     primary: number;
   };

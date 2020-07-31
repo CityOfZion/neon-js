@@ -22,7 +22,7 @@ const inspect = util.inspect.custom;
 export interface AccountJSON {
   address: string;
   label: string;
-  isDefault: boolean;
+  isdefault: boolean;
   lock: boolean;
   key: string;
   contract?: {
@@ -111,7 +111,7 @@ export class Account implements NeonObject<AccountJSON> {
       this._encrypted = str.key;
       this._address = str.address;
       this.label = str.label ?? "";
-      this.isDefault = str.isDefault ?? false;
+      this.isDefault = str.isdefault ?? false;
       this.lock = str.lock ?? false;
       this.contract =
         str.contract ?? Object.assign({}, DEFAULT_ACCOUNT_CONTRACT);
@@ -325,7 +325,7 @@ export class Account implements NeonObject<AccountJSON> {
     return {
       address: this.address,
       label: this.label,
-      isDefault: this.isDefault,
+      isdefault: this.isDefault,
       lock: this.lock,
       key,
       contract: this.contract,

@@ -55,9 +55,9 @@ export interface TransactionJson {
   version: number;
   nonce: number;
   sender: string;
-  sys_fee: string;
-  net_fee: string;
-  valid_until_block: number;
+  sysfee: string;
+  netfee: string;
+  validuntilblock: number;
   signers: SignerJson[];
   attributes: TransactionAttributeJson[];
   // base64-encoded
@@ -125,9 +125,9 @@ export class Transaction implements NeonObject<TransactionLike> {
     return new Transaction({
       version: input.version,
       nonce: input.nonce,
-      systemFee: new Fixed8(input.sys_fee).div(100000000),
-      networkFee: new Fixed8(input.net_fee).div(100000000),
-      validUntilBlock: input.valid_until_block,
+      systemFee: new Fixed8(input.sysfee).div(100000000),
+      networkFee: new Fixed8(input.netfee).div(100000000),
+      validUntilBlock: input.validuntilblock,
       attributes: input.attributes.map((a) => TransactionAttribute.fromJson(a)),
       signers: input.signers.map((c) => Signer.fromJson(c)),
       script: HexString.fromBase64(input.script),
@@ -333,9 +333,9 @@ export class Transaction implements NeonObject<TransactionLike> {
       version: this.version,
       nonce: this.nonce,
       sender: getAddressFromScriptHash(this.sender.toBigEndian()),
-      sys_fee: this.systemFee.toRawNumber().toString(),
-      net_fee: this.networkFee.toRawNumber().toString(),
-      valid_until_block: this.validUntilBlock,
+      sysfee: this.systemFee.toRawNumber().toString(),
+      netfee: this.networkFee.toRawNumber().toString(),
+      validuntilblock: this.validUntilBlock,
       attributes: this.attributes.map((a) => a.toJson()),
       signers: this.signers.map((c) => c.toJson()),
       script: this.script.toBase64(),
