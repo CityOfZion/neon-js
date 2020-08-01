@@ -3,11 +3,7 @@
  * The execution in vm of a script is kind of opaque, user could add scope on his signature to avoid abuse of signature
  */
 export enum WitnessScope {
-  /**
-   * Global allows this witness in all contexts (default Neo2 behavior)
-   * This cannot be combined with other flags
-   */
-  Global = 0,
+  FeeOnly = 0,
 
   /**
    * CalledByEntry means that this condition must hold: EntryScriptHash == CallingScriptHash
@@ -25,13 +21,19 @@ export enum WitnessScope {
    * Custom pubkey for group members, group can be found in contract manifest
    */
   CustomGroups = 1 << 5,
+
+  /**
+   * Global allows this witness in all contexts (default Neo2 behavior)
+   * This cannot be combined with other flags
+   */
+  Global = 1 << 7,
 }
 
 export function parse(stringFlags: string): WitnessScope {
   const flags = stringFlags.split(/\,/g);
   return flags.reduce(
     (p, c) => p | WitnessScope[c.trim() as keyof typeof WitnessScope],
-    WitnessScope.Global
+    WitnessScope.FeeOnly
   );
 }
 
@@ -42,7 +44,7 @@ function getEnums(): WitnessScope[] {
 }
 
 export function toString(flags: WitnessScope): string {
-  if (flags === WitnessScope.Global) {
+  if (flags === WitnessScope.FeeOnly) {
     return "Global";
   }
   return getEnums()
