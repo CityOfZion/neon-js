@@ -75,7 +75,7 @@ describe("setter", () => {
     expect(transaction.signers.map((s) => s.export())).toEqual([
       {
         account: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
-        scopes: 0,
+        scopes: 128,
       },
       {
         account: "bd8bf7f95e33415fc242c48d143694a729172d9f",
