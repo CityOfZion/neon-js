@@ -10,7 +10,10 @@ const data: [string, string, SignerJson][] = [
   [
     "default",
     "000000000000000000000000000000000000000000",
-    { account: "0x0000000000000000000000000000000000000000", scopes: "Global" },
+    {
+      account: "0x0000000000000000000000000000000000000000",
+      scopes: "FeeOnly",
+    },
   ],
   [
     "simple",
@@ -18,6 +21,14 @@ const data: [string, string, SignerJson][] = [
     {
       account: "0x0000000000000000000000000000000000000001",
       scopes: "CalledByEntry",
+    },
+  ],
+  [
+    "Global",
+    "010000000000000000000000000000000000000080",
+    {
+      account: "0x0000000000000000000000000000000000000001",
+      scopes: "Global",
     },
   ],
   [
