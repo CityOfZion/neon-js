@@ -45,7 +45,7 @@ function getEnums(): WitnessScope[] {
 
 export function toString(flags: WitnessScope): string {
   if (flags === WitnessScope.FeeOnly) {
-    return "Global";
+    return "FeeOnly";
   }
   return getEnums()
     .filter((f) => flags & f)
