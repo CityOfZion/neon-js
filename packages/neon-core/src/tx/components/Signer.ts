@@ -58,7 +58,8 @@ export class Signer {
       allowedGroups = [],
     } = signer;
     this.account = HexString.fromHex(account);
-    this.scopes = scopes & 0xff;
+    this.scopes =
+      (typeof scopes === "string" ? parseWitnessScope(scopes) : scopes) & 0xff;
     this.allowedContracts = allowedContracts.map((i) => HexString.fromHex(i));
     this.allowedGroups = allowedGroups.map((i) => HexString.fromHex(i));
   }
