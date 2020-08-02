@@ -7,15 +7,15 @@ export const MAGIC_NUMBER = {
 
 export const NATIVE_CONTRACTS: { [key: string]: string } = {
   NEO: "NEO",
-  "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789": "NEO",
+  de5f57d430d3dece511cf975a8d37848cb9e0525: "NEO",
   GAS: "GAS",
-  "8c23f196d8a1bfd103a9dcb1f9ccf0c611377d3b": "GAS",
+  "668e0c1f9d7b70a99dd9e06eadd4c784d641afbc": "GAS",
   POLICY: "3209d09120465bf181ced70693b897ec6ea4619a",
 };
 
 export const ASSET_ID: { [key: string]: string } = {
-  NEO: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
-  GAS: "8c23f196d8a1bfd103a9dcb1f9ccf0c611377d3b",
+  NEO: "de5f57d430d3dece511cf975a8d37848cb9e0525",
+  GAS: "668e0c1f9d7b70a99dd9e06eadd4c784d641afbc",
 };
 
 export const ASSET_TYPE: { [key: string]: number } = {

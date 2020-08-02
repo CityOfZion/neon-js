@@ -4,6 +4,7 @@ import RPCClient from "../../src/rpc/RPCClient";
 import { DEFAULT_RPC } from "../../src/consts";
 import { ContractManifest } from "../../src/sc";
 import Query from "../../src/rpc/Query";
+import { Signer, WitnessScope } from "../../src/tx";
 
 jest.mock("axios");
 const Axios = mocked(_Axios, true);
@@ -500,7 +501,7 @@ describe("RPC Methods", () => {
 
   describe("getVersion", () => {
     test("success", async () => {
-      const expected = "3.0.0-preview2-00";
+      const expected = "3.0.0-preview3";
       Axios.post.mockImplementationOnce(async (url, data) => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
@@ -512,10 +513,10 @@ describe("RPC Methods", () => {
             jsonrpc: "2.0",
             id: data.id,
             result: {
-              tcp_port: 20333,
-              ws_port: 20334,
+              tcpport: 20333,
+              wsport: 20334,
               nonce: 288566725,
-              user_agent: "/Neo:3.0.0-preview2-00/",
+              useragent: "/Neo:3.0.0-preview3/",
             },
           },
         };
@@ -538,7 +539,12 @@ describe("RPC Methods", () => {
             "hash",
             "method",
             [1, "2", randomObj],
-            ["abcdabcdabcdabcdabcd"],
+            [
+              {
+                account: "0x" + "0".repeat(20),
+                scopes: "Global",
+              },
+            ],
           ],
         });
         return {
@@ -554,7 +560,12 @@ describe("RPC Methods", () => {
         "hash",
         "method",
         [1, "2", randomObj],
-        ["abcdabcdabcdabcdabcd"]
+        [
+          new Signer({
+            account: "0".repeat(20),
+            scopes: WitnessScope.Global,
+          }),
+        ]
       );
       expect(result).toEqual(expected);
     });
@@ -567,7 +578,15 @@ describe("RPC Methods", () => {
         expect(url).toEqual("testUrl");
         expect(data).toMatchObject({
           method: "invokescript",
-          params: ["script", ["abcdabcdabcdabcdabcd"]],
+          params: [
+            "script",
+            [
+              {
+                account: "0x" + "0".repeat(20),
+                scopes: "Global",
+              },
+            ],
+          ],
         });
         return {
           data: {
@@ -579,7 +598,10 @@ describe("RPC Methods", () => {
       });
 
       const result = await client.invokeScript("script", [
-        "abcdabcdabcdabcdabcd",
+        new Signer({
+          account: "0".repeat(20),
+          scopes: WitnessScope.Global,
+        }),
       ]);
       expect(result).toEqual(expected);
     });

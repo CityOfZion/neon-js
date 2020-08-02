@@ -9,7 +9,7 @@ import { deserializeArrayOf, serializeArrayOf } from "../lib";
 export interface SignerLike {
   /* account scripthash in big endian */
   account: string | HexString;
-  scopes: number;
+  scopes: number | string | WitnessScope;
   allowedContracts?: (string | HexString)[];
   allowedGroups?: (string | HexString)[];
 }
@@ -58,7 +58,8 @@ export class Signer {
       allowedGroups = [],
     } = signer;
     this.account = HexString.fromHex(account);
-    this.scopes = scopes & 0xff;
+    this.scopes =
+      (typeof scopes === "string" ? parseWitnessScope(scopes) : scopes) & 0xff;
     this.allowedContracts = allowedContracts.map((i) => HexString.fromHex(i));
     this.allowedGroups = allowedGroups.map((i) => HexString.fromHex(i));
   }

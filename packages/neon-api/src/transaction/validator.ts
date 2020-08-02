@@ -219,7 +219,7 @@ export class TransactionValidator {
     const { script } = this.transaction;
     const {
       state,
-      gas_consumed: gasConsumed,
+      gasconsumed: gasConsumed,
     } = await this.rpcClient.invokeScript(script.toBigEndian());
 
     if (state === "FAULT") {

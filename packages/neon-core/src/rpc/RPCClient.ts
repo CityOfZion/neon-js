@@ -2,7 +2,7 @@ import Axios, { AxiosRequestConfig } from "axios";
 import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from "../consts";
 import logger from "../logging";
 import { timeout } from "../settings";
-import { Transaction } from "../tx";
+import { Transaction, Signer, SignerJson } from "../tx";
 import {
   Query,
   CliPlugin,
@@ -298,8 +298,8 @@ export class RPCClient {
   public async getVersion(): Promise<string> {
     try {
       const response = await this.execute(Query.getVersion());
-      if (response?.user_agent) {
-        const useragent = response.user_agent;
+      if (response?.useragent) {
+        const useragent = response.useragent;
         const responseLength = useragent.length;
         const strippedResponse = useragent.substring(1, responseLength - 1);
         this.version = strippedResponse.split(":")[1];
@@ -334,10 +334,10 @@ export class RPCClient {
     scriptHash: string,
     operation: string,
     params: unknown[] = [],
-    checkedWitnessHashes: string[] = []
+    signers: (Signer | SignerJson)[] = []
   ): Promise<InvokeResult> {
     return await this.execute(
-      Query.invokeFunction(scriptHash, operation, params, checkedWitnessHashes)
+      Query.invokeFunction(scriptHash, operation, params, signers)
     );
   }
 
@@ -346,9 +346,9 @@ export class RPCClient {
    */
   public async invokeScript(
     script: string,
-    checkedWitnessHashes: string[] = []
+    signers: (Signer | SignerJson)[] = []
   ): Promise<InvokeResult> {
-    return await this.execute(Query.invokeScript(script, checkedWitnessHashes));
+    return await this.execute(Query.invokeScript(script, signers));
   }
 
   /**
