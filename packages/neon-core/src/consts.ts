@@ -7,7 +7,7 @@ export const MAGIC_NUMBER = {
 
 export const NATIVE_CONTRACTS: { [key: string]: string } = {
   NEO: "NEO",
-  "de5f57d430d3dece511cf975a8d37848cb9e0525": "NEO",
+  de5f57d430d3dece511cf975a8d37848cb9e0525: "NEO",
   GAS: "GAS",
   "668e0c1f9d7b70a99dd9e06eadd4c784d641afbc": "GAS",
   POLICY: "3209d09120465bf181ced70693b897ec6ea4619a",
