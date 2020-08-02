@@ -1,5 +1,5 @@
 import { DEFAULT_REQ } from "../consts";
-import { Transaction, TransactionJson } from "../tx";
+import { Transaction, TransactionJson, Signer, SignerJson } from "../tx";
 import { ContractManifestLike, StackItemLike } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 
@@ -32,8 +32,9 @@ export interface InvokeResult {
   /** State of VM on exit. HALT means a successful exit while FAULT means exit with error. */
   state: "HALT" | "FAULT";
   /** Amount of gas consumed up to the point of stopping in the VM. If state is FAULT, this value is not representative of the amount of gas it will consume if it somehow succeeds on the blockchain. */
-  gas_consumed: string;
+  gasconsumed: string;
   stack: StackItemLike[];
+  tx?: unknown;
 }
 
 export interface GetContractStateResult {
@@ -66,10 +67,10 @@ export interface GetRawTransactionResult extends TransactionJson {
 }
 
 export interface GetVersionResult {
-  tcp_port: number;
-  ws_port: number;
+  tcpport: number;
+  wsport: number;
   nonce: number;
-  user_agent: string;
+  useragent: string;
 }
 
 export interface NodePeer {
@@ -302,32 +303,40 @@ export class Query<TParams extends unknown[], TResponse> {
    * @param scriptHash - hash of contract to test.
    * @param operation - name of operation to call (first argument)
    * @param params - parameters to pass (second argument)
-   * @param checkedWitnessHashes - scripthashes of witnesses that should sign the transaction containing this script.
+   * @param signers - scripthashes of witnesses that should sign the transaction containing this script.
    */
   public static invokeFunction(
     scriptHash: string,
     operation: string,
     params: unknown[] = [],
-    checkedWitnessHashes: string[] = []
-  ): Query<[string, string, unknown[], string[]], InvokeResult> {
+    signers: (Signer | SignerJson)[] = []
+  ): Query<[string, string, unknown[], SignerJson[]], InvokeResult> {
     return new Query({
       method: "invokefunction",
-      params: [scriptHash, operation, params, checkedWitnessHashes],
+      params: [
+        scriptHash,
+        operation,
+        params,
+        signers.map((s) => (s instanceof Signer ? s.toJson() : s)),
+      ],
     });
   }
 
   /**
    * This Query runs the specific script through the VM.
    * @param script -VM script as a hexstring.
-   * @param checkedWitnessHashes - scripthashes of witnesses that should sign the transaction containing this script.
+   * @param signers - scripthashes of witnesses that should sign the transaction containing this script.
    */
   public static invokeScript(
     script: string,
-    checkedWitnessHashes: string[] = []
-  ): Query<[string, string[]], InvokeResult> {
+    signers: (Signer | SignerJson)[] = []
+  ): Query<[string, SignerJson[]], InvokeResult> {
     return new Query({
       method: "invokescript",
-      params: [script, checkedWitnessHashes],
+      params: [
+        script,
+        signers.map((s) => (s instanceof Signer ? s.toJson() : s)),
+      ],
     });
   }
 

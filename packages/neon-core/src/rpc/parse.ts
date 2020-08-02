@@ -1,19 +1,10 @@
 import { StackItemLike } from "../sc";
 import { Fixed8, hexstring2str } from "../u";
-
-/**
- * RPC Response from test invokes
- */
-export interface RPCVMResponse {
-  script: string;
-  state: "HALT, BREAK" | "FAULT, BREAK" | "HALT" | "FAULT";
-  gas_consumed: string;
-  stack: StackItemLike[];
-}
+import { InvokeResult } from "./Query";
 
 export type StackItemParser = (item: StackItemLike) => unknown;
 
-export type VMResultParser = (result: RPCVMResponse) => unknown[];
+export type VMResultParser = (result: InvokeResult) => unknown[];
 
 /**
  * Builds a parser to parse the results of the stack.
@@ -21,7 +12,7 @@ export type VMResultParser = (result: RPCVMResponse) => unknown[];
  * @returns parser function
  */
 export function buildParser(...args: StackItemParser[]): VMResultParser {
-  return (result: RPCVMResponse): unknown[] => {
+  return (result: InvokeResult): unknown[] => {
     if (result.stack.length !== args.length) {
       throw new Error(
         `Wrong number of items to parse! Expected ${args.length} but got ${result.stack.length}!`
@@ -65,7 +56,7 @@ export function Fixed8Parser(item: StackItemLike): Fixed8 {
  * @param res - RPC Response
  * @returns Array of results
  */
-export function SimpleParser(res: RPCVMResponse): unknown[] {
+export function SimpleParser(res: InvokeResult): unknown[] {
   return res.stack.map((item) => {
     switch (item.type) {
       case "ByteArray":

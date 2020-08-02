@@ -1,8 +1,9 @@
 import { rpc } from "../../src/index";
 import { ContractParam, createScript, ScriptBuilder } from "../../src/sc";
-import { Transaction, WitnessScope } from "../../src/tx";
+import { Transaction, WitnessScope, Signer } from "../../src/tx";
 import { Wallet } from "../../src/wallet";
 import { HexString } from "../../src/u";
+import { ASSET_ID } from "../../src/consts";
 import testWallet from "../../__tests__/testWallet.json";
 
 const wallet = new Wallet(testWallet);
@@ -21,7 +22,7 @@ let client: rpc.RPCClient;
 const address = wallet.accounts[0].address;
 
 // NEO contract hash. Should be same across TestNet or LocalNet.
-const contractHash = "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789";
+const contractHash = ASSET_ID["NEO"];
 let txid: string;
 let blockhash: string;
 
@@ -61,7 +62,7 @@ beforeAll(async () => {
   txid = firstBlock.tx[0].hash;
 }, 20000);
 
-describe.skip("RPC Methods", () => {
+describe("RPC Methods", () => {
   describe("getBlock", () => {
     test("height as index, verbose = 0", async () => {
       const result = await client.getBlock(0);
@@ -81,7 +82,7 @@ describe.skip("RPC Methods", () => {
           "index",
           "nextconsensus",
           "witnesses",
-          "consensus_data",
+          "consensusdata",
           "tx",
           "confirmations",
           "nextblockhash",
@@ -242,12 +243,18 @@ describe.skip("RPC Methods", () => {
       const result = await client.invokeFunction(contractHash, "name");
 
       expect(Object.keys(result)).toEqual(
-        expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
+        expect.arrayContaining([
+          "script",
+          "state",
+          "gasconsumed",
+          "stack",
+          "tx",
+        ])
       );
       expect(result.state).toContain("HALT");
     });
 
-    test("invokeFunction with checkedWitness", async () => {
+    test("invokeFunction with signers", async () => {
       const fromAccount = wallet.accounts[0];
       const toAccount = wallet.accounts[1];
       const result = await client.invokeFunction(
@@ -258,11 +265,22 @@ describe.skip("RPC Methods", () => {
           ContractParam.hash160(toAccount.address),
           ContractParam.integer(1),
         ],
-        [wallet.accounts[0].scriptHash]
+        [
+          new Signer({
+            account: fromAccount.scriptHash,
+            scopes: WitnessScope.CalledByEntry,
+          }),
+        ]
       );
 
       expect(Object.keys(result)).toEqual(
-        expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
+        expect.arrayContaining([
+          "script",
+          "state",
+          "gasconsumed",
+          "stack",
+          "tx",
+        ])
       );
       expect(result.state).toContain("HALT");
     });
@@ -275,7 +293,13 @@ describe.skip("RPC Methods", () => {
           .build()
       );
       expect(Object.keys(result)).toEqual(
-        expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
+        expect.arrayContaining([
+          "script",
+          "state",
+          "gasconsumed",
+          "stack",
+          "tx",
+        ])
       );
       expect(result.state).toContain("HALT");
       expect(result.stack.length).toEqual(2);
@@ -287,11 +311,11 @@ describe.skip("RPC Methods", () => {
       );
     });
 
-    test("invokeScript with checkedWitness", async () => {
+    test("invokeScript with signers", async () => {
       const fromAccount = wallet.accounts[0];
       const toAccount = wallet.accounts[1];
       const script = createScript({
-        scriptHash: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
+        scriptHash: contractHash,
         operation: "transfer",
         args: [
           ContractParam.hash160(fromAccount.address),
@@ -301,11 +325,20 @@ describe.skip("RPC Methods", () => {
       });
 
       const result = await client.invokeScript(script, [
-        fromAccount.scriptHash,
+        new Signer({
+          account: fromAccount.scriptHash,
+          scopes: WitnessScope.CalledByEntry,
+        }),
       ]);
 
       expect(Object.keys(result)).toEqual(
-        expect.arrayContaining(["script", "state", "gas_consumed", "stack"])
+        expect.arrayContaining([
+          "script",
+          "state",
+          "gasconsumed",
+          "stack",
+          "tx",
+        ])
       );
       expect(result.state).toContain("HALT");
     });
@@ -326,8 +359,7 @@ describe.skip("RPC Methods", () => {
 
     const currentHeight = await client.getBlockCount();
     const transaction = new Transaction({
-      sender: fromAccount.scriptHash,
-      cosigners: [
+      signers: [
         {
           account: fromAccount.scriptHash,
           scopes: WitnessScope.CalledByEntry,

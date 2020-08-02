@@ -9,7 +9,7 @@ import { deserializeArrayOf, serializeArrayOf } from "../lib";
 export interface SignerLike {
   /* account scripthash in big endian */
   account: string | HexString;
-  scopes: number;
+  scopes: number | string | WitnessScope;
   allowedContracts?: (string | HexString)[];
   allowedGroups?: (string | HexString)[];
 }
