@@ -34,6 +34,9 @@ export function NoOpParser(item: StackItemJson): unknown {
  * Parses the result to an integer.
  */
 export function IntegerParser(item: StackItemJson): number {
+  if (typeof item.value !== "string") {
+    throw new Error("value received is not a string");
+  }
   return parseInt(item.value || "0", 10);
 }
 
@@ -41,6 +44,9 @@ export function IntegerParser(item: StackItemJson): number {
  *  Parses the result to a ASCII string.
  */
 export function StringParser(item: StackItemJson): string {
+  if (typeof item.value !== "string") {
+    throw new Error("value received is not a string");
+  }
   return hexstring2str(item.value);
 }
 
@@ -48,6 +54,9 @@ export function StringParser(item: StackItemJson): string {
  * Parses the result to a Fixed8.
  */
 export function Fixed8Parser(item: StackItemJson): Fixed8 {
+  if (typeof item.value !== "string") {
+    throw new Error("value received is not a string");
+  }
   return Fixed8.fromReverseHex(item.value);
 }
 
