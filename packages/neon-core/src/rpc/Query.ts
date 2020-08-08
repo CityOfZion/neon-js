@@ -1,6 +1,6 @@
 import { DEFAULT_REQ } from "../consts";
 import { Transaction, TransactionJson, Signer, SignerJson } from "../tx";
-import { ContractManifestLike, StackItemLike } from "../sc";
+import { ContractManifestLike, StackItemJson } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 
 export type BooleanLikeParam = 0 | 1 | boolean;
@@ -33,7 +33,7 @@ export interface InvokeResult {
   state: "HALT" | "FAULT";
   /** Amount of gas consumed up to the point of stopping in the VM. If state is FAULT, this value is not representative of the amount of gas it will consume if it somehow succeeds on the blockchain. */
   gasconsumed: string;
-  stack: StackItemLike[];
+  stack: StackItemJson[];
   tx?: unknown;
 }
 

@@ -1,8 +1,8 @@
-import { StackItemLike } from "../sc";
+import { StackItemJson } from "../sc";
 import { Fixed8, hexstring2str } from "../u";
 import { InvokeResult } from "./Query";
 
-export type StackItemParser = (item: StackItemLike) => unknown;
+export type StackItemParser = (item: StackItemJson) => unknown;
 
 export type VMResultParser = (result: InvokeResult) => unknown[];
 
@@ -26,29 +26,38 @@ export function buildParser(...args: StackItemParser[]): VMResultParser {
 /**
  * This just returns the value of the StackItem.
  */
-export function NoOpParser(item: StackItemLike): unknown {
+export function NoOpParser(item: StackItemJson): unknown {
   return item.value;
 }
 
 /**
  * Parses the result to an integer.
  */
-export function IntegerParser(item: StackItemLike): number {
-  return parseInt((item.value as string) || "0", 10);
+export function IntegerParser(item: StackItemJson): number {
+  if (typeof item.value !== "string") {
+    throw new Error("value received is not a string");
+  }
+  return parseInt(item.value || "0", 10);
 }
 
 /**
  *  Parses the result to a ASCII string.
  */
-export function StringParser(item: StackItemLike): string {
-  return hexstring2str(item.value as string);
+export function StringParser(item: StackItemJson): string {
+  if (typeof item.value !== "string") {
+    throw new Error("value received is not a string");
+  }
+  return hexstring2str(item.value);
 }
 
 /**
  * Parses the result to a Fixed8.
  */
-export function Fixed8Parser(item: StackItemLike): Fixed8 {
-  return Fixed8.fromReverseHex(item.value as string);
+export function Fixed8Parser(item: StackItemJson): Fixed8 {
+  if (typeof item.value !== "string") {
+    throw new Error("value received is not a string");
+  }
+  return Fixed8.fromReverseHex(item.value);
 }
 
 /**
@@ -59,7 +68,7 @@ export function Fixed8Parser(item: StackItemLike): Fixed8 {
 export function SimpleParser(res: InvokeResult): unknown[] {
   return res.stack.map((item) => {
     switch (item.type) {
-      case "ByteArray":
+      case "ByteString":
         return StringParser(item);
       case "Integer":
         return IntegerParser(item);
