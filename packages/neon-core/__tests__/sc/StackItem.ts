@@ -43,6 +43,20 @@ describe("constructor", () => {
       expect(result.type).toBe(StackItemType.Map);
       expect(result.value).toEqual([]);
     });
+
+    test("Pointer", () => {
+      const result = new StackItem({ type: StackItemType.Pointer });
+
+      expect(result.type).toBe(StackItemType.Pointer);
+      expect(result.value).toEqual(0);
+    });
+
+    test("Buffer", () => {
+      const result = new StackItem({ type: StackItemType.Buffer });
+
+      expect(result.type).toBe(StackItemType.Buffer);
+      expect(result.value).toEqual("");
+    });
   });
 });
 
