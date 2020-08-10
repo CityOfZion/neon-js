@@ -5,6 +5,52 @@ title: Changelog (v5)
 
 # 5.0.0
 
+## Preview3:
+
+```
+neo-cli v3.0.0-preview3
+neon-js: v5.0.0-next4
+```
+
+Key blockchain changes:
+
+- Another update of InteropServiceCode. This means that all scripthashes,
+  addresses and encrypted keys from preview2 are invalid and will need to be
+  regenerated.
+- Transaction.cosigners is now renamed to signers. The sender field is now
+  inferred from the first Signer.
+- Codebase wide changes for json field name convention. Field names are now
+  lowercased without seperators (previously it was lower case with underscores).
+- Add support for SECP256K1 curve (same elliptic curve used in bitcoin).
+
+SDK changes:
+
+As usual, only `neon-core` will be updated and usable during the preview stage.
+
+- Misc
+
+  - Enforce ts-lint for docstrings throughout the codebase.
+
+- tx
+
+  - The `cosigners` field is now `signers`. Deserialization order has changed.
+  - The `sender` field is now inferred as the first `signer`. It is now not
+    included in the transaction serialization.
+  - Updated WitnessScope enum to include the FeeOnly enum. Integer ordering has
+    also changed.
+
+- sc
+
+  - Updated codes for OpCodes and InteropServiceCodes.
+  - Updated interfaces for ContractParamType, StackItem enum types. Integer
+    ordering for both types have changed.
+  - Removed serialization of StackItem. Added toJson support.
+
+- rpc
+
+  - Updated fields to use lowercased strings with no separators. This should not
+    have any effect internally as neon-js will continue to use camelCase.
+
 ## Preview2:
 
 ```
@@ -31,7 +77,6 @@ functional and maintained.
 - Misc
 
   - Establish testing for Node 10 and Node 12.
-  -
 
 - tx
 
