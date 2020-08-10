@@ -11,16 +11,21 @@ export enum StackItemType {
   InteropInterface = 0x60,
 }
 
-export type StackItemValue = string | boolean | StackItem[] | StackItemMap[];
+export type StackItemValue =
+  | string
+  | boolean
+  | number
+  | StackItem[]
+  | StackItemMap[];
 
 export interface StackItemLike {
   type: StackItemType | keyof typeof StackItemType | number;
-  value: string | number | boolean | StackItemLike[] | StackItemMapLike[];
+  value: string | boolean | number | StackItemLike[] | StackItemMapLike[];
 }
 
 export interface StackItemJson {
   type: keyof typeof StackItemType;
-  value?: string | boolean | StackItemJson[];
+  value?: string | boolean | number | StackItemJson[];
 }
 
 export interface StackItemMapLike {
@@ -65,6 +70,8 @@ function getDefaultValue(type: StackItemType): StackItemValue {
       return false;
     case StackItemType.Integer:
       return "0";
+    case StackItemType.Pointer:
+      return 0;
     default:
       return "";
   }
@@ -75,7 +82,7 @@ function getDefaultValue(type: StackItemType): StackItemValue {
  */
 export class StackItem {
   public type: StackItemType;
-  public value: string | boolean | StackItem[] | StackItemMap[];
+  public value: string | boolean | number | StackItem[] | StackItemMap[];
 
   public constructor(obj: Partial<StackItemLike>) {
     if (obj.type === undefined) {
@@ -87,13 +94,20 @@ export class StackItem {
       return;
     }
     switch (this.type) {
+      case StackItemType.Pointer:
+        if (typeof obj.value !== "number") {
+          throw new Error("value of a Pointer StackItem should be a number.");
+        }
+        this.value = obj.value;
+        return;
       case StackItemType.Integer:
         this.value = obj.value?.toString() ?? "0";
         return;
+      case StackItemType.Buffer:
       case StackItemType.ByteString:
         if (typeof obj.value !== "string") {
           throw new Error(
-            "value of a ByteString StackItem should be a string."
+            "value of a ByteString/Buffer StackItem should be a string."
           );
         }
         this.value = obj.value;
