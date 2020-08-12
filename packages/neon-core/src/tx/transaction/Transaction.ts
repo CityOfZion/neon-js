@@ -204,8 +204,7 @@ export class Transaction implements NeonObject<TransactionLike> {
   public get headerSize(): number {
     return (
       /* version */ 1 +
-      /* nonce */ 4 /* sender */ +
-      20 +
+      /* nonce */ 4 +
       /* systemFee */ 8 +
       /* networkFee */ 8 +
       /* validUntilBlock */ 4

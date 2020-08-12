@@ -195,14 +195,11 @@ describe("RPC Methods", () => {
     });
   });
 
-  // TODO: Find a contract on neo3
-  test.skip("getStorage", async () => {
-    const result = await client.getStorage(
-      contractHash,
-      "9847e26135152874355e324afd5cc99f002acb33"
-    );
+  test("getStorage", async () => {
+    const result = await client.getStorage(contractHash, "0b");
 
-    expect(typeof result).toBe("string");
+    // This storage is totalSupply of NEO. Should be safe and static for usage.
+    expect(result).toBe("00e1f505");
   });
 
   test("getTransactionHeight", async () => {

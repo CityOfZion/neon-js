@@ -3,6 +3,7 @@ export const ADDR_VERSION = "35";
 export const MAGIC_NUMBER = {
   MainNet: 5195086,
   TestNet: 1951352142,
+  SoloNet: 1234567890,
 };
 
 export const NATIVE_CONTRACTS: { [key: string]: string } = {
