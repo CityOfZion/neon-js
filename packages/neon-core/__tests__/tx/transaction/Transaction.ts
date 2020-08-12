@@ -265,7 +265,7 @@ const dataSet = Object.keys(samples).map((k) => {
   return [s.txid, s.serialized, s.deserialized];
 });
 
-describe.skip.each(dataSet)(
+describe.each(dataSet)(
   "transform %s",
   (txid: string, serialized: string, json: TransactionJson) => {
     const neonObj = Transaction.fromJson(json);
@@ -285,7 +285,7 @@ describe.skip.each(dataSet)(
     });
 
     test("hash", () => {
-      const result = neonObj.hash(MAGIC_NUMBER.TestNet);
+      const result = neonObj.hash(MAGIC_NUMBER.SoloNet);
       expect(result).toEqual(txid);
     });
   }
