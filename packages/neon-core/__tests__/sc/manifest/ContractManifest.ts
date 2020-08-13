@@ -2,15 +2,12 @@ import {
   ContractManifest,
   ContractManifestLike,
   ContractParamType,
+  ContractPermissionJson,
 } from "../../../src/sc";
 
 const defaultManifestLike: ContractManifestLike = {
+  supportedStandards: [],
   abi: {
-    entryPoint: {
-      name: "",
-      parameters: [],
-      returnType: ContractParamType.Any,
-    },
     events: [],
     hash: "",
     methods: [],
@@ -23,28 +20,12 @@ const defaultManifestLike: ContractManifestLike = {
   permissions: [],
   safeMethods: "*",
   trusts: "*",
+  extra: undefined,
 };
 
 const definedManifestLike: ContractManifestLike = {
+  supportedStandards: ["NEP-5"],
   abi: {
-    entryPoint: {
-      name: "transfer",
-      parameters: [
-        {
-          name: "from",
-          type: ContractParamType.Hash160,
-        },
-        {
-          name: "to",
-          type: ContractParamType.Hash160,
-        },
-        {
-          name: "amount",
-          type: ContractParamType.Integer,
-        },
-      ],
-      returnType: ContractParamType.Boolean,
-    },
     events: [
       {
         name: "transfer",
@@ -68,6 +49,7 @@ const definedManifestLike: ContractManifestLike = {
     methods: [
       {
         name: "transfer",
+        offset: 0,
         parameters: [
           {
             name: "from",
@@ -104,6 +86,7 @@ const definedManifestLike: ContractManifestLike = {
   ],
   safeMethods: "*",
   trusts: "*",
+  extra: "random note",
 };
 
 describe("constructor & export", () => {
@@ -190,52 +173,198 @@ describe("canCall", () => {
   });
 });
 
-describe("parse", () => {
-  test("can parse neo", () => {
-    const neoManifestInString = `{"groups":[{"pubKey":"03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c","signature":"41414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141"}],"features":{"storage":true,"payable":true},"abi":{"hash":"0x1d8642796276c8ce3c5c03b8984a1b593d99b49a63d830bb06f800b8c953be77","entryPoint":{"name":"Main","parameters":[{"name":"operation","type":"String"},{"name":"args","type":"Array"}],"returnType":"Any"},"methods":[],"events":[]},"permissions":[{"contract":"0x0000000000000000000000000000000000000000","methods":["method1","method2"]}],"trusts":[],"safeMethods":[]}`;
-    const neoManifestInJson = {
-      groups: [
-        {
-          pubKey:
-            "03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c",
-          signature:
-            "41414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141",
-        },
-      ],
+describe("fromJson", () => {
+  test("neo", () => {
+    const neoManifestJson = {
+      groups: [],
       features: {
         storage: true,
-        payable: true,
+        payable: false,
       },
+      supportedstandards: ["NEP-5"],
       abi: {
-        hash:
-          "0x1d8642796276c8ce3c5c03b8984a1b593d99b49a63d830bb06f800b8c953be77",
-        entryPoint: {
-          name: "Main",
-          parameters: [
-            {
-              name: "operation",
-              type: "String",
-            },
-            {
-              name: "args",
-              type: "Array",
-            },
-          ],
-          returnType: "Any",
-        },
-        methods: [],
-        events: [],
+        hash: "0xde5f57d430d3dece511cf975a8d37848cb9e0525",
+        methods: [
+          {
+            name: "totalSupply",
+            parameters: [],
+            offset: 0,
+            returntype: "Integer",
+          },
+          {
+            name: "onPersist",
+            parameters: [],
+            offset: 0,
+            returntype: "Void",
+          },
+          {
+            name: "unclaimedGas",
+            parameters: [
+              {
+                name: "account",
+                type: "ByteArray",
+              },
+              {
+                name: "end",
+                type: "Integer",
+              },
+            ],
+            offset: 0,
+            returntype: "Integer",
+          },
+          {
+            name: "registerCandidate",
+            parameters: [
+              {
+                name: "pubkey",
+                type: "ByteArray",
+              },
+            ],
+            offset: 0,
+            returntype: "Boolean",
+          },
+          {
+            name: "unregisterCandidate",
+            parameters: [
+              {
+                name: "pubkey",
+                type: "ByteArray",
+              },
+            ],
+            offset: 0,
+            returntype: "Boolean",
+          },
+          {
+            name: "vote",
+            parameters: [
+              {
+                name: "account",
+                type: "ByteArray",
+              },
+              {
+                name: "voteTo",
+                type: "ByteArray",
+              },
+            ],
+            offset: 0,
+            returntype: "Boolean",
+          },
+          {
+            name: "getCandidates",
+            parameters: [],
+            offset: 0,
+            returntype: "Array",
+          },
+          {
+            name: "getValidators",
+            parameters: [],
+            offset: 0,
+            returntype: "Array",
+          },
+          {
+            name: "getCommittee",
+            parameters: [],
+            offset: 0,
+            returntype: "Array",
+          },
+          {
+            name: "getNextBlockValidators",
+            parameters: [],
+            offset: 0,
+            returntype: "Array",
+          },
+          {
+            name: "balanceOf",
+            parameters: [
+              {
+                name: "account",
+                type: "ByteArray",
+              },
+            ],
+            offset: 0,
+            returntype: "Integer",
+          },
+          {
+            name: "transfer",
+            parameters: [
+              {
+                name: "from",
+                type: "ByteArray",
+              },
+              {
+                name: "to",
+                type: "ByteArray",
+              },
+              {
+                name: "amount",
+                type: "Integer",
+              },
+            ],
+            offset: 0,
+            returntype: "Boolean",
+          },
+          {
+            name: "name",
+            parameters: [],
+            offset: 0,
+            returntype: "String",
+          },
+          {
+            name: "symbol",
+            parameters: [],
+            offset: 0,
+            returntype: "String",
+          },
+          {
+            name: "decimals",
+            parameters: [],
+            offset: 0,
+            returntype: "Integer",
+          },
+        ],
+        events: [
+          {
+            name: "Transfer",
+            parameters: [
+              {
+                name: "from",
+                type: "Hash160",
+              },
+              {
+                name: "to",
+                type: "Hash160",
+              },
+              {
+                name: "amount",
+                type: "Integer",
+              },
+            ],
+          },
+        ],
       },
       permissions: [
         {
-          contract: "0000000000000000000000000000000000000000",
-          methods: ["method1", "method2"],
-        },
+          contract: "*",
+          methods: "*",
+        } as ContractPermissionJson,
       ],
       trusts: [],
-      safeMethods: [],
+      safemethods: [
+        "totalSupply",
+        "unclaimedGas",
+        "getCandidates",
+        "getValidators",
+        "getCommittee",
+        "getNextBlockValidators",
+        "balanceOf",
+        "name",
+        "symbol",
+        "decimals",
+      ],
+      extra: null,
     };
-    const manifest = ContractManifest.parse(neoManifestInString);
-    expect(manifest.export()).toStrictEqual(neoManifestInJson);
+
+    const manifest = ContractManifest.fromJson(neoManifestJson);
+    expect(manifest.toJson()).toStrictEqual(neoManifestJson);
   });
 });

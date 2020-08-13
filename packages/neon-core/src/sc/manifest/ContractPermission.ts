@@ -3,9 +3,18 @@ export interface ContractPermissionLike {
   methods: "*" | string[];
 }
 
+export interface ContractPermissionJson {
+  contract: string;
+  methods: "*" | string[];
+}
+
 export class ContractPermission {
   public contract: string;
   public methods: "*" | string[];
+
+  public fromJson(json: ContractPermissionJson): ContractPermission {
+    return new ContractPermission(json);
+  }
 
   public constructor(obj: Partial<ContractPermissionLike> = {}) {
     const { contract = "*", methods = "*" } = obj;
@@ -38,6 +47,13 @@ export class ContractPermission {
           `This is not a ContractPermissionDescriptor: ${contract}`
         );
     }
+  }
+
+  public toJson(): ContractPermissionJson {
+    return {
+      contract: this.contract,
+      methods: this.methods,
+    };
   }
 
   public export(): ContractPermissionLike {

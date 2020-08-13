@@ -1,5 +1,10 @@
 import { rpc } from "../../src/index";
-import { ContractParam, createScript, ScriptBuilder } from "../../src/sc";
+import {
+  ContractParam,
+  createScript,
+  ScriptBuilder,
+  ContractManifest,
+} from "../../src/sc";
 import { Transaction, WitnessScope, Signer } from "../../src/tx";
 import { Wallet } from "../../src/wallet";
 import { HexString } from "../../src/u";
@@ -143,18 +148,9 @@ describe("RPC Methods", () => {
     expect(typeof result).toBe("number");
   });
 
-  // TODO: Find a contract on neo3
   test("getContractState", async () => {
     const result = await client.getContractState(contractHash);
-    expect(Object.keys(result)).toEqual([
-      "groups",
-      "hasStorage",
-      "payable",
-      "abi",
-      "permissions",
-      "trusts",
-      "safeMethods",
-    ]);
+    expect(result).toBeInstanceOf(ContractManifest);
   });
 
   test("getPeers", async () => {
