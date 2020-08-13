@@ -41,10 +41,7 @@ export function validateDeployParams(params: DeployParams): void {
       `Manifest length ${manifest.length} is exceeding upper limit: ${ContractManifest.MAX_LENGTH}`
     );
   }
-  const contractManifest = ContractManifest.parse(manifest);
-  if (!contractManifest.isValid()) {
-    throw new Error(`Manifest is not valid!`);
-  }
+  ContractManifest.fromJson(JSON.parse(manifest));
 }
 /**
  * Generates script for deploying contract
