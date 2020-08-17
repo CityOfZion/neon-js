@@ -16,7 +16,7 @@ similarly to how NEP-5 tokens work in Neo2.
 First, some setup:
  */
 
-const { rpc, sc, wallet, tx, u } = require("@cityofzion/neon-core");
+const { CONST, rpc, sc, wallet, tx, u } = require("@cityofzion/neon-core");
 
 const inputs = {
   fromAccount: new wallet.Account(
@@ -25,10 +25,10 @@ const inputs = {
   toAccount: new wallet.Account(
     "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG"
   ),
-  tokenScriptHash: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
+  tokenScriptHash: CONST.ASSET_ID.NEO,
   amountToTransfer: 1,
   systemFee: 0,
-  networkFee: 0.02,
+  networkFee: 0,
   networkMagic: 1234567890, //CONST.MAGIC_NUMBER.TestNet,
   nodeUrl: "http://localhost:20332", //"http://seed2t.neo.org:20332",
 };
@@ -44,7 +44,6 @@ We will perform the following checks:
 
 All these checks can be performed through RPC calls to a NEO node.
  */
-
 const rpcClient = new rpc.RPCClient(inputs.nodeUrl);
 
 async function createTransaction() {
@@ -70,7 +69,7 @@ async function createTransaction() {
   const currentHeight = await rpcClient.getBlockCount();
   vars.tx = new tx.Transaction({
     sender: inputs.fromAccount.scriptHash,
-    cosigners: [
+    signers: [
       {
         account: inputs.fromAccount.scriptHash,
         scopes: tx.WitnessScope.CalledByEntry,
@@ -80,14 +79,53 @@ async function createTransaction() {
     systemFee: vars.systemFee,
     script: script,
   });
-
-  const transactionByteSize = vars.tx.serialize().length / 2;
-  const networkFeeEstimate = transactionByteSize10;
-  vars.tx.networkFee = u.Fixed8.fromRawNumber(networkFeeEstimate);
-  console.log(
-    `\u001b[32m  ✓ Network Fee estimate: ${vars.tx.networkFee.toString()} \u001b[0m`
-  );
   console.log("\u001b[32m  ✓ Transaction created \u001b[0m");
+}
+
+/**
+Network fees pay for the processing and storage of the transaction in the
+network. There is a cost incurred per byte of the transaction (without the
+signatures) and also the cost of running the verification of signatures.
+ */
+async function checkNetworkFee() {
+  const feePerByteInvokeResponse = await rpcClient.invokeFunction(
+    CONST.NATIVE_CONTRACTS.POLICY,
+    "getFeePerByte"
+  );
+
+  if (feePerByteInvokeResponse.state !== "HALT") {
+    if (inputs.networkFee === 0) {
+      throw new Error("Unable to retrieve data to calculate network fee.");
+    } else {
+      console.log(
+        "\u001b[31m  ✗ Unable to get information to calculate network fee.  Using user provided value.\u001b[0m"
+      );
+      vars.tx.networkFee = new u.Fixed8(inputs.networkFee);
+    }
+  }
+  const feePerByte = u.Fixed8.fromRawNumber(
+    feePerByteInvokeResponse.stack[0].value
+  );
+  // Account for witness size
+  const transactionByteSize = vars.tx.serialize().length / 2 + 109;
+  // Hardcoded. Running a witness is always the same cost for the basic account.
+  const witnessProcessingFee = u.Fixed8.fromRawNumber(1000390);
+  const networkFeeEstimate = feePerByte
+    .mul(transactionByteSize)
+    .add(witnessProcessingFee);
+  if (inputs.networkFee && inputs.networkFee >= networkFeeEstimate.toNumber()) {
+    vars.tx.networkFee = new u.Fixed8(inputs.networkFee);
+    console.log(
+      `  i Node indicates ${networkFeeEstimate.toNumber()} networkFee but using user provided value of ${
+        inputs.networkFee
+      }`
+    );
+  } else {
+    vars.tx.networkFee = networkFeeEstimate;
+  }
+  console.log(
+    `\u001b[32m  ✓ Network Fee set: ${vars.tx.networkFee.toNumber()} \u001b[0m`
+  );
 }
 
 /**
@@ -115,12 +153,10 @@ async function checkToken() {
 }
 
 /**
-We check the required systemFee for this transaction. System Fees pays for the
-storage of the transaction itself in the network. It is proportional to the
-number of bytes of the serialized transaction. Not very clear on the networkFees
-at the moment.
+SystemFees pay for the processing of the script carried in the transaction. We
+can easily get this number by using invokeScript with the appropriate signers.
  */
-async function checkFees() {
+async function checkSystemFee() {
   const script = sc.createScript({
     scriptHash: inputs.tokenScriptHash,
     operation: "transfer",
@@ -130,17 +166,31 @@ async function checkFees() {
       inputs.amountToTransfer,
     ],
   });
-  console.log(inputs.fromAccount.scriptHash);
   const invokeFunctionResponse = await rpcClient.invokeScript(script, [
-    inputs.fromAccount.scriptHash,
+    {
+      account: inputs.fromAccount.scriptHash,
+      scopes: tx.WitnessScope.CalledByEntry,
+    },
   ]);
   if (invokeFunctionResponse.state !== "HALT") {
     throw new Error(
       "Transfer script errored out! You might not have sufficient funds for this transfer."
     );
   }
-  vars.systemFee = new u.Fixed8(invokeFunctionResponse.gas_consumed);
-  console.log("\u001b[32m  ✓ SystemFee found \u001b[0m");
+  const requiredSystemFee = u.Fixed8.fromRawNumber(
+    invokeFunctionResponse.gasconsumed
+  );
+  if (inputs.systemFee && inputs.systemFee >= requiredSystemFee) {
+    vars.tx.systemFee = new u.Fixed8(inputs.systemFee);
+    console.log(
+      `  i Node indicates ${requiredSystemFee} systemFee but using user provided value of ${inputs.systemFee}`
+    );
+  } else {
+    vars.tx.systemFee = requiredSystemFee;
+  }
+  console.log(
+    `\u001b[32m  ✓ SystemFee set: ${vars.tx.systemFee.toString()}\u001b[0m`
+  );
 }
 
 /**
@@ -163,7 +213,7 @@ async function checkBalance() {
   }
   // Check for token funds
   const balances = balanceResponse.balance.filter((bal) =>
-    bal.asset_hash.includes(inputs.tokenScriptHash)
+    bal.assethash.includes(inputs.tokenScriptHash)
   );
   const balanceAmount =
     balances.length === 0 ? 0 : parseInt(balances[0].amount);
@@ -178,7 +228,7 @@ async function checkBalance() {
     vars.tx.systemFee
   );
   const gasBalance = balanceResponse.balance.filter((bal) =>
-    bal.asset_hash.includes("8c23f196d8a1bfd103a9dcb1f9ccf0c611377d3b")
+    bal.assethash.includes(CONST.ASSET_ID.GAS)
   );
   const gasAmount =
     gasBalance.length === 0
@@ -190,7 +240,9 @@ async function checkBalance() {
       `Insufficient gas to pay for fees! Required ${gasRequirements.toString()} but only had ${gasAmount.toString()}`
     );
   } else {
-    console.log("\u001b[32m  ✓ Sufficient GAS for fees found \u001b[0m");
+    console.log(
+      `\u001b[32m  ✓ Sufficient GAS for fees found (${gasRequirements.toString()}) \u001b[0m`
+    );
   }
 }
 
@@ -202,6 +254,8 @@ async function performTransfer() {
     inputs.fromAccount,
     inputs.networkMagic
   );
+
+  console.log(vars.tx.toJson());
   const result = await rpcClient.sendRawTransaction(
     signedTransaction.serialize(true)
   );
@@ -212,7 +266,8 @@ async function performTransfer() {
 
 createTransaction()
   .then(checkToken)
-  .then(checkFees)
+  .then(checkNetworkFee)
+  .then(checkSystemFee)
   .then(checkBalance)
   .then(performTransfer)
   .catch((err) => console.log(err));

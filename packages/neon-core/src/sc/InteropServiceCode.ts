@@ -1,5 +1,5 @@
-import { str2hexstring, sha256, hash160, int2hex, reverseHex } from "../u";
-import { OpCode } from "./OpCode";
+import { str2hexstring, sha256, hash160, reverseHex } from "../u";
+import ScriptBuilder from "./ScriptBuilder";
 
 export enum InteropServiceCode {
   NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256K1 = "57c6efb2",
@@ -81,7 +81,10 @@ export function fromMethodName(methodName: string): InteropServiceCode {
   throw new Error("Method name not found in InteropServiceCode!");
 }
 
-export function getContractHash(contractName: string): string {
-  const interopHash = generateInteropServiceCode(contractName);
-  return reverseHex(hash160(int2hex(OpCode.SYSCALL) + interopHash));
+export function getNativeContractHash(contractName: string): string {
+  const script = new ScriptBuilder()
+    .emitString(contractName)
+    .emitSysCall(InteropServiceCode.NEO_NATIVE_CALL)
+    .build();
+  return reverseHex(hash160(script));
 }

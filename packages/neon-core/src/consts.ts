@@ -11,7 +11,7 @@ export const NATIVE_CONTRACTS: { [key: string]: string } = {
   de5f57d430d3dece511cf975a8d37848cb9e0525: "NEO",
   GAS: "GAS",
   "668e0c1f9d7b70a99dd9e06eadd4c784d641afbc": "GAS",
-  POLICY: "3209d09120465bf181ced70693b897ec6ea4619a",
+  POLICY: "ce06595079cd69583126dbfd1d2e25cca74cffe9",
 };
 
 export const ASSET_ID: { [key: string]: string } = {

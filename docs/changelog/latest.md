@@ -45,6 +45,7 @@ As usual, only `neon-core` will be updated and usable during the preview stage.
   - Updated interfaces for ContractParamType, StackItem enum types. Integer
     ordering for both types have changed.
   - Removed serialization of StackItem. Added toJson support.
+  - Update ContractManifest and its related classes.
 
 - rpc
 
