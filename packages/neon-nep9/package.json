@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-nep9",
   "description": "Neon-NEP9 Module",
-  "version": "5.0.0-next.3",
+  "version": "5.0.0-next.4",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
@@ -32,7 +32,7 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "@cityofzion/neon-core": "^5.0.0-next.3"
+    "@cityofzion/neon-core": "^5.0.0-next.4"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "^4.0.0"
