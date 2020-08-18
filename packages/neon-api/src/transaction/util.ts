@@ -62,9 +62,7 @@ export function getNetworkFee(transaction: tx.Transaction): u.Fixed8 {
     // TODO: consider about contract verfication script
   });
   const size = transaction.serialize(true).length / 2;
-  networkFee = networkFee.add(
-    new u.Fixed8(size).multipliedBy(CONST.POLICY_FEE_PERBYTE)
-  );
+  networkFee = networkFee.add(new u.Fixed8(size).mul(CONST.POLICY_FEE_PERBYTE));
   return networkFee;
 }
 

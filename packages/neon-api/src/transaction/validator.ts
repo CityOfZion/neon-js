@@ -181,7 +181,7 @@ export class TransactionValidator {
         },
       };
     } else if (
-      minimumSystemFee.isGreaterThan(systemFee) ||
+      minimumSystemFee.gt(systemFee) ||
       !systemFee.equals(systemFee.ceil())
     ) {
       return {
@@ -194,7 +194,7 @@ export class TransactionValidator {
           },
         },
       };
-    } else if (minimumSystemFee.isLessThan(systemFee)) {
+    } else if (minimumSystemFee.lt(systemFee)) {
       return {
         valid: true,
         result: {
@@ -260,7 +260,7 @@ export class TransactionValidator {
           },
         },
       };
-    } else if (minimumNetworkFee.isGreaterThan(networkFee)) {
+    } else if (minimumNetworkFee.gt(networkFee)) {
       return {
         valid: false,
         result: {
@@ -271,7 +271,7 @@ export class TransactionValidator {
           },
         },
       };
-    } else if (minimumNetworkFee.isLessThan(networkFee)) {
+    } else if (minimumNetworkFee.lt(networkFee)) {
       return {
         valid: true,
         result: {

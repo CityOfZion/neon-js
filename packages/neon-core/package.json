@@ -39,7 +39,6 @@
   },
   "dependencies": {
     "axios": "0.19.2",
-    "bignumber.js": "7.2.1",
     "bn.js": "5.1.1",
     "bs58": "4.0.1",
     "bs58check": "2.1.2",

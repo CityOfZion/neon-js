@@ -60,7 +60,7 @@ const create = {
     new rpc.Network(net),
   stringStream: (str?: string): neonCore.u.StringStream =>
     new u.StringStream(str),
-  fixed8: (i?: string | number): neonCore.u.Fixed8 => new u.Fixed8(i),
+  fixed8: (i?: string | number): neonCore.u.Fixed8 => new u.Fixed8(i ?? 0),
 };
 
 /**

@@ -1,19 +1,21 @@
-import BN from "bignumber.js";
+import BN from "bn.js";
 import { reverseHex } from "./misc";
 
 const DECIMALS = 100000000;
 
 // This is the maximum hex integer 0x7fffffffffffffff (= 9223372036854775807)
 // that can be converted to Fixed8 by dividing by the 10^8.
-const MAX_FIXED8_HEX = new BN(2).pow(63).minus(1);
+const MAX_FIXED8_HEX = new BN(2).pow(new BN(63)).subn(1);
+const MAX_FIXED8_NUM = MAX_FIXED8_HEX.divn(DECIMALS);
 
 // This is the minimum hex integer 0x8000000000000000 (= -9223372036854775808)
 // that can be converted to Fixed8 by dividing by the 10^8.
-const MIN_FIXED8_HEX = new BN(2).pow(63).negated();
+const MIN_FIXED8_HEX = new BN(2).pow(new BN(63)).neg();
+const MIN_FIXED8_NUM = MIN_FIXED8_HEX.divn(DECIMALS);
 
 // Total number of Fixed8 available. This includes negative and positive
 // Fixed8 numbers.
-const TOTAL_FIXED8_HEX = new BN(2).pow(64);
+const TOTAL_FIXED8_HEX = new BN(2).pow(new BN(64));
 
 /**
  * A fixed point notation used widely in the NEO system for representing decimals.
@@ -28,16 +30,20 @@ const TOTAL_FIXED8_HEX = new BN(2).pow(64);
  * const fromReverseHex = Fixed8.fromReverseHex("3930");
  *
  */
-export class Fixed8 extends BN {
+export class Fixed8 {
   /**
    * Maximum value that a Fixed8 can hold (92233720368.54775807).
    */
-  public static readonly MAX_VALUE = new Fixed8(MAX_FIXED8_HEX.div(DECIMALS));
+  public static readonly MAX_VALUE = new Fixed8(
+    MAX_FIXED8_HEX.divn(DECIMALS).toString()
+  );
 
   /**
    * Minimum value that a Fixed8 can hold (-9223372036854775808).
    */
-  public static readonly MIN_VALUE = new Fixed8(MIN_FIXED8_HEX.div(DECIMALS));
+  public static readonly MIN_VALUE = new Fixed8(
+    MIN_FIXED8_HEX.divn(DECIMALS).toString()
+  );
 
   public static fromHex(hex: string): Fixed8 {
     if (hex.length > 16) {
@@ -46,13 +52,13 @@ export class Fixed8 extends BN {
       );
     }
 
-    let n = new BN(hex, 16);
-    if (n.isGreaterThan(MAX_FIXED8_HEX)) {
+    const n = new BN(hex, 16);
+    if (n.gt(MAX_FIXED8_HEX)) {
       // convert n to two complement
-      n = n.minus(TOTAL_FIXED8_HEX);
+      n.isub(TOTAL_FIXED8_HEX);
     }
-    n = n.div(DECIMALS);
-    return new Fixed8(n, 10);
+    n.idivn(DECIMALS);
+    return new Fixed8(n.toString());
   }
 
   public static fromReverseHex(hex: string): Fixed8 {
@@ -80,41 +86,50 @@ export class Fixed8 extends BN {
    * const willThrow = new Fixed8(rawValue);
    */
   public static fromRawNumber(input: string | number, decimals = 8): Fixed8 {
-    return new Fixed8(new BN(input).div(new BN(10).pow(decimals)));
+    return new Fixed8(
+      new BN(input).div(new BN(10).pow(new BN(decimals))).toString()
+    );
   }
 
-  public constructor(input?: number | string | BN, base = 10) {
+  #val: BN;
+
+  public constructor();
+  public constructor(input: number | string | Fixed8);
+  public constructor(input: number | string, base?: number);
+  public constructor(input?: number | string | Fixed8, base = 10) {
     if (!input) {
-      input = "0";
-    }
-    if (typeof input === "number") {
-      input = input.toFixed(8);
-    }
-    super(input, base);
-
-    if (this.isGreaterThan(Fixed8.MAX_VALUE)) {
-      throw new Error(
-        `expected input to be less than ${Fixed8.MAX_VALUE}. Got input = ${this}`
-      );
-    }
-    if (this.isLessThan(Fixed8.MIN_VALUE)) {
-      throw new Error(
-        `expected input to be greater than ${Fixed8.MIN_VALUE}. Got input = ${this}`
-      );
+      this.#val = new BN(0);
+    } else if (typeof input === "number") {
+      this.#val = new BN(input.toFixed(8), base);
+    } else if (input instanceof Fixed8) {
+      this.#val = input.#val.clone();
+      return;
+    } else {
+      this.#val = new BN(input, base);
     }
 
-    Object.setPrototypeOf(this, Fixed8.prototype);
+    if (this.#val.gt(MAX_FIXED8_NUM)) {
+      throw new Error(
+        `expected input to be less than ${MAX_FIXED8_NUM.toString()}. Got input = ${this}`
+      );
+    }
+    if (this.#val.lt(MIN_FIXED8_NUM)) {
+      throw new Error(
+        `expected input to be greater than ${MIN_FIXED8_NUM.toString()}. Got input = ${this}`
+      );
+    }
+  }
+
+  private static _parse(i: number | string | Fixed8): BN {
+    return i instanceof Fixed8 ? i.#val : new BN(i);
+  }
+
+  public clone(): Fixed8 {
+    return new Fixed8(this);
   }
 
   public toHex(): string {
-    let hexstring = "";
-    const num = this.toRawNumber();
-
-    hexstring = num.isLessThan(0)
-      ? TOTAL_FIXED8_HEX.plus(num).toString(16) // convert num to two complement
-      : num.toString(16);
-
-    return "0".repeat(16 - hexstring.length) + hexstring;
+    return this.#val.toTwos(8).toString("hex");
   }
 
   public toReverseHex(): string {
@@ -122,98 +137,117 @@ export class Fixed8 extends BN {
   }
 
   /**
-   * Returns a raw number represetation of Fixed8.
+   * Returns a raw number representation of Fixed8.
    */
-  public toRawNumber(): BN {
-    return super.times(DECIMALS);
+  public toRawNumber(): string {
+    return this.#val.muln(DECIMALS).toString();
+  }
+
+  public toNumber(): number {
+    return this.#val.toNumber();
+  }
+
+  public mod(n: string | number | Fixed8): Fixed8 {
+    return new Fixed8(this.#val.mod(Fixed8._parse(n)).toString());
   }
 
   /**
    * Returns a Fixed8 whose value is rounded upwards to the next whole number.
    */
   public ceil(): Fixed8 {
-    return new Fixed8(super.decimalPlaces(0, BN.ROUND_CEIL));
+    return this.#val.mod(new BN(1)).gtn(0)
+      ? new Fixed8(this.#val.divn(1).addn(1).toString())
+      : new Fixed8(this.#val.divn(1).toString());
   }
 
   /**
    * Returns a Fixed8 whose value is rounded downwards to the previous whole number.
    */
   public floor(): Fixed8 {
-    return new Fixed8(super.decimalPlaces(0, BN.ROUND_FLOOR));
+    return new Fixed8(this.#val.divn(1).toString());
   }
 
   /**
    * Returns true if the value is equivalent.
    */
-  public equals(other: string | number | Fixed8 | BN): boolean {
-    return super.eq(other);
-  }
-
-  /**
-   * Returns a Fixed8 rounded to the nearest dp decimal places according to rounding mode rm.
-   * If dp is null, round to whole number.
-   * If rm is null, round according to default rounding mode.
-   * @param dp - number of decimal places to keep. Defaults to 0.
-   * @param rm - rounding mode.
-   */
-  public round(dp = 0, rm?: BN.RoundingMode): Fixed8 {
-    return new Fixed8(super.decimalPlaces(dp, rm));
+  public equals(other: string | number | Fixed8): boolean {
+    return this.#val.eq(Fixed8._parse(other));
   }
 
   /**
    * Returns a Fixed8 whose value is the value of this Fixed8 divided by `n`
    */
-  public dividedBy(n: string | number | BN, base?: number): Fixed8 {
-    return new Fixed8(super.dividedBy(n, base));
+  public dividedBy(n: string | number | Fixed8): Fixed8 {
+    return new Fixed8(this.#val.div(Fixed8._parse(n)).toString());
   }
 
   /**
    * {@inheritDoc Fixed8.dividedBy}
    */
-  public div(n: string | number | BN, base?: number): Fixed8 {
-    return this.dividedBy(n, base);
+  public div(n: string | number | Fixed8): Fixed8 {
+    return this.dividedBy(n);
   }
 
   /**
    * Returns a Fixed8 whose value is the value of this Fixed8 multipled by `n`
    */
-  public times(n: string | number | BN, base?: number): Fixed8 {
-    return new Fixed8(super.times(n, base));
+  public times(n: string | number | Fixed8): Fixed8 {
+    return new Fixed8(this.#val.mul(Fixed8._parse(n)).toString());
   }
 
   /**
    * {@inheritDoc Fixed8.times}
    */
-  public mul(n: string | number | BN, base?: number): Fixed8 {
-    return this.times(n, base);
+  public mul(n: string | number | Fixed8): Fixed8 {
+    return this.times(n);
   }
 
   /**
    * Returns a Fixed8 whose value is the value of this Fixed8 plus `n`
    */
-  public plus(n: string | number | BN, base?: number): Fixed8 {
-    return new Fixed8(super.plus(n, base));
+  public plus(n: string | number | Fixed8): Fixed8 {
+    return new Fixed8(this.#val.add(Fixed8._parse(n)).toString());
   }
 
   /**
    * {@inheritDoc Fixed8.plus}
    */
-  public add(n: string | number | BN, base?: number): Fixed8 {
-    return this.plus(n, base);
+  public add(n: string | number | Fixed8): Fixed8 {
+    return this.plus(n);
   }
 
   /**
    * Returns a Fixed8 whose value is the value of this Fixed8 minus `n`
    */
-  public minus(n: string | number | BN, base?: number): Fixed8 {
-    return new Fixed8(super.minus(n, base));
+  public minus(n: string | number | Fixed8): Fixed8 {
+    return new Fixed8(this.#val.sub(Fixed8._parse(n)).toString());
   }
 
   /**
    * {@inheritDoc Fixed8.minus}
    */
-  public sub(n: string | number | BN, base?: number): Fixed8 {
-    return this.minus(n, base);
+  public sub(n: string | number | Fixed8): Fixed8 {
+    return this.minus(n);
+  }
+
+  public isZero(): boolean {
+    return this.#val.isZero();
+  }
+
+  public gt(i: string | number | Fixed8): boolean {
+    return this.#val.gt(Fixed8._parse(i));
+  }
+
+  public gte(i: string | number | Fixed8): boolean {
+    return this.#val.gte(Fixed8._parse(i));
+  }
+
+  public lt(i: string | number | Fixed8): boolean {
+    return this.#val.lt(Fixed8._parse(i));
+  }
+
+  public lte(i: string | number | Fixed8): boolean {
+    return this.#val.lte(Fixed8._parse(i));
   }
 }
 
