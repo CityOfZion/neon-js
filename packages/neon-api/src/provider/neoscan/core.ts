@@ -91,9 +91,17 @@ export async function getRPCEndpoint(url: string): Promise<string> {
   if (internal.settings.httpsOnly) {
     nodes = filterHttpsOnly(nodes);
   }
-  const goodNodes = findGoodNodesFromHeight(nodes);
-  const bestRPC = await getBestUrl(goodNodes);
-  return bestRPC;
+
+  let goodNodes = null;
+  let bestRPC = null;
+  const env = url.toLowerCase().indexOf(`testnet`) >= 0 ? `TEST` : `MAIN`;
+  try {
+    goodNodes = findGoodNodesFromHeight(nodes);
+    bestRPC = await getBestUrl(goodNodes);
+  } catch {
+    bestRPC = null;
+  }
+  return !bestRPC ? CONST.DEFAULT_URLS[env][0] : bestRPC;
 }
 
 /**

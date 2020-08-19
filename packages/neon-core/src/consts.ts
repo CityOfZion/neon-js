@@ -35,6 +35,33 @@ export const DEFAULT_RPC: { [key: string]: string } = {
   TEST: "https://seed11.ngd.network:20331",
 };
 
+export const DEFAULT_URLS = {
+  MAIN: [
+    "http://seed1.ngd.network:10332",
+    "http://seed2.ngd.network:10332",
+    "http://seed3.ngd.network:10332",
+    "http://seed4.ngd.network:10332",
+    "http://seed5.ngd.network:10332",
+    "http://seed6.ngd.network:10332",
+    "http://seed7.ngd.network:10332",
+    "http://seed8.ngd.network:10332",
+    "http://seed9.ngd.network:10332",
+    "http://seed10.ngd.network:10332",
+  ],
+  TEST: [
+    "http://seed1.ngd.network:20332",
+    "http://seed2.ngd.network:20332",
+    "http://seed3.ngd.network:20332",
+    "http://seed4.ngd.network:20332",
+    "http://seed5.ngd.network:20332",
+    "http://seed6.ngd.network:20332",
+    "http://seed7.ngd.network:20332",
+    "http://seed8.ngd.network:20332",
+    "http://seed9.ngd.network:20332",
+    "http://seed10.ngd.network:20332"
+  ]
+};
+
 export const DEFAULT_REQ = {
   jsonrpc: "2.0",
   method: "getblockcount",
