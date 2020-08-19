@@ -101,7 +101,7 @@ export async function getRPCEndpoint(url: string): Promise<string> {
   } catch {
     bestRPC = null;
   }
-  return !bestRPC ? CONST.DEFAULT_URLS[env][0] : bestRPC;
+  return bestRPC || CONST.DEFAULT_URLS[env][0];
 }
 
 /**
