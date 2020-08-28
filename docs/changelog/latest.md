@@ -3,6 +3,20 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.8.1
+=====
+
+
+- Fixes
+
+  - Fix websocket not closing quickly enough. This also includes a minor API interface change for closing. Closing notifications now return promises instead of void. There is no major change as it will still close even if you do not await the promises.
+
+- Others
+
+  - Update crypto-js to 3.3.0
+  - Update elliptic to 6.5.3
+  - Minor fixes to tests to not use testnet neoscan as it is broken.
+
 4.8.0
 =====
 
