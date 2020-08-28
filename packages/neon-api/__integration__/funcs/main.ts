@@ -6,7 +6,7 @@ const neonJs = apiPlugin(neonCore);
 const { api, CONST, rpc, sc } = neonJs;
 
 const net = "TestNet";
-const url = "https://neoscan-testnet.io/api/test_net";
+const neoscanUrl = "https://neoscan-testnet.io/api/test_net";
 const testKeys = {
   a: {
     address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
@@ -28,15 +28,12 @@ const testKeys = {
 neonCore.settings.networks[net] = new rpc.Network({
   Name: net,
   ExtraConfiguration: {
-    neoscan: url,
+    neoscan: neoscanUrl,
   },
 });
 
-const provider = new api.neoscan.instance("TestNet");
-
-beforeAll(() => {
-  expect(provider.name).toMatch(url);
-});
+const provider = new api.neoCli.instance("http://seed1.ngd.network:20332");
+// const provider = new api.neoscan.instance("TestNet");
 
 describe("sendAsset", () => {
   test("send some NEO with network fee from a to b", async () => {

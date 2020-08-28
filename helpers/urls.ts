@@ -13,9 +13,8 @@ const TESTNET_URLS = [
   "http://seed7.ngd.network:20332",
   "http://seed8.ngd.network:20332",
   "http://seed9.ngd.network:20332",
-  "http://seed10.ngd.network:20332"
+  "http://seed10.ngd.network:20332",
 ];
-
 
 const MAINNET_URLS = [
   "http://seed1.ngd.network:10332",
@@ -37,7 +36,7 @@ const MAINNET_URLS = [
   "https://seed6.cityofzion.io:443",
   "https://seed7.cityofzion.io:443",
   "https://seed8.cityofzion.io:443",
-  "https://seed9.cityofzion.io:443"
+  "https://seed9.cityofzion.io:443",
 ];
 
 export function getUrls(net: string): string[] {
@@ -58,7 +57,7 @@ export async function getUrl(net: string): Promise<string> {
   const orderedUrls = getUrls(net);
 
   const slicedUrls = cutArray(orderedUrls);
-  var previousBlockCount = 0;
+  let previousBlockCount = 0;
   for (let i = 0; i < slicedUrls.length; i++) {
     try {
       const res = (await rpc.Query.getBlockCount().execute(slicedUrls[i])) as {

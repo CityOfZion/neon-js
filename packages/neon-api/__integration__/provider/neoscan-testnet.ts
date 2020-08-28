@@ -18,7 +18,7 @@ neonJs.settings.networks[net] = new rpc.Network({
 const provider = new neonJs.api.neoscan.instance("TestNet");
 const invalidAddr = "address";
 
-describe(`Valid Address: ${provider.name}`, () => {
+describe.skip(`Valid Address: ${provider.name}`, () => {
   test("getBalance", async () => {
     const result = await provider.getBalance(addr);
     expect(result).toBeInstanceOf(wallet.Balance);
@@ -59,7 +59,7 @@ describe(`Valid Address: ${provider.name}`, () => {
   });
 });
 
-describe(`Invalid Address: ${provider.name}`, () => {
+describe.skip(`Invalid Address: ${provider.name}`, () => {
   test("getBalance", async () => {
     const result = await provider.getBalance(invalidAddr);
     expect(result).toBeInstanceOf(wallet.Balance);
