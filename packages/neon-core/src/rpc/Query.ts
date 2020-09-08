@@ -23,6 +23,21 @@ export interface RPCErrorResponse {
   message: string;
 }
 
+export interface ApplicationLog {
+  txid: string;
+  trigger: string;
+  vmstate: string;
+  gasconsumed: string;
+  stack?: StackItemJson[];
+  notifications: {
+    contract: string;
+    eventname: string;
+    state: string;
+  }[];
+}
+
+export type GetApplicationLogsResult = ApplicationLog[];
+
 /**
  * Result from calling invokescript or invokefunction.
  */
@@ -42,6 +57,31 @@ export interface GetContractStateResult {
   hash: string;
   script: string;
   manifest: ContractManifestLike;
+}
+
+export interface GetNep5TransfersResult {
+  sent: Nep5TransferEvent[];
+  received: Nep5TransferEvent[];
+  address: string;
+}
+
+export interface Nep5TransferEvent {
+  timestamp: number;
+  assethash: string;
+  transferaddress: string;
+  amount: string;
+  blockindex: number;
+  transfernotifyindex: number;
+  txhash: string;
+}
+
+export interface GetNep5BalancesResult {
+  address: string;
+  balance: {
+    assethash: string;
+    amount: string;
+    lastupdatedblock: number;
+  }[];
 }
 
 export interface GetPeersResult {
@@ -106,6 +146,18 @@ export class Query<TParams extends unknown[], TResponse> {
   public static getBestBlockHash(): Query<[], string> {
     return new Query({
       method: "getbestblockhash",
+    });
+  }
+
+  /**
+   * Query returning the application log.
+   */
+  public static getApplicationLogs(
+    hash: string
+  ): Query<[string], GetApplicationLogsResult> {
+    return new Query({
+      method: "getapplicationlogs",
+      params: [hash],
     });
   }
 
@@ -195,6 +247,39 @@ export class Query<TParams extends unknown[], TResponse> {
     return new Query({
       method: "getcontractstate",
       params: [scriptHash],
+    });
+  }
+
+  /**
+   * Query returning the nep5 transfer history of an account. Defaults of 1 week of history.
+   * @param accountIdentifer - address or scriptHash of account
+   * @param startTime - millisecond Unix timestamp
+   * @param endTime - millisecond Unix timestamp
+   */
+  public static getNep5Transfers(
+    accountIdentifer: string,
+    startTime?: string,
+    endTime?: string
+  ): Query<[string, string?, string?], GetNep5TransfersResult> {
+    const params: [string, string?, string?] = [accountIdentifer];
+    if (startTime) params.push(startTime);
+    if (endTime) params.push(endTime);
+    return new Query({
+      method: "getnep5transfers",
+      params,
+    });
+  }
+
+  /**
+   * Query returning the nep5 balance of an account.
+   * @param accountIdentifer - address or scriptHash of account
+   */
+  public static getNep5Balances(
+    accountIdentifer: string
+  ): Query<[string], GetNep5BalancesResult> {
+    return new Query({
+      method: "getnep5balances",
+      params: [accountIdentifer],
     });
   }
 

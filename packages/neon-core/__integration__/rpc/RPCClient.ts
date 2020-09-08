@@ -1,4 +1,4 @@
-import { rpc } from "../../src/index";
+import { rpc } from "../../src";
 import {
   ContractParam,
   createScript,
@@ -60,7 +60,6 @@ beforeAll(async () => {
     throw new Error("No good endpoint found");
   }
   client = new rpc.RPCClient(best.url);
-
   const firstBlock = await client.getBlock(0, true);
   expect(firstBlock.tx.length).toBe(1);
   blockhash = firstBlock.hash;

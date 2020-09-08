@@ -8,7 +8,7 @@ different functionality.
 
 ## Core
 
-The core package is `neon-core`, comprising of the following packages:
+The core package is `neon-core`, comprising of the following folders:
 
 - `rpc`
 - `sc`
@@ -25,7 +25,7 @@ package:
 
 ```js
 import { tx, wallet, settings } from "@cityofzion/neon-core";
-const t = new tx.ClaimTransaction();
+const t = new tx.Transaction();
 const acct = new wallet.Account();
 
 console.log(settings.networks); // {} (empty object as there are no defaults)
