@@ -9,7 +9,9 @@ build
 *.log
 
 # IDE specific
-/.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
 .idea
 
 # Package stuff
