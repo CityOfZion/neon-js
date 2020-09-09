@@ -1,0 +1,11 @@
+# Node modules
+/node_modules/
+
+# Website
+/website/
+
+/examples/
+
+# Packages output dir
+/packages/**/lib/
+/packages/**/node_modules/

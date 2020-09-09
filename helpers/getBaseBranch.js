@@ -8,6 +8,6 @@ axios
   .get(
     `https://api.github.com/repos/cityofzion/neon-js/pulls/${pullRequestNumber}`
   )
-  .then(res => {
+  .then((res) => {
     console.log(res.data.base.ref);
   });

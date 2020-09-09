@@ -1,16 +1,15 @@
 const path = require("path");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 let env = process.env.NODE_ENV || "development";
 
-module.exports = function(rootDir) {
+module.exports = function (rootDir) {
   return {
     mode: env,
     devtool: env === "development" ? "inline-source-map" : "source-map",
     entry: path.resolve(rootDir, "src", "index.ts"),
     resolve: {
       // Add `.ts` and `.tsx` as a resolvable extension.
-      extensions: [".ts", ".tsx", ".js"]
+      extensions: [".ts", ".tsx", ".js"],
     },
     module: {
       rules: [
@@ -22,11 +21,11 @@ module.exports = function(rootDir) {
             compilerOptions: {
               declarationDir: path.resolve(rootDir, "dist"),
               sourceMap: env === "development",
-              module: "commonjs"
-            }
-          }
-        }
-      ]
+              module: "commonjs",
+            },
+          },
+        },
+      ],
     },
     // plugins: [new CleanWebpackPlugin({verbose: true})]
   };
