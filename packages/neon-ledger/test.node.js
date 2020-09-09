@@ -11,25 +11,25 @@ let ledgerInstance = null;
 
 neonJs.ledger
   .getDevicePaths(nodeLedger)
-  .then(paths => {
+  .then((paths) => {
     console.log("\n\n ---Ledger devices---");
     console.log(paths);
     ledgerInstance = nodeLedger.open(paths[0]);
     return ledgerInstance;
   })
-  .then(ledger => {
+  .then((ledger) => {
     ledgerInstance = ledger;
     const bip = neonJs.ledger.BIP44(addressNumber);
     console.log("\n\n ---BIP44 String---");
     console.log(bip);
     return neonJs.ledger.getPublicKey(ledger, bip);
   })
-  .then(key => {
+  .then((key) => {
     console.log("\n\n ---Public Key---");
     console.log(key);
     return key;
   })
-  .then(publicKey => {
+  .then((publicKey) => {
     return neonJs.api.sendAsset({
       api: neoscan,
       account: new neonJs.wallet.Account(publicKey),
@@ -45,13 +45,13 @@ neonJs.ledger
         );
         const witness = await neonJs.tx.Witness.fromSignature(sig, pubKey);
         return witness.serialize();
-      }
+      },
     });
   })
-  .then(sendAsset => {
+  .then((sendAsset) => {
     console.log("\n\n---SendAsset---");
     console.log(sendAsset.response);
   })
-  .catch(e => {
+  .catch((e) => {
     console.log(e);
   });
