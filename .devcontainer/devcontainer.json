@@ -1,0 +1,19 @@
+{
+    "name": "neo3-preview neon-js dev environment",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "main",
+    "workspaceFolder": "/workspace",
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+    ],
+    "forwardPorts": [
+        3000,
+        20332
+    ],
+    "postCreateCommand": "yarn install",
+    "remoteUser": "node"
+}
