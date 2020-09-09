@@ -5,7 +5,7 @@ import testWalletJson from "../../../__tests__/testWallet.json";
 const testWallet = new wallet.Wallet(testWalletJson);
 
 let client: rpc.Nep5TrackerRpcClient;
-const address = testWallet.accounts[0].address;
+const address = "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV";
 
 beforeAll(async () => {
   await testWallet.decryptAll("wallet");
