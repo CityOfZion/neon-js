@@ -8,3 +8,4 @@ export * from "./InteropServiceCode";
 export * from "./InteropServicePrices";
 export * from "./StackItem";
 export * from "./manifest";
+export * from "./OpToken";
