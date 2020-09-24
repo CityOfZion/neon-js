@@ -1,7 +1,19 @@
 import OpCode from "./OpCode";
 import { StringStream } from "../u";
 
+/**
+ * A token from tokenizing a VM script. Consists of a OpCode and optional params that follow it.
+ *
+ * @example
+ *
+ * const result = OpToken.fromScript("4101020304");
+ * console.log(result[0].toInstruction()); // SYSCALL 01020304
+ */
 export class OpToken {
+  /**
+   * Tokenizes a VM script into its individual instructions.
+   * @param script - VM script to tokenize.
+   */
   public static fromScript(script: string): OpToken[] {
     const ss = new StringStream(script);
     const operations: OpToken[] = [];
@@ -16,6 +28,9 @@ export class OpToken {
 
   constructor(public code: OpCode, public params?: string) {}
 
+  /**
+   * Helps to print the token in a formatted way.
+   */
   public toInstruction(): string {
     return `${OpCode[this.code]}${this.params ? " " + this.params : ""}`;
   }
@@ -34,12 +49,6 @@ type PushByteOpCode =
   | OpCode.PUSHDATA1
   | OpCode.PUSHDATA2
   | OpCode.PUSHDATA4;
-
-type PushConstOpCode =
-  | OpCode.PUSHNULL
-  | OpCode.PUSHM1
-  | OpCode.PUSH0
-  | OpCode.PUSH1;
 
 type OpCodeWithParams = PushByteOpCode | OpCode.SYSCALL;
 const paramsFactory: Record<OpCodeWithParams, ParamsExtracter> = {
