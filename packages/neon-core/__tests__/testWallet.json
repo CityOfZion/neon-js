@@ -71,6 +71,30 @@
             }
         },
         {
+            "address": "NSyfwYL3LUNgjiiXDZBi9SDYh5eoe5DA71",
+            "label": null,
+            "isdefault": false,
+            "lock": false,
+            "key": "6PYSeMMbHPpzD9jFvtytPLatcDJA1qraaKaxrkMDxxvN4XV5VZe2tdus8e",
+            "contract": {
+                "script": "EgwhAgKKmYJu3AyX0Y4itpMjc9kI0yOqf5JlanfsJuiGFpnvDCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckMIQIjLOjS4gY9zgRRExhR1HQhv8T8HaTbEW/KUwLAdWRi\u002BhMLQRON768=",
+                "parameters": [
+                    {
+                        "name": "parameter0",
+                        "type": "Signature"
+                    },
+                    {
+                        "name": "parameter1",
+                        "type": "Signature"
+                    }
+                ],
+                "deployed": false
+            },
+            "extra": {
+                "description": "MultiSig made from A,B,C."
+            }
+        },
+        {
             "address": "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV",
             "label": "origin multisig",
             "isdefault": false,

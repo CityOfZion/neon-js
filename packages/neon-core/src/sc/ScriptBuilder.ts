@@ -166,6 +166,35 @@ export class ScriptBuilder extends StringStream {
   }
 
   /**
+   * Helper method to emit a public key.
+   *
+   * @remarks
+   * Conventionally, hexstrings are pushed as little endian into the script. However, for public keys, they are pushed as big endian.
+   * This helper method reduces the confusion by hiding this edge case.
+   * @param publicKey - 66 character string or a HexString.
+   *
+   * @example
+   * const publicKey = "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef";
+   * const result = new ScriptBuilder()
+   *  .emitPublicKey(publicKey)
+   *  .build();
+   *
+   * const publicKeyInHexString = HexString.fromHex(publicKey, false);
+   * const sameResult = new ScriptBuilder()
+   *  .emitPublicKey(publicKeyInHexString)
+   *  .build();
+   *
+   * console.log(result); // 0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef
+   *
+   *
+   */
+  public emitPublicKey(publicKey: string | HexString): this {
+    const stringFormatKey =
+      publicKey instanceof HexString ? publicKey.toBigEndian() : publicKey;
+    return this.emit(OpCode.PUSHDATA1, num2hexstring(33) + stringFormatKey);
+  }
+
+  /**
    * Appends a number. Maximum number possible is ulong(256 bits of data).
    * @param num - for numbers beyond MAX_INT, please pass in a string instead of a javascript number.
    */

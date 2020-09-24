@@ -18,7 +18,7 @@ export function constructMultiSigVerificationScript(
     if (!isPublicKey(k, true)) {
       throw new Error(`${k} is not a valid encoded public key`);
     }
-    sb.emitHexstring(k);
+    sb.emitPublicKey(k);
   });
   return sb
     .emitPush(keys.length)
