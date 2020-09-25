@@ -66,14 +66,14 @@ describe("encrypt", () => {
 
     expect(result).toBeTruthy();
     expect(wallet.accounts[0].encrypted).toBe(WALLET_JSON.accounts[1].key);
-  });
+  }, 10000);
   test("failure", async () => {
     const wallet = new Wallet();
     wallet.addAccount(new Account(WALLET_JSON.accounts[0].extra.WIF));
 
     await expect(wallet.encrypt(-1, "badPassword")).rejects.toThrow();
   });
-});
+}, 10000);
 
 describe("encryptAll", () => {
   test("success", async () => {
@@ -97,12 +97,12 @@ describe("decrypt", () => {
 
     expect(result).toBeTruthy();
     expect(wallet.accounts[0].WIF).toBe(WALLET_JSON.accounts[0].extra.WIF);
-  });
+  }, 10000);
   test("failure", async () => {
     const wallet = new Wallet(WALLET_JSON);
 
     await expect(wallet.decrypt(1, "passw0rd_failure")).rejects.toThrow();
-  });
+  }, 10000);
 });
 
 describe("decryptAll", () => {
@@ -111,7 +111,7 @@ describe("decryptAll", () => {
 
     const result = await wallet.decryptAll(PASSWORD);
 
-    expect(result).toStrictEqual([true, true, true, true, true]);
+    expect(result).toStrictEqual([true, true, true, true, true, true]);
     expect(wallet.accounts[0].WIF).toBe(WALLET_JSON.accounts[0].extra.WIF);
   }, 20000);
 

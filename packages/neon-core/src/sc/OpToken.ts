@@ -30,6 +30,12 @@ export class OpToken {
     return operations;
   }
 
+  /**
+   * Attempts to convert a OpToken that is parsable to an integer.
+   * @param opToken - token with code that is a PUSHINT[0-9]+ or PUSH[0-9]+.
+   *
+   * @throws Error if OpToken contains an invalid code.
+   */
   public static parseInt(opToken: OpToken): number {
     if (opToken.code >= 0 && opToken.code <= 5) {
       //PUSHINT*
