@@ -1,11 +1,19 @@
-import { ScriptBuilder, InteropServiceCode, OpCode, fromHex } from "../sc";
-import { reverseHex, StringStream } from "../u";
+import { ScriptBuilder, InteropServiceCode, OpCode, OpToken } from "../sc";
+import { StringStream } from "../u";
 import { isPublicKey } from "./verify";
 
+/**
+ * Constructs the script for a multi-sig account.
+ * @param signingThreshold - number of keys required for signing. Must be smaller or equal to the number of keys provided.
+ * @param keys - public keys of all keys involved. Ordering matters.
+ */
 export function constructMultiSigVerificationScript(
   signingThreshold: number,
   keys: string[]
 ): string {
+  if (signingThreshold <= 0) {
+    throw new Error("signingThreshold must be bigger than zero.");
+  }
   if (signingThreshold > keys.length) {
     throw new Error(
       "signingThreshold must be smaller than or equal to number of keys"
@@ -34,49 +42,28 @@ export function constructMultiSigVerificationScript(
 export function getPublicKeysFromVerificationScript(
   verificationScript: string
 ): string[] {
-  const ss = new StringStream(verificationScript);
-  const keys = [] as string[];
-  while (!ss.isEmpty()) {
-    const byte = ss.read();
-    if (fromHex(byte) === OpCode.PUSHDATA1) {
-      keys.push(ss.read(33));
-    }
-  }
-  return keys;
+  const operations = OpToken.fromScript(verificationScript);
+  return operations.filter(looksLikePublicKey).map((t) => t.params.slice(2));
+}
+
+function looksLikePublicKey(token: OpToken): token is Required<OpToken> {
+  return (
+    token.code === OpCode.PUSHDATA1 &&
+    !!token.params &&
+    token.params.length === 68 &&
+    token.params.slice(0, 2) === "21"
+  );
 }
 
 /**
  * Returns the number of signatures required for signing for a verification Script.
- * @param verificationScript - verification Script of a multi-sig Account.
+ * @param verificationScript - verification script of a multi-sig Account.
  */
 export function getSigningThresholdFromVerificationScript(
   verificationScript: string
 ): number {
-  const checkSigInteropCode = verificationScript.slice(
-    verificationScript.length - 8
-  );
-  if (
-    checkSigInteropCode ===
-    InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
-  ) {
-    return 1;
-  } else if (
-    checkSigInteropCode ===
-    InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256R1
-  ) {
-    const ss = new StringStream(verificationScript);
-    const byte = parseInt(ss.peek(), 16);
-    if (byte < 80) {
-      const hexNum = reverseHex(ss.readVarBytes());
-      return parseInt(hexNum, 16);
-    } else {
-      return parseInt(ss.read(), 16) - 80;
-    }
-  } else {
-    throw new Error(
-      "VerificationScript does not call CHECKSIG or CHECKMULTISIG."
-    );
-  }
+  const operations = OpToken.fromScript(verificationScript);
+  return OpToken.parseInt(operations[0]);
 }
 
 /**

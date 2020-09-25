@@ -1,7 +1,6 @@
 import {
   constructMultiSigVerificationScript,
   getPublicKeysFromVerificationScript,
-  getSignaturesFromInvocationScript,
   getSigningThresholdFromVerificationScript,
 } from "../../src/wallet";
 
@@ -23,111 +22,33 @@ const testData: [string, number, string[], string][] = [
     "120c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef0c21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c90c2102232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa130b41138defaf",
   ],
 ];
-describe.skip("getSigningThresholdFromVerificationScript", () => {
-  test.each([
-    [
-      1,
-      "2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef68747476aa",
-    ],
-    [
-      2,
-      "522102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c92102232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa5368c7c34cba",
-    ],
-    [
-      17,
-      "01112102019a1a66c13311bf97534b2a563f9a1836855a6786c7129ceb5a062e3ca3f514210313b4274044e44b36c2d6c456ed78780c6a24bf9b62ea081f6503f19c1fbef0ad21022aae92683dc6936312c75d27bf8f7110a4a42a5d715c2c63b9483a2ac525f8bd21022e57d04af639405d352ddaf0b1499f29e438fb78dacafbddb17c9a1817b6e367210238ed4dea9df79805e265452ebe28da582a3b4c38636671e515d4c02b255bd5de2102392acac4b678a2c8088025e83f19e6dc6e24a6fa25ddbda13c3c905fbad2acc02103436846c527c02c79b61e3f4727ab029b04a1ac7847d36efbb2e1fe9d593f654721024f9d1be2b30e724cff20215a307aabd7d718a90ed42e5f64fcf7954762d6ca74210258e57f0350730befb2fbcd8a6f5fef6dd4dc143207d486e16a4d694a87f806f4210369507b2bd96e79e4d201ed4345a6010ff3bbf2f4c68966414751b1b6f88daf5f21026de9edd43d92ddcb018e6ec58309bfe99be00d0a4e12b1819b15baa75de2320821037845a53d5cc53347e41a22937c0a9e82291f88363fcf99a13a7a12cf1613c46821027c39729410040d8b3977cf19320a997f6e5a1c9895454c9993e26f59544405c52102a16bd9140780909eb4d86f44060a963b8988fbaea601336a5a92942e82b0c1e62103b3c4ccce56af5e066583620cac2e507dc5c47058c7a92a97ea122dc47ebb84112103bbb2f2cc850537818515da29d7dab0ee75be5ee1e65d9e2c26cdc15ac504a2b72103c73ce19147500f30bc075f134d2ad715ce4dfa5d6c13c8e5584816438b7529fb2102de3a4cfa86aa62ab4784be7b08d3528cf52f19781dc4f043bceed407536ef97a2103f85d0cbd392dac4647a313564d9426016f42a0ba89cf2fc0f6903528ec2d92e82103ff7fd8eccae93001919460e5cae6325f0ff832e8977e3276efd155ba3a27f6e7011468c7c34cba",
-    ],
-  ])("returns correct int: %i", (expected: number, script: string) => {
-    const result = getSigningThresholdFromVerificationScript(script);
-    expect(result).toEqual(expected);
-  });
-});
 
-describe.skip("getPublicKeysFromVerificationScript", () => {
-  test.each([
-    [
-      1,
-      ["02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef"],
-      "2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef68747476aa",
-    ],
-    [
-      3,
-      [
-        "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
-        "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
-        "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
-      ],
-      "522102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c92102232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa5368c7c34cba",
-    ],
-    [
-      20,
-      [
-        "02019a1a66c13311bf97534b2a563f9a1836855a6786c7129ceb5a062e3ca3f514",
-        "0313b4274044e44b36c2d6c456ed78780c6a24bf9b62ea081f6503f19c1fbef0ad",
-        "022aae92683dc6936312c75d27bf8f7110a4a42a5d715c2c63b9483a2ac525f8bd",
-        "022e57d04af639405d352ddaf0b1499f29e438fb78dacafbddb17c9a1817b6e367",
-        "0238ed4dea9df79805e265452ebe28da582a3b4c38636671e515d4c02b255bd5de",
-        "02392acac4b678a2c8088025e83f19e6dc6e24a6fa25ddbda13c3c905fbad2acc0",
-        "03436846c527c02c79b61e3f4727ab029b04a1ac7847d36efbb2e1fe9d593f6547",
-        "024f9d1be2b30e724cff20215a307aabd7d718a90ed42e5f64fcf7954762d6ca74",
-        "0258e57f0350730befb2fbcd8a6f5fef6dd4dc143207d486e16a4d694a87f806f4",
-        "0369507b2bd96e79e4d201ed4345a6010ff3bbf2f4c68966414751b1b6f88daf5f",
-        "026de9edd43d92ddcb018e6ec58309bfe99be00d0a4e12b1819b15baa75de23208",
-        "037845a53d5cc53347e41a22937c0a9e82291f88363fcf99a13a7a12cf1613c468",
-        "027c39729410040d8b3977cf19320a997f6e5a1c9895454c9993e26f59544405c5",
-        "02a16bd9140780909eb4d86f44060a963b8988fbaea601336a5a92942e82b0c1e6",
-        "03b3c4ccce56af5e066583620cac2e507dc5c47058c7a92a97ea122dc47ebb8411",
-        "03bbb2f2cc850537818515da29d7dab0ee75be5ee1e65d9e2c26cdc15ac504a2b7",
-        "03c73ce19147500f30bc075f134d2ad715ce4dfa5d6c13c8e5584816438b7529fb",
-        "02de3a4cfa86aa62ab4784be7b08d3528cf52f19781dc4f043bceed407536ef97a",
-        "03f85d0cbd392dac4647a313564d9426016f42a0ba89cf2fc0f6903528ec2d92e8",
-        "03ff7fd8eccae93001919460e5cae6325f0ff832e8977e3276efd155ba3a27f6e7",
-      ],
-      "01112102019a1a66c13311bf97534b2a563f9a1836855a6786c7129ceb5a062e3ca3f514210313b4274044e44b36c2d6c456ed78780c6a24bf9b62ea081f6503f19c1fbef0ad21022aae92683dc6936312c75d27bf8f7110a4a42a5d715c2c63b9483a2ac525f8bd21022e57d04af639405d352ddaf0b1499f29e438fb78dacafbddb17c9a1817b6e367210238ed4dea9df79805e265452ebe28da582a3b4c38636671e515d4c02b255bd5de2102392acac4b678a2c8088025e83f19e6dc6e24a6fa25ddbda13c3c905fbad2acc02103436846c527c02c79b61e3f4727ab029b04a1ac7847d36efbb2e1fe9d593f654721024f9d1be2b30e724cff20215a307aabd7d718a90ed42e5f64fcf7954762d6ca74210258e57f0350730befb2fbcd8a6f5fef6dd4dc143207d486e16a4d694a87f806f4210369507b2bd96e79e4d201ed4345a6010ff3bbf2f4c68966414751b1b6f88daf5f21026de9edd43d92ddcb018e6ec58309bfe99be00d0a4e12b1819b15baa75de2320821037845a53d5cc53347e41a22937c0a9e82291f88363fcf99a13a7a12cf1613c46821027c39729410040d8b3977cf19320a997f6e5a1c9895454c9993e26f59544405c52102a16bd9140780909eb4d86f44060a963b8988fbaea601336a5a92942e82b0c1e62103b3c4ccce56af5e066583620cac2e507dc5c47058c7a92a97ea122dc47ebb84112103bbb2f2cc850537818515da29d7dab0ee75be5ee1e65d9e2c26cdc15ac504a2b72103c73ce19147500f30bc075f134d2ad715ce4dfa5d6c13c8e5584816438b7529fb2102de3a4cfa86aa62ab4784be7b08d3528cf52f19781dc4f043bceed407536ef97a2103f85d0cbd392dac4647a313564d9426016f42a0ba89cf2fc0f6903528ec2d92e82103ff7fd8eccae93001919460e5cae6325f0ff832e8977e3276efd155ba3a27f6e7011468c7c34cba",
-    ],
-  ])(
-    "returns publicKeys: %i",
-    (_: string, expected: string[], script: string) => {
-      const result = getPublicKeysFromVerificationScript(script);
-
-      expect(result).toEqual(expected);
-    }
-  );
-});
-
-describe.skip("getSignaturesFromInvocationScript", () => {
-  test.each([
-    [
-      1,
-      [
-        "51c2e6e2993c6feb43383131ed2091f4953747d3e16ecad752cdd90203a992dea0273e98c8cd09e9bfcf2dab22ce843429cdf0fcb9ba4ac93ef1aeef40b20783",
-      ],
-      "4051c2e6e2993c6feb43383131ed2091f4953747d3e16ecad752cdd90203a992dea0273e98c8cd09e9bfcf2dab22ce843429cdf0fcb9ba4ac93ef1aeef40b20783",
-    ],
-    [
-      3,
-      [
-        "e634f503454fc99d72aa3ab6048cb0cf33ed2afec8c9f38a6c4b87126f0da6c62e39205c86178d95a191ec76fb09b2380b8df1074ea62e02cb9d4a5e1c6372a2",
-        "f81e7b0ac2e415dac37bf189827f2e716c53e383faf973d9e222bbb44bb0c55d181726460397a90e9f26013ac3eb17019f0667d78915d5d7ded4d9f87ef785ac",
-        "9ed10d60df8d8ac2fe719448ea732638963649f41c44bdbe6eb10e7dd7d6c5c71d82738f1d33c58fe8350f5c4c51b388a41c32768b598afb978f08a56eef72d7",
-      ],
-      "40e634f503454fc99d72aa3ab6048cb0cf33ed2afec8c9f38a6c4b87126f0da6c62e39205c86178d95a191ec76fb09b2380b8df1074ea62e02cb9d4a5e1c6372a240f81e7b0ac2e415dac37bf189827f2e716c53e383faf973d9e222bbb44bb0c55d181726460397a90e9f26013ac3eb17019f0667d78915d5d7ded4d9f87ef785ac409ed10d60df8d8ac2fe719448ea732638963649f41c44bdbe6eb10e7dd7d6c5c71d82738f1d33c58fe8350f5c4c51b388a41c32768b598afb978f08a56eef72d7",
-    ],
-  ])(
-    "return signatures: %i",
-    (_: number, expected: string[], script: string) => {
-      const result = getSignaturesFromInvocationScript(script);
-      expect(result).toEqual(expected);
+describe("constructMultiSigVerificationScript", () => {
+  test.each(testData)(
+    "%s",
+    (_: string, threshold: number, keys: string[], script: string) => {
+      const result = constructMultiSigVerificationScript(threshold, keys);
+      expect(result).toBe(script);
     }
   );
 });
 
 describe("getPublicKeysFromVerificationScript", () => {
-  test.skip.each(testData)(
-    "constructMultiSigVerificationScript %s",
-    (_: string, threshold: number, keys: string[], script: string) => {
-      const result = constructMultiSigVerificationScript(threshold, keys);
-      expect(result).toBe(script);
+  test.each(testData)(
+    "%s",
+    (_: string, _threshold: number, keys: string[], script: string) => {
+      const result = getPublicKeysFromVerificationScript(script);
+      expect(result).toStrictEqual(keys);
+    }
+  );
+});
+
+describe("getSigningThresholdFromVerificationScript", () => {
+  test.each(testData)(
+    "%s",
+    (_: string, threshold: number, _keys: string[], script: string) => {
+      const result = getSigningThresholdFromVerificationScript(script);
+      expect(result).toBe(threshold);
     }
   );
 });
