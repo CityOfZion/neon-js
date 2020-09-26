@@ -111,7 +111,7 @@ export class Witness implements NeonObject<WitnessLike> {
     return new Witness({
       invocationScript: validSigs
         .slice(0, signingThreshold)
-        .map((s) => "40" + s)
+        .map((s) => "0c40" + s)
         .join(""),
       verificationScript,
     });
