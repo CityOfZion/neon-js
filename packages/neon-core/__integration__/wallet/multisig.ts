@@ -1,4 +1,4 @@
-import { rpc, wallet } from "../../src";
+import { rpc } from "../../src";
 import { Account, Wallet } from "../../src/wallet";
 import { createScript, ContractParam } from "../../src/sc";
 import { Transaction, Witness, WitnessScope } from "../../src/tx";
