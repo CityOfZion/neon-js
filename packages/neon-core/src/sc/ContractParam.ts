@@ -272,6 +272,16 @@ export class ContractParam implements NeonObject<ContractParamLike> {
           return false;
         case ContractParamType.Void:
           return true;
+        case ContractParamType.Hash160:
+        case ContractParamType.Hash256:
+        case ContractParamType.PublicKey:
+          if (
+            other.value instanceof HexString ||
+            typeof other.value === "string"
+          ) {
+            return (this.value as HexString).equals(other.value);
+          }
+          return false;
         default:
           return this.value === other.value;
       }

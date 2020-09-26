@@ -1,8 +1,10 @@
-import ContractParam, {
+import {
+  ContractParam,
   ContractParamType,
   likeContractParam,
   ContractParamLike,
 } from "../../src/sc/ContractParam";
+import { HexString } from "../../src/u";
 
 describe("constructor", () => {
   test("ContractParamLike", () => {
@@ -95,7 +97,9 @@ describe("Static constructors", () => {
 
       expect(result instanceof ContractParam).toBeTruthy();
       expect(result.type).toBe(ContractParamType.Hash160);
-      expect(result.value).toBe(expected);
+      expect(result.value).toBeInstanceOf(HexString);
+      const hexStringValue = result.value as HexString;
+      expect(hexStringValue.toBigEndian()).toBe(expected);
     });
 
     test("Errors on non-address or scripthash", () => {
@@ -157,7 +161,9 @@ describe("Static constructors", () => {
 
     expect(result instanceof ContractParam).toBeTruthy();
     expect(result.type).toBe(ContractParamType.PublicKey);
-    expect(result.value).toBe(
+    expect(result.value).toBeInstanceOf(HexString);
+    const hexStringValue = result.value as HexString;
+    expect(hexStringValue.toBigEndian()).toBe(
       "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee"
     );
   });
