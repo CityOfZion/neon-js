@@ -13,7 +13,6 @@ let txid: string;
 let blockhash: string;
 
 beforeAll(async () => {
-  await testWallet.decryptAll("wallet");
   const url = await TestHelpers.getIntegrationEnvUrl();
   client = new rpc.NeoServerRpcClient(url);
   const firstBlock = await client.getBlock(0, true);
@@ -293,6 +292,8 @@ describe("NeoServerRpcClient", () => {
   });
 
   test("sendRawTransaction", async () => {
+    await testWallet.decrypt(0, "wallet");
+
     const fromAccount = testWallet.accounts[0];
     const toAccount = testWallet.accounts[1];
     const script = sc.createScript({
@@ -320,7 +321,7 @@ describe("NeoServerRpcClient", () => {
     }).sign(fromAccount, 1234567890);
     const result = await client.sendRawTransaction(transaction.serialize(true));
     expect(typeof result).toBe("string");
-  }, 10000);
+  }, 20000);
 
   test.skip("submitBlock", () => {
     const alreadyExistedBlock =

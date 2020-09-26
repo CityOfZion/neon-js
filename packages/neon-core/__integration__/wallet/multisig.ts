@@ -1,4 +1,4 @@
-import { rpc } from "../../src";
+import { rpc, wallet } from "../../src";
 import { Account, Wallet } from "../../src/wallet";
 import { createScript, ContractParam } from "../../src/sc";
 import { Transaction, Witness, WitnessScope } from "../../src/tx";
@@ -9,17 +9,17 @@ const testWallet = new Wallet(testWalletJson);
 let client: rpc.RPCClient;
 
 beforeAll(async () => {
-  await testWallet.decryptAll("wallet");
   const url = await TestHelpers.getIntegrationEnvUrl();
   client = new rpc.RPCClient(url);
 
-  console.log(client);
   const firstBlock = await client.getBlock(0, true);
   expect(firstBlock.tx.length).toBe(1);
-}, 20000);
+}, 30000);
 
 describe("multisig", () => {
   test("signs and sends transaction", async () => {
+    await testWallet.decrypt(0, "wallet");
+    await testWallet.decrypt(1, "wallet");
     const multisigAcct = Account.createMultiSig(2, [
       testWallet.accounts[0].publicKey,
       testWallet.accounts[1].publicKey,
