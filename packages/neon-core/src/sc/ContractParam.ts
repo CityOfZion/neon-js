@@ -186,9 +186,11 @@ export class ContractParam implements NeonObject<ContractParamLike> {
         case ContractParamType.Hash256:
         case ContractParamType.PublicKey:
           this.value = HexString.fromHex(input.value as string);
+          return;
         case ContractParamType.Integer:
         case ContractParamType.String:
           this.value = input.value as number | string;
+          return;
         case ContractParamType.Any:
           this.value =
             typeof input.value === "object"
