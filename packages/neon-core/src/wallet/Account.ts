@@ -1,7 +1,7 @@
 import util from "util";
 import { DEFAULT_ACCOUNT_CONTRACT, DEFAULT_SCRYPT } from "../consts";
 import logger from "../logging";
-import { hash160, reverseHex } from "../u";
+import { hash160, HexString, reverseHex } from "../u";
 import * as core from "./core";
 import { constructMultiSigVerificationScript } from "./multisig";
 import { decrypt, encrypt, ScryptParams } from "./nep2";
@@ -20,12 +20,15 @@ const log = logger("wallet");
 
 const inspect = util.inspect.custom;
 export interface AccountJSON {
+  /** Base58 encoded string */
   address: string;
   label: string;
   isdefault: boolean;
   lock: boolean;
+  /** NEP2 encoded string */
   key: string;
   contract?: {
+    /** Base64 encoded string */
     script: string;
     parameters: { name: string; type: string }[];
     deployed: boolean;
@@ -210,15 +213,33 @@ export class Account implements NeonObject<AccountJSON> {
    * Returns the public key in encoded form. This is the form that is the short version (starts with 02 or 03).
    * If you require the unencoded form, do use the publicKey method instead of this getter.
    *
+   * @remarks
+   * There are 2 sources of data: The verification script or the private key.
+   * We attempt to rely on the verification script first if possible as that does not require decrypting the private key.
+   * If it fails, then we rely on the private key and only throw if the private key is not available for conversion.
+   *
    * @example 02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef
    */
   public get publicKey(): string {
     if (this._publicKey) {
       return this._publicKey;
-    } else {
-      this._publicKey = core.getPublicKeyFromPrivateKey(this.privateKey);
-      return this._publicKey;
     }
+    if (this.contract?.script) {
+      // Disassemble and attempt to pull the public key
+      try {
+        const verificationScript = HexString.fromBase64(
+          this.contract.script
+        ).toBigEndian();
+        this._publicKey = core.getPublicKeyFromVerificationScript(
+          verificationScript
+        );
+        return this._publicKey;
+      } catch {
+        // Failed to get public key from contract. Account might be malformed.
+      }
+    }
+    this._publicKey = core.getPublicKeyFromPrivateKey(this.privateKey);
+    return this._publicKey;
   }
 
   /** Retrieves the Public Key in encoded / unencoded form.
@@ -344,9 +365,9 @@ export class Account implements NeonObject<AccountJSON> {
     try {
       if (this.contract.script === "") {
         const publicKey = this.publicKey;
-        this.contract.script = core.getVerificationScriptFromPublicKey(
-          publicKey
-        );
+        this.contract.script = HexString.fromHex(
+          core.getVerificationScriptFromPublicKey(publicKey)
+        ).toBase64();
         this._scriptHash = this._getScriptHashFromVerificationScript();
         log.debug(`Updated ContractScript for Account: ${this.address}`);
       }
@@ -356,7 +377,8 @@ export class Account implements NeonObject<AccountJSON> {
   }
 
   private _getScriptHashFromVerificationScript(): string {
-    return reverseHex(hash160(this.contract.script));
+    const hexScript = HexString.fromBase64(this.contract.script).toBigEndian();
+    return reverseHex(hash160(hexScript));
   }
 }
 

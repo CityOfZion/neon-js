@@ -26,7 +26,7 @@ import {
   EllipticCurvePreset,
 } from "../u";
 import { sign } from "./signing";
-import { OpCode, InteropServiceCode, ScriptBuilder } from "../sc";
+import { OpCode, InteropServiceCode, ScriptBuilder, OpToken } from "../sc";
 
 const curve = getCurve(EllipticCurvePreset.SECP256R1);
 /**
@@ -94,6 +94,32 @@ export const getVerificationScriptFromPublicKey = (
     .emitSysCall(InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1)
     .build();
 };
+
+/**
+ * Extracts the public key from the verification script. This only works for single key accounts.
+ * @param script - hexstring
+ */
+export function getPublicKeyFromVerificationScript(script: string): string {
+  const ops = OpToken.fromScript(script);
+  const sysCallToken = ops.pop();
+  if (
+    sysCallToken === undefined ||
+    sysCallToken.code !== OpCode.SYSCALL ||
+    (sysCallToken.params ?? "") !==
+      InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
+  ) {
+    throw new Error("script is not a single key account.");
+  }
+  const publicKeyToken = ops[0];
+  if (
+    publicKeyToken.code !== OpCode.PUSHDATA1 ||
+    publicKeyToken.params?.length !== 68 ||
+    publicKeyToken.params.slice(0, 2) !== "21"
+  ) {
+    throw new Error("cannot find public key");
+  }
+  return publicKeyToken.params.slice(2);
+}
 
 /**
  * Converts a public key to scripthash.
