@@ -71,7 +71,9 @@ export class Witness implements NeonObject<WitnessLike> {
     const verificationScript =
       typeof acctOrVerificationScript === "string"
         ? acctOrVerificationScript
-        : acctOrVerificationScript.contract.script;
+        : HexString.fromBase64(
+            acctOrVerificationScript.contract.script
+          ).toBigEndian();
 
     const publicKeys = getPublicKeysFromVerificationScript(verificationScript);
     const orderedSigs = Array(publicKeys.length).fill("");

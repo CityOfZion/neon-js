@@ -76,7 +76,7 @@ export class Account implements NeonObject<AccountJSON> {
     );
     return new Account({
       contract: {
-        script: verificationScript,
+        script: HexString.fromHex(verificationScript).toBase64(),
         parameters: Array(signingThreshold).map((_, i) => ({
           name: `signature${i}`,
           type: "Signature",
