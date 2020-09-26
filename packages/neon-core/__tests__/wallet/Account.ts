@@ -1,4 +1,5 @@
 import Account, { AccountJSON } from "../../src/wallet/Account";
+import testWalletJson from "../testWallet.json";
 
 jest.mock("../../src/wallet/nep2");
 
@@ -72,6 +73,15 @@ describe("export", () => {
     const acct = new Account(testObject);
     const result = acct.export();
     expect(result).toEqual(testObject);
+  });
+});
+
+describe("others", () => {
+  test("extract public key from verification script", () => {
+    const acct = new Account(testWalletJson.accounts[0]);
+    expect(acct.publicKey).toBe(
+      "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef"
+    );
   });
 });
 
