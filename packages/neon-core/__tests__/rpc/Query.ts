@@ -1,6 +1,6 @@
 import Query from "../../src/rpc/Query";
 import { ContractParam } from "../../src/sc";
-import { Transaction, WitnessScope } from "../../src/tx";
+import { Transaction, Signer } from "../../src/tx";
 
 describe("constructor", () => {
   test("RPCRequest", () => {
@@ -177,8 +177,9 @@ describe("static", () => {
         { type: "Integer", value: "3" },
       ];
       const result = Query.invokeFunction("hash", "method", inputParams, [
+        new Signer({ account: "ab".repeat(20) }),
         {
-          account: "ab".repeat(20),
+          account: "cd".repeat(20),
           scopes: "CalledByEntry",
         },
       ]);
@@ -190,6 +191,10 @@ describe("static", () => {
         [
           {
             account: "ab".repeat(20),
+            scopes: "FeeOnly",
+          },
+          {
+            account: "cd".repeat(20),
             scopes: "CalledByEntry",
           },
         ],
@@ -204,10 +209,28 @@ describe("static", () => {
       expect(result.params).toEqual(["script", []]);
     });
 
-    test("script with checkWitnessHashes", () => {
-      const result = Query.invokeScript("script", ["abcdabcdabcdabcdabcd"]);
+    test("script with signers", () => {
+      const result = Query.invokeScript("script", [
+        new Signer({ account: "ab".repeat(20) }),
+        {
+          account: "cd".repeat(20),
+          scopes: "CalledByEntry",
+        },
+      ]);
       expect(result.method).toEqual("invokescript");
-      expect(result.params).toEqual(["script", ["abcdabcdabcdabcdabcd"]]);
+      expect(result.params).toEqual([
+        "script",
+        [
+          {
+            account: "ab".repeat(20),
+            scopes: "FeeOnly",
+          },
+          {
+            account: "cd".repeat(20),
+            scopes: "CalledByEntry",
+          },
+        ],
+      ]);
     });
   });
 
