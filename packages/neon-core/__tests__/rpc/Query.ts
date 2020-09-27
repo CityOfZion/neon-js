@@ -190,7 +190,7 @@ describe("static", () => {
         [1, { type: "Integer", value: "2" }, { type: "Integer", value: "3" }],
         [
           {
-            account: "ab".repeat(20),
+            account: "0x" + "ab".repeat(20),
             scopes: "FeeOnly",
           },
           {
@@ -222,7 +222,7 @@ describe("static", () => {
         "script",
         [
           {
-            account: "ab".repeat(20),
+            account: "0x" + "ab".repeat(20),
             scopes: "FeeOnly",
           },
           {
