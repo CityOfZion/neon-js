@@ -1,6 +1,6 @@
 import { DEFAULT_REQ } from "../consts";
 import { Transaction, TransactionJson, Signer, SignerJson } from "../tx";
-import { ContractManifestLike, StackItemJson } from "../sc";
+import { ContractManifestLike, ContractParam, StackItemJson } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 
 export type BooleanLikeParam = 0 | 1 | boolean;
@@ -387,8 +387,8 @@ export class Query<TParams extends unknown[], TResponse> {
    * This Query invokes the VM to run the specific contract with the provided operation and params. Do note that this function only suits contracts with a Main(string, args[]) entry method.
    * @param scriptHash - hash of contract to test.
    * @param operation - name of operation to call (first argument)
-   * @param params - parameters to pass (second argument)
-   * @param signers - scripthashes of witnesses that should sign the transaction containing this script.
+   * @param params - parameters to pass (second argument). ContractParam objects will be exported to JSON format.
+   * @param signers - scripthashes of witnesses that should sign the transaction containing this script. Signers will be exported to JSON format.
    */
   public static invokeFunction(
     scriptHash: string,
@@ -401,7 +401,7 @@ export class Query<TParams extends unknown[], TResponse> {
       params: [
         scriptHash,
         operation,
-        params,
+        params.map((p) => (p instanceof ContractParam ? p.export() : p)),
         signers.map((s) => (s instanceof Signer ? s.toJson() : s)),
       ],
     });

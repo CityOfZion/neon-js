@@ -65,7 +65,7 @@ export class ScriptBuilder extends StringStream {
     }
 
     return this.emitString(operation)
-      .emitHexstring(HexString.fromHex(scriptHash))
+      .emitHexString(HexString.fromHex(scriptHash))
       .emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALL);
   }
 
@@ -93,7 +93,7 @@ export class ScriptBuilder extends StringStream {
         if (Array.isArray(data)) {
           return this.emitArray(data);
         } else if (data instanceof HexString) {
-          return this.emitHexstring(data);
+          return this.emitHexString(data);
         } else if (data === null) {
           return this.emitPush(false);
         } else if (likeContractParam(data)) {
@@ -127,7 +127,7 @@ export class ScriptBuilder extends StringStream {
    * Appends a bytearray.
    */
   public emitBytes(byteArray: ArrayBuffer | ArrayLike<number>): this {
-    return this.emitHexstring(HexString.fromArrayBuffer(byteArray, true));
+    return this.emitHexString(HexString.fromArrayBuffer(byteArray, true));
   }
 
   /**
@@ -141,10 +141,14 @@ export class ScriptBuilder extends StringStream {
 
   /**
    * Appends a hexstring.
+   *
+   * @remarks
+   * If a Javascript string is provided, it is emitted as it is.
+   * If a HexString is provided, it is emitted as little-endian.
    */
-  public emitHexstring(hexstr: string | HexString): this {
+  public emitHexString(hexstr: string | HexString): this {
     if (typeof hexstr === "string") {
-      hexstr = HexString.fromHex(hexstr);
+      hexstr = HexString.fromHex(hexstr, true);
     }
     const littleEndianHex = hexstr.toLittleEndian();
     const size = hexstr.byteLength;
@@ -272,13 +276,14 @@ export class ScriptBuilder extends StringStream {
       case ContractParamType.Integer:
         return this.emitNumber(param.value as number | string);
       case ContractParamType.ByteArray:
-        return this.emitHexstring(param.value as string);
+        return this.emitHexString(param.value as string);
       case ContractParamType.Array:
         return this.emitArray(param.value as ContractParam[]);
       case ContractParamType.Hash160:
       case ContractParamType.Hash256:
+        return this.emitHexString(param.value as HexString);
       case ContractParamType.PublicKey:
-        return this.emitHexstring(param.value as HexString);
+        return this.emitPublicKey(param.value as string);
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }
