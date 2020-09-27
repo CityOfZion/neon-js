@@ -59,7 +59,7 @@ describe("emitSysCall", () => {
 });
 
 describe("emitAppCall", () => {
-  test.only.each([
+  test.each([
     [
       "simple emitAppCall",
       {
@@ -165,7 +165,9 @@ describe("emitString", () => {
 describe("emitHexString", () => {
   test.each([
     ["null", "", "0c00"],
-    ["basic", "0102030405", "0c050504030201"],
+    ["string input", "0102030405", "0c050102030405"],
+    ["string input", HexString.fromHex("0102030405", true), "0c050102030405"],
+    ["string input", HexString.fromHex("0102030405", false), "0c050504030201"],
   ])("%s", (_msg: string, data: string | HexString, expected: string) => {
     const sb = new ScriptBuilder();
     sb.emitHexString(data);

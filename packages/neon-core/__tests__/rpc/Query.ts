@@ -1,5 +1,6 @@
 import Query from "../../src/rpc/Query";
-import { Transaction } from "../../src/tx";
+import { ContractParam } from "../../src/sc";
+import { Transaction, WitnessScope } from "../../src/tx";
 
 describe("constructor", () => {
   test("RPCRequest", () => {
@@ -154,23 +155,44 @@ describe("static", () => {
     });
 
     test("multiple params", () => {
-      const params = [jest.fn(), jest.fn(), jest.fn()];
-      const result = Query.invokeFunction("hash", "method", params);
+      const inputParams = [
+        1,
+        ContractParam.integer(2),
+        { type: "Integer", value: "3" },
+      ];
+      const result = Query.invokeFunction("hash", "method", inputParams);
       expect(result.method).toEqual("invokefunction");
-      expect(result.params).toEqual(["hash", "method", params, []]);
+      expect(result.params).toEqual([
+        "hash",
+        "method",
+        [1, { type: "Integer", value: "2" }, { type: "Integer", value: "3" }],
+        [],
+      ]);
     });
 
-    test("multiple params with checkedWitnessHashes", () => {
-      const params = [jest.fn(), jest.fn(), jest.fn()];
-      const result = Query.invokeFunction("hash", "method", params, [
-        "abcdabcdabcdabcdabcd",
+    test("multiple params with signers", () => {
+      const inputParams = [
+        1,
+        ContractParam.integer(2),
+        { type: "Integer", value: "3" },
+      ];
+      const result = Query.invokeFunction("hash", "method", inputParams, [
+        {
+          account: "ab".repeat(20),
+          scopes: "CalledByEntry",
+        },
       ]);
       expect(result.method).toEqual("invokefunction");
       expect(result.params).toEqual([
         "hash",
         "method",
-        params,
-        ["abcdabcdabcdabcdabcd"],
+        [1, { type: "Integer", value: "2" }, { type: "Integer", value: "3" }],
+        [
+          {
+            account: "ab".repeat(20),
+            scopes: "CalledByEntry",
+          },
+        ],
       ]);
     });
   });
