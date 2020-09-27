@@ -22,7 +22,7 @@ export class OpToken {
     if (!isHex(script)) {
       throw new Error(
         `Expected a hexstring but got ${
-          script.length > 20 ? script.substr(0, 20) : script
+          script.length > 20 ? script.substr(0, 20) + "..." : script
         }`
       );
     }
