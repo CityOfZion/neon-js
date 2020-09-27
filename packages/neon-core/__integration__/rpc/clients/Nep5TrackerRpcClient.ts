@@ -1,14 +1,10 @@
-import { rpc, wallet } from "../../../src";
+import { rpc } from "../../../src";
 import * as TestHelpers from "../../../../../testHelpers";
-import testWalletJson from "../../../__tests__/testWallet.json";
-
-const testWallet = new wallet.Wallet(testWalletJson);
 
 let client: rpc.Nep5TrackerRpcClient;
 const address = "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV";
 
 beforeAll(async () => {
-  await testWallet.decryptAll("wallet");
   const url = await TestHelpers.getIntegrationEnvUrl();
   client = new rpc.Nep5TrackerRpcClient(url);
 }, 20000);

@@ -47,7 +47,6 @@ function isTestNet(): boolean {
 }
 
 beforeAll(async () => {
-  await wallet.decryptAll("wallet");
   const urls = isTestNet() ? TESTNET_URLS : LOCALNET_URLS;
   const data = await Promise.all(urls.map((url) => safelyCheckHeight(url)));
   const heights = data.map((h, i) => ({ height: h, url: urls[i] }));
@@ -337,6 +336,8 @@ describe("RPC Methods", () => {
   });
 
   test("sendRawTransaction", async () => {
+    await wallet.decrypt(0, "wallet");
+
     const fromAccount = wallet.accounts[0];
     const toAccount = wallet.accounts[1];
     const script = createScript({
@@ -364,7 +365,7 @@ describe("RPC Methods", () => {
     }).sign(fromAccount, 1234567890);
     const result = await client.sendRawTransaction(transaction.serialize(true));
     expect(typeof result).toBe("string");
-  }, 10000);
+  }, 20000);
 
   test.skip("submitBlock", () => {
     const alreadyExistedBlock =

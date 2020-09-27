@@ -1,5 +1,5 @@
 import OpCode from "./OpCode";
-import { StringStream, HexString } from "../u";
+import { StringStream, HexString, isHex } from "../u";
 
 /**
  * A token from tokenizing a VM script. Consists of a OpCode and optional params that follow it.
@@ -19,6 +19,13 @@ export class OpToken {
    * @param script - VM script to tokenize.
    */
   public static fromScript(script: string): OpToken[] {
+    if (!isHex(script)) {
+      throw new Error(
+        `Expected a hexstring but got ${
+          script.length > 20 ? script.substr(0, 20) + "..." : script
+        }`
+      );
+    }
     const ss = new StringStream(script);
     const operations: OpToken[] = [];
     while (!ss.isEmpty()) {

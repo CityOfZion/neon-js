@@ -1,5 +1,4 @@
 import { ScriptBuilder, InteropServiceCode, OpCode, OpToken } from "../sc";
-import { StringStream } from "../u";
 import { isPublicKey } from "./verify";
 
 /**
@@ -73,15 +72,12 @@ export function getSigningThresholdFromVerificationScript(
 export function getSignaturesFromInvocationScript(
   invocationScript: string
 ): string[] {
-  const ss = new StringStream(invocationScript);
-  const sigs = [];
-  while (!ss.isEmpty()) {
-    const byte = parseInt(ss.peek(), 16);
-    if (byte > 80) {
-      continue;
-    } else if (byte === 4 * 16) {
-      sigs.push(ss.readVarBytes());
-    }
-  }
-  return sigs;
+  return OpToken.fromScript(invocationScript)
+    .filter(
+      (token): token is Required<OpToken> =>
+        token.code === OpCode.PUSHDATA1 &&
+        !!token.params &&
+        token.params.startsWith("40")
+    )
+    .map((token) => token.params.slice(2));
 }
