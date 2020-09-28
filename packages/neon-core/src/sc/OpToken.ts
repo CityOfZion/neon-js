@@ -1,5 +1,6 @@
-import OpCode from "./OpCode";
-import { StringStream, HexString, isHex } from "../u";
+import { OpCode } from "./OpCode";
+import { StringStream, isHex, reverseHex } from "../u";
+import { OpCodeAnnotations } from "./OpCodeAnnotations";
 
 /**
  * A token from tokenizing a VM script. Consists of a OpCode and optional params that follow it.
@@ -11,7 +12,7 @@ import { StringStream, HexString, isHex } from "../u";
  * @example
  *
  * const result = OpToken.fromScript("4101020304");
- * console.log(result[0].toInstruction()); // SYSCALL 01020304
+ * console.log(result[0].prettyPrint()); // SYSCALL 01020304
  */
 export class OpToken {
   /**
@@ -31,8 +32,13 @@ export class OpToken {
     while (!ss.isEmpty()) {
       const hexOpCode = ss.read(1);
       const opCode = parseInt(hexOpCode, 16) as OpCode;
-      const params = hasParams(opCode) ? paramsFactory[opCode](ss) : undefined;
-      operations.push(new OpToken(opCode, params));
+      const annotation = OpCodeAnnotations[opCode];
+      const paramsExtracter = annotation.operandSize
+        ? readParams(annotation.operandSize)
+        : annotation.operandSizePrefix
+        ? readParamsWithPrefix(annotation.operandSizePrefix)
+        : () => undefined;
+      operations.push(new OpToken(opCode, paramsExtracter(ss)));
     }
     return operations;
   }
@@ -47,9 +53,7 @@ export class OpToken {
     if (opToken.code >= 0 && opToken.code <= 5) {
       //PUSHINT*
       // We dont verify the length of the params. Its screwed if its wrong
-      return opToken.params
-        ? HexString.fromHex(opToken.params, true).toNumber()
-        : 0;
+      return opToken.params ? parseInt(reverseHex(opToken.params), 16) : 0;
     } else if (opToken.code >= 0x0f && opToken.code <= 0x20) {
       return opToken.code - 16;
     } else {
@@ -61,72 +65,42 @@ export class OpToken {
 
   /**
    * Helps to print the token in a formatted way.
+   *
+   * @remarks
+   * Longest OpCode is 12 characters long so default padding is set to 12 characters.
+   * This padding does not include an mandatory space between the OpCode and parameters.
+   * Padding only happens to instructions with parameters.
+   *
+   * @example
+   * ```
+   * const script = "210c0500000000014101020304"
+   * console.log(OpToken.fromScript(script).map(t => t.prettyPrint()));
+   * //NOP
+   * //PUSHDATA1     0000000001
+   * //SYSCALL       01020304
+   *
+   * console.log(OpToken.fromScript(script).map(t => t.prettyPrint(8))); //underpad
+   * //NOP
+   * //PUSHDATA1 0000000001
+   * //SYSCALL  01020304
+   * ```
    */
-  public toInstruction(): string {
-    return `${OpCode[this.code]}${this.params ? " " + this.params : ""}`;
+  public prettyPrint(padding = 12): string {
+    return `${
+      this.params
+        ? OpCode[this.code].padEnd(padding) + " " + this.params
+        : OpCode[this.code]
+    }`;
   }
 }
 
 type ParamsExtracter = (script: StringStream) => string;
 
-type PushByteOpCode =
-  | OpCode.PUSHINT8
-  | OpCode.PUSHINT16
-  | OpCode.PUSHINT32
-  | OpCode.PUSHINT64
-  | OpCode.PUSHINT128
-  | OpCode.PUSHINT256
-  | OpCode.PUSHA
-  | OpCode.PUSHDATA1
-  | OpCode.PUSHDATA2
-  | OpCode.PUSHDATA4;
+function readParams(bytesToRead: number): ParamsExtracter {
+  return (script: StringStream): string => script.read(bytesToRead);
+}
 
-type OpCodeWithParams = PushByteOpCode | OpCode.SYSCALL;
-const paramsFactory: Record<OpCodeWithParams, ParamsExtracter> = {
-  [OpCode.PUSHINT8]: (script: StringStream): string => {
-    return script.read(1);
-  },
-  [OpCode.PUSHINT16]: (script: StringStream): string => {
-    return script.read(2);
-  },
-  [OpCode.PUSHINT32]: (script: StringStream): string => {
-    return script.read(4);
-  },
-  [OpCode.PUSHINT64]: (script: StringStream): string => {
-    return script.read(8);
-  },
-  [OpCode.PUSHINT128]: (script: StringStream): string => {
-    return script.read(16);
-  },
-  [OpCode.PUSHINT256]: (script: StringStream): string => {
-    return script.read(32);
-  },
-  [OpCode.PUSHA]: (script: StringStream): string => {
-    return script.read(4);
-  },
-  [OpCode.PUSHDATA1]: (script: StringStream): string => {
-    const bytesToRead = script.read(1);
-    const numberOfBytesToRead = parseInt(bytesToRead, 16);
-    const data = script.read(numberOfBytesToRead);
-    return bytesToRead + data;
-  },
-  [OpCode.PUSHDATA2]: (script: StringStream): string => {
-    const bytesToRead = script.read(2);
-    const numberOfBytesToRead = parseInt(bytesToRead, 16);
-    const data = script.read(numberOfBytesToRead);
-    return bytesToRead + data;
-  },
-  [OpCode.PUSHDATA4]: (script: StringStream): string => {
-    const bytesToRead = script.read(4);
-    const numberOfBytesToRead = parseInt(bytesToRead, 16);
-    const data = script.read(numberOfBytesToRead);
-    return bytesToRead + data;
-  },
-  [OpCode.SYSCALL]: (script: StringStream): string => {
-    return script.read(4);
-  },
-};
-
-function hasParams(opCode: OpCode): opCode is OpCodeWithParams {
-  return paramsFactory.hasOwnProperty(opCode);
+function readParamsWithPrefix(bytesToRead: number): ParamsExtracter {
+  return (script: StringStream): string =>
+    script.read(parseInt(reverseHex(script.read(bytesToRead)), 16));
 }

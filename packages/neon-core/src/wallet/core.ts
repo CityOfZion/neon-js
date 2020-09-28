@@ -27,6 +27,7 @@ import {
 } from "../u";
 import { sign } from "./signing";
 import { OpCode, InteropServiceCode, ScriptBuilder, OpToken } from "../sc";
+import { isPublicKey } from "./verify";
 
 const curve = getCurve(EllipticCurvePreset.SECP256R1);
 /**
@@ -111,12 +112,12 @@ export function getPublicKeyFromVerificationScript(script: string): string {
   const publicKeyToken = ops[0];
   if (
     publicKeyToken.code !== OpCode.PUSHDATA1 ||
-    publicKeyToken.params?.length !== 68 ||
-    publicKeyToken.params.slice(0, 2) !== "21"
+    !publicKeyToken.params ||
+    !isPublicKey(publicKeyToken.params)
   ) {
     throw new Error("cannot find public key");
   }
-  return publicKeyToken.params.slice(2);
+  return publicKeyToken.params;
 }
 
 /**
