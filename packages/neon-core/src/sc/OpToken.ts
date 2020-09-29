@@ -1,5 +1,5 @@
 import { OpCode } from "./OpCode";
-import { StringStream, isHex, reverseHex } from "../u";
+import { StringStream, isHex, reverseHex, Fixed8 } from "../u";
 import { OpCodeAnnotations } from "./OpCodeAnnotations";
 
 /**
@@ -53,7 +53,9 @@ export class OpToken {
     if (opToken.code >= 0 && opToken.code <= 5) {
       //PUSHINT*
       // We dont verify the length of the params. Its screwed if its wrong
-      return opToken.params ? parseInt(reverseHex(opToken.params), 16) : 0;
+      return opToken.params
+        ? Fixed8.fromReverseHex(opToken.params).toRawNumber().toNumber()
+        : 0;
     } else if (opToken.code >= 0x0f && opToken.code <= 0x20) {
       return opToken.code - 16;
     } else {

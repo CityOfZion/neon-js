@@ -105,6 +105,18 @@ describe("parseInt", () => {
     [16, new OpToken(OpCode.PUSH16)],
     [127, new OpToken(OpCode.PUSHINT8, "7f")],
     [32512, new OpToken(OpCode.PUSHINT16, "007f")],
+    [-1, new OpToken(OpCode.PUSHINT8, "00ff")],
+    [-2, new OpToken(OpCode.PUSHINT16, "feff")],
+    [-3, new OpToken(OpCode.PUSHINT32, "fdffffff")],
+    [-4, new OpToken(OpCode.PUSHINT64, "fcffffffffffffff")],
+    [-5, new OpToken(OpCode.PUSHINT128, "fbffffffffffffffffffffffffffffff")],
+    [
+      -6,
+      new OpToken(
+        OpCode.PUSHINT256,
+        "faffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      ),
+    ],
   ])("%d", (expected: number, input: OpToken) => {
     const result = OpToken.parseInt(input);
     expect(result).toBe(expected);
