@@ -7,3 +7,4 @@ export * from "./StringStream";
 export * from "./random";
 export * from "./HexString";
 export * from "./base64";
+export * from "./BigInteger";
