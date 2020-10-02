@@ -6,8 +6,11 @@ describe("twos complement", () => {
     [-1, "ff"],
     [1, "01"],
     [127, "7f"],
+    [128, "0080"],
     [-128, "80"],
     [-2, "fffe"],
+    [255, "00ff"],
+    [1024, "0400"],
     [32767, "7fff"],
     [-32768, "8000"],
     [-3, "fffffd"],
@@ -37,8 +40,11 @@ describe("twos complement", () => {
     [-1, "ff"],
     [1, "01"],
     [127, "7f"],
+    [128, "0080"],
     [-128, "80"],
     [-2, "fe"],
+    [255, "00ff"],
+    [1024, "0400"],
     [32767, "7fff"],
     [-32768, "8000"],
     [-3, "fd"],
@@ -60,4 +66,168 @@ describe("twos complement", () => {
     const result = BigInteger.fromNumber(n);
     expect(result.toTwos()).toBe(s);
   });
+});
+
+describe("math", () => {
+  test.each([
+    [0, 0, "0"],
+    [0, 1, "1"],
+    [-256, 256, "0"],
+    ["999999999999999", 1, "1000000000000000"],
+  ])(
+    "BI + int: %s + %s = %s",
+    (base: string | number, other: number, expected: string) => {
+      const result = BigInteger.fromNumber(base).add(other);
+
+      expect(result.toString()).toEqual(expected);
+    }
+  );
+
+  test.each([
+    [0, 0, "0"],
+    [0, 1, "1"],
+    [-256, 256, "0"],
+    ["123456789", "987654321", "1111111110"],
+  ])(
+    "BI + BI: %s + %s = %s",
+    (base: string | number, other: number | string, expected: string) => {
+      const result = BigInteger.fromNumber(base).add(
+        BigInteger.fromNumber(other)
+      );
+
+      expect(result.toString()).toEqual(expected);
+    }
+  );
+
+  test.each([
+    [0, 0, "0"],
+    [0, 1, "-1"],
+    [-256, 256, "-512"],
+    ["123456789", "987654321", "-864197532"],
+  ])(
+    "BI - int: %s - %s = %s",
+    (base: string | number, other: number | string, expected: string) => {
+      const result = BigInteger.fromNumber(base).sub(
+        BigInteger.fromNumber(other)
+      );
+
+      expect(result.toString()).toEqual(expected);
+    }
+  );
+
+  test.each([
+    [0, 0, "0"],
+    [0, 1, "-1"],
+    [-256, 256, "-512"],
+    ["123456789", "987654321", "-864197532"],
+  ])(
+    "BI - BI: %s - %s = %s",
+    (base: string | number, other: number | string, expected: string) => {
+      const result = BigInteger.fromNumber(base).sub(
+        BigInteger.fromNumber(other)
+      );
+
+      expect(result.toString()).toEqual(expected);
+    }
+  );
+
+  test.each([
+    [0, 0, "0"],
+    [0, 1, "0"],
+    [-256, 256, "-65536"],
+    ["123456789", "987654321", "121932631112635269"],
+  ])(
+    "BI * int: %s * %s = %s",
+    (base: string | number, other: number | string, expected: string) => {
+      const result = BigInteger.fromNumber(base).mul(
+        BigInteger.fromNumber(other)
+      );
+
+      expect(result.toString()).toEqual(expected);
+    }
+  );
+
+  test.each([
+    [0, 0, "0"],
+    [0, 1, "0"],
+    [-256, 256, "-65536"],
+    ["123456789", "987654321", "121932631112635269"],
+  ])(
+    "BI * BI: %s * %s = %s",
+    (base: string | number, other: number | string, expected: string) => {
+      const result = BigInteger.fromNumber(base).mul(
+        BigInteger.fromNumber(other)
+      );
+
+      expect(result.toString()).toEqual(expected);
+    }
+  );
+
+  test.each([
+    [0, 1, "0"],
+    [1, 1, "1"],
+    [-256, 256, "-1"],
+    [5, 3, "1"],
+    ["123456789", "987654321", "0"],
+  ])(
+    "BI / int: %s / %s = %s",
+    (base: string | number, other: number | string, expected: string) => {
+      const result = BigInteger.fromNumber(base).div(
+        BigInteger.fromNumber(other)
+      );
+
+      expect(result.toString()).toEqual(expected);
+    }
+  );
+
+  test.each([
+    [0, 1, "0"],
+    [1, 1, "1"],
+    [-256, 256, "-1"],
+    [5, 3, "1"],
+    ["123456789", "987654321", "0"],
+  ])(
+    "BI / BI: %s / %s = %s",
+    (base: string | number, other: number | string, expected: string) => {
+      const result = BigInteger.fromNumber(base).div(
+        BigInteger.fromNumber(other)
+      );
+
+      expect(result.toString()).toEqual(expected);
+    }
+  );
+
+  test.each([
+    [0, 1, "0"],
+    [1, 1, "0"],
+    [-256, 256, "0"],
+    [5, 3, "2"],
+    ["123456789", "987654321", "123456789"],
+  ])(
+    "BI % BI: %s % %s = %s",
+    (base: string | number, other: number | string, expected: string) => {
+      const result = BigInteger.fromNumber(base).mod(
+        BigInteger.fromNumber(other)
+      );
+
+      expect(result.toString()).toEqual(expected);
+    }
+  );
+
+  test.each([
+    [0, 1, "0"],
+    [1, 1, "0"],
+    [-256, 256, "0"],
+    [5, 3, "2"],
+    ["123456789", "987654321", "123456789"],
+  ])(
+    "BI % BI: %s % %s = %s",
+    (base: string | number, other: number | string, expected: string) => {
+      const result = BigInteger.fromNumber(base).mod(
+        BigInteger.fromNumber(other)
+      );
+
+      expect(result.toString()).toEqual(expected);
+    }
+  );
 });
