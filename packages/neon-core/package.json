@@ -44,7 +44,6 @@
     "bs58": "4.0.1",
     "bs58check": "2.1.2",
     "crypto-js": "3.3.0",
-    "csbiginteger": "^4.0.3",
     "elliptic": "6.5.3",
     "loglevel": "1.6.8",
     "loglevel-plugin-prefix": "0.8.4",
@@ -62,6 +61,5 @@
     "dist/",
     "lib/",
     "typings/"
-  ],
-  "gitHead": "d21633d03deca1f4bc6c3a4f4e1d32a61aec2fe3"
+  ]
 }
