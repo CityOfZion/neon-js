@@ -68,6 +68,54 @@ describe("twos complement", () => {
   });
 });
 
+describe("hexstring", () => {
+  test.each([
+    ["00", "0"],
+    ["01", "1"],
+    ["ff", "255"],
+    ["ffff", "65535"],
+  ])("fromHex: %s -> %s", (hexstr: string, num: string) => {
+    const result = BigInteger.fromHex(hexstr);
+    expect(result.toString()).toBe(num);
+  });
+
+  test.each([
+    ["00", "0"],
+    ["01", "1"],
+    ["ff", "255"],
+    ["ffff", "65535"],
+  ])("toHex: %s <- %s", (hexstr: string, num: string) => {
+    const result = BigInteger.fromNumber(num);
+    expect(result.toHex()).toBe(hexstr);
+  });
+});
+
+describe("fromNumber", () => {
+  test("throws when non-integer number", () => {
+    expect(() => BigInteger.fromNumber(1.1)).toThrowError(
+      "BigInteger only accepts integers"
+    );
+  });
+
+  test("throws when non-integer numeric string", () => {
+    expect(() => BigInteger.fromNumber("1.1")).toThrowError(
+      "BigInteger only accepts integers"
+    );
+  });
+
+  test("accepts larger than safe number", () => {
+    const result = BigInteger.fromNumber(9007199254740992);
+
+    expect(result.toString()).toBe("9007199254740992");
+  });
+
+  test("accepts smaller than safe number", () => {
+    const result = BigInteger.fromNumber(-9007199254740992);
+
+    expect(result.toString()).toBe("-9007199254740992");
+  });
+});
+
 describe("math", () => {
   test.each([
     [0, 0, "0"],
@@ -103,13 +151,11 @@ describe("math", () => {
     [0, 0, "0"],
     [0, 1, "-1"],
     [-256, 256, "-512"],
-    ["123456789", "987654321", "-864197532"],
+    ["123456789", 987654321, "-864197532"],
   ])(
     "BI - int: %s - %s = %s",
-    (base: string | number, other: number | string, expected: string) => {
-      const result = BigInteger.fromNumber(base).sub(
-        BigInteger.fromNumber(other)
-      );
+    (base: string | number, other: number, expected: string) => {
+      const result = BigInteger.fromNumber(base).sub(other);
 
       expect(result.toString()).toEqual(expected);
     }
@@ -135,13 +181,11 @@ describe("math", () => {
     [0, 0, "0"],
     [0, 1, "0"],
     [-256, 256, "-65536"],
-    ["123456789", "987654321", "121932631112635269"],
+    ["123456789", 987654321, "121932631112635269"],
   ])(
     "BI * int: %s * %s = %s",
-    (base: string | number, other: number | string, expected: string) => {
-      const result = BigInteger.fromNumber(base).mul(
-        BigInteger.fromNumber(other)
-      );
+    (base: string | number, other: number, expected: string) => {
+      const result = BigInteger.fromNumber(base).mul(other);
 
       expect(result.toString()).toEqual(expected);
     }
@@ -168,13 +212,11 @@ describe("math", () => {
     [1, 1, "1"],
     [-256, 256, "-1"],
     [5, 3, "1"],
-    ["123456789", "987654321", "0"],
+    ["123456789", 987654321, "0"],
   ])(
     "BI / int: %s / %s = %s",
-    (base: string | number, other: number | string, expected: string) => {
-      const result = BigInteger.fromNumber(base).div(
-        BigInteger.fromNumber(other)
-      );
+    (base: string | number, other: number, expected: string) => {
+      const result = BigInteger.fromNumber(base).div(other);
 
       expect(result.toString()).toEqual(expected);
     }
@@ -202,13 +244,11 @@ describe("math", () => {
     [1, 1, "0"],
     [-256, 256, "0"],
     [5, 3, "2"],
-    ["123456789", "987654321", "123456789"],
+    ["123456789", 987654321, "123456789"],
   ])(
-    "BI % BI: %s % %s = %s",
-    (base: string | number, other: number | string, expected: string) => {
-      const result = BigInteger.fromNumber(base).mod(
-        BigInteger.fromNumber(other)
-      );
+    "BI % int: %s % %s = %s",
+    (base: string | number, other: number, expected: string) => {
+      const result = BigInteger.fromNumber(base).mod(other);
 
       expect(result.toString()).toEqual(expected);
     }

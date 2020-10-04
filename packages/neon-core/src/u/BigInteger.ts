@@ -78,15 +78,15 @@ export class BigInteger {
   public static fromNumber(input: number | string): BigInteger {
     switch (typeof input) {
       case "string":
+        if (input.indexOf(".") !== -1) {
+          throw new Error(`BigInteger only accepts integers. Got ${input}`);
+        }
         return new BigInteger(new BN(input));
       case "number":
         if (input % 1 !== 0) {
           throw new Error(`BigInteger only accepts integers. Got ${input}`);
         }
-        if (input > Number.MAX_SAFE_INTEGER) {
-          return new BigInteger(new BN(input.toString()));
-        }
-        return new BigInteger(new BN(input));
+        return new BigInteger(new BN(input.toString()));
       default:
         throw new Error("Input was not stringified number or number");
     }
@@ -101,7 +101,8 @@ export class BigInteger {
    * Does not come with a prefix.
    */
   public toHex(): string {
-    return this.#value.toString(16);
+    const result = this.#value.toString(16);
+    return result.length % 2 !== 0 ? "0" + result : result;
   }
 
   /**
@@ -136,35 +137,29 @@ export class BigInteger {
    * @param other - other operand to add.
    */
   public add(other: BigInteger | number): BigInteger {
-    return new BigInteger(
-      other instanceof BigInteger
-        ? this.#value.add(other.#value)
-        : this.#value.addn(other)
-    );
+    const otherBigInteger =
+      other instanceof BigInteger ? other : BigInteger.fromNumber(other);
+    return new BigInteger(this.#value.add(otherBigInteger.#value));
   }
 
   /**
    * Subtracts the other value from this value and returns the result as a new BigInteger.
    * @param other - other operand to subtract.
    */
-  public sub(other: BigInteger): BigInteger {
-    return new BigInteger(
-      other instanceof BigInteger
-        ? this.#value.sub(other.#value)
-        : this.#value.subn(other)
-    );
+  public sub(other: BigInteger | number): BigInteger {
+    const otherBigInteger =
+      other instanceof BigInteger ? other : BigInteger.fromNumber(other);
+    return new BigInteger(this.#value.sub(otherBigInteger.#value));
   }
 
   /**
    * Multiply the other value with this value and returns the result as a new BigInteger.
    * @param other - other operand to multiply.
    */
-  public mul(other: BigInteger): BigInteger {
-    return new BigInteger(
-      other instanceof BigInteger
-        ? this.#value.mul(other.#value)
-        : this.#value.muln(other)
-    );
+  public mul(other: BigInteger | number): BigInteger {
+    const otherBigInteger =
+      other instanceof BigInteger ? other : BigInteger.fromNumber(other);
+    return new BigInteger(this.#value.mul(otherBigInteger.#value));
   }
 
   /**
@@ -172,24 +167,20 @@ export class BigInteger {
    * There are no decimals and results are always rounded down.
    * @param other - other operand to divide.
    */
-  public div(other: BigInteger): BigInteger {
-    return new BigInteger(
-      other instanceof BigInteger
-        ? this.#value.div(other.#value)
-        : this.#value.divn(other)
-    );
+  public div(other: BigInteger | number): BigInteger {
+    const otherBigInteger =
+      other instanceof BigInteger ? other : BigInteger.fromNumber(other);
+    return new BigInteger(this.#value.div(otherBigInteger.#value));
   }
 
   /**
    * Performs the MOD operation with the other value and returns the result as a new BigInteger.
    * @param other - other operand to perform mod.
    */
-  public mod(other: BigInteger): BigInteger {
-    return new BigInteger(
-      other instanceof BigInteger
-        ? this.#value.mod(other.#value)
-        : this.#value.mod(new BN(other))
-    );
+  public mod(other: BigInteger | number): BigInteger {
+    const otherBigInteger =
+      other instanceof BigInteger ? other : BigInteger.fromNumber(other);
+    return new BigInteger(this.#value.mod(otherBigInteger.#value));
   }
 }
 
