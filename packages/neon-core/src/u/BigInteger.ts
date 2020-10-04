@@ -86,7 +86,9 @@ export class BigInteger {
         if (input % 1 !== 0) {
           throw new Error(`BigInteger only accepts integers. Got ${input}`);
         }
-        return new BigInteger(new BN(input.toString()));
+        // We use hex notation here as toString occasionally outputs scientific notation.
+        // eg. 9999999999999999999999999999999999.toString() == '1e+34'.
+        return new BigInteger(new BN(input.toString(16), 16));
       default:
         throw new Error("Input was not stringified number or number");
     }
@@ -181,6 +183,16 @@ export class BigInteger {
     const otherBigInteger =
       other instanceof BigInteger ? other : BigInteger.fromNumber(other);
     return new BigInteger(this.#value.mod(otherBigInteger.#value));
+  }
+
+  /**
+   * Compares the two values and returns -1, 0, 1 if this value is larger, equal, smaller than the other value respectively.
+   * @param other - other operand to compare against.
+   */
+  public compare(other: BigInteger | number): number {
+    const otherBigInteger =
+      other instanceof BigInteger ? other : BigInteger.fromNumber(other);
+    return this.#value.cmp(otherBigInteger.#value);
   }
 }
 

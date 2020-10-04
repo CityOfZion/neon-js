@@ -271,3 +271,49 @@ describe("math", () => {
     }
   );
 });
+
+describe("compare", () => {
+  test("less than (int)", () => {
+    const result = BigInteger.fromNumber(5).compare(10);
+
+    expect(result).toBe(-1);
+  });
+
+  test("equal (int)", () => {
+    const result = BigInteger.fromNumber(5).compare(5);
+
+    expect(result).toBe(0);
+  });
+
+  test("less than (int)", () => {
+    const result = BigInteger.fromNumber(5).compare(1);
+
+    expect(result).toBe(1);
+  });
+
+  test("less than (BI)", () => {
+    const result = BigInteger.fromNumber(5).compare(BigInteger.fromNumber(10));
+
+    expect(result).toBe(-1);
+  });
+
+  test("equal (BI)", () => {
+    const result = BigInteger.fromNumber(5).compare(BigInteger.fromNumber(5));
+
+    expect(result).toBe(0);
+  });
+
+  test("less than (BI)", () => {
+    const result = BigInteger.fromNumber(5).compare(BigInteger.fromNumber(1));
+
+    expect(result).toBe(1);
+  });
+
+  test("accepts unsafe numbers", () => {
+    const result = BigInteger.fromNumber(5).compare(
+      9999999999999999999999999999999999
+    );
+
+    expect(result).toBe(-1);
+  });
+});
