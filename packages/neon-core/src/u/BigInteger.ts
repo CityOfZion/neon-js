@@ -47,7 +47,7 @@ export class BigInteger {
    * const oneTwoEightAgain = BigInteger.fromHex("0080");
    *
    * // Apply a second paramter when using little endian.
-   * const oneZeroTwoFour = BigInteger.fromHex("0040", true);
+   * const oneSixThreeEightFour = BigInteger.fromHex("0040", true);
    */
   public static fromHex(hexstring: HexString): BigInteger;
   public static fromHex(hexstring: string, littleEndian?: boolean): BigInteger;
