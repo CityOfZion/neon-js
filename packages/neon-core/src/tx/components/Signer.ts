@@ -69,10 +69,7 @@ export class Signer {
    */
   public get size(): number {
     return (
-      20 +
-      1 +
-      this.allowedContracts.length * 20 +
-      this.allowedGroups.length * 33
+      this.serialize().length / 2
     );
   }
 
