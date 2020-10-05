@@ -49,8 +49,10 @@ export class RpcDispatcher {
   public url: string;
 
   public constructor(url: string) {
-    if (!url.startsWith("http")) {
-      throw new Error("Please provide an url that starts with http or https");
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      throw new Error(
+        "Please provide an url that starts with http:// or https://"
+      );
     }
     this.url = url;
   }
