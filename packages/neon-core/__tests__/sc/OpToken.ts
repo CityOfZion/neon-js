@@ -54,6 +54,16 @@ describe("fromScript", () => {
       [new OpToken(OpCode.SYSCALL, "01020304")],
     ],
     [
+      "PUSHINT256",
+      "05faffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      [
+        new OpToken(
+          OpCode.PUSHINT256,
+          "faffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        ),
+      ],
+    ],
+    [
       "simple jump",
       "212203371140",
       [
