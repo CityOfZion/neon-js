@@ -42,15 +42,14 @@ export function getPublicKeysFromVerificationScript(
   verificationScript: string
 ): string[] {
   const operations = OpToken.fromScript(verificationScript);
-  return operations.filter(looksLikePublicKey).map((t) => t.params.slice(2));
+  return operations.filter(looksLikePublicKey).map((t) => t.params);
 }
 
 function looksLikePublicKey(token: OpToken): token is Required<OpToken> {
   return (
     token.code === OpCode.PUSHDATA1 &&
     !!token.params &&
-    token.params.length === 68 &&
-    token.params.slice(0, 2) === "21"
+    token.params.length === 66
   );
 }
 
@@ -77,7 +76,7 @@ export function getSignaturesFromInvocationScript(
       (token): token is Required<OpToken> =>
         token.code === OpCode.PUSHDATA1 &&
         !!token.params &&
-        token.params.startsWith("40")
+        token.params.length === 128
     )
-    .map((token) => token.params.slice(2));
+    .map((token) => token.params);
 }
