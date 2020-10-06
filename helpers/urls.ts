@@ -60,10 +60,10 @@ export async function getUrl(net: string): Promise<string> {
   let previousBlockCount = 0;
   for (let i = 0; i < slicedUrls.length; i++) {
     try {
-      const res = (await rpc.Query.getBlockCount().execute(slicedUrls[i])) as {
-        result: number;
-      };
-      const currentBlockCount = res.result;
+      const dispatcher = new rpc.RpcDispatcher(slicedUrls[i]);
+      const currentBlockCount = await dispatcher.execute<number>(
+        rpc.Query.getBlockCount()
+      );
       if (currentBlockCount - previousBlockCount <= 5) {
         return slicedUrls[i];
       }
