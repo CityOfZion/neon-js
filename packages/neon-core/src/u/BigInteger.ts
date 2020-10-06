@@ -4,6 +4,7 @@ import { HexString } from "./HexString";
 
 /**
  * This is a BigInteger representation, providing several helper methods to convert between different formats as well as basic math operations.
+ * Mainly used within the NEO VM for representing numbers.
  */
 export class BigInteger {
   /** Internal holding value. */
@@ -11,7 +12,8 @@ export class BigInteger {
 
   /**
    * Creates a BigInteger from a twos complement hexstring.
-   * @param hexstring - HexString class or a bigendian string.
+   * @param hexstring - HexString class or a string.
+   * @param littleEndian - indicate if provided string is big or little endian. Defaults to false(big endian).
    *
    * @example
    * const negativeOne = BigInteger.fromTwos("ff");
@@ -46,7 +48,7 @@ export class BigInteger {
    * const oneTwoEight = BigIntger.fromHex("80");
    * const oneTwoEightAgain = BigInteger.fromHex("0080");
    *
-   * // Apply a second paramter when using little endian.
+   * // Apply a second parameter when using little endian.
    * const oneSixThreeEightFour = BigInteger.fromHex("0040", true);
    */
   public static fromHex(hexstring: HexString): BigInteger;
@@ -108,6 +110,14 @@ export class BigInteger {
   }
 
   /**
+   * Returns a little endian hex representation of the integer.
+   * Does not come with a prefix.
+   */
+  public toReverseHex(): string {
+    return reverseHex(this.toHex());
+  }
+
+  /**
    * Returns a big endian two's complement representation of the integer.
    * Does not come with a prefix.
    */
@@ -120,11 +130,11 @@ export class BigInteger {
   }
 
   /**
-   * Returns a little endian hex representation of the integer.
+   * Returns a little endian two's complement representation of the integer.
    * Does not come with a prefix.
    */
-  public toReverseHex(): string {
-    return reverseHex(this.toHex());
+  public toReverseTwos(): string {
+    return reverseHex(this.toTwos());
   }
 
   /**
