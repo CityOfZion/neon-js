@@ -1,6 +1,9 @@
 import { OpCode } from "./OpCode";
-import { StringStream, isHex, reverseHex, Fixed8 } from "../u";
 import { OpCodeAnnotations } from "./OpCodeAnnotations";
+import { BigInteger, StringStream, isHex, HexString } from "../u";
+
+// Number of bytes to read off when reading params for PUSHINT*
+const PUSHINT_BYTES = [1, 2, 4, 8, 16, 32];
 
 /**
  * A token from tokenizing a VM script. Consists of a OpCode and optional params that follow it.
@@ -53,8 +56,14 @@ export class OpToken {
     if (opToken.code >= 0 && opToken.code <= 5) {
       //PUSHINT*
       // We dont verify the length of the params. Its screwed if its wrong
+      const charactersToRead = PUSHINT_BYTES[opToken.code] * 2;
       return opToken.params
-        ? Fixed8.fromReverseHex(opToken.params).toRawNumber().toNumber()
+        ? parseInt(
+            BigInteger.fromTwos(
+              opToken.params.substr(0, charactersToRead),
+              true
+            ).toString()
+          )
         : 0;
     } else if (opToken.code >= 0x0f && opToken.code <= 0x20) {
       return opToken.code - 16;
@@ -104,5 +113,5 @@ function readParams(bytesToRead: number): ParamsExtracter {
 
 function readParamsWithPrefix(bytesToRead: number): ParamsExtracter {
   return (script: StringStream): string =>
-    script.read(parseInt(reverseHex(script.read(bytesToRead)), 16));
+    script.read(HexString.fromHex(script.read(bytesToRead), true).toNumber());
 }

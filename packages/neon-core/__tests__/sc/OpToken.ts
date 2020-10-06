@@ -105,7 +105,7 @@ describe("parseInt", () => {
     [16, new OpToken(OpCode.PUSH16)],
     [127, new OpToken(OpCode.PUSHINT8, "7f")],
     [32512, new OpToken(OpCode.PUSHINT16, "007f")],
-    [-1, new OpToken(OpCode.PUSHINT8, "00ff")],
+    [-1, new OpToken(OpCode.PUSHINT8, "ff")],
     [-2, new OpToken(OpCode.PUSHINT16, "feff")],
     [-3, new OpToken(OpCode.PUSHINT32, "fdffffff")],
     [-4, new OpToken(OpCode.PUSHINT64, "fcffffffffffffff")],

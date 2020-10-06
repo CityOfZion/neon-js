@@ -1,7 +1,9 @@
 import { OpCode } from "./OpCode";
 
 export interface OpCodeAnnotation {
+  /** Number of bytes to read as params. */
   operandSize?: number;
+  /** Number of bytes to read to get the number that is the bytes to read as params. */
   operandSizePrefix?: number;
 }
 
