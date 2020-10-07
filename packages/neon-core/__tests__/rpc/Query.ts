@@ -1,4 +1,4 @@
-import Query from "../../src/rpc/Query";
+import Query, { QueryLike } from "../../src/rpc/Query";
 import { ContractParam } from "../../src/sc";
 import { Transaction, Signer } from "../../src/tx";
 
@@ -32,7 +32,12 @@ describe("equals", () => {
     ["Query1 !== Obj2", query1, obj2, false],
   ])(
     "%s",
-    (msg: string, a: Query<unknown[], unknown>, b: unknown, cond: boolean) => {
+    (
+      msg: string,
+      a: Query<unknown[], unknown>,
+      b: Partial<Query<unknown[], unknown> | QueryLike<unknown[]>>,
+      cond: boolean
+    ) => {
       expect(a.equals(b)).toBe(cond);
     }
   );

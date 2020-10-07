@@ -175,7 +175,7 @@ describe("equals", () => {
     (
       _msg: string,
       a: Transaction,
-      b: Partial<TransactionLike>,
+      b: Partial<TransactionLike | Transaction>,
       cond: boolean
     ) => {
       expect(a.equals(b)).toBe(cond);
@@ -260,10 +260,12 @@ describe("Add Methods", () => {
   });
 });
 
-const dataSet = Object.keys(samples).map((k) => {
-  const s = samples[k];
-  return [s.txid, s.serialized, s.deserialized];
-});
+const dataSet: [string, string, TransactionJson][] = Object.keys(samples).map(
+  (k) => {
+    const s = samples[k as keyof typeof samples];
+    return [s.txid, s.serialized, s.deserialized];
+  }
+);
 
 describe.each(dataSet)(
   "transform %s",

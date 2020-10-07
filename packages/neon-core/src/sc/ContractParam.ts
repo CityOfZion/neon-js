@@ -110,7 +110,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
    */
   public static byteArray(
     value: string | number,
-    format: string,
+    format?: string,
     ...args: unknown[]
   ): ContractParam {
     if (format) {

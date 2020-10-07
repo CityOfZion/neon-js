@@ -72,8 +72,8 @@ describe("encrypt", () => {
     wallet.addAccount(new Account(WALLET_JSON.accounts[0].extra.WIF));
 
     await expect(wallet.encrypt(-1, "badPassword")).rejects.toThrow();
-  });
-}, 10000);
+  }, 10000);
+});
 
 describe("encryptAll", () => {
   test("success", async () => {

@@ -89,13 +89,18 @@ describe("equals", () => {
     ["Witness1 !== Obj2", witness1, obj2, false],
   ])(
     "%s",
-    (_msg: string, a: Witness, b: Partial<WitnessLike>, cond: boolean) => {
+    (
+      _msg: string,
+      a: Witness,
+      b: Partial<WitnessLike> | Witness,
+      cond: boolean
+    ) => {
       expect(a.equals(b)).toBe(cond);
     }
   );
 });
 
-const dataSet = [
+const dataSet: [string, WitnessLike, string][] = [
   [
     "Basic Output",
     {
@@ -239,7 +244,7 @@ describe.skip("buildMultiSig", () => {
 });
 
 describe("JSON", () => {
-  const jsonTestCases = [
+  const jsonTestCases: [string, WitnessJson, Witness][] = [
     [
       "simple",
       {

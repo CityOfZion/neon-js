@@ -1,5 +1,4 @@
-import { Protocol } from "../../src/rpc";
-import Network, { NetworkLike } from "../../src/rpc/Network";
+import { Protocol, Network, NetworkLike, NetworkJSON } from "../../src/rpc";
 
 describe("constructor", () => {
   test("empty", () => {

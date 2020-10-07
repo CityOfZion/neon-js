@@ -305,7 +305,7 @@ export class Transaction implements NeonObject<TransactionLike> {
     return this;
   }
 
-  public equals(other: Partial<TransactionLike>): boolean {
+  public equals(other: Partial<TransactionLike | Transaction>): boolean {
     if (other instanceof Transaction) {
       return this.hash(0) === other.hash(0);
     }

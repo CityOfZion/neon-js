@@ -119,12 +119,12 @@ describe("Static constructors", () => {
       ["fixed8", [100.012345678, "fixed8"], "88ba1e5402000000"],
       ["fixed8 (0 decimals)", [1, "fixed8", 0], "0100000000000000"],
       ["fixed8(4 decimals)", [222.1234, "fixed8", 4], "b2e4210000000000"],
-    ])(
+    ] as [string, [string | number, string?, ...(string | number)[]], string][])(
       "%s",
       (
         _msg: string,
-        data: [string | number, string, number?],
-        expected: unknown
+        data: [string | number, string?, ...(string | number)[]],
+        expected: string
       ) => {
         const result = ContractParam.byteArray(...data);
 

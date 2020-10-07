@@ -139,6 +139,7 @@ export interface ValidateAddressResult {
  * @example
  * const q1 = Query.getBestBlockHash();
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class Query<TParams extends unknown[], TResponse> {
   /**
    * This Query returns the hash of the highest block.

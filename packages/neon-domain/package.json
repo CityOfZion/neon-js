@@ -30,6 +30,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc -b",
+    "dist": "tsc -m commonjs --outDir dist",
     "dist:prod": "tsc -m commonjs --outDir dist",
     "clean": "rimraf ./lib ./dist tsconfig.tsbuildinfo",
     "prepublishOnly": "yarn clean && yarn build && yarn dist:prod",
