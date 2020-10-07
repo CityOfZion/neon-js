@@ -1,7 +1,7 @@
 import StringStream from "../../src/u/StringStream";
 
 describe("constructor", () => {
-  test.each([[""], ["0102030405"], "randomstring"])(
+  test.each([[""], ["0102030405"], ["randomstring"]])(
     "construct with %s",
     (data: string) => {
       const result = new StringStream(data);

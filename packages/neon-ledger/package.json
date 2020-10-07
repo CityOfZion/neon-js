@@ -22,6 +22,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc -b",
+    "dist": "tsc -m commonjs --outDir dist",
     "dist:prod": "tsc -m commonjs --outDir dist",
     "clean": "rimraf ./lib ./dist tsconfig.tsbuildinfo",
     "prepublishOnly": "yarn clean && yarn build && yarn dist:prod",
@@ -46,8 +47,8 @@
   ],
   "devDependencies": {
     "@cityofzion/neon-js": "^4.8.0",
-    "@ledgerhq/hw-transport-node-hid": "5.22.0",
-    "@ledgerhq/hw-transport-u2f": "5.22.0",
-    "@types/ledgerhq__hw-transport-node-hid": "4.22.1"
+    "@ledgerhq/hw-transport-node-hid": "5.25.0",
+    "@ledgerhq/hw-transport-u2f": "5.25.3",
+    "@types/ledgerhq__hw-transport-node-hid": "4.22.2"
   }
 }

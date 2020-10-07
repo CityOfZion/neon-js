@@ -1,5 +1,5 @@
 {
-    "name": null,
+    "name": "testWallet",
     "version": "3.0",
     "scrypt": {
         "n": 16384,
@@ -72,7 +72,7 @@
         },
         {
             "address": "NSyfwYL3LUNgjiiXDZBi9SDYh5eoe5DA71",
-            "label": null,
+            "label": "multisigABC",
             "isdefault": false,
             "lock": false,
             "key": "6PYSeMMbHPpzD9jFvtytPLatcDJA1qraaKaxrkMDxxvN4XV5VZe2tdus8e",

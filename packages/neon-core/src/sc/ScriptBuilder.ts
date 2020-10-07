@@ -19,7 +19,7 @@ import { TextEncoder } from "util";
 
 export interface ScriptIntent {
   scriptHash: string | "NEO" | "GAS" | "POLICY";
-  operation?: string;
+  operation: string;
   args?: unknown[];
 }
 
