@@ -75,10 +75,6 @@ function getCheckMultiSigPrice(size: number): number {
 }
 
 type fixedPriceInteropServiceCode = keyof typeof fixedPrices;
-type variablePriceInteropServiceCode = Exclude<
-  InteropServiceCode,
-  fixedPriceInteropServiceCode
->;
 
 function isFixedPrice(
   code: InteropServiceCode
