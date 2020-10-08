@@ -258,6 +258,14 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
       const response = await this.execute(Query.validateAddress(addr));
       return response.isvalid;
     }
+
+    /**
+     * Get the amount of unclaimed GAS for a NEO address.
+     */
+    public async getUnclaimedGas(addr: string): Promise<number> {
+      const response = await this.execute(Query.getUnclaimedGas(addr));
+      return parseInt(response.unclaimed) / 100_000_000;
+    }
   };
 }
 
