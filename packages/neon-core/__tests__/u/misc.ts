@@ -1,4 +1,6 @@
 import * as misc from "../../src/u/misc";
+import { HexString } from "../../src/u/HexString";
+import { getVarSize } from "../../src/u/misc";
 
 describe("hexXor", () => {
   test("throws if inputs of different length", () => {
@@ -38,5 +40,66 @@ describe("reverseHex", () => {
     const input = "000102030405060708090a0b0c0d0e0f";
     const result = misc.reverseHex(input);
     expect(result).toBe("0f0e0d0c0b0a09080706050403020100");
+  });
+});
+
+class SerializableObject {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  public get size(): number {
+    return 2;
+  }
+
+  public serialize(): string {
+    return "";
+  }
+}
+
+describe("getVarSize", () => {
+  test("size of HexString", () => {
+    const input = HexString.fromHex("112233");
+    const result = getVarSize(input);
+    expect(result).toBe(4);
+  });
+
+  test("size of number < 0xfd", () => {
+    const result = getVarSize(0xfc);
+    expect(result).toBe(1);
+  });
+
+  test("size of number <= 0xffff", () => {
+    // lower boundary
+    let result = getVarSize(0xfd);
+    expect(result).toBe(3);
+    // upper boundary
+    result = getVarSize(0xffff);
+    expect(result).toBe(3);
+  });
+
+  test("size of number > 0xffff", () => {
+    const result = getVarSize(0xffff + 1);
+    expect(result).toBe(5);
+  });
+
+  test("array of serializable objects", () => {
+    const input = [new SerializableObject(), new SerializableObject()];
+    const result = getVarSize(input);
+    expect(result).toBe(5);
+  });
+
+  test("array of hexstring objects", () => {
+    const input = [HexString.fromHex("0102"), HexString.fromHex("0304")];
+    const result = getVarSize(input);
+    expect(result).toBe(5);
+  });
+
+  test("array of unsupported objects throws", () => {
+    expect(() => getVarSize([{}, {}])).toThrow(
+      "Unsupported value type in array: object"
+    );
+  });
+
+  test("unsupported value throws", () => {
+    expect(() => getVarSize({})).toThrow("Unsupported value type: object");
   });
 });
