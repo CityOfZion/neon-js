@@ -11,6 +11,7 @@ import {
 import { ContractManifest } from "../../sc";
 import { BlockJson, BlockHeaderJson, Validator } from "../../types";
 import { RpcDispatcher, RpcDispatcherMixin } from "./RpcDispatcher";
+import { BigInteger } from "../../u";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
 export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
@@ -262,9 +263,9 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
     /**
      * Get the amount of unclaimed GAS for a NEO address.
      */
-    public async getUnclaimedGas(addr: string): Promise<number> {
+    public async getUnclaimedGas(addr: string): Promise<BigInteger> {
       const response = await this.execute(Query.getUnclaimedGas(addr));
-      return parseInt(response.unclaimed) / 100_000_000;
+      return BigInteger.fromNumber(response.unclaimed).div(100_000_000);
     }
   };
 }

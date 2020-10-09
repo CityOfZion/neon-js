@@ -133,7 +133,7 @@ export interface ValidateAddressResult {
   isvalid: boolean;
 }
 
-export interface UnclaimedGasResult {
+export interface GetUnclaimedGasResult {
   unclaimed: string;
   address: string;
 }
@@ -482,9 +482,13 @@ export class Query<TParams extends unknown[], TResponse> {
     });
   }
 
+  /**
+   * This Query returns the available unclaimed bonus GAS for a NEO address
+   * @param addr - a NEO address
+   */
   public static getUnclaimedGas(
     addr: string
-  ): Query<[string], UnclaimedGasResult> {
+  ): Query<[string], GetUnclaimedGasResult> {
     return new Query({
       method: "getunclaimedgas",
       params: [addr],
