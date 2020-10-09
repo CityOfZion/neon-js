@@ -84,34 +84,36 @@ export function reverseHex(hex: string): string {
  * Calculates the byte size of any supported input following NEO's variable int format.
  */
 export function getVarSize(value: any): number {
-  if (typeof value === "object" && value instanceof HexString) {
-    const size = value.byteLength;
-    return getVarSize(size) + size;
-  } else if (typeof value === "number") {
-    if (value < 0xfd) return 1;
-    else if (value <= 0xffff) return 3;
-    else return 5;
-  } else if (Array.isArray(value)) {
-    const array_length = value.length;
-    let size = 0;
-    if (array_length > 0) {
-      const tmp = value.map((item) => {
-        // in lack of an ISerializable interface, we check it like this
-        if (
-          typeof item.size === "number" &&
-          typeof item.serialize === "function"
-        ) {
-          return item.size;
-        } else if (typeof item === "object" && item instanceof HexString) {
-          return item.byteLength;
-        } else {
-          throw new Error("Unsupported value type in array: " + typeof value);
-        }
-      });
-      size = tmp.reduce((a, b) => a + b);
+  console.log(typeof value);
+  switch (typeof value) {
+    case "number": {
+      if (value < 0xfd) return 1;
+      else if (value <= 0xffff) return 3;
+      else return 5;
     }
-    return getVarSize(array_length) + size;
-  } else {
-    throw new Error("Unsupported value type: " + typeof value);
+    case "object": {
+      if (value instanceof HexString) {
+        const size = value.byteLength;
+        return getVarSize(size) + size;
+      } else if (
+        typeof value.size === "number" &&
+        typeof value.serialize === "function"
+      ) {
+        return getVarSize(value.size) + value.size;
+      } else if (Array.isArray(value)) {
+        const array_length = value.length;
+        let size = 0;
+        if (array_length > 0) {
+          size =
+            value
+              .map((item) => getVarSize(item))
+              .reduce((prev, curr) => prev + curr, 0) - array_length;
+        }
+        return getVarSize(array_length) + size;
+      }
+      // do not break here so we fall through to the default
+    }
+    default:
+      throw new Error("Unsupported value type: " + typeof value);
   }
 }

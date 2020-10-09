@@ -95,7 +95,7 @@ describe("getVarSize", () => {
 
   test("array of unsupported objects throws", () => {
     expect(() => getVarSize([{}, {}])).toThrow(
-      "Unsupported value type in array: object"
+      "Unsupported value type: object"
     );
   });
 
