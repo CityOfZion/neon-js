@@ -344,8 +344,8 @@ describe("NeoServerRpcClient", () => {
 
   test("getUnclaimedGas", async () => {
     const result = await client.getUnclaimedGas(
-      "PWYLE4NWFUqn7DRK2YhcjsRm3mp5Ts4Eod"
+      "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV"
     );
-    expect(result).toBe(0);
+    expect(result).toBeGreaterThan(0);
   });
 });

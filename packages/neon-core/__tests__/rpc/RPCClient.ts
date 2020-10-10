@@ -704,4 +704,29 @@ describe("RPC Methods", () => {
       expect(result).toEqual(true);
     });
   });
+
+  describe("getUnclaimedGas", () => {
+    test("success", async () => {
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("http://testUrl.com");
+        expect(data).toMatchObject({
+          method: "getunclaimedgas",
+          params: ["addr"],
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: {
+              unclaimed: "1234567812345678",
+              address: "addr",
+            },
+          },
+        };
+      });
+
+      const result = await client.getUnclaimedGas("addr");
+      expect(result).toEqual(12345678.12345678);
+    });
+  });
 });
