@@ -1,7 +1,7 @@
 /* 
 Helper to check if signature is a single signature
 */
-function is_signature_contract(signature_script){
+export function is_signature_contract(signature_script){
     const PUSHDATA1   = 12, //0x0C
           PUSHNULL    = 11, //0x0B,
           PUSHSYSCALL = 65,  //0x41
@@ -17,7 +17,13 @@ function is_signature_contract(signature_script){
 /* 
 Helper to check if signatures are multi-sig
 */
-function is_multisig_contract(signature_script){
+
+interface SignParamsLike {
+    public_key_count: number;
+    signature_count: number;
+ }
+
+export function is_multisig_contract(signature_script, state?: SignParamsLike){
     const script = Buffer.from(signature_script, "hex");
     if(script.length < 43){ //First check length and return if failure to prevent indexing related errors.
         return false;
@@ -39,7 +45,6 @@ function is_multisig_contract(signature_script){
         i = 2;
     } else if(script[0] == PUSHINT16){
         signature_count = script.readUInt16LE(1);
-        console.log(signature_count);
         i = 3;
     } else if(signature_count <= PUSH1 || signature_count >= PUSH16){
         signature_count = script[0] - PUSH0;
@@ -95,25 +100,30 @@ function is_multisig_contract(signature_script){
     i += 2;
     
     /*
-    AFEF8D13 || 2951712019
+    tail should be 2951712019
     */
     if(script.readUInt32LE(i) != 2951712019){  //Temp
         return false;
     }
+     
+     if (state) {
+        state.public_key_count = public_key_count;
+        state.signature_count = signature_count;
+    }
+    
     return true;
 }
 
-
 /* TEST CALLS */
-let single_sig_1 = "0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78"; //Passes
-let single_sig_2 = "0C33aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0b4195440d78"; //Fails
-let multi_sig_1 = "0102000c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0102000b41AFEF8D13";
-let multi_sig_2 = "0102000c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0103000b41138defaf";
+// let single_sig_1 = "0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78"; //Passes
+// let single_sig_2 = "0C33aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0b4195440d78"; //Fails
+// let multi_sig_1 = "0102000c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0102000b41AFEF8D13";
+// let multi_sig_2 = "0102000c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0103000b41138defaf";
 
-console.log("Is\n%s\nSingle Sig?\nResult: %s", single_sig_1, is_signature_contract(single_sig_1));
-console.log("Is\n%s\nSingle Sig?\nResult: %s", single_sig_2, is_signature_contract(single_sig_2));
-console.log("Is\n%s\nMulti Sig?\nResult: %s", multi_sig_1, is_signature_contract(multi_sig_1));
-console.log("Is\n%s\nMulti Sig?\nResult: %s", multi_sig_2, is_multisig_contract(multi_sig_2));
+// console.log("Is\n%s\nSingle Sig?\nResult: %s", single_sig_1, is_signature_contract(single_sig_1));
+// console.log("Is\n%s\nSingle Sig?\nResult: %s", single_sig_2, is_signature_contract(single_sig_2));
+// console.log("Is\n%s\nMulti Sig?\nResult: %s", multi_sig_1, is_signature_contract(multi_sig_1));
+// console.log("Is\n%s\nMulti Sig?\nResult: %s", multi_sig_2, is_multisig_contract(multi_sig_2));
 
 /* 
 Useful notes:
