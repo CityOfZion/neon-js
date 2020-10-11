@@ -114,7 +114,10 @@ export function is_multisig_contract(signature_script, state?: SignParamsLike){
     return true;
 }
 
-/* TEST CALLS */
+/* 
+* Example Test CALLS 
+* Use ../contracts/contracts/test_contract.ts for a more robust test set
+*/
 // let single_sig_1 = "0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78"; //Passes
 // let single_sig_2 = "0C33aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0b4195440d78"; //Fails
 // let multi_sig_1 = "0102000c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0102000b41AFEF8D13";
