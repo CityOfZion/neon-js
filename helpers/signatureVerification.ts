@@ -115,20 +115,6 @@ export function is_multisig_contract(signature_script, state?: SignParamsLike){
 }
 
 /* 
-* Example Test CALLS 
-* Use ../contracts/contracts/test_contract.ts for a more robust test set
-*/
-// let single_sig_1 = "0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78"; //Passes
-// let single_sig_2 = "0C33aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0b4195440d78"; //Fails
-// let multi_sig_1 = "0102000c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0102000b41AFEF8D13";
-// let multi_sig_2 = "0102000c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0103000b41138defaf";
-
-// console.log("Is\n%s\nSingle Sig?\nResult: %s", single_sig_1, is_signature_contract(single_sig_1));
-// console.log("Is\n%s\nSingle Sig?\nResult: %s", single_sig_2, is_signature_contract(single_sig_2));
-// console.log("Is\n%s\nMulti Sig?\nResult: %s", multi_sig_1, is_signature_contract(multi_sig_1));
-// console.log("Is\n%s\nMulti Sig?\nResult: %s", multi_sig_2, is_multisig_contract(multi_sig_2));
-
-/* 
 Useful notes:
 -Single Sig end instruction = 2504265080 (HEX: 95440d78)
 -Multi Sig end instruction  = 2951712019 (HEX: AFEF8D13)
