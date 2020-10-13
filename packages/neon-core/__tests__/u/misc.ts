@@ -100,6 +100,8 @@ describe("getVarSize", () => {
   });
 
   test("unsupported value throws", () => {
-    expect(() => getSerializedSize({})).toThrow("Unsupported value type: object");
+    expect(() => getSerializedSize({})).toThrow(
+      "Unsupported value type: object"
+    );
   });
 });
