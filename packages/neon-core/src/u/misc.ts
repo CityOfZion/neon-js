@@ -83,7 +83,13 @@ export function reverseHex(hex: string): string {
 /**
  * Calculates the byte size of any supported input following NEO's variable int format.
  */
-export function getSerializedSize(value: any): number {
+interface NeonSerializable {
+  size: number;
+  serialize: () => string;
+}
+type Serialiables = number | HexString | NeonSerializable | Serialiables[];
+export function getSerializedSize(value: Serialiables): number {
+
   console.log(typeof value);
   switch (typeof value) {
     case "number": {
