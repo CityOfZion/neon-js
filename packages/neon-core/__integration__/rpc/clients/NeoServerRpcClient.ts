@@ -115,12 +115,12 @@ describe("NeoServerRpcClient", () => {
   });
 
   describe("getRawMemPool", () => {
-    test("get comfirmed only", async () => {
+    test("get confirmed only", async () => {
       const result = await client.getRawMemPool();
       expect(Array.isArray(result)).toBeTruthy();
     });
 
-    test("get comfirmed and unconfirmed", async () => {
+    test("get confirmed and unconfirmed", async () => {
       const result = await client.getRawMemPool(true);
       expect(Object.keys(result)).toEqual(
         expect.arrayContaining(["height", "verified", "unverified"])
@@ -340,5 +340,12 @@ describe("NeoServerRpcClient", () => {
       const result = await client.validateAddress("wrongaddress");
       expect(result).toBe(false);
     });
+  });
+
+  test("getUnclaimedGas", async () => {
+    const result = await client.getUnclaimedGas(
+      "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV"
+    );
+    expect(result).toBeGreaterThan(0);
   });
 });

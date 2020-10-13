@@ -133,6 +133,11 @@ export interface ValidateAddressResult {
   isvalid: boolean;
 }
 
+export interface GetUnclaimedGasResult {
+  unclaimed: string;
+  address: string;
+}
+
 /**
  * A Query object helps us to construct and record requests for the Neo node RPC. For each RPC endpoint, the equivalent static method is camelcased. Each Query object can only be used once.
  *
@@ -473,6 +478,19 @@ export class Query<TParams extends unknown[], TResponse> {
   ): Query<[string], ValidateAddressResult> {
     return new Query({
       method: "validateaddress",
+      params: [addr],
+    });
+  }
+
+  /**
+   * This Query returns the available unclaimed bonus GAS for a NEO address
+   * @param addr - a NEO address
+   */
+  public static getUnclaimedGas(
+    addr: string
+  ): Query<[string], GetUnclaimedGasResult> {
+    return new Query({
+      method: "getunclaimedgas",
       params: [addr],
     });
   }
