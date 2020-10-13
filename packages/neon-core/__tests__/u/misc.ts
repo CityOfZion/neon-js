@@ -55,7 +55,7 @@ class SerializableObject {
   }
 }
 
-describe("getVarSize", () => {
+describe("getSerializedSize", () => {
   test("size of HexString", () => {
     const input = HexString.fromHex("112233");
     const result = getSerializedSize(input);
@@ -91,17 +91,5 @@ describe("getVarSize", () => {
     const input = [HexString.fromHex("0102"), HexString.fromHex("0304")];
     const result = getSerializedSize(input);
     expect(result).toBe(5);
-  });
-
-  test("array of unsupported objects throws", () => {
-    expect(() => getSerializedSize([{}, {}])).toThrow(
-      "Unsupported value type: object"
-    );
-  });
-
-  test("unsupported value throws", () => {
-    expect(() => getSerializedSize({})).toThrow(
-      "Unsupported value type: object"
-    );
   });
 });

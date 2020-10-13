@@ -87,10 +87,8 @@ interface NeonSerializable {
   size: number;
   serialize: () => string;
 }
-type Serialiables = number | HexString | NeonSerializable | Serialiables[];
-export function getSerializedSize(value: Serialiables): number {
-
-  console.log(typeof value);
+type Serializables = number | HexString | NeonSerializable | Serializables[];
+export function getSerializedSize(value: Serializables): number {
   switch (typeof value) {
     case "number": {
       if (value < 0xfd) return 1;
@@ -101,11 +99,6 @@ export function getSerializedSize(value: Serialiables): number {
       if (value instanceof HexString) {
         const size = value.byteLength;
         return getSerializedSize(size) + size;
-      } else if (
-        typeof value.size === "number" &&
-        typeof value.serialize === "function"
-      ) {
-        return getSerializedSize(value.size) + value.size;
       } else if (Array.isArray(value)) {
         const array_length = value.length;
         let size = 0;
@@ -116,10 +109,15 @@ export function getSerializedSize(value: Serialiables): number {
               .reduce((prev, curr) => prev + curr, 0) - array_length;
         }
         return getSerializedSize(array_length) + size;
+      } else if (
+        typeof value.size === "number" &&
+        typeof value.serialize === "function"
+      ) {
+        return getSerializedSize(value.size) + value.size;
+        // do not break here so we fall through to the default
       }
-      // do not break here so we fall through to the default
     }
     default:
-      throw new Error("Unsupported value type: " + typeof value);
+      return 0;
   }
 }
