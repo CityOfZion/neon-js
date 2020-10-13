@@ -83,7 +83,7 @@ export function reverseHex(hex: string): string {
 /**
  * Calculates the byte size of any supported input following NEO's variable int format.
  */
-export function getVarSize(value: any): number {
+export function getSerializedSize(value: any): number {
   console.log(typeof value);
   switch (typeof value) {
     case "number": {
@@ -94,22 +94,22 @@ export function getVarSize(value: any): number {
     case "object": {
       if (value instanceof HexString) {
         const size = value.byteLength;
-        return getVarSize(size) + size;
+        return getSerializedSize(size) + size;
       } else if (
         typeof value.size === "number" &&
         typeof value.serialize === "function"
       ) {
-        return getVarSize(value.size) + value.size;
+        return getSerializedSize(value.size) + value.size;
       } else if (Array.isArray(value)) {
         const array_length = value.length;
         let size = 0;
         if (array_length > 0) {
           size =
             value
-              .map((item) => getVarSize(item))
+              .map((item) => getSerializedSize(item))
               .reduce((prev, curr) => prev + curr, 0) - array_length;
         }
-        return getVarSize(array_length) + size;
+        return getSerializedSize(array_length) + size;
       }
       // do not break here so we fall through to the default
     }

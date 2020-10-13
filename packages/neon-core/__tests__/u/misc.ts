@@ -1,6 +1,6 @@
 import * as misc from "../../src/u/misc";
 import { HexString } from "../../src/u/HexString";
-import { getVarSize } from "../../src/u/misc";
+import { getSerializedSize } from "../../src/u/misc";
 
 describe("hexXor", () => {
   test("throws if inputs of different length", () => {
@@ -58,48 +58,48 @@ class SerializableObject {
 describe("getVarSize", () => {
   test("size of HexString", () => {
     const input = HexString.fromHex("112233");
-    const result = getVarSize(input);
+    const result = getSerializedSize(input);
     expect(result).toBe(4);
   });
 
   test("size of number < 0xfd", () => {
-    const result = getVarSize(0xfc);
+    const result = getSerializedSize(0xfc);
     expect(result).toBe(1);
   });
 
   test("size of number <= 0xffff", () => {
     // lower boundary
-    let result = getVarSize(0xfd);
+    let result = getSerializedSize(0xfd);
     expect(result).toBe(3);
     // upper boundary
-    result = getVarSize(0xffff);
+    result = getSerializedSize(0xffff);
     expect(result).toBe(3);
   });
 
   test("size of number > 0xffff", () => {
-    const result = getVarSize(0xffff + 1);
+    const result = getSerializedSize(0xffff + 1);
     expect(result).toBe(5);
   });
 
   test("array of serializable objects", () => {
     const input = [new SerializableObject(), new SerializableObject()];
-    const result = getVarSize(input);
+    const result = getSerializedSize(input);
     expect(result).toBe(5);
   });
 
   test("array of hexstring objects", () => {
     const input = [HexString.fromHex("0102"), HexString.fromHex("0304")];
-    const result = getVarSize(input);
+    const result = getSerializedSize(input);
     expect(result).toBe(5);
   });
 
   test("array of unsupported objects throws", () => {
-    expect(() => getVarSize([{}, {}])).toThrow(
+    expect(() => getSerializedSize([{}, {}])).toThrow(
       "Unsupported value type: object"
     );
   });
 
   test("unsupported value throws", () => {
-    expect(() => getVarSize({})).toThrow("Unsupported value type: object");
+    expect(() => getSerializedSize({})).toThrow("Unsupported value type: object");
   });
 });
