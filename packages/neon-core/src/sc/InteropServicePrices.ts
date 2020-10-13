@@ -13,6 +13,8 @@ const fixedPrices = {
   [InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1]: 1000000e-8,
   [InteropServiceCode.NEO_NATIVE_CALL]: 0e-8,
   [InteropServiceCode.NEO_NATIVE_DEPLOY]: 0e-8,
+  [InteropServiceCode.SYSTEM_BINARY_BASE58DECODE]: 100000e-8,
+  [InteropServiceCode.SYSTEM_BINARY_BASE58ENCODE]: 100000e-8,
   [InteropServiceCode.SYSTEM_BINARY_BASE64DECODE]: 100000e-8,
   [InteropServiceCode.SYSTEM_BINARY_BASE64ENCODE]: 100000e-8,
   [InteropServiceCode.SYSTEM_BINARY_DESERIALIZE]: 500000e-8,
