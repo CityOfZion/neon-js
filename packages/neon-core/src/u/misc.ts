@@ -80,14 +80,15 @@ export function reverseHex(hex: string): string {
   return out;
 }
 
-/**
- * Calculates the byte size of any supported input following NEO's variable int format.
- */
+
 interface NeonSerializable {
   size: number;
   serialize: () => string;
 }
 type Serializables = number | HexString | NeonSerializable | Serializables[];
+/**
+ * Calculates the byte size of any supported input following NEO's variable int format.
+ */
 export function getSerializedSize(value: Serializables): number {
   switch (typeof value) {
     case "number": {
@@ -100,24 +101,24 @@ export function getSerializedSize(value: Serializables): number {
         const size = value.byteLength;
         return getSerializedSize(size) + size;
       } else if (Array.isArray(value)) {
-        const array_length = value.length;
+        const arrayLength = value.length;
         let size = 0;
-        if (array_length > 0) {
+        if (arrayLength > 0) {
           size =
             value
               .map((item) => getSerializedSize(item))
-              .reduce((prev, curr) => prev + curr, 0) - array_length;
+              .reduce((prev, curr) => prev + curr, 0) - arrayLength;
         }
-        return getSerializedSize(array_length) + size;
+        return getSerializedSize(arrayLength) + size;
       } else if (
         typeof value.size === "number" &&
         typeof value.serialize === "function"
       ) {
         return getSerializedSize(value.size) + value.size;
-        // do not break here so we fall through to the default
       }
+      // do not break here so we fall through to the default
     }
     default:
-      return 0;
+      throw new Error("Unsupported value type: " + typeof value);
   }
 }

@@ -88,8 +88,8 @@ describe("getSerializedSize", () => {
   });
 
   test("array of hexstring objects", () => {
-    const input = [HexString.fromHex("0102"), HexString.fromHex("0304")];
+    const input = [HexString.fromHex("0102"), HexString.fromHex("030405")];
     const result = getSerializedSize(input);
-    expect(result).toBe(5);
+    expect(result).toBe(6);
   });
 });
