@@ -68,7 +68,7 @@ export class Signer {
    * Returns the number of bytes this object will take when serialized.
    */
   public get size(): number {
-    return (this.serialize().length / 2);
+    return this.serialize().length / 2;
   }
 
   public addAllowedContracts(...contracts: string[]): void {
