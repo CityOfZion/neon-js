@@ -80,7 +80,6 @@ export function reverseHex(hex: string): string {
   return out;
 }
 
-
 interface NeonSerializable {
   size: number;
   serialize: () => string;
