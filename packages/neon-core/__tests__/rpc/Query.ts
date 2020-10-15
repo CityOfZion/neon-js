@@ -1,5 +1,6 @@
-import Query from "../../src/rpc/Query";
-import { Transaction } from "../../src/tx";
+import Query, { QueryLike } from "../../src/rpc/Query";
+import { ContractParam } from "../../src/sc";
+import { Transaction, Signer } from "../../src/tx";
 
 describe("constructor", () => {
   test("RPCRequest", () => {
@@ -31,7 +32,12 @@ describe("equals", () => {
     ["Query1 !== Obj2", query1, obj2, false],
   ])(
     "%s",
-    (msg: string, a: Query<unknown[], unknown>, b: unknown, cond: boolean) => {
+    (
+      msg: string,
+      a: Query<unknown[], unknown>,
+      b: Partial<Query<unknown[], unknown> | QueryLike<unknown[]>>,
+      cond: boolean
+    ) => {
       expect(a.equals(b)).toBe(cond);
     }
   );
@@ -154,23 +160,49 @@ describe("static", () => {
     });
 
     test("multiple params", () => {
-      const params = [jest.fn(), jest.fn(), jest.fn()];
-      const result = Query.invokeFunction("hash", "method", params);
+      const inputParams = [
+        1,
+        ContractParam.integer(2),
+        { type: "Integer", value: "3" },
+      ];
+      const result = Query.invokeFunction("hash", "method", inputParams);
       expect(result.method).toEqual("invokefunction");
-      expect(result.params).toEqual(["hash", "method", params, []]);
+      expect(result.params).toEqual([
+        "hash",
+        "method",
+        [1, { type: "Integer", value: "2" }, { type: "Integer", value: "3" }],
+        [],
+      ]);
     });
 
-    test("multiple params with checkedWitnessHashes", () => {
-      const params = [jest.fn(), jest.fn(), jest.fn()];
-      const result = Query.invokeFunction("hash", "method", params, [
-        "abcdabcdabcdabcdabcd",
+    test("multiple params with signers", () => {
+      const inputParams = [
+        1,
+        ContractParam.integer(2),
+        { type: "Integer", value: "3" },
+      ];
+      const result = Query.invokeFunction("hash", "method", inputParams, [
+        new Signer({ account: "ab".repeat(20) }),
+        {
+          account: "cd".repeat(20),
+          scopes: "CalledByEntry",
+        },
       ]);
       expect(result.method).toEqual("invokefunction");
       expect(result.params).toEqual([
         "hash",
         "method",
-        params,
-        ["abcdabcdabcdabcdabcd"],
+        [1, { type: "Integer", value: "2" }, { type: "Integer", value: "3" }],
+        [
+          {
+            account: "0x" + "ab".repeat(20),
+            scopes: "FeeOnly",
+          },
+          {
+            account: "cd".repeat(20),
+            scopes: "CalledByEntry",
+          },
+        ],
       ]);
     });
   });
@@ -182,10 +214,28 @@ describe("static", () => {
       expect(result.params).toEqual(["script", []]);
     });
 
-    test("script with checkWitnessHashes", () => {
-      const result = Query.invokeScript("script", ["abcdabcdabcdabcdabcd"]);
+    test("script with signers", () => {
+      const result = Query.invokeScript("script", [
+        new Signer({ account: "ab".repeat(20) }),
+        {
+          account: "cd".repeat(20),
+          scopes: "CalledByEntry",
+        },
+      ]);
       expect(result.method).toEqual("invokescript");
-      expect(result.params).toEqual(["script", ["abcdabcdabcdabcdabcd"]]);
+      expect(result.params).toEqual([
+        "script",
+        [
+          {
+            account: "0x" + "ab".repeat(20),
+            scopes: "FeeOnly",
+          },
+          {
+            account: "cd".repeat(20),
+            scopes: "CalledByEntry",
+          },
+        ],
+      ]);
     });
   });
 

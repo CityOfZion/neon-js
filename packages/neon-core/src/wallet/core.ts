@@ -26,7 +26,8 @@ import {
   EllipticCurvePreset,
 } from "../u";
 import { sign } from "./signing";
-import { OpCode, InteropServiceCode, ScriptBuilder } from "../sc";
+import { OpCode, InteropServiceCode, ScriptBuilder, OpToken } from "../sc";
+import { isPublicKey } from "./verify";
 
 const curve = getCurve(EllipticCurvePreset.SECP256R1);
 /**
@@ -84,47 +85,71 @@ export function getPublicKeyFromPrivateKey(
  * It is attached as part of the signature when signing a transaction.
  * Thus, the name 'scriptHash' instead of 'keyHash' is because we are hashing the verificationScript and not the PublicKey.
  */
-export const getVerificationScriptFromPublicKey = (
-  publicKey: string
-): string => {
+export function getVerificationScriptFromPublicKey(publicKey: string): string {
   const sb = new ScriptBuilder();
   return sb
     .emit(OpCode.PUSHDATA1, "21" + publicKey)
     .emit(OpCode.PUSHNULL)
     .emitSysCall(InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1)
     .build();
-};
+}
+
+/**
+ * Extracts the public key from the verification script. This only works for single key accounts.
+ * @param script - hexstring
+ */
+export function getPublicKeyFromVerificationScript(script: string): string {
+  const ops = OpToken.fromScript(script);
+  const sysCallToken = ops.pop();
+  if (
+    sysCallToken === undefined ||
+    sysCallToken.code !== OpCode.SYSCALL ||
+    (sysCallToken.params ?? "") !==
+      InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
+  ) {
+    throw new Error("script is not a single key account.");
+  }
+  const publicKeyToken = ops[0];
+  if (
+    publicKeyToken.code !== OpCode.PUSHDATA1 ||
+    !publicKeyToken.params ||
+    !isPublicKey(publicKeyToken.params)
+  ) {
+    throw new Error("cannot find public key");
+  }
+  return publicKeyToken.params;
+}
 
 /**
  * Converts a public key to scripthash.
  */
-export const getScriptHashFromPublicKey = (publicKey: string): string => {
+export function getScriptHashFromPublicKey(publicKey: string): string {
   // if unencoded
   if (publicKey.substring(0, 2) === "04") {
     publicKey = getPublicKeyEncoded(publicKey);
   }
   const verificationScript = getVerificationScriptFromPublicKey(publicKey);
   return reverseHex(hash160(verificationScript));
-};
+}
 
 /**
  * Converts a scripthash to address.
  */
-export const getAddressFromScriptHash = (scriptHash: string): string => {
+export function getAddressFromScriptHash(scriptHash: string): string {
   scriptHash = reverseHex(scriptHash);
   const shaChecksum = hash256(ADDR_VERSION + scriptHash).substr(0, 8);
   return base58.encode(
     Buffer.from(ADDR_VERSION + scriptHash + shaChecksum, "hex")
   );
-};
+}
 
 /**
  * Converts an address to scripthash.
  */
-export const getScriptHashFromAddress = (address: string): string => {
+export function getScriptHashFromAddress(address: string): string {
   const hash = ab2hexstring(base58.decode(address));
   return reverseHex(hash.substr(2, 40));
-};
+}
 
 /**
  * Generates a signature of the transaction based on given private key.
@@ -132,13 +157,13 @@ export const getScriptHashFromAddress = (address: string): string => {
  * @param privateKey - private Key
  * @returns Signature. Does not include tx.
  */
-export const generateSignature = (tx: string, privateKey: string): string => {
+export function generateSignature(tx: string, privateKey: string): string {
   return sign(tx, privateKey);
-};
+}
 
 /**
  * Generates a random private key.
  */
-export const generatePrivateKey = (): string => {
+export function generatePrivateKey(): string {
   return ab2hexstring(generateRandomArray(32));
-};
+}

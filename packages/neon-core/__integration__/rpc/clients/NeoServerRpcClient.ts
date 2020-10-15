@@ -13,7 +13,6 @@ let txid: string;
 let blockhash: string;
 
 beforeAll(async () => {
-  await testWallet.decryptAll("wallet");
   const url = await TestHelpers.getIntegrationEnvUrl();
   client = new rpc.NeoServerRpcClient(url);
   const firstBlock = await client.getBlock(0, true);
@@ -116,12 +115,12 @@ describe("NeoServerRpcClient", () => {
   });
 
   describe("getRawMemPool", () => {
-    test("get comfirmed only", async () => {
+    test("get confirmed only", async () => {
       const result = await client.getRawMemPool();
       expect(Array.isArray(result)).toBeTruthy();
     });
 
-    test("get comfirmed and unconfirmed", async () => {
+    test("get confirmed and unconfirmed", async () => {
       const result = await client.getRawMemPool(true);
       expect(Object.keys(result)).toEqual(
         expect.arrayContaining(["height", "verified", "unverified"])
@@ -293,6 +292,8 @@ describe("NeoServerRpcClient", () => {
   });
 
   test("sendRawTransaction", async () => {
+    await testWallet.decrypt(0, "wallet");
+
     const fromAccount = testWallet.accounts[0];
     const toAccount = testWallet.accounts[1];
     const script = sc.createScript({
@@ -320,7 +321,7 @@ describe("NeoServerRpcClient", () => {
     }).sign(fromAccount, 1234567890);
     const result = await client.sendRawTransaction(transaction.serialize(true));
     expect(typeof result).toBe("string");
-  }, 10000);
+  }, 20000);
 
   test.skip("submitBlock", () => {
     const alreadyExistedBlock =
@@ -339,5 +340,12 @@ describe("NeoServerRpcClient", () => {
       const result = await client.validateAddress("wrongaddress");
       expect(result).toBe(false);
     });
+  });
+
+  test("getUnclaimedGas", async () => {
+    const result = await client.getUnclaimedGas(
+      "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV"
+    );
+    expect(result).toBeGreaterThan(0);
   });
 });

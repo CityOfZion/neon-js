@@ -15,13 +15,13 @@ describe("constructor", () => {
     expect(result.net).toBe(DEFAULT_RPC.MAIN);
   });
   test("only url", () => {
-    const url = "testUrl";
+    const url = "http://testUrl.com";
     const result = new RPCClient(url);
     expect(result.net).toBe(url);
   });
 
   test("url with version", () => {
-    const url = "testUrl";
+    const url = "http://testUrl.com";
     const version = "1.2.3";
     const result = new RPCClient(url, version);
     expect(result.version).toBe(version);
@@ -30,12 +30,12 @@ describe("constructor", () => {
 
 describe("getters", () => {
   test("default latency", () => {
-    const client = new RPCClient("url");
+    const client = new RPCClient("http://testUrl.com");
     expect(client.latency).toBe(99999);
   });
 
   test("average latency", () => {
-    const client = new RPCClient("url");
+    const client = new RPCClient("http://testUrl.com");
     const latencies = [1, 5, 10, 20, 30, 40, 50];
     const ave = [1, 3, 5, 9, 13, 21, 30];
     for (let i = 0; i < latencies.length; i++) {
@@ -52,7 +52,7 @@ describe("execute", () => {
       method: "test",
     });
     Axios.post.mockImplementationOnce(async (url, data) => {
-      expect(url).toEqual("url");
+      expect(url).toEqual("http://testUrl.com");
       expect(data).toEqual(expectedQuery.export());
       return {
         data: {
@@ -63,7 +63,7 @@ describe("execute", () => {
       };
     });
 
-    const client = new RPCClient("url");
+    const client = new RPCClient("http://testUrl.com");
 
     const result = await client.execute(expectedQuery);
     expect(result).toBe("1234");
@@ -88,7 +88,7 @@ describe("execute", () => {
       };
     });
 
-    const client = new RPCClient("url");
+    const client = new RPCClient("http://testUrl.com");
     expect(client.execute(query)).rejects.toThrow(expectedErrorMessage);
   });
 });
@@ -97,13 +97,13 @@ describe("RPC Methods", () => {
   let client: RPCClient;
 
   beforeEach(() => {
-    client = new RPCClient("testUrl");
+    client = new RPCClient("http://testUrl.com");
   });
 
   describe("getBestBlockHash", () => {
     test("success", async () => {
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getbestblockhash",
           params: [],
@@ -125,7 +125,7 @@ describe("RPC Methods", () => {
   describe("getBlock", () => {
     test("index with height, verbose = default 0", async () => {
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getblock",
           params: [123, 0],
@@ -146,7 +146,7 @@ describe("RPC Methods", () => {
     test("index with hash, verbose = 1", async () => {
       const expected = jest.fn();
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getblock",
           params: ["hash", 1],
@@ -169,7 +169,7 @@ describe("RPC Methods", () => {
     test("success", async () => {
       const expected = 123;
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getblockcount",
           params: [],
@@ -192,7 +192,7 @@ describe("RPC Methods", () => {
     test("success", async () => {
       const expected = "1234";
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getblockhash",
           params: [123],
@@ -215,7 +215,7 @@ describe("RPC Methods", () => {
     test("index with height, verbose = default0", async () => {
       const expected = "1234";
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getblockheader",
           params: [234, 0],
@@ -236,7 +236,7 @@ describe("RPC Methods", () => {
     test("index with hash, verbose = 1", async () => {
       const expected = jest.fn();
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getblockheader",
           params: ["hash", 1],
@@ -259,7 +259,7 @@ describe("RPC Methods", () => {
     test("success", async () => {
       const expected = 100;
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getconnectioncount",
           params: [],
@@ -286,7 +286,7 @@ describe("RPC Methods", () => {
         manifest: { safeMethods: ["a", "b"] },
       };
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getcontractstate",
           params: ["hash"],
@@ -313,7 +313,7 @@ describe("RPC Methods", () => {
         bad: [{ address: "addressC", port: 3456 }],
       };
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getpeers",
           params: [],
@@ -336,7 +336,7 @@ describe("RPC Methods", () => {
     test("success with no verbose", async () => {
       const expected = ["a", "b", "c"];
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getrawmempool",
           params: [0],
@@ -361,7 +361,7 @@ describe("RPC Methods", () => {
         height: 1234,
       };
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getrawmempool",
           params: [1],
@@ -384,7 +384,7 @@ describe("RPC Methods", () => {
     test("verbose = 1", async () => {
       const expected = jest.fn();
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getrawtransaction",
           params: ["txid", 1],
@@ -405,7 +405,7 @@ describe("RPC Methods", () => {
     test("verbose = default 0", async () => {
       const expected = "1234";
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getrawtransaction",
           params: ["txid", 0],
@@ -428,7 +428,7 @@ describe("RPC Methods", () => {
     test("success", async () => {
       const expected = "expected";
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getstorage",
           params: ["hash", "key"],
@@ -451,7 +451,7 @@ describe("RPC Methods", () => {
     test("success", async () => {
       const expected = 1234;
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "gettransactionheight",
           params: ["txid"],
@@ -480,7 +480,7 @@ describe("RPC Methods", () => {
         },
       ];
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getvalidators",
           params: [],
@@ -503,7 +503,7 @@ describe("RPC Methods", () => {
     test("success", async () => {
       const expected = "3.0.0-preview3";
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getversion",
           params: [],
@@ -532,7 +532,7 @@ describe("RPC Methods", () => {
       const randomObj = jest.fn();
       const expected = jest.fn();
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "invokefunction",
           params: [
@@ -575,7 +575,7 @@ describe("RPC Methods", () => {
     test("success", async () => {
       const expected = jest.fn();
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "invokescript",
           params: [
@@ -611,7 +611,7 @@ describe("RPC Methods", () => {
     test("success", async () => {
       const expected = jest.fn();
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "listplugins",
           params: [],
@@ -634,7 +634,7 @@ describe("RPC Methods", () => {
     test("success", async () => {
       const expected = "1234";
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "sendrawtransaction",
           params: ["hexstring"],
@@ -659,7 +659,7 @@ describe("RPC Methods", () => {
     test("success", async () => {
       const expected = "1234";
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "submitblock",
           params: ["hexstring"],
@@ -683,7 +683,7 @@ describe("RPC Methods", () => {
   describe("validateAddress", () => {
     test("success", async () => {
       Axios.post.mockImplementationOnce(async (url, data) => {
-        expect(url).toEqual("testUrl");
+        expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "validateaddress",
           params: ["addr"],
@@ -702,6 +702,31 @@ describe("RPC Methods", () => {
 
       const result = await client.validateAddress("addr");
       expect(result).toEqual(true);
+    });
+  });
+
+  describe("getUnclaimedGas", () => {
+    test("success", async () => {
+      Axios.post.mockImplementationOnce(async (url, data) => {
+        expect(url).toEqual("http://testUrl.com");
+        expect(data).toMatchObject({
+          method: "getunclaimedgas",
+          params: ["addr"],
+        });
+        return {
+          data: {
+            jsonrpc: "2.0",
+            id: data.id,
+            result: {
+              unclaimed: "1234567812345678",
+              address: "addr",
+            },
+          },
+        };
+      });
+
+      const result = await client.getUnclaimedGas("addr");
+      expect(result).toEqual(12345678.12345678);
     });
   });
 });

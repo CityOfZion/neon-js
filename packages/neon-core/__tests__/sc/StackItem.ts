@@ -61,18 +61,19 @@ describe("constructor", () => {
 });
 
 describe("hasChildren", () => {
-  test.each(["Array", "Struct", "Map"])(
-    "%s has children",
-    (type: keyof typeof StackItemType) => {
-      const result = hasChildren(StackItemType[type]);
-      expect(result).toBeTruthy();
-    }
-  );
+  test.each(["Array", "Struct", "Map"])("%s has children", (type: string) => {
+    const result = hasChildren(
+      StackItemType[type as keyof typeof StackItemType]
+    );
+    expect(result).toBeTruthy();
+  });
 
   test.each(["ByteString", "Boolean", "Integer", "InteropInterface"])(
     "%s do not have children",
-    (type: keyof typeof StackItemType) => {
-      const result = hasChildren(StackItemType[type]);
+    (type: string) => {
+      const result = hasChildren(
+        StackItemType[type as keyof typeof StackItemType]
+      );
       expect(result).toBeFalsy();
     }
   );

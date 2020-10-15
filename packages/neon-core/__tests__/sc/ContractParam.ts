@@ -1,8 +1,10 @@
-import ContractParam, {
+import {
+  ContractParam,
   ContractParamType,
   likeContractParam,
   ContractParamLike,
 } from "../../src/sc/ContractParam";
+import { HexString } from "../../src/u";
 
 describe("constructor", () => {
   test("ContractParamLike", () => {
@@ -95,7 +97,9 @@ describe("Static constructors", () => {
 
       expect(result instanceof ContractParam).toBeTruthy();
       expect(result.type).toBe(ContractParamType.Hash160);
-      expect(result.value).toBe(expected);
+      expect(result.value).toBeInstanceOf(HexString);
+      const hexStringValue = result.value as HexString;
+      expect(hexStringValue.toBigEndian()).toBe(expected);
     });
 
     test("Errors on non-address or scripthash", () => {
@@ -115,12 +119,12 @@ describe("Static constructors", () => {
       ["fixed8", [100.012345678, "fixed8"], "88ba1e5402000000"],
       ["fixed8 (0 decimals)", [1, "fixed8", 0], "0100000000000000"],
       ["fixed8(4 decimals)", [222.1234, "fixed8", 4], "b2e4210000000000"],
-    ])(
+    ] as [string, [string | number, string?, ...(string | number)[]], string][])(
       "%s",
       (
         _msg: string,
-        data: [string | number, string, number?],
-        expected: unknown
+        data: [string | number, string?, ...(string | number)[]],
+        expected: string
       ) => {
         const result = ContractParam.byteArray(...data);
 
@@ -157,7 +161,9 @@ describe("Static constructors", () => {
 
     expect(result instanceof ContractParam).toBeTruthy();
     expect(result.type).toBe(ContractParamType.PublicKey);
-    expect(result.value).toBe(
+    expect(result.value).toBeInstanceOf(HexString);
+    const hexStringValue = result.value as HexString;
+    expect(hexStringValue.toBigEndian()).toBe(
       "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee"
     );
   });

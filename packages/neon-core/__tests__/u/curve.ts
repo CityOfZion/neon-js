@@ -4,7 +4,7 @@ import {
   EllipticCurve,
 } from "../../src/u/curve";
 
-type CurveData = Array<[string, string, string]>;
+type CurveData = string[][];
 describe("EllipticCurve", () => {
   // http://point-at-infinity.org/ecc/nisttv
   const secp256r1Data = [

@@ -19,7 +19,7 @@ import { TextEncoder } from "util";
 
 export interface ScriptIntent {
   scriptHash: string | "NEO" | "GAS" | "POLICY";
-  operation?: string;
+  operation: string;
   args?: unknown[];
 }
 
@@ -65,7 +65,7 @@ export class ScriptBuilder extends StringStream {
     }
 
     return this.emitString(operation)
-      .emitHexstring(HexString.fromHex(scriptHash))
+      .emitHexString(HexString.fromHex(scriptHash))
       .emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALL);
   }
 
@@ -93,7 +93,7 @@ export class ScriptBuilder extends StringStream {
         if (Array.isArray(data)) {
           return this.emitArray(data);
         } else if (data instanceof HexString) {
-          return this.emitHexstring(data);
+          return this.emitHexString(data);
         } else if (data === null) {
           return this.emitPush(false);
         } else if (likeContractParam(data)) {
@@ -127,7 +127,7 @@ export class ScriptBuilder extends StringStream {
    * Appends a bytearray.
    */
   public emitBytes(byteArray: ArrayBuffer | ArrayLike<number>): this {
-    return this.emitHexstring(HexString.fromArrayBuffer(byteArray, true));
+    return this.emitHexString(HexString.fromArrayBuffer(byteArray, true));
   }
 
   /**
@@ -141,10 +141,14 @@ export class ScriptBuilder extends StringStream {
 
   /**
    * Appends a hexstring.
+   *
+   * @remarks
+   * If a Javascript string is provided, it is emitted as it is.
+   * If a HexString is provided, it is emitted as little-endian.
    */
-  public emitHexstring(hexstr: string | HexString): this {
+  public emitHexString(hexstr: string | HexString): this {
     if (typeof hexstr === "string") {
-      hexstr = HexString.fromHex(hexstr);
+      hexstr = HexString.fromHex(hexstr, true);
     }
     const littleEndianHex = hexstr.toLittleEndian();
     const size = hexstr.byteLength;
@@ -163,6 +167,35 @@ export class ScriptBuilder extends StringStream {
     } else {
       throw new Error(`Data too big to emit!`);
     }
+  }
+
+  /**
+   * Helper method to emit a public key.
+   *
+   * @remarks
+   * Conventionally, hexstrings are pushed as little endian into the script. However, for public keys, they are pushed as big endian.
+   * This helper method reduces the confusion by hiding this edge case.
+   * @param publicKey - 66 character string or a HexString.
+   *
+   * @example
+   * const publicKey = "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef";
+   * const result = new ScriptBuilder()
+   *  .emitPublicKey(publicKey)
+   *  .build();
+   *
+   * const publicKeyInHexString = HexString.fromHex(publicKey, false);
+   * const sameResult = new ScriptBuilder()
+   *  .emitPublicKey(publicKeyInHexString)
+   *  .build();
+   *
+   * console.log(result); // 0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef
+   *
+   *
+   */
+  public emitPublicKey(publicKey: string | HexString): this {
+    const stringFormatKey =
+      publicKey instanceof HexString ? publicKey.toBigEndian() : publicKey;
+    return this.emit(OpCode.PUSHDATA1, num2hexstring(33) + stringFormatKey);
   }
 
   /**
@@ -243,13 +276,14 @@ export class ScriptBuilder extends StringStream {
       case ContractParamType.Integer:
         return this.emitNumber(param.value as number | string);
       case ContractParamType.ByteArray:
-        return this.emitHexstring(param.value as string);
+        return this.emitHexString(param.value as string);
       case ContractParamType.Array:
         return this.emitArray(param.value as ContractParam[]);
       case ContractParamType.Hash160:
       case ContractParamType.Hash256:
+        return this.emitHexString(param.value as HexString);
       case ContractParamType.PublicKey:
-        return this.emitHexstring(param.value as HexString);
+        return this.emitPublicKey(param.value as string);
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }

@@ -1,5 +1,5 @@
 {
-    "name": null,
+    "name": "testWallet",
     "version": "3.0",
     "scrypt": {
         "n": 16384,
@@ -68,6 +68,30 @@
             "extra": {
                 "WIF": "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
                 "publicKey": "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa"
+            }
+        },
+        {
+            "address": "NSyfwYL3LUNgjiiXDZBi9SDYh5eoe5DA71",
+            "label": "multisigABC",
+            "isdefault": false,
+            "lock": false,
+            "key": "6PYSeMMbHPpzD9jFvtytPLatcDJA1qraaKaxrkMDxxvN4XV5VZe2tdus8e",
+            "contract": {
+                "script": "EgwhAgKKmYJu3AyX0Y4itpMjc9kI0yOqf5JlanfsJuiGFpnvDCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckMIQIjLOjS4gY9zgRRExhR1HQhv8T8HaTbEW/KUwLAdWRi\u002BhMLQRON768=",
+                "parameters": [
+                    {
+                        "name": "parameter0",
+                        "type": "Signature"
+                    },
+                    {
+                        "name": "parameter1",
+                        "type": "Signature"
+                    }
+                ],
+                "deployed": false
+            },
+            "extra": {
+                "description": "MultiSig made from A,B,C."
             }
         },
         {

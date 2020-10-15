@@ -34,17 +34,20 @@ describe("IntegerParser", () => {
   test.each([
     ["empty string", { type: "ByteString", value: "" }, 0],
     ["random integer", { type: "Integer", value: "9" }, 9],
-  ])("%s", (_msg: string, item: StackItemJson, expected: number) => {
-    const result = IntegerParser(item);
-    expect(result).toBe(expected);
-  });
+  ] as [string, StackItemJson, number][])(
+    "%s",
+    (_msg: string, item: StackItemJson, expected: number) => {
+      const result = IntegerParser(item);
+      expect(result).toBe(expected);
+    }
+  );
 });
 
 describe("Fixed8Parser", () => {
   test.each([
     ["0", { type: "ByteString", value: "" }],
     ["40000", { type: "ByteString", value: "00409452a303" }],
-  ])("%s", (msg: string, item: StackItemJson) => {
+  ] as [string, StackItemJson][])("%s", (msg: string, item: StackItemJson) => {
     const result = Fixed8Parser(item);
     expect(result.toString()).toBe(msg);
   });
@@ -54,7 +57,7 @@ describe("StringParser", () => {
   test.each([
     ["RPX", { type: "ByteString", value: "525058" }],
     ["Qlink Token", { type: "ByteArray", value: "516c696e6b20546f6b656e" }],
-  ])("%s", (msg: string, item: StackItemJson) => {
+  ] as [string, StackItemJson][])("%s", (msg: string, item: StackItemJson) => {
     const result = StringParser(item);
     expect(result).toBe(msg);
   });

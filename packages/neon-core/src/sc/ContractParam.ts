@@ -110,7 +110,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
    */
   public static byteArray(
     value: string | number,
-    format: string,
+    format?: string,
     ...args: unknown[]
   ): ContractParam {
     if (format) {
@@ -186,9 +186,11 @@ export class ContractParam implements NeonObject<ContractParamLike> {
         case ContractParamType.Hash256:
         case ContractParamType.PublicKey:
           this.value = HexString.fromHex(input.value as string);
+          return;
         case ContractParamType.Integer:
         case ContractParamType.String:
           this.value = input.value as number | string;
+          return;
         case ContractParamType.Any:
           this.value =
             typeof input.value === "object"
@@ -270,6 +272,16 @@ export class ContractParam implements NeonObject<ContractParamLike> {
           return false;
         case ContractParamType.Void:
           return true;
+        case ContractParamType.Hash160:
+        case ContractParamType.Hash256:
+        case ContractParamType.PublicKey:
+          if (
+            other.value instanceof HexString ||
+            typeof other.value === "string"
+          ) {
+            return (this.value as HexString).equals(other.value);
+          }
+          return false;
         default:
           return this.value === other.value;
       }

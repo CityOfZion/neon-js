@@ -108,7 +108,7 @@ describe("equals", () => {
     (
       _msg: string,
       a: TransactionAttribute,
-      b: TransactionAttributeLike,
+      b: TransactionAttributeLike | TransactionAttribute,
       cond: boolean
     ) => {
       expect(a.equals(b)).toBe(cond);
@@ -116,7 +116,7 @@ describe("equals", () => {
   );
 });
 
-const dataSet = [
+const dataSet: [string, TransactionAttributeLike, string][] = [
   [
     "Cosigner",
     {
@@ -156,7 +156,11 @@ describe("deserialize", () => {
   );
 });
 
-const jsonTestCases = [
+const jsonTestCases: [
+  string,
+  TransactionAttributeJson,
+  TransactionAttribute
+][] = [
   [
     "simple",
     {

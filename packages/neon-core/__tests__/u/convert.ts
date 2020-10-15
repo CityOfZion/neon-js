@@ -115,10 +115,7 @@ describe("num2hexstring", () => {
 
       test(`${msg}(LE) `, () => {
         const result = convert.num2hexstring(num, size, true);
-        const reversedHex = hex
-          .match(/.{1,2}/g)
-          .reverse()
-          .join("");
+        const reversedHex = (hex.match(/.{1,2}/g) ?? []).reverse().join("");
         expect(result).toBe(reversedHex);
       });
     }

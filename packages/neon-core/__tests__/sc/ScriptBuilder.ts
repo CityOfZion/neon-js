@@ -72,16 +72,16 @@ describe("emitAppCall", () => {
     [
       "emitAppCall with args",
       {
-        scriptHash: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
+        scriptHash: "de5f57d430d3dece511cf975a8d37848cb9e0525",
         operation: "balanceOf",
         args: [
           {
             type: "Hash160",
-            value: "a7213b15cc18d19c810f644e37411d882ee561ca",
+            value: "4120c7c8443dd30af91a8280d151fd38d1b9be91",
           },
         ],
       },
-      "0c14ca61e52e881d41374e640f819cd118cc153b21a711c00c0962616c616e63654f660c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52",
+      "0c1491beb9d138fd51d180821af90ad33d44c8c7204111c00c0962616c616e63654f660c1425059ecb4878d3a875f91c51ceded330d4575fde41627d5b52",
     ],
   ] as [string, ScriptIntent, string][])(
     "%s",
@@ -144,6 +144,7 @@ describe("emitString", () => {
       "simple string",
       "0c" + "0d" + "73696d706c6520737472696e67",
     ],
+    ["12345", "12345", "0c053132333435"],
     ["256 byte string", "a".repeat(0x100), "0d" + "0001" + "61".repeat(0x100)],
     [
       "65536 byte string",
@@ -159,6 +160,21 @@ describe("emitString", () => {
   });
 
   // Difficult to test throw when string too large due to string buffer smaller than limit
+});
+
+describe("emitHexString", () => {
+  test.each([
+    ["null", "", "0c00"],
+    ["string input", "0102030405", "0c050102030405"],
+    ["string input", HexString.fromHex("0102030405", true), "0c050102030405"],
+    ["string input", HexString.fromHex("0102030405", false), "0c050504030201"],
+  ])("%s", (_msg: string, data: string | HexString, expected: string) => {
+    const sb = new ScriptBuilder();
+    sb.emitHexString(data);
+    // Check initial slice to fail early and print less
+    expect(sb.build().substr(0, 10)).toBe(expected.substr(0, 10));
+    expect(sb.build()).toBe(expected);
+  });
 });
 
 describe("emitNumber", () => {

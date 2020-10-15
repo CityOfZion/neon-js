@@ -54,13 +54,12 @@
   "devDependencies": {
     "@types/bn.js": "4.11.6",
     "@types/bs58": "4.0.1",
-    "@types/crypto-js": "3.1.47",
+    "@types/crypto-js": "4.0.1",
     "@types/elliptic": "6.4.12"
   },
   "files": [
     "dist/",
     "lib/",
     "typings/"
-  ],
-  "gitHead": "d21633d03deca1f4bc6c3a4f4e1d32a61aec2fe3"
+  ]
 }
