@@ -23,8 +23,8 @@ interface SignParamsLike {
     signatureCount: number;
  }
 
-export function isMultisigContract(signature_script, state?: SignParamsLike){
-    const script = Buffer.from(signature_script, "hex");
+export function isMultisigContract(signatureScript, state?: SignParamsLike){
+    const script = Buffer.from(signatureScript, "hex");
     if(script.length < 43){ //First check length and return if failure to prevent indexing related errors.
         return false;
     }
@@ -46,7 +46,7 @@ export function isMultisigContract(signature_script, state?: SignParamsLike){
     } else if(script[0] == PUSHINT16){
         signatureCount = script.readUInt16LE(1);
         i = 3;
-    } else if(signatureCount <= PUSH1 || signatureCount >= PUSH16){
+    } else if(script[0] <= PUSH1 || script[0] >= PUSH16){
         signatureCount = script[0] - PUSH0;
         i = 1;
     } else{

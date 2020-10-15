@@ -1,4 +1,4 @@
-var test = require("./signatureVerification.ts");
+import {isSignatureContract, isMultisigContract} from "../../helpers/signatureVerification";
 
 function testIsSignatureContract(){
     /* 
@@ -14,31 +14,31 @@ function testIsSignatureContract(){
     */
     console.log("TESTING SINGLE SIG CONTRACT ...");
     //LENGTH
-    if(!test.isSignatureContract("0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78")){
+    if(!isSignatureContract("0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78")){
         console.log("Length Test: [Pass]");
     } else { console.log("Length Test: [Fail]");}
     //FIRST BYTE should be PUSHDATA1
-    if(!test.isSignatureContract("XX21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78")){
+    if(!isSignatureContract("XX21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78")){
         console.log("FirstByte is PUSHDATA1 Test: [Pass]");
     } else { console.log("FirstByte is PUSHDATA1 Test: [Fail]");}
     //2nd BYTE should be 33
-    if(!test.isSignatureContract("0CXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78")){
+    if(!isSignatureContract("0CXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78")){
         console.log("2nd Byte is 33 Test: [Pass]");
     } else { console.log("2nd Byte is 33 Test: [Fail]");}
     //index 35 should be PUSHNULL
-    if(!test.isSignatureContract("0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaXX4195440d78")){
+    if(!isSignatureContract("0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaXX4195440d78")){
         console.log("Index 35 is PUSHNULL Test: [Pass]");
     } else { console.log("Index 35 is PUSHNULL Test: [Fail]");}
     //index 36 should be SYSCALL
-    if(!test.isSignatureContract("0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0BXX95440d78")){
+    if(!isSignatureContract("0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0BXX95440d78")){
         console.log("Index 36 is SYSCALL Test: [Pass]");
     } else { console.log("Index 36 is SYSCALL Test: [Fail]");}
     //last 4 should be identifier
-    if(!test.isSignatureContract("0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B41XXXXXXXX")){
+    if(!isSignatureContract("0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B41XXXXXXXX")){
         console.log("Correct Identifier Test: [Pass]");
     } else { console.log("Correct identifier Test: [Fail]");}
     //correct script
-    if(test.isSignatureContract("0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78")){
+    if(isSignatureContract("0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78")){
         console.log("Correct Signature Test: [Pass]");
     } else { console.log("Correct Signature Test: [Fail]");}
 
@@ -49,31 +49,31 @@ function testIsMultisigContract(){
     let multiSigTest = "01";
     console.log("TESTING MULTISIG CONTRACT ...");
     //Length
-    if(!test.isMultisigContract(multiSigTest)){
+    if(!isMultisigContract(multiSigTest)){
         console.log("Correct Length Test: [Pass]");
     } else { console.log("Correct Length Test: [Fail]");}
     //Invalid Public Keys (2nd key too short)
     multiSigTest = "0102000c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddXXdddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0103000b41138defaf";
-    if(!test.isMultisigContract(multiSigTest)){
+    if(!isMultisigContract(multiSigTest)){
         console.log("Invalid Pub Key Test: [Pass]");
     } else { console.log("Invalid Pub Key Test: [Fail]");}
     //Invlie Public Keys (Invalid PUSHDATA)
     multiSigTest = "0102000c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0XXXdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0103000b41138defaf"
-    if(!test.isMultisigContract(multiSigTest)){
+    if(!isMultisigContract(multiSigTest)){
         console.log("Invalid Pub Key Test 2: [Pass]");
     } else { console.log("Invalid Pub Key Test 2: [Fail]");}
     //Key Count lower than given count (have 3 sigs claim 2)
     multiSigTest = "0102000c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0102000b41138defaf"
-    if(!test.isMultisigContract(multiSigTest)){
+    if(!isMultisigContract(multiSigTest)){
         console.log("Invalid Key Count Test: [Pass]");
     } else { console.log("Invalid Key Count Test: [Fail]");}
     //Invalid Tail
     multiSigTest = "0102000c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0c21dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd0102000b41138defXf"
-    if(!test.isMultisigContract(multiSigTest)){
+    if(!isMultisigContract(multiSigTest)){
         console.log("Invalid Tail Test: [Pass]");
     } else { console.log("Invalid Tail Test: [Fail]");}
     //correct script
-    if(test.isMultisigContract(multiSigGood)){
+    if(isMultisigContract(multiSigGood)){
         console.log("Correct Signature Test: [Pass]");
     } else { console.log("Correct Signature Test: [Fail]");}
 
