@@ -13,9 +13,9 @@ import {
   isScriptHash,
   isWIF,
 } from "./verify";
-import { InteropServiceCode } from "../sc";
+//import { InteropServiceCode } from "../sc";
 import { NeonObject } from "../model";
-import {isMultisigContract} from "../u/misc";
+import { isMultisigContract } from "../u/misc";
 
 const log = logger("wallet");
 
