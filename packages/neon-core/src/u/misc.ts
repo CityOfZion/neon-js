@@ -88,9 +88,9 @@ interface SignParamsLike {
 }
 
 export function isMultisigContract(
-    signatureScript: string,
-    state?: SignParamsLike
-    ): boolean {
+  signatureScript: string,
+  state?: SignParamsLike
+): boolean {
   const script = Buffer.from(signatureScript, "hex");
   if (script.length < 43) {
     return false;
@@ -115,8 +115,8 @@ export function isMultisigContract(
   } else if (script[0] <= PUSH1 || script[0] >= PUSH16) {
     signatureCount = script[0] - PUSH0;
     i = 1;
-  } else{
-      return false;
+  } else {
+    return false;
   }
 
   if (signatureCount < 1 || signatureCount > 1024) {
@@ -124,7 +124,7 @@ export function isMultisigContract(
   }
 
   let publicKeyCount = 0;
-  while(script[i] == PUSHDATA1) {
+  while (script[i] == PUSHDATA1) {
     if (script.length <= i + 35) {
       return false;
     }
@@ -151,23 +151,24 @@ export function isMultisigContract(
     }
     i += 3;
   } else if (PUSH1 <= value && value <= PUSH16) {
-    if (publicKeyCount != (value - PUSH0)) {
+    if (publicKeyCount != value - PUSH0) {
       return false;
     }
     i += 1;
-  } else{
+  } else {
     return false;
   }
 
-  if ( (script.length != (i + 6)) || (script[i] != PUSHNULL) || (script[i + 1] != SYSCALL) ){
+  if (
+    (script.length != i + 6) ||
+    script[i] != PUSHNULL ||
+    script[i + 1] != SYSCALL
+  ) {
     return false;
   }
 
   i += 2;
 
-  /*
-  AFEF8D13 || 2951712019
-  */
   if (script.readUInt32LE(i) != 2951712019) {
     return false;
   }
