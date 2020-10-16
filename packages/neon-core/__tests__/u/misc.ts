@@ -1,6 +1,7 @@
 import * as misc from "../../src/u/misc";
 import { HexString } from "../../src/u/HexString";
 import { getSerializedSize } from "../../src/u/misc";
+import { Witness } from "../../src/tx/components";
 
 describe("hexXor", () => {
   test("throws if inputs of different length", () => {
@@ -43,18 +44,6 @@ describe("reverseHex", () => {
   });
 });
 
-class SerializableObject {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  public get size(): number {
-    return 2;
-  }
-
-  public serialize(): string {
-    return "";
-  }
-}
-
 describe("getSerializedSize", () => {
   test("size of HexString", () => {
     const input = HexString.fromHex("112233");
@@ -82,14 +71,18 @@ describe("getSerializedSize", () => {
   });
 
   test("array of serializable objects", () => {
-    const input = [new SerializableObject(), new SerializableObject()];
-    const result = getSerializedSize(input);
-    expect(result).toBe(5);
-  });
+    const input = [
+      new Witness({
+        invocationScript: "01".repeat(256),
+        verificationScript: "03",
+      }),
+      new Witness({
+        invocationScript: "01".repeat(256),
+        verificationScript: "03",
+      }),
+    ];
 
-  test("array of hexstring objects", () => {
-    const input = [HexString.fromHex("0102"), HexString.fromHex("030405")];
     const result = getSerializedSize(input);
-    expect(result).toBe(6);
+    expect(result).toBe(523);
   });
 });

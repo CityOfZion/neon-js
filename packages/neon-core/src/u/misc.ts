@@ -84,7 +84,7 @@ interface NeonSerializable {
   size: number;
   serialize: () => string;
 }
-type Serializables = number | HexString | NeonSerializable | Serializables[];
+type Serializables = number | HexString | NeonSerializable[];
 /**
  * Calculates the byte size of any supported input following NEO's variable int format.
  */
@@ -103,17 +103,16 @@ export function getSerializedSize(value: Serializables): number {
         const arrayLength = value.length;
         let size = 0;
         if (arrayLength > 0) {
-          size =
-            value
-              .map((item) => getSerializedSize(item))
-              .reduce((prev, curr) => prev + curr, 0) - arrayLength;
+          if (
+            typeof value[0].size === "number" &&
+            typeof value[0].serialize === "function"
+          ) {
+            size = value
+              .map((item) => item.size)
+              .reduce((prev, curr) => prev + curr, 0);
+          }
         }
         return getSerializedSize(arrayLength) + size;
-      } else if (
-        typeof value.size === "number" &&
-        typeof value.serialize === "function"
-      ) {
-        return getSerializedSize(value.size) + value.size;
       }
       // do not break here so we fall through to the default
     }
