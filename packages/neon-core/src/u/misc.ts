@@ -87,7 +87,7 @@ interface SignParamsLike {
   signatureCount: number;
 }
 
-export function isMultisigContract(signatureScript: string, state?: SignParamsLike){
+export function isMultisigContract(signatureScript: string, state?: SignParamsLike): boolean{
   const script = Buffer.from(signatureScript, "hex");
   if(script.length < 43){ //First check length and return if failure to prevent indexing related errors.
     return false;
@@ -95,14 +95,14 @@ export function isMultisigContract(signatureScript: string, state?: SignParamsLi
 
   //Hard-coded sys calls
   const PUSHINT8 = 12, //0 //0x00
-        PUSHINT16 = 1, //1 //0x01
-        PUSH0 = 16, //16 //0x10
-        PUSH1 = 17, //17 //0x11
-        PUSH16 = 32, //32 //0x20
-        PUSHDATA1 = 12, //12 //0x0C
-        PUSHNULL = 11, //11 //0x0B
-        SYSCALL = 65; //65 //0x41
-
+  PUSHINT16 = 1, //1 //0x01
+  PUSH0 = 16, //16 //0x10
+  PUSH1 = 17, //17 //0x11
+  PUSH16 = 32, //32 //0x20
+  PUSHDATA1 = 12, //12 //0x0C
+  PUSHNULL = 11, //11 //0x0B
+  SYSCALL = 65; //65 //0x41
+        
   let signatureCount, i;
   if(script[0] == PUSHINT8){
     signatureCount = script[1];
