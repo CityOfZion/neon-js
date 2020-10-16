@@ -160,7 +160,7 @@ export function isMultisigContract(
   }
 
   if (
-    (script.length != i + 6) ||
+    script.length != i + 6 ||
     script[i] != PUSHNULL ||
     script[i + 1] != SYSCALL
   ) {
@@ -172,7 +172,7 @@ export function isMultisigContract(
   if (script.readUInt32LE(i) != 2951712019) {
     return false;
   }
-   
+
   if (state) {
     state.publicKeyCount = publicKeyCount;
     state.signatureCount = signatureCount;
