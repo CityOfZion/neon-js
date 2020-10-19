@@ -117,3 +117,104 @@ export function getSerializedSize(value: Serializables): number {
       throw new Error("Unsupported value type: " + typeof value);
   }
 }
+/* 
+Helper to check if signatures are multi-sig
+*/
+interface SignParamsLike {
+  publicKeyCount: number;
+  signatureCount: number;
+}
+
+export function isMultisigContract(
+  signatureScript: string,
+  state?: SignParamsLike
+): boolean {
+  const script = Buffer.from(signatureScript, "hex");
+  if (script.length < 43) {
+    return false;
+  }
+
+  //Hard-coded sys calls
+  const PUSHINT8 = 12, //0 //0x00
+    PUSHINT16 = 1, //1 //0x01
+    PUSH0 = 16, //16 //0x10
+    PUSH1 = 17, //17 //0x11
+    PUSH16 = 32, //32 //0x20
+    PUSHDATA1 = 12, //12 //0x0C
+    PUSHNULL = 11, //11 //0x0B
+    SYSCALL = 65; //65 //0x41
+  let signatureCount, i;
+  if (script[0] == PUSHINT8) {
+    signatureCount = script[1];
+    i = 2;
+  } else if (script[0] == PUSHINT16) {
+    signatureCount = script.readUInt16LE(1);
+    i = 3;
+  } else if (script[0] <= PUSH1 || script[0] >= PUSH16) {
+    signatureCount = script[0] - PUSH0;
+    i = 1;
+  } else {
+    return false;
+  }
+
+  if (signatureCount < 1 || signatureCount > 1024) {
+    return false;
+  }
+
+  let publicKeyCount = 0;
+  while (script[i] == PUSHDATA1) {
+    if (script.length <= i + 35) {
+      return false;
+    }
+    if (script[i + 1] != 33) {
+      return false;
+    }
+    i += 35;
+    publicKeyCount += 1;
+  }
+
+  if (publicKeyCount < signatureCount || publicKeyCount > 1024) {
+    return false;
+  }
+
+  const value = script[i];
+  if (value == PUSHINT8) {
+    if (script.length <= i + 1 || publicKeyCount != script[i + 1]) {
+      return false;
+    }
+    i += 2;
+  } else if (value == PUSHINT16) {
+    if (script.length < i + 3 || publicKeyCount != script.readUInt16LE(i + 1)) {
+      return false;
+    }
+    i += 3;
+  } else if (PUSH1 <= value && value <= PUSH16) {
+    if (publicKeyCount != value - PUSH0) {
+      return false;
+    }
+    i += 1;
+  } else {
+    return false;
+  }
+
+  if (
+    script.length != i + 6 ||
+    script[i] != PUSHNULL ||
+    script[i + 1] != SYSCALL
+  ) {
+    return false;
+  }
+
+  i += 2;
+
+  if (script.readUInt32LE(i) != 2951712019) {
+    return false;
+  }
+
+  if (state) {
+    state.publicKeyCount = publicKeyCount;
+    state.signatureCount = signatureCount;
+  }
+
+  return true;
+}
