@@ -100,19 +100,16 @@ export function getSerializedSize(value: Serializables): number {
         const size = value.byteLength;
         return getSerializedSize(size) + size;
       } else if (Array.isArray(value)) {
-        const arrayLength = value.length;
         let size = 0;
-        if (arrayLength > 0) {
-          if (
-            typeof value[0].size === "number" &&
-            typeof value[0].serialize === "function"
-          ) {
-            size = value
-              .map((item) => item.size)
-              .reduce((prev, curr) => prev + curr, 0);
-          }
+        if (
+          typeof value[0].size === "number" &&
+          typeof value[0].serialize === "function"
+        ) {
+          size = value
+            .map((item) => item.size)
+            .reduce((prev, curr) => prev + curr, 0);
         }
-        return getSerializedSize(arrayLength) + size;
+        return getSerializedSize(value.length) + size;
       }
       // do not break here so we fall through to the default
     }
