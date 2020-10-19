@@ -13,8 +13,9 @@ import {
   isScriptHash,
   isWIF,
 } from "./verify";
-import { InteropServiceCode } from "../sc";
+//import { InteropServiceCode } from "../sc";
 import { NeonObject } from "../model";
+import { isMultisigContract } from "../u/misc";
 
 const log = logger("wallet");
 
@@ -158,10 +159,7 @@ export class Account implements NeonObject<AccountJSON> {
   }
 
   public get isMultiSig(): boolean {
-    return (
-      this.contract?.script?.slice(this.contract.script.length - 8) ===
-      InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256R1
-    );
+    return isMultisigContract(this.contract.script);
   }
 
   /**
