@@ -5,7 +5,8 @@ import nepPlugin from "@cityofzion/neon-nep5";
 import defaultNetworks from "./networks";
 const neonWithApi = apiPlugin(neonCore);
 const neonJs = nepPlugin(neonWithApi);
-
+import * as coz from "./coz";
+export { coz };
 export const {
   api,
   nep5,
@@ -138,4 +139,5 @@ export default {
   },
   u,
   CONST,
+  coz,
 };
