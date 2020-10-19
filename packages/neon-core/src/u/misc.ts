@@ -144,7 +144,6 @@ export function isSignatureContract(input: HexString): boolean {
 export function isMultisigContract(input: HexString): boolean {
   const script = Buffer.from(input.toString(), "hex");
   if (script.length < 43) {
-    //First check length and return if failure to prevent indexing related errors.
     return false;
   }
 
