@@ -1,5 +1,6 @@
 import { ab2hexstring } from "./convert";
 import { HexString } from "./HexString";
+import { OpCode } from "../sc";
 
 const hexRegex = /^([0-9A-Fa-f]{2})*$/;
 
@@ -124,34 +125,51 @@ interface SignParamsLike {
   publicKeyCount: number;
   signatureCount: number;
 }
+/**
+ * Helper to check if signature is a single signature
+ *
+ * @param signatureScript - HEX String
+ * @returns True if Signature Script is valid
+ * @example
+ * isSignatureContract("0C21aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0B4195440d78") = true
+ */
+export function isSignatureContract(signatureScript: string): boolean {
+  const script = Buffer.from(signatureScript, "hex"),
+    SCRIPTLEN = 41;
+  if (
+    script.length != SCRIPTLEN ||
+    script[0] != OpCode.PUSHDATA1 ||
+    script[1] != 33 ||
+    script[35] != OpCode.PUSHNULL ||
+    script[36] != OpCode.SYSCALL ||
+    script.readUInt32LE(37) != 2014135445
+  ) {
+    return false;
+  }
+  return true;
+}
 
-export function isMultisigContract(
-  signatureScript: string,
-  state?: SignParamsLike
-): boolean {
+/**
+ * Helper to check if Signature is a Multi-Signature
+ *
+ * @param signatureScript - HEX String
+ * @returns True value if Signature Script is a valid Multi-Sig
+ */
+export function isMultiSigContract(signatureScript: string): boolean {
   const script = Buffer.from(signatureScript, "hex");
   if (script.length < 43) {
     return false;
   }
 
-  //Hard-coded sys calls
-  const PUSHINT8 = 12, //0 //0x00
-    PUSHINT16 = 1, //1 //0x01
-    PUSH0 = 16, //16 //0x10
-    PUSH1 = 17, //17 //0x11
-    PUSH16 = 32, //32 //0x20
-    PUSHDATA1 = 12, //12 //0x0C
-    PUSHNULL = 11, //11 //0x0B
-    SYSCALL = 65; //65 //0x41
   let signatureCount, i;
-  if (script[0] == PUSHINT8) {
+  if (script[0] == OpCode.PUSHINT8) {
     signatureCount = script[1];
     i = 2;
-  } else if (script[0] == PUSHINT16) {
+  } else if (script[0] == OpCode.PUSHINT16) {
     signatureCount = script.readUInt16LE(1);
     i = 3;
-  } else if (script[0] <= PUSH1 || script[0] >= PUSH16) {
-    signatureCount = script[0] - PUSH0;
+  } else if (script[0] <= OpCode.PUSH1 || script[0] >= OpCode.PUSH16) {
+    signatureCount = script[0] - OpCode.PUSH0;
     i = 1;
   } else {
     return false;
@@ -162,7 +180,7 @@ export function isMultisigContract(
   }
 
   let publicKeyCount = 0;
-  while (script[i] == PUSHDATA1) {
+  while (script[i] == OpCode.PUSHDATA1) {
     if (script.length <= i + 35) {
       return false;
     }
@@ -178,18 +196,18 @@ export function isMultisigContract(
   }
 
   const value = script[i];
-  if (value == PUSHINT8) {
+  if (value == OpCode.PUSHINT8) {
     if (script.length <= i + 1 || publicKeyCount != script[i + 1]) {
       return false;
     }
     i += 2;
-  } else if (value == PUSHINT16) {
+  } else if (value == OpCode.PUSHINT16) {
     if (script.length < i + 3 || publicKeyCount != script.readUInt16LE(i + 1)) {
       return false;
     }
     i += 3;
-  } else if (PUSH1 <= value && value <= PUSH16) {
-    if (publicKeyCount != value - PUSH0) {
+  } else if (OpCode.PUSH1 <= value && value <= OpCode.PUSH16) {
+    if (publicKeyCount != value - OpCode.PUSH0) {
       return false;
     }
     i += 1;
@@ -199,8 +217,8 @@ export function isMultisigContract(
 
   if (
     script.length != i + 6 ||
-    script[i] != PUSHNULL ||
-    script[i + 1] != SYSCALL
+    script[i] != OpCode.PUSHNULL ||
+    script[i + 1] != OpCode.SYSCALL
   ) {
     return false;
   }
@@ -209,11 +227,6 @@ export function isMultisigContract(
 
   if (script.readUInt32LE(i) != 2951712019) {
     return false;
-  }
-
-  if (state) {
-    state.publicKeyCount = publicKeyCount;
-    state.signatureCount = signatureCount;
   }
 
   return true;
