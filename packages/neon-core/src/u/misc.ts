@@ -118,13 +118,7 @@ export function getSerializedSize(value: Serializables): number {
       throw new Error("Unsupported value type: " + typeof value);
   }
 }
-/* 
-Helper to check if signatures are multi-sig
-*/
-interface SignParamsLike {
-  publicKeyCount: number;
-  signatureCount: number;
-}
+
 /**
  * Helper to check if signature is a single signature
  *
