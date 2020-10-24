@@ -54,8 +54,5 @@
   "prettier": {
     "endOfLine": "auto",
     "proseWrap": "always"
-  },
-  "dependencies": {
-    "@cityofzion/neon-js": "^5.0.0-next.4"
   }
 }
