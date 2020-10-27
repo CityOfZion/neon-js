@@ -33,7 +33,7 @@ export async function resolveDomain(
   const hashDomain = u.sha256(u.str2hexstring(tld));
 
   const hashName = u.sha256(hashSubdomain.concat(hashDomain));
-  const parsedName = sc.ContractParam.byteArray(hashName, "name");
+  const parsedName = sc.ContractParam.byteArray(hashName);
 
   const args = [protocol, parsedName, empty];
 

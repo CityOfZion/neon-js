@@ -283,7 +283,7 @@ export class ScriptBuilder extends StringStream {
       case ContractParamType.Hash256:
         return this.emitHexString(param.value as HexString);
       case ContractParamType.PublicKey:
-        return this.emitPublicKey(param.value as string);
+        return this.emitPublicKey(param.value as HexString);
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }
