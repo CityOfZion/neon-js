@@ -97,7 +97,7 @@ export class ScriptBuilder extends StringStream {
         } else if (data === null) {
           return this.emitPush(false);
         } else if (likeContractParam(data)) {
-          return this.emitContractParam(new ContractParam(data));
+          return this.emitContractParam(ContractParam.fromJson(data));
         }
         throw new Error(`Unidentified object: ${data}`);
       default:
