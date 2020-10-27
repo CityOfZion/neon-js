@@ -32,7 +32,6 @@ export type ContractParamLike = Pick<
   ContractParamJson | ContractParam,
   keyof ContractParamJson
 >;
-
 /**
  * These are the parameters used for interacting with smart contracts.
  * Depending on the type, the data is stored differently.
