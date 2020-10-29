@@ -102,9 +102,40 @@ describe("Static constructors", () => {
       expect(hexStringValue.toBigEndian()).toBe(expected);
     });
 
-    test("Errors on non-address or scripthash", () => {
-      const thrower = (): ContractParam => ContractParam.hash160("1");
-      expect(thrower).toThrow();
+    test("errors when not 20 bytes", () => {
+      expect(() => ContractParam.hash160(HexString.fromHex("12"))).toThrow(
+        "expected 20 bytes"
+      );
+    });
+  });
+
+  describe("hash256", () => {
+    test("hexstring", () => {
+      const expected = "abcd".repeat(16);
+      const result = ContractParam.hash256(expected);
+
+      expect(result instanceof ContractParam).toBeTruthy();
+      expect(result.type).toBe(ContractParamType.Hash256);
+      expect(result.value).toBeInstanceOf(HexString);
+      const hexStringValue = result.value as HexString;
+      expect(hexStringValue.toBigEndian()).toBe(expected);
+    });
+
+    test("HexString class", () => {
+      const expected = HexString.fromHex("1234".repeat(16));
+      const result = ContractParam.hash256(expected);
+
+      expect(result instanceof ContractParam).toBeTruthy();
+      expect(result.type).toBe(ContractParamType.Hash256);
+      expect(result.value).toBeInstanceOf(HexString);
+      const hexStringValue = result.value as HexString;
+      expect(hexStringValue.equals(expected)).toBeTruthy();
+    });
+
+    test("errors when not 32 bytes", () => {
+      expect(() => ContractParam.hash256(HexString.fromHex("12"))).toThrow(
+        "expected 32 bytes"
+      );
     });
   });
 
@@ -133,18 +164,26 @@ describe("Static constructors", () => {
     });
   });
 
-  test("publicKey", () => {
-    const result = ContractParam.publicKey(
-      "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee"
-    );
+  describe("publicKey", () => {
+    test("valid key", () => {
+      const result = ContractParam.publicKey(
+        "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee"
+      );
 
-    expect(result instanceof ContractParam).toBeTruthy();
-    expect(result.type).toBe(ContractParamType.PublicKey);
-    expect(result.value).toBeInstanceOf(HexString);
-    const hexStringValue = result.value as HexString;
-    expect(hexStringValue.toBigEndian()).toBe(
-      "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee"
-    );
+      expect(result instanceof ContractParam).toBeTruthy();
+      expect(result.type).toBe(ContractParamType.PublicKey);
+      expect(result.value).toBeInstanceOf(HexString);
+      const hexStringValue = result.value as HexString;
+      expect(hexStringValue.toBigEndian()).toBe(
+        "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee"
+      );
+    });
+
+    test("invalid key", () => {
+      expect(() => ContractParam.publicKey("")).toThrow(
+        "expected valid public key"
+      );
+    });
   });
 });
 
@@ -223,16 +262,6 @@ describe("toJson", () => {
     });
   });
 
-  test("string", () => {
-    const testObject = ContractParam.string("utf8 string");
-    const result = testObject.toJson();
-
-    expect(result).toEqual({
-      type: "String",
-      value: "utf8 string",
-    });
-  });
-
   test("hash160", () => {
     const testObject = ContractParam.hash160("abcd".repeat(10));
     const result = testObject.toJson();
@@ -240,6 +269,16 @@ describe("toJson", () => {
     expect(result).toEqual({
       type: "Hash160",
       value: "abcd".repeat(10),
+    });
+  });
+
+  test("hash256", () => {
+    const testObject = ContractParam.hash256("abcd".repeat(16));
+    const result = testObject.toJson();
+
+    expect(result).toEqual({
+      type: "Hash256",
+      value: "abcd".repeat(16),
     });
   });
 

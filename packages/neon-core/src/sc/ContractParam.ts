@@ -1,10 +1,10 @@
 import { BigInteger, HexString } from "../u";
-import { getScriptHashFromAddress, isAddress } from "../wallet";
+import { getScriptHashFromAddress, isAddress, isPublicKey } from "../wallet";
 import { NeonObject } from "../model";
 import { parseEnum } from "../internal";
 
 export enum ContractParamType {
-  Any = 0x00,
+  Any = 0x00, // TODO: Implement support
 
   Boolean = 0x10,
   Integer = 0x11,
@@ -13,12 +13,12 @@ export enum ContractParamType {
   Hash160 = 0x14,
   Hash256 = 0x15,
   PublicKey = 0x16,
-  Signature = 0x17,
+  Signature = 0x17, // TODO: Implement support
 
-  Array = 0x20,
-  Map = 0x22,
+  Array = 0x20, // TODO: Implement support
+  Map = 0x22, // TODO: Implement support
 
-  InteropInterface = 0x30,
+  InteropInterface = 0x30, // TODO: Implement support
 
   Void = 0xff,
 }
@@ -67,34 +67,62 @@ export class ContractParam implements NeonObject<ContractParamLike> {
     });
   }
 
+  /**
+   * Creates a PublicKey ContractParam. Both encoding formats are allowed. Value field will be a HexString.
+   * @param value - A public key (both encoding formats accepted)
+   */
   public static publicKey(value: string | HexString): ContractParam {
+    const stringValue =
+      value instanceof HexString ? value.toBigEndian() : value;
+    if (!isPublicKey(stringValue)) {
+      throw new Error(
+        `publicKey expected valid public key but got ${stringValue}`
+      );
+    }
     return new ContractParam({
       type: ContractParamType.PublicKey,
-      value: value instanceof HexString ? value : HexString.fromHex(value),
+      value: HexString.fromHex(stringValue),
     });
   }
 
   /**
    * Creates a Hash160 ContractParam. This is used for containing a scriptHash. Value field will be a HexString.
    * Do not reverse the input if using this format.
-   * @param value - A 40 character long hexstring. Automatically converts an address to scripthash if provided.
+   * @param value - A 40 character (20 bytes) hexstring. Automatically converts an address to scripthash if provided.
    */
   public static hash160(value: string | HexString): ContractParam {
-    if (value instanceof HexString) {
-      return new ContractParam({ type: ContractParamType.Hash160, value });
-    }
-
-    if (isAddress(value)) {
-      value = getScriptHashFromAddress(value);
-    }
-    if (value.length !== 40) {
+    const hexStringValue =
+      value instanceof HexString
+        ? value
+        : HexString.fromHex(
+            isAddress(value) ? getScriptHashFromAddress(value) : value
+          );
+    if (hexStringValue.byteLength !== 20) {
       throw new Error(
-        `hash160 expected a 40 character string but got ${value.length} chars instead.`
+        `hash160 expected 20 bytes but got ${hexStringValue.byteLength} bytes instead.`
       );
     }
     return new ContractParam({
       type: ContractParamType.Hash160,
-      value: HexString.fromHex(value),
+      value: hexStringValue,
+    });
+  }
+
+  /**
+   * Creates a Hash256 ContractParam. Value field will be a HexString.s
+   * @param value - A 64 character (32 bytes) hexstring .
+   */
+  public static hash256(value: string | HexString): ContractParam {
+    const hexStringValue =
+      value instanceof HexString ? value : HexString.fromHex(value);
+    if (hexStringValue.byteLength !== 32) {
+      throw new Error(
+        `hash256 expected 32 bytes but got ${hexStringValue.byteLength} bytes instead.`
+      );
+    }
+    return new ContractParam({
+      type: ContractParamType.Hash256,
+      value: hexStringValue,
     });
   }
 
@@ -199,6 +227,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
 
       case ContractParamType.ByteArray:
       case ContractParamType.Hash160:
+      case ContractParamType.Hash256:
       case ContractParamType.PublicKey:
         if (arg instanceof HexString) {
           this.value = arg;
@@ -284,15 +313,21 @@ export class ContractParam implements NeonObject<ContractParamLike> {
         }
         break;
 
-      case ContractParamType.Integer:
-        if (typeof arg === "string" || typeof arg === "number") {
-          return ContractParam.integer(arg);
+      case ContractParamType.Hash256:
+        if (typeof arg === "string" || arg instanceof HexString) {
+          return ContractParam.hash256(arg);
         }
         break;
 
       case ContractParamType.PublicKey:
-        if (typeof arg === "string") {
+        if (typeof arg === "string" || arg instanceof HexString) {
           return ContractParam.publicKey(arg);
+        }
+        break;
+
+      case ContractParamType.Integer:
+        if (typeof arg === "string" || typeof arg === "number") {
+          return ContractParam.integer(arg);
         }
         break;
 
@@ -321,6 +356,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
     switch (this.type) {
       case ContractParamType.Void:
         return { type: ContractParamType[this.type], value: null };
+
       case ContractParamType.ByteArray:
       case ContractParamType.Hash160:
       case ContractParamType.Hash256:
@@ -342,15 +378,12 @@ export class ContractParam implements NeonObject<ContractParamLike> {
         };
       case ContractParamType.Integer:
       case ContractParamType.String:
-      case ContractParamType.Signature:
-      case ContractParamType.Any:
         return {
           type: ContractParamType[this.type],
           value: this.value as string,
         };
 
       default:
-        //TODO: Support Map and Interop
         throw new Error("Unsupported!");
     }
   }
