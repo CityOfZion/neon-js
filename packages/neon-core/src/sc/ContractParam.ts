@@ -99,8 +99,9 @@ export class ContractParam implements NeonObject<ContractParamLike> {
   }
 
   /**
-   * Creates an Integer ContractParam. This is converted into an BigInteger in NeoVM. Value field will be a string.
-   * @param value - A value that can be parsed to an BigInteger. Numbers or numeric strings are accepted.
+   * Creates an Integer ContractParam. This is converted into a BigInteger in NeoVM. Value field will be a string.
+   * @param value - A value that can be parsed to a BigInteger. Numbers or numeric strings are accepted.
+
    * @example
    * ContractParam.integer(128);
    * ContractParam.integer("128");
