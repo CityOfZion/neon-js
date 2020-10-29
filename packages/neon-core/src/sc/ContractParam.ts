@@ -15,7 +15,7 @@ export enum ContractParamType {
   PublicKey = 0x16,
   Signature = 0x17, // TODO: Implement support
 
-  Array = 0x20, // TODO: Implement support
+  Array = 0x20,
   Map = 0x22, // TODO: Implement support
 
   InteropInterface = 0x30, // TODO: Implement support
@@ -291,6 +291,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
           return ContractParam.array(...arg);
         }
         break;
+
       case ContractParamType.Boolean:
         if (
           typeof arg === "string" ||
@@ -407,6 +408,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
             );
           }
           return false;
+
         case ContractParamType.ByteArray:
         case ContractParamType.Hash160:
         case ContractParamType.Hash256:
@@ -418,6 +420,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
             return (this.value as HexString).equals(other.value);
           }
           return false;
+
         case ContractParamType.Integer:
           if (typeof other.value === "number") {
             return this.value === other.value.toString();
@@ -426,8 +429,12 @@ export class ContractParam implements NeonObject<ContractParamLike> {
             return this.value === other.value;
           }
           return false;
+
         case ContractParamType.Void:
           return true;
+
+        case ContractParamType.Boolean:
+        case ContractParamType.String:
         default:
           return this.value === other.value;
       }
