@@ -161,13 +161,13 @@ export class ContractParam implements NeonObject<ContractParamLike> {
 
   /**
    * Creates a ByteArray ContractParam. Value field will be a HexString.
-   * @param value - a string or HexString.
+   * @param value - a base64 encoded string (LE) or HexString.
    */
   public static byteArray(value: string | HexString): ContractParam {
     if (typeof value === "string") {
       return new ContractParam({
         type: ContractParamType.ByteArray,
-        value: HexString.fromHex(value),
+        value: HexString.fromBase64(value, true),
       });
     }
 
@@ -359,6 +359,10 @@ export class ContractParam implements NeonObject<ContractParamLike> {
         return { type: ContractParamType[this.type], value: null };
 
       case ContractParamType.ByteArray:
+        return {
+          type: ContractParamType[this.type],
+          value: (this.value as HexString).toBase64(true),
+        };
       case ContractParamType.Hash160:
       case ContractParamType.Hash256:
       case ContractParamType.PublicKey:

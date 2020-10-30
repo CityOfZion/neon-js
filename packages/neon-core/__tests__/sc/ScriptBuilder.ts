@@ -210,6 +210,18 @@ describe("emitContractParam", () => {
       (0x10 + 1).toString(16),
     ],
     ["ContractParam(integer) 256", ContractParam.integer(256), "010001"],
+    [
+      "ContractParam(byteArray)",
+      ContractParam.byteArray(
+        HexString.fromHex("5461c33e9bbc7de7076754540ba9e62b255ea9fc")
+      ),
+      "0c14fca95e252be6a90b54546707e77dbc9b3ec36154",
+    ],
+    [
+      "ContractParam(hash160)",
+      ContractParam.hash160("5461c33e9bbc7de7076754540ba9e62b255ea9fc"),
+      "0c14fca95e252be6a90b54546707e77dbc9b3ec36154",
+    ],
   ])("%s", (_msg: string, data: ContractParam, expected: string) => {
     const sb = new ScriptBuilder();
     sb.emitContractParam(data);

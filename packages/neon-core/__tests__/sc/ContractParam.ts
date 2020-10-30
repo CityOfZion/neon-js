@@ -140,8 +140,18 @@ describe("Static constructors", () => {
   });
 
   describe("byteArray", () => {
-    test("%s", () => {
-      const result = ContractParam.byteArray("1234");
+    test("base64 encoded string", () => {
+      const result = ContractParam.byteArray("NBI=");
+
+      expect(result instanceof ContractParam).toBeTruthy();
+      expect(result.type).toBe(ContractParamType.ByteArray);
+      expect(result.value).toBeInstanceOf(HexString);
+      const hexStringValue = result.value as HexString;
+      expect(hexStringValue.toBigEndian()).toEqual("1234");
+    });
+
+    test("HexString", () => {
+      const result = ContractParam.byteArray(HexString.fromHex("1234"));
 
       expect(result instanceof ContractParam).toBeTruthy();
       expect(result.type).toBe(ContractParamType.ByteArray);
@@ -296,12 +306,12 @@ describe("toJson", () => {
   });
 
   test("byteArray", () => {
-    const testObject = ContractParam.byteArray("1234abcd");
+    const testObject = ContractParam.byteArray("/KleJSvmqQtUVGcH5328mz7DYVQ=");
     const result = testObject.toJson();
 
     expect(result).toEqual({
       type: "ByteArray",
-      value: "1234abcd",
+      value: "/KleJSvmqQtUVGcH5328mz7DYVQ=",
     });
   });
 
