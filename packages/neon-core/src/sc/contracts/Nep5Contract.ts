@@ -43,7 +43,7 @@ export class Nep5Contract extends BaseContract {
    * @example
    * const contract = new Nep5Contract(contractHash);
    * const balanceOfCall = contract.balanceOf(address);
-   * const result = 
+   * const result =
    */
   public balanceOf(address: string): ContractCall {
     return this.call("balanceOf", ContractParam.hash160(address));
