@@ -15,13 +15,13 @@ executors:
     working_directory: ~/repo
     docker:
       - image: circleci/node:10-stretch
-      - image: snowypowers/neo-privatenet:v3.0.0-preview3
+      - image: snowypowers/neo-privatenet:head
 
   env-integration12:
     working_directory: ~/repo
     docker:
       - image: circleci/node:12-stretch
-      - image: snowypowers/neo-privatenet:v3.0.0-preview3
+      - image: snowypowers/neo-privatenet:head
 
 commands:
   run-unittest:
