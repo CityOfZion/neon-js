@@ -149,8 +149,8 @@ export function isSignatureContract(signatureScript: string): boolean {
  * @param signatureScript - HEX String
  * @returns True value if Signature Script is a valid Multi-Sig
  */
-export function isMultiSigContract(signatureScript: string): boolean {
-  const script = Buffer.from(signatureScript, "hex");
+export function isMultiSigContract(signatureScript: HexString): boolean {
+  const script = Buffer.from(signatureScript.toString(), "hex");
   if (script.length < 43) {
     return false;
   }

@@ -158,7 +158,7 @@ export class Account implements NeonObject<AccountJSON> {
   }
 
   public get isMultiSig(): boolean {
-    return isMultiSigContract(this.contract.script);
+    return isMultiSigContract(HexString.fromBase64(this.contract?.script));
   }
 
   /**
