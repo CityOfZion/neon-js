@@ -97,7 +97,7 @@ export class ScriptBuilder extends StringStream {
         } else if (data === null) {
           return this.emitPush(false);
         } else if (likeContractParam(data)) {
-          return this.emitContractParam(new ContractParam(data));
+          return this.emitContractParam(ContractParam.fromJson(data));
         }
         throw new Error(`Unidentified object: ${data}`);
       default:
@@ -283,7 +283,7 @@ export class ScriptBuilder extends StringStream {
       case ContractParamType.Hash256:
         return this.emitHexString(param.value as HexString);
       case ContractParamType.PublicKey:
-        return this.emitPublicKey(param.value as string);
+        return this.emitPublicKey(param.value as HexString);
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }

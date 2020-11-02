@@ -40,14 +40,14 @@ const create = {
     new wallet.Wallet(k),
   contractParam: (
     type: keyof typeof sc.ContractParamType,
-    value:
+    value?:
       | string
       | number
       | boolean
-      | neonCore.sc.ContractParamLike[]
+      | neonCore.sc.ContractParamJson[]
       | null
       | undefined
-  ): neonCore.sc.ContractParam => new sc.ContractParam({ type, value }),
+  ): neonCore.sc.ContractParam => sc.ContractParam.fromJson({ type, value }),
   script: sc.createScript,
   scriptBuilder: (): neonCore.sc.ScriptBuilder => new sc.ScriptBuilder(),
   deployScript: (args: neonCore.sc.DeployParams): neonCore.sc.ScriptBuilder =>
