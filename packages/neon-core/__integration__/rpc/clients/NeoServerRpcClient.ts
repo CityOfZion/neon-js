@@ -136,7 +136,7 @@ describe("NeoServerRpcClient", () => {
       expect(resultTx).toBeDefined();
     });
 
-      //TODO: Update to receive base64 string
+    //TODO: Update to receive base64 string
     test.skip("non-verbose", async () => {
       const result = await client.getRawTransaction(txid);
       expect(typeof result).toBe("string");
