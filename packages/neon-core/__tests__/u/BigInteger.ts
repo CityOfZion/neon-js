@@ -36,6 +36,19 @@ describe("twos complement", () => {
   });
 
   test.each([
+    ["0000000000000000", "0"],
+    ["00e1f50500000000", "100000000"],
+    ["0100000000000000", "1"],
+    ["0080c6a47e8d0300", "1000000000000000"],
+    ["5004fb711f010000", "1234567890000"],
+    ["ffffffffffffffff", "-1"],
+    ["31e28e7915000000", "92233720369"],
+  ])("Fixed8: %s -> %s", (n: string, s: string) => {
+    const result = BigInteger.fromTwos(n, true);
+    expect(result.toString()).toBe(s);
+  });
+
+  test.each([
     [0, "00"],
     [-1, "ff"],
     [1, "01"],
@@ -63,8 +76,8 @@ describe("twos complement", () => {
       "161bcca7119915b50764b4abe86529797775a5f171950fffffffffffffffffff",
     ],
   ])("toTwos: %s -> %s", (n: number | string, s: string) => {
-    const result = BigInteger.fromNumber(n);
-    expect(result.toTwos()).toBe(s);
+    const result = BigInteger.fromNumber(n).toTwos();
+    expect(result).toBe(s);
   });
 });
 
@@ -90,29 +103,77 @@ describe("hexstring", () => {
   });
 });
 
-describe("fromNumber", () => {
-  test("throws when non-integer number", () => {
-    expect(() => BigInteger.fromNumber(1.1)).toThrowError(
-      "BigInteger only accepts integers"
+describe("number", () => {
+  describe("fromNumber", () => {
+    test("throws when non-integer number", () => {
+      expect(() => BigInteger.fromNumber(1.1)).toThrowError(
+        "BigInteger only accepts integers"
+      );
+    });
+
+    test("throws when non-integer numeric string", () => {
+      expect(() => BigInteger.fromNumber("1.1")).toThrowError(
+        "BigInteger only accepts integers"
+      );
+    });
+
+    test("accepts larger than safe number", () => {
+      const result = BigInteger.fromNumber(9007199254740992);
+
+      expect(result.toString()).toBe("9007199254740992");
+    });
+
+    test("accepts smaller than safe number", () => {
+      const result = BigInteger.fromNumber(-9007199254740992);
+
+      expect(result.toString()).toBe("-9007199254740992");
+    });
+  });
+});
+
+describe("decimals", () => {
+  describe("fromDecimal", () => {
+    test.each([
+      [1234.5678, 8, "123456780000"],
+      [1234.5678, 4, "12345678"],
+      [0, 0, "0"],
+      [0, 50, "0"],
+      [-1, 3, "-1000"],
+      [-0.00001, 5, "-1"],
+    ])(
+      "BigInteger.fromDecimal(%s,%s) = %s",
+      (
+        decimalNumber: number | string,
+        decimalPlaces: number,
+        expected: string
+      ) => {
+        const result = BigInteger.fromDecimal(decimalNumber, decimalPlaces);
+
+        expect(result.toString()).toBe(expected);
+      }
     );
+
+    test("throws if provided number has more decimals than provides places", () => {
+      expect(() => BigInteger.fromDecimal(0.123456789, 8)).toThrow();
+    });
   });
 
-  test("throws when non-integer numeric string", () => {
-    expect(() => BigInteger.fromNumber("1.1")).toThrowError(
-      "BigInteger only accepts integers"
+  describe("toDecimal", () => {
+    test.each([
+      [0, 4, "0.0000"],
+      [100000, 5, "1.00000"],
+      [12345678, 4, "1234.5678"],
+      [1, 8, "0.00000001"],
+      [-1, 8, "-0.00000001"],
+      [-12345678, 3, "-12345.678"],
+    ])(
+      "%s",
+      (input: string | number, decimalPlaces: number, expected: string) => {
+        const result = BigInteger.fromNumber(input).toDecimal(decimalPlaces);
+
+        expect(result).toBe(expected);
+      }
     );
-  });
-
-  test("accepts larger than safe number", () => {
-    const result = BigInteger.fromNumber(9007199254740992);
-
-    expect(result.toString()).toBe("9007199254740992");
-  });
-
-  test("accepts smaller than safe number", () => {
-    const result = BigInteger.fromNumber(-9007199254740992);
-
-    expect(result.toString()).toBe("-9007199254740992");
   });
 });
 

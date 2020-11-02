@@ -96,6 +96,36 @@ export class BigInteger {
     }
   }
 
+  /**
+   * Creates a BigInteger instance from a decimal by parsing the decimals and shifting the decimal point by a provided number of places.
+   * @param input - Javascript number or string containing numbers. Accepts decimals.
+   * @param decimals - Number of decimal places to support.
+   */
+  public static fromDecimal(
+    input: number | string,
+    decimals: number
+  ): BigInteger {
+    const stringNumber = typeof input === "number" ? input.toString() : input;
+
+    const portions = stringNumber.split(".", 2);
+    const leftOfDecimal = portions[0];
+    const rightOfDecimal = portions.length === 2 ? portions[1] : "";
+
+    // Throw if the right side is too long as it affects how we form the final number.
+    if (rightOfDecimal.length > decimals) {
+      throw new Error(
+        `Input had more decimal places than provided. Got ${rightOfDecimal} but only got ${decimals} decimal places.`
+      );
+    }
+
+    const finalNumber =
+      leftOfDecimal +
+      rightOfDecimal +
+      "0".repeat(decimals - rightOfDecimal.length);
+
+    return BigInteger.fromNumber(finalNumber);
+  }
+
   private constructor(value: BN) {
     this.#value = value;
   }
@@ -142,6 +172,20 @@ export class BigInteger {
    */
   public toString(): string {
     return this.#value.toString();
+  }
+
+  // We do not provide a toNumber() as it is unsafe conversion.
+
+  public toDecimal(decimals: number): string {
+    const sign = this.#value.isNeg() ? "-" : "";
+    const stringNumber = this.#value.abs().toString(10);
+    if (stringNumber.length <= decimals) {
+      return sign + "0." + stringNumber.padStart(decimals, "0");
+    }
+    const leftOfDecimal = stringNumber.slice(0, stringNumber.length - decimals);
+    return (
+      sign + leftOfDecimal + "." + stringNumber.slice(leftOfDecimal.length)
+    );
   }
 
   /**
@@ -203,6 +247,10 @@ export class BigInteger {
     const otherBigInteger =
       other instanceof BigInteger ? other : BigInteger.fromNumber(other);
     return this.#value.cmp(otherBigInteger.#value);
+  }
+
+  public equals(other: BigInteger | number): boolean {
+    return this.compare(other) === 0;
   }
 }
 
