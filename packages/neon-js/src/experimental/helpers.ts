@@ -138,11 +138,11 @@ export async function getSystemFee(
   try {
     const response = await rpcClient.invokeScript(script.toString(), signers);
     if (response.state === "FAULT") {
-      throw Error("ExecutionEngine state = FAULT");
+      throw Error("Script execution failed. ExecutionEngine state = FAULT");
     }
     return u.Fixed8.fromRawNumber(response.gasconsumed).toNumber();
   } catch (e) {
-    throw new Error(`Failed to get system fee. Error: ${e}`);
+    throw new Error(`Failed to get system fee. ${e}`);
   }
 }
 

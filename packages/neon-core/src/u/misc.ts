@@ -102,13 +102,15 @@ export function getSerializedSize(value: Serializables): number {
         return getSerializedSize(size) + size;
       } else if (Array.isArray(value)) {
         let size = 0;
-        if (
-          typeof value[0].size === "number" &&
-          typeof value[0].serialize === "function"
-        ) {
-          size = value
-            .map((item) => item.size)
-            .reduce((prev, curr) => prev + curr, 0);
+        if (value.length > 0) {
+          if (
+            typeof value[0].size === "number" &&
+            typeof value[0].serialize === "function"
+          ) {
+            size = value
+              .map((item) => item.size)
+              .reduce((prev, curr) => prev + curr, 0);
+          }
         }
         return getSerializedSize(value.length) + size;
       }

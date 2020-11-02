@@ -1,4 +1,5 @@
 import * as nep5 from "./nep5";
+import { SmartContract } from "./contract";
 import { wallet } from "@cityofzion/neon-core";
 import {
   getSystemFee,
@@ -23,4 +24,4 @@ export interface CommonConfig {
   account?: wallet.Account;
 }
 
-export { nep5, txHelpers, deployContract };
+export { nep5, txHelpers, deployContract, SmartContract };
