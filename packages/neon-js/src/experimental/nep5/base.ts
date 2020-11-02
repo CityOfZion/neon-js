@@ -1,146 +1,12 @@
 import { HexString } from "@cityofzion/neon-core/lib/u";
 import { CONST, rpc, wallet, sc, u, tx } from "@cityofzion/neon-core";
-import { Signer } from "@cityofzion/neon-core/lib/tx";
-
-export interface CommonConfig {
-  networkMagic: number;
-  rpcAddress: string;
-  prioritisationFee?: number;
-  blocksTillExpiry?: number;
-  account?: wallet.Account;
-}
-
-export async function calculateNetworkFee(
-  transaction: tx.Transaction,
-  account: wallet.Account,
-  config: CommonConfig
-): Promise<number> {
-  if (transaction.signers.length < 1) {
-    throw new Error(
-      "Cannot calculate the network fee without a sender in the transaction."
-    );
-  }
-
-  const hashes = transaction.getScriptHashesForVerifying();
-  let networkFeeSize =
-    transaction.headerSize +
-    u.getSerializedSize(transaction.signers) +
-    u.getSerializedSize(transaction.attributes) +
-    u.getSerializedSize(transaction.script) +
-    u.getSerializedSize(hashes.length);
-
-  let networkFee = 0;
-  hashes.map((hash) => {
-    let witnessScript;
-    if (hash === account.scriptHash && account.contract.script !== undefined) {
-      witnessScript = HexString.fromBase64(account.contract.script);
-    }
-
-    if (witnessScript === undefined && transaction.witnesses.length > 0) {
-      for (const witness of transaction.witnesses) {
-        if (witness.scriptHash === hash) {
-          witnessScript = witness.verificationScript;
-          break;
-        }
-      }
-    }
-
-    if (witnessScript === undefined)
-      // should get the contract script via RPC getcontractstate
-      // then execute the script with a verification trigger (not yet supported)
-      // and collect the gas consumed
-      throw new Error(
-        "Using a smart contract as a witness is not yet supported in neon-js"
-      );
-    else if (u.isSignatureContract(witnessScript)) {
-      networkFeeSize += 67 + u.getSerializedSize(witnessScript);
-      networkFee =
-        (sc.OpCodePrices[sc.OpCode.PUSHDATA1] +
-          sc.OpCodePrices[sc.OpCode.PUSHDATA1] +
-          sc.OpCodePrices[sc.OpCode.PUSHNULL] +
-          sc.getInteropServicePrice(
-            sc.InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
-          )) *
-        100_000_000;
-    } else if (u.isMultisigContract(witnessScript)) {
-      const publicKeyCount = wallet.getPublicKeysFromVerificationScript(
-        witnessScript.toString()
-      ).length;
-      const signatureCount = wallet.getSigningThresholdFromVerificationScript(
-        witnessScript.toString()
-      );
-      const size_inv = 66 * signatureCount;
-      networkFeeSize +=
-        u.getSerializedSize(size_inv) +
-        size_inv +
-        u.getSerializedSize(witnessScript);
-      networkFee += sc.OpCodePrices[sc.OpCode.PUSHDATA1] * signatureCount;
-
-      const builder = new sc.ScriptBuilder();
-      let pushOpcode = sc.fromHex(
-        builder.emitPush(signatureCount).build().slice(0, 2)
-      );
-      // signature count push price
-      networkFee += sc.OpCodePrices[pushOpcode];
-
-      // now do the same for the public keys
-      builder.reset();
-      pushOpcode = sc.fromHex(
-        builder.emitPush(publicKeyCount).build().slice(0, 2)
-      );
-      // publickey count push price
-      networkFee += sc.OpCodePrices[pushOpcode];
-      networkFee +=
-        sc.OpCodePrices[sc.OpCode.PUSHNULL] +
-        sc.getInteropServicePrice(
-          sc.InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
-        ) *
-          publicKeyCount;
-      networkFee *= 100_000_000;
-    }
-    // else { // future supported contract types}
-  });
-
-  const rpcClient = new rpc.RPCClient(config.rpcAddress);
-  try {
-    const response = await rpcClient.invokeFunction(
-      CONST.NATIVE_CONTRACTS.POLICY,
-      "getFeePerByte"
-    );
-    if (response.state === "FAULT") {
-      throw Error;
-    }
-    const nativeContractPolicyFeePerByte = parseInt(
-      response.stack[0].value as string
-    );
-    networkFee += networkFeeSize * nativeContractPolicyFeePerByte;
-  } catch (e) {
-    throw new Error(
-      `Failed to get 'fee per byte' from Policy contract. Error: ${e}`
-    );
-  }
-
-  return networkFee;
-}
-
-export async function getSystemFee(
-  script: HexString,
-  config: CommonConfig,
-  signers?: Signer[]
-): Promise<number> {
-  const rpcClient = new rpc.RPCClient(config.rpcAddress);
-  try {
-    const response = await rpcClient.invokeScript(script.toString(), signers);
-    if (response.state === "FAULT") {
-      throw Error;
-    }
-    return u.Fixed8.fromRawNumber(response.gasconsumed).toNumber();
-  } catch (e) {
-    throw new Error(`Failed to get system fee. Error: ${e}`);
-  }
-}
+import { CommonConfig } from "../";
+import { getSystemFee, calculateNetworkFee, setBlockExpiry, addFees } from "../helpers";
 
 export class Nep5Contract {
+  /**
+   * Base class for communicating with NEP-5 contracts on the block chain.
+   */
   public contractHash: HexString;
   protected config: CommonConfig;
   protected rpcClient: rpc.RPCClient;
@@ -154,25 +20,38 @@ export class Nep5Contract {
     this.rpcClient = new rpc.RPCClient(config.rpcAddress);
   }
 
+  /**
+   * Get the number of tokens owned by NEO address
+   */
   public async balanceOf(address: string): Promise<number> {
     if (!wallet.isAddress(address)) {
       throw new Error("Address is not a valid NEO address");
     }
     try {
       const response = await this.rpcClient.invokeFunction(
-        CONST.ASSET_ID.NEO,
+        this.contractHash.toString(),
         "balanceOf",
         [sc.ContractParam.hash160(address)]
       );
       if (response.state == "FAULT") {
         throw Error;
       }
-      return parseInt(response.stack[0].value as string);
+
+      const decimals = await this.decimals();
+      if (decimals === 0) {
+        return parseInt(response.stack[0].value as string);
+      } else {
+        const divider = Math.pow(10, decimals);
+        return parseInt(response.stack[0].value as string) / divider;
+      }
     } catch (e) {
       throw new Error(`Failed to get balance of address. Error: ${e}`);
     }
   }
 
+  /**
+   * Get the number of decimals the token can have
+   */
   public async decimals(): Promise<number> {
     if (this._decimals) return this._decimals;
     try {
@@ -192,6 +71,9 @@ export class Nep5Contract {
     }
   }
 
+  /**
+   * Get the human readable name of the token
+   */
   public async name(): Promise<string> {
     if (this._name) return this._name;
     try {
@@ -211,6 +93,10 @@ export class Nep5Contract {
     }
   }
 
+  /**
+   * Get the abbreviated name of the token.
+   * Often used to represent the token in exchanges
+   */
   public async symbol(): Promise<string> {
     if (this._symbol) return this._symbol;
     try {
@@ -230,6 +116,12 @@ export class Nep5Contract {
     }
   }
 
+  /**
+   * Get the total amount of tokens deployed to the system
+   *
+   * Note: this is not the same as the total freely available tokens for exchanging.
+   * A certain amount might be locked in the contract until a specific release date.
+   */
   public async totalSupply(): Promise<number> {
     try {
       const response = await this.rpcClient.invokeFunction(
@@ -247,11 +139,17 @@ export class Nep5Contract {
     }
   }
 
+  /**
+   * Move tokens from one address to another
+   * @param from source NEO address
+   * @param to destination NEO address
+   * @param amount quantity of tokens to send
+   */
   public async transfer(
     from: string,
     to: string,
     amount: number
-  ): Promise<boolean> {
+  ): Promise<string> {
     if (!wallet.isAddress(from)) {
       throw new Error("From address is not a valid NEO address");
     }
@@ -288,53 +186,47 @@ export class Nep5Contract {
     const transaction = new tx.Transaction();
     transaction.script = HexString.fromHex(builder.build());
 
-    let blockLifeSpan = tx.Transaction.MAX_TRANSACTION_LIFESPAN;
-    if (
-      this.config.blocksTillExpiry &&
-      !(this.config.blocksTillExpiry > tx.Transaction.MAX_TRANSACTION_LIFESPAN)
-    )
-      blockLifeSpan = this.config.blocksTillExpiry;
-    transaction.validUntilBlock =
-      (await this.rpcClient.getBlockCount()) + blockLifeSpan - 1;
+    await setBlockExpiry(
+      transaction,
+      this.config,
+      this.config.blocksTillExpiry
+    );
 
-    // might be needed for transfering from multi-sig address
-    // transaction.addSigner({
-    //   account: wallet.getScriptHashFromAddress(from),
-    //   scopes: "CalledByEntry",
-    // });
+    // add a sender
     transaction.addSigner({
       account: this.config.account.scriptHash,
       scopes: "CalledByEntry",
     });
 
-    transaction.systemFee = new u.Fixed8(
-      await getSystemFee(transaction.script, this.config, transaction.signers)
-    );
-
-    transaction.networkFee = new u.Fixed8(
-      await calculateNetworkFee(transaction, this.config.account, this.config)
-    ).div(100_000_000);
+    await addFees(transaction, this.config);
 
     transaction.sign(this.config.account, this.config.networkMagic);
-    try {
-      await this.rpcClient.sendRawTransaction(transaction);
-      return true;
-    } catch (e) {
-      return false;
-    }
+    return await this.rpcClient.sendRawTransaction(transaction);
   }
 }
 
 export class NEOContract extends Nep5Contract {
+  /**
+   * Convenience class initializing a Nep5Contract to the NEO token
+   * exposing additional claim functions
+   * @param config
+   */
+
   constructor(config: CommonConfig) {
     super(HexString.fromHex(CONST.ASSET_ID.NEO), config);
   }
 
+  /**
+   * Move tokens from one address to another
+   * @param from source NEO address
+   * @param to destination NEO address
+   * @param amount quantity of tokens to send
+   */
   public async transfer(
     from: string,
     to: string,
     amount: number
-  ): Promise<boolean> {
+  ): Promise<string> {
     if (!Number.isInteger(amount)) {
       throw new Error("Amount must be an integer");
     }
@@ -345,9 +237,9 @@ export class NEOContract extends Nep5Contract {
   /**
    * Claim gas for address
    * @param address
-   * @returns boolean on success
+   * @returns txid
    */
-  public async claimGas(address: string): Promise<boolean> {
+  public async claimGas(address: string): Promise<string> {
     if (!wallet.isAddress(address)) {
       throw new Error("From address is not a valid NEO address");
     }
@@ -361,6 +253,10 @@ export class NEOContract extends Nep5Contract {
     return await this.transfer(address, address, balance);
   }
 
+  /**
+   * Get the available bonus GAS for address
+   * @param address
+   */
   public async getUnclaimedGas(address: string): Promise<number> {
     if (!wallet.isAddress(address)) {
       throw new Error("From address is not a valid NEO address");
@@ -370,6 +266,10 @@ export class NEOContract extends Nep5Contract {
 }
 
 export class GASContract extends Nep5Contract {
+  /**
+   * Convenience class initializing a Nep5Contract to GAS token
+   * @param config
+   */
   constructor(config: CommonConfig) {
     super(HexString.fromHex(CONST.ASSET_ID.GAS), config);
   }
