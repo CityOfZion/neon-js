@@ -98,8 +98,21 @@ export class BigInteger {
 
   /**
    * Creates a BigInteger instance from a decimal by parsing the decimals and shifting the decimal point by a provided number of places.
+   *
+   * This is mainly used with dealing with NEP5 tokens.
+   * While most tokens support some sort of decimal places, the data is actually stored as an integer.
+   * This helper method converts the decimal number to the integer representation to work with.
+   * To convert back, use toDecimal(decimals);
    * @param input - Javascript number or string containing numbers. Accepts decimals.
    * @param decimals - Number of decimal places to support.
+   *
+   * @example
+   *
+   * const transformedDecimal = BigInteger.fromDecimal(12.34,3);
+   * console.log(transformedDecimal.toString()); // 12340
+   *
+   * const oneGas = BigInteger.fromDecimal(1,8);
+   * console.log(oneGas); // 100000000
    */
   public static fromDecimal(
     input: number | string,
@@ -176,6 +189,14 @@ export class BigInteger {
 
   // We do not provide a toNumber() as it is unsafe conversion.
 
+  /**
+   * Converts the BigInteger into a decimal number by shifting the decimal place to the left.
+   * @param decimals - Number of decimals places
+   *
+   * @example
+   * const bigNumber = BigInteger.fromNumber(100000000);
+   * console.log(bigNumber.toDecimal(8)); // 1.00000000
+   */
   public toDecimal(decimals: number): string {
     const sign = this.#value.isNeg() ? "-" : "";
     const stringNumber = this.#value.abs().toString(10);
