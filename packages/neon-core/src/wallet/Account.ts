@@ -13,7 +13,6 @@ import {
   isScriptHash,
   isWIF,
 } from "./verify";
-import { InteropServiceCode } from "../sc";
 import { NeonObject } from "../model";
 
 const log = logger("wallet");

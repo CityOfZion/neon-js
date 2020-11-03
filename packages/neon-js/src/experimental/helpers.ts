@@ -1,14 +1,18 @@
 import { CONST, rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { CommonConfig } from "./index";
-import { HexString, reverseHex, StringStream } from "@cityofzion/neon-core/lib/u";
+import {
+  HexString,
+  reverseHex,
+  StringStream,
+} from "@cityofzion/neon-core/lib/u";
 import { Signer } from "@cityofzion/neon-core/lib/tx";
 import { GASContract } from "./nep5";
 
 /**
  * Calculate the GAS costs for validation and inclusion of the transaction in a block
- * @param transaction the transaction to calculate the costs for
- * @param account
- * @param config
+ * @param transaction - the transaction to calculate the network fee for
+ * @param account -
+ * @param config -
  */
 export async function calculateNetworkFee(
   transaction: tx.Transaction,
@@ -125,9 +129,9 @@ export async function calculateNetworkFee(
 
 /**
  * Get the cost of executing the smart contract script
- * @param script smart contract script
- * @param config
- * @param signers optional signers to set while running the script
+ * @param script - smart contract script
+ * @param config -
+ * @param signers - signers to set while running the script
  */
 export async function getSystemFee(
   script: HexString,
@@ -152,9 +156,9 @@ export async function getSystemFee(
  * If `blocksTillExpiry` is provided then the value is used.
  * If `blocksTillExpiry` is not provided, or the value exceeds the maximum allowed,
  * then the field is automatically set to the maximum allowed by the network.
- * @param transaction the transaction to set the expiry field on
- * @param config
- * @param blocksTillExpiry
+ * @param transaction - the transaction to set the expiry field on
+ * @param config -
+ * @param blocksTillExpiry - number of blocks from the current chain height until the transaction is no longer valid
  */
 export async function setBlockExpiry(
   transaction: tx.Transaction,
@@ -175,8 +179,8 @@ export async function setBlockExpiry(
 /**
  * Add system and network fees to a transaction.
  * Validates that the source Account has sufficient balance
- * @param transaction
- * @param config
+ * @param transaction - the transaction to add network and system fees to
+ * @param config -
  */
 export async function addFees(
   transaction: tx.Transaction,
@@ -211,7 +215,7 @@ export async function addFees(
  * Deploy a smart contract
  * @param NEF - A smart contract in Neo executable file format. Commonly created by a NEO compiler and stored as .NEF on disk
  * @param manifest - the manifest conresponding to the smart contract
- * @param config
+ * @param config -
  */
 export async function deployContract(
   NEF: Buffer,
