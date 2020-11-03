@@ -111,6 +111,7 @@ export interface GetVersionResult {
   wsport: number;
   nonce: number;
   useragent: string;
+  magic: number;
 }
 
 export interface NodePeer {

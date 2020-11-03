@@ -505,7 +505,13 @@ describe("RPC Methods", () => {
 
   describe("getVersion", () => {
     test("success", async () => {
-      const expected = "3.0.0-preview3";
+      const expected = {
+        tcpport: 20333,
+        wsport: 20334,
+        nonce: 288566725,
+        useragent: "/Neo:3.0.0-preview3/",
+        magic: 1234567890,
+      };
       Axios.post.mockImplementationOnce(async (url, data) => {
         expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
@@ -516,12 +522,7 @@ describe("RPC Methods", () => {
           data: {
             jsonrpc: "2.0",
             id: data.id,
-            result: {
-              tcpport: 20333,
-              wsport: 20334,
-              nonce: 288566725,
-              useragent: "/Neo:3.0.0-preview3/",
-            },
+            result: expected,
           },
         };
       });

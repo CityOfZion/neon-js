@@ -7,6 +7,7 @@ import {
   GetRawTransactionResult,
   InvokeResult,
   BooleanLikeParam,
+  GetVersionResult,
 } from "../Query";
 import { ContractManifest } from "../../sc";
 import { BlockJson, BlockHeaderJson, Validator } from "../../types";
@@ -182,20 +183,11 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
       return response;
     }
     /**
-     * Gets the version of the NEO node. This method will never be blocked by version. This method will also update the current Client's version to the one received.
+     * Gets the version of the NEO node along with various other metadata.
      */
-    public async getVersion(): Promise<string> {
+    public async getVersion(): Promise<GetVersionResult> {
       const response = await this.execute(Query.getVersion());
-      if (response?.useragent) {
-        const useragent = response.useragent;
-        const responseLength = useragent.length;
-        const strippedResponse = useragent.substring(1, responseLength - 1);
-        return strippedResponse.split(":")[1];
-      } else {
-        throw new Error(
-          `Empty or unexpected version pattern. Got ${JSON.stringify(response)}`
-        );
-      }
+      return response;
     }
 
     /**
