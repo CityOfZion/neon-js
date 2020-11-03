@@ -201,8 +201,8 @@ describe("RPC Methods", () => {
     expect(result).toBe(0);
   });
 
-  test.skip("getValidators", async () => {
-    const result = await client.getValidators();
+  test("getNextBlockValidators", async () => {
+    const result = await client.getNextBlockValidators();
     result.map((v) =>
       expect(v).toMatchObject({
         publickey: expect.any(String),

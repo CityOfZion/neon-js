@@ -158,16 +158,16 @@ describe("NeoServerRpcClient", () => {
     expect(result).toBe(0);
   });
 
-  //TODO: Update to getNextBlockValidators
-  test.skip("getValidators", async () => {
-    const result = await client.getValidators();
-    result.map((v) =>
+  test("getNextBlockValidators", async () => {
+    const result = await client.getNextBlockValidators();
+    result.map((v) => {
+      expect(Object.keys(v)).toHaveLength(3);
       expect(v).toMatchObject({
         publickey: expect.any(String),
         active: expect.any(Boolean),
         votes: expect.any(String),
-      })
-    );
+      });
+    });
   });
 
   // TODO: Add new field magic
