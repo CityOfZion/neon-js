@@ -180,7 +180,7 @@ describe("RPC Methods", () => {
       expect(tx).toBeDefined();
     });
 
-    test("non-verbose", async () => {
+    test.skip("non-verbose", async () => {
       const result = await client.getRawTransaction(txid);
       expect(typeof result).toBe("string");
 
@@ -201,7 +201,7 @@ describe("RPC Methods", () => {
     expect(result).toBe(0);
   });
 
-  test("getValidators", async () => {
+  test.skip("getValidators", async () => {
     const result = await client.getValidators();
     result.map((v) =>
       expect(v).toMatchObject({
