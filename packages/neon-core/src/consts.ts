@@ -1,4 +1,4 @@
-export const ADDR_VERSION = "37";
+export const ADDR_VERSION = "35";
 
 export const MAGIC_NUMBER = {
   MainNet: 5195086,
