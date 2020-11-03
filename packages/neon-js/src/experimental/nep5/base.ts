@@ -1,5 +1,5 @@
 import { HexString } from "@cityofzion/neon-core/lib/u";
-import { CONST, rpc, wallet, sc, u, tx } from "@cityofzion/neon-core";
+import { CONST, rpc, wallet, sc, tx } from "@cityofzion/neon-core";
 import { CommonConfig } from "../";
 import { setBlockExpiry, addFees } from "../helpers";
 import { enc } from "crypto-js";
@@ -147,9 +147,9 @@ export class Nep5Contract {
 
   /**
    * Move tokens from one address to another
-   * @param from source NEO address
-   * @param to destination NEO address
-   * @param amount quantity of tokens to send
+   * @param from - source NEO address
+   * @param to - destination NEO address
+   * @param amount - quantity of tokens to send
    */
   public async transfer(
     from: string,
@@ -215,7 +215,7 @@ export class NEOContract extends Nep5Contract {
   /**
    * Convenience class initializing a Nep5Contract to the NEO token
    * exposing additional claim functions
-   * @param config
+   * @param config -
    */
 
   constructor(config: CommonConfig) {
@@ -224,9 +224,9 @@ export class NEOContract extends Nep5Contract {
 
   /**
    * Move tokens from one address to another
-   * @param from source NEO address
-   * @param to destination NEO address
-   * @param amount quantity of tokens to send
+   * @param from - source NEO address
+   * @param to - destination NEO address
+   * @param amount - quantity of tokens to send
    */
   public async transfer(
     from: string,
@@ -242,8 +242,8 @@ export class NEOContract extends Nep5Contract {
 
   /**
    * Claim gas for address
-   * @param address
-   * @returns txid
+   * @param address - NEO address
+   * @returns transaction id
    */
   public async claimGas(address: string): Promise<string> {
     if (!wallet.isAddress(address)) {
@@ -261,7 +261,7 @@ export class NEOContract extends Nep5Contract {
 
   /**
    * Get the available bonus GAS for address
-   * @param address
+   * @param address - NEO address
    */
   public async getUnclaimedGas(address: string): Promise<number> {
     if (!wallet.isAddress(address)) {
@@ -274,7 +274,7 @@ export class NEOContract extends Nep5Contract {
 export class GASContract extends Nep5Contract {
   /**
    * Convenience class initializing a Nep5Contract to GAS token
-   * @param config
+   * @param config -
    */
   constructor(config: CommonConfig) {
     super(HexString.fromHex(CONST.ASSET_ID.GAS), config);
