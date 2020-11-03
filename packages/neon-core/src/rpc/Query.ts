@@ -42,13 +42,16 @@ export type GetApplicationLogsResult = ApplicationLog[];
  * Result from calling invokescript or invokefunction.
  */
 export interface InvokeResult {
-  /** The script that is sent for execution on the blockchain. This is a hexstring. */
+  /** The script that is sent for execution on the blockchain as a base64 string. */
   script: string;
   /** State of VM on exit. HALT means a successful exit while FAULT means exit with error. */
   state: "HALT" | "FAULT";
   /** Amount of gas consumed up to the point of stopping in the VM. If state is FAULT, this value is not representative of the amount of gas it will consume if it somehow succeeds on the blockchain. */
   gasconsumed: string;
+  /** A human-readable string clarifying the exception that occurred. Only available when state is "FAULT". */
+  exception: string | null;
   stack: StackItemJson[];
+  /** A ready to send transaction that wraps the script. Only available when signers are provided and the sender's private key is open in the RPC node.*/
   tx?: unknown;
 }
 

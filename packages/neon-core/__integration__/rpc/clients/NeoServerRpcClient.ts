@@ -188,22 +188,32 @@ describe("NeoServerRpcClient", () => {
     });
   });
 
-  //TODO: Add new field: exception
-  // TODO: Update script to receive base64 string
   describe("Invocation methods", () => {
-    test("invokeFunction", async () => {
+    test("invokeFunction with HALT", async () => {
       const result = await client.invokeFunction(contractHash, "name");
 
-      expect(Object.keys(result)).toEqual(
-        expect.arrayContaining([
-          "script",
-          "state",
-          "gasconsumed",
-          "stack",
-          "tx",
-        ])
-      );
-      expect(result.state).toContain("HALT");
+      expect(Object.keys(result)).toHaveLength(6);
+      expect(result).toMatchObject({
+        script: expect.any(String),
+        state: "HALT",
+        gasconsumed: expect.any(String),
+        exception: null,
+        stack: expect.any(Array),
+        tx: null,
+      });
+    });
+
+    test("invokeFunction with FAULT", async () => {
+      const result = await client.invokeFunction(contractHash, "fail");
+
+      expect(Object.keys(result)).toHaveLength(5);
+      expect(result).toMatchObject({
+        script: expect.any(String),
+        state: "FAULT",
+        gasconsumed: expect.any(String),
+        exception: expect.any(String),
+        stack: expect.any(Array),
+      });
     });
 
     test("invokeFunction with signers", async () => {
@@ -225,16 +235,15 @@ describe("NeoServerRpcClient", () => {
         ]
       );
 
-      expect(Object.keys(result)).toEqual(
-        expect.arrayContaining([
-          "script",
-          "state",
-          "gasconsumed",
-          "stack",
-          "tx",
-        ])
-      );
-      expect(result.state).toContain("HALT");
+      expect(Object.keys(result)).toHaveLength(6);
+      expect(result).toMatchObject({
+        script: expect.any(String),
+        state: "HALT",
+        gasconsumed: expect.any(String),
+        exception: null,
+        stack: expect.any(Array),
+        tx: null,
+      });
     });
 
     test("invokeScript", async () => {
@@ -244,15 +253,17 @@ describe("NeoServerRpcClient", () => {
           .emitAppCall(contractHash, "symbol")
           .build()
       );
-      expect(Object.keys(result)).toEqual(
-        expect.arrayContaining([
-          "script",
-          "state",
-          "gasconsumed",
-          "stack",
-          "tx",
-        ])
-      );
+
+      expect(Object.keys(result)).toHaveLength(6);
+      expect(result).toMatchObject({
+        script: expect.any(String),
+        state: "HALT",
+        gasconsumed: expect.any(String),
+        exception: null,
+        stack: expect.any(Array),
+        tx: null,
+      });
+
       expect(result.state).toContain("HALT");
       expect(result.stack.length).toEqual(2);
       expect(result.stack[0].value).toEqual(
@@ -283,16 +294,15 @@ describe("NeoServerRpcClient", () => {
         }),
       ]);
 
-      expect(Object.keys(result)).toEqual(
-        expect.arrayContaining([
-          "script",
-          "state",
-          "gasconsumed",
-          "stack",
-          "tx",
-        ])
-      );
-      expect(result.state).toContain("HALT");
+      expect(Object.keys(result)).toHaveLength(6);
+      expect(result).toMatchObject({
+        script: expect.any(String),
+        state: "HALT",
+        gasconsumed: expect.any(String),
+        exception: null,
+        stack: expect.any(Array),
+        tx: null,
+      });
     });
   });
 
