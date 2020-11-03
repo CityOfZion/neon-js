@@ -9,6 +9,10 @@ import { Signer, WitnessScope } from "../../src/tx";
 jest.mock("axios");
 const Axios = mocked(_Axios, true);
 
+beforeEach(() => {
+  Axios.mockReset();
+});
+
 describe("constructor", () => {
   test("net", () => {
     const result = new RPCClient("MainNet");
@@ -470,7 +474,7 @@ describe("RPC Methods", () => {
     });
   });
 
-  describe("getValidators", () => {
+  describe("getNextBlockValidators", () => {
     test("success", async () => {
       const expected = [
         {
@@ -482,7 +486,7 @@ describe("RPC Methods", () => {
       Axios.post.mockImplementationOnce(async (url, data) => {
         expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
-          method: "getvalidators",
+          method: "getnextblockvalidators",
           params: [],
         });
         return {
@@ -494,7 +498,7 @@ describe("RPC Methods", () => {
         };
       });
 
-      const result = await client.getValidators();
+      const result = await client.getNextBlockValidators();
       expect(result).toEqual(expected);
     });
   });

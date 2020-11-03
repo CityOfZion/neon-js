@@ -177,8 +177,8 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
     /**
      * Gets the list of validators available for voting.
      */
-    public async getValidators(): Promise<Validator[]> {
-      const response = await this.execute(Query.getValidators());
+    public async getNextBlockValidators(): Promise<Validator[]> {
+      const response = await this.execute(Query.getNextBlockValidators());
       return response;
     }
     /**

@@ -140,9 +140,9 @@ describe("static", () => {
     expect(result.params).toEqual(["hash"]);
   });
 
-  test("getValidators", () => {
-    const result = Query.getValidators();
-    expect(result.method).toEqual("getvalidators");
+  test("getNextBlockValidators", () => {
+    const result = Query.getNextBlockValidators();
+    expect(result.method).toEqual("getnextblockvalidators");
     expect(result.params).toEqual([]);
   });
 

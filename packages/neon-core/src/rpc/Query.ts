@@ -374,9 +374,9 @@ export class Query<TParams extends unknown[], TResponse> {
    * Gets the list of candidates available for voting.
    * @returns list of validators
    */
-  public static getValidators(): Query<[], Validator[]> {
+  public static getNextBlockValidators(): Query<[], Validator[]> {
     return new Query({
-      method: "getvalidators",
+      method: "getnextblockvalidators",
     });
   }
 
