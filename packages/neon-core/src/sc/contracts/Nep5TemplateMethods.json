@@ -1,0 +1,78 @@
+{
+  "hash": "",
+  "methods": [
+    {
+      "name": "totalSupply",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "Integer"
+    },
+    {
+      "name": "balanceOf",
+      "parameters": [
+        {
+          "name": "account",
+          "type": "ByteArray"
+        }
+      ],
+      "offset": 0,
+      "returntype": "Integer"
+    },
+    {
+      "name": "transfer",
+      "parameters": [
+        {
+          "name": "from",
+          "type": "ByteArray"
+        },
+        {
+          "name": "to",
+          "type": "ByteArray"
+        },
+        {
+          "name": "amount",
+          "type": "Integer"
+        }
+      ],
+      "offset": 0,
+      "returntype": "Boolean"
+    },
+    {
+      "name": "name",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "String"
+    },
+    {
+      "name": "symbol",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "String"
+    },
+    {
+      "name": "decimals",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "Integer"
+    }
+  ],
+  "events": [
+    {
+      "name": "Transfer",
+      "parameters": [
+        {
+          "name": "from",
+          "type": "Hash160"
+        },
+        {
+          "name": "to",
+          "type": "Hash160"
+        },
+        {
+          "name": "amount",
+          "type": "Integer"
+        }
+      ]
+    }
+  ]
+}
