@@ -170,10 +170,17 @@ describe("NeoServerRpcClient", () => {
     );
   });
 
-  // TODO: Add new field magic
   test("getVersion", async () => {
     const result = await client.getVersion();
-    expect(result).toMatch(/\d+\.\d+\.\d+-?.*/);
+
+    expect(Object.keys(result)).toHaveLength(5);
+    expect(result).toMatchObject({
+      tcpport: expect.any(Number),
+      wsport: expect.any(Number),
+      nonce: expect.any(Number),
+      useragent: expect.any(String),
+      magic: expect.any(Number),
+    });
   });
 
   test("listPlugins", async () => {
