@@ -96,6 +96,49 @@ export class BigInteger {
     }
   }
 
+  /**
+   * Creates a BigInteger instance from a decimal by parsing the decimals and shifting the decimal point by a provided number of places.
+   *
+   * This is mainly used with dealing with NEP5 tokens.
+   * While most tokens support some sort of decimal places, the data is actually stored as an integer.
+   * This helper method converts the decimal number to the integer representation to work with.
+   * To convert back, use toDecimal(decimals);
+   * @param input - Javascript number or string containing numbers. Accepts decimals.
+   * @param decimals - Number of decimal places to support.
+   *
+   * @example
+   *
+   * const transformedDecimal = BigInteger.fromDecimal(12.34,3);
+   * console.log(transformedDecimal.toString()); // 12340
+   *
+   * const oneGas = BigInteger.fromDecimal(1,8);
+   * console.log(oneGas); // 100000000
+   */
+  public static fromDecimal(
+    input: number | string,
+    decimals: number
+  ): BigInteger {
+    const stringNumber = typeof input === "number" ? input.toString() : input;
+
+    const portions = stringNumber.split(".", 2);
+    const leftOfDecimal = portions[0];
+    const rightOfDecimal = portions.length === 2 ? portions[1] : "";
+
+    // Throw if the right side is too long as it affects how we form the final number.
+    if (rightOfDecimal.length > decimals) {
+      throw new Error(
+        `Input had more decimal places than provided. Got ${rightOfDecimal} but only got ${decimals} decimal places.`
+      );
+    }
+
+    const finalNumber =
+      leftOfDecimal +
+      rightOfDecimal +
+      "0".repeat(decimals - rightOfDecimal.length);
+
+    return BigInteger.fromNumber(finalNumber);
+  }
+
   private constructor(value: BN) {
     this.#value = value;
   }
@@ -142,6 +185,28 @@ export class BigInteger {
    */
   public toString(): string {
     return this.#value.toString();
+  }
+
+  // We do not provide a toNumber() as it is unsafe conversion.
+
+  /**
+   * Converts the BigInteger into a decimal number by shifting the decimal place to the left.
+   * @param decimals - Number of decimals places
+   *
+   * @example
+   * const bigNumber = BigInteger.fromNumber(100000000);
+   * console.log(bigNumber.toDecimal(8)); // 1.00000000
+   */
+  public toDecimal(decimals: number): string {
+    const sign = this.#value.isNeg() ? "-" : "";
+    const stringNumber = this.#value.abs().toString(10);
+    if (stringNumber.length <= decimals) {
+      return sign + "0." + stringNumber.padStart(decimals, "0");
+    }
+    const leftOfDecimal = stringNumber.slice(0, stringNumber.length - decimals);
+    return (
+      sign + leftOfDecimal + "." + stringNumber.slice(leftOfDecimal.length)
+    );
   }
 
   /**
@@ -203,6 +268,10 @@ export class BigInteger {
     const otherBigInteger =
       other instanceof BigInteger ? other : BigInteger.fromNumber(other);
     return this.#value.cmp(otherBigInteger.#value);
+  }
+
+  public equals(other: BigInteger | number): boolean {
+    return this.compare(other) === 0;
   }
 }
 
