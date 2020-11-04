@@ -104,7 +104,7 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
       scriptHash: string
     ): Promise<ContractManifest> {
       const response = await this.execute(Query.getContractState(scriptHash));
-      return new ContractManifest(response.manifest);
+      return ContractManifest.fromJson(response.manifest);
     }
 
     /**
