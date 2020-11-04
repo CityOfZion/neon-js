@@ -1,6 +1,6 @@
 import { DEFAULT_REQ } from "../consts";
 import { Transaction, TransactionJson, Signer, SignerJson } from "../tx";
-import { ContractManifestLike, ContractParam, StackItemJson } from "../sc";
+import { ContractManifestJson, ContractParam, StackItemJson } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 
 export type BooleanLikeParam = 0 | 1 | boolean;
@@ -59,7 +59,7 @@ export interface GetContractStateResult {
   /** 0x prefixed hexstring */
   hash: string;
   script: string;
-  manifest: ContractManifestLike;
+  manifest: ContractManifestJson;
 }
 
 export interface GetNep5TransfersResult {
