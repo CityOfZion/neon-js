@@ -287,13 +287,28 @@ describe("RPC Methods", () => {
       const successfulResult = {
         script: "1234",
         hash: "5678",
-        manifest: { safeMethods: ["a", "b"] },
+        manifest: {
+          groups: [],
+          abi: {
+            hash: "1234",
+            methods: [],
+            events: [],
+          },
+          permissions: [],
+          trusts: "*" as const,
+          safemethods: ["a", "b"],
+          supportedstandards: [],
+          features: {
+            storage: true,
+            payable: false,
+          },
+        },
       };
       Axios.post.mockImplementationOnce(async (url, data) => {
         expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getcontractstate",
-          params: ["hash"],
+          params: ["5678"],
         });
         return {
           data: {
@@ -303,9 +318,11 @@ describe("RPC Methods", () => {
           },
         };
       });
-      const result = await client.getContractState("hash");
+      const result = await client.getContractState("5678");
 
-      expect(result).toEqual(new ContractManifest(successfulResult.manifest));
+      expect(result).toEqual(
+        ContractManifest.fromJson(successfulResult.manifest)
+      );
     });
   });
 
