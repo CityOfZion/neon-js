@@ -16,6 +16,7 @@ import {
 import { OpCode } from "./OpCode";
 import { InteropServiceCode } from "./InteropServiceCode";
 import { TextEncoder } from "util";
+import { ContractCall, ContractCallJson } from "./types";
 
 export interface ScriptIntent {
   scriptHash: string | "NEO" | "GAS" | "POLICY";
@@ -49,6 +50,14 @@ export class ScriptBuilder extends StringStream {
     return this;
   }
 
+  /**
+   * Appends a script that calls an operation on a smart contract.
+   * @param scriptHash - ScriptHash of the contract to call.
+   * @param operation - The operation to call as a UTF8 string.
+   * @param args - Any arguments to pass to the operation.
+   *
+   * @deprecated Please use emitContractCall which is better typed.
+   */
   public emitAppCall(
     scriptHash: string | HexString,
     operation: string,
@@ -287,6 +296,18 @@ export class ScriptBuilder extends StringStream {
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }
+  }
+
+  /**
+   * Appends a script that calls an operation on a smart contract.
+   * @param contractCall - A ContractCall object emitted from a Contract instance.
+   */
+  public emitContractCall(contractCall: ContractCall | ContractCallJson): this {
+    return this.emitAppCall(
+      contractCall.scriptHash,
+      contractCall.operation,
+      contractCall.args
+    );
   }
 }
 
