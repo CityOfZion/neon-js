@@ -1,8 +1,9 @@
-import ContractParam from "../../src/sc/ContractParam";
-import OpCode from "../../src/sc/OpCode";
-import ScriptBuilder, { ScriptIntent } from "../../src/sc/ScriptBuilder";
+import { ContractParam } from "../../src/sc/ContractParam";
+import { OpCode } from "../../src/sc/OpCode";
+import { ScriptBuilder } from "../../src/sc/ScriptBuilder";
 import { InteropServiceCode } from "../../src/sc";
 import { HexString } from "../../src/u";
+import { ContractCallJson } from "../../src/sc/types";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -19,46 +20,38 @@ describe("constructor", () => {
 
 describe("build", () => {
   test("returns script", () => {
-    const sb = new ScriptBuilder();
-    sb.emit(OpCode.PUSHDATA1, "1234");
-    expect(sb.build()).toBe("0c1234");
-  });
-
-  test("is copy", () => {
-    const sb = new ScriptBuilder();
-    const result = sb.emit(OpCode.PUSHDATA1, "1234").build();
-    sb.emit(OpCode.PUSHDATA2);
+    const result = new ScriptBuilder().emit(OpCode.PUSHDATA1, "1234").build();
     expect(result).toBe("0c1234");
   });
 });
 
 describe("emit", () => {
   test("single OpCode", () => {
-    const sb = new ScriptBuilder();
-    sb.emit(OpCode.PUSH1);
-    expect(sb.build()).toBe("11");
+    const result = new ScriptBuilder().emit(OpCode.PUSH1).build();
+    expect(result).toBe("11");
   });
 
   test("OpCode with args", () => {
-    const sb = new ScriptBuilder();
-    sb.emit(0x10 as OpCode, "0102");
-    expect(sb.build()).toBe("100102");
+    const result = new ScriptBuilder().emit(0x10 as OpCode, "0102").build();
+    expect(result).toBe("100102");
   });
 });
 
 describe("emitSysCall", () => {
   test("emitSysCall with args", () => {
     const sb = new ScriptBuilder();
-    const result = sb.emitSysCall(
-      InteropServiceCode.SYSTEM_CONTRACT_CREATE,
-      HexString.fromHex("a45f"),
-      HexString.fromHex("2bc5")
-    ).str;
+    const result = sb
+      .emitSysCall(
+        InteropServiceCode.SYSTEM_CONTRACT_CREATE,
+        HexString.fromHex("a45f"),
+        HexString.fromHex("2bc5")
+      )
+      .build();
     expect(result).toBe("0c02c52b0c025fa441ce352c85");
   });
 });
 
-describe("emitAppCall", () => {
+describe("emitContractCall", () => {
   test.each([
     [
       "simple emitAppCall",
@@ -83,12 +76,11 @@ describe("emitAppCall", () => {
       },
       "0c1491beb9d138fd51d180821af90ad33d44c8c7204111c00c0962616c616e63654f660c1425059ecb4878d3a875f91c51ceded330d4575fde41627d5b52",
     ],
-  ] as [string, ScriptIntent, string][])(
+  ] as [string, ContractCallJson, string][])(
     "%s",
-    (_msg: string, data: ScriptIntent, expected: string) => {
-      const sb = new ScriptBuilder();
-      sb.emitAppCall(data.scriptHash, data.operation, data.args);
-      expect(sb.str).toBe(expected);
+    (_msg: string, data: ContractCallJson, expected: string) => {
+      const result = new ScriptBuilder().emitContractCall(data).build();
+      expect(result).toBe(expected);
     }
   );
 });
@@ -118,9 +110,8 @@ describe("emitPush", () => {
       data: ContractParam | string | number | boolean,
       expected: string
     ) => {
-      const sb = new ScriptBuilder();
-      sb.emitPush(data);
-      expect(sb.str).toBe(expected);
+      const result = new ScriptBuilder().emitPush(data).build();
+      expect(result).toBe(expected);
     }
   );
 });
@@ -130,9 +121,8 @@ describe("emitBoolean", () => {
     ["true", true, "11"],
     ["false", false, "10"],
   ])("%s", (_msg: string, data: boolean, expected: string) => {
-    const sb = new ScriptBuilder();
-    sb.emitBoolean(data);
-    expect(sb.build()).toBe(expected);
+    const result = new ScriptBuilder().emitBoolean(data).build();
+    expect(result).toBe(expected);
   });
 });
 
@@ -152,11 +142,10 @@ describe("emitString", () => {
       "0e" + "00000100" + "61".repeat(0x10000),
     ],
   ])("%s", (_msg: string, data: string, expected: string) => {
-    const sb = new ScriptBuilder();
-    sb.emitString(data);
+    const result = new ScriptBuilder().emitString(data).build();
     // Check initial slice to fail early and print less
-    expect(sb.build().substr(0, 10)).toBe(expected.substr(0, 10));
-    expect(sb.build()).toBe(expected);
+    expect(result.substr(0, 10)).toBe(expected.substr(0, 10));
+    expect(result).toBe(expected);
   });
 
   // Difficult to test throw when string too large due to string buffer smaller than limit
@@ -169,11 +158,10 @@ describe("emitHexString", () => {
     ["string input", HexString.fromHex("0102030405", true), "0c050102030405"],
     ["string input", HexString.fromHex("0102030405", false), "0c050504030201"],
   ])("%s", (_msg: string, data: string | HexString, expected: string) => {
-    const sb = new ScriptBuilder();
-    sb.emitHexString(data);
+    const result = new ScriptBuilder().emitHexString(data).build();
     // Check initial slice to fail early and print less
-    expect(sb.build().substr(0, 10)).toBe(expected.substr(0, 10));
-    expect(sb.build()).toBe(expected);
+    expect(result.substr(0, 10)).toBe(expected.substr(0, 10));
+    expect(result).toBe(expected);
   });
 });
 
@@ -196,9 +184,8 @@ describe("emitNumber", () => {
     ["long max", "9223372036854775807", "03ffffffffffffff7f"],
     ["ulong max", "18446744073709551615", "04ffffffffffffffff0000000000000000"],
   ])("%s", (_msg: string, data: number | string, expected: string) => {
-    const sb = new ScriptBuilder();
-    sb.emitNumber(data);
-    expect(sb.build()).toBe(expected);
+    const result = new ScriptBuilder().emitNumber(data).build();
+    expect(result).toBe(expected);
   });
 });
 
@@ -223,8 +210,7 @@ describe("emitContractParam", () => {
       "0c14fca95e252be6a90b54546707e77dbc9b3ec36154",
     ],
   ])("%s", (_msg: string, data: ContractParam, expected: string) => {
-    const sb = new ScriptBuilder();
-    sb.emitContractParam(data);
-    expect(sb.build()).toBe(expected);
+    const result = new ScriptBuilder().emitContractParam(data).build();
+    expect(result).toBe(expected);
   });
 });
