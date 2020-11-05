@@ -27,6 +27,8 @@ function isValidValue(value: any): boolean {
     return true;
   } else if (value === "") {
     return true;
+  } else if (value === false) {
+    return true;
   }
   return false;
 }
