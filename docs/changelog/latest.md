@@ -3,6 +3,13 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.8.2
+=====
+
+- Fixes
+
+  - Fix false not being accepted as a valid value for ContractParam.
+
 4.8.1
 =====
 
