@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-core",
   "description": "Neon-JS Core functionality",
-  "version": "4.8.1",
+  "version": "4.8.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
