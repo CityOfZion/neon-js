@@ -1,7 +1,7 @@
 import { rpc, CONST } from "@cityofzion/neon-core";
 import * as TestHelpers from "../../../../testHelpers";
 
-import { getTokenInfo } from "../../src/api/getTokenInfo";
+import { getTokenInfo, TokenInfo } from "../../src/api/getTokenInfo";
 
 let client: rpc.NeoServerRpcClient;
 
@@ -17,20 +17,20 @@ describe("getTokenInfo", () => {
     expect(result).toStrictEqual({
       name: "NEO",
       symbol: "neo",
-      decimals: "0",
+      decimals: 0,
       totalSupply: "100000000",
-    });
+    } as TokenInfo);
   });
 
   test("GAS", async () => {
-    const neoScriptHash = CONST.ASSET_ID["GAS"];
-    const result = await getTokenInfo(neoScriptHash, client);
+    const gasScriptHash = CONST.ASSET_ID["GAS"];
+    const result = await getTokenInfo(gasScriptHash, client);
     expect(result).toStrictEqual({
       name: "GAS",
       symbol: "gas",
-      decimals: "8",
+      decimals: 8,
       totalSupply: expect.any(String),
-    });
+    } as TokenInfo);
 
     expect(parseInt(result.totalSupply)).toBeGreaterThan(0);
   });
