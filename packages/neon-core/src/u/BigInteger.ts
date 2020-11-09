@@ -198,6 +198,10 @@ export class BigInteger {
    * console.log(bigNumber.toDecimal(8)); // 1.00000000
    */
   public toDecimal(decimals: number): string {
+    if (decimals === 0) {
+      return this.#value.toString();
+    }
+
     const sign = this.#value.isNeg() ? "-" : "";
     const stringNumber = this.#value.abs().toString(10);
     if (stringNumber.length <= decimals) {
