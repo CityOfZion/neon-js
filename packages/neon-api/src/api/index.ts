@@ -1,2 +1,2 @@
 export * from "./getTokenBalances";
-export * from "./getTokenInfo";
+export * from "./getTokenInfos";
