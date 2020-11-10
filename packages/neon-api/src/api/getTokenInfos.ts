@@ -34,7 +34,9 @@ export async function getTokenInfos(
   const response = await client.invokeScript(script);
   if (response.state === "FAULT") {
     throw new Error(
-      `Invoke exception: ${response.exception ?? "No exception returned."}`
+      response.exception
+        ? `Invoke exception: ${response.exception}}`
+        : "No exception returned."
     );
   }
 
