@@ -102,6 +102,6 @@ describe("getTokenBalances", () => {
           ],
           mockClient
         )
-    ).rejects.toThrow("No exception returned");
+    ).rejects.toThrow("No exception message returned");
   });
 });
