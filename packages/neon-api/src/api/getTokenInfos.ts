@@ -36,7 +36,7 @@ export async function getTokenInfos(
     throw new Error(
       response.exception
         ? `Invoke exception: ${response.exception}}`
-        : "No exception returned."
+        : "No exception message returned."
     );
   }
 

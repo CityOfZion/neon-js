@@ -112,6 +112,6 @@ describe("getTokenInfos", () => {
           ["668e0c1f9d7b70a99dd9e06eadd4c784d641afbc"],
           mockClient
         )
-    ).rejects.toThrow("No exception returned");
+    ).rejects.toThrow("No exception message returned");
   });
 });
