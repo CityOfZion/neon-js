@@ -1,7 +1,7 @@
 import util from "util";
 import { DEFAULT_ACCOUNT_CONTRACT, DEFAULT_SCRYPT } from "../consts";
 import logger from "../logging";
-import { hash160, HexString, reverseHex } from "../u";
+import { hash160, HexString, reverseHex, isMultisigContract } from "../u";
 import * as core from "./core";
 import { constructMultiSigVerificationScript } from "./multisig";
 import { decrypt, encrypt, ScryptParams } from "./nep2";
@@ -13,7 +13,6 @@ import {
   isScriptHash,
   isWIF,
 } from "./verify";
-import { InteropServiceCode } from "../sc";
 import { NeonObject } from "../model";
 
 const log = logger("wallet");
@@ -158,10 +157,7 @@ export class Account implements NeonObject<AccountJSON> {
   }
 
   public get isMultiSig(): boolean {
-    return (
-      this.contract?.script?.slice(this.contract.script.length - 8) ===
-      InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256R1
-    );
+    return isMultisigContract(HexString.fromBase64(this.contract?.script));
   }
 
   /**

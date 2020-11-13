@@ -1,5 +1,6 @@
 import { ab2hexstring } from "./convert";
 import { HexString } from "./HexString";
+import { OpCode } from "../sc/OpCode";
 
 const hexRegex = /^([0-9A-Fa-f]{2})*$/;
 
@@ -101,13 +102,15 @@ export function getSerializedSize(value: Serializables): number {
         return getSerializedSize(size) + size;
       } else if (Array.isArray(value)) {
         let size = 0;
-        if (
-          typeof value[0].size === "number" &&
-          typeof value[0].serialize === "function"
-        ) {
-          size = value
-            .map((item) => item.size)
-            .reduce((prev, curr) => prev + curr, 0);
+        if (value.length > 0) {
+          if (
+            typeof value[0].size === "number" &&
+            typeof value[0].serialize === "function"
+          ) {
+            size = value
+              .map((item) => item.size)
+              .reduce((prev, curr) => prev + curr, 0);
+          }
         }
         return getSerializedSize(value.length) + size;
       }
@@ -116,4 +119,100 @@ export function getSerializedSize(value: Serializables): number {
     default:
       throw new Error("Unsupported value type: " + typeof value);
   }
+}
+
+/**
+ * Check if the format of input matches that of a single signature contract
+ */
+export function isSignatureContract(input: HexString): boolean {
+  const PUBLIC_KEY_LENGTH = 33;
+  const script = Buffer.from(input.toString(), "hex");
+  return !(
+    script.length != 41 ||
+    script[0] != OpCode.PUSHDATA1 ||
+    script[1] != PUBLIC_KEY_LENGTH ||
+    script[35] != OpCode.PUSHNULL ||
+    script[36] != OpCode.SYSCALL ||
+    script.readUInt32LE(37) != 2014135445
+  );
+}
+
+/**
+ * Check if the format of input matches that of a multi-signature contract
+ */
+export function isMultisigContract(input: HexString): boolean {
+  const script = Buffer.from(input.toString(), "hex");
+  if (script.length < 43) {
+    return false;
+  }
+
+  let signatureCount, i;
+  if (script[0] == OpCode.PUSHINT8) {
+    signatureCount = script[1];
+    i = 2;
+  } else if (script[0] == OpCode.PUSHINT16) {
+    signatureCount = script.readUInt16LE(1);
+    i = 3;
+  } else if (script[0] <= OpCode.PUSH1 || script[0] >= OpCode.PUSH16) {
+    signatureCount = script[0] - OpCode.PUSH0;
+    i = 1;
+  } else {
+    return false;
+  }
+
+  if (signatureCount < 1 || signatureCount > 1024) {
+    return false;
+  }
+
+  let publicKeyCount = 0;
+  while (script[i] == OpCode.PUSHDATA1) {
+    if (script.length <= i + 35) {
+      return false;
+    }
+    if (script[i + 1] != 33) {
+      return false;
+    }
+    i += 35;
+    publicKeyCount += 1;
+  }
+
+  if (publicKeyCount < signatureCount || publicKeyCount > 1024) {
+    return false;
+  }
+
+  const value = script[i];
+  if (value == OpCode.PUSHINT8) {
+    if (script.length <= i + 1 || publicKeyCount != script[i + 1]) {
+      return false;
+    }
+    i += 2;
+  } else if (value == OpCode.PUSHINT16) {
+    if (script.length < i + 3 || publicKeyCount != script.readUInt16LE(i + 1)) {
+      return false;
+    }
+    i += 3;
+  } else if (OpCode.PUSH1 <= value && value <= OpCode.PUSH16) {
+    if (publicKeyCount != value - OpCode.PUSH0) {
+      return false;
+    }
+    i += 1;
+  } else {
+    return false;
+  }
+
+  if (
+    script.length != i + 6 ||
+    script[i] != OpCode.PUSHNULL ||
+    script[i + 1] != OpCode.SYSCALL
+  ) {
+    return false;
+  }
+
+  i += 2;
+
+  if (script.readUInt32LE(i) != 2951712019) {
+    return false;
+  }
+
+  return true;
 }
