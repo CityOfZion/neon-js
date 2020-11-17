@@ -109,7 +109,7 @@ describe("NeoServerRpcClient", () => {
       id: expect.any(Number),
       hash: expect.any(String),
       script: expect.any(String),
-      manifest: expect.any(String),
+      manifest: expect.any(Object),
     });
   });
 
