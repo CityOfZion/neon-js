@@ -2,7 +2,6 @@ import _Axios from "axios";
 import { mocked } from "ts-jest/utils";
 import RPCClient from "../../src/rpc/RPCClient";
 import { DEFAULT_RPC } from "../../src/consts";
-import { ContractManifest } from "../../src/sc";
 import Query from "../../src/rpc/Query";
 import { Signer, WitnessScope } from "../../src/tx";
 

@@ -10,7 +10,6 @@ import {
   GetVersionResult,
   GetContractStateResult,
 } from "../Query";
-import { ContractManifest } from "../../sc";
 import { BlockJson, BlockHeaderJson, Validator } from "../../types";
 import { RpcDispatcher, RpcDispatcherMixin } from "./RpcDispatcher";
 import { Fixed8 } from "../../u";
