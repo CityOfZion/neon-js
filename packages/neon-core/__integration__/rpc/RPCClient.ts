@@ -1,10 +1,5 @@
 import { rpc } from "../../src";
-import {
-  ContractParam,
-  createScript,
-  ScriptBuilder,
-  ContractManifest,
-} from "../../src/sc";
+import { ContractParam, createScript, ScriptBuilder } from "../../src/sc";
 import { Transaction, WitnessScope, Signer } from "../../src/tx";
 import { Wallet } from "../../src/wallet";
 import { HexString } from "../../src/u";
