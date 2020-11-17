@@ -1,0 +1,177 @@
+{
+  "hash": "0xde5f57d430d3dece511cf975a8d37848cb9e0525",
+  "methods": [
+      {
+          "name": "totalSupply",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Integer"
+      },
+      {
+          "name": "onPersist",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Void"
+      },
+      {
+          "name": "postPersist",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Void"
+      },
+      {
+          "name": "setGasPerBlock",
+          "parameters": [
+              {
+                  "name": "gasPerBlock",
+                  "type": "Integer"
+              }
+          ],
+          "offset": 0,
+          "returntype": "Boolean"
+      },
+      {
+          "name": "getGasPerBlock",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Integer"
+      },
+      {
+          "name": "unclaimedGas",
+          "parameters": [
+              {
+                  "name": "account",
+                  "type": "ByteArray"
+              },
+              {
+                  "name": "end",
+                  "type": "Integer"
+              }
+          ],
+          "offset": 0,
+          "returntype": "Integer"
+      },
+      {
+          "name": "registerCandidate",
+          "parameters": [
+              {
+                  "name": "pubkey",
+                  "type": "ByteArray"
+              }
+          ],
+          "offset": 0,
+          "returntype": "Boolean"
+      },
+      {
+          "name": "unregisterCandidate",
+          "parameters": [
+              {
+                  "name": "pubkey",
+                  "type": "ByteArray"
+              }
+          ],
+          "offset": 0,
+          "returntype": "Boolean"
+      },
+      {
+          "name": "vote",
+          "parameters": [
+              {
+                  "name": "account",
+                  "type": "ByteArray"
+              },
+              {
+                  "name": "voteTo",
+                  "type": "ByteArray"
+              }
+          ],
+          "offset": 0,
+          "returntype": "Boolean"
+      },
+      {
+          "name": "getCandidates",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Array"
+      },
+      {
+          "name": "getCommittee",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Array"
+      },
+      {
+          "name": "getNextBlockValidators",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Array"
+      },
+      {
+          "name": "balanceOf",
+          "parameters": [
+              {
+                  "name": "account",
+                  "type": "ByteArray"
+              }
+          ],
+          "offset": 0,
+          "returntype": "Integer"
+      },
+      {
+          "name": "transfer",
+          "parameters": [
+              {
+                  "name": "from",
+                  "type": "ByteArray"
+              },
+              {
+                  "name": "to",
+                  "type": "ByteArray"
+              },
+              {
+                  "name": "amount",
+                  "type": "Integer"
+              }
+          ],
+          "offset": 0,
+          "returntype": "Boolean"
+      },
+      {
+          "name": "name",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "String"
+      },
+      {
+          "name": "symbol",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "String"
+      },
+      {
+          "name": "decimals",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Integer"
+      }
+  ],
+  "events": [
+      {
+          "name": "Transfer",
+          "parameters": [
+              {
+                  "name": "from",
+                  "type": "Hash160"
+              },
+              {
+                  "name": "to",
+                  "type": "Hash160"
+              },
+              {
+                  "name": "amount",
+                  "type": "Integer"
+              }
+          ]
+      }
+  ]
+}
