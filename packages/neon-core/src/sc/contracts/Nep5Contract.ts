@@ -1,8 +1,8 @@
 import { ContractParam } from "../ContractParam";
-import { ContractMethodDefinition } from "../manifest";
+import { ContractMethodDefinition } from "../manifest/ContractMethodDefinition";
 import { ContractCall } from "../types";
 import { BaseContract } from "./BaseContract";
-import defaultAbi from "./Nep5TemplateMethods.json";
+import defaultAbi from "./templates/Nep5TemplateAbi.json";
 
 /**
  * A standard NEP-5 contract according to specification.

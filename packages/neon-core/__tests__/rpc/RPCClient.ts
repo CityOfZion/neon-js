@@ -2,7 +2,6 @@ import _Axios from "axios";
 import { mocked } from "ts-jest/utils";
 import RPCClient from "../../src/rpc/RPCClient";
 import { DEFAULT_RPC } from "../../src/consts";
-import { ContractManifest } from "../../src/sc";
 import Query from "../../src/rpc/Query";
 import { Signer, WitnessScope } from "../../src/tx";
 
@@ -285,6 +284,7 @@ describe("RPC Methods", () => {
   describe("getContractState", () => {
     test("success", async () => {
       const successfulResult = {
+        id: 1,
         script: "1234",
         hash: "5678",
         manifest: {
@@ -320,9 +320,7 @@ describe("RPC Methods", () => {
       });
       const result = await client.getContractState("5678");
 
-      expect(result).toEqual(
-        ContractManifest.fromJson(successfulResult.manifest)
-      );
+      expect(result).toEqual(successfulResult);
     });
   });
 

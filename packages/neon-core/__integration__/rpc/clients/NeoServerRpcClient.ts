@@ -104,7 +104,13 @@ describe("NeoServerRpcClient", () => {
 
   test("getContractState", async () => {
     const result = await client.getContractState(contractHash);
-    expect(result).toBeInstanceOf(sc.ContractManifest);
+    expect(Object.keys(result)).toHaveLength(4);
+    expect(result).toMatchObject({
+      id: expect.any(Number),
+      hash: expect.any(String),
+      script: expect.any(String),
+      manifest: expect.any(Object),
+    });
   });
 
   test("getPeers", async () => {

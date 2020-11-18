@@ -56,8 +56,10 @@ export interface InvokeResult {
 }
 
 export interface GetContractStateResult {
+  id: number;
   /** 0x prefixed hexstring */
   hash: string;
+  /** Base64 encoded string */
   script: string;
   manifest: ContractManifestJson;
 }

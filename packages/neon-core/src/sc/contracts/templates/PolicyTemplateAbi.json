@@ -1,0 +1,125 @@
+{
+  "hash": "0xce06595079cd69583126dbfd1d2e25cca74cffe9",
+  "methods": [
+    {
+      "name": "getMaxTransactionsPerBlock",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "Integer"
+    },
+    {
+      "name": "getMaxBlockSize",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "Integer"
+    },
+    {
+      "name": "getMaxBlockSystemFee",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "Integer"
+    },
+    {
+      "name": "getFeePerByte",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "Integer"
+    },
+    {
+      "name": "isBlocked",
+      "parameters": [
+        {
+          "name": "account",
+          "type": "ByteArray"
+        }
+      ],
+      "offset": 0,
+      "returntype": "Boolean"
+    },
+    {
+      "name": "setMaxBlockSize",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "Integer"
+        }
+      ],
+      "offset": 0,
+      "returntype": "Boolean"
+    },
+    {
+      "name": "setMaxTransactionsPerBlock",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "Integer"
+        }
+      ],
+      "offset": 0,
+      "returntype": "Boolean"
+    },
+    {
+      "name": "setMaxBlockSystemFee",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "Integer"
+        }
+      ],
+      "offset": 0,
+      "returntype": "Boolean"
+    },
+    {
+      "name": "setFeePerByte",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "Integer"
+        }
+      ],
+      "offset": 0,
+      "returntype": "Boolean"
+    },
+    {
+      "name": "blockAccount",
+      "parameters": [
+        {
+          "name": "account",
+          "type": "ByteArray"
+        }
+      ],
+      "offset": 0,
+      "returntype": "Boolean"
+    },
+    {
+      "name": "unblockAccount",
+      "parameters": [
+        {
+          "name": "account",
+          "type": "ByteArray"
+        }
+      ],
+      "offset": 0,
+      "returntype": "Boolean"
+    },
+    {
+      "name": "onPersist",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "Void"
+    },
+    {
+      "name": "postPersist",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "Void"
+    },
+    {
+      "name": "name",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "String"
+    }
+  ],
+  "events": []
+}

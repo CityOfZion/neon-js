@@ -1,10 +1,5 @@
 import { rpc } from "../../src";
-import {
-  ContractParam,
-  createScript,
-  ScriptBuilder,
-  ContractManifest,
-} from "../../src/sc";
+import { ContractParam, createScript, ScriptBuilder } from "../../src/sc";
 import { Transaction, WitnessScope, Signer } from "../../src/tx";
 import { Wallet } from "../../src/wallet";
 import { HexString } from "../../src/u";
@@ -148,7 +143,13 @@ describe("RPC Methods", () => {
 
   test("getContractState", async () => {
     const result = await client.getContractState(contractHash);
-    expect(result).toBeInstanceOf(ContractManifest);
+    expect(Object.keys(result)).toHaveLength(4);
+    expect(result).toMatchObject({
+      id: expect.any(Number),
+      hash: expect.any(String),
+      script: expect.any(String),
+      manifest: expect.any(Object),
+    });
   });
 
   test("getPeers", async () => {

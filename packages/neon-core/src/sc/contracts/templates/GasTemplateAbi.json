@@ -1,0 +1,90 @@
+{
+  "hash": "0x668e0c1f9d7b70a99dd9e06eadd4c784d641afbc",
+  "methods": [
+      {
+          "name": "onPersist",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Void"
+      },
+      {
+          "name": "totalSupply",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Integer"
+      },
+      {
+          "name": "balanceOf",
+          "parameters": [
+              {
+                  "name": "account",
+                  "type": "ByteArray"
+              }
+          ],
+          "offset": 0,
+          "returntype": "Integer"
+      },
+      {
+          "name": "transfer",
+          "parameters": [
+              {
+                  "name": "from",
+                  "type": "ByteArray"
+              },
+              {
+                  "name": "to",
+                  "type": "ByteArray"
+              },
+              {
+                  "name": "amount",
+                  "type": "Integer"
+              }
+          ],
+          "offset": 0,
+          "returntype": "Boolean"
+      },
+      {
+          "name": "postPersist",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Void"
+      },
+      {
+          "name": "name",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "String"
+      },
+      {
+          "name": "symbol",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "String"
+      },
+      {
+          "name": "decimals",
+          "parameters": [],
+          "offset": 0,
+          "returntype": "Integer"
+      }
+  ],
+  "events": [
+      {
+          "name": "Transfer",
+          "parameters": [
+              {
+                  "name": "from",
+                  "type": "Hash160"
+              },
+              {
+                  "name": "to",
+                  "type": "Hash160"
+              },
+              {
+                  "name": "amount",
+                  "type": "Integer"
+              }
+          ]
+      }
+  ]
+}

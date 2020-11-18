@@ -100,10 +100,11 @@ export class TransactionValidator {
     intent: sc.ScriptIntent
   ): Promise<string | null> {
     const { scriptHash, operation } = intent;
-    const manifest = await this.rpcClient.getContractState(scriptHash);
-    if (manifest === null) {
+    const response = await this.rpcClient.getContractState(scriptHash);
+    if (response === null) {
       return `Unknown contract ${scriptHash}`;
     }
+    const manifest = sc.ContractManifest.fromJson(response.manifest);
 
     if (operation) {
       if (

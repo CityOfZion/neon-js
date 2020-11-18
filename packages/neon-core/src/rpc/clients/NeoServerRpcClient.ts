@@ -8,8 +8,8 @@ import {
   InvokeResult,
   BooleanLikeParam,
   GetVersionResult,
+  GetContractStateResult,
 } from "../Query";
-import { ContractManifest } from "../../sc";
 import { BlockJson, BlockHeaderJson, Validator } from "../../types";
 import { RpcDispatcher, RpcDispatcherMixin } from "./RpcDispatcher";
 import { Fixed8 } from "../../u";
@@ -102,9 +102,9 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
      */
     public async getContractState(
       scriptHash: string
-    ): Promise<ContractManifest> {
+    ): Promise<GetContractStateResult> {
       const response = await this.execute(Query.getContractState(scriptHash));
-      return ContractManifest.fromJson(response.manifest);
+      return response;
     }
 
     /**
