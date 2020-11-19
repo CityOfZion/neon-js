@@ -3,7 +3,8 @@ ARG VARIANT=12
 
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:${VARIANT}
 
-RUN sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
+RUN sudo apt-get update && sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
+
 # Update args in docker-compose.yaml to set the UID/GID of the "node" user.
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
