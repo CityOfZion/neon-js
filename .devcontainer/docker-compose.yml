@@ -27,7 +27,7 @@ services:
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   solonet:
-    image: snowypowers/neo-privatenet:v3.0.0-preview3
+    image: snowypowers/neo-privatenet:v3.0.0-head
     restart: unless-stopped
     volumes:
       - ../tmp/:/opt/neo-cli:consistent
