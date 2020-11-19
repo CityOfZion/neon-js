@@ -1,24 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import apiPlugin from "@cityofzion/neon-api";
 import * as neonCore from "@cityofzion/neon-core";
-import nepPlugin from "@cityofzion/neon-nep5";
 import defaultNetworks from "./networks";
-const neonWithApi = apiPlugin(neonCore);
-const neonJs = nepPlugin(neonWithApi);
+const neonJs = apiPlugin(neonCore);
 import * as experimental from "./experimental";
 export { experimental };
-export const {
-  api,
-  nep5,
-  settings,
-  sc,
-  rpc,
-  wallet,
-  CONST,
-  u,
-  tx,
-  logging,
-} = neonJs;
+export const { api, settings, sc, rpc, wallet, CONST, u, tx, logging } = neonJs;
 
 const bootstrap: {
   [net: string]: Partial<neonCore.rpc.NetworkJSON>;
