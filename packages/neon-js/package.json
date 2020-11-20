@@ -31,8 +31,7 @@
   },
   "dependencies": {
     "@cityofzion/neon-api": "^5.0.0-next.4",
-    "@cityofzion/neon-core": "^5.0.0-next.4",
-    "@cityofzion/neon-nep5": "^5.0.0-next.4"
+    "@cityofzion/neon-core": "^5.0.0-next.4"
   },
   "files": [
     "dist/"
