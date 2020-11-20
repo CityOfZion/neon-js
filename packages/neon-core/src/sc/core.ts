@@ -1,25 +1,30 @@
-import { ScriptBuilder, ScriptIntent } from "./ScriptBuilder";
+import { ScriptBuilder } from "./ScriptBuilder";
 import { InteropServiceCode } from "./InteropServiceCode";
 import { ContractManifest } from "./manifest";
+import { ContractCall, ContractCallJson } from "./types";
 /**
  * Translates a ScriptIntent / array of ScriptIntents into hexstring.
+ * @param scripts - ContractCall or hexstrings.
  */
-export function createScript(...intents: (ScriptIntent | string)[]): string {
+export function createScript(
+  ...scripts: (ContractCall | ContractCallJson | string)[]
+): string {
   const sb = new ScriptBuilder();
-  for (const scriptIntent of intents) {
-    if (typeof scriptIntent === "string") {
-      sb.str += scriptIntent;
+  for (const script of scripts) {
+    if (typeof script === "string") {
+      sb.str += script;
       continue;
     }
-    if (!scriptIntent.scriptHash) {
+
+    const contractCall = script;
+    if (!contractCall.scriptHash) {
       throw new Error("No scriptHash found!");
     }
-    const { scriptHash, operation, args = undefined } = Object.assign(
-      { operation: null, args: undefined },
-      scriptIntent
-    );
+    if (!contractCall.operation) {
+      throw new Error("No operation found!");
+    }
 
-    sb.emitAppCall(scriptHash, operation, args);
+    sb.emitContractCall(script);
   }
   return sb.build();
 }

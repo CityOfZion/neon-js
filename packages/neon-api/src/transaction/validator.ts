@@ -96,27 +96,6 @@ export class TransactionValidator {
     };
   }
 
-  private async _validateIntent(
-    intent: sc.ScriptIntent
-  ): Promise<string | null> {
-    const { scriptHash, operation } = intent;
-    const response = await this.rpcClient.getContractState(scriptHash);
-    if (response === null) {
-      return `Unknown contract ${scriptHash}`;
-    }
-    const manifest = sc.ContractManifest.fromJson(response.manifest);
-
-    if (operation) {
-      if (
-        manifest.abi.methods.map((method) => method.name).indexOf(operation) < 0
-      ) {
-        return `Unknown method ${operation} for contract ${scriptHash}`;
-      }
-    }
-
-    return null;
-  }
-
   /**
    * Validate intents
    */
@@ -135,33 +114,9 @@ export class TransactionValidator {
         },
       };
     }
-
-    const intents = new sc.ScriptParser(
-      this.transaction.script.toBigEndian()
-    ).toScriptParams();
-    const intentsRes: Array<string> = [];
-    await Promise.all(
-      intents.map((intent) =>
-        this._validateIntent(intent).then((res) =>
-          res ? intentsRes.push(res) : res
-        )
-      )
-    );
-    if (intentsRes.length > 0) {
-      return {
-        valid: false,
-        result: {
-          script: {
-            fixed: false,
-            message: intentsRes.join(";"),
-          },
-        },
-      };
-    } else {
-      return {
-        valid: true,
-      };
-    }
+    return {
+      valid: true,
+    };
   }
 
   private _validateSystemFee(

@@ -18,9 +18,11 @@ export class TransactionBuilder {
   /**
    * You can add multiple intents to the transaction
    */
-  public addIntents(...intents: sc.ScriptIntent[]): this {
+  public addContractCall(
+    ...contractCalls: (sc.ContractCall | sc.ContractCallJson)[]
+  ): this {
     this._config.script =
-      this._config.script || "" + sc.createScript(...intents);
+      this._config.script || "" + sc.createScript(...contractCalls);
     return this;
   }
 
