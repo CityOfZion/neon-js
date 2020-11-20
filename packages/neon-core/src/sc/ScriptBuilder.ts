@@ -4,7 +4,6 @@ import {
   num2hexstring,
   str2hexstring,
   StringStream,
-  Fixed8,
   int2hex,
   HexString,
 } from "../u";
@@ -17,17 +16,6 @@ import { OpCode } from "./OpCode";
 import { InteropServiceCode } from "./InteropServiceCode";
 import { TextEncoder } from "util";
 import { ContractCall, ContractCallJson } from "./types";
-
-export interface ScriptIntent {
-  scriptHash: string | "NEO" | "GAS" | "POLICY";
-  operation: string;
-  args?: unknown[];
-}
-
-export interface ScriptResult {
-  hex: string;
-  fee: Fixed8;
-}
 
 /**
  * Builds a VM script in hexstring. Used for constructing smart contract method calls.

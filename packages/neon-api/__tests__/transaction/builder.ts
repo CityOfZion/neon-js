@@ -87,18 +87,32 @@ describe("setter", () => {
     );
   });
 
-  test.skip("addIntents", () => {
+  test.skip("addContractCall", () => {
     const transaction = new TransactionBuilder()
-      .addIntents(
+      .addContractCall(
         {
           scriptHash: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
           operation: "test",
-          args: [1, 2],
+          args: [
+            {
+              type: "Integer",
+              value: "1",
+            },
+            {
+              type: "Integer",
+              value: "2",
+            },
+          ],
         },
         {
           scriptHash: "bd8bf7f95e33415fc242c48d143694a729172d9f",
           operation: "balanceOf",
-          args: ["bd8bf7f95e33415fc242c48d143694a729172d9f"],
+          args: [
+            {
+              type: "Hash160",
+              value: "bd8bf7f95e33415fc242c48d143694a729172d9f",
+            },
+          ],
         }
       )
       .build();
