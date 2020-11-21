@@ -75,7 +75,7 @@ The available providers are `neoscan`, `neonDB` and `notifications`. The first t
 ```js
 const mainNetNeoscan = new api.neocan.instance("MainNet");
 const mainNetNeonDB = new api.neonDB.instance("MainNet");
-const mainNetNotifications = new api.notifications.instance("MainNet");
+const mainNetNotifications = new api.notifications.instance("wss://YOUR_PUBSUB_SERVER.com");
 
 const neoscanBalance = await mainNetNeoscan.getBalance(addr);
 const neonDBBalance = await mainNetNeonDB.getBalance(addr);
