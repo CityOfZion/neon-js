@@ -746,7 +746,7 @@ describe("RPC Methods", () => {
       });
 
       const result = await client.getUnclaimedGas("addr");
-      expect(result).toEqual(12345678.12345678);
+      expect(result).toEqual("1234567812345678");
     });
   });
 });

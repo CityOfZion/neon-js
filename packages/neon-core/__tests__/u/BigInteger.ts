@@ -154,7 +154,7 @@ describe("decimals", () => {
     );
 
     test("throws if provided number has more decimals than provides places", () => {
-      expect(() => BigInteger.fromDecimal(0.123456789, 8)).toThrow();
+      expect(() => BigInteger.fromDecimal("0.123456789", 8)).toThrow();
     });
   });
 

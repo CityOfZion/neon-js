@@ -4,12 +4,12 @@ import {
   hash256,
   num2hexstring,
   reverseHex,
-  Fixed8,
   StringStream,
   num2VarInt,
   generateRandomArray,
   ab2hexstring,
   HexString,
+  BigInteger,
 } from "../../u";
 import { Account, sign, getAddressFromScriptHash } from "../../wallet";
 import {
@@ -40,8 +40,8 @@ const log = logger("tx");
 export interface TransactionLike {
   version: number;
   nonce: number;
-  systemFee: Fixed8 | number;
-  networkFee: Fixed8 | number;
+  systemFee: BigInteger | string | number;
+  networkFee: BigInteger | string | number;
   validUntilBlock: number;
   signers: SignerLike[];
   attributes: TransactionAttributeLike[];
@@ -91,7 +91,7 @@ export class Transaction implements NeonObject<TransactionLike> {
    * @example
    * const systemFee = SUM(OpCodePrices + InteropServiceCodePrices)
    */
-  public systemFee: Fixed8;
+  public systemFee: BigInteger;
 
   /**
    * networkFee is calculated according to transaction size and verificationScript cost in witnesses.
@@ -105,7 +105,7 @@ export class Transaction implements NeonObject<TransactionLike> {
    * const networkFee = FeePerByte * txSize + SUM(verificationScriptCost)
    *
    */
-  public networkFee: Fixed8;
+  public networkFee: BigInteger;
 
   /**
    * Current transaction will be invalid after block of height validUntilBlock
@@ -125,8 +125,8 @@ export class Transaction implements NeonObject<TransactionLike> {
     return new Transaction({
       version: input.version,
       nonce: input.nonce,
-      systemFee: new Fixed8(input.sysfee).div(100000000),
-      networkFee: new Fixed8(input.netfee).div(100000000),
+      systemFee: BigInteger.fromNumber(input.sysfee),
+      networkFee: BigInteger.fromNumber(input.netfee),
       validUntilBlock: input.validuntilblock,
       attributes: input.attributes.map((a) => TransactionAttribute.fromJson(a)),
       signers: input.signers.map((c) => Signer.fromJson(c)),
@@ -163,8 +163,14 @@ export class Transaction implements NeonObject<TransactionLike> {
     );
     this.signers = [];
     signers.forEach((s) => this.addSigner(s));
-    this.systemFee = systemFee ? new Fixed8(systemFee) : new Fixed8(0);
-    this.networkFee = networkFee ? new Fixed8(networkFee) : new Fixed8(0);
+    this.systemFee =
+      systemFee instanceof BigInteger
+        ? systemFee
+        : BigInteger.fromNumber(systemFee ?? 0);
+    this.networkFee =
+      networkFee instanceof BigInteger
+        ? networkFee
+        : BigInteger.fromNumber(networkFee ?? 0);
     this.script = HexString.fromHex(script ?? "");
   }
 
@@ -194,8 +200,12 @@ export class Transaction implements NeonObject<TransactionLike> {
     );
   }
 
-  public get fees(): number {
-    return this.systemFee.plus(this.networkFee).toNumber();
+  /**
+   * Returns the fees as a integer string.
+   * Divide this by 100000000 to get the decimal value.
+   */
+  public get fees(): string {
+    return this.systemFee.add(this.networkFee).toString();
   }
 
   /**
@@ -268,8 +278,8 @@ export class Transaction implements NeonObject<TransactionLike> {
     let out = "";
     out += num2hexstring(this.version);
     out += num2hexstring(this.nonce, 4, true);
-    out += this.systemFee.toReverseHex();
-    out += this.networkFee.toReverseHex();
+    out += this.systemFee.toReverseHex().padEnd(16, "0");
+    out += this.networkFee.toReverseHex().padEnd(16, "0");
     out += num2hexstring(this.validUntilBlock, 4, true);
     out += serializeArrayOf(this.signers);
     out += serializeArrayOf(this.attributes);
@@ -316,8 +326,8 @@ export class Transaction implements NeonObject<TransactionLike> {
     return {
       version: this.version,
       nonce: this.nonce,
-      systemFee: this.systemFee.toNumber(),
-      networkFee: this.networkFee.toNumber(),
+      systemFee: this.systemFee.toString(),
+      networkFee: this.networkFee.toString(),
       validUntilBlock: this.validUntilBlock,
       attributes: this.attributes.map((a) => a.export()),
       signers: this.signers.map((s) => s.export()),
@@ -332,8 +342,8 @@ export class Transaction implements NeonObject<TransactionLike> {
       version: this.version,
       nonce: this.nonce,
       sender: getAddressFromScriptHash(this.sender.toBigEndian()),
-      sysfee: this.systemFee.toRawNumber().toString(),
-      netfee: this.networkFee.toRawNumber().toString(),
+      sysfee: this.systemFee.toString(),
+      netfee: this.networkFee.toString(),
       validuntilblock: this.validUntilBlock,
       attributes: this.attributes.map((a) => a.toJson()),
       signers: this.signers.map((c) => c.toJson()),

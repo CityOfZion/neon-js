@@ -29,8 +29,8 @@ export interface ValidationResult {
   result?: {
     validUntilBlock?: ValidationSuggestion<number>;
     script?: ValidationSuggestion<string>;
-    systemFee?: ValidationSuggestion<u.Fixed8>;
-    networkFee?: ValidationSuggestion<u.Fixed8>;
+    systemFee?: ValidationSuggestion<u.BigInteger>;
+    networkFee?: ValidationSuggestion<u.BigInteger>;
   };
 }
 
@@ -120,7 +120,7 @@ export class TransactionValidator {
   }
 
   private _validateSystemFee(
-    minimumSystemFee: u.Fixed8,
+    minimumSystemFee: u.BigInteger,
     autoFix = false
   ): ValidationResult {
     const { systemFee } = this.transaction;
@@ -136,10 +136,7 @@ export class TransactionValidator {
           },
         },
       };
-    } else if (
-      minimumSystemFee.isGreaterThan(systemFee) ||
-      !systemFee.equals(systemFee.ceil())
-    ) {
+    } else if (minimumSystemFee.compare(systemFee) > 0) {
       return {
         valid: false,
         result: {
@@ -150,7 +147,7 @@ export class TransactionValidator {
           },
         },
       };
-    } else if (minimumSystemFee.isLessThan(systemFee)) {
+    } else if (minimumSystemFee.compare(systemFee) < 0) {
       return {
         valid: true,
         result: {
@@ -191,9 +188,7 @@ export class TransactionValidator {
       };
     }
 
-    const minimumSystemFee = new u.Fixed8(parseFloat(gasConsumed))
-      .mul(1e-8)
-      .ceil();
+    const minimumSystemFee = u.BigInteger.fromNumber(gasConsumed);
     return this._validateSystemFee(minimumSystemFee, autoFix);
   }
 
@@ -216,7 +211,7 @@ export class TransactionValidator {
           },
         },
       };
-    } else if (minimumNetworkFee.isGreaterThan(networkFee)) {
+    } else if (minimumNetworkFee.compare(networkFee) > 0) {
       return {
         valid: false,
         result: {
@@ -227,7 +222,7 @@ export class TransactionValidator {
           },
         },
       };
-    } else if (minimumNetworkFee.isLessThan(networkFee)) {
+    } else if (minimumNetworkFee.compare(networkFee) < 0) {
       return {
         valid: true,
         result: {

@@ -128,8 +128,8 @@ describe.skip("validateSystemFee", () => {
         result: {
           systemFee: {
             fixed: false,
-            prev: new u.Fixed8(0),
-            suggestion: new u.Fixed8(1),
+            prev: u.BigInteger.fromNumber(0),
+            suggestion: u.BigInteger.fromNumber(1),
           },
         },
       });
@@ -152,8 +152,8 @@ describe.skip("validateSystemFee", () => {
         result: {
           systemFee: {
             fixed: false,
-            prev: new u.Fixed8(10.1),
-            suggestion: new u.Fixed8(1),
+            prev: u.BigInteger.fromNumber(10.1),
+            suggestion: u.BigInteger.fromNumber(1),
           },
         },
       });
@@ -166,7 +166,7 @@ describe.skip("validateSystemFee", () => {
       const script = sc.createScript({
         scriptHash: CONST.ASSET_ID.NEO,
         operation: "transfer",
-        args: [addressInHash160, addressInHash160, 1],
+        args: [addressInHash160, addressInHash160, sc.ContractParam.integer(1)],
       });
       const transaction = new TransactionBuilder({
         script,
@@ -243,7 +243,7 @@ describe.skip("validateSystemFee", () => {
 describe.skip("validateNetworkFee", () => {
   test("valid", async () => {
     const transaction = new TransactionBuilder({
-      scripts: [sig, multiSig],
+      witnesses: [sig, multiSig],
       networkFee: 0.0237654,
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
@@ -253,7 +253,7 @@ describe.skip("validateNetworkFee", () => {
 
   test("invalid", async () => {
     const transaction = new TransactionBuilder({
-      scripts: [sig, multiSig],
+      witnesses: [sig, multiSig],
       networkFee: 0.01,
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
@@ -263,7 +263,7 @@ describe.skip("validateNetworkFee", () => {
 
   test("autoFix", async () => {
     const transaction = new TransactionBuilder({
-      scripts: [sig, multiSig],
+      witnesses: [sig, multiSig],
       networkFee: 0.01,
     }).build();
     const validator = new TransactionValidator(rpcClient, transaction);
@@ -294,7 +294,7 @@ describe.skip("validateAll", () => {
         tx.Transaction.MAX_TRANSACTION_LIFESPAN +
         (await rpcClient.getBlockCount()) -
         1,
-      scripts: [sig, multiSig],
+      witnesses: [sig, multiSig],
       networkFee: 0.1,
       script,
       systemFee: 1,
@@ -315,7 +315,7 @@ describe.skip("validateAll", () => {
         tx.Transaction.MAX_TRANSACTION_LIFESPAN +
         (await rpcClient.getBlockCount()) -
         1,
-      scripts: [sig, multiSig],
+      witnesses: [sig, multiSig],
       networkFee: 0.01,
       script,
       systemFee: 1.1,
@@ -337,7 +337,7 @@ describe.skip("validateAll", () => {
           tx.Transaction.MAX_TRANSACTION_LIFESPAN +
           (await rpcClient.getBlockCount()) -
           1,
-        scripts: [sig, multiSig],
+        witnesses: [sig, multiSig],
         networkFee: 0.01,
         script,
         systemFee: 1.1,
@@ -352,13 +352,13 @@ describe.skip("validateAll", () => {
         result: {
           systemFee: {
             fixed: true,
-            prev: new u.Fixed8(1.1),
-            suggestion: new u.Fixed8(1),
+            prev: u.BigInteger.fromNumber(1.1),
+            suggestion: u.BigInteger.fromNumber(1),
           },
           networkFee: {
             fixed: true,
-            prev: new u.Fixed8(0.01),
-            suggestion: new u.Fixed8(0.0240954),
+            prev: u.BigInteger.fromNumber(0.01),
+            suggestion: u.BigInteger.fromNumber(0.0240954),
           },
         },
       });
@@ -375,7 +375,7 @@ describe.skip("validateAll", () => {
           tx.Transaction.MAX_TRANSACTION_LIFESPAN +
           (await rpcClient.getBlockCount()) -
           1,
-        scripts: [sig, multiSig],
+        witnesses: [sig, multiSig],
         networkFee: 0.01,
         script,
         systemFee: 1.1,
@@ -390,13 +390,13 @@ describe.skip("validateAll", () => {
         result: {
           systemFee: {
             fixed: true,
-            prev: new u.Fixed8(1.1),
-            suggestion: new u.Fixed8(1),
+            prev: u.BigInteger.fromNumber(1.1),
+            suggestion: u.BigInteger.fromNumber(1),
           },
           networkFee: {
             fixed: false,
-            prev: new u.Fixed8(0.01),
-            suggestion: new u.Fixed8(0.0240954),
+            prev: u.BigInteger.fromNumber(0.01),
+            suggestion: u.BigInteger.fromNumber(0.0240954),
           },
         },
       });

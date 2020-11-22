@@ -1,5 +1,5 @@
 import { StackItemJson } from "../sc";
-import { Fixed8, hexstring2str } from "../u";
+import { BigInteger, hexstring2str } from "../u";
 import { InvokeResult } from "./Query";
 
 export type StackItemParser = (item: StackItemJson) => unknown;
@@ -53,11 +53,11 @@ export function StringParser(item: StackItemJson): string {
 /**
  * Parses the result to a Fixed8.
  */
-export function Fixed8Parser(item: StackItemJson): Fixed8 {
+export function Fixed8Parser(item: StackItemJson): number {
   if (typeof item.value !== "string") {
     throw new Error("value received is not a string");
   }
-  return Fixed8.fromReverseHex(item.value);
+  return parseFloat(BigInteger.fromHex(item.value, true).toDecimal(8));
 }
 
 /**

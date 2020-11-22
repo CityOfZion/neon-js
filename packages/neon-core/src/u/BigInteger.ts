@@ -118,7 +118,8 @@ export class BigInteger {
     input: number | string,
     decimals: number
   ): BigInteger {
-    const stringNumber = typeof input === "number" ? input.toString() : input;
+    const stringNumber =
+      typeof input === "number" ? input.toFixed(decimals) : input;
 
     const portions = stringNumber.split(".", 2);
     const leftOfDecimal = portions[0];
@@ -135,7 +136,6 @@ export class BigInteger {
       leftOfDecimal +
       rightOfDecimal +
       "0".repeat(decimals - rightOfDecimal.length);
-
     return BigInteger.fromNumber(finalNumber);
   }
 
@@ -201,16 +201,14 @@ export class BigInteger {
     if (decimals === 0) {
       return this.#value.toString();
     }
-
     const sign = this.#value.isNeg() ? "-" : "";
     const stringNumber = this.#value.abs().toString(10);
     if (stringNumber.length <= decimals) {
       return sign + "0." + stringNumber.padStart(decimals, "0");
     }
     const leftOfDecimal = stringNumber.slice(0, stringNumber.length - decimals);
-    return (
-      sign + leftOfDecimal + "." + stringNumber.slice(leftOfDecimal.length)
-    );
+    const rightOfDecimal = stringNumber.slice(leftOfDecimal.length);
+    return sign + leftOfDecimal + "." + rightOfDecimal;
   }
 
   /**

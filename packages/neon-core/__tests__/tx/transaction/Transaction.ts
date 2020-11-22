@@ -16,8 +16,8 @@ describe("constructor", () => {
     expect(result.version).toBe(0);
     expect(result.nonce).toBeDefined();
     expect(result.validUntilBlock).toBeDefined();
-    expect(result.systemFee.toNumber()).toBe(0);
-    expect(result.networkFee.toNumber()).toBe(0);
+    expect(parseFloat(result.systemFee.toDecimal(8))).toBe(0);
+    expect(parseFloat(result.networkFee.toDecimal(8))).toBe(0);
     expect(result.script.toBigEndian()).toEqual("");
   });
 
@@ -26,8 +26,8 @@ describe("constructor", () => {
       version: 1,
       nonce: 1,
       validUntilBlock: 1000,
-      systemFee: 1,
-      networkFee: 10,
+      systemFee: "1",
+      networkFee: "10",
       script: "00",
     } as Partial<TransactionLike>;
 
@@ -36,8 +36,8 @@ describe("constructor", () => {
     expect(result.version).toBe(testObject.version);
     expect(result.nonce).toBe(testObject.nonce);
     expect(result.validUntilBlock).toBe(testObject.validUntilBlock);
-    expect(result.systemFee.toNumber()).toBe(testObject.systemFee);
-    expect(result.networkFee.toNumber()).toBe(testObject.networkFee);
+    expect(result.systemFee.toString()).toBe(testObject.systemFee);
+    expect(result.networkFee.toString()).toBe(testObject.networkFee);
     expect(result.script.toBigEndian()).toEqual(testObject.script);
   });
 
@@ -63,7 +63,7 @@ describe("getters", () => {
       systemFee: 2,
       networkFee: 4,
     });
-    expect(tx.fees).toBe(6);
+    expect(tx.fees).toBe("6");
   });
 
   test("sender", () => {
@@ -109,8 +109,8 @@ describe("export", () => {
   const expected = {
     version: 1,
     nonce: 123,
-    systemFee: 12,
-    networkFee: 13,
+    systemFee: "12",
+    networkFee: "13",
     validUntilBlock: 1000,
     signers: [
       {
@@ -188,8 +188,8 @@ describe("Add Methods", () => {
     return new Transaction({
       version: 0,
       nonce: 123,
-      systemFee: 12,
-      networkFee: 13,
+      systemFee: "1200000000",
+      networkFee: "1300000000",
       validUntilBlock: 1000,
       signers: [
         {

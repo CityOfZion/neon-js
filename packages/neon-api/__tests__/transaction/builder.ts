@@ -123,8 +123,8 @@ describe("setter", () => {
 
   test("setFee", () => {
     const transaction = new TransactionBuilder()
-      .setSystemFee(new u.Fixed8(10))
-      .setNetworkFee(new u.Fixed8(2))
+      .setSystemFee(u.BigInteger.fromNumber(10))
+      .setNetworkFee(u.BigInteger.fromNumber(2))
       .build();
     expect(transaction.systemFee.equals(10)).toBeTruthy();
     expect(transaction.networkFee.equals(2)).toBeTruthy();

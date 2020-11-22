@@ -36,12 +36,12 @@ export class TransactionBuilder {
     return this;
   }
 
-  public setSystemFee(fee: u.Fixed8): this {
+  public setSystemFee(fee: u.BigInteger): this {
     this._config.systemFee = fee;
     return this;
   }
 
-  public setNetworkFee(fee: u.Fixed8): this {
+  public setNetworkFee(fee: u.BigInteger): this {
     this._config.networkFee = fee;
     return this;
   }
