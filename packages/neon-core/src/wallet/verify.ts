@@ -47,19 +47,13 @@ export function isNEP2(nep2: string): boolean {
  * Verifies a WIF using its checksum.
  */
 export function isWIF(wif: string): boolean {
-  try {
-    if (wif.length !== 52) {
-      return false;
-    }
-    const hexStr = ab2hexstring(base58.decode(wif));
-    const shaChecksum = hash256(hexStr.substr(0, hexStr.length - 8)).substr(
-      0,
-      8
-    );
-    return shaChecksum === hexStr.substr(hexStr.length - 8, 8);
-  } catch (e) {
+  if (wif.length !== 52) {
     return false;
   }
+  const assembledKeyWithChecksum = ab2hexstring(base58.decode(wif));
+  const assembledKey = assembledKeyWithChecksum.substr(0, 68);
+  const checksum = assembledKeyWithChecksum.substr(-8);
+  return hash256(assembledKey).substr(0, 8) === checksum;
 }
 
 /**

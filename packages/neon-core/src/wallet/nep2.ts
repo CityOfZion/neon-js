@@ -4,7 +4,6 @@
  * This encrypts your private key with a passphrase, protecting your private key from being stolen and used.
  * It is useful for storing private keys in a JSON file securely or to mask the key before printing it.
  */
-import bs58check from "bs58check"; // This is importable because WIF specifies it as a dependency.
 import AES from "crypto-js/aes";
 import hexEncoding from "crypto-js/enc-hex";
 import latin1Encoding from "crypto-js/enc-latin1";
@@ -15,7 +14,7 @@ import { lib } from "crypto-js";
 import { scrypt } from "scrypt-js";
 import { DEFAULT_SCRYPT, NEP_FLAG, NEP_HEADER } from "../consts";
 import logging from "../logging";
-import { ab2hexstring, hexXor, hash160, hash256 } from "../u";
+import { ab2hexstring, hexXor, hash160, hash256, hexstring2ab } from "../u";
 import { isWIF } from "./verify";
 import {
   getPrivateKeyFromWIF,
@@ -78,7 +77,9 @@ async function createNep2Key(
   );
   const assembled =
     NEP_HEADER + NEP_FLAG + addressHash + encrypted.ciphertext.toString();
-  const encryptedKey = bs58check.encode(Buffer.from(assembled, "hex"));
+
+  const checksum = hash256(assembled).substr(0, 8);
+  const encryptedKey = base58.encode(hexstring2ab(assembled + checksum));
   log.info(`Successfully encrypted key to ${encryptedKey}`);
   return encryptedKey;
 }
@@ -129,7 +130,16 @@ async function decipherNep2Key(
   scryptParams: ScryptParams
 ): Promise<string> {
   const { n, r, p } = scryptParams;
-  const assembled = ab2hexstring(bs58check.decode(encryptedKey));
+  const assembledWithChecksum = ab2hexstring(base58.decode(encryptedKey));
+  const assembled = assembledWithChecksum.substr(
+    0,
+    assembledWithChecksum.length - 8
+  );
+  const checksum = assembledWithChecksum.substr(-8);
+  if (hash256(assembled).substr(0, 8) !== checksum) {
+    throw new Error("Base58 checksum failed.");
+  }
+
   const addressHash = assembled.substr(6, 8);
   const encrypted = assembled.substr(-64);
 
