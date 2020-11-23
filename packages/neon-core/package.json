@@ -42,14 +42,12 @@
     "bignumber.js": "7.2.1",
     "bn.js": "5.1.1",
     "bs58": "4.0.1",
-    "bs58check": "2.1.2",
     "crypto-js": "3.3.0",
     "elliptic": "6.5.3",
     "loglevel": "1.6.8",
     "loglevel-plugin-prefix": "0.8.4",
     "scrypt-js": "3.0.1",
-    "secure-random": "1.1.2",
-    "wif": "2.0.6"
+    "secure-random": "1.1.2"
   },
   "devDependencies": {
     "@types/bn.js": "4.11.6",

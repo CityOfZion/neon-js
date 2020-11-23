@@ -13,7 +13,6 @@
  */
 import base58 from "bs58";
 import { Buffer } from "buffer";
-import WIF from "wif";
 import { ADDR_VERSION } from "../consts";
 import {
   ab2hexstring,
@@ -57,14 +56,19 @@ export function getPublicKeyUnencoded(publicKey: string): string {
  * Converts a WIF to private key.
  */
 export function getPrivateKeyFromWIF(wif: string): string {
-  return ab2hexstring(WIF.decode(wif, 128).privateKey);
+  const assembledKeyWithChecksum = ab2hexstring(base58.decode(wif));
+  return assembledKeyWithChecksum.substr(2, 64);
 }
 
 /**
  * Converts a private key to WIF.
  */
 export function getWIFFromPrivateKey(privateKey: string): string {
-  return WIF.encode(128, Buffer.from(privateKey, "hex"), true);
+  const assembledKey = "80" + privateKey + "01";
+  const hashed = hash256(assembledKey);
+  const checksum = hashed.substr(0, 8); // first 4 bytes
+  const assembledKeyWithChecksum = assembledKey + checksum;
+  return base58.encode(hexstring2ab(assembledKeyWithChecksum));
 }
 
 /**
