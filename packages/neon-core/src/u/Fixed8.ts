@@ -20,6 +20,7 @@ const TOTAL_FIXED8_HEX = new BN(2).pow(64);
  * It uses a signed 64-bit integer divided by 10^8. This allows it to accurately represent 8 decimal places.
  * Supports up to 8 decimals and is 8 bytes long.
  *
+ * @deprecated Please use BigInteger instead. This will be removed in the first minor update.
  * @example
  * const zero = new Fixed8();
  * const fromNumber = new Fixed8(12345);

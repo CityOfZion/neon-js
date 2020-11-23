@@ -17,6 +17,7 @@ describe("buildParser", () => {
         state: "HALT",
         gasconsumed: "0",
         stack: [{ type: "Integer", value: "1" }],
+        exception: null,
       })
     ).toThrow("Wrong number of items to parse!");
   });
@@ -73,6 +74,7 @@ describe("SimpleParser", () => {
         { type: "ByteString", value: "525058" },
         { type: "Integer", value: "1" },
       ],
+      exception: null,
     });
     expect(result).toEqual(["RPX", 1]);
   });

@@ -45,8 +45,8 @@ describe("multisig", () => {
         },
       ],
       validUntilBlock: currentHeight + 1000000,
-      systemFee: 1,
-      networkFee: 1,
+      systemFee: "100000001",
+      networkFee: "100000001",
       script,
     })
       .sign(testWallet.accounts[0], 1234567890, 1024)

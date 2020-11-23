@@ -144,7 +144,9 @@ export async function getSystemFee(
     if (response.state === "FAULT") {
       throw Error("Script execution failed. ExecutionEngine state = FAULT");
     }
-    return u.Fixed8.fromRawNumber(response.gasconsumed).toNumber();
+    return parseFloat(
+      u.BigInteger.fromNumber(response.gasconsumed).toDecimal(8)
+    );
   } catch (e) {
     throw new Error(`Failed to get system fee. ${e}`);
   }
@@ -186,8 +188,9 @@ export async function addFees(
   transaction: tx.Transaction,
   config: CommonConfig
 ): Promise<void> {
-  transaction.systemFee = new u.Fixed8(
-    await getSystemFee(transaction.script, config, transaction.signers)
+  transaction.systemFee = u.BigInteger.fromDecimal(
+    await getSystemFee(transaction.script, config, transaction.signers),
+    8
   );
 
   if (config.account === undefined)
@@ -195,15 +198,16 @@ export async function addFees(
       "Cannot determine network fee and validate balances without an account in your config"
     );
 
-  transaction.networkFee = new u.Fixed8(
-    await calculateNetworkFee(transaction, config.account, config)
-  ).div(100_000_000);
+  transaction.networkFee = u.BigInteger.fromDecimal(
+    await calculateNetworkFee(transaction, config.account, config),
+    8
+  );
 
   const GAS = new GASContract(config);
   const GASBalance = await GAS.balanceOf(config.account.address);
-  const requiredGAS = transaction.systemFee
-    .add(transaction.networkFee)
-    .toNumber();
+  const requiredGAS = parseFloat(
+    transaction.systemFee.add(transaction.networkFee).toDecimal(8)
+  );
   if (GASBalance < requiredGAS) {
     throw new Error(
       `Insufficient GAS. Required: ${requiredGAS} Available: ${GASBalance}`

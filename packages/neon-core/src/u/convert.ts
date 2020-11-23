@@ -1,4 +1,4 @@
-import Fixed8 from "./Fixed8";
+import { BigInteger } from "./BigInteger";
 import { ensureHex, reverseHex } from "./misc";
 
 /**
@@ -129,6 +129,8 @@ export function num2hexstring(
  * @param num - the value to convert
  * @param size - output size in bytes
  * @returns number in Fixed8 representation.
+ *
+ * @deprecated BigInteger.fromDecimal(num,8).toHex()
  */
 export function num2fixed8(num: number, size = 8): string {
   if (typeof num !== "number") {
@@ -141,19 +143,18 @@ export function num2fixed8(num: number, size = 8): string {
       `num2fixed8 expected an integer for argument size but got ${size} instead.`
     );
   }
-  return new Fixed8(num).toReverseHex().slice(0, size * 2);
+  const hexString = BigInteger.fromDecimal(num, 8).toReverseTwos();
+  return hexString.padEnd(size * 2, "0");
 }
 
 /**
  * Converts a Fixed8 hex string to its original number
  * @param fixed8hex - number in Fixed8 representation
+ *
+ * @deprecated  parseInt(BigInteger.fromTwos(fixed8hex, true).toDecimal(8))
  */
 export function fixed82num(fixed8hex: string): number {
-  ensureHex(fixed8hex);
-  if (fixed8hex === "") {
-    return 0;
-  }
-  return Fixed8.fromReverseHex(fixed8hex).toNumber();
+  return parseFloat(BigInteger.fromTwos(fixed8hex, true).toDecimal(8));
 }
 
 /**

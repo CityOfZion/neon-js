@@ -1,5 +1,4 @@
-import { HexString } from "@cityofzion/neon-core/lib/u";
-import { CONST, rpc, wallet, sc, tx } from "@cityofzion/neon-core";
+import { CONST, rpc, wallet, sc, tx, u } from "@cityofzion/neon-core";
 import { CommonConfig } from "../";
 import { setBlockExpiry, addFees } from "../helpers";
 import { enc } from "crypto-js";
@@ -12,14 +11,14 @@ export class Nep5Contract {
   /**
    * Base class for communicating with NEP-5 contracts on the block chain.
    */
-  public contractHash: HexString;
+  public contractHash: u.HexString;
   protected config: CommonConfig;
   protected rpcClient: rpc.RPCClient;
   private _decimals?: number;
   private _name?: string;
   private _symbol?: string;
 
-  public constructor(contractHash: HexString, config: CommonConfig) {
+  public constructor(contractHash: u.HexString, config: CommonConfig) {
     this.contractHash = contractHash;
     this.config = config;
     this.rpcClient = new rpc.RPCClient(config.rpcAddress);
@@ -184,13 +183,13 @@ export class Nep5Contract {
     const amount_to_transfer =
       decimals == 0 ? amount : amount * Math.pow(10, decimals);
     builder.emitAppCall(this.contractHash, "transfer", [
-      HexString.fromHex(wallet.getScriptHashFromAddress(from)),
-      HexString.fromHex(wallet.getScriptHashFromAddress(to)),
+      u.HexString.fromHex(wallet.getScriptHashFromAddress(from)),
+      u.HexString.fromHex(wallet.getScriptHashFromAddress(to)),
       amount_to_transfer,
     ]);
     builder.emit(sc.OpCode.ASSERT);
     const transaction = new tx.Transaction();
-    transaction.script = HexString.fromHex(builder.build());
+    transaction.script = u.HexString.fromHex(builder.build());
 
     await setBlockExpiry(
       transaction,
@@ -219,7 +218,7 @@ export class NEOContract extends Nep5Contract {
    */
 
   constructor(config: CommonConfig) {
-    super(HexString.fromHex(CONST.ASSET_ID.NEO), config);
+    super(u.HexString.fromHex(CONST.ASSET_ID.NEO), config);
   }
 
   /**
@@ -251,7 +250,7 @@ export class NEOContract extends Nep5Contract {
     }
 
     const unclaimed = await this.rpcClient.getUnclaimedGas(address);
-    if (unclaimed < 0.5) {
+    if (u.BigInteger.fromNumber(unclaimed).compare(50000000) < 0) {
       throw new Error("Minimum claim value is 0.5");
     }
 
@@ -267,7 +266,11 @@ export class NEOContract extends Nep5Contract {
     if (!wallet.isAddress(address)) {
       throw new Error("From address is not a valid NEO address");
     }
-    return await this.rpcClient.getUnclaimedGas(address);
+    return parseFloat(
+      u.BigInteger.fromNumber(
+        await this.rpcClient.getUnclaimedGas(address)
+      ).toDecimal(8)
+    );
   }
 }
 
@@ -277,6 +280,6 @@ export class GASContract extends Nep5Contract {
    * @param config -
    */
   constructor(config: CommonConfig) {
-    super(HexString.fromHex(CONST.ASSET_ID.GAS), config);
+    super(u.HexString.fromHex(CONST.ASSET_ID.GAS), config);
   }
 }

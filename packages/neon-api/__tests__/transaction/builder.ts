@@ -8,11 +8,11 @@ describe("constructor", () => {
     expect(txBuilder.build().export()).toEqual({
       attributes: [],
       signers: [],
-      networkFee: 0,
+      networkFee: "0",
       nonce: 1,
       script: "",
       witnesses: [],
-      systemFee: 0,
+      systemFee: "0",
       validUntilBlock: 0,
       version: 0,
     });
@@ -28,11 +28,11 @@ describe("constructor", () => {
     expect(txBuilder.build().export()).toEqual({
       attributes: [],
       signers: [],
-      networkFee: 1000,
+      networkFee: "1000",
       nonce: 1,
       script: "abcd",
       witnesses: [],
-      systemFee: 100,
+      systemFee: "100",
       validUntilBlock: 0,
       version: 0,
     });
@@ -123,8 +123,8 @@ describe("setter", () => {
 
   test("setFee", () => {
     const transaction = new TransactionBuilder()
-      .setSystemFee(new u.Fixed8(10))
-      .setNetworkFee(new u.Fixed8(2))
+      .setSystemFee(u.BigInteger.fromNumber(10))
+      .setNetworkFee(u.BigInteger.fromNumber(2))
       .build();
     expect(transaction.systemFee.equals(10)).toBeTruthy();
     expect(transaction.networkFee.equals(2)).toBeTruthy();

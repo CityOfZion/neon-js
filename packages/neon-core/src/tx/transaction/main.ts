@@ -1,4 +1,4 @@
-import { StringStream, fixed82num, ensureHex, reverseHex } from "../../u";
+import { StringStream, ensureHex, reverseHex, BigInteger } from "../../u";
 import { TransactionAttribute, Witness, Signer } from "../components";
 import { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
@@ -42,8 +42,8 @@ export function deserializeFee(
   ss: StringStream,
   tx: Partial<TransactionLike> = {}
 ): Partial<TransactionLike> {
-  const systemFee = fixed82num(ss.read(8));
-  const networkFee = fixed82num(ss.read(8));
+  const systemFee = BigInteger.fromTwos(ss.read(8), true);
+  const networkFee = BigInteger.fromTwos(ss.read(8), true);
   return Object.assign(tx, { systemFee, networkFee });
 }
 

@@ -12,7 +12,6 @@ import {
 } from "../Query";
 import { BlockJson, BlockHeaderJson, Validator } from "../../types";
 import { RpcDispatcher, RpcDispatcherMixin } from "./RpcDispatcher";
-import { Fixed8 } from "../../u";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
 export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
@@ -253,11 +252,11 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
     }
 
     /**
-     * Get the amount of unclaimed GAS for a NEO address.
+     * Get the amount of unclaimed GAS for a NEO address. This is returned as the raw value. To get the display value, divide this by 100000000.
      */
-    public async getUnclaimedGas(addr: string): Promise<number> {
+    public async getUnclaimedGas(addr: string): Promise<string> {
       const response = await this.execute(Query.getUnclaimedGas(addr));
-      return Fixed8.fromRawNumber(response.unclaimed).toNumber();
+      return response.unclaimed;
     }
   };
 }

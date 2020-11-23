@@ -45,8 +45,8 @@ function isMultiSig(verificationScript: string): boolean {
   );
 }
 
-export function getNetworkFee(transaction: tx.Transaction): u.Fixed8 {
-  let networkFee = new u.Fixed8(0e-8);
+export function getNetworkFee(transaction: tx.Transaction): u.BigInteger {
+  let networkFee = u.BigInteger.fromNumber(0);
   const verificationScripts = getVerificationScriptsFromWitnesses(transaction);
   verificationScripts.forEach((verificationScript) => {
     if (isMultiSig(verificationScript)) {
@@ -63,7 +63,7 @@ export function getNetworkFee(transaction: tx.Transaction): u.Fixed8 {
   });
   const size = transaction.serialize(true).length / 2;
   networkFee = networkFee.add(
-    new u.Fixed8(size).multipliedBy(CONST.POLICY_FEE_PERBYTE)
+    u.BigInteger.fromNumber(size).mul(CONST.POLICY_FEE_PERBYTE)
   );
   return networkFee;
 }
