@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@ledgerhq/hw-transport": "5.22.0",
-    "@types/ledgerhq__hw-transport": "4.21.2"
+    "@types/ledgerhq__hw-transport": "4.21.3"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "^4.0.0"
@@ -47,8 +47,8 @@
   ],
   "devDependencies": {
     "@cityofzion/neon-js": "^4.8.0",
-    "@ledgerhq/hw-transport-node-hid": "5.25.0",
-    "@ledgerhq/hw-transport-u2f": "5.25.3",
+    "@ledgerhq/hw-transport-node-hid": "5.30.0",
+    "@ledgerhq/hw-transport-u2f": "5.30.0",
     "@types/ledgerhq__hw-transport-node-hid": "4.22.2"
   }
 }

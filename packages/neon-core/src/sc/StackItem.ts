@@ -158,7 +158,7 @@ export class StackItem {
 }
 
 function isStackItemLike(i: unknown): i is StackItemLike {
-  return i && typeof i === "object" && "type" in i;
+  return typeof i === "object" && i !== null && "type" in i;
 }
 
 function isStackItemLikeArray(arr: unknown[]): arr is StackItemLike[] {
