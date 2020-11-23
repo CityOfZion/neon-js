@@ -78,7 +78,9 @@ export class Transaction implements NeonObject<TransactionLike> {
    * transation invoker in script hash in big endian
    */
   public get sender(): HexString {
-    return this.signers[0].account;
+    return this.signers && this.signers.length > 0
+      ? this.signers[0].account
+      : HexString.fromHex("");
   }
 
   /**
@@ -341,7 +343,10 @@ export class Transaction implements NeonObject<TransactionLike> {
       size: this.size,
       version: this.version,
       nonce: this.nonce,
-      sender: getAddressFromScriptHash(this.sender.toBigEndian()),
+      sender:
+        this.sender.byteLength === 0
+          ? ""
+          : getAddressFromScriptHash(this.sender.toBigEndian()),
       sysfee: this.systemFee.toString(),
       netfee: this.networkFee.toString(),
       validuntilblock: this.validUntilBlock,

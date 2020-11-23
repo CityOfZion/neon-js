@@ -8,11 +8,11 @@ describe("constructor", () => {
     expect(txBuilder.build().export()).toEqual({
       attributes: [],
       signers: [],
-      networkFee: 0,
+      networkFee: "0",
       nonce: 1,
       script: "",
       witnesses: [],
-      systemFee: 0,
+      systemFee: "0",
       validUntilBlock: 0,
       version: 0,
     });
@@ -28,11 +28,11 @@ describe("constructor", () => {
     expect(txBuilder.build().export()).toEqual({
       attributes: [],
       signers: [],
-      networkFee: 1000,
+      networkFee: "1000",
       nonce: 1,
       script: "abcd",
       witnesses: [],
-      systemFee: 100,
+      systemFee: "100",
       validUntilBlock: 0,
       version: 0,
     });
