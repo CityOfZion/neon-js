@@ -368,8 +368,8 @@ describe("RPC Methods", () => {
         },
       ],
       validUntilBlock: currentHeight + 1000000,
-      systemFee: 1,
-      networkFee: 1,
+      systemFee: "100000000",
+      networkFee: "100000000",
       script: script,
     }).sign(fromAccount, 1234567890);
     const result = await client.sendRawTransaction(transaction.serialize(true));
