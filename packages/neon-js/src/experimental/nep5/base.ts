@@ -1,11 +1,6 @@
 import { CONST, rpc, wallet, sc, tx, u } from "@cityofzion/neon-core";
-import { CommonConfig } from "../";
+import { CommonConfig } from "../types";
 import { setBlockExpiry, addFees } from "../helpers";
-import { enc } from "crypto-js";
-
-function base64decode(input: string): string {
-  return enc.Utf8.stringify(enc.Base64.parse(input));
-}
 
 export class Nep5Contract {
   /**
@@ -88,7 +83,7 @@ export class Nep5Contract {
       if (response.state === "FAULT") {
         throw Error;
       }
-      this._name = base64decode(response.stack[0].value as string);
+      this._name = u.utf82base64(response.stack[0].value as string);
       return this._name;
     } catch (e) {
       throw new Error(
@@ -112,7 +107,7 @@ export class Nep5Contract {
         throw Error;
       }
 
-      this._symbol = base64decode(response.stack[0].value as string);
+      this._symbol = u.utf82base64(response.stack[0].value as string);
       return this._symbol;
     } catch (e) {
       throw new Error(

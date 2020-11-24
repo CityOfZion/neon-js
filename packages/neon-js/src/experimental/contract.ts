@@ -1,17 +1,16 @@
-import { HexString } from "@cityofzion/neon-core/lib/u";
-import { CommonConfig } from "./index";
-import { rpc, tx, sc } from "@cityofzion/neon-core";
+import { CommonConfig } from "./types";
+import { rpc, tx, sc, u } from "@cityofzion/neon-core";
 import { addFees, setBlockExpiry } from "./helpers";
 
 export class SmartContract {
   /**
    * A class for communicating with smart contracts on the block chain.
    */
-  public contractHash: HexString;
+  public contractHash: u.HexString;
   protected config: CommonConfig;
   protected rpcClient: rpc.RPCClient;
 
-  public constructor(contractHash: HexString, config: CommonConfig) {
+  public constructor(contractHash: u.HexString, config: CommonConfig) {
     this.contractHash = contractHash;
     this.config = config;
     this.rpcClient = new rpc.RPCClient(config.rpcAddress);
@@ -58,7 +57,7 @@ export class SmartContract {
     builder.emitAppCall(this.contractHash.toString(), operation, params);
 
     const transaction = new tx.Transaction();
-    transaction.script = HexString.fromHex(builder.build());
+    transaction.script = u.HexString.fromHex(builder.build());
 
     await setBlockExpiry(
       transaction,
