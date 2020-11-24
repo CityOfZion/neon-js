@@ -1,11 +1,5 @@
 import { CONST, rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
-import { CommonConfig } from "./index";
-import {
-  HexString,
-  reverseHex,
-  StringStream,
-} from "@cityofzion/neon-core/lib/u";
-import { Signer } from "@cityofzion/neon-core/lib/tx";
+import { CommonConfig } from "./types";
 import { GASContract } from "./nep5";
 
 /**
@@ -37,7 +31,7 @@ export async function calculateNetworkFee(
   hashes.map((hash) => {
     let witnessScript;
     if (hash === account.scriptHash && account.contract.script !== undefined) {
-      witnessScript = HexString.fromBase64(account.contract.script);
+      witnessScript = u.HexString.fromBase64(account.contract.script);
     }
 
     if (witnessScript === undefined && transaction.witnesses.length > 0) {
@@ -134,9 +128,9 @@ export async function calculateNetworkFee(
  * @param signers - signers to set while running the script
  */
 export async function getSystemFee(
-  script: HexString,
+  script: u.HexString,
   config: CommonConfig,
-  signers?: Signer[]
+  signers?: tx.Signer[]
 ): Promise<number> {
   const rpcClient = new rpc.RPCClient(config.rpcAddress);
   try {
@@ -228,18 +222,18 @@ export async function deployContract(
 ): Promise<string> {
   const builder = new sc.ScriptBuilder();
   const script_size_offset = 76;
-  const nef_script_with_size = new StringStream(
+  const nef_script_with_size = new u.StringStream(
     NEF.slice(script_size_offset).toString("hex")
   );
 
   builder.emitSysCall(
     sc.InteropServiceCode.SYSTEM_CONTRACT_CREATE,
-    HexString.fromHex(reverseHex(nef_script_with_size.readVarBytes())),
+    u.HexString.fromHex(u.reverseHex(nef_script_with_size.readVarBytes())),
     JSON.stringify(manifest.toJson())
   );
 
   const transaction = new tx.Transaction();
-  transaction.script = HexString.fromHex(builder.build());
+  transaction.script = u.HexString.fromHex(builder.build());
 
   await setBlockExpiry(transaction, config, config.blocksTillExpiry);
 
