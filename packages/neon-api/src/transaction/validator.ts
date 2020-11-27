@@ -11,9 +11,9 @@ export enum ValidationAttributes {
 }
 
 export type ValidationSuggestion<T> = {
+  valid: boolean;
   /**
-   * Whether this is auto-fixed by validator
-   * Validator will try to fix the transaction when param `autoFix` is set to TRUE
+   * Whether this is auto-fixed by validator.
    */
   fixed: boolean;
   prev?: T;
@@ -26,9 +26,9 @@ export interface ValidationResult {
    * Whether the transaction is valid after validation
    */
   valid: boolean;
-  result?: {
+  result: {
     validUntilBlock?: ValidationSuggestion<number>;
-    script?: ValidationSuggestion<string>;
+    script?: ValidationSuggestion<void>;
     systemFee?: ValidationSuggestion<u.BigInteger>;
     networkFee?: ValidationSuggestion<u.BigInteger>;
   };
@@ -54,238 +54,215 @@ export class TransactionValidator {
   }
 
   /**
-   * validate transaction attribute - validUntilBlock
-   * @param autoFix - will automatically fix transaction if specified as true
+   * validate validUntilBlock.
+   * @param autoFix - autofix when number is below current height.
    */
   public async validateValidUntilBlock(
     autoFix = false
-  ): Promise<ValidationResult> {
-    const { validUntilBlock } = this.transaction;
+  ): Promise<ValidationSuggestion<number>> {
+    const { validUntilBlock: prev } = this.transaction;
     const height = await this.rpcClient.getBlockCount();
+    const suggestion = tx.Transaction.MAX_TRANSACTION_LIFESPAN + height - 1;
     if (
-      validUntilBlock <= height ||
-      validUntilBlock >= height + tx.Transaction.MAX_TRANSACTION_LIFESPAN
+      prev <= height ||
+      prev >= height + tx.Transaction.MAX_TRANSACTION_LIFESPAN
     ) {
-      const suggestion = tx.Transaction.MAX_TRANSACTION_LIFESPAN + height - 1;
       if (autoFix) {
         this.transaction.validUntilBlock = suggestion;
-        return {
-          valid: true,
-          result: {
-            validUntilBlock: {
-              fixed: true,
-              prev: validUntilBlock,
-              suggestion,
-            },
-          },
-        };
+        return fixed(prev, suggestion);
       }
-      return {
-        valid: false,
-        result: {
-          validUntilBlock: {
-            fixed: false,
-            prev: validUntilBlock,
-            suggestion,
-          },
-        },
-      };
+      return invalid(
+        prev,
+        suggestion,
+        "Your transaction lifespan was out of range."
+      );
     }
-    return {
-      valid: true,
-    };
+    if (prev - height <= 240) {
+      return suggest(
+        prev,
+        suggestion,
+        "Your transaction has a very limited lifespan. Consider increasing it."
+      );
+    }
+    return valid();
   }
 
   /**
    * Validate intents
    */
-  public async validateScript(): Promise<ValidationResult> {
+  public async validateScript(): Promise<ValidationSuggestion<void>> {
     const { state } = await this.rpcClient.invokeScript(
       this.transaction.script.toBigEndian()
     );
-    if (state === "FAULT") {
-      return {
-        valid: false,
-        result: {
-          script: {
-            fixed: false,
-            message: "Encountered FAULT when validating script.",
-          },
-        },
-      };
+    if (state !== "HALT") {
+      return err("Encountered FAULT when validating script.");
     }
-    return {
-      valid: true,
-    };
-  }
-
-  private _validateSystemFee(
-    minimumSystemFee: u.BigInteger,
-    autoFix = false
-  ): ValidationResult {
-    const { systemFee } = this.transaction;
-    if (autoFix && !minimumSystemFee.equals(systemFee)) {
-      this.transaction.systemFee = minimumSystemFee;
-      return {
-        valid: true,
-        result: {
-          systemFee: {
-            fixed: true,
-            prev: systemFee,
-            suggestion: minimumSystemFee,
-          },
-        },
-      };
-    } else if (minimumSystemFee.compare(systemFee) > 0) {
-      return {
-        valid: false,
-        result: {
-          systemFee: {
-            fixed: false,
-            prev: systemFee,
-            suggestion: minimumSystemFee,
-          },
-        },
-      };
-    } else if (minimumSystemFee.compare(systemFee) < 0) {
-      return {
-        valid: true,
-        result: {
-          systemFee: {
-            fixed: false,
-            prev: systemFee,
-            suggestion: minimumSystemFee,
-          },
-        },
-      };
-    }
-    return {
-      valid: true,
-    };
+    return valid();
   }
 
   /**
    * validate systemFee
-   * @param autoFix - will automatically fix transaction if specified as true
+   * @param autoFix - autofix when fee is too low.
    */
-  public async validateSystemFee(autoFix = false): Promise<ValidationResult> {
-    const { script } = this.transaction;
+  public async validateSystemFee(
+    autoFix = false
+  ): Promise<ValidationSuggestion<u.BigInteger>> {
+    const { script, systemFee: prev } = this.transaction;
     const {
       state,
       gasconsumed: gasConsumed,
     } = await this.rpcClient.invokeScript(script.toBigEndian());
 
     if (state === "FAULT") {
-      return {
-        valid: false,
-        result: {
-          systemFee: {
-            fixed: false,
-            message:
-              "Cannot get precise systemFee as script execution on node reports FAULT.",
-          },
-        },
-      };
+      return err(
+        "Cannot get precise systemFee as script execution on node reports FAULT."
+      );
     }
 
-    const minimumSystemFee = u.BigInteger.fromNumber(gasConsumed);
-    return this._validateSystemFee(minimumSystemFee, autoFix);
+    const suggestion = u.BigInteger.fromNumber(gasConsumed);
+    const compareResult = suggestion.compare(prev);
+    if (compareResult > 0) {
+      // Did not hit the minimum fees to run the script.
+      if (autoFix) {
+        this.transaction.systemFee = suggestion;
+        return fixed(prev, suggestion);
+      }
+      return invalid(
+        prev,
+        suggestion,
+        "Insufficient fees attached to run the script."
+      );
+    } else if (compareResult < 0) {
+      // Overpaying for the script.
+      return suggest(prev, suggestion, "Overpaying for running the script.");
+    }
+    return valid();
   }
 
   /**
    * Validate NetworkFee
-   * @param autoFix - will automatically fix transaction if specified as true
+   * @param autoFix - autofix when fee is too low.
    */
-  public async validateNetworkFee(autoFix = false): Promise<ValidationResult> {
-    const { networkFee } = this.transaction;
-    const minimumNetworkFee = getNetworkFee(this.transaction);
-    if (autoFix && !minimumNetworkFee.equals(networkFee)) {
-      this.transaction.networkFee = minimumNetworkFee;
-      return {
-        valid: true,
-        result: {
-          networkFee: {
-            fixed: true,
-            prev: networkFee,
-            suggestion: minimumNetworkFee,
-          },
-        },
-      };
-    } else if (minimumNetworkFee.compare(networkFee) > 0) {
-      return {
-        valid: false,
-        result: {
-          networkFee: {
-            fixed: false,
-            prev: networkFee,
-            suggestion: minimumNetworkFee,
-          },
-        },
-      };
-    } else if (minimumNetworkFee.compare(networkFee) < 0) {
-      return {
-        valid: true,
-        result: {
-          networkFee: {
-            fixed: false,
-            prev: networkFee,
-            suggestion: minimumNetworkFee,
-          },
-        },
-      };
+  public async validateNetworkFee(
+    autoFix = false
+  ): Promise<ValidationSuggestion<u.BigInteger>> {
+    const { networkFee: prev } = this.transaction;
+    const suggestion = getNetworkFee(this.transaction);
+    const compareResult = suggestion.compare(prev);
+    if (compareResult > 0) {
+      // Underpaying
+      if (autoFix) {
+        this.transaction.networkFee = suggestion;
+        return fixed(prev, suggestion);
+      }
+      return invalid(prev, suggestion, "Insufficient network fees.");
+    } else if (compareResult < 0) {
+      // Overpaying
+      return suggest(prev, suggestion, "Overpaying network fee.");
     }
-
-    return {
-      valid: true,
-    };
+    return valid();
   }
 
   public async validate(
     attrs: ValidationAttributes,
     autoFix: ValidationAttributes = ValidationAttributes.None
   ): Promise<ValidationResult> {
-    const validationTasks: Array<Promise<ValidationResult>> = [];
+    const validationTasks: Promise<ValidationSuggestion<unknown>>[] = [];
+    const output: ValidationResult = {
+      valid: true,
+      result: {},
+    };
+
     if (attrs & ValidationAttributes.ValidUntilBlock) {
       validationTasks.push(
         this.validateValidUntilBlock(
-          Boolean(autoFix & ValidationAttributes.ValidUntilBlock)
-        )
+          (autoFix & ValidationAttributes.ValidUntilBlock) ===
+            ValidationAttributes.ValidUntilBlock
+        ).then((s) => (output.result.validUntilBlock = s))
       );
     }
 
     if (attrs & ValidationAttributes.SystemFee) {
       validationTasks.push(
         this.validateSystemFee(
-          Boolean(autoFix & ValidationAttributes.SystemFee)
-        )
+          (autoFix & ValidationAttributes.SystemFee) ===
+            ValidationAttributes.SystemFee
+        ).then((s) => (output.result.systemFee = s))
       );
     }
 
     if (attrs & ValidationAttributes.NetworkFee) {
       validationTasks.push(
         this.validateNetworkFee(
-          Boolean(autoFix & ValidationAttributes.NetworkFee)
-        )
+          (autoFix & ValidationAttributes.NetworkFee) ===
+            ValidationAttributes.NetworkFee
+        ).then((s) => (output.result.networkFee = s))
       );
     }
 
-    if (
-      !(attrs & ValidationAttributes.SystemFee) &&
-      attrs & ValidationAttributes.Script
-    ) {
-      validationTasks.push(this.validateScript());
+    if (attrs & ValidationAttributes.Script) {
+      validationTasks.push(
+        this.validateScript().then((s) => (output.result.script = s))
+      );
     }
 
-    return Promise.all(validationTasks).then((res) =>
-      res.reduce((prev, cur) => {
-        return {
-          valid: prev.valid && cur.valid,
-          result: {
-            ...prev.result,
-            ...cur.result,
-          },
-        };
-      })
-    );
+    await Promise.all(validationTasks);
+    output.valid = Object.values(output.result)
+      .map((r) => (r ? r.valid : true))
+      .reduce((a, b) => a && b);
+
+    return output;
   }
+}
+
+function valid<T>(): ValidationSuggestion<T> {
+  return { valid: true, fixed: false };
+}
+function fixed<T>(
+  prev: T,
+  suggestion?: T,
+  message?: string
+): ValidationSuggestion<T> {
+  return {
+    valid: true,
+    fixed: true,
+    prev,
+    suggestion,
+    message,
+  };
+}
+
+function err<T>(message: string): ValidationSuggestion<T> {
+  return {
+    valid: false,
+    fixed: false,
+    message,
+  };
+}
+function suggest<T>(
+  prev: T,
+  suggestion?: T,
+  message?: string
+): ValidationSuggestion<T> {
+  return {
+    valid: true,
+    fixed: false,
+    prev,
+    suggestion,
+    message,
+  };
+}
+
+function invalid<T>(
+  prev: T,
+  suggestion?: T,
+  message?: string
+): ValidationSuggestion<T> {
+  return {
+    valid: false,
+    fixed: false,
+    prev,
+    suggestion,
+    message,
+  };
 }
