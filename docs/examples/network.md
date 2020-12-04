@@ -34,10 +34,8 @@ const apiCli = new api.neoCli.instance(
 ```javascript
 const { api } = require("@cityofzion/neon-js");
 
-const NETWORK = "MainNet"; // or "TestNet"
 const notificationsProvider = new api.notifications.instance(
-  "wss://pubsub.main.neologin.io/event"
-  //or "wss://pubsub.test.neologin.io/event" for TestNet
+  "wss://main.YOUR_PUBSUB_SERVER.com/event"
 );
 ```
 

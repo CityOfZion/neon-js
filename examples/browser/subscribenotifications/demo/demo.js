@@ -4,7 +4,7 @@ const contractHash = "0x314b5aac1cdd01d10661b00886197f2194c3c89b";
 const allContractHashes = null;
 
 // Get an instance of the Notifications server
-const provider = new Neon.api.notifications.instance("MainNet");
+const provider = new Neon.api.notifications.instance("wss://YOUR_PUBSUB_SERVER.com/event");
 
 let subscription;
 

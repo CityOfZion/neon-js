@@ -21,6 +21,7 @@ export class Notifications {
 
   /**
    * Create a new notification service that handles contract subscriptions
+   * Source code and instructions on how to run this service are available on https://github.com/corollari/neo-PubSub
    * @param url - URL of a notifications service.
    */
   public constructor(url: string) {
