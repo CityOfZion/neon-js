@@ -137,10 +137,10 @@ export async function getToken(
       name: res[0],
       symbol: res[1],
       decimals: res[2],
-      totalSupply: res[3].div(Math.pow(10, 8 - res[2])).toNumber(),
+      totalSupply: res[3].mul(Math.pow(10, 8 - res[2])).toNumber(),
     };
     if (address) {
-      result.balance = res[4].div(Math.pow(10, 8 - res[2]));
+      result.balance = res[4].mul(Math.pow(10, 8 - res[2]));
     }
     return result;
   } catch (err) {
@@ -182,10 +182,10 @@ export async function getTokens(
       const symbol = rpc.StringParser(res.stack[i + 1]);
       const decimals = rpc.IntegerParser(res.stack[i + 2]);
       const totalSupply = NumberParser(res.stack[i + 3])
-        .dividedBy(Math.pow(10, 8 - decimals))
+        .mul(Math.pow(10, 8 - decimals))
         .toNumber();
       const balance = address
-        ? NumberParser(res.stack[i + 4]).dividedBy(Math.pow(10, 8 - decimals))
+        ? NumberParser(res.stack[i + 4]).mul(Math.pow(10, 8 - decimals))
         : undefined;
 
       const obj = {

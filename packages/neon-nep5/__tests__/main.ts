@@ -107,21 +107,23 @@ describe("regression", () => {
     const address = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
     const result = await getTokens(client, [scriptHash, scriptHash], address);
 
-    expect(result).toContainEqual([
-      {
-        name: "abc",
-        symbol: "ABC",
-        decimals: 4,
-        totalSupply: 1,
-        balance: 0.1234,
-      },
-      {
-        name: "def",
-        symbol: "DEF",
-        decimals: 8,
-        totalSupply: 2,
-        balance: 0.12345678,
-      },
-    ]);
+    expect(result).toEqual(
+      expect.arrayContaining([
+        {
+          name: "abc",
+          symbol: "ABC",
+          decimals: 4,
+          totalSupply: 1,
+          balance: new u.Fixed8(0.1234),
+        },
+        {
+          name: "def",
+          symbol: "DEF",
+          decimals: 8,
+          totalSupply: 2,
+          balance: new u.Fixed8(0.12345678),
+        },
+      ])
+    );
   });
 });
