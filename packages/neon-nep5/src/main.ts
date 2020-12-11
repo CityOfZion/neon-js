@@ -1,4 +1,4 @@
-import { logging, rpc, sc, u, wallet } from "@cityofzion/neon-core";
+import { logging, rpc, sc, u } from "@cityofzion/neon-core";
 import * as abi from "./abi";
 const log = logging.default("nep5");
 
@@ -10,19 +10,33 @@ export interface TokenInfo {
   balance?: u.Fixed8;
 }
 
+/**
+ * Workaround for contracts such as SWTH returning Integer instead of ByteArray.
+ */
+function NumberParser(item: sc.StackItemLike): u.Fixed8 {
+  switch (item.type) {
+    case "Integer":
+      return new u.Fixed8(item.value as string).div(100000000);
+    case "ByteArray":
+      return u.Fixed8.fromReverseHex(item.value as string);
+    default:
+      throw new Error(`Received invalid type ${item.type}`);
+  }
+}
+
 const parseTokenInfo = rpc.buildParser(
   rpc.StringParser,
   rpc.StringParser,
   rpc.IntegerParser,
-  rpc.Fixed8Parser
+  NumberParser
 );
 
 const parseTokenInfoAndBalance = rpc.buildParser(
   rpc.StringParser,
   rpc.StringParser,
   rpc.IntegerParser,
-  rpc.Fixed8Parser,
-  rpc.Fixed8Parser
+  NumberParser,
+  NumberParser
 );
 
 /**
@@ -32,20 +46,19 @@ const parseTokenInfoAndBalance = rpc.buildParser(
  * @param address the Address to query for the balance.
  */
 export async function getTokenBalance(
-  url: string,
+  url: string | rpc.RPCClient,
   scriptHash: string,
   address: string
 ): Promise<u.Fixed8> {
+  const client = typeof url === "string" ? new rpc.RPCClient(url) : url;
   const sb = new sc.ScriptBuilder();
   abi.decimals(scriptHash)(sb);
   abi.balanceOf(scriptHash, address)(sb);
   const script = sb.str;
   try {
-    const res = await rpc.Query.invokeScript(script).execute(url);
-    const decimals = rpc.IntegerParser(res.result.stack[0]);
-    return rpc
-      .Fixed8Parser(res.result.stack[1])
-      .mul(Math.pow(10, 8 - decimals));
+    const res = await client.invokeScript(script);
+    const decimals = rpc.IntegerParser(res.stack[0]);
+    return NumberParser(res.stack[1]).mul(Math.pow(10, 8 - decimals));
   } catch (err) {
     log.error(`getTokenBalance failed with : ${err.message}`);
     throw err;
@@ -59,7 +72,7 @@ export async function getTokenBalance(
  * @param address Address to query for balance of tokens.
  */
 export async function getTokenBalances(
-  url: string,
+  url: string | rpc.RPCClient,
   scriptHashArray: string[],
   address: string
 ): Promise<{ [symbol: string]: u.Fixed8 }> {
@@ -70,24 +83,20 @@ export async function getTokenBalances(
     abi.balanceOf(scriptHash, address)(sb);
   });
 
-  const res = await rpc.Query.invokeScript(sb.str).execute(url);
+  const client = typeof url === "string" ? new rpc.RPCClient(url) : url;
+  const res = await client.invokeScript(sb.str);
   const tokenList = {} as { [symbol: string]: u.Fixed8 };
-  if (
-    !res ||
-    !res.result ||
-    !res.result.stack ||
-    res.result.stack.length !== 3 * scriptHashArray.length
-  ) {
+  if (!res || !res.stack || res.stack.length !== 3 * scriptHashArray.length) {
     throw new Error("Stack returned was invalid");
   }
   try {
-    for (let i = 0; i < res.result.stack.length; i += 3) {
+    for (let i = 0; i < res.stack.length; i += 3) {
       try {
-        const symbol = rpc.StringParser(res.result.stack[i]);
-        const decimals = rpc.IntegerParser(res.result.stack[i + 1]);
-        tokenList[symbol] = rpc
-          .Fixed8Parser(res.result.stack[i + 2])
-          .mul(Math.pow(10, 8 - decimals));
+        const symbol = rpc.StringParser(res.stack[i]);
+        const decimals = rpc.IntegerParser(res.stack[i + 1]);
+        tokenList[symbol] = NumberParser(res.stack[i + 2]).mul(
+          Math.pow(10, 8 - decimals)
+        );
       } catch (e) {
         log.error(`single call in getTokenBalances failed with : ${e.message}`);
         throw e;
@@ -107,7 +116,7 @@ export async function getTokenBalances(
  * @param address Optional address to query the balance for. If provided, the returned object will include the balance property.
  */
 export async function getToken(
-  url: string,
+  url: string | rpc.RPCClient,
   scriptHash: string,
   address?: string
 ): Promise<TokenInfo> {
@@ -122,9 +131,8 @@ export async function getToken(
   }
   const script = sb.str;
   try {
-    const res = await rpc.Query.invokeScript(script)
-      .parseWith(parser)
-      .execute(url);
+    const client = typeof url === "string" ? new rpc.RPCClient(url) : url;
+    const res = parser(await client.invokeScript(script));
     const result: TokenInfo = {
       name: res[0],
       symbol: res[1],
@@ -148,7 +156,7 @@ export async function getToken(
  * @param address Optional address to query the balance for. If provided, the returned object will include the balance property.
  */
 export async function getTokens(
-  url: string,
+  url: string | rpc.RPCClient,
   scriptHashArray: string[],
   address?: string
 ): Promise<TokenInfo[]> {
@@ -164,29 +172,20 @@ export async function getTokens(
       }
     });
 
-    const res = await rpc.Query.invokeScript(sb.str).execute(url);
+    const client = typeof url === "string" ? new rpc.RPCClient(url) : url;
+    const res = await client.invokeScript(sb.str);
 
     const result: TokenInfo[] = [];
     const step = address ? 5 : 4;
-    for (let i = 0; i < res.result.stack.length; i += step) {
-      const name = rpc.StringParser(res.result.stack[i]);
-      const symbol = rpc.StringParser(res.result.stack[i + 1]);
-      const decimals = rpc.IntegerParser(res.result.stack[i + 2]);
-      const totalSupply = rpc
-        .Fixed8Parser(res.result.stack[i + 3])
-        .dividedBy(
-          Math.pow(10, decimals - rpc.IntegerParser(res.result.stack[i + 2]))
-        )
+    for (let i = 0; i < res.stack.length; i += step) {
+      const name = rpc.StringParser(res.stack[i]);
+      const symbol = rpc.StringParser(res.stack[i + 1]);
+      const decimals = rpc.IntegerParser(res.stack[i + 2]);
+      const totalSupply = NumberParser(res.stack[i + 3])
+        .dividedBy(Math.pow(10, 8 - decimals))
         .toNumber();
       const balance = address
-        ? rpc
-            .Fixed8Parser(res.result.stack[i + 4])
-            .dividedBy(
-              Math.pow(
-                10,
-                decimals - rpc.IntegerParser(res.result.stack[i + 2])
-              )
-            )
+        ? NumberParser(res.stack[i + 4]).dividedBy(Math.pow(10, 8 - decimals))
         : undefined;
 
       const obj = {
