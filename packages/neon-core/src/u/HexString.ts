@@ -1,7 +1,6 @@
 import { ensureHex, reverseHex, hexXor } from "./misc";
 import {
   str2hexstring,
-  num2hexstring,
   hexstring2ab,
   ab2hexstring,
   hexstring2str,
@@ -141,8 +140,12 @@ export class HexString {
    * Get HexString instance from a number
    * @param littleEndian - whether `num` is little endian
    */
-  public static fromNumber(num: number, littleEndian = false): HexString {
-    return new HexString(num2hexstring(num), littleEndian);
+  public static fromNumber(num: number): HexString {
+    const rawHex = num.toString(16);
+    if (rawHex.length % 2 !== 0) {
+      return new HexString("0" + rawHex);
+    }
+    return new HexString(rawHex);
   }
 
   /**

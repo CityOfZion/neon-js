@@ -122,6 +122,18 @@ describe("toScript", () => {
       expect(result).toEqual(script);
     }
   );
+
+  test("throws on incorrectly sized OpToken (operandSize)", () => {
+    const token = new OpToken(OpCode.PUSHINT8, "000000");
+
+    expect(() => token.toScript()).toThrow();
+  });
+
+  test("throws on incorrectly sized OpToken (operandSizePrefix)", () => {
+    const token = new OpToken(OpCode.PUSHDATA1, "00".repeat(500));
+
+    expect(() => token.toScript()).toThrow();
+  });
 });
 
 describe("parseInt", () => {
