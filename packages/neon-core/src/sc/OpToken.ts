@@ -72,6 +72,31 @@ export class OpToken {
     }
   }
 
+  /**Creates the OpToken for pushing a variable number onto the stack. */
+  public static forInteger(n: number | string | BigInteger): OpToken {
+    const i = n instanceof BigInteger ? n : BigInteger.fromNumber(n);
+    if (n === -1) {
+      return new OpToken(OpCode.PUSHM1);
+    }
+    if (i.compare(0) >= 0 && i.compare(16) <= 0) {
+      return new OpToken(OpCode.PUSH0 + parseInt(i.toString()));
+    }
+    const twos = i.toReverseTwos();
+    if (twos.length <= 2) {
+      return new OpToken(OpCode.PUSHINT8, twos.padEnd(2, "0"));
+    } else if (twos.length <= 4) {
+      return new OpToken(OpCode.PUSHINT16, twos.padEnd(4, "0"));
+    } else if (twos.length <= 8) {
+      return new OpToken(OpCode.PUSHINT32, twos.padEnd(8, "0"));
+    } else if (twos.length <= 16) {
+      return new OpToken(OpCode.PUSHINT64, twos.padEnd(16, "0"));
+    } else if (twos.length <= 32) {
+      return new OpToken(OpCode.PUSHINT128, twos.padEnd(32, "0"));
+    } else {
+      throw new Error("Number out of range");
+    }
+  }
+
   constructor(public code: OpCode, public params?: string) {}
 
   /**
