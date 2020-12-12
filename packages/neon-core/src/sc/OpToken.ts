@@ -103,6 +103,25 @@ export class OpToken {
         : OpCode[this.code]
     }`;
   }
+
+  public toScript(): string {
+    const opCodeHex = HexString.fromNumber(this.code).toLittleEndian();
+    const params = this.params ?? "";
+    const annotation = OpCodeAnnotations[this.code];
+    if (annotation.operandSizePrefix) {
+      const sizeByte = HexString.fromNumber(params.length / 2).toLittleEndian();
+      if (sizeByte.length / 2 > annotation.operandSizePrefix) {
+        throw new Error("params is larger than allowed by OpCode.");
+      }
+
+      return (
+        opCodeHex +
+        sizeByte.padEnd(annotation.operandSizePrefix * 2, "0") +
+        params
+      );
+    }
+    return opCodeHex + params;
+  }
 }
 
 type ParamsExtracter = (script: StringStream) => string;
