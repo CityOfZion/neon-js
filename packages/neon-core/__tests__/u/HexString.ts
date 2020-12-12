@@ -29,11 +29,6 @@ describe("Initiator", () => {
       expect(hex.toBigEndian()).toBe("270f");
     });
 
-    test("param littleEndian is true", () => {
-      const hex = HexString.fromNumber(9999, true);
-      expect(hex.toBigEndian()).toBe("0f27");
-    });
-
     test("0 as param", () => {
       const hex = HexString.fromNumber(0);
       expect(hex.toBigEndian()).toBe("00");

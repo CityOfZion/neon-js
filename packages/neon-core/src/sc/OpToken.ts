@@ -103,6 +103,48 @@ export class OpToken {
         : OpCode[this.code]
     }`;
   }
+
+  /**
+   * Converts an OpToken back to hexstring.
+   */
+  public toScript(): string {
+    const opCodeHex = HexString.fromNumber(this.code).toLittleEndian();
+    const params = this.params ?? "";
+    const annotation = OpCodeAnnotations[this.code];
+
+    // operandSizePrefix indicates how many variable bytes after the OpCode to read.
+    if (annotation.operandSizePrefix) {
+      const sizeByte = HexString.fromNumber(params.length / 2).toLittleEndian();
+
+      if (sizeByte.length / 2 > annotation.operandSizePrefix) {
+        const maxExpectedSize = Math.pow(2, annotation.operandSizePrefix * 8);
+        throw new Error(
+          `Expected params to be less than ${maxExpectedSize} but got ${
+            params.length / 2
+          }`
+        );
+      }
+
+      return (
+        opCodeHex +
+        sizeByte.padEnd(annotation.operandSizePrefix * 2, "0") +
+        params
+      );
+    }
+
+    // operandSize indicates how many bytes after the OpCode to read.
+    if (annotation.operandSize) {
+      if (params.length / 2 !== annotation.operandSize) {
+        throw new Error(
+          `Expected params to be ${annotation.operandSize} bytes long but got ${
+            params.length / 2
+          } instead.`
+        );
+      }
+    }
+
+    return opCodeHex + params;
+  }
 }
 
 type ParamsExtracter = (script: StringStream) => string;
