@@ -160,3 +160,19 @@ describe("parseInt", () => {
     expect(result).toBe(expected);
   });
 });
+
+describe("forInteger", () => {
+  test.each([
+    [16, new OpToken(OpCode.PUSH16)],
+    [0, new OpToken(OpCode.PUSH0)],
+    [-1, new OpToken(OpCode.PUSHM1)],
+    [127, new OpToken(OpCode.PUSHINT8, "7f")],
+    [255, new OpToken(OpCode.PUSHINT16, "ff00")],
+    [32512, new OpToken(OpCode.PUSHINT16, "007f")],
+    ["2130706432", new OpToken(OpCode.PUSHINT32, "0000007f")],
+  ])("%d", (n: number | string, token: OpToken) => {
+    const result = OpToken.forInteger(n);
+
+    expect(result).toEqual(token);
+  });
+});
