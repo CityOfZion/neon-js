@@ -14,13 +14,13 @@ beforeAll(async () => {
   );
 
   MAINNET_URL = await getUrl("MainNet");
-});
+}, 30000);
 
 describe("domainResolve", () => {
   test("name found", async () => {
     const address = await provider.resolveDomain(MAINNET_URL, "test.neo");
     expect(wallet.isAddress(address)).toBe(true);
-  });
+  }, 30000);
 
   test("name not found", async () => {
     const address = await provider.resolveDomain(
@@ -28,5 +28,5 @@ describe("domainResolve", () => {
       "alkdjfklasjdlfkjasdklf.neo"
     );
     expect(address).toMatch("");
-  });
+  }, 30000);
 });
