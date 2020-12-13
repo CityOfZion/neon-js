@@ -1,5 +1,4 @@
-import { rpc, sc } from "@cityofzion/neon-core";
-import { BigInteger } from "@cityofzion/neon-core/lib/u";
+import { rpc, sc, u } from "@cityofzion/neon-core";
 
 const CHUNK_SIZE = 2;
 
@@ -44,6 +43,8 @@ export async function getTokenBalances(
 
   return results.map((result) => {
     const decimals = parseInt(result[0].value as string);
-    return BigInteger.fromNumber(result[1].value as string).toDecimal(decimals);
+    return u.BigInteger.fromNumber(result[1].value as string).toDecimal(
+      decimals
+    );
   });
 }

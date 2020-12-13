@@ -68,7 +68,9 @@ export class OpToken {
     } else if (opToken.code >= 0x0f && opToken.code <= 0x20) {
       return opToken.code - 16;
     } else {
-      throw new Error("given OpToken isnt a parsable integer.");
+      throw new Error(
+        `given OpToken ${OpCode[opToken.code]} isnt a parsable integer.`
+      );
     }
   }
 

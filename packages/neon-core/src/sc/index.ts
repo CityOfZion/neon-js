@@ -9,5 +9,6 @@ export * from "./StackItem";
 export * from "./manifest";
 export * from "./OpToken";
 export * from "./contracts";
+export * from "./fees";
 
 export * from "./types";
