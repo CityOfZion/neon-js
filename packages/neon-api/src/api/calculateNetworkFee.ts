@@ -1,5 +1,13 @@
 import { tx, sc, u, wallet } from "@cityofzion/neon-core";
 
+/**
+ * Calculates the network fee required to process the transaction.
+ * The fields signers, attributes and script needs to be fully populated for this to work.
+ *
+ * @param txn - A partially filled out transaction.
+ * @param feePerByte - The current feePerByte in Policy contract.
+ * @param signingAccts - The accounts that will be signing this.
+ */
 export function calculateNetworkFee(
   txn: tx.Transaction,
   feePerByte: number | u.BigInteger,

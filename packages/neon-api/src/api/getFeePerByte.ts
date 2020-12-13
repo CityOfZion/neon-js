@@ -2,7 +2,7 @@ import { rpc, u, CONST } from "@cityofzion/neon-core";
 
 /**
  * Helper method for retrieving FeePerByte information.
- * This is the rate 
+ * This is the rate
  */
 export async function getFeePerByte(
   client: rpc.NeoServerRpcClient
