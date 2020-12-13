@@ -3,26 +3,21 @@ id: latest
 title: Changelog (v4)
 ---
 
-4.8.2
+4.8.3
 =====
-
-- Fixes
-
-  - Fix false not being accepted as a valid value for ContractParam.
-
-4.8.1
-=====
-
 
 - Fixes
 
   - Fix websocket not closing quickly enough. This also includes a minor API interface change for closing. Closing notifications now return promises instead of void. There is no major change as it will still close even if you do not await the promises.
+  - Fix false not being accepted as a valid value for ContractParam.
+  - Fix NEP5 parsing of contract return values.
 
 - Others
 
   - Update crypto-js to 3.3.0
   - Update elliptic to 6.5.3
   - Minor fixes to tests to not use testnet neoscan as it is broken.
+  - Remove default notifications urls as they are being deprecated.
 
 4.8.0
 =====
