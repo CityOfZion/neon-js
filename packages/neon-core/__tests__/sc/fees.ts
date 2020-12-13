@@ -39,7 +39,7 @@ describe("calculateExecutionFees", () => {
       ),
     ]);
 
-    expect(result.toString()).toBe("3000630");
+    expect(result.toString()).toBe("2000630");
   });
 
   test("invocationScript fee", () => {
