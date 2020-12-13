@@ -10,6 +10,7 @@ import latin1Encoding from "crypto-js/enc-latin1";
 import ECBMode from "crypto-js/mode-ecb";
 import NoPadding from "crypto-js/pad-nopadding";
 import SHA256 from "crypto-js/sha256";
+import { lib } from "crypto-js";
 import { scrypt } from "scrypt-js";
 import { DEFAULT_SCRYPT, NEP_FLAG, NEP_HEADER } from "../consts";
 import logging from "../logging";
@@ -106,11 +107,9 @@ export async function decrypt(
   const derived = Buffer.from(key).toString("hex");
   const derived1 = derived.slice(0, 64);
   const derived2 = derived.slice(64);
-  const ciphertext = {
+  const ciphertext = lib.CipherParams.create({
     ciphertext: enc.Hex.parse(encrypted),
-    salt: "",
-    iv: "",
-  };
+  });
   const decrypted = AES.decrypt(
     ciphertext,
     enc.Hex.parse(derived2),
