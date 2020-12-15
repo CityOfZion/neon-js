@@ -1,9 +1,6 @@
 import { rpc } from "@cityofzion/neon-core";
 
 const TESTNET_URLS = [
-  "https://test1.cityofzion.io:443",
-  "https://test2.cityofzion.io:443",
-  "https://test3.cityofzion.io:443",
   "http://seed1.ngd.network:20332",
   "http://seed2.ngd.network:20332",
   "http://seed3.ngd.network:20332",
@@ -27,16 +24,9 @@ const MAINNET_URLS = [
   "http://seed8.ngd.network:10332",
   "http://seed9.ngd.network:10332",
   "http://seed10.ngd.network:10332",
-  "https://seed0.cityofzion.io:443",
-  "https://seed1.cityofzion.io:443",
-  "https://seed2.cityofzion.io:443",
-  "https://seed3.cityofzion.io:443",
-  "https://seed4.cityofzion.io:443",
-  "https://seed5.cityofzion.io:443",
-  "https://seed6.cityofzion.io:443",
-  "https://seed7.cityofzion.io:443",
-  "https://seed8.cityofzion.io:443",
-  "https://seed9.cityofzion.io:443",
+  "https://mainnet1.neo2.coz.io:443",
+  "https://mainnet2.neo2.coz.io:443",
+  "https://mainnet3.neo2.coz.io:443",
 ];
 
 export function getUrls(net: string): string[] {
@@ -60,7 +50,9 @@ export async function getUrl(net: string): Promise<string> {
   let previousBlockCount = 0;
   for (let i = 0; i < slicedUrls.length; i++) {
     try {
-      const res = (await rpc.Query.getBlockCount().execute(slicedUrls[i])) as {
+      const res = (await rpc.Query.getBlockCount().execute(slicedUrls[i], {
+        timeout: 2000,
+      })) as {
         result: number;
       };
       const currentBlockCount = res.result;
