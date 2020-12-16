@@ -343,7 +343,9 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       default:
         throw new Error(`${ContractParamType[type]} not supported!`);
     }
-    throw new Error(`got ${typeof arg} which is not convertable to ${type}`);
+    throw new Error(
+      `got ${typeof arg} which is not convertable to ${ContractParamType[type]}`
+    );
   }
 
   public export(): ContractParamJson {

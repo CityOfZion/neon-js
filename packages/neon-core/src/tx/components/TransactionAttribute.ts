@@ -6,7 +6,7 @@ const maxTransactionAttributeSize = 252;
 
 export interface TransactionAttributeLike {
   usage: number | string;
-  data: string;
+  data: string | HexString;
 }
 
 export interface TransactionAttributeJson {

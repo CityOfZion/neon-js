@@ -100,6 +100,20 @@ export class Signer {
     return new Signer({ account, scopes, allowedContracts, allowedGroups });
   }
 
+  public merge(other: SignerLike | Signer): this {
+    const otherSigner = other instanceof Signer ? other : new Signer(other);
+    this.scopes |= otherSigner.scopes;
+    if (otherSigner.allowedContracts) {
+      this.allowedContracts = this.allowedContracts.concat(
+        otherSigner.allowedContracts
+      );
+    }
+    if (otherSigner.allowedGroups) {
+      this.allowedGroups = this.allowedGroups.concat(otherSigner.allowedGroups);
+    }
+    return this;
+  }
+
   public serialize(): string {
     let out = "";
     out += this.account.toLittleEndian();
