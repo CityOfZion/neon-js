@@ -137,7 +137,9 @@ export class Transaction implements NeonObject<TransactionLike> {
     });
   }
 
-  public constructor(tx: Partial<TransactionLike | Transaction> = {}) {
+  public constructor(
+    tx: Partial<Pick<TransactionLike | Transaction, keyof TransactionLike>> = {}
+  ) {
     const {
       version,
       nonce,
