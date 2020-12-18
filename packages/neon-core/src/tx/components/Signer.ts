@@ -72,6 +72,10 @@ export class Signer {
   }
 
   public addAllowedContracts(...contracts: string[]): void {
+    if (this.scopes & WitnessScope.Global) {
+      return;
+    }
+
     this.scopes |= WitnessScope.CustomContracts;
     contracts
       .map((i) => HexString.fromHex(i))
@@ -79,6 +83,10 @@ export class Signer {
   }
 
   public addAllowedGroups(...groups: string[]): void {
+    if (this.scopes & WitnessScope.Global) {
+      return;
+    }
+
     this.scopes |= WitnessScope.CustomGroups;
     groups
       .map((i) => HexString.fromHex(i))
@@ -100,16 +108,41 @@ export class Signer {
     return new Signer({ account, scopes, allowedContracts, allowedGroups });
   }
 
+  /**
+   * Merges the other Signer into this signer.
+   * Deduplicates contracts and groups.
+   * Modifies the original Signer and returns it.
+   */
   public merge(other: SignerLike | Signer): this {
     const otherSigner = other instanceof Signer ? other : new Signer(other);
+
+    if (!this.account.equals(otherSigner.account)) {
+      throw new Error("Cannot merge Signers of different accounts!");
+    }
+
     this.scopes |= otherSigner.scopes;
+
+    // Global scope
+    if (this.scopes & WitnessScope.Global) {
+      this.scopes = WitnessScope.Global;
+      this.allowedContracts = [];
+      this.allowedGroups = [];
+      return this;
+    }
+
     if (otherSigner.allowedContracts) {
+      const deduplicatedContracts = otherSigner.allowedContracts.filter(
+        (i) => !this.allowedContracts.some((j) => j.equals(i))
+      );
       this.allowedContracts = this.allowedContracts.concat(
-        otherSigner.allowedContracts
+        deduplicatedContracts
       );
     }
     if (otherSigner.allowedGroups) {
-      this.allowedGroups = this.allowedGroups.concat(otherSigner.allowedGroups);
+      const deduplicatedGroups = otherSigner.allowedGroups.filter(
+        (i) => !this.allowedGroups.some((j) => j.equals(i))
+      );
+      this.allowedGroups = this.allowedGroups.concat(deduplicatedGroups);
     }
     return this;
   }
