@@ -40,7 +40,7 @@ describe("validate", () => {
         .mockImplementation(async () => ({ state: "HALT", gasconsumed: 100 })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
-      validUntilBlock: 1000000,
+      validUntilBlock: 5000,
       script: "abcd",
       systemFee: 100,
     });
@@ -100,7 +100,7 @@ describe("validateValidUntilBlock", () => {
       getBlockCount: jest.fn().mockImplementation(async () => 10),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
-      validUntilBlock: 1000000,
+      validUntilBlock: 5000,
     });
     const validator = new TransactionValidator(rpcClient, txn);
     const result = await validator.validateValidUntilBlock(false);
@@ -109,7 +109,7 @@ describe("validateValidUntilBlock", () => {
       valid: true,
       fixed: false,
     });
-    expect(txn.validUntilBlock).toBe(1000000);
+    expect(txn.validUntilBlock).toBe(5000);
   });
 
   test("invalid (validUntilBlock too small)", async () => {
@@ -149,12 +149,12 @@ describe("validateValidUntilBlock", () => {
     expect(txn.validUntilBlock).toBe(100000000);
   });
 
-  test("valid but suggest when lifespan too short (240)", async () => {
+  test("valid but suggest when lifespan too short (20)", async () => {
     const rpcClient: rpc.RPCClient = ({
       getBlockCount: jest.fn().mockImplementation(async () => 10),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
-      validUntilBlock: 250,
+      validUntilBlock: 30,
     });
     const validator = new TransactionValidator(rpcClient, txn);
     const result = await validator.validateValidUntilBlock(false);
