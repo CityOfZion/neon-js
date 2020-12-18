@@ -4,7 +4,7 @@ import {
   SignerJson,
 } from "../../../src/tx/components/Signer";
 import { WitnessScope } from "../../../src/tx/components/WitnessScope";
-import { StringStream } from "../../../src/u";
+import { HexString, StringStream } from "../../../src/u";
 
 const data: [string, string, SignerJson][] = [
   [
@@ -138,3 +138,114 @@ describe.each(data)(
     });
   }
 );
+
+describe("merge", () => {
+  test("same scope", () => {
+    const base = new Signer({
+      account: "0".repeat(40),
+      scopes: WitnessScope.CalledByEntry,
+    });
+
+    const result = base.merge(
+      new Signer({
+        account: "0".repeat(40),
+        scopes: WitnessScope.CalledByEntry,
+      })
+    );
+
+    expect(result).toBe(base);
+    expect(result).toMatchObject({
+      account: HexString.fromHex("0".repeat(40)),
+      scopes: WitnessScope.CalledByEntry,
+    });
+  });
+
+  test("throws when different account", () => {
+    const base = new Signer({
+      account: "0".repeat(40),
+      scopes: WitnessScope.CalledByEntry,
+    });
+
+    expect(() => base.merge(new Signer())).toThrow();
+  });
+
+  test("merges groups and contracts correctly", () => {
+    const base = new Signer({
+      account: "0".repeat(40),
+      scopes: WitnessScope.CalledByEntry,
+    });
+
+    const result = base.merge(
+      new Signer({
+        account: "0".repeat(40),
+        scopes: WitnessScope.CustomContracts | WitnessScope.CustomGroups,
+        allowedContracts: ["1".repeat(40)],
+        allowedGroups: ["2".repeat(66)],
+      })
+    );
+
+    expect(result).toBe(base);
+    expect(result).toMatchObject({
+      account: HexString.fromHex("0".repeat(40)),
+      scopes:
+        WitnessScope.CalledByEntry |
+        WitnessScope.CustomContracts |
+        WitnessScope.CustomGroups,
+      allowedContracts: [HexString.fromHex("1".repeat(40))],
+      allowedGroups: [HexString.fromHex("2".repeat(66))],
+    });
+  });
+
+  test("merges deduplicates groups and contracts", () => {
+    const base = new Signer({
+      account: "0".repeat(40),
+      scopes: WitnessScope.CustomContracts | WitnessScope.CustomGroups,
+      allowedContracts: ["1".repeat(40)],
+      allowedGroups: ["2".repeat(66)],
+    });
+
+    const result = base.merge(
+      new Signer({
+        account: "0".repeat(40),
+        scopes: WitnessScope.CustomContracts | WitnessScope.CustomGroups,
+        allowedContracts: ["1".repeat(40), "2".repeat(40)],
+        allowedGroups: ["2".repeat(66), "3".repeat(66)],
+      })
+    );
+
+    expect(result).toBe(base);
+    expect(result).toMatchObject({
+      account: HexString.fromHex("0".repeat(40)),
+      scopes: WitnessScope.CustomContracts | WitnessScope.CustomGroups,
+      allowedContracts: [
+        HexString.fromHex("1".repeat(40)),
+        HexString.fromHex("2".repeat(40)),
+      ],
+      allowedGroups: [
+        HexString.fromHex("2".repeat(66)),
+        HexString.fromHex("3".repeat(66)),
+      ],
+    });
+  });
+
+  test("merge global", () => {
+    const base = new Signer({
+      account: "0".repeat(40),
+      scopes: WitnessScope.CustomContracts | WitnessScope.CustomGroups,
+      allowedContracts: ["1".repeat(40)],
+      allowedGroups: ["2".repeat(66)],
+    });
+
+    const result = base.merge(
+      new Signer({ account: "0".repeat(40), scopes: WitnessScope.Global })
+    );
+
+    expect(result).toBe(base);
+    expect(result).toMatchObject({
+      account: HexString.fromHex("0".repeat(40)),
+      scopes: WitnessScope.Global,
+      allowedContracts: [],
+      allowedGroups: [],
+    });
+  });
+});
