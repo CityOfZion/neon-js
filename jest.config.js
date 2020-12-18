@@ -3,7 +3,7 @@ module.exports = {
   testEnvironment: "node",
   globals: {
     "ts-jest": {
-      tsConfig: "<rootDir>/tsconfig-test.json",
+      tsconfig: "<rootDir>/tsconfig-test.json",
       diagnostics: false,
     },
     __TARGETNET__: "LocalNet",
