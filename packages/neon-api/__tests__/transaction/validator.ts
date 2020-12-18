@@ -165,7 +165,7 @@ describe("validateValidUntilBlock", () => {
       prev: 30,
       suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
     });
-    expect(txn.validUntilBlock).toBe(250);
+    expect(txn.validUntilBlock).toBe(30);
   });
 
   test("autofix", async () => {
