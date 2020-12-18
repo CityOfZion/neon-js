@@ -85,7 +85,7 @@ describe("validate", () => {
           valid: true,
           fixed: true,
           prev: 1,
-          suggestion: 10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1,
+          suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
         },
         systemFee: { valid: true, fixed: false },
         script: { valid: true, fixed: false },
@@ -126,7 +126,7 @@ describe("validateValidUntilBlock", () => {
       valid: false,
       fixed: false,
       prev: 1,
-      suggestion: 10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1,
+      suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
     });
     expect(txn.validUntilBlock).toBe(1);
   });
@@ -144,7 +144,7 @@ describe("validateValidUntilBlock", () => {
       valid: false,
       fixed: false,
       prev: 100000000,
-      suggestion: 10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1,
+      suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
     });
     expect(txn.validUntilBlock).toBe(100000000);
   });
@@ -163,7 +163,7 @@ describe("validateValidUntilBlock", () => {
       valid: true,
       fixed: false,
       prev: 250,
-      suggestion: 10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1,
+      suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
     });
     expect(txn.validUntilBlock).toBe(250);
   });
@@ -182,10 +182,10 @@ describe("validateValidUntilBlock", () => {
       valid: true,
       fixed: true,
       prev: 1,
-      suggestion: 10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1,
+      suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
     });
     expect(txn.validUntilBlock).toBe(
-      10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1
+      10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1
     );
   });
 });

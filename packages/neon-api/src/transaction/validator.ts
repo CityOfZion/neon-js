@@ -38,6 +38,7 @@ export interface ValidationResult {
  * A class with functions to validate transaction
  */
 export class TransactionValidator {
+  public static TX_LIFESPAN_SUGGESTION = 240;
   /**
    * Transaction will be validated on this rpc node
    */
@@ -62,7 +63,8 @@ export class TransactionValidator {
   ): Promise<ValidationSuggestion<number>> {
     const { validUntilBlock: prev } = this.transaction;
     const height = await this.rpcClient.getBlockCount();
-    const suggestion = tx.Transaction.MAX_TRANSACTION_LIFESPAN + height - 1;
+    // Suggest a lifespan of approx. 1hr based on 15s blocks
+    const suggestion = TransactionValidator.TX_LIFESPAN_SUGGESTION + height - 1;
     if (
       prev <= height ||
       prev >= height + tx.Transaction.MAX_TRANSACTION_LIFESPAN
@@ -77,7 +79,7 @@ export class TransactionValidator {
         "Your transaction lifespan was out of range."
       );
     }
-    if (prev - height <= 240) {
+    if (prev - height <= 20) {
       return suggest(
         prev,
         suggestion,

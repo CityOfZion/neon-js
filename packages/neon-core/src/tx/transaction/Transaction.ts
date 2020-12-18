@@ -119,9 +119,10 @@ export class Transaction implements NeonObject<TransactionLike> {
   public script: HexString;
 
   /**
-   * Maximum duration in blocks that a transaction can stay valid in the mempol
+   * Maximum duration in blocks that a transaction can stay valid in the mempool.
+   * This is 24 hours based on 15s blocktime.
    */
-  public static MAX_TRANSACTION_LIFESPAN = 2102400;
+  public static MAX_TRANSACTION_LIFESPAN = 5760;
 
   public static fromJson(input: TransactionJson): Transaction {
     return new Transaction({
