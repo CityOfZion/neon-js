@@ -12,6 +12,7 @@ import {
 } from "../Query";
 import { BlockJson, BlockHeaderJson, Validator } from "../../types";
 import { RpcDispatcher, RpcDispatcherMixin } from "./RpcDispatcher";
+import { HexString } from "../../u";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
 export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
@@ -213,9 +214,12 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
 
     /**
      * Submits a script for the node to run. This method is a local invoke, results are not reflected on the blockchain.
+     *
+     * @param script - base64-encoded hexstring.
+     * @param signers - signatures accompanying this execution.
      */
     public async invokeScript(
-      script: string,
+      script: string | HexString,
       signers: (Signer | SignerJson)[] = []
     ): Promise<InvokeResult> {
       return await this.execute(Query.invokeScript(script, signers));
@@ -226,7 +230,7 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
      * @returns transaction id
      */
     public async sendRawTransaction(
-      transaction: Transaction | string
+      transaction: Transaction | string | HexString
     ): Promise<string> {
       const response = await this.execute(
         Query.sendRawTransaction(transaction)

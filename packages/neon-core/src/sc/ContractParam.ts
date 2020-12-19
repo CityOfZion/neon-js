@@ -4,7 +4,7 @@ import { NeonObject } from "../model";
 import { parseEnum } from "../internal";
 
 export enum ContractParamType {
-  Any = 0x00, // TODO: Implement support
+  Any = 0x00,
 
   Boolean = 0x10,
   Integer = 0x11,
@@ -45,6 +45,13 @@ export type ContractParamLike = Pick<
  * ContractParam.string("12ab");
  */
 export class ContractParam implements NeonObject<ContractParamLike> {
+  public static any(value: string | HexString | null = null): ContractParam {
+    return new ContractParam({
+      type: ContractParamType.Any,
+      value,
+    });
+  }
+
   /**
    * Creates a String ContractParam.
    *
@@ -217,6 +224,16 @@ export class ContractParam implements NeonObject<ContractParamLike> {
     this.type = parseEnum(input.type, ContractParamType);
     const arg = input.value;
     switch (this.type) {
+      case ContractParamType.Any:
+        if (arg instanceof HexString) {
+          this.value = arg.toBigEndian();
+          return;
+        } else if (typeof arg === "string" || arg === null) {
+          this.value = arg;
+          return;
+        } else {
+          throw new Error("Please provide a hexstring for value!");
+        }
       case ContractParamType.Boolean:
         if (typeof arg === "boolean") {
           this.value = arg;
@@ -267,7 +284,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
         }
 
       default:
-        throw new Error(`${this.type} not supported!`);
+        throw new Error(`${ContractParamType[this.type]} not supported!`);
     }
   }
 
@@ -286,6 +303,16 @@ export class ContractParam implements NeonObject<ContractParamLike> {
     const type = parseEnum(json.type, ContractParamType);
     const arg = json.value;
     switch (type) {
+      case ContractParamType.Any:
+        if (
+          typeof arg === "string" ||
+          arg instanceof HexString ||
+          arg === null ||
+          arg === undefined
+        ) {
+          return ContractParam.any(arg);
+        }
+        break;
       case ContractParamType.Array:
         if (Array.isArray(arg)) {
           return ContractParam.array(...arg);
@@ -357,6 +384,14 @@ export class ContractParam implements NeonObject<ContractParamLike> {
    */
   public toJson(): ContractParamJson {
     switch (this.type) {
+      case ContractParamType.Any:
+        return {
+          type: ContractParamType[this.type],
+          value:
+            this.value instanceof HexString
+              ? this.value.toBigEndian()
+              : (this.value as string | null | undefined),
+        };
       case ContractParamType.Void:
         return { type: ContractParamType[this.type], value: null };
 

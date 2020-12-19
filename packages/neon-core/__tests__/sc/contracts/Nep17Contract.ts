@@ -1,9 +1,9 @@
 import { ContractParam } from "../../../src/sc";
-import { Nep5Contract } from "../../../src/sc/contracts/Nep5Contract";
+import { Nep17Contract } from "../../../src/sc/contracts/Nep17Contract";
 import testWallet from "../../testWallet.json";
 
 const scriptHash = "de5f57d430d3dece511cf975a8d37848cb9e0525";
-const contract = new Nep5Contract(scriptHash);
+const contract = new Nep17Contract(scriptHash);
 
 const address = testWallet.accounts[0].address;
 const addressScriptHash = testWallet.accounts[0].extra.scriptHash;
@@ -12,16 +12,6 @@ const addressTwo = testWallet.accounts[1].address;
 const addressTwoScriptHash = testWallet.accounts[1].extra.scriptHash;
 
 describe("default methods", () => {
-  test("name", () => {
-    const result = contract.name();
-
-    expect(result).toEqual({
-      scriptHash,
-      operation: "name",
-      args: [],
-    });
-  });
-
   test("totalSupply", () => {
     const result = contract.totalSupply();
 
@@ -63,7 +53,7 @@ describe("default methods", () => {
   });
 
   test("transfer", () => {
-    const result = contract.transfer(address, addressTwo, 100000000);
+    const result = contract.transfer(address, addressTwo, 100000000, null);
 
     expect(result).toEqual({
       scriptHash,
@@ -72,6 +62,7 @@ describe("default methods", () => {
         ContractParam.hash160(addressScriptHash),
         ContractParam.hash160(addressTwoScriptHash),
         ContractParam.integer(100000000),
+        ContractParam.any(),
       ],
     });
   });

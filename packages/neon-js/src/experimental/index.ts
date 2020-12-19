@@ -1,4 +1,4 @@
-import * as nep5 from "./nep5";
+import * as Nep17 from "./nep17";
 import { SmartContract } from "./contract";
 import {
   getSystemFee,
@@ -14,4 +14,4 @@ const txHelpers = {
   addFees,
 };
 
-export { nep5, txHelpers, SmartContract };
+export { Nep17, txHelpers, SmartContract };

@@ -1,11 +1,11 @@
-import { NATIVE_CONTRACTS } from "../../consts";
+import { NATIVE_CONTRACT_HASH } from "../../consts";
 import { ContractMethodDefinition } from "../manifest";
-import { Nep5Contract } from "./Nep5Contract";
+import { Nep17Contract } from "./Nep17Contract";
 import gasAbi from "./templates/GasTemplateAbi.json";
 
 let SINGLETON: GasContract;
 
-export class GasContract extends Nep5Contract {
+export class GasContract extends Nep17Contract {
   public static get INSTANCE(): GasContract {
     if (!SINGLETON) {
       SINGLETON = new GasContract();
@@ -21,6 +21,6 @@ export class GasContract extends Nep5Contract {
   }
 
   constructor() {
-    super(NATIVE_CONTRACTS.GAS, GasContract.getMethods());
+    super(NATIVE_CONTRACT_HASH.GasToken, GasContract.getMethods());
   }
 }

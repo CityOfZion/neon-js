@@ -1,25 +1,25 @@
 import { rpc } from "../../../src";
 import * as TestHelpers from "../../../../../testHelpers";
 
-let client: rpc.Nep5TrackerRpcClient;
+let client: rpc.Nep17TrackerRpcClient;
 const address = "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV";
 
 beforeAll(async () => {
   const url = await TestHelpers.getIntegrationEnvUrl();
-  client = new rpc.Nep5TrackerRpcClient(url);
+  client = new rpc.Nep17TrackerRpcClient(url);
 }, 20000);
 
-describe("Nep5TrackerRpcClient", () => {
-  describe("getNep5Transfers", () => {
+describe("Nep17TrackerRpcClient", () => {
+  describe("getNep17Transfers", () => {
     test("empty address", async () => {
-      const result = await client.getNep5Transfers("0".repeat(40));
+      const result = await client.getNep17Transfers("0".repeat(40));
       expect(result.received.length).toBe(0);
       expect(result.sent.length).toBe(0);
     });
 
     // We set startTime to beginning of UTC to get all transactions.
     test("address with endtime", async () => {
-      const result = await client.getNep5Transfers(
+      const result = await client.getNep17Transfers(
         address,
         "0",
         Date.now().toString()
@@ -57,14 +57,14 @@ describe("Nep5TrackerRpcClient", () => {
     });
   });
 
-  describe("getNep5Balances", () => {
+  describe("getNep17Balances", () => {
     test("empty address", async () => {
-      const result = await client.getNep5Balances("0".repeat(40));
+      const result = await client.getNep17Balances("0".repeat(40));
       expect(result.balance.length).toBe(0);
     });
 
     test("address with some assets", async () => {
-      const result = await client.getNep5Balances(address);
+      const result = await client.getNep17Balances(address);
       expect(result.address).toBe(address);
       expect(result.balance.length).toBeGreaterThan(0);
       result.balance.forEach((b) => {

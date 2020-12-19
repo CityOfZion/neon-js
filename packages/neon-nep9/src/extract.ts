@@ -10,9 +10,9 @@ export function extractAsset(params: {
   }
   switch (params.asset) {
     case "neo":
-      return CONST.ASSET_ID.NEO;
+      return CONST.NATIVE_CONTRACT_HASH.NeoToken;
     case "gas":
-      return CONST.ASSET_ID.GAS;
+      return CONST.NATIVE_CONTRACT_HASH.GasToken;
     default:
       return params.asset;
   }

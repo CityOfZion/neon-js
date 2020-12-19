@@ -4,14 +4,14 @@ const CHUNK_SIZE = 2;
 
 export async function getTokenBalances(
   address: string,
-  contracts: (string | sc.Nep5Contract)[],
+  contracts: (string | sc.Nep17Contract)[],
   client: rpc.NeoServerRpcClient
 ): Promise<string[]> {
   const script = contracts
     .map((scriptHash) =>
-      scriptHash instanceof sc.Nep5Contract
+      scriptHash instanceof sc.Nep17Contract
         ? scriptHash
-        : new sc.Nep5Contract(scriptHash)
+        : new sc.Nep17Contract(scriptHash)
     )
     .map((contract) => [contract.decimals(), contract.balanceOf(address)])
     .reduce((sb, contractCalls) => {
@@ -20,7 +20,7 @@ export async function getTokenBalances(
     }, new sc.ScriptBuilder())
     .build();
 
-  const response = await client.invokeScript(script);
+  const response = await client.invokeScript(u.HexString.fromHex(script));
   if (response.state === "FAULT") {
     throw new Error(
       response.exception

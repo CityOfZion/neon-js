@@ -2,12 +2,12 @@ import { ContractParam } from "../ContractParam";
 import { ContractMethodDefinition } from "../manifest/ContractMethodDefinition";
 import { ContractCall } from "../types";
 import { BaseContract } from "./BaseContract";
-import defaultAbi from "./templates/Nep5TemplateAbi.json";
+import defaultAbi from "./templates/Nep17TemplateAbi.json";
 
 /**
- * A standard NEP-5 contract according to specification.
+ * A standard NEP-17 contract according to specification.
  */
-export class Nep5Contract extends BaseContract {
+export class Nep17Contract extends BaseContract {
   /**
    * The list of methods found on the NEP-5 specification.
    */
@@ -19,11 +19,7 @@ export class Nep5Contract extends BaseContract {
     scriptHash: string,
     additionalMethods: ContractMethodDefinition[] = []
   ) {
-    super(scriptHash, Nep5Contract.getMethods().concat(additionalMethods));
-  }
-
-  public name(): ContractCall {
-    return this.call("name");
+    super(scriptHash, Nep17Contract.getMethods().concat(additionalMethods));
   }
 
   public symbol(): ContractCall {
@@ -41,7 +37,7 @@ export class Nep5Contract extends BaseContract {
    * @param address - The address to enquire.
    *
    * @example
-   * const contract = new Nep5Contract(contractHash);
+   * const contract = new Nep17Contract(contractHash);
    * const balanceOfCall = contract.balanceOf(address);
    * const result =
    */
@@ -63,13 +59,15 @@ export class Nep5Contract extends BaseContract {
   public transfer(
     from: string,
     to: string,
-    amount: string | number
+    amount: string | number,
+    data?: string
   ): ContractCall {
     return this.call(
       "transfer",
       ContractParam.hash160(from),
       ContractParam.hash160(to),
-      ContractParam.integer(amount)
+      ContractParam.integer(amount),
+      ContractParam.any(data)
     );
   }
 }

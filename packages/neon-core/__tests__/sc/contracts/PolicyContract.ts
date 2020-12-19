@@ -1,24 +1,15 @@
 import { PolicyContract } from "../../../src/sc";
 
 const contract = PolicyContract.INSTANCE;
-const scriptHash = "ce06595079cd69583126dbfd1d2e25cca74cffe9";
+const scriptHash = "dde31084c0fdbebc7f5ed5f53a38905305ccee14";
 
 test("scriptHash", () => {
   expect(contract.scriptHash).toEqual(
-    "ce06595079cd69583126dbfd1d2e25cca74cffe9"
+    "dde31084c0fdbebc7f5ed5f53a38905305ccee14"
   );
 });
 
 describe("default methods", () => {
-  test("name", () => {
-    const result = contract.name();
-
-    expect(result).toEqual({
-      scriptHash,
-      operation: "name",
-      args: [],
-    });
-  });
 
   test("getFeePerByte", () => {
     const result = contract.getFeePerByte();
@@ -26,6 +17,16 @@ describe("default methods", () => {
     expect(result).toEqual({
       scriptHash,
       operation: "getFeePerByte",
+      args: [],
+    });
+  });
+
+  test("getExecFeeFactor", () => {
+    const result = contract.getExecFeeFactor();
+
+    expect(result).toEqual({
+      scriptHash,
+      operation: "getExecFeeFactor",
       args: [],
     });
   });

@@ -30,14 +30,14 @@ export class TransactionBuilder {
       .addEmptyWitness(account);
   }
 
-  public addNep5Transfer(
+  public addNep17Transfer(
     account: wallet.Account,
     destination: string,
     tokenScriptHash: string,
     amt: number
   ): TransactionBuilder {
     const address = account.address;
-    const contract = new sc.Nep5Contract(tokenScriptHash);
+    const contract = new sc.Nep17Contract(tokenScriptHash);
     return this.addContractCall(contract.transfer(address, destination, amt))
       .addSigners({
         account: account.scriptHash,

@@ -262,10 +262,14 @@ export class ScriptBuilder extends StringStream {
    * Private method to append a ContractParam
    */
   public emitContractParam(param: ContractParam): this {
-    if (!param.type) {
+    if (param.type === undefined) {
       throw new Error("No type available!");
     }
     switch (param.type) {
+      case ContractParamType.Any:
+        return this.emitHexString(
+          (param.value as string | HexString | null) ?? ""
+        );
       case ContractParamType.String:
         return this.emitString(str2hexstring(param.value as string));
       case ContractParamType.Boolean:

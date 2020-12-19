@@ -2,6 +2,7 @@ import { rpc } from "../../src";
 import { Account, Wallet } from "../../src/wallet";
 import { createScript, ContractParam } from "../../src/sc";
 import { Transaction, Witness, WitnessScope } from "../../src/tx";
+import { NATIVE_CONTRACT_HASH } from "../../src/consts";
 import * as TestHelpers from "../../../../testHelpers";
 import testWalletJson from "../../__tests__/testWallet.json";
 
@@ -13,7 +14,7 @@ beforeAll(async () => {
   client = new rpc.RPCClient(url);
 
   const firstBlock = await client.getBlock(0, true);
-  expect(firstBlock.tx.length).toBe(1);
+  expect(firstBlock).toBeDefined();
 }, 30000);
 
 describe("multisig", () => {
@@ -27,12 +28,13 @@ describe("multisig", () => {
     ]);
 
     const script = createScript({
-      scriptHash: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
+      scriptHash: NATIVE_CONTRACT_HASH.GasToken,
       operation: "transfer",
       args: [
         ContractParam.hash160(multisigAcct.address),
         ContractParam.hash160(testWallet.accounts[0].address),
         ContractParam.integer(1),
+        ContractParam.any(),
       ],
     });
 
@@ -44,7 +46,7 @@ describe("multisig", () => {
           scopes: WitnessScope.CalledByEntry,
         },
       ],
-      validUntilBlock: currentHeight + 1000000,
+      validUntilBlock: currentHeight + 1000,
       systemFee: "100000001",
       networkFee: "100000001",
       script,

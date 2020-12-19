@@ -4,7 +4,7 @@ import { NeoServerRpcMixin } from "./clients/NeoServerRpcClient";
 import {
   RpcDispatcher,
   ApplicationLogsRpcMixin,
-  Nep5TrackerRpcMixin,
+  Nep17TrackerRpcMixin,
 } from "./clients";
 import { Query } from "./Query";
 
@@ -18,7 +18,7 @@ function parseNetwork(net: string): string {
   }
 }
 
-class FullRpcClient extends Nep5TrackerRpcMixin(
+class FullRpcClient extends Nep17TrackerRpcMixin(
   ApplicationLogsRpcMixin(NeoServerRpcMixin(RpcDispatcher))
 ) {
   public get [Symbol.toStringTag](): string {

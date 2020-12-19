@@ -11,20 +11,19 @@ import { tx, sc, u, wallet } from "@cityofzion/neon-core";
 export function calculateNetworkFee(
   txn: tx.Transaction,
   feePerByte: number | u.BigInteger,
-  signingAccts: wallet.Account[]
+  executionFeeFactor: number | u.BigInteger
 ): u.BigInteger {
   const feePerByteBigInteger =
     feePerByte instanceof u.BigInteger
       ? feePerByte
       : u.BigInteger.fromNumber(feePerByte);
 
-  const witnesses = signingAccts.map((acct) => {
-    const verificationScript = u.HexString.fromBase64(
-      acct.contract.script
-    ).toBigEndian();
-    if (acct.isMultiSig) {
+  const txClone = new tx.Transaction(txn);
+  txClone.witnesses = txn.witnesses.map((w) => {
+    const verificationScript = w.verificationScript;
+    if (u.isMultisigContract(verificationScript)) {
       const threshold = wallet.getSigningThresholdFromVerificationScript(
-        verificationScript
+        verificationScript.toBigEndian()
       );
 
       return new tx.Witness({
@@ -40,24 +39,24 @@ export function calculateNetworkFee(
       });
     }
   });
-
-  const txClone = new tx.Transaction(txn);
-  txClone.witnesses = witnesses;
-  const verificationExecutionFee = witnesses.reduce((totalFee, witness) => {
-    return totalFee
-      .add(
-        sc.calculateExecutionFee(
-          witness.invocationScript.toBigEndian(),
-          feePerByte
+  const verificationExecutionFee = txClone.witnesses.reduce(
+    (totalFee, witness) => {
+      return totalFee
+        .add(
+          sc.calculateExecutionFee(
+            witness.invocationScript.toBigEndian(),
+            executionFeeFactor
+          )
         )
-      )
-      .add(
-        sc.calculateExecutionFee(
-          witness.verificationScript.toBigEndian(),
-          feePerByte
-        )
-      );
-  }, u.BigInteger.fromNumber(0));
+        .add(
+          sc.calculateExecutionFee(
+            witness.verificationScript.toBigEndian(),
+            executionFeeFactor
+          )
+        );
+    },
+    u.BigInteger.fromNumber(0)
+  );
   const sizeFee = feePerByteBigInteger.mul(txClone.serialize(true).length / 2);
 
   return sizeFee.add(verificationExecutionFee);

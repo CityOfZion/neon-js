@@ -14,8 +14,8 @@ beforeAll(async () => {
 
 describe("getTokenBalances", () => {
   test("NEO & GAS (some balance)", async () => {
-    const neoScriptHash = CONST.ASSET_ID["NEO"];
-    const gasScriptHash = CONST.ASSET_ID["GAS"];
+    const neoScriptHash = CONST.NATIVE_CONTRACT_HASH.NeoToken;
+    const gasScriptHash = CONST.NATIVE_CONTRACT_HASH.GasToken;
     const result = await getTokenBalances(
       address,
       [neoScriptHash, gasScriptHash],
@@ -27,8 +27,8 @@ describe("getTokenBalances", () => {
   });
 
   test("NEO & GAS (empty)", async () => {
-    const neoScriptHash = CONST.ASSET_ID["NEO"];
-    const gasScriptHash = CONST.ASSET_ID["GAS"];
+    const neoScriptHash = CONST.NATIVE_CONTRACT_HASH.NeoToken;
+    const gasScriptHash = CONST.NATIVE_CONTRACT_HASH.GasToken;
     const result = await getTokenBalances(
       new wallet.Account().address,
       [neoScriptHash, gasScriptHash],

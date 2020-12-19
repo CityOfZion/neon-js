@@ -1,29 +1,46 @@
 {
-  "hash": "0xce06595079cd69583126dbfd1d2e25cca74cffe9",
   "methods": [
     {
       "name": "getMaxTransactionsPerBlock",
       "parameters": [],
       "offset": 0,
-      "returntype": "Integer"
+      "returntype": "Integer",
+      "safe": true
     },
     {
       "name": "getMaxBlockSize",
       "parameters": [],
       "offset": 0,
-      "returntype": "Integer"
+      "returntype": "Integer",
+      "safe": true
     },
     {
       "name": "getMaxBlockSystemFee",
       "parameters": [],
       "offset": 0,
-      "returntype": "Integer"
+      "returntype": "Integer",
+      "safe": true
     },
     {
       "name": "getFeePerByte",
       "parameters": [],
       "offset": 0,
-      "returntype": "Integer"
+      "returntype": "Integer",
+      "safe": true
+    },
+    {
+      "name": "getExecFeeFactor",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "Integer",
+      "safe": true
+    },
+    {
+      "name": "getStoragePrice",
+      "parameters": [],
+      "offset": 0,
+      "returntype": "Integer",
+      "safe": true
     },
     {
       "name": "isBlocked",
@@ -34,7 +51,8 @@
         }
       ],
       "offset": 0,
-      "returntype": "Boolean"
+      "returntype": "Boolean",
+      "safe": true
     },
     {
       "name": "setMaxBlockSize",
@@ -45,7 +63,8 @@
         }
       ],
       "offset": 0,
-      "returntype": "Boolean"
+      "returntype": "Boolean",
+      "safe": false
     },
     {
       "name": "setMaxTransactionsPerBlock",
@@ -56,7 +75,8 @@
         }
       ],
       "offset": 0,
-      "returntype": "Boolean"
+      "returntype": "Boolean",
+      "safe": false
     },
     {
       "name": "setMaxBlockSystemFee",
@@ -67,7 +87,8 @@
         }
       ],
       "offset": 0,
-      "returntype": "Boolean"
+      "returntype": "Boolean",
+      "safe": false
     },
     {
       "name": "setFeePerByte",
@@ -78,7 +99,32 @@
         }
       ],
       "offset": 0,
-      "returntype": "Boolean"
+      "returntype": "Boolean",
+      "safe": false
+    },
+    {
+      "name": "setExecFeeFactor",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "Integer"
+        }
+      ],
+      "offset": 0,
+      "returntype": "Boolean",
+      "safe": false
+    },
+    {
+      "name": "setStoragePrice",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "Integer"
+        }
+      ],
+      "offset": 0,
+      "returntype": "Boolean",
+      "safe": false
     },
     {
       "name": "blockAccount",
@@ -89,7 +135,8 @@
         }
       ],
       "offset": 0,
-      "returntype": "Boolean"
+      "returntype": "Boolean",
+      "safe": false
     },
     {
       "name": "unblockAccount",
@@ -100,25 +147,8 @@
         }
       ],
       "offset": 0,
-      "returntype": "Boolean"
-    },
-    {
-      "name": "onPersist",
-      "parameters": [],
-      "offset": 0,
-      "returntype": "Void"
-    },
-    {
-      "name": "postPersist",
-      "parameters": [],
-      "offset": 0,
-      "returntype": "Void"
-    },
-    {
-      "name": "name",
-      "parameters": [],
-      "offset": 0,
-      "returntype": "String"
+      "returntype": "Boolean",
+      "safe": false
     }
   ],
   "events": []

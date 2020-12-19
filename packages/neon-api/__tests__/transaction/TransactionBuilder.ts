@@ -186,14 +186,19 @@ describe("template methods", () => {
     });
   });
 
-  test("addNep5Transfer", () => {
+  test("addNep17Transfer", () => {
     const account = new wallet.Account(
       "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g"
     );
     const destination = "NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV";
 
     const result = new TransactionBuilder()
-      .addNep5Transfer(account, destination, CONST.NATIVE_CONTRACTS.GAS, 100)
+      .addNep17Transfer(
+        account,
+        destination,
+        CONST.NATIVE_CONTRACT_HASH.GasToken,
+        100
+      )
       .build();
 
     expect(result).toMatchObject({

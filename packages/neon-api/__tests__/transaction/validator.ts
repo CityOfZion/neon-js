@@ -5,39 +5,13 @@ import {
 } from "../../src/transaction";
 
 describe("validate", () => {
-  test.skip("validate all, no autofix, all valid", async () => {
-    const rpcClient: rpc.RPCClient = ({
-      getBlockCount: jest.fn().mockImplementation(async () => 10),
-      invokeScript: jest
-        .fn()
-        .mockImplementation(async () => ({ state: "HALT", gasconsumed: 100 })),
-    } as unknown) as rpc.RPCClient;
-    const txn = new tx.Transaction({
-      validUntilBlock: 1000000,
-      script: "abcd",
-      systemFee: 100,
-      networkFee: 10000,
-    });
-    const validator = new TransactionValidator(rpcClient, txn);
-    const result = await validator.validate(ValidationAttributes.All);
-
-    expect(result).toMatchObject({
-      valid: true,
-      result: {
-        validUntilBlock: { valid: true, fixed: false },
-        systemFee: { valid: true, fixed: false },
-        script: { valid: true, fixed: false },
-        networkFee: { valid: true, fixed: false },
-      },
-    });
-  });
-
   test("validate some, no autofix, all valid", async () => {
     const rpcClient: rpc.RPCClient = ({
       getBlockCount: jest.fn().mockImplementation(async () => 10),
-      invokeScript: jest
-        .fn()
-        .mockImplementation(async () => ({ state: "HALT", gasconsumed: 100 })),
+      invokeScript: jest.fn().mockImplementation(async () => ({
+        state: "HALT",
+        gasconsumed: "0.000001",
+      })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
       validUntilBlock: 5000,
@@ -61,9 +35,10 @@ describe("validate", () => {
   test("validate some, some autofix, autofixes specified fields", async () => {
     const rpcClient: rpc.RPCClient = ({
       getBlockCount: jest.fn().mockImplementation(async () => 10),
-      invokeScript: jest
-        .fn()
-        .mockImplementation(async () => ({ state: "HALT", gasconsumed: 100 })),
+      invokeScript: jest.fn().mockImplementation(async () => ({
+        state: "HALT",
+        gasconsumed: "0.000001",
+      })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
       validUntilBlock: 1,
@@ -233,9 +208,10 @@ describe("validateScript", () => {
 describe("validateSystemFee", () => {
   test("valid", async () => {
     const rpcClient: rpc.RPCClient = ({
-      invokeScript: jest
-        .fn()
-        .mockImplementation(async () => ({ state: "HALT", gasconsumed: 100 })),
+      invokeScript: jest.fn().mockImplementation(async () => ({
+        state: "HALT",
+        gasconsumed: "0.000001",
+      })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
       script: "abcd",
@@ -254,9 +230,10 @@ describe("validateSystemFee", () => {
 
   test("invalid (too low)", async () => {
     const rpcClient: rpc.RPCClient = ({
-      invokeScript: jest
-        .fn()
-        .mockImplementation(async () => ({ state: "HALT", gasconsumed: 100 })),
+      invokeScript: jest.fn().mockImplementation(async () => ({
+        state: "HALT",
+        gasconsumed: "0.000001",
+      })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
       script: "abcd",
@@ -277,9 +254,10 @@ describe("validateSystemFee", () => {
 
   test("suggest (too high)", async () => {
     const rpcClient: rpc.RPCClient = ({
-      invokeScript: jest
-        .fn()
-        .mockImplementation(async () => ({ state: "HALT", gasconsumed: 100 })),
+      invokeScript: jest.fn().mockImplementation(async () => ({
+        state: "HALT",
+        gasconsumed: "0.000001",
+      })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
       script: "abcd",
@@ -300,9 +278,10 @@ describe("validateSystemFee", () => {
 
   test("autofix applies fix when too low", async () => {
     const rpcClient: rpc.RPCClient = ({
-      invokeScript: jest
-        .fn()
-        .mockImplementation(async () => ({ state: "HALT", gasconsumed: 100 })),
+      invokeScript: jest.fn().mockImplementation(async () => ({
+        state: "HALT",
+        gasconsumed: "0.000001",
+      })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
       script: "abcd",
@@ -323,9 +302,10 @@ describe("validateSystemFee", () => {
 
   test("autofix does not activate when too high", async () => {
     const rpcClient: rpc.RPCClient = ({
-      invokeScript: jest
-        .fn()
-        .mockImplementation(async () => ({ state: "HALT", gasconsumed: 100 })),
+      invokeScript: jest.fn().mockImplementation(async () => ({
+        state: "HALT",
+        gasconsumed: "0.000001",
+      })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
       script: "abcd",

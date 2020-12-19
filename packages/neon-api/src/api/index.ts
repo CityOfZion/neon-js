@@ -1,4 +1,4 @@
 export * from "./calculateNetworkFee";
-export * from "./getFeePerByte";
+export * from "./getFeeInformation";
 export * from "./getTokenBalances";
 export * from "./getTokenInfos";

@@ -8,16 +8,12 @@ describe("getTokenInfos", () => {
         return {
           script: "",
           state: "HALT",
-          gasconsumed: "4000000",
+          gasconsumed: "0.04",
           exception: null,
           stack: [
             {
               type: "ByteString",
               value: "R0FT",
-            },
-            {
-              type: "ByteString",
-              value: "Z2Fz",
             },
             {
               type: "Integer",
@@ -30,10 +26,6 @@ describe("getTokenInfos", () => {
             {
               type: "ByteString",
               value: "TkVP",
-            },
-            {
-              type: "ByteString",
-              value: "bmVv",
             },
             {
               type: "Integer",
@@ -58,14 +50,12 @@ describe("getTokenInfos", () => {
 
     expect(result).toStrictEqual([
       {
-        name: "GAS",
-        symbol: "gas",
+        symbol: "GAS",
         decimals: 8,
         totalSupply: "30000063.84920100",
       },
       {
-        name: "NEO",
-        symbol: "neo",
+        symbol: "NEO",
         decimals: 0,
         totalSupply: "100000000",
       },
@@ -78,7 +68,7 @@ describe("getTokenInfos", () => {
         return {
           script: "",
           state: "FAULT",
-          gasconsumed: "4000000",
+          gasconsumed: "0.04",
           exception: "expected exception message",
           stack: [],
         };
@@ -100,7 +90,7 @@ describe("getTokenInfos", () => {
         return {
           script: "",
           state: "FAULT",
-          gasconsumed: "4000000",
+          gasconsumed: "0.04",
           stack: [],
         };
       }),

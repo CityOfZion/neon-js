@@ -1,26 +1,24 @@
 import { rpc, sc, u } from "@cityofzion/neon-core";
 
 export interface TokenInfo {
-  name: string;
   symbol: string;
   decimals: number;
   totalSupply: string;
 }
 
-const CHUNK_SIZE = 4;
+const CHUNK_SIZE = 3;
 
 export async function getTokenInfos(
-  contracts: (string | sc.Nep5Contract)[],
+  contracts: (string | sc.Nep17Contract)[],
   client: rpc.NeoServerRpcClient
 ): Promise<TokenInfo[]> {
   const script = contracts
     .map((scriptHash) =>
-      scriptHash instanceof sc.Nep5Contract
+      scriptHash instanceof sc.Nep17Contract
         ? scriptHash
-        : new sc.Nep5Contract(scriptHash)
+        : new sc.Nep17Contract(scriptHash)
     )
     .map((contract) => [
-      contract.name(),
       contract.symbol(),
       contract.decimals(),
       contract.totalSupply(),
@@ -31,7 +29,7 @@ export async function getTokenInfos(
     }, new sc.ScriptBuilder())
     .build();
 
-  const response = await client.invokeScript(script);
+  const response = await client.invokeScript(u.HexString.fromHex(script));
   if (response.state === "FAULT") {
     throw new Error(
       response.exception
@@ -53,12 +51,11 @@ export async function getTokenInfos(
   }
 
   return results.map((result) => {
-    const decimals = parseInt(result[2].value as string);
+    const decimals = parseInt(result[1].value as string);
     return {
-      name: u.HexString.fromBase64(result[0].value as string).toAscii(),
-      symbol: u.HexString.fromBase64(result[1].value as string).toAscii(),
+      symbol: u.HexString.fromBase64(result[0].value as string).toAscii(),
       decimals,
-      totalSupply: u.BigInteger.fromNumber(result[3].value as string).toDecimal(
+      totalSupply: u.BigInteger.fromNumber(result[2].value as string).toDecimal(
         decimals
       ),
     };

@@ -6,14 +6,18 @@ export const MAGIC_NUMBER = {
   SoloNet: 1234567890,
 };
 
-export const NATIVE_CONTRACTS: { [key: string]: string } = {
-  NEO: "de5f57d430d3dece511cf975a8d37848cb9e0525",
-  de5f57d430d3dece511cf975a8d37848cb9e0525: "NEO",
-  GAS: "668e0c1f9d7b70a99dd9e06eadd4c784d641afbc",
-  "668e0c1f9d7b70a99dd9e06eadd4c784d641afbc": "GAS",
-  POLICY: "ce06595079cd69583126dbfd1d2e25cca74cffe9",
-};
+export enum NATIVE_CONTRACT_HASH {
+  NeoToken = "0a46e2e37c9987f570b4af253fb77e7eef0f72b6",
+  GasToken = "a6a6c15dcdc9b997dac448b6926522d22efeedfb",
+  PolicyContract = "dde31084c0fdbebc7f5ed5f53a38905305ccee14",
+  ContractManagement = "081514120c7894779309255b7fb18b376cec731a",
+  OracleContract = "b1c37d5847c2ae36bdde31d0cc833a7ad9667f8f",
+  RoleManagement = "136ec44854ad9a714901eb7d714714f1791203f2",
+}
 
+/**
+ * @deprecated Please use NATIVE_CONTRACT_HASh
+ */
 export const ASSET_ID: { [key: string]: string } = {
   NEO: "de5f57d430d3dece511cf975a8d37848cb9e0525",
   GAS: "668e0c1f9d7b70a99dd9e06eadd4c784d641afbc",

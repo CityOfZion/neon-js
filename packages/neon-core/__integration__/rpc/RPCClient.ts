@@ -3,7 +3,7 @@ import { ContractParam, createScript, ScriptBuilder } from "../../src/sc";
 import { Transaction, WitnessScope, Signer } from "../../src/tx";
 import { Wallet } from "../../src/wallet";
 import { HexString } from "../../src/u";
-import { ASSET_ID } from "../../src/consts";
+import { NATIVE_CONTRACT_HASH } from "../../src/consts";
 import testWallet from "../../__tests__/testWallet.json";
 
 const wallet = new Wallet(testWallet);
@@ -22,9 +22,10 @@ let client: rpc.RPCClient;
 const address = wallet.accounts[0].address;
 
 // NEO contract hash. Should be same across TestNet or LocalNet.
-const contractHash = ASSET_ID["NEO"];
+const contractHash = NATIVE_CONTRACT_HASH.NeoToken;
 let txid: string;
 let blockhash: string;
+let blockHeight: number;
 
 async function safelyCheckHeight(url: string): Promise<number> {
   try {
@@ -54,10 +55,18 @@ beforeAll(async () => {
     throw new Error("No good endpoint found");
   }
   client = new rpc.RPCClient(best.url);
-  const firstBlock = await client.getBlock(0, true);
-  expect(firstBlock.tx.length).toBe(1);
-  blockhash = firstBlock.hash;
-  txid = firstBlock.tx[0].hash;
+  let height = 0;
+  while (!txid) {
+    const block = await client.getBlock(height, true);
+    if (block.tx.length !== 0 && block.tx[0].hash) {
+      txid = block.tx[0].hash;
+      blockhash = block.hash;
+      blockHeight = height;
+      return;
+    }
+
+    height++;
+  }
 }, 20000);
 
 describe("RPC Methods", () => {
@@ -143,9 +152,10 @@ describe("RPC Methods", () => {
 
   test("getContractState", async () => {
     const result = await client.getContractState(contractHash);
-    expect(Object.keys(result)).toHaveLength(4);
+    expect(Object.keys(result)).toHaveLength(5);
     expect(result).toMatchObject({
       id: expect.any(Number),
+      updatecounter: expect.any(Number),
       hash: expect.any(String),
       script: expect.any(String),
       manifest: expect.any(Object),
@@ -199,7 +209,7 @@ describe("RPC Methods", () => {
 
   test("getTransactionHeight", async () => {
     const result = await client.getTransactionHeight(txid);
-    expect(result).toBe(0);
+    expect(result).toBe(blockHeight);
   });
 
   test("getNextBlockValidators", async () => {
@@ -240,7 +250,7 @@ describe("RPC Methods", () => {
 
   describe("Invocation methods", () => {
     test("invokeFunction", async () => {
-      const result = await client.invokeFunction(contractHash, "name");
+      const result = await client.invokeFunction(contractHash, "symbol");
 
       expect(Object.keys(result)).toEqual(
         expect.arrayContaining([
@@ -248,7 +258,7 @@ describe("RPC Methods", () => {
           "state",
           "gasconsumed",
           "stack",
-          "tx",
+          "exception",
         ])
       );
       expect(result.state).toContain("HALT");
@@ -264,6 +274,7 @@ describe("RPC Methods", () => {
           ContractParam.hash160(fromAccount.address),
           ContractParam.hash160(toAccount.address),
           ContractParam.integer(1),
+          ContractParam.any(),
         ],
         [
           new Signer({
@@ -279,7 +290,7 @@ describe("RPC Methods", () => {
           "state",
           "gasconsumed",
           "stack",
-          "tx",
+          "exception",
         ])
       );
       expect(result.state).toContain("HALT");
@@ -287,10 +298,9 @@ describe("RPC Methods", () => {
 
     test("invokeScript", async () => {
       const result = await client.invokeScript(
-        new ScriptBuilder()
-          .emitAppCall(contractHash, "name")
-          .emitAppCall(contractHash, "symbol")
-          .build()
+        HexString.fromHex(
+          new ScriptBuilder().emitAppCall(contractHash, "symbol").build()
+        )
       );
       expect(Object.keys(result)).toEqual(
         expect.arrayContaining([
@@ -298,16 +308,13 @@ describe("RPC Methods", () => {
           "state",
           "gasconsumed",
           "stack",
-          "tx",
+          "exception",
         ])
       );
       expect(result.state).toContain("HALT");
-      expect(result.stack.length).toEqual(2);
+      expect(result.stack.length).toEqual(1);
       expect(result.stack[0].value).toEqual(
         HexString.fromAscii("NEO").toBase64()
-      );
-      expect(result.stack[1].value).toEqual(
-        HexString.fromAscii("neo").toBase64()
       );
     });
 
@@ -321,10 +328,11 @@ describe("RPC Methods", () => {
           ContractParam.hash160(fromAccount.address),
           ContractParam.hash160(toAccount.address),
           ContractParam.integer(1),
+          ContractParam.any(),
         ],
       });
 
-      const result = await client.invokeScript(script, [
+      const result = await client.invokeScript(HexString.fromHex(script), [
         new Signer({
           account: fromAccount.scriptHash,
           scopes: WitnessScope.CalledByEntry,
@@ -337,7 +345,7 @@ describe("RPC Methods", () => {
           "state",
           "gasconsumed",
           "stack",
-          "tx",
+          "exception",
         ])
       );
       expect(result.state).toContain("HALT");
@@ -350,12 +358,13 @@ describe("RPC Methods", () => {
     const fromAccount = wallet.accounts[0];
     const toAccount = wallet.accounts[1];
     const script = createScript({
-      scriptHash: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
+      scriptHash: contractHash,
       operation: "transfer",
       args: [
         ContractParam.hash160(fromAccount.address),
         ContractParam.hash160(toAccount.address),
         ContractParam.integer(1),
+        ContractParam.any(),
       ],
     });
 
@@ -367,12 +376,14 @@ describe("RPC Methods", () => {
           scopes: WitnessScope.CalledByEntry,
         },
       ],
-      validUntilBlock: currentHeight + 1000000,
+      validUntilBlock: currentHeight + 1000,
       systemFee: "100000000",
       networkFee: "100000000",
       script: script,
     }).sign(fromAccount, 1234567890);
-    const result = await client.sendRawTransaction(transaction.serialize(true));
+    const result = await client.sendRawTransaction(
+      HexString.fromHex(transaction.serialize(true))
+    );
     expect(typeof result).toBe("string");
   }, 20000);
 

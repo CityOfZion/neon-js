@@ -1,7 +1,7 @@
 import { getIntegrationEnvUrl } from "../../../../../testHelpers";
-import { NATIVE_CONTRACTS } from "../../../src/consts";
+import { NATIVE_CONTRACT_HASH } from "../../../src/consts";
 import { RPCClient } from "../../../src/rpc";
-import { Nep5Contract } from "../../../src/sc/contracts/Nep5Contract";
+import { Nep17Contract } from "../../../src/sc/contracts/Nep17Contract";
 import testWallet from "../../../__tests__/testWallet.json";
 
 let rpcClient: RPCClient;
@@ -10,28 +10,9 @@ beforeAll(async () => {
   rpcClient = new RPCClient(url);
 });
 
-describe("Nep5Contract", () => {
-  test("name", async () => {
-    const neoContract = new Nep5Contract(NATIVE_CONTRACTS.NEO);
-    const contractCall = neoContract.name();
-
-    const result = await rpcClient.invokeFunction(
-      contractCall.scriptHash,
-      contractCall.operation,
-      contractCall.args
-    );
-
-    expect(result.state).toBe("HALT");
-    expect(result.stack).toStrictEqual([
-      {
-        type: "ByteString",
-        value: "TkVP",
-      },
-    ]);
-  });
-
+describe("Nep17Contract", () => {
   test("totalSupply", async () => {
-    const neoContract = new Nep5Contract(NATIVE_CONTRACTS.NEO);
+    const neoContract = new Nep17Contract(NATIVE_CONTRACT_HASH.NeoToken);
     const contractCall = neoContract.totalSupply();
 
     const result = await rpcClient.invokeFunction(
@@ -50,7 +31,7 @@ describe("Nep5Contract", () => {
   });
 
   test("symbol", async () => {
-    const neoContract = new Nep5Contract(NATIVE_CONTRACTS.NEO);
+    const neoContract = new Nep17Contract(NATIVE_CONTRACT_HASH.NeoToken);
     const contractCall = neoContract.symbol();
 
     const result = await rpcClient.invokeFunction(
@@ -63,13 +44,13 @@ describe("Nep5Contract", () => {
     expect(result.stack).toStrictEqual([
       {
         type: "ByteString",
-        value: "bmVv",
+        value: "TkVP",
       },
     ]);
   });
 
   test("decimals", async () => {
-    const neoContract = new Nep5Contract(NATIVE_CONTRACTS.GAS);
+    const neoContract = new Nep17Contract(NATIVE_CONTRACT_HASH.GasToken);
     const contractCall = neoContract.decimals();
 
     const result = await rpcClient.invokeFunction(
@@ -88,7 +69,7 @@ describe("Nep5Contract", () => {
   });
 
   test("balanceOf", async () => {
-    const neoContract = new Nep5Contract(NATIVE_CONTRACTS.GAS);
+    const neoContract = new Nep17Contract(NATIVE_CONTRACT_HASH.GasToken);
     const contractCall = neoContract.balanceOf(testWallet.accounts[0].address);
 
     const result = await rpcClient.invokeFunction(

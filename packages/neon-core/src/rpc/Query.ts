@@ -2,6 +2,7 @@ import { DEFAULT_REQ } from "../consts";
 import { Transaction, TransactionJson, Signer, SignerJson } from "../tx";
 import { ContractManifestJson, ContractParam, StackItemJson } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
+import { HexString } from "../u";
 
 export type BooleanLikeParam = 0 | 1 | boolean;
 export interface QueryLike<T extends unknown[]> {
@@ -46,17 +47,19 @@ export interface InvokeResult {
   script: string;
   /** State of VM on exit. HALT means a successful exit while FAULT means exit with error. */
   state: "HALT" | "FAULT";
-  /** Amount of gas consumed up to the point of stopping in the VM. If state is FAULT, this value is not representative of the amount of gas it will consume if it somehow succeeds on the blockchain. */
+  /** Amount of gas consumed up to the point of stopping in the VM. If state is FAULT, this value is not representative of the amount of gas it will consume if it somehow succeeds on the blockchain.
+   * This is a decimal value.
+   */
   gasconsumed: string;
   /** A human-readable string clarifying the exception that occurred. Only available when state is "FAULT". */
   exception: string | null;
   stack: StackItemJson[];
   /** A ready to send transaction that wraps the script. Only available when signers are provided and the sender's private key is open in the RPC node.*/
-  tx?: unknown;
 }
 
 export interface GetContractStateResult {
   id: number;
+  updatecounter: number;
   /** 0x prefixed hexstring */
   hash: string;
   /** Base64 encoded string */
@@ -64,13 +67,13 @@ export interface GetContractStateResult {
   manifest: ContractManifestJson;
 }
 
-export interface GetNep5TransfersResult {
-  sent: Nep5TransferEvent[];
-  received: Nep5TransferEvent[];
+export interface GetNep17TransfersResult {
+  sent: Nep17TransferEvent[];
+  received: Nep17TransferEvent[];
   address: string;
 }
 
-export interface Nep5TransferEvent {
+export interface Nep17TransferEvent {
   timestamp: number;
   assethash: string;
   transferaddress: string;
@@ -80,7 +83,7 @@ export interface Nep5TransferEvent {
   txhash: string;
 }
 
-export interface GetNep5BalancesResult {
+export interface GetNep17BalancesResult {
   address: string;
   balance: {
     assethash: string;
@@ -263,34 +266,34 @@ export class Query<TParams extends unknown[], TResponse> {
   }
 
   /**
-   * Query returning the nep5 transfer history of an account. Defaults of 1 week of history.
+   * Query returning the Nep17 transfer history of an account. Defaults of 1 week of history.
    * @param accountIdentifer - address or scriptHash of account
    * @param startTime - millisecond Unix timestamp
    * @param endTime - millisecond Unix timestamp
    */
-  public static getNep5Transfers(
+  public static getNep17Transfers(
     accountIdentifer: string,
     startTime?: string,
     endTime?: string
-  ): Query<[string, string?, string?], GetNep5TransfersResult> {
+  ): Query<[string, string?, string?], GetNep17TransfersResult> {
     const params: [string, string?, string?] = [accountIdentifer];
     if (startTime) params.push(startTime);
     if (endTime) params.push(endTime);
     return new Query({
-      method: "getnep5transfers",
+      method: "getnep17transfers",
       params,
     });
   }
 
   /**
-   * Query returning the nep5 balance of an account.
+   * Query returning the Nep17 balance of an account.
    * @param accountIdentifer - address or scriptHash of account
    */
-  public static getNep5Balances(
+  public static getNep17Balances(
     accountIdentifer: string
-  ): Query<[string], GetNep5BalancesResult> {
+  ): Query<[string], GetNep17BalancesResult> {
     return new Query({
-      method: "getnep5balances",
+      method: "getnep17balances",
       params: [accountIdentifer],
     });
   }
@@ -421,17 +424,17 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query runs the specific script through the VM.
-   * @param script -VM script as a hexstring.
+   * @param script - base64-encoded string.
    * @param signers - scripthashes of witnesses that should sign the transaction containing this script.
    */
   public static invokeScript(
-    script: string,
+    script: string | HexString,
     signers: (Signer | SignerJson)[] = []
   ): Query<[string, SignerJson[]], InvokeResult> {
     return new Query({
       method: "invokescript",
       params: [
-        script,
+        script instanceof HexString ? script.toBase64() : script,
         signers.map((s) => (s instanceof Signer ? s.toJson() : s)),
       ],
     });
@@ -449,14 +452,16 @@ export class Query<TParams extends unknown[], TResponse> {
 
   /**
    * This Query transmits the specific transaction to the node. On success, the node will return the transaction hash.
-   * @param transaction - transaction as a Transaction object or hexstring.
+   * @param transaction - transaction as a Transaction object or base64 hexstring.
    */
   public static sendRawTransaction(
-    transaction: Transaction | string
+    transaction: Transaction | string | HexString
   ): Query<[string], SendResult> {
     const serialized =
       transaction instanceof Transaction
-        ? transaction.serialize(true)
+        ? HexString.fromHex(transaction.serialize(true)).toBase64()
+        : transaction instanceof HexString
+        ? transaction.toBase64()
         : transaction;
     return new Query({
       method: "sendrawtransaction",
