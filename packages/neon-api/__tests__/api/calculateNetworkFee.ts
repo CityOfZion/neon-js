@@ -45,6 +45,6 @@ describe("calculateNetworkFee", () => {
 
     const result = calculateNetworkFee(txn, feePerByte, signingAccounts);
 
-    expect(result.toString()).toBe("2063450");
+    expect(result.toString()).toBe("33850000");
   });
 });

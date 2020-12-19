@@ -1,4 +1,6 @@
 import { str2hexstring, sha256, hash160, reverseHex } from "../u";
+import { ContractParam } from "./ContractParam";
+import { OpCode } from "./OpCode";
 import ScriptBuilder from "./ScriptBuilder";
 
 export enum InteropServiceCode {
@@ -8,16 +10,15 @@ export enum InteropServiceCode {
   NEO_CRYPTO_SHA256 = "d7ac7411",
   NEO_CRYPTO_VERIFYWITHECDSASECP256K1 = "7e3c53b7",
   NEO_CRYPTO_VERIFYWITHECDSASECP256R1 = "95440d78",
-  NEO_NATIVE_CALL = "6b67780b",
-  NEO_NATIVE_DEPLOY = "123e7fe8",
+  SYSTEM_BINARY_ATOI = "1c3840eb",
   SYSTEM_BINARY_BASE58DECODE = "6df79237",
   SYSTEM_BINARY_BASE58ENCODE = "3f57b067",
   SYSTEM_BINARY_BASE64DECODE = "dba384c3",
   SYSTEM_BINARY_BASE64ENCODE = "acbf5376",
   SYSTEM_BINARY_DESERIALIZE = "527cd0df",
+  SYSTEM_BINARY_ITOA = "7be3ba7d",
   SYSTEM_BINARY_SERIALIZE = "3f1c0124",
   SYSTEM_BLOCKCHAIN_GETBLOCK = "8347922d",
-  SYSTEM_BLOCKCHAIN_GETCONTRACT = "a9c54b41",
   SYSTEM_BLOCKCHAIN_GETHEIGHT = "7ef5721f",
   SYSTEM_BLOCKCHAIN_GETTRANSACTION = "e6558d48",
   SYSTEM_BLOCKCHAIN_GETTRANSACTIONFROMBLOCK = "7e56fd69",
@@ -28,12 +29,12 @@ export enum InteropServiceCode {
   SYSTEM_CALLBACK_INVOKE = "d42b3dad",
   SYSTEM_CONTRACT_CALL = "627d5b52",
   SYSTEM_CONTRACT_CALLEX = "eef40cdb",
-  SYSTEM_CONTRACT_CREATE = "ce352c85",
+  SYSTEM_CONTRACT_CALLNATIVE = "1af77b67",
   SYSTEM_CONTRACT_CREATESTANDARDACCOUNT = "cf998702",
-  SYSTEM_CONTRACT_DESTROY = "c69f1df0",
   SYSTEM_CONTRACT_GETCALLFLAGS = "95da3a81",
   SYSTEM_CONTRACT_ISSTANDARD = "d76b9d85",
-  SYSTEM_CONTRACT_UPDATE = "31c6331d",
+  SYSTEM_CONTRACT_NATIVEONPERSIST = "2edbbc93",
+  SYSTEM_CONTRACT_NATIVEPOSTPERSIST = "44a15d16",
   SYSTEM_ENUMERATOR_CONCAT = "d406e5e1",
   SYSTEM_ENUMERATOR_CREATE = "bbaa607a",
   SYSTEM_ENUMERATOR_NEXT = "926d4cf0",
@@ -84,9 +85,15 @@ export function fromMethodName(methodName: string): InteropServiceCode {
 }
 
 export function getNativeContractHash(contractName: string): string {
-  const script = new ScriptBuilder()
+  const innerScript = new ScriptBuilder()
     .emitString(contractName)
-    .emitSysCall(InteropServiceCode.NEO_NATIVE_CALL)
+    .emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALLNATIVE)
+    .build();
+
+  const script = new ScriptBuilder()
+    .emit(OpCode.ABORT)
+    .emitContractParam(ContractParam.hash160("0".repeat(40)))
+    .emitHexString(innerScript)
     .build();
   return reverseHex(hash160(script));
 }

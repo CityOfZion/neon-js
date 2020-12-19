@@ -1,5 +1,5 @@
 import { tx, rpc, u } from "@cityofzion/neon-core";
-import { getNetworkFee } from "./util";
+import { calculateNetworkFee } from "../api";
 
 export enum ValidationAttributes {
   None = 0,
@@ -149,7 +149,7 @@ export class TransactionValidator {
     autoFix = false
   ): Promise<ValidationSuggestion<u.BigInteger>> {
     const { networkFee: prev } = this.transaction;
-    const suggestion = getNetworkFee(this.transaction);
+    const suggestion = calculateNetworkFee(this.transaction, 30, []);
     const compareResult = suggestion.compare(prev);
     if (compareResult > 0) {
       // Underpaying

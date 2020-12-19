@@ -45,8 +45,18 @@ export function calculateNetworkFee(
   txClone.witnesses = witnesses;
   const verificationExecutionFee = witnesses.reduce((totalFee, witness) => {
     return totalFee
-      .add(sc.calculateExecutionFee(witness.invocationScript.toBigEndian()))
-      .add(sc.calculateExecutionFee(witness.verificationScript.toBigEndian()));
+      .add(
+        sc.calculateExecutionFee(
+          witness.invocationScript.toBigEndian(),
+          feePerByte
+        )
+      )
+      .add(
+        sc.calculateExecutionFee(
+          witness.verificationScript.toBigEndian(),
+          feePerByte
+        )
+      );
   }, u.BigInteger.fromNumber(0));
   const sizeFee = feePerByteBigInteger.mul(txClone.serialize(true).length / 2);
 

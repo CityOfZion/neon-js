@@ -5,7 +5,6 @@ import {
   calculateNetworkFee,
   setBlockExpiry,
   addFees,
-  deployContract,
 } from "./helpers";
 
 const txHelpers = {
@@ -15,4 +14,4 @@ const txHelpers = {
   addFees,
 };
 
-export { nep5, txHelpers, deployContract, SmartContract };
+export { nep5, txHelpers, SmartContract };
