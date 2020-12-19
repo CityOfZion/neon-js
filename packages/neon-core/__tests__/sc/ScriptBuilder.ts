@@ -42,12 +42,12 @@ describe("emitSysCall", () => {
     const sb = new ScriptBuilder();
     const result = sb
       .emitSysCall(
-        InteropServiceCode.SYSTEM_CONTRACT_CREATE,
+        InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256K1,
         HexString.fromHex("a45f"),
         HexString.fromHex("2bc5")
       )
       .build();
-    expect(result).toBe("0c02c52b0c025fa441ce352c85");
+    expect(result).toBe("0c02c52b0c025fa44157c6efb2");
   });
 });
 

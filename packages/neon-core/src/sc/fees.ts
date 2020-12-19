@@ -10,9 +10,17 @@ import { OpToken } from "./OpToken";
  * This only supports running non APPCALL scripts.
  * Mainly used to calculate network fees.
  */
-export function calculateExecutionFee(script: string | OpToken[]): BigInteger {
+export function calculateExecutionFee(
+  script: string | OpToken[],
+  executionFeeFactor: number | BigInteger
+): BigInteger {
   const opTokens =
     typeof script === "string" ? OpToken.fromScript(script) : script;
+
+  const factor =
+    typeof executionFeeFactor === "number"
+      ? BigInteger.fromNumber(executionFeeFactor)
+      : executionFeeFactor;
 
   return opTokens
     .map((token, i) => {
@@ -29,20 +37,21 @@ export function calculateExecutionFee(script: string | OpToken[]): BigInteger {
             InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256K1
         ) {
           const threshold = extractThresholdForMultiSig(opTokens, i);
-          return BigInteger.fromDecimal(OpCodePrices[token.code], 8).add(
-            BigInteger.fromDecimal(
+          return BigInteger.fromNumber(OpCodePrices[token.code]).add(
+            BigInteger.fromNumber(
               getInteropServicePrice(
                 InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
-              ),
-              8
-            ).mul(threshold)
+              )
+            )
+              .mul(threshold)
+              .mul(factor)
           );
         }
-        return BigInteger.fromDecimal(OpCodePrices[token.code], 8).add(
-          BigInteger.fromDecimal(getInteropServicePrice(interopCode), 8)
-        );
+        return BigInteger.fromNumber(OpCodePrices[token.code])
+          .add(BigInteger.fromNumber(getInteropServicePrice(interopCode)))
+          .mul(factor);
       } else {
-        return BigInteger.fromDecimal(OpCodePrices[token.code], 8);
+        return BigInteger.fromNumber(OpCodePrices[token.code]).mul(factor);
       }
     })
     .reduce((a, b) => a.add(b), BigInteger.fromNumber(0));

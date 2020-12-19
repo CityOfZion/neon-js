@@ -37,8 +37,6 @@ const create = {
   ): neonCore.sc.ContractParam => sc.ContractParam.fromJson({ type, value }),
   script: sc.createScript,
   scriptBuilder: (): neonCore.sc.ScriptBuilder => new sc.ScriptBuilder(),
-  deployScript: (args: neonCore.sc.DeployParams): neonCore.sc.ScriptBuilder =>
-    sc.generateDeployScript(args),
   rpcClient: (net: string, version: string): neonCore.rpc.RPCClient =>
     new rpc.RPCClient(net, version),
   query: (
