@@ -40,7 +40,7 @@ describe("validate", () => {
         .mockImplementation(async () => ({ state: "HALT", gasconsumed: 100 })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
-      validUntilBlock: 1000000,
+      validUntilBlock: 5000,
       script: "abcd",
       systemFee: 100,
     });
@@ -85,7 +85,7 @@ describe("validate", () => {
           valid: true,
           fixed: true,
           prev: 1,
-          suggestion: 10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1,
+          suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
         },
         systemFee: { valid: true, fixed: false },
         script: { valid: true, fixed: false },
@@ -100,7 +100,7 @@ describe("validateValidUntilBlock", () => {
       getBlockCount: jest.fn().mockImplementation(async () => 10),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
-      validUntilBlock: 1000000,
+      validUntilBlock: 5000,
     });
     const validator = new TransactionValidator(rpcClient, txn);
     const result = await validator.validateValidUntilBlock(false);
@@ -109,7 +109,7 @@ describe("validateValidUntilBlock", () => {
       valid: true,
       fixed: false,
     });
-    expect(txn.validUntilBlock).toBe(1000000);
+    expect(txn.validUntilBlock).toBe(5000);
   });
 
   test("invalid (validUntilBlock too small)", async () => {
@@ -126,7 +126,7 @@ describe("validateValidUntilBlock", () => {
       valid: false,
       fixed: false,
       prev: 1,
-      suggestion: 10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1,
+      suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
     });
     expect(txn.validUntilBlock).toBe(1);
   });
@@ -144,17 +144,17 @@ describe("validateValidUntilBlock", () => {
       valid: false,
       fixed: false,
       prev: 100000000,
-      suggestion: 10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1,
+      suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
     });
     expect(txn.validUntilBlock).toBe(100000000);
   });
 
-  test("valid but suggest when lifespan too short (240)", async () => {
+  test("valid but suggest when lifespan too short (20)", async () => {
     const rpcClient: rpc.RPCClient = ({
       getBlockCount: jest.fn().mockImplementation(async () => 10),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
-      validUntilBlock: 250,
+      validUntilBlock: 30,
     });
     const validator = new TransactionValidator(rpcClient, txn);
     const result = await validator.validateValidUntilBlock(false);
@@ -162,10 +162,10 @@ describe("validateValidUntilBlock", () => {
     expect(result).toMatchObject({
       valid: true,
       fixed: false,
-      prev: 250,
-      suggestion: 10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1,
+      prev: 30,
+      suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
     });
-    expect(txn.validUntilBlock).toBe(250);
+    expect(txn.validUntilBlock).toBe(30);
   });
 
   test("autofix", async () => {
@@ -182,10 +182,10 @@ describe("validateValidUntilBlock", () => {
       valid: true,
       fixed: true,
       prev: 1,
-      suggestion: 10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1,
+      suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
     });
     expect(txn.validUntilBlock).toBe(
-      10 + tx.Transaction.MAX_TRANSACTION_LIFESPAN - 1
+      10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1
     );
   });
 });
