@@ -1,7 +1,16 @@
 const sc = require("@cityofzion/neon-core").sc;
 
-console.log(sc.getNativeContractHash("NeoToken"));
+const nativeContractNames = [
+  "NeoToken",
+  "GasToken",
+  "PolicyContract",
+  "ContractManagement",
+  "OracleContract",
+  "RoleManagement",
+];
 
-console.log(sc.getNativeContractHash("GasToken"));
-
-console.log(sc.getNativeContractHash("PolicyContract"));
+console.log(
+  nativeContractNames
+    .map((name) => `${name} = "${sc.getNativeContractHash(name)}"`)
+    .join(",\n")
+);

@@ -128,8 +128,8 @@ export class Transaction implements NeonObject<TransactionLike> {
     return new Transaction({
       version: input.version,
       nonce: input.nonce,
-      systemFee: BigInteger.fromNumber(input.sysfee),
-      networkFee: BigInteger.fromNumber(input.netfee),
+      systemFee: BigInteger.fromDecimal(input.sysfee, 8),
+      networkFee: BigInteger.fromDecimal(input.netfee, 8),
       validUntilBlock: input.validuntilblock,
       attributes: input.attributes.map((a) => TransactionAttribute.fromJson(a)),
       signers: input.signers.map((c) => Signer.fromJson(c)),
@@ -350,8 +350,8 @@ export class Transaction implements NeonObject<TransactionLike> {
         this.sender.byteLength === 0
           ? ""
           : getAddressFromScriptHash(this.sender.toBigEndian()),
-      sysfee: this.systemFee.toString(),
-      netfee: this.networkFee.toString(),
+      sysfee: this.systemFee.toDecimal(8),
+      netfee: this.networkFee.toDecimal(8),
       validuntilblock: this.validUntilBlock,
       attributes: this.attributes.map((a) => a.toJson()),
       signers: this.signers.map((c) => c.toJson()),

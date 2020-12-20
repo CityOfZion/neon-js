@@ -7,8 +7,8 @@
       "version": 0,
       "nonce": 0,
       "sender": "NeN4xPMn4kHoj7G8Lciq9oorgLTvqt4qi1",
-      "sysfee": "0",
-      "netfee": "0",
+      "sysfee": "0.00000000",
+      "netfee": "0.00000000",
       "validuntilblock": 0,
       "signers": [
         {
@@ -34,8 +34,8 @@
       "version": 0,
       "nonce": 1149994904,
       "sender": "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV",
-      "sysfee": "72063920",
-      "netfee": "1883450",
+      "sysfee": "0.72063920",
+      "netfee": "0.01883450",
       "validuntilblock": 2102401,
       "attributes": [],
       "signers": [

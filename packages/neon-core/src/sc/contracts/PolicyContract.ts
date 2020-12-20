@@ -2,7 +2,7 @@ import { ContractMethodDefinition } from "../manifest/ContractMethodDefinition";
 import { ContractCall } from "../types";
 import { BaseContract } from "./BaseContract";
 import policyAbi from "./templates/PolicyTemplateAbi.json";
-import { NATIVE_CONTRACTS } from "../../consts";
+import { NATIVE_CONTRACT_HASH } from "../../consts";
 
 let SINGLETON: PolicyContract;
 /**
@@ -22,14 +22,14 @@ export class PolicyContract extends BaseContract {
   }
 
   constructor() {
-    super(NATIVE_CONTRACTS.POLICY, PolicyContract.getMethods());
-  }
-
-  public name(): ContractCall {
-    return this.call("name");
+    super(NATIVE_CONTRACT_HASH.PolicyContract, PolicyContract.getMethods());
   }
 
   public getFeePerByte(): ContractCall {
     return this.call("getFeePerByte");
+  }
+
+  public getExecFeeFactor(): ContractCall {
+    return this.call("getExecFeeFactor");
   }
 }

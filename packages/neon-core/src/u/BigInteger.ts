@@ -99,7 +99,7 @@ export class BigInteger {
   /**
    * Creates a BigInteger instance from a decimal by parsing the decimals and shifting the decimal point by a provided number of places.
    *
-   * This is mainly used with dealing with NEP5 tokens.
+   * This is mainly used with dealing with Nep17 tokens.
    * While most tokens support some sort of decimal places, the data is actually stored as an integer.
    * This helper method converts the decimal number to the integer representation to work with.
    * To convert back, use toDecimal(decimals);

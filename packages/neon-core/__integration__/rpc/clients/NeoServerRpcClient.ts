@@ -1,6 +1,7 @@
 import { rpc, sc, tx, u, CONST, wallet } from "../../../src";
 import * as TestHelpers from "../../../../../testHelpers";
 import testWalletJson from "../../../__tests__/testWallet.json";
+import { HexString } from "../../../src/u";
 
 const testWallet = new wallet.Wallet(testWalletJson);
 
@@ -8,17 +9,27 @@ let client: rpc.NeoServerRpcClient;
 const address = testWallet.accounts[0].address;
 
 // NEO contract hash. Should be same across TestNet or LocalNet.
-const contractHash = CONST.ASSET_ID["NEO"];
+const contractHash = CONST.NATIVE_CONTRACT_HASH.NeoToken;
 let txid: string;
 let blockhash: string;
+let blockHeight: number;
 
 beforeAll(async () => {
   const url = await TestHelpers.getIntegrationEnvUrl();
   client = new rpc.NeoServerRpcClient(url);
-  const firstBlock = await client.getBlock(0, true);
-  expect(firstBlock.tx.length).toBe(1);
-  blockhash = firstBlock.hash;
-  txid = firstBlock.tx[0].hash;
+
+  let height = 0;
+  while (!txid) {
+    const block = await client.getBlock(height, true);
+    if (block.tx.length !== 0 && block.tx[0].hash) {
+      txid = block.tx[0].hash;
+      blockhash = block.hash;
+      blockHeight = height;
+      return;
+    }
+
+    height++;
+  }
 }, 20000);
 
 describe("NeoServerRpcClient", () => {
@@ -104,9 +115,10 @@ describe("NeoServerRpcClient", () => {
 
   test("getContractState", async () => {
     const result = await client.getContractState(contractHash);
-    expect(Object.keys(result)).toHaveLength(4);
+    expect(Object.keys(result)).toHaveLength(5);
     expect(result).toMatchObject({
       id: expect.any(Number),
+      updatecounter: expect.any(Number),
       hash: expect.any(String),
       script: expect.any(String),
       manifest: expect.any(Object),
@@ -161,7 +173,7 @@ describe("NeoServerRpcClient", () => {
 
   test("getTransactionHeight", async () => {
     const result = await client.getTransactionHeight(txid);
-    expect(result).toBe(0);
+    expect(result).toBe(blockHeight);
   });
 
   test("getNextBlockValidators", async () => {
@@ -203,16 +215,15 @@ describe("NeoServerRpcClient", () => {
 
   describe("Invocation methods", () => {
     test("invokeFunction with HALT", async () => {
-      const result = await client.invokeFunction(contractHash, "name");
+      const result = await client.invokeFunction(contractHash, "symbol");
 
-      expect(Object.keys(result)).toHaveLength(6);
+      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
         gasconsumed: expect.any(String),
         exception: null,
         stack: expect.any(Array),
-        tx: null,
       });
     });
 
@@ -239,6 +250,7 @@ describe("NeoServerRpcClient", () => {
           sc.ContractParam.hash160(fromAccount.address),
           sc.ContractParam.hash160(toAccount.address),
           sc.ContractParam.integer(1),
+          sc.ContractParam.any(),
         ],
         [
           new tx.Signer({
@@ -248,42 +260,36 @@ describe("NeoServerRpcClient", () => {
         ]
       );
 
-      expect(Object.keys(result)).toHaveLength(6);
+      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
         gasconsumed: expect.any(String),
         exception: null,
         stack: expect.any(Array),
-        tx: null,
       });
     });
 
     test("invokeScript", async () => {
       const result = await client.invokeScript(
-        new sc.ScriptBuilder()
-          .emitAppCall(contractHash, "name")
-          .emitAppCall(contractHash, "symbol")
-          .build()
+        HexString.fromHex(
+          new sc.ScriptBuilder().emitAppCall(contractHash, "symbol").build()
+        )
       );
 
-      expect(Object.keys(result)).toHaveLength(6);
+      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
         gasconsumed: expect.any(String),
         exception: null,
         stack: expect.any(Array),
-        tx: null,
       });
 
       expect(result.state).toContain("HALT");
-      expect(result.stack.length).toEqual(2);
+      expect(result.stack.length).toEqual(1);
       expect(result.stack[0].value).toEqual(
         u.HexString.fromAscii("NEO").toBase64()
-      );
-      expect(result.stack[1].value).toEqual(
-        u.HexString.fromAscii("neo").toBase64()
       );
     });
 
@@ -297,24 +303,24 @@ describe("NeoServerRpcClient", () => {
           sc.ContractParam.hash160(fromAccount.address),
           sc.ContractParam.hash160(toAccount.address),
           sc.ContractParam.integer(1),
+          sc.ContractParam.any(),
         ],
       });
 
-      const result = await client.invokeScript(script, [
+      const result = await client.invokeScript(HexString.fromHex(script), [
         new tx.Signer({
           account: fromAccount.scriptHash,
           scopes: tx.WitnessScope.CalledByEntry,
         }),
       ]);
 
-      expect(Object.keys(result)).toHaveLength(6);
+      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
         gasconsumed: expect.any(String),
         exception: null,
         stack: expect.any(Array),
-        tx: null,
       });
     });
   });
@@ -325,12 +331,13 @@ describe("NeoServerRpcClient", () => {
     const fromAccount = testWallet.accounts[0];
     const toAccount = testWallet.accounts[1];
     const script = sc.createScript({
-      scriptHash: "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
+      scriptHash: contractHash,
       operation: "transfer",
       args: [
         sc.ContractParam.hash160(fromAccount.address),
         sc.ContractParam.hash160(toAccount.address),
         sc.ContractParam.integer(1),
+        sc.ContractParam.any(),
       ],
     });
 
@@ -342,12 +349,14 @@ describe("NeoServerRpcClient", () => {
           scopes: tx.WitnessScope.CalledByEntry,
         },
       ],
-      validUntilBlock: currentHeight + 1000000,
+      validUntilBlock: currentHeight + 1000,
       systemFee: "100000000",
       networkFee: "100000000",
       script: script,
     }).sign(fromAccount, 1234567890);
-    const result = await client.sendRawTransaction(transaction.serialize(true));
+    const result = await client.sendRawTransaction(
+      HexString.fromHex(transaction.serialize(true))
+    );
     expect(typeof result).toBe("string");
   }, 20000);
 

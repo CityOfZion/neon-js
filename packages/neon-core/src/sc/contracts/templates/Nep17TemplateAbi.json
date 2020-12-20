@@ -1,11 +1,11 @@
 {
-  "hash": "",
   "methods": [
     {
       "name": "totalSupply",
       "parameters": [],
       "offset": 0,
-      "returntype": "Integer"
+      "returntype": "Integer",
+      "safe": true
     },
     {
       "name": "balanceOf",
@@ -16,7 +16,8 @@
         }
       ],
       "offset": 0,
-      "returntype": "Integer"
+      "returntype": "Integer",
+      "safe": true
     },
     {
       "name": "transfer",
@@ -32,28 +33,29 @@
         {
           "name": "amount",
           "type": "Integer"
+        },
+        {
+          "name": "data",
+          "type": "Any"
         }
       ],
       "offset": 0,
-      "returntype": "Boolean"
-    },
-    {
-      "name": "name",
-      "parameters": [],
-      "offset": 0,
-      "returntype": "String"
+      "returntype": "Boolean",
+      "safe": false
     },
     {
       "name": "symbol",
       "parameters": [],
       "offset": 0,
-      "returntype": "String"
+      "returntype": "String",
+      "safe": true
     },
     {
       "name": "decimals",
       "parameters": [],
       "offset": 0,
-      "returntype": "Integer"
+      "returntype": "Integer",
+      "safe": true
     }
   ],
   "events": [

@@ -2,7 +2,7 @@ import { CONST, rpc, wallet, sc, tx, u } from "@cityofzion/neon-core";
 import { CommonConfig } from "../types";
 import { setBlockExpiry, addFees } from "../helpers";
 
-export class Nep5Contract {
+export class Nep17Contract {
   /**
    * Base class for communicating with NEP-5 contracts on the block chain.
    */
@@ -205,15 +205,15 @@ export class Nep5Contract {
   }
 }
 
-export class NEOContract extends Nep5Contract {
+export class NEOContract extends Nep17Contract {
   /**
-   * Convenience class initializing a Nep5Contract to the NEO token
+   * Convenience class initializing a Nep17Contract to the NEO token
    * exposing additional claim functions
    * @param config -
    */
 
   constructor(config: CommonConfig) {
-    super(u.HexString.fromHex(CONST.ASSET_ID.NEO), config);
+    super(u.HexString.fromHex(CONST.NATIVE_CONTRACT_HASH.NeoToken), config);
   }
 
   /**
@@ -269,12 +269,12 @@ export class NEOContract extends Nep5Contract {
   }
 }
 
-export class GASContract extends Nep5Contract {
+export class GASContract extends Nep17Contract {
   /**
-   * Convenience class initializing a Nep5Contract to GAS token
+   * Convenience class initializing a Nep17Contract to GAS token
    * @param config -
    */
   constructor(config: CommonConfig) {
-    super(u.HexString.fromHex(CONST.ASSET_ID.GAS), config);
+    super(u.HexString.fromHex(CONST.NATIVE_CONTRACT_HASH.GasToken), config);
   }
 }

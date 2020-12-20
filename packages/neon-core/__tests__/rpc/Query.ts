@@ -1,6 +1,7 @@
 import Query, { QueryLike } from "../../src/rpc/Query";
 import { ContractParam } from "../../src/sc";
 import { Transaction, Signer } from "../../src/tx";
+import { HexString } from "../../src/u";
 
 describe("constructor", () => {
   test("RPCRequest", () => {
@@ -208,14 +209,20 @@ describe("static", () => {
   });
 
   describe("invokeScript", () => {
-    test("script", () => {
-      const result = Query.invokeScript("script");
+    test("base64 input", () => {
+      const result = Query.invokeScript("EBES");
       expect(result.method).toEqual("invokescript");
-      expect(result.params).toEqual(["script", []]);
+      expect(result.params).toEqual(["EBES", []]);
+    });
+
+    test("HexString", () => {
+      const result = Query.invokeScript(HexString.fromHex("101112"));
+      expect(result.method).toEqual("invokescript");
+      expect(result.params).toEqual(["EBES", []]);
     });
 
     test("script with signers", () => {
-      const result = Query.invokeScript("script", [
+      const result = Query.invokeScript("MDAxMTIy", [
         new Signer({ account: "ab".repeat(20) }),
         {
           account: "cd".repeat(20),
@@ -224,7 +231,7 @@ describe("static", () => {
       ]);
       expect(result.method).toEqual("invokescript");
       expect(result.params).toEqual([
-        "script",
+        "MDAxMTIy",
         [
           {
             account: "0x" + "ab".repeat(20),
@@ -256,7 +263,9 @@ describe("static", () => {
       const tx = new Transaction();
       const result = Query.sendRawTransaction(tx);
       expect(result.method).toEqual("sendrawtransaction");
-      expect(result.params).toEqual([tx.serialize(true)]);
+      expect(result.params).toEqual([
+        HexString.fromHex(tx.serialize(true)).toBase64(),
+      ]);
     });
   });
 

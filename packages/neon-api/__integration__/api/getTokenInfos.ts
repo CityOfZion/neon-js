@@ -12,19 +12,17 @@ beforeAll(async () => {
 
 describe("getTokenInfos", () => {
   test("NEO & GAS", async () => {
-    const neoScriptHash = CONST.ASSET_ID["NEO"];
-    const gasScriptHash = CONST.ASSET_ID["GAS"];
+    const neoScriptHash = CONST.NATIVE_CONTRACT_HASH.NeoToken;
+    const gasScriptHash = CONST.NATIVE_CONTRACT_HASH.GasToken;
     const result = await getTokenInfos([neoScriptHash, gasScriptHash], client);
     expect(result).toStrictEqual([
       {
-        name: "NEO",
-        symbol: "neo",
+        symbol: "NEO",
         decimals: 0,
         totalSupply: "100000000",
       } as TokenInfo,
       {
-        name: "GAS",
-        symbol: "gas",
+        symbol: "GAS",
         decimals: 8,
         totalSupply: expect.any(String),
       } as TokenInfo,

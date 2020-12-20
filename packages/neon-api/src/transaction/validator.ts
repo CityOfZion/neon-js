@@ -1,5 +1,5 @@
 import { tx, rpc, u } from "@cityofzion/neon-core";
-import { calculateNetworkFee } from "../api";
+import { calculateNetworkFee, getFeeInformation } from "../api";
 
 export enum ValidationAttributes {
   None = 0,
@@ -94,7 +94,7 @@ export class TransactionValidator {
    */
   public async validateScript(): Promise<ValidationSuggestion<void>> {
     const { state } = await this.rpcClient.invokeScript(
-      this.transaction.script.toBigEndian()
+      this.transaction.script
     );
     if (state !== "HALT") {
       return err("Encountered FAULT when validating script.");
@@ -113,7 +113,7 @@ export class TransactionValidator {
     const {
       state,
       gasconsumed: gasConsumed,
-    } = await this.rpcClient.invokeScript(script.toBigEndian());
+    } = await this.rpcClient.invokeScript(script);
 
     if (state === "FAULT") {
       return err(
@@ -121,7 +121,7 @@ export class TransactionValidator {
       );
     }
 
-    const suggestion = u.BigInteger.fromNumber(gasConsumed);
+    const suggestion = u.BigInteger.fromDecimal(gasConsumed, 8);
     const compareResult = suggestion.compare(prev);
     if (compareResult > 0) {
       // Did not hit the minimum fees to run the script.
@@ -149,7 +149,16 @@ export class TransactionValidator {
     autoFix = false
   ): Promise<ValidationSuggestion<u.BigInteger>> {
     const { networkFee: prev } = this.transaction;
-    const suggestion = calculateNetworkFee(this.transaction, 30, []);
+
+    const { feePerByte, executionFeeFactor } = await getFeeInformation(
+      this.rpcClient
+    );
+
+    const suggestion = calculateNetworkFee(
+      this.transaction,
+      feePerByte,
+      executionFeeFactor
+    );
     const compareResult = suggestion.compare(prev);
     if (compareResult > 0) {
       // Underpaying

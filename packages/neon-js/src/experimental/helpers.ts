@@ -1,6 +1,6 @@
 import { CONST, rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { CommonConfig } from "./types";
-import { GASContract } from "./nep5";
+import { GASContract } from "./nep17";
 
 /**
  * Calculate the GAS costs for validation and inclusion of the transaction in a block
@@ -102,7 +102,7 @@ export async function calculateNetworkFee(
   const rpcClient = new rpc.RPCClient(config.rpcAddress);
   try {
     const response = await rpcClient.invokeFunction(
-      CONST.NATIVE_CONTRACTS.POLICY,
+      CONST.NATIVE_CONTRACT_HASH.PolicyContract,
       "getFeePerByte"
     );
     if (response.state === "FAULT") {
@@ -134,7 +134,7 @@ export async function getSystemFee(
 ): Promise<number> {
   const rpcClient = new rpc.RPCClient(config.rpcAddress);
   try {
-    const response = await rpcClient.invokeScript(script.toString(), signers);
+    const response = await rpcClient.invokeScript(script, signers);
     if (response.state === "FAULT") {
       throw Error("Script execution failed. ExecutionEngine state = FAULT");
     }

@@ -124,7 +124,9 @@ export class Witness implements NeonObject<WitnessLike> {
 
   #scriptHash = "";
 
-  public constructor(obj: Partial<WitnessLike | Witness> = {}) {
+  public constructor(
+    obj: Partial<Pick<WitnessLike | Witness, keyof WitnessLike>> = {}
+  ) {
     if (
       typeof obj.invocationScript === "undefined" ||
       typeof obj.verificationScript === "undefined"

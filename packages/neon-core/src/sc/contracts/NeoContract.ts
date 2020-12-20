@@ -1,14 +1,14 @@
-import { NATIVE_CONTRACTS } from "../../consts";
+import { NATIVE_CONTRACT_HASH } from "../../consts";
 import { BigInteger } from "../../u";
 import { ContractParam } from "../ContractParam";
 import { ContractMethodDefinition } from "../manifest";
 import { ContractCall } from "../types";
-import { Nep5Contract } from "./Nep5Contract";
+import { Nep17Contract } from "./Nep17Contract";
 import neoAbi from "./templates/NeoTemplateAbi.json";
 
 let SINGLETON: NeoContract;
 
-export class NeoContract extends Nep5Contract {
+export class NeoContract extends Nep17Contract {
   public static get INSTANCE(): NeoContract {
     if (!SINGLETON) {
       SINGLETON = new NeoContract();
@@ -24,7 +24,7 @@ export class NeoContract extends Nep5Contract {
   }
 
   constructor() {
-    super(NATIVE_CONTRACTS.NEO, NeoContract.getMethods());
+    super(NATIVE_CONTRACT_HASH.NeoToken, NeoContract.getMethods());
   }
 
   public unclaimedGas(address: string, end: number | BigInteger): ContractCall {
