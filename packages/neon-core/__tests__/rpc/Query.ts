@@ -263,7 +263,9 @@ describe("static", () => {
       const tx = new Transaction();
       const result = Query.sendRawTransaction(tx);
       expect(result.method).toEqual("sendrawtransaction");
-      expect(result.params).toEqual([tx.serialize(true)]);
+      expect(result.params).toEqual([
+        HexString.fromHex(tx.serialize(true)).toBase64(),
+      ]);
     });
   });
 

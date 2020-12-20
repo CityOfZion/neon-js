@@ -10,7 +10,6 @@ test("scriptHash", () => {
 });
 
 describe("default methods", () => {
-
   test("getFeePerByte", () => {
     const result = contract.getFeePerByte();
 
