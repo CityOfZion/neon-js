@@ -1,3 +1,4 @@
+import { BigInteger } from "../../u";
 import { ContractParam } from "../ContractParam";
 import { ContractMethodDefinition } from "../manifest/ContractMethodDefinition";
 import { ContractCall } from "../types";
@@ -54,12 +55,12 @@ export class Nep17Contract extends BaseContract {
    * The amount of tokens needs to be
    * @param from - The address from where the funds originate.
    * @param to - The address where the funds will arrive at.
-   * @param amount - The amount of tokens to transfer.
+   * @param amount - The amount of tokens to transfer in integer format.
    */
   public transfer(
     from: string,
     to: string,
-    amount: string | number,
+    amount: string | number | BigInteger,
     data?: string
   ): ContractCall {
     return this.call(

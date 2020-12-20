@@ -30,11 +30,18 @@ export class TransactionBuilder {
       .addEmptyWitness(account);
   }
 
+  /**
+   *  Adds the logic to send tokens around.
+   * @param account - originating account
+   * @param destination - account where the tokens will be sent
+   * @param tokenScriptHash - scripthash of the token contract
+   * @param amt - Amount of tokens in integer format.
+   */
   public addNep17Transfer(
     account: wallet.Account,
     destination: string,
     tokenScriptHash: string,
-    amt: number
+    amt: number | string | u.BigInteger
   ): TransactionBuilder {
     const address = account.address;
     const contract = new sc.Nep17Contract(tokenScriptHash);
@@ -44,6 +51,34 @@ export class TransactionBuilder {
         scopes: tx.WitnessScope.CalledByEntry,
       })
       .addEmptyWitness(account);
+  }
+
+  /**
+   * Sets an account to pay fees for this transaction.
+   * The first Signer defaults to the payer.
+   * @param account - Account to pay fees from.
+   */
+  public setFeeAccount(account: wallet.Account): this {
+    const ind = this.signers.findIndex((s) =>
+      s.account.equals(account.scriptHash)
+    );
+
+    // Signer exists. We shift it to first in array to become the sender.
+    if (ind > 0) {
+      const s = this.signers.splice(ind, 1)[0];
+      this.signers.unshift(s);
+      return this;
+    } else if (ind === -1) {
+      this.signers.unshift(
+        new tx.Signer({
+          account: account.scriptHash,
+          scopes: tx.WitnessScope.FeeOnly,
+        })
+      );
+      return this.addEmptyWitness(account);
+    }
+    // Account is already the sender.
+    return this;
   }
 
   /**
