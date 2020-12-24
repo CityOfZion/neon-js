@@ -125,6 +125,17 @@ export function getPublicKeyFromVerificationScript(script: string): string {
 }
 
 /**
+ * Converts a verification script to scripthash.
+ *
+ * @param verificationScript - hexstring
+ */
+export function getScriptHashFromVerificationScript(
+  verificationScript: string
+): string {
+  return reverseHex(hash160(verificationScript));
+}
+
+/**
  * Converts a public key to scripthash.
  */
 export function getScriptHashFromPublicKey(publicKey: string): string {

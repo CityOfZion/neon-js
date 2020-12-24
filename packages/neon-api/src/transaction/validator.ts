@@ -42,14 +42,14 @@ export class TransactionValidator {
   /**
    * Transaction will be validated on this rpc node
    */
-  public rpcClient: rpc.RPCClient;
+  public rpcClient: rpc.NeoServerRpcClient;
 
   /**
    * Transaction that will be validated
    */
   public transaction: tx.Transaction;
 
-  constructor(rpc: rpc.RPCClient, transaction: tx.Transaction) {
+  constructor(rpc: rpc.NeoServerRpcClient, transaction: tx.Transaction) {
     this.rpcClient = rpc;
     this.transaction = transaction;
   }

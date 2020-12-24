@@ -267,6 +267,9 @@ export class ScriptBuilder extends StringStream {
     }
     switch (param.type) {
       case ContractParamType.Any:
+        if (param.value === null) {
+          return this.emit(OpCode.PUSHNULL);
+        }
         return this.emitHexString(
           (param.value as string | HexString | null) ?? ""
         );

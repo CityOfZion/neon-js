@@ -320,6 +320,14 @@ export class Transaction implements NeonObject<TransactionLike> {
     return this;
   }
 
+  /**
+   * Hexstring of transaction for signing.
+   * @param networkMagic - magic number of network found in protocol.json.
+   */
+  public getMessageForSigning(networkMagic: number): string {
+    return num2hexstring(networkMagic, 4, true) + this.serialize(false);
+  }
+
   public equals(other: Partial<TransactionLike | Transaction>): boolean {
     if (other instanceof Transaction) {
       return this.hash(0) === other.hash(0);
