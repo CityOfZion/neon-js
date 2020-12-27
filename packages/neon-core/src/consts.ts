@@ -10,9 +10,9 @@ export enum NATIVE_CONTRACT_HASH {
   NeoToken = "0a46e2e37c9987f570b4af253fb77e7eef0f72b6",
   GasToken = "a6a6c15dcdc9b997dac448b6926522d22efeedfb",
   PolicyContract = "dde31084c0fdbebc7f5ed5f53a38905305ccee14",
-  ContractManagement = "081514120c7894779309255b7fb18b376cec731a",
+  ManagementContract = "cd97b70d82d69adfcd9165374109419fade8d6ab",
   OracleContract = "b1c37d5847c2ae36bdde31d0cc833a7ad9667f8f",
-  RoleManagement = "136ec44854ad9a714901eb7d714714f1791203f2",
+  DesignationContract = "c0073f4c7069bf38995780c9da065f9b3949ea7a",
 }
 
 /**

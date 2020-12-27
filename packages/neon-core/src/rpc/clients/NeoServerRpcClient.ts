@@ -19,6 +19,8 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
   base: TBase
 ) {
   return class NeoServerRpcInterface extends base {
+    //#region Blockchain
+
     /**
      * Get the latest block hash.
      */
@@ -90,13 +92,11 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
     }
 
     /**
-     * Gets the number of peers this node is connected to.
+     * Get the list of public keys in the committee.
      */
-    public async getConnectionCount(): Promise<number> {
-      const response = await this.execute(Query.getConnectionCount());
-      return response;
+    public async getCommittee(): Promise<string[]> {
+      return await this.execute(Query.getCommittee());
     }
-
     /**
      * Gets the state of the contract at the given scriptHash.
      */
@@ -104,14 +104,6 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
       scriptHash: string
     ): Promise<GetContractStateResult> {
       const response = await this.execute(Query.getContractState(scriptHash));
-      return response;
-    }
-
-    /**
-     * Gets a list of all peers that this node has discovered.
-     */
-    public async getPeers(): Promise<GetPeersResult> {
-      const response = await this.execute(Query.getPeers());
       return response;
     }
 
@@ -175,6 +167,18 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
       return response;
     }
 
+    //#endregion
+
+    //#region Node
+
+    /**
+     * Gets the number of peers this node is connected to.
+     */
+    public async getConnectionCount(): Promise<number> {
+      const response = await this.execute(Query.getConnectionCount());
+      return response;
+    }
+
     /**
      * Gets the list of validators available for voting.
      */
@@ -182,6 +186,15 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
       const response = await this.execute(Query.getNextBlockValidators());
       return response;
     }
+
+    /**
+     * Gets a list of all peers that this node has discovered.
+     */
+    public async getPeers(): Promise<GetPeersResult> {
+      const response = await this.execute(Query.getPeers());
+      return response;
+    }
+
     /**
      * Gets the version of the NEO node along with various other metadata.
      */
@@ -191,13 +204,54 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
     }
 
     /**
-     * Returns a list of plugins loaded by the node.
+     * Sends a serialized transaction to the network.
+     * @returns transaction id
      */
-    public async listPlugins(): Promise<CliPlugin[]> {
-      const response = await this.execute(Query.listPlugins());
-      return response;
+    public async sendRawTransaction(
+      transaction: Transaction | string | HexString
+    ): Promise<string> {
+      const response = await this.execute(
+        Query.sendRawTransaction(transaction)
+      );
+      return response.hash;
     }
 
+    /**
+     * Submits a serialized block to the network.
+     * @returns block hash if success
+     */
+    public async submitBlock(block: string): Promise<string> {
+      const response = await this.execute(Query.submitBlock(block));
+      return response.hash;
+    }
+
+    //#endregion
+
+    //#region SmartContract
+
+    /**
+     * Get the amount of unclaimed GAS for a NEO address. This is returned as the raw value. To get the display value, divide this by 100000000.
+     */
+    public async getUnclaimedGas(addr: string): Promise<string> {
+      const response = await this.execute(Query.getUnclaimedGas(addr));
+      return response.unclaimed;
+    }
+
+    /**
+     * Submits a verification script to run under a contract.
+     * @param scriptHash - contract to test
+     * @param args - arguments to pass
+     * @param signers - Signers to be included in transaction
+     */
+    public async invokeContractVerify(
+      scriptHash: string,
+      args: unknown[],
+      signers: (Signer | SignerJson)[] = []
+    ): Promise<InvokeResult> {
+      return await this.execute(
+        Query.invokeContractVerify(scriptHash, args, signers)
+      );
+    }
     /**
      * Submits a contract method call with parameters for the node to run. This method is a local invoke, results are not reflected on the blockchain.
      */
@@ -225,26 +279,16 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
       return await this.execute(Query.invokeScript(script, signers));
     }
 
-    /**
-     * Sends a serialized transaction to the network.
-     * @returns transaction id
-     */
-    public async sendRawTransaction(
-      transaction: Transaction | string | HexString
-    ): Promise<string> {
-      const response = await this.execute(
-        Query.sendRawTransaction(transaction)
-      );
-      return response.hash;
-    }
+    //#endregion
+
+    //#region Utilities
 
     /**
-     * Submits a serialized block to the network.
-     * @returns block hash if success
+     * Returns a list of plugins loaded by the node.
      */
-    public async submitBlock(block: string): Promise<string> {
-      const response = await this.execute(Query.submitBlock(block));
-      return response.hash;
+    public async listPlugins(): Promise<CliPlugin[]> {
+      const response = await this.execute(Query.listPlugins());
+      return response;
     }
 
     /**
@@ -255,13 +299,7 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
       return response.isvalid;
     }
 
-    /**
-     * Get the amount of unclaimed GAS for a NEO address. This is returned as the raw value. To get the display value, divide this by 100000000.
-     */
-    public async getUnclaimedGas(addr: string): Promise<string> {
-      const response = await this.execute(Query.getUnclaimedGas(addr));
-      return response.unclaimed;
-    }
+    //#endregion
   };
 }
 
