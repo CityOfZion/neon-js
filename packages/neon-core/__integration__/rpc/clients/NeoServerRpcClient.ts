@@ -108,6 +108,14 @@ describe("NeoServerRpcClient", () => {
     });
   });
 
+  test("getCommittee", async () => {
+    const result = await client.getCommittee();
+
+    // expect at least 1 public key
+    expect(result.length).toBeGreaterThanOrEqual(1);
+    expect(result[0].length).toBe(66);
+  });
+
   test("getConnectionCount", async () => {
     const result = await client.getConnectionCount();
     expect(typeof result).toBe("number");
@@ -154,12 +162,12 @@ describe("NeoServerRpcClient", () => {
       expect(resultTx).toBeDefined();
     });
 
-    //TODO: Update to receive base64 string
-    test.skip("non-verbose", async () => {
+    test("non-verbose", async () => {
       const result = await client.getRawTransaction(txid);
       expect(typeof result).toBe("string");
 
-      const deserializedTx = tx.Transaction.deserialize(result);
+      const hexstring = HexString.fromBase64(result).toBigEndian();
+      const deserializedTx = tx.Transaction.deserialize(hexstring);
       expect(deserializedTx).toBeDefined();
     });
   });
@@ -214,6 +222,19 @@ describe("NeoServerRpcClient", () => {
   });
 
   describe("Invocation methods", () => {
+    // Currently there are no contracts with verify that we can make use of.
+    test.skip("invokeContractVerify", async () => {
+      const result = await client.invokeContractVerify(contractHash, []);
+
+      expect(Object.keys(result)).toHaveLength(5);
+      expect(result).toMatchObject({
+        script: expect.any(String),
+        state: "HALT",
+        gasconsumed: expect.any(String),
+        exception: null,
+        stack: expect.any(Array),
+      });
+    });
     test("invokeFunction with HALT", async () => {
       const result = await client.invokeFunction(contractHash, "symbol");
 

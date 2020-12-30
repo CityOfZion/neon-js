@@ -4,9 +4,9 @@ const nativeContractNames = [
   "NeoToken",
   "GasToken",
   "PolicyContract",
-  "ContractManagement",
+  "ManagementContract",
   "OracleContract",
-  "RoleManagement",
+  "DesignationContract",
 ];
 
 console.log(

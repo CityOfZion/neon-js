@@ -54,7 +54,11 @@ export interface InvokeResult {
   /** A human-readable string clarifying the exception that occurred. Only available when state is "FAULT". */
   exception: string | null;
   stack: StackItemJson[];
-  /** A ready to send transaction that wraps the script. Only available when signers are provided and the sender's private key is open in the RPC node.*/
+  /** A ready to send transaction that wraps the script.
+   * Only available when signers are provided and the sender's private key is open in the RPC node.
+   * Formatted in base64-encoding.
+   */
+  tx?: string;
 }
 
 export interface GetContractStateResult {
@@ -244,6 +248,15 @@ export class Query<TParams extends unknown[], TResponse> {
   }
 
   /**
+   * This Query returns the list of public keys in the current committee.
+   */
+  public static getCommittee(): Query<[], string[]> {
+    return new Query({
+      method: "getcommittee",
+    });
+  }
+
+  /**
    * This Query returns the number of other nodes that this node is connected to.
    */
   public static getConnectionCount(): Query<[], number> {
@@ -399,6 +412,27 @@ export class Query<TParams extends unknown[], TResponse> {
   }
 
   /**
+   * Invoke the verification portion of a contract.
+   * @param scriptHash - hash of contract to test
+   * @param args - arguments to pass
+   * @param signers - Signers to be included in transaction
+   */
+  public static invokeContractVerify(
+    scriptHash: string,
+    args: unknown[] = [],
+    signers: (Signer | SignerJson)[] = []
+  ): Query<[string, unknown[], SignerJson[]], InvokeResult> {
+    return new Query({
+      method: "invokecontractverify",
+      params: [
+        scriptHash,
+        args.map((a) => (a instanceof ContractParam ? a.toJson() : a)),
+        signers.map((s) => (s instanceof Signer ? s.toJson() : s)),
+      ],
+    });
+  }
+
+  /**
    * This Query invokes the VM to run the specific contract with the provided operation and params. Do note that this function only suits contracts with a Main(string, args[]) entry method.
    * @param scriptHash - hash of contract to test.
    * @param operation - name of operation to call (first argument)
@@ -416,7 +450,7 @@ export class Query<TParams extends unknown[], TResponse> {
       params: [
         scriptHash,
         operation,
-        params.map((p) => (p instanceof ContractParam ? p.export() : p)),
+        params.map((p) => (p instanceof ContractParam ? p.toJson() : p)),
         signers.map((s) => (s instanceof Signer ? s.toJson() : s)),
       ],
     });

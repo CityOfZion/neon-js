@@ -91,6 +91,12 @@ describe("static", () => {
     });
   });
 
+  test("getCommittee", () => {
+    const result = Query.getCommittee();
+    expect(result.method).toEqual("getcommittee");
+    expect(result.params).toEqual([]);
+  });
+
   test("getConnectionCount", () => {
     const result = Query.getConnectionCount();
     expect(result.method).toEqual("getconnectioncount");
@@ -151,6 +157,29 @@ describe("static", () => {
     const result = Query.getVersion();
     expect(result.method).toEqual("getversion");
     expect(result.params).toEqual([]);
+  });
+
+  describe("invokeContractVerify", () => {
+    test("no params", () => {
+      const result = Query.invokeContractVerify("hash");
+      expect(result.method).toEqual("invokecontractverify");
+      expect(result.params).toEqual(["hash", [], []]);
+    });
+
+    test("multiple params", () => {
+      const result = Query.invokeContractVerify(
+        "hash",
+        [ContractParam.integer(1)],
+        [new Signer({ account: "ab".repeat(20), scopes: "CalledByEntry" })]
+      );
+
+      expect(result.method).toEqual("invokecontractverify");
+      expect(result.params).toEqual([
+        "hash",
+        [{ type: "Integer", value: "1" }],
+        [{ account: "0x" + "ab".repeat(20), scopes: "CalledByEntry" }],
+      ]);
+    });
   });
 
   describe("invokeFunction", () => {
