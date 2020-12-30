@@ -12,7 +12,7 @@ import NoPadding from "crypto-js/pad-nopadding";
 import SHA256 from "crypto-js/sha256";
 import { lib } from "crypto-js";
 import { scrypt } from "scrypt-js";
-import { DEFAULT_SCRYPT, NEP_FLAG, NEP_HEADER } from "../consts";
+import { DEFAULT_SCRYPT, NEP2_FLAG, NEP2_HEADER } from "../consts";
 import logging from "../logging";
 import { ab2hexstring, hexXor, hash160, hash256, hexstring2ab } from "../u";
 import { isWIF } from "./verify";
@@ -76,7 +76,7 @@ async function createNep2Key(
     AES_OPTIONS
   );
   const assembled =
-    NEP_HEADER + NEP_FLAG + addressHash + encrypted.ciphertext.toString();
+    NEP2_HEADER + NEP2_FLAG + addressHash + encrypted.ciphertext.toString();
 
   const checksum = hash256(assembled).substr(0, 8);
   const encryptedKey = base58.encode(hexstring2ab(assembled + checksum));
@@ -115,7 +115,7 @@ export function encrypt(
   const privateKey = isWIF(wifKey) ? getPrivateKeyFromWIF(wifKey) : wifKey;
   const address = getAddressFromPrivateKey(privateKey);
   return createNep2Key(
-    NEP_HEADER + NEP_FLAG,
+    NEP2_HEADER + NEP2_FLAG,
     privateKey,
     keyphrase,
     address,

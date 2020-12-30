@@ -1,4 +1,3 @@
-import { DEFAULT_RPC, NEO_NETWORK, RPC_VERSION } from "../consts";
 import { timeout } from "../settings";
 import { NeoServerRpcMixin } from "./clients/NeoServerRpcClient";
 import {
@@ -7,16 +6,6 @@ import {
   Nep17TrackerRpcMixin,
 } from "./clients";
 import { Query } from "./Query";
-
-function parseNetwork(net: string): string {
-  if (net === NEO_NETWORK.MAIN) {
-    return DEFAULT_RPC.MAIN;
-  } else if (net === NEO_NETWORK.TEST) {
-    return DEFAULT_RPC.TEST;
-  } else {
-    return net;
-  }
-}
 
 class FullRpcClient extends Nep17TrackerRpcMixin(
   ApplicationLogsRpcMixin(NeoServerRpcMixin(RpcDispatcher))
@@ -32,23 +21,19 @@ export class RPCClient extends FullRpcClient {
   public net: string;
   public history: Query<unknown[], unknown>[];
   public lastSeenHeight: number;
-  public version: string;
   private _latencies: number[];
 
   /**
-   * @param net - 'MainNet' or 'TestNet' will query the default RPC address found in consts. You may provide a custom URL.
+   * @param net - A url pointing to a NEO RPC node.
    * @param version - version of NEO node. Used to check if RPC methods have been implemented. it will default to DEFAULT_RPC found in CONST
    */
-  public constructor(net: string, version = RPC_VERSION) {
-    const url = parseNetwork(net);
-    super(url);
-    this.net = url;
+  public constructor(net: string) {
+    super(net);
+    this.net = net;
 
     this.history = [];
     this.lastSeenHeight = 0;
     this._latencies = [];
-
-    this.version = version;
   }
 
   public get [Symbol.toStringTag](): string {
