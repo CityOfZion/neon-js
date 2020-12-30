@@ -1,7 +1,6 @@
 import _Axios from "axios";
 import { mocked } from "ts-jest/utils";
 import RPCClient from "../../src/rpc/RPCClient";
-import { DEFAULT_RPC } from "../../src/consts";
 import Query from "../../src/rpc/Query";
 import { Signer, WitnessScope } from "../../src/tx";
 
@@ -13,21 +12,10 @@ beforeEach(() => {
 });
 
 describe("constructor", () => {
-  test("net", () => {
-    const result = new RPCClient("MainNet");
-    expect(result.net).toBe(DEFAULT_RPC.MAIN);
-  });
   test("only url", () => {
     const url = "http://testUrl.com";
     const result = new RPCClient(url);
     expect(result.net).toBe(url);
-  });
-
-  test("url with version", () => {
-    const url = "http://testUrl.com";
-    const version = "1.2.3";
-    const result = new RPCClient(url, version);
-    expect(result.version).toBe(version);
   });
 });
 
