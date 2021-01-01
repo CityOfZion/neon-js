@@ -14,7 +14,6 @@ import {
 } from "./ContractParam";
 import { OpCode } from "./OpCode";
 import { InteropServiceCode } from "./InteropServiceCode";
-import { TextEncoder } from "util";
 import { ContractCall, ContractCallJson } from "./types";
 
 /**
