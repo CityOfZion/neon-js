@@ -14,9 +14,8 @@ import {
 } from "./ContractParam";
 import { OpCode } from "./OpCode";
 import { InteropServiceCode } from "./InteropServiceCode";
-import { TextEncoder } from "util";
 import { ContractCall, ContractCallJson } from "./types";
-
+import { TextEncoder as textEncoderNode10 } from "util";
 /**
  * Builds a VM script in hexstring. Used for constructing smart contract method calls.
  */
@@ -131,7 +130,10 @@ export class ScriptBuilder extends StringStream {
    * Appends a UTF-8 string.
    */
   public emitString(str: string): this {
-    const encoder = new TextEncoder();
+    const encoder =
+      typeof TextEncoder !== "undefined"
+        ? new TextEncoder()
+        : new textEncoderNode10();
     const bytes = encoder.encode(str);
     return this.emitBytes(bytes);
   }
