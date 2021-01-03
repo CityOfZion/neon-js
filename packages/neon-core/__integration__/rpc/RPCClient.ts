@@ -69,6 +69,28 @@ beforeAll(async () => {
   }
 }, 20000);
 
+describe("batch", () => {
+  test("batch", async () => {
+    const batch = rpc.BatchQuery.of(rpc.Query.getBlockCount())
+      .add(rpc.Query.validateAddress("helloworld"))
+      .add(rpc.Query.getBlockHash(0));
+    const responses = await client.batch(batch);
+
+    expect(responses.length).toBe(3);
+    expect(responses[0]).toEqual(expect.any(Number));
+    expect(responses[1].isvalid).toBeFalsy();
+    expect(responses[2]).toEqual(expect.any(String));
+  });
+
+  test("single failure throws", async () => {
+    const batch = rpc.BatchQuery.of(rpc.Query.getBlockCount())
+      .add(new rpc.Query({ method: "unknownmethod" }))
+      .add(rpc.Query.getBlockHash(0));
+
+    expect(client.batch(batch)).rejects.toThrow();
+  });
+});
+
 describe("RPC Methods", () => {
   describe("getBlock", () => {
     test("height as index, verbose = 0", async () => {
