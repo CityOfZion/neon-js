@@ -6,6 +6,7 @@ import {
 } from "../../../src/sc";
 
 const defaultManifestLike: ContractManifestLike = {
+  name: undefined,
   supportedStandards: [],
   abi: {
     events: [],

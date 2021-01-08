@@ -1,6 +1,7 @@
 import { CONST, rpc, wallet, sc, tx, u } from "@cityofzion/neon-core";
 import { CommonConfig } from "../types";
 import { setBlockExpiry, addFees } from "../helpers";
+import { ContractParam } from "@cityofzion/neon-core/lib/sc/ContractParam";
 
 export class Nep17Contract {
   /**
@@ -76,14 +77,10 @@ export class Nep17Contract {
   public async name(): Promise<string> {
     if (this._name) return this._name;
     try {
-      const response = await this.rpcClient.invokeFunction(
-        this.contractHash.toString(),
-        "name"
+      const response = await this.rpcClient.getContractState(
+        this.contractHash.toString()
       );
-      if (response.state === "FAULT") {
-        throw Error;
-      }
-      this._name = u.utf82base64(response.stack[0].value as string);
+      this._name = response.manifest.name as string;
       return this._name;
     } catch (e) {
       throw new Error(
@@ -181,6 +178,7 @@ export class Nep17Contract {
       u.HexString.fromHex(wallet.getScriptHashFromAddress(from)),
       u.HexString.fromHex(wallet.getScriptHashFromAddress(to)),
       amount_to_transfer,
+      ContractParam.any(null),
     ]);
     builder.emit(sc.OpCode.ASSERT);
     const transaction = new tx.Transaction();
@@ -261,11 +259,7 @@ export class NEOContract extends Nep17Contract {
     if (!wallet.isAddress(address)) {
       throw new Error("From address is not a valid NEO address");
     }
-    return parseFloat(
-      u.BigInteger.fromNumber(
-        await this.rpcClient.getUnclaimedGas(address)
-      ).toDecimal(8)
-    );
+    return parseFloat(await this.rpcClient.getUnclaimedGas(address));
   }
 }
 

@@ -11,6 +11,7 @@ import {
 } from "./ContractPermission";
 
 export interface ContractManifestLike {
+  name: string;
   groups: ContractGroupLike[];
   abi: ContractAbiLike;
   supportedStandards: string[];
@@ -25,6 +26,7 @@ export interface ContractManifestLike {
 }
 
 export interface ContractManifestJson {
+  name: string;
   groups: ContractGroupJson[];
   features: {
     storage: boolean;
@@ -40,6 +42,7 @@ export interface ContractManifestJson {
 
 export class ContractManifest {
   public static readonly MAX_LENGTH = 2048;
+  public name: string;
   public groups: ContractGroup[];
   // #region features
   public hasStorage: boolean;
@@ -54,6 +57,7 @@ export class ContractManifest {
 
   public static fromJson(json: ContractManifestJson): ContractManifest {
     return new ContractManifest({
+      name: json.name,
       groups: json.groups.map((g) => ContractGroup.fromJson(g)),
       features: json.features,
       abi: ContractAbi.fromJson(json.abi),
@@ -67,6 +71,7 @@ export class ContractManifest {
 
   public constructor(obj: Partial<ContractManifestLike>) {
     const {
+      name = "",
       groups = [],
       features: { storage = false, payable = false } = {},
       abi = {},
@@ -76,6 +81,7 @@ export class ContractManifest {
       safeMethods = "*",
       extra,
     } = obj;
+    this.name = name;
     this.groups = groups.map((group) => new ContractGroup(group));
     this.hasStorage = storage;
     this.payable = payable;
@@ -113,6 +119,7 @@ export class ContractManifest {
 
   public toJson(): ContractManifestJson {
     return {
+      name: this.name,
       groups: this.groups.map((g) => g.toJson()),
       features: {
         storage: this.hasStorage,
@@ -129,6 +136,7 @@ export class ContractManifest {
 
   public export(): ContractManifestLike {
     return {
+      name: this.name,
       groups: this.groups.map((group) => group.export()),
       features: {
         storage: this.hasStorage,
