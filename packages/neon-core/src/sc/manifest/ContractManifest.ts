@@ -39,7 +39,7 @@ export interface ContractManifestJson {
 }
 
 export class ContractManifest {
-  public static readonly MAX_LENGTH = 2048;
+  public static readonly MAX_LENGTH = 0xffff;
   public name: string;
   public groups: ContractGroup[];
   // #region features
