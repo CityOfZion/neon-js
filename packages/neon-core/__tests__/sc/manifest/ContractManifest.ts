@@ -6,7 +6,7 @@ import {
 } from "../../../src/sc";
 
 const defaultManifestLike: ContractManifestLike = {
-  name: undefined,
+  name: "",
   supportedStandards: [],
   abi: {
     events: [],
@@ -19,13 +19,13 @@ const defaultManifestLike: ContractManifestLike = {
   },
   groups: [],
   permissions: [],
-  safeMethods: "*",
   trusts: "*",
   extra: undefined,
 };
 
 const definedManifestLike: ContractManifestLike = {
   supportedStandards: ["NEP-5"],
+  name: "contract_name",
   abi: {
     events: [
       {
@@ -66,6 +66,7 @@ const definedManifestLike: ContractManifestLike = {
           },
         ],
         returnType: ContractParamType.Boolean,
+        safe: false,
       },
     ],
   },
@@ -85,7 +86,6 @@ const definedManifestLike: ContractManifestLike = {
       methods: ["balanceOf"],
     },
   ],
-  safeMethods: "*",
   trusts: "*",
   extra: "random note",
 };
@@ -183,6 +183,7 @@ describe("fromJson", () => {
         payable: false,
       },
       supportedstandards: ["NEP-5"],
+      name: "NeoToken",
       abi: {
         hash: "0xde5f57d430d3dece511cf975a8d37848cb9e0525",
         methods: [
@@ -191,12 +192,7 @@ describe("fromJson", () => {
             parameters: [],
             offset: 0,
             returntype: "Integer",
-          },
-          {
-            name: "onPersist",
-            parameters: [],
-            offset: 0,
-            returntype: "Void",
+            safe: true,
           },
           {
             name: "unclaimedGas",
@@ -212,6 +208,7 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Integer",
+            safe: true,
           },
           {
             name: "registerCandidate",
@@ -223,6 +220,7 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Boolean",
+            safe: false,
           },
           {
             name: "unregisterCandidate",
@@ -234,6 +232,7 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Boolean",
+            safe: false,
           },
           {
             name: "vote",
@@ -249,30 +248,28 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Boolean",
+            safe: false,
           },
           {
             name: "getCandidates",
             parameters: [],
             offset: 0,
             returntype: "Array",
-          },
-          {
-            name: "getValidators",
-            parameters: [],
-            offset: 0,
-            returntype: "Array",
+            safe: true,
           },
           {
             name: "getCommittee",
             parameters: [],
             offset: 0,
             returntype: "Array",
+            safe: true,
           },
           {
             name: "getNextBlockValidators",
             parameters: [],
             offset: 0,
             returntype: "Array",
+            safe: true,
           },
           {
             name: "balanceOf",
@@ -284,6 +281,7 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Integer",
+            safe: true,
           },
           {
             name: "transfer",
@@ -303,24 +301,21 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Boolean",
-          },
-          {
-            name: "name",
-            parameters: [],
-            offset: 0,
-            returntype: "String",
+            safe: false,
           },
           {
             name: "symbol",
             parameters: [],
             offset: 0,
             returntype: "String",
+            safe: true,
           },
           {
             name: "decimals",
             parameters: [],
             offset: 0,
             returntype: "Integer",
+            safe: true,
           },
         ],
         events: [
@@ -350,18 +345,6 @@ describe("fromJson", () => {
         } as ContractPermissionJson,
       ],
       trusts: [],
-      safemethods: [
-        "totalSupply",
-        "unclaimedGas",
-        "getCandidates",
-        "getValidators",
-        "getCommittee",
-        "getNextBlockValidators",
-        "balanceOf",
-        "name",
-        "symbol",
-        "decimals",
-      ],
       extra: null,
     };
 

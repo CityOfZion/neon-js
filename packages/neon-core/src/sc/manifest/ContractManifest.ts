@@ -17,7 +17,6 @@ export interface ContractManifestLike {
   supportedStandards: string[];
   permissions: ContractPermissionLike[];
   trusts: "*" | string[];
-  safeMethods: "*" | string[];
   features: {
     storage: boolean;
     payable: boolean;
@@ -36,7 +35,6 @@ export interface ContractManifestJson {
   abi: ContractAbiJson;
   permissions: ContractPermissionJson[];
   trusts: "*" | string[];
-  safemethods: "*" | string[];
   extra?: unknown;
 }
 
@@ -52,7 +50,6 @@ export class ContractManifest {
   public abi: ContractAbi;
   public permissions: ContractPermission[];
   public trusts: "*" | string[];
-  public safeMethods: "*" | string[];
   public extra: unknown;
 
   public static fromJson(json: ContractManifestJson): ContractManifest {
@@ -64,7 +61,6 @@ export class ContractManifest {
       supportedStandards: json.supportedstandards,
       permissions: json.permissions,
       trusts: json.trusts,
-      safeMethods: json.safemethods,
       extra: json.extra,
     });
   }
@@ -78,7 +74,6 @@ export class ContractManifest {
       supportedStandards = [],
       permissions = [],
       trusts = "*",
-      safeMethods = "*",
       extra,
     } = obj;
     this.name = name;
@@ -91,7 +86,6 @@ export class ContractManifest {
       (permission) => new ContractPermission(permission)
     );
     this.trusts = trusts;
-    this.safeMethods = safeMethods;
     this.extra = extra;
   }
 
@@ -129,7 +123,6 @@ export class ContractManifest {
       abi: this.abi.toJson(),
       permissions: this.permissions.map((p) => p.toJson()),
       trusts: this.trusts,
-      safemethods: this.safeMethods,
       extra: this.extra,
     };
   }
@@ -146,7 +139,6 @@ export class ContractManifest {
       abi: this.abi.export(),
       permissions: this.permissions.map((permission) => permission.export()),
       trusts: this.trusts,
-      safeMethods: this.safeMethods,
       extra: this.extra,
     };
   }

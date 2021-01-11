@@ -49,7 +49,7 @@ export class ContractMethodDefinition {
       offset = 0,
       parameters = [],
       returnType = ContractParamType.Any,
-      safe = true,
+      safe = false,
     } = obj;
     this.name = name;
     this.offset = offset;
