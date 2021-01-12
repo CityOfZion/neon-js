@@ -1,8 +1,6 @@
 import { CONST, rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { CommonConfig } from "./types";
 import { GASContract } from "./nep17";
-import { OpCode } from "@cityofzion/neon-core/lib/sc";
-import { hash160 } from "@cityofzion/neon-core/lib/u";
 
 /**
  * Calculate the GAS costs for validation and inclusion of the transaction in a block
@@ -218,9 +216,6 @@ export async function addFees(
     config
   );
 
-  console.log(`transfering with sysfee ${transaction.systemFee}`);
-  console.log(`transfering with network ${transaction.networkFee}`);
-
   const GAS = new GASContract(config);
   const GASBalance = await GAS.balanceOf(config.account.address);
   const requiredGAS = parseFloat(
@@ -240,10 +235,13 @@ export async function addFees(
  * @param config -
  */
 export async function deployContract(
-  NEF: Buffer,
+  NEF: Buffer | ArrayBuffer,
   manifest: sc.ContractManifest,
   config: CommonConfig
 ): Promise<string> {
+  if (typeof NEF === "object" && NEF instanceof ArrayBuffer) {
+    NEF = Buffer.from(NEF);
+  }
   const builder = new sc.ScriptBuilder();
   builder.emitAppCall(CONST.NATIVE_CONTRACT_HASH.ManagementContract, "deploy", [
     u.HexString.fromHex(u.reverseHex(NEF.toString("hex"))),
@@ -252,7 +250,6 @@ export async function deployContract(
 
   const transaction = new tx.Transaction();
   transaction.script = u.HexString.fromHex(builder.build());
-  console.log(transaction.script.toString());
 
   await setBlockExpiry(transaction, config, config.blocksTillExpiry);
 
@@ -279,8 +276,8 @@ export function getContractHash(sender: u.HexString, nef: Buffer): string {
   const script_buf = Buffer.from(script, "hex");
   script_buf.reverse();
   const builder = new sc.ScriptBuilder();
-  builder.emit(OpCode.ABORT);
+  builder.emit(sc.OpCode.ABORT);
   builder.emitPush(sender);
   builder.emitPush(u.HexString.fromHex(script_buf.toString("hex")));
-  return u.reverseHex(hash160(builder.build()));
+  return u.reverseHex(u.hash160(builder.build()));
 }

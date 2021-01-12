@@ -1,7 +1,6 @@
 import { CONST, rpc, wallet, sc, tx, u } from "@cityofzion/neon-core";
 import { CommonConfig } from "../types";
 import { setBlockExpiry, addFees } from "../helpers";
-import { ContractParam } from "@cityofzion/neon-core/lib/sc/ContractParam";
 
 export class Nep17Contract {
   /**
@@ -178,7 +177,7 @@ export class Nep17Contract {
       u.HexString.fromHex(wallet.getScriptHashFromAddress(from)),
       u.HexString.fromHex(wallet.getScriptHashFromAddress(to)),
       amount_to_transfer,
-      ContractParam.any(null),
+      sc.ContractParam.any(null),
     ]);
     builder.emit(sc.OpCode.ASSERT);
     const transaction = new tx.Transaction();
