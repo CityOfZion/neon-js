@@ -1,4 +1,4 @@
-import { getIntegrationEnvUrl } from "../../../../../testHelpers";
+// import { getIntegrationEnvUrl } from "../../../../../testHelpers";
 import { RPCClient } from "../../../../neon-core/src/rpc";
 import { Account } from "../../../../neon-core/src/wallet";
 import { sc, u } from "../../../../neon-core/src/";
@@ -22,7 +22,8 @@ function sleep(ms: number) {
 }
 
 beforeAll(async () => {
-  const url = await getIntegrationEnvUrl();
+  // const url = await getIntegrationEnvUrl();
+  const url = "http://localhost:20332";
   config.rpcAddress = url;
   rpc_client = new RPCClient(url);
 });
