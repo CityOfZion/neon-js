@@ -1,15 +1,12 @@
 // import { getIntegrationEnvUrl } from "../../../../../testHelpers";
-import { RPCClient } from "../../../../neon-core/src/rpc";
-import { Account } from "../../../../neon-core/src/wallet";
-import { sc, u } from "../../../../neon-core/src/";
 import { experimental } from "../../";
+import { rpc, sc, wallet, u } from "@cityofzion/neon-core";
+import { promises as fs } from "fs";
 
-const fs = require("fs").promises;
-
-let rpc_client: RPCClient;
+let rpc_client: rpc.RPCClient;
 
 const wif = "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g";
-const acc = new Account(wif);
+const acc = new wallet.Account(wif);
 
 const config = {
   networkMagic: 769,
@@ -25,7 +22,7 @@ beforeAll(async () => {
   // const url = await getIntegrationEnvUrl();
   const url = "http://localhost:20332";
   config.rpcAddress = url;
-  rpc_client = new RPCClient(url);
+  rpc_client = new rpc.RPCClient(url);
 });
 
 describe("contract", () => {
