@@ -73,28 +73,6 @@ export class ContractManifest {
     this.extra = extra;
   }
 
-  public get hash(): string {
-    return this.abi.hash;
-  }
-
-  public canCall(manifest: ContractManifest, method: string): boolean {
-    return this.permissions.some((permission) => {
-      const { contract, methods } = permission;
-      if (permission.isHash) {
-        if (contract !== manifest.hash) {
-          return false;
-        }
-      } else if (permission.isGroup) {
-        if (manifest.groups.every((group) => group.pubKey !== contract)) {
-          return false;
-        }
-      }
-      return (
-        methods === "*" || methods.length === 0 || methods.includes(method)
-      );
-    });
-  }
-
   public toJson(): ContractManifestJson {
     return {
       name: this.name,

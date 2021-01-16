@@ -154,7 +154,9 @@ export async function getSystemFee(
   try {
     const response = await rpcClient.invokeScript(script, signers);
     if (response.state === "FAULT") {
-      throw Error("Script execution failed. ExecutionEngine state = FAULT");
+      throw Error(
+        `Script execution failed. ExecutionEngine state = FAULT. ${response.exception}`
+      );
     }
     return u.BigInteger.fromDecimal(response.gasconsumed, 8);
   } catch (e) {
@@ -243,10 +245,18 @@ export async function deployContract(
     NEF = Buffer.from(NEF);
   }
   const builder = new sc.ScriptBuilder();
-  builder.emitAppCall(CONST.NATIVE_CONTRACT_HASH.ManagementContract, "deploy", [
-    u.HexString.fromHex(u.reverseHex(NEF.toString("hex"))),
-    JSON.stringify(manifest.toJson()),
-  ]);
+  builder.emitContractCall({
+    scriptHash: CONST.NATIVE_CONTRACT_HASH.ManagementContract,
+    operation: "deploy",
+    args: [
+      sc.ContractParam.byteArray(
+        u.HexString.fromHex(NEF.toString("hex"), true)
+      ),
+      sc.ContractParam.byteArray(
+        u.HexString.fromAscii(JSON.stringify(manifest.toJson()))
+      ),
+    ],
+  });
 
   const transaction = new tx.Transaction();
   transaction.script = u.HexString.fromHex(builder.build());
@@ -262,22 +272,30 @@ export async function deployContract(
     scopes: "CalledByEntry",
   });
 
-  await addFees(transaction, config);
-
+  // await addFees(transaction, config);
+  // Hack as RPC endpoint doesnt work well in preview4.
+  // See https://github.com/neo-project/neo-modules/issues/458
+  if (!config.networkFeeOverride || !config.systemFeeOverride) {
+    throw new Error("Requires networkFeeOverride and systemFeeOveride");
+  }
+  transaction.networkFee = config.networkFeeOverride;
+  transaction.systemFee = config.systemFeeOverride;
   transaction.sign(config.account, config.networkMagic);
   const rpcClient = new rpc.RPCClient(config.rpcAddress);
   return await rpcClient.sendRawTransaction(transaction);
 }
 
 export function getContractHash(sender: u.HexString, nef: Buffer): string {
-  const SCRIPT_OFFSET = 68; //   4 magic + 32 compiler + 32 version
-  const stream = new u.StringStream(nef.slice(SCRIPT_OFFSET).toString("hex"));
+  const NEF_FILE_HEADER_BYTES = 68; //   4 magic + 32 compiler + 32 version
+  const stream = new u.StringStream(
+    nef.slice(NEF_FILE_HEADER_BYTES).toString("hex")
+  );
   const script = stream.readVarBytes();
-  const script_buf = Buffer.from(script, "hex");
-  script_buf.reverse();
-  const builder = new sc.ScriptBuilder();
-  builder.emit(sc.OpCode.ABORT);
-  builder.emitPush(sender);
-  builder.emitPush(u.HexString.fromHex(script_buf.toString("hex")));
-  return u.reverseHex(u.hash160(builder.build()));
+  const hexScript = u.HexString.fromHex(script, true);
+  const assembledScript = new sc.ScriptBuilder()
+    .emit(sc.OpCode.ABORT)
+    .emitPush(sender)
+    .emitPush(hexScript)
+    .build();
+  return u.reverseHex(u.hash160(assembledScript));
 }

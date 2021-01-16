@@ -10,12 +10,7 @@ const defaultManifestLike: ContractManifestLike = {
   supportedStandards: [],
   abi: {
     events: [],
-    hash: "",
     methods: [],
-  },
-  features: {
-    payable: false,
-    storage: false,
   },
   groups: [],
   permissions: [],
@@ -46,7 +41,6 @@ const definedManifestLike: ContractManifestLike = {
         ],
       },
     ],
-    hash: "43cf98eddbe047e198a3e5d57006311442a0ca15",
     methods: [
       {
         name: "transfer",
@@ -69,10 +63,6 @@ const definedManifestLike: ContractManifestLike = {
         safe: false,
       },
     ],
-  },
-  features: {
-    payable: false,
-    storage: false,
   },
   groups: [
     {
@@ -102,90 +92,13 @@ describe("constructor & export", () => {
   });
 });
 
-describe("getter", () => {
-  test("hash", () => {
-    const manifest = new ContractManifest(definedManifestLike);
-    expect(manifest.hash).toBe("43cf98eddbe047e198a3e5d57006311442a0ca15");
-  });
-});
-
-describe("canCall", () => {
-  test("Cannot call according to Hash", () => {
-    const manifest1 = new ContractManifest(definedManifestLike);
-    const manifest2 = new ContractManifest(definedManifestLike);
-    manifest2.abi.hash = "43cf98eddbe047e198a3e5d57006311442a0ca15";
-    expect(manifest1.canCall(manifest2, "balanceOf")).toBeFalsy();
-  });
-
-  test("Can call according to Hash", () => {
-    const manifest1 = new ContractManifest(definedManifestLike);
-    const manifest2 = new ContractManifest(definedManifestLike);
-    manifest2.abi.hash = "a1760976db5fcdfab2a9930e8f6ce875b2d18225";
-    expect(manifest1.canCall(manifest2, "balanceOf")).toBeTruthy();
-  });
-
-  test("Cannot call according to Group", () => {
-    const manifest1 = new ContractManifest(
-      Object.assign({}, definedManifestLike, {
-        permissions: [
-          {
-            contract:
-              "03ff12614a7f6f370fb22260061be9da8b320ff33207aa10118b2bb2e717f5159d",
-            methods: ["balanceOf"],
-          },
-        ],
-      })
-    );
-    const manifest2 = new ContractManifest(definedManifestLike);
-    expect(manifest1.canCall(manifest2, "balanceOf")).toBeFalsy();
-  });
-
-  test("Can call according to Group", () => {
-    const manifest1 = new ContractManifest(
-      Object.assign({}, definedManifestLike, {
-        permissions: [
-          {
-            contract:
-              "03ff12614a7f6f370fb22260061be9da8b320ff33207aa10118b2bb2e717f5159d",
-            methods: ["balanceOf"],
-          },
-        ],
-      })
-    );
-    const manifest2 = new ContractManifest(
-      Object.assign({}, definedManifestLike, {
-        groups: [
-          {
-            pubKey:
-              "03ff12614a7f6f370fb22260061be9da8b320ff33207aa10118b2bb2e717f5159d",
-            signature: "this_is_a_signature",
-          },
-        ],
-      })
-    );
-    expect(manifest1.canCall(manifest2, "balanceOf")).toBeTruthy();
-  });
-
-  test("Can not call according to methods", () => {
-    const manifest1 = new ContractManifest(definedManifestLike);
-    const manifest2 = new ContractManifest(definedManifestLike);
-    manifest2.abi.hash = "a1760976db5fcdfab2a9930e8f6ce875b2d18225";
-    expect(manifest1.canCall(manifest2, "name")).toBeFalsy();
-  });
-});
-
 describe("fromJson", () => {
   test("neo", () => {
     const neoManifestJson = {
       groups: [],
-      features: {
-        storage: true,
-        payable: false,
-      },
       supportedstandards: ["NEP-5"],
       name: "NeoToken",
       abi: {
-        hash: "0xde5f57d430d3dece511cf975a8d37848cb9e0525",
         methods: [
           {
             name: "totalSupply",
