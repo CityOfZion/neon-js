@@ -1,0 +1,37 @@
+{
+    "name": "contract3",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "test_func",
+                "offset": 2,
+                "parameters": [],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "test_func2",
+                "offset": 4,
+                "parameters": [
+                    {
+                        "name": "value",
+                        "type": "Integer"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            }
+        ],
+        "events": []
+    },
+    "permissions": [
+        {
+            "contract": "*",
+            "methods": "*"
+        }
+    ],
+    "trusts": [],
+    "supportedstandards": [],
+    "extra": null
+}

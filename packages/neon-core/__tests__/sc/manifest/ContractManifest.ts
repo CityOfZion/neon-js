@@ -6,25 +6,21 @@ import {
 } from "../../../src/sc";
 
 const defaultManifestLike: ContractManifestLike = {
+  name: "",
   supportedStandards: [],
   abi: {
     events: [],
-    hash: "",
     methods: [],
-  },
-  features: {
-    payable: false,
-    storage: false,
   },
   groups: [],
   permissions: [],
-  safeMethods: "*",
   trusts: "*",
   extra: undefined,
 };
 
 const definedManifestLike: ContractManifestLike = {
   supportedStandards: ["NEP-5"],
+  name: "contract_name",
   abi: {
     events: [
       {
@@ -45,7 +41,6 @@ const definedManifestLike: ContractManifestLike = {
         ],
       },
     ],
-    hash: "43cf98eddbe047e198a3e5d57006311442a0ca15",
     methods: [
       {
         name: "transfer",
@@ -65,12 +60,9 @@ const definedManifestLike: ContractManifestLike = {
           },
         ],
         returnType: ContractParamType.Boolean,
+        safe: false,
       },
     ],
-  },
-  features: {
-    payable: false,
-    storage: false,
   },
   groups: [
     {
@@ -84,7 +76,6 @@ const definedManifestLike: ContractManifestLike = {
       methods: ["balanceOf"],
     },
   ],
-  safeMethods: "*",
   trusts: "*",
   extra: "random note",
 };
@@ -101,101 +92,20 @@ describe("constructor & export", () => {
   });
 });
 
-describe("getter", () => {
-  test("hash", () => {
-    const manifest = new ContractManifest(definedManifestLike);
-    expect(manifest.hash).toBe("43cf98eddbe047e198a3e5d57006311442a0ca15");
-  });
-});
-
-describe("canCall", () => {
-  test("Cannot call according to Hash", () => {
-    const manifest1 = new ContractManifest(definedManifestLike);
-    const manifest2 = new ContractManifest(definedManifestLike);
-    manifest2.abi.hash = "43cf98eddbe047e198a3e5d57006311442a0ca15";
-    expect(manifest1.canCall(manifest2, "balanceOf")).toBeFalsy();
-  });
-
-  test("Can call according to Hash", () => {
-    const manifest1 = new ContractManifest(definedManifestLike);
-    const manifest2 = new ContractManifest(definedManifestLike);
-    manifest2.abi.hash = "a1760976db5fcdfab2a9930e8f6ce875b2d18225";
-    expect(manifest1.canCall(manifest2, "balanceOf")).toBeTruthy();
-  });
-
-  test("Cannot call according to Group", () => {
-    const manifest1 = new ContractManifest(
-      Object.assign({}, definedManifestLike, {
-        permissions: [
-          {
-            contract:
-              "03ff12614a7f6f370fb22260061be9da8b320ff33207aa10118b2bb2e717f5159d",
-            methods: ["balanceOf"],
-          },
-        ],
-      })
-    );
-    const manifest2 = new ContractManifest(definedManifestLike);
-    expect(manifest1.canCall(manifest2, "balanceOf")).toBeFalsy();
-  });
-
-  test("Can call according to Group", () => {
-    const manifest1 = new ContractManifest(
-      Object.assign({}, definedManifestLike, {
-        permissions: [
-          {
-            contract:
-              "03ff12614a7f6f370fb22260061be9da8b320ff33207aa10118b2bb2e717f5159d",
-            methods: ["balanceOf"],
-          },
-        ],
-      })
-    );
-    const manifest2 = new ContractManifest(
-      Object.assign({}, definedManifestLike, {
-        groups: [
-          {
-            pubKey:
-              "03ff12614a7f6f370fb22260061be9da8b320ff33207aa10118b2bb2e717f5159d",
-            signature: "this_is_a_signature",
-          },
-        ],
-      })
-    );
-    expect(manifest1.canCall(manifest2, "balanceOf")).toBeTruthy();
-  });
-
-  test("Can not call according to methods", () => {
-    const manifest1 = new ContractManifest(definedManifestLike);
-    const manifest2 = new ContractManifest(definedManifestLike);
-    manifest2.abi.hash = "a1760976db5fcdfab2a9930e8f6ce875b2d18225";
-    expect(manifest1.canCall(manifest2, "name")).toBeFalsy();
-  });
-});
-
 describe("fromJson", () => {
   test("neo", () => {
     const neoManifestJson = {
       groups: [],
-      features: {
-        storage: true,
-        payable: false,
-      },
       supportedstandards: ["NEP-5"],
+      name: "NeoToken",
       abi: {
-        hash: "0xde5f57d430d3dece511cf975a8d37848cb9e0525",
         methods: [
           {
             name: "totalSupply",
             parameters: [],
             offset: 0,
             returntype: "Integer",
-          },
-          {
-            name: "onPersist",
-            parameters: [],
-            offset: 0,
-            returntype: "Void",
+            safe: true,
           },
           {
             name: "unclaimedGas",
@@ -211,6 +121,7 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Integer",
+            safe: true,
           },
           {
             name: "registerCandidate",
@@ -222,6 +133,7 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Boolean",
+            safe: false,
           },
           {
             name: "unregisterCandidate",
@@ -233,6 +145,7 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Boolean",
+            safe: false,
           },
           {
             name: "vote",
@@ -248,30 +161,28 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Boolean",
+            safe: false,
           },
           {
             name: "getCandidates",
             parameters: [],
             offset: 0,
             returntype: "Array",
-          },
-          {
-            name: "getValidators",
-            parameters: [],
-            offset: 0,
-            returntype: "Array",
+            safe: true,
           },
           {
             name: "getCommittee",
             parameters: [],
             offset: 0,
             returntype: "Array",
+            safe: true,
           },
           {
             name: "getNextBlockValidators",
             parameters: [],
             offset: 0,
             returntype: "Array",
+            safe: true,
           },
           {
             name: "balanceOf",
@@ -283,6 +194,7 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Integer",
+            safe: true,
           },
           {
             name: "transfer",
@@ -302,24 +214,21 @@ describe("fromJson", () => {
             ],
             offset: 0,
             returntype: "Boolean",
-          },
-          {
-            name: "name",
-            parameters: [],
-            offset: 0,
-            returntype: "String",
+            safe: false,
           },
           {
             name: "symbol",
             parameters: [],
             offset: 0,
             returntype: "String",
+            safe: true,
           },
           {
             name: "decimals",
             parameters: [],
             offset: 0,
             returntype: "Integer",
+            safe: true,
           },
         ],
         events: [
@@ -349,18 +258,6 @@ describe("fromJson", () => {
         } as ContractPermissionJson,
       ],
       trusts: [],
-      safemethods: [
-        "totalSupply",
-        "unclaimedGas",
-        "getCandidates",
-        "getValidators",
-        "getCommittee",
-        "getNextBlockValidators",
-        "balanceOf",
-        "name",
-        "symbol",
-        "decimals",
-      ],
       extra: null,
     };
 

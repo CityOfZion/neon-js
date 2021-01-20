@@ -19,7 +19,7 @@
     "test": "jest",
     "version:latest": "lerna version --conventional-commits --no-changelog",
     "version:next": "lerna version --conventional-commits --conventional-prerelease --no-changelog --preid next",
-    "test:integration": "jest /packages/neon-core/__integration__/.* /packages/neon-api/__integration__/.*",
+    "test:integration": "jest /packages/neon-core/__integration__/.* /packages/neon-api/__integration__/.* /packages/neon-js/__integration__/.*",
     "test:unit": "jest /packages/neon-core/__tests__/.*  /packages/neon-api/__tests__/.*"
   },
   "devDependencies": {

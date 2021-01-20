@@ -10,6 +10,7 @@ export interface ContractMethodDefinitionLike {
   offset: number;
   parameters: ContractParameterDefinition[];
   returnType: ContractParamType;
+  safe: boolean;
 }
 
 export interface ContractMethodDefinitionJson {
@@ -17,6 +18,7 @@ export interface ContractMethodDefinitionJson {
   offset: number;
   parameters: ContractParameterDefinitionJson[];
   returntype: string;
+  safe: boolean;
 }
 
 export class ContractMethodDefinition {
@@ -24,6 +26,7 @@ export class ContractMethodDefinition {
   public offset: number;
   public parameters: ContractParameterDefinition[];
   public returnType: ContractParamType;
+  public safe: boolean;
 
   public static fromJson(
     json: ContractMethodDefinitionJson
@@ -36,6 +39,7 @@ export class ContractMethodDefinition {
         type: parseEnum(p.type, ContractParamType),
       })),
       returnType: parseEnum(json.returntype, ContractParamType),
+      safe: json.safe,
     });
   }
 
@@ -45,11 +49,13 @@ export class ContractMethodDefinition {
       offset = 0,
       parameters = [],
       returnType = ContractParamType.Any,
+      safe = false,
     } = obj;
     this.name = name;
     this.offset = offset;
     this.parameters = [...parameters];
     this.returnType = returnType;
+    this.safe = safe;
   }
 
   public toJson(): ContractMethodDefinitionJson {
@@ -61,6 +67,7 @@ export class ContractMethodDefinition {
         type: ContractParamType[p.type],
       })),
       returntype: ContractParamType[this.returnType],
+      safe: this.safe,
     };
   }
 
@@ -70,6 +77,7 @@ export class ContractMethodDefinition {
       offset: this.offset,
       parameters: [...this.parameters],
       returnType: this.returnType,
+      safe: this.safe,
     };
   }
 }

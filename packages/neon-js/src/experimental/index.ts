@@ -1,10 +1,12 @@
-import * as Nep17 from "./nep17";
+import * as nep17 from "./nep17";
 import { SmartContract } from "./contract";
 import {
   getSystemFee,
   calculateNetworkFee,
   setBlockExpiry,
   addFees,
+  deployContract,
+  getContractHash,
 } from "./helpers";
 
 const txHelpers = {
@@ -14,4 +16,4 @@ const txHelpers = {
   addFees,
 };
 
-export { Nep17, txHelpers, SmartContract };
+export { nep17, txHelpers, SmartContract, deployContract, getContractHash };

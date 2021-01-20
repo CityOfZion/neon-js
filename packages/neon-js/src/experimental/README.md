@@ -1,6 +1,6 @@
 # Table of contents
 * [Deploying a smart contract](#1)
-* [NEP-5 Contract interaction](#2)
+* [NEP-17 Contract interaction](#2)
 * [Arbitrary Smart Contract invocation](#3)
 
 ## <a name="1">Deploying a smart contract
@@ -48,11 +48,16 @@ async function run() {
   );
   try {
     // Finally, deploy and get a transaction id in return if successful
+    const contract_hash = Neon.experimental.getContractHash(
+      Neon.u.HexString.fromHex(acc.scriptHash),
+      nef
+    );
+    console.log(`Atemping to deploy contract with hash: 0x${contract_hash}`);
     console.log(await Neon.experimental.deployContract(nef, manifest, config));
     // We can query the blockchain for our contract
     // Note that you'll want to delay this call after a deploy because the deploy transaction will first have to be processed.
     // At the time of writing a block is generated every 15 seconds, thus the following call might will fail until it is processed.
-    // console.log(await rpc_client.getContractState(manifest.abi.hash));
+    // console.log(await rpc_client.getContractState(contract_hash));
   } catch (e) {
     console.log(e);
   }
@@ -61,11 +66,11 @@ async function run() {
 run();
 ```
 
-## <a name="2">NEP-5 Contract interaction
-The following section describes how to interact with NEP-5 contracts on the blockchain.
+## <a name="2">NEP-17 Contract interaction
+The following section describes how to interact with NEP-17 contracts on the blockchain.
 
 ###Pre-requisites
-* (optional) A wallet with NEP-5 tokens if you want to transfer tokens, or a wallet with NEO if you want to claim GAS
+* (optional) A wallet with NEP-17 tokens if you want to transfer tokens, or a wallet with NEO if you want to claim GAS
 
 ### Steps
 1. <a name="createconfig"></a> Create a `CommonConfig` matching your environment. Here we create a config and wallet account for our private network
@@ -83,7 +88,7 @@ const config = {
 ```
 2. Create a contract object and interact with it
 ```javascript
-const NEO = new Neon.experimental.nep5.NEOContract(config);
+const NEO = new Neon.experimental.nep17.NEOContract(config);
 async function run() {
   console.log(await NEO.name());
   console.log(await NEO.symbol());

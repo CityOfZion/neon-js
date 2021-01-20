@@ -12,7 +12,7 @@ export async function calculateNetworkFee(
   transaction: tx.Transaction,
   account: wallet.Account,
   config: CommonConfig
-): Promise<number> {
+): Promise<u.BigInteger> {
   if (transaction.signers.length < 1) {
     throw new Error(
       "Cannot calculate the network fee without a sender in the transaction."
@@ -26,6 +26,24 @@ export async function calculateNetworkFee(
     u.getSerializedSize(transaction.attributes) +
     u.getSerializedSize(transaction.script) +
     u.getSerializedSize(hashes.length);
+
+  const rpcClient = new rpc.RPCClient(config.rpcAddress);
+
+  let execFeeFactor = 0;
+  try {
+    const response = await rpcClient.invokeFunction(
+      CONST.NATIVE_CONTRACT_HASH.PolicyContract,
+      "getExecFeeFactor"
+    );
+    if (response.state === "FAULT") {
+      throw Error;
+    }
+    execFeeFactor = parseInt(response.stack[0].value as string);
+  } catch (e) {
+    throw new Error(
+      `Failed to get 'Execution Fee factor' from Policy contract. Error: ${e}`
+    );
+  }
 
   let networkFee = 0;
   hashes.map((hash) => {
@@ -53,13 +71,13 @@ export async function calculateNetworkFee(
     else if (u.isSignatureContract(witnessScript)) {
       networkFeeSize += 67 + u.getSerializedSize(witnessScript);
       networkFee =
+        execFeeFactor *
         (sc.OpCodePrices[sc.OpCode.PUSHDATA1] +
           sc.OpCodePrices[sc.OpCode.PUSHDATA1] +
           sc.OpCodePrices[sc.OpCode.PUSHNULL] +
           sc.getInteropServicePrice(
             sc.InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
-          )) *
-        100_000_000;
+          ));
     } else if (u.isMultisigContract(witnessScript)) {
       const publicKeyCount = wallet.getPublicKeysFromVerificationScript(
         witnessScript.toString()
@@ -72,14 +90,15 @@ export async function calculateNetworkFee(
         u.getSerializedSize(size_inv) +
         size_inv +
         u.getSerializedSize(witnessScript);
-      networkFee += sc.OpCodePrices[sc.OpCode.PUSHDATA1] * signatureCount;
+      networkFee +=
+        execFeeFactor * sc.OpCodePrices[sc.OpCode.PUSHDATA1] * signatureCount;
 
       const builder = new sc.ScriptBuilder();
       let pushOpcode = sc.fromHex(
         builder.emitPush(signatureCount).build().slice(0, 2)
       );
       // price for pushing the signature count
-      networkFee += sc.OpCodePrices[pushOpcode];
+      networkFee += execFeeFactor * sc.OpCodePrices[pushOpcode];
 
       // now do the same for the public keys
       builder.reset();
@@ -87,19 +106,18 @@ export async function calculateNetworkFee(
         builder.emitPush(publicKeyCount).build().slice(0, 2)
       );
       // price for pushing the public key count
-      networkFee += sc.OpCodePrices[pushOpcode];
+      networkFee += execFeeFactor * sc.OpCodePrices[pushOpcode];
       networkFee +=
-        sc.OpCodePrices[sc.OpCode.PUSHNULL] +
-        sc.getInteropServicePrice(
-          sc.InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
-        ) *
-          publicKeyCount;
-      networkFee *= 100_000_000;
+        execFeeFactor *
+        (sc.OpCodePrices[sc.OpCode.PUSHNULL] +
+          sc.getInteropServicePrice(
+            sc.InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
+          ) *
+            publicKeyCount);
     }
     // else { // future supported contract types}
   });
 
-  const rpcClient = new rpc.RPCClient(config.rpcAddress);
   try {
     const response = await rpcClient.invokeFunction(
       CONST.NATIVE_CONTRACT_HASH.PolicyContract,
@@ -118,7 +136,7 @@ export async function calculateNetworkFee(
     );
   }
 
-  return networkFee;
+  return u.BigInteger.fromDecimal(networkFee, 0);
 }
 
 /**
@@ -131,16 +149,16 @@ export async function getSystemFee(
   script: u.HexString,
   config: CommonConfig,
   signers?: tx.Signer[]
-): Promise<number> {
+): Promise<u.BigInteger> {
   const rpcClient = new rpc.RPCClient(config.rpcAddress);
   try {
     const response = await rpcClient.invokeScript(script, signers);
     if (response.state === "FAULT") {
-      throw Error("Script execution failed. ExecutionEngine state = FAULT");
+      throw Error(
+        `Script execution failed. ExecutionEngine state = FAULT. ${response.exception}`
+      );
     }
-    return parseFloat(
-      u.BigInteger.fromNumber(response.gasconsumed).toDecimal(8)
-    );
+    return u.BigInteger.fromDecimal(response.gasconsumed, 8);
   } catch (e) {
     throw new Error(`Failed to get system fee. ${e}`);
   }
@@ -177,14 +195,16 @@ export async function setBlockExpiry(
  * Validates that the source Account has sufficient balance
  * @param transaction - the transaction to add network and system fees to
  * @param config -
+ * @param token_decimals -
  */
 export async function addFees(
   transaction: tx.Transaction,
   config: CommonConfig
 ): Promise<void> {
-  transaction.systemFee = u.BigInteger.fromDecimal(
-    await getSystemFee(transaction.script, config, transaction.signers),
-    8
+  transaction.systemFee = await getSystemFee(
+    transaction.script,
+    config,
+    transaction.signers
   );
 
   if (config.account === undefined)
@@ -192,9 +212,10 @@ export async function addFees(
       "Cannot determine network fee and validate balances without an account in your config"
     );
 
-  transaction.networkFee = u.BigInteger.fromDecimal(
-    await calculateNetworkFee(transaction, config.account, config),
-    8
+  transaction.networkFee = await calculateNetworkFee(
+    transaction,
+    config.account,
+    config
   );
 
   const GAS = new GASContract(config);
@@ -207,4 +228,73 @@ export async function addFees(
       `Insufficient GAS. Required: ${requiredGAS} Available: ${GASBalance}`
     );
   }
+}
+
+/**
+ * Deploy a smart contract
+ * @param NEF - A smart contract in Neo executable file format. Commonly created by a NEO compiler and stored as .NEF on disk
+ * @param manifest - the manifest conresponding to the smart contract
+ * @param config -
+ */
+export async function deployContract(
+  NEF: Buffer | ArrayBuffer,
+  manifest: sc.ContractManifest,
+  config: CommonConfig
+): Promise<string> {
+  const builder = new sc.ScriptBuilder();
+  builder.emitContractCall({
+    scriptHash: CONST.NATIVE_CONTRACT_HASH.ManagementContract,
+    operation: "deploy",
+    args: [
+      sc.ContractParam.byteArray(
+        u.HexString.fromHex(u.ab2hexstring(NEF), true)
+      ),
+      sc.ContractParam.byteArray(
+        u.HexString.fromAscii(JSON.stringify(manifest.toJson())).reversed()
+      ),
+    ],
+  });
+
+  const transaction = new tx.Transaction();
+  transaction.script = u.HexString.fromHex(builder.build());
+
+  await setBlockExpiry(transaction, config, config.blocksTillExpiry);
+
+  // add a sender
+  if (config.account === undefined)
+    throw new Error("Account in your config cannot be undefined");
+
+  transaction.addSigner({
+    account: config.account.scriptHash,
+    scopes: "CalledByEntry",
+  });
+
+  // await addFees(transaction, config);
+  // Hack as RPC endpoint doesnt work well in preview4.
+  // See https://github.com/neo-project/neo-modules/issues/458
+  if (!config.networkFeeOverride || !config.systemFeeOverride) {
+    throw new Error("Requires networkFeeOverride and systemFeeOveride");
+  }
+  transaction.networkFee = config.networkFeeOverride;
+  transaction.systemFee = config.systemFeeOverride;
+  transaction.sign(config.account, config.networkMagic);
+  const rpcClient = new rpc.RPCClient(config.rpcAddress);
+  return await rpcClient.sendRawTransaction(transaction);
+}
+
+export function getContractHash(
+  sender: u.HexString,
+  nef: Buffer | ArrayBuffer
+): string {
+  const NEF_FILE_HEADER_BYTES = 68; //   4 magic + 32 compiler + 32 version
+  const stream = new u.StringStream(u.ab2hexstring(nef));
+  stream.read(NEF_FILE_HEADER_BYTES);
+  const script = stream.readVarBytes();
+  const hexScript = u.HexString.fromHex(script, true);
+  const assembledScript = new sc.ScriptBuilder()
+    .emit(sc.OpCode.ABORT)
+    .emitPush(sender)
+    .emitPush(hexScript)
+    .build();
+  return u.reverseHex(u.hash160(assembledScript));
 }
