@@ -241,19 +241,16 @@ export async function deployContract(
   manifest: sc.ContractManifest,
   config: CommonConfig
 ): Promise<string> {
-  if (typeof NEF === "object" && NEF instanceof ArrayBuffer) {
-    NEF = Buffer.from(NEF);
-  }
   const builder = new sc.ScriptBuilder();
   builder.emitContractCall({
     scriptHash: CONST.NATIVE_CONTRACT_HASH.ManagementContract,
     operation: "deploy",
     args: [
       sc.ContractParam.byteArray(
-        u.HexString.fromHex(NEF.toString("hex"), true)
+        u.HexString.fromHex(u.ab2hexstring(NEF), true)
       ),
       sc.ContractParam.byteArray(
-        u.HexString.fromAscii(JSON.stringify(manifest.toJson()))
+        u.HexString.fromAscii(JSON.stringify(manifest.toJson())).reversed()
       ),
     ],
   });
@@ -285,11 +282,13 @@ export async function deployContract(
   return await rpcClient.sendRawTransaction(transaction);
 }
 
-export function getContractHash(sender: u.HexString, nef: Buffer): string {
+export function getContractHash(
+  sender: u.HexString,
+  nef: Buffer | ArrayBuffer
+): string {
   const NEF_FILE_HEADER_BYTES = 68; //   4 magic + 32 compiler + 32 version
-  const stream = new u.StringStream(
-    nef.slice(NEF_FILE_HEADER_BYTES).toString("hex")
-  );
+  const stream = new u.StringStream(u.ab2hexstring(nef));
+  stream.read(NEF_FILE_HEADER_BYTES);
   const script = stream.readVarBytes();
   const hexScript = u.HexString.fromHex(script, true);
   const assembledScript = new sc.ScriptBuilder()

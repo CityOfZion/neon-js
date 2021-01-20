@@ -60,9 +60,14 @@ export class StringStream {
    * ss.read(2); // "0203"
    */
   public read(bytes = 1): string {
+    if (bytes === 0) {
+      return "";
+    }
+
     if (this.isEmpty()) {
       throw new Error("Reached the end of the stream!");
     }
+
     const out = this.str.substr(this.pter, bytes * 2);
     this.pter += bytes * 2;
     return out;

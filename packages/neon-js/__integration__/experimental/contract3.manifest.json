@@ -1,10 +1,6 @@
 {
     "name": "contract3",
     "groups": [],
-    "features": {
-        "storage": false,
-        "payable": false
-    },
     "abi": {
         "methods": [
             {
@@ -36,7 +32,6 @@
         }
     ],
     "trusts": [],
-    "safemethods": [],
     "supportedstandards": [],
     "extra": null
 }

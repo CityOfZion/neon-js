@@ -1,17 +1,19 @@
 // import { getIntegrationEnvUrl } from "../../../../../testHelpers";
 import { experimental } from "../../src";
 import { CONST, rpc, sc, wallet, u } from "@cityofzion/neon-core";
+import * as TestHelpers from "../../../../testHelpers";
 import { promises as fs } from "fs";
 import path from "path";
+import { CommonConfig } from "../../src/experimental/types";
 
-let rpc_client: rpc.RPCClient;
+let rpcClient: rpc.RPCClient;
 
 const wif = "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g";
 const acc = new wallet.Account(wif);
 
-const baseConfig = {
+const baseConfig: CommonConfig = {
   networkMagic: CONST.MAGIC_NUMBER.SoloNet,
-  rpcAddress: "http://127.0.0.1:10332",
+  rpcAddress: "",
   account: acc,
 };
 
@@ -20,18 +22,17 @@ async function sleep(ms: number): Promise<void> {
 }
 
 beforeAll(async () => {
-  // const url = await getIntegrationEnvUrl();
-  const url = "http://localhost:20332";
+  const url = await TestHelpers.getIntegrationEnvUrl();
   baseConfig.rpcAddress = url;
-  rpc_client = new rpc.RPCClient(url);
+  rpcClient = new rpc.RPCClient(url);
 });
 
 describe("contract", () => {
   test("deploy", async () => {
     const config = Object.assign(
       {
-        networkFeeOverride: u.BigInteger.fromDecimal(10, 8),
-        systemFeeOverride: u.BigInteger.fromDecimal(10, 8),
+        networkFeeOverride: u.BigInteger.fromDecimal(20, 8),
+        systemFeeOverride: u.BigInteger.fromDecimal(20, 8),
       },
       baseConfig
     );
@@ -43,26 +44,30 @@ describe("contract", () => {
     );
     const manifest = sc.ContractManifest.fromJson(
       JSON.parse(
-        await fs.readFile(path.resolve(__dirname, "./contract3.manifest.json"))
+        ((await fs.readFile(
+          path.resolve(__dirname, "./contract3.manifest.json")
+        )) as unknown) as string
       )
     );
 
-    const contract_hash = experimental.getContractHash(
+    const contractHash = experimental.getContractHash(
       u.HexString.fromHex(acc.scriptHash),
       nef
     );
-    console.log(`Deploying contract with hash: 0x${contract_hash}`);
+    console.log(`Deploying contract with hash: 0x${contractHash}`);
 
     const txid = await experimental.deployContract(nef, manifest, config);
     expect(txid).toBeDefined();
 
+    console.log(`TXID: ${txid}`);
+
     await sleep(5000);
 
-    const state = await rpc_client.getContractState(contract_hash);
+    const state = await rpcClient.getContractState(contractHash);
     // if contract state fails it throws an RpcError
     expect(state).toBeDefined();
     const contract = new experimental.SmartContract(
-      u.HexString.fromHex(contract_hash),
+      u.HexString.fromHex(contractHash),
       config
     );
     const result = await contract.testInvoke("test_func");
@@ -84,7 +89,7 @@ describe("contract", () => {
       baseConfig
     );
 
-    const nefFile = new ArrayBuffer(0);
+    const nefFile = new ArrayBuffer(69);
     const manifest = new sc.ContractManifest({
       permissions: [
         {

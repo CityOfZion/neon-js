@@ -57,6 +57,13 @@ export class HexString {
   }
 
   /**
+   * Returns a new HexString with internal value reversed hex.
+   */
+  public reversed(): HexString {
+    return new HexString(reverseHex(this.#value));
+  }
+
+  /**
    * Judge if 2 HexString are equal
    */
   public equals(other: HexString | string): boolean {
