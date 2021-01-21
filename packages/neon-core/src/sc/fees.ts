@@ -1,7 +1,7 @@
 import { BigInteger } from "../u";
-import InteropServiceCode from "./InteropServiceCode";
+import { InteropServiceCode } from "./InteropServiceCode";
 import { getInteropServicePrice } from "./InteropServicePrices";
-import OpCode from "./OpCode";
+import { OpCode } from "./OpCode";
 import { OpCodePrices } from "./OpCodePrices";
 import { OpToken } from "./OpToken";
 
@@ -50,9 +50,10 @@ export function calculateExecutionFee(
         return BigInteger.fromNumber(OpCodePrices[token.code])
           .add(BigInteger.fromNumber(getInteropServicePrice(interopCode)))
           .mul(factor);
-      } else {
+      } else if (OpCode[token.code] !== null) {
         return BigInteger.fromNumber(OpCodePrices[token.code]).mul(factor);
       }
+      throw new Error(`OpCode ${token.code} not found!`);
     })
     .reduce((a, b) => a.add(b), BigInteger.fromNumber(0));
 }

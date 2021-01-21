@@ -1,60 +1,57 @@
 import {
-  TransactionBuilder,
   TransactionValidator,
   ValidationAttributes,
 } from "../../src/transaction";
 import { sc, tx, u, rpc, CONST } from "@cityofzion/neon-core";
+import * as TestHelpers from "../../../../testHelpers";
 
-const TESTNET_URL = "http://seed5t.neo.org:20332";
-const rpcClient = new rpc.RPCClient(TESTNET_URL);
+let rpcClient: rpc.NeoServerRpcClient;
+beforeAll(async () => {
+  const url = await TestHelpers.getIntegrationEnvUrl();
+  rpcClient = new rpc.NeoServerRpcClient(url);
+}, 20000);
 
 const sig = {
   invocationScript:
     "40f52d1206315dfac64c14ec2dfef1edd62f4460487c23be6bbbbf9080973784ca7dbfe4dfcf4b6b82f2921b968e0d693020b76be0b20171ac56e7da50ab1c4b06",
   verificationScript:
-    "21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c968747476aa",
+    "0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef0b4195440d78",
 };
 const multiSig = {
   invocationScript:
     "40f52d1206315dfac64c14ec2dfef1edd62f4460487c23be6bbbbf9080973784ca7dbfe4dfcf4b6b82f2921b968e0d693020b76be0b20171ac56e7da50ab1c4b0640efe3ccf3a49dd670d8785a12218324f60a6b56ed5a628f15522b883a81b51ea9256c0be62008377b156eb1a76e6dc25aad776524c18eb01b0810ed833b15a1ca",
   verificationScript:
-    "5221031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c92103767002bb9f74317035ce8d557a3aed30ce831eb16b5f636a139dad0b07916bed210329898e6e5e0a2f175e205b4019c500d6bb69203b56470ec2fc8ab0a4c065e16d5368c7c34cba",
+    "110c2103118a2b7962fa0226fa35acf5d224855b691c7ea978d1afe2c538631d5f7be85e110b41138defaf",
 };
 
-describe.skip("validateValidUntilBlock", () => {
+describe("validateValidUntilBlock", () => {
   test("valid", async () => {
-    const transaction = new TransactionBuilder({
+    const currentBlock = await rpcClient.getBlockCount();
+    const transaction = new tx.Transaction({
       validUntilBlock:
-        tx.Transaction.MAX_TRANSACTION_LIFESPAN +
-        (await rpcClient.getBlockCount()) -
-        1,
-    }).build();
+        tx.Transaction.MAX_TRANSACTION_LIFESPAN + currentBlock - 1,
+    });
     const validator = new TransactionValidator(rpcClient, transaction);
     const validation = await validator.validateValidUntilBlock();
     expect(validation.valid).toBeTruthy();
   });
 
   test("invalid", async () => {
-    const transaction = new TransactionBuilder({
+    const transaction = new tx.Transaction({
       validUntilBlock: 1,
-    }).build();
+    });
     const validator = new TransactionValidator(rpcClient, transaction);
     const validation = await validator.validateValidUntilBlock();
     expect(validation.valid).toBeFalsy();
   });
 
   test("autoFix", async () => {
-    const transaction = new TransactionBuilder({
+    const transaction = new tx.Transaction({
       validUntilBlock: 1,
-    }).build();
+    });
     const validator = new TransactionValidator(rpcClient, transaction);
     const validation = await validator.validateValidUntilBlock(true);
-    const {
-      valid,
-      result: {
-        validUntilBlock: { fixed, prev, suggestion },
-      },
-    } = validation;
+    const { valid, fixed, prev, suggestion } = validation;
     expect(valid).toBeTruthy();
     expect(fixed).toBeTruthy();
     expect(prev).toBe(1);
@@ -66,13 +63,13 @@ describe.skip("validateValidUntilBlock", () => {
 describe.skip("validateScript", () => {
   test("valid", async () => {
     const script = sc.createScript({
-      scriptHash: CONST.ASSET_ID.NEO,
-      operation: "name",
+      scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
+      operation: "symbol",
       args: [],
     });
-    const transaction = new TransactionBuilder({
+    const transaction = new tx.Transaction({
       script,
-    }).build();
+    });
     const validator = new TransactionValidator(rpcClient, transaction);
     const validation = await validator.validateScript();
     expect(validation.valid).toBeTruthy();
@@ -80,31 +77,31 @@ describe.skip("validateScript", () => {
 
   test("invalid", async () => {
     const script = sc.createScript({
-      scriptHash: CONST.ASSET_ID.NEO,
+      scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
       operation: "not_exist_method",
       args: [],
     });
-    const transaction = new TransactionBuilder({
+    const transaction = new tx.Transaction({
       script,
-    }).build();
+    });
     const validator = new TransactionValidator(rpcClient, transaction);
     const validation = await validator.validateScript();
     expect(validation.valid).toBeFalsy();
-    expect(validation.result.script.message).toBeDefined();
+    expect(validation.message).toBeDefined();
   });
 });
 
-describe.skip("validateSystemFee", () => {
+describe("validateSystemFee", () => {
   test("valid", async () => {
     const script = sc.createScript({
-      scriptHash: CONST.ASSET_ID.NEO,
-      operation: "name",
+      scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
+      operation: "symbol",
       args: [],
     });
-    const transaction = new TransactionBuilder({
+    const transaction = new tx.Transaction({
       script,
-      systemFee: 10,
-    }).build();
+      systemFee: "1000000000",
+    });
     const validator = new TransactionValidator(rpcClient, transaction);
     const validation = await validator.validateSystemFee();
     expect(validation.valid).toBeTruthy();
@@ -113,76 +110,45 @@ describe.skip("validateSystemFee", () => {
   describe("invalid", () => {
     test("not enough", async () => {
       const script = sc.createScript({
-        scriptHash: CONST.ASSET_ID.NEO,
-        operation: "name",
+        scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
+        operation: "symbol",
         args: [],
       });
-      const transaction = new TransactionBuilder({
+      const transaction = new tx.Transaction({
         script,
         systemFee: 0,
-      }).build();
+      });
       const validator = new TransactionValidator(rpcClient, transaction);
       const validation = await validator.validateSystemFee();
       expect(validation).toStrictEqual({
         valid: false,
-        result: {
-          systemFee: {
-            fixed: false,
-            prev: u.BigInteger.fromNumber(0),
-            suggestion: u.BigInteger.fromNumber(1),
-          },
-        },
-      });
-    });
-
-    test("precision", async () => {
-      const script = sc.createScript({
-        scriptHash: CONST.ASSET_ID.NEO,
-        operation: "name",
-        args: [],
-      });
-      const transaction = new TransactionBuilder({
-        script,
-        systemFee: 10.1,
-      }).build();
-      const validator = new TransactionValidator(rpcClient, transaction);
-      const validation = await validator.validateSystemFee();
-      expect(validation).toStrictEqual({
-        valid: false,
-        result: {
-          systemFee: {
-            fixed: false,
-            prev: u.BigInteger.fromNumber(10.1),
-            suggestion: u.BigInteger.fromNumber(1),
-          },
-        },
+        fixed: false,
+        prev: u.BigInteger.fromNumber(0),
+        suggestion: u.BigInteger.fromNumber(1),
+        message: "Insufficient fees attached to run the script.",
       });
     });
 
     test("script execution error in neoVM", async () => {
       const addressInHash160 = sc.ContractParam.hash160(
-        "AZzpS2oDPRtPwFp6C9ric98KCXGZiic6RV"
+        "NNWAo5vdVJz1oyCuNiaTBA3amBHnWCF4Yk"
       );
       const script = sc.createScript({
-        scriptHash: CONST.ASSET_ID.NEO,
+        scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
         operation: "transfer",
         args: [addressInHash160, addressInHash160, sc.ContractParam.integer(1)],
       });
-      const transaction = new TransactionBuilder({
+      const transaction = new tx.Transaction({
         script,
-        systemFee: 10,
-      }).build();
+        systemFee: "1000000000",
+      });
       const validator = new TransactionValidator(rpcClient, transaction);
       const validation = await validator.validateSystemFee();
       expect(validation).toStrictEqual({
         valid: false,
-        result: {
-          systemFee: {
-            fixed: false,
-            message:
-              "Cannot get precise systemFee as script execution on node reports FAULT.",
-          },
-        },
+        fixed: false,
+        message:
+          "Cannot get precise systemFee as script execution on node reports FAULT.",
       });
     });
   });
@@ -190,136 +156,119 @@ describe.skip("validateSystemFee", () => {
   describe("autoFix", () => {
     test("fix not enough", async () => {
       const script = sc.createScript({
-        scriptHash: CONST.ASSET_ID.NEO,
-        operation: "name",
+        scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
+        operation: "symbol",
         args: [],
       });
-      const transaction = new TransactionBuilder({
+      const transaction = new tx.Transaction({
         script,
         systemFee: 0,
-      }).build();
-      const validator = new TransactionValidator(rpcClient, transaction);
-      const validation = await validator.validateSystemFee(true);
-      const {
-        valid,
-        result: {
-          systemFee: { fixed, prev, suggestion },
-        },
-      } = validation;
-      expect(valid).toBeTruthy();
-      expect(fixed).toBeTruthy();
-      expect(prev.equals(0)).toBeTruthy();
-      expect(suggestion.equals(1)).toBeTruthy();
-      expect(transaction.systemFee.equals(suggestion)).toBeTruthy();
-    });
-
-    test("precision", async () => {
-      const script = sc.createScript({
-        scriptHash: CONST.ASSET_ID.NEO,
-        operation: "name",
-        args: [],
       });
-      const transaction = new TransactionBuilder({
-        script,
-        systemFee: 10.1,
-      }).build();
       const validator = new TransactionValidator(rpcClient, transaction);
       const validation = await validator.validateSystemFee(true);
-      const {
-        valid,
-        result: {
-          systemFee: { fixed, prev, suggestion },
-        },
-      } = validation;
+      const { valid, fixed, prev, suggestion } = validation;
       expect(valid).toBeTruthy();
       expect(fixed).toBeTruthy();
-      expect(prev.equals(10.1)).toBeTruthy();
-      expect(suggestion.equals(1)).toBeTruthy();
-      expect(transaction.systemFee.equals(suggestion)).toBeTruthy();
+      expect(prev && prev.equals(0)).toBeTruthy();
+      expect(suggestion && suggestion.compare(0)).toEqual(1);
+      expect(transaction.systemFee.equals(suggestion ?? -1)).toBeTruthy();
     });
+  });
+
+  test("suggest when overpaying", async () => {
+    const script = sc.createScript({
+      scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
+      operation: "symbol",
+      args: [],
+    });
+    const transaction = new tx.Transaction({
+      script,
+      systemFee: 1010000000,
+    });
+    const validator = new TransactionValidator(rpcClient, transaction);
+    const validation = await validator.validateSystemFee(true);
+    const { valid, fixed, prev, suggestion, message } = validation;
+    expect(valid).toBeTruthy();
+    expect(fixed).toBeFalsy();
+    expect(prev && prev.equals(1010000000)).toBeTruthy();
+    expect(suggestion && suggestion.compare(1010000000)).toEqual(-1);
+    expect(message).toContain("Overpaying");
   });
 });
 
-describe.skip("validateNetworkFee", () => {
+describe("validateNetworkFee", () => {
   test("valid", async () => {
-    const transaction = new TransactionBuilder({
+    const transaction = new tx.Transaction({
       witnesses: [sig, multiSig],
-      networkFee: 0.0237654,
-    }).build();
+      networkFee: 2376540,
+    });
     const validator = new TransactionValidator(rpcClient, transaction);
     const validation = await validator.validateNetworkFee();
     expect(validation.valid).toBeTruthy();
   });
 
   test("invalid", async () => {
-    const transaction = new TransactionBuilder({
+    const transaction = new tx.Transaction({
       witnesses: [sig, multiSig],
-      networkFee: 0.01,
-    }).build();
+      networkFee: 1,
+    });
     const validator = new TransactionValidator(rpcClient, transaction);
     const validation = await validator.validateNetworkFee();
     expect(validation.valid).toBeFalsy();
   });
 
   test("autoFix", async () => {
-    const transaction = new TransactionBuilder({
+    const transaction = new tx.Transaction({
       witnesses: [sig, multiSig],
-      networkFee: 0.01,
-    }).build();
+      networkFee: 1,
+    });
     const validator = new TransactionValidator(rpcClient, transaction);
     const validation = await validator.validateNetworkFee(true);
-    const {
-      valid,
-      result: {
-        networkFee: { fixed, prev, suggestion },
-      },
-    } = validation;
+    const { valid, fixed, prev, suggestion } = validation;
     expect(valid).toBeTruthy();
     expect(fixed).toBeTruthy();
-    expect(prev.equals(0.01)).toBeTruthy();
-    expect(suggestion.equals(0.0237654)).toBeTruthy();
-    expect(transaction.networkFee.equals(suggestion)).toBeTruthy();
+    expect(prev && prev.equals(1)).toBeTruthy();
+    expect(suggestion && suggestion.compare(1)).toEqual(1);
+    expect(transaction.networkFee.equals(suggestion ?? -1)).toBeTruthy();
   });
 });
 
-describe.skip("validateAll", () => {
+describe("validateAll", () => {
   test("valid", async () => {
+    const currentBlock = await rpcClient.getBlockCount();
     const script = sc.createScript({
-      scriptHash: CONST.ASSET_ID.NEO,
-      operation: "name",
+      scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
+      operation: "symbol",
       args: [],
     });
-    const transaction = new TransactionBuilder({
+    const transaction = new tx.Transaction({
       validUntilBlock:
-        tx.Transaction.MAX_TRANSACTION_LIFESPAN +
-        (await rpcClient.getBlockCount()) -
-        1,
+        tx.Transaction.MAX_TRANSACTION_LIFESPAN + currentBlock - 1,
       witnesses: [sig, multiSig],
-      networkFee: 0.1,
       script,
-      systemFee: 1,
-    }).build();
+      networkFee: 100000000,
+      systemFee: 100000000,
+    });
     const validator = new TransactionValidator(rpcClient, transaction);
     const validation = await validator.validate(ValidationAttributes.All);
     expect(validation.valid).toBeTruthy();
   });
 
   test("invalid", async () => {
+    const currentBlock = await rpcClient.getBlockCount();
     const script = sc.createScript({
-      scriptHash: CONST.ASSET_ID.NEO,
-      operation: "name",
+      scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
+      operation: "symbol",
       args: [],
     });
-    const transaction = new TransactionBuilder({
+    const transaction = new tx.Transaction({
       validUntilBlock:
-        tx.Transaction.MAX_TRANSACTION_LIFESPAN +
-        (await rpcClient.getBlockCount()) -
-        1,
+        tx.Transaction.MAX_TRANSACTION_LIFESPAN + currentBlock - 1,
       witnesses: [sig, multiSig],
-      networkFee: 0.01,
       script,
-      systemFee: 1.1,
-    }).build();
+      networkFee: 1,
+      systemFee: 1,
+    });
     const validator = new TransactionValidator(rpcClient, transaction);
     const validation = await validator.validate(ValidationAttributes.All);
     expect(validation.valid).toBeFalsy();
@@ -327,76 +276,95 @@ describe.skip("validateAll", () => {
 
   describe("autoFix", () => {
     test("fix all", async () => {
+      const currentBlock = await rpcClient.getBlockCount();
       const script = sc.createScript({
-        scriptHash: CONST.ASSET_ID.NEO,
-        operation: "name",
+        scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
+        operation: "symbol",
         args: [],
       });
-      const transaction = new TransactionBuilder({
+      const transaction = new tx.Transaction({
         validUntilBlock:
-          tx.Transaction.MAX_TRANSACTION_LIFESPAN +
-          (await rpcClient.getBlockCount()) -
-          1,
+          tx.Transaction.MAX_TRANSACTION_LIFESPAN + currentBlock - 1,
         witnesses: [sig, multiSig],
-        networkFee: 0.01,
         script,
-        systemFee: 1.1,
-      }).build();
+        networkFee: 1,
+        systemFee: 1,
+      });
       const validator = new TransactionValidator(rpcClient, transaction);
       const validation = await validator.validate(
         ValidationAttributes.All,
         ValidationAttributes.All
       );
-      expect(validation).toStrictEqual({
+      expect(validation).toMatchObject({
         valid: true,
         result: {
           systemFee: {
+            valid: true,
             fixed: true,
-            prev: u.BigInteger.fromNumber(1.1),
-            suggestion: u.BigInteger.fromNumber(1),
+            prev: u.BigInteger.fromNumber(1),
+            suggestion: expect.any(u.BigInteger),
           },
           networkFee: {
+            valid: true,
             fixed: true,
-            prev: u.BigInteger.fromNumber(0.01),
-            suggestion: u.BigInteger.fromNumber(0.0240954),
+            prev: u.BigInteger.fromNumber(1),
+            suggestion: expect.any(u.BigInteger),
+          },
+          validUntilBlock: {
+            valid: true,
+            fixed: false,
+          },
+          script: {
+            valid: true,
+            fixed: false,
           },
         },
       });
     });
 
     test("fix one", async () => {
+      const currentBlock = await rpcClient.getBlockCount();
       const script = sc.createScript({
-        scriptHash: CONST.ASSET_ID.NEO,
-        operation: "name",
+        scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
+        operation: "symbol",
         args: [],
       });
-      const transaction = new TransactionBuilder({
+      const transaction = new tx.Transaction({
         validUntilBlock:
-          tx.Transaction.MAX_TRANSACTION_LIFESPAN +
-          (await rpcClient.getBlockCount()) -
-          1,
+          tx.Transaction.MAX_TRANSACTION_LIFESPAN + currentBlock - 1,
         witnesses: [sig, multiSig],
-        networkFee: 0.01,
         script,
-        systemFee: 1.1,
-      }).build();
+        networkFee: 1,
+        systemFee: 1,
+      });
       const validator = new TransactionValidator(rpcClient, transaction);
       const validation = await validator.validate(
         ValidationAttributes.All,
         ValidationAttributes.SystemFee
       );
-      expect(validation).toStrictEqual({
+      expect(validation).toMatchObject({
         valid: false,
         result: {
           systemFee: {
+            valid: true,
             fixed: true,
-            prev: u.BigInteger.fromNumber(1.1),
-            suggestion: u.BigInteger.fromNumber(1),
+            prev: u.BigInteger.fromNumber(1),
+            suggestion: expect.any(u.BigInteger),
           },
           networkFee: {
+            valid: false,
             fixed: false,
-            prev: u.BigInteger.fromNumber(0.01),
-            suggestion: u.BigInteger.fromNumber(0.0240954),
+            prev: u.BigInteger.fromNumber(1),
+            suggestion: expect.any(u.BigInteger),
+            message: "Insufficient network fees.",
+          },
+          validUntilBlock: {
+            valid: true,
+            fixed: false,
+          },
+          script: {
+            valid: true,
+            fixed: false,
           },
         },
       });

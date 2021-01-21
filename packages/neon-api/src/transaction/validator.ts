@@ -110,17 +110,14 @@ export class TransactionValidator {
     autoFix = false
   ): Promise<ValidationSuggestion<u.BigInteger>> {
     const { script, systemFee: prev } = this.transaction;
-    const {
-      state,
-      gasconsumed: gasConsumed,
-    } = await this.rpcClient.invokeScript(script);
+    const invokeResponse = await this.rpcClient.invokeScript(script);
 
-    if (state === "FAULT") {
+    if (invokeResponse.state === "FAULT") {
       return err(
         "Cannot get precise systemFee as script execution on node reports FAULT."
       );
     }
-
+    const gasConsumed = invokeResponse.gasconsumed;
     const suggestion = u.BigInteger.fromDecimal(gasConsumed, 8);
     const compareResult = suggestion.compare(prev);
     if (compareResult > 0) {
