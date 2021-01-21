@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-ledger",
   "description": "Neon Ledger integration for Node.js",
-  "version": "5.0.0-next.4",
+  "version": "5.0.0-next.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
