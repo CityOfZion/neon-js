@@ -5,6 +5,104 @@ title: Changelog (v5)
 
 # 5.0.0
 
+## Preview4:
+
+```
+neo-cli: v3.0.0-preview4
+neon-js: v5.0.0-next5
+```
+
+Key blockchain changes:
+
+- Prices for VM operations are now adjusted to be dynamic. It is now a baseline
+  price multipled by PolicyContract's GetExecFee.
+-
+
+SDK changes:
+
+`neon-core` and `neon-api` is now supported and usable for this preview stage.
+
+- Misc
+
+  - GAS claim is now more complicated, sending NEO to the same address does not
+    give you GAS anymore. Currently, this function is not supported until
+    further notice. If you want to claim gas, just have 2 addresses and send NEO
+    between both addresses.
+  - Removal of the Nep5 package. The functionality is now absorbed into the `sc`
+    package as tokens become part of the native functionality.
+  - Nep5 is now deprecated in favor of Nep17. The new standard removes `name`,
+    adjusts `transfer` and adds some new functionality.
+  - Fees are now more dynamic. It now uses data from PolicyContract as a
+    multipler to the execution price.
+
+- api
+
+  - NetworkFacade is the new high level API class that is intended to make
+    common wallet operations easy to use. It will contain the following methods:
+
+    - transferToken
+    - getTokenInfos
+    - getTokenBalances
+    - getFeeInformation
+
+  - TransactionBuilder is a utility class for building transaction templates.
+    This will help create transactions based on intents provided. Currently only
+    supports token transfer.
+
+  - TransactionValidator is a class working in tandem with TransactionBuilder to
+    validate and autofill other portions of the transaction that requires a
+    network connection. For example, both fees require blockchain assistance in
+    determining the correct fees.
+
+- u
+
+  - Fixed8 is now deprecated. BigInteger is the new replacement for this class.
+    BigInteger will allow for bigger numbers and less messing around with the
+    fixed convention of 8 decimals. Internally, the SDK will try to represent
+    and move data around as integers since the decimals is merely an arbitrary
+    precision data contained within the contract.
+
+- tx
+
+  - Reduce max transaction lifespan down to 24 hours (based on 15s blocks).
+
+- rpc
+
+  - Invoke\* methods and transaction methods now use base64 encoding for
+    transmission of data.
+  - rename getValidators to getNextBlockValidators
+  - getVersion is updated to return the full payload (previously it only
+    returned the version strong). This allows users to access the magic number
+    inside this payload which will be needed to sign transactions.
+
+- sc
+
+  - OpToken is introduced to wrap OpCode. This allows for better parsing of VM
+    scripts.
+  - Introduce a better typed interface ContractCall. This replaces the old
+    ScriptIntent with the primary goal of making the arguments easier to
+    translate into proper VM script format.
+  - Remove ScriptParser in favor of using OpToken.
+  - Renamed Nep5Contract to Nep17Contract. Most of the original Nep5 methods
+    remain unchanged with the exception of the removal of the `name` method.
+  - Removed contract deployment code. We are testing it out in experimental at
+    the moment.
+
+- wallet
+
+  - Implement WIF format natively to reduce dependency.
+
+- CONST
+
+  - Deprecate ASSET_ID in favor of NATIVE_CONTRACT_HASH. Asset as a term is
+    pretty much deprecated in neo3.
+
+- experimental
+
+  - new section under neon-js to test out a different way of doing things.
+    Contract deployment and some basic api functions are available. Please look
+    at the readme found within the src folder for more details.
+
 ## Preview3:
 
 ```
