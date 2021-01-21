@@ -35,7 +35,7 @@ export class OpToken {
     while (!ss.isEmpty()) {
       const hexOpCode = ss.read(1);
       const opCode = parseInt(hexOpCode, 16) as OpCode;
-      const annotation = OpCodeAnnotations[opCode];
+      const annotation = OpCodeAnnotations[opCode] ?? {};
       const paramsExtracter = annotation.operandSize
         ? readParams(annotation.operandSize)
         : annotation.operandSizePrefix

@@ -92,7 +92,9 @@ export class BigInteger {
         // eg. 9999999999999999999999999999999999.toString() == '1e+34'.
         return new BigInteger(new BN(input.toString(16), 16));
       default:
-        throw new Error("Input was not stringified number or number");
+        throw new Error(
+          `Input was not stringified number or number: ${typeof input} ${input}`
+        );
     }
   }
 
