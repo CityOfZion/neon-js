@@ -38,7 +38,7 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "bignumber.js": "7.2.1",
     "bn.js": "5.1.1",
     "bs58": "4.0.1",
