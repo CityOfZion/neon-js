@@ -35,22 +35,5 @@
   },
   "files": [
     "dist/"
-  ],
-  "gitHead": "d21633d03deca1f4bc6c3a4f4e1d32a61aec2fe3",
-  "devDependencies": {
-    "@types/jest": "26.0.19",
-    "@types/node": "14.14.13",
-    "@typescript-eslint/eslint-plugin": "4.9.1",
-    "@typescript-eslint/parser": "4.9.1",
-    "cross-env": "7.0.3",
-    "eslint": "7.15.0",
-    "eslint-config-prettier": "7.0.0",
-    "eslint-plugin-prettier": "3.2.0",
-    "eslint-plugin-tsdoc": "^0.2.10",
-    "prettier": "2.2.1",
-    "ts-loader": "8.0.12",
-    "typescript": "4.1.3",
-    "webpack": "5.10.1",
-    "webpack-cli": "4.2.0"
-  }
+  ]
 }
