@@ -16,6 +16,8 @@ Key blockchain changes:
 
 - Prices for VM operations are now adjusted to be dynamic. It is now a baseline
   price multipled by PolicyContract's GetExecFee.
+- Contract deployment is now managed by a native contract.
+- NEP17 is now the new token standard superceding NEP5.
 -
 
 SDK changes:
@@ -68,6 +70,9 @@ SDK changes:
 
 - rpc
 
+  - Reworked base class into RpcDispatcher that uses mixins to create suitable
+    clients. This allows typings to be more specific for certain cases where
+    only a subset of the RPC methods are required.
   - Invoke\* methods and transaction methods now use base64 encoding for
     transmission of data.
   - rename getValidators to getNextBlockValidators

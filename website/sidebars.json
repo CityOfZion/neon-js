@@ -6,7 +6,8 @@
       "structure"
     ],
     "Guides": [
-      "guides/basic/transfer"
+      "guides/basic/transfer",
+      "guides/basic/facade"
     ]
   },
   "api": {

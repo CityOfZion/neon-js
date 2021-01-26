@@ -47,6 +47,9 @@
       "changelog/v4": {
         "title": "Changelog (v4)"
       },
+      "guides/basic/facade": {
+        "title": "Using the NetworkFacade"
+      },
       "guides/basic/transfer": {
         "title": "Performing a basic transaction"
       },
