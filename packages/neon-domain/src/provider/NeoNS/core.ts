@@ -1,4 +1,5 @@
 import { rpc, sc, u } from "@cityofzion/neon-core";
+import { CallFlags } from "@cityofzion/neon-core/lib/sc";
 
 const operation = "resolve";
 

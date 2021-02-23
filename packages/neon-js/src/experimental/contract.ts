@@ -47,6 +47,7 @@ export class SmartContract {
    * Tip: use `testInvoke` for querying data without needing to pay GAS.
    * @param operation - name of operation to call
    * @param params - parameters to pass.
+   * @param callFlags - call flag required for the operation to call.
    * @returns transaction id
    */
   public async invoke(

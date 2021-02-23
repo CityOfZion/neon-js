@@ -1,6 +1,7 @@
 import { CONST, rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { CommonConfig } from "./types";
 import { GASContract } from "./nep17";
+import { CallFlags, NEF } from "@cityofzion/neon-core/lib/sc";
 
 /**
  * Calculate the GAS costs for validation and inclusion of the transaction in a block
@@ -158,7 +159,7 @@ export async function getSystemFee(
         `Script execution failed. ExecutionEngine state = FAULT. ${response.exception}`
       );
     }
-    return u.BigInteger.fromDecimal(response.gasconsumed, 8);
+    return u.BigInteger.fromDecimal(response.gasconsumed, 0);
   } catch (e) {
     throw new Error(`Failed to get system fee. ${e}`);
   }
@@ -201,22 +202,30 @@ export async function addFees(
   transaction: tx.Transaction,
   config: CommonConfig
 ): Promise<void> {
-  transaction.systemFee = await getSystemFee(
-    transaction.script,
-    config,
-    transaction.signers
-  );
+  if (config.systemFeeOverride) {
+    transaction.systemFee = config.systemFeeOverride;
+  } else {
+    transaction.systemFee = await getSystemFee(
+      transaction.script,
+      config,
+      transaction.signers
+    );
+  }
 
   if (config.account === undefined)
     throw new Error(
       "Cannot determine network fee and validate balances without an account in your config"
     );
 
-  transaction.networkFee = await calculateNetworkFee(
-    transaction,
-    config.account,
-    config
-  );
+  if (config.networkFeeOverride) {
+    transaction.networkFee = config.networkFeeOverride;
+  } else {
+    transaction.networkFee = await calculateNetworkFee(
+      transaction,
+      config.account,
+      config
+    );
+  }
 
   const GAS = new GASContract(config);
   const GASBalance = await GAS.balanceOf(config.account.address);
@@ -232,12 +241,12 @@ export async function addFees(
 
 /**
  * Deploy a smart contract
- * @param NEF - A smart contract in Neo executable file format. Commonly created by a NEO compiler and stored as .NEF on disk
- * @param manifest - the manifest conresponding to the smart contract
+ * @param nef - A smart contract in Neo executable file format. Commonly created by a NEO compiler and stored as .NEF on disk
+ * @param manifest - the manifest corresponding to the smart contract
  * @param config -
  */
 export async function deployContract(
-  NEF: Buffer | ArrayBuffer,
+  nef: NEF,
   manifest: sc.ContractManifest,
   config: CommonConfig
 ): Promise<string> {
@@ -245,10 +254,9 @@ export async function deployContract(
   builder.emitContractCall({
     scriptHash: CONST.NATIVE_CONTRACT_HASH.ManagementContract,
     operation: "deploy",
+    callFlags: CallFlags.All,
     args: [
-      sc.ContractParam.byteArray(
-        u.HexString.fromHex(u.ab2hexstring(NEF), true)
-      ),
+      sc.ContractParam.byteArray(u.HexString.fromHex(nef.serialize(), true)),
       sc.ContractParam.byteArray(
         u.HexString.fromAscii(JSON.stringify(manifest.toJson())).reversed()
       ),
@@ -269,32 +277,29 @@ export async function deployContract(
     scopes: "CalledByEntry",
   });
 
-  // await addFees(transaction, config);
-  // Hack as RPC endpoint doesnt work well in preview4.
-  // See https://github.com/neo-project/neo-modules/issues/458
-  if (!config.networkFeeOverride || !config.systemFeeOverride) {
-    throw new Error("Requires networkFeeOverride and systemFeeOveride");
-  }
-  transaction.networkFee = config.networkFeeOverride;
-  transaction.systemFee = config.systemFeeOverride;
+  await addFees(transaction, config);
+
   transaction.sign(config.account, config.networkMagic);
   const rpcClient = new rpc.RPCClient(config.rpcAddress);
   return await rpcClient.sendRawTransaction(transaction);
 }
 
+/**
+ * Get the hash that identifies the contract on the chain matching the specified NEF
+ * @param sender - The sender of the transaction
+ * @param nefChecksum - The checksum of the Neo Executable File. A NEF file is a smart contract commonly created by a NEO compiler and stored as .NEF on disk
+ * @param contractName - The name as indicated in the manifest
+ */
 export function getContractHash(
   sender: u.HexString,
-  nef: Buffer | ArrayBuffer
+  nefChecksum: number,
+  contractName: string
 ): string {
-  const NEF_FILE_HEADER_BYTES = 68; //   4 magic + 32 compiler + 32 version
-  const stream = new u.StringStream(u.ab2hexstring(nef));
-  stream.read(NEF_FILE_HEADER_BYTES);
-  const script = stream.readVarBytes();
-  const hexScript = u.HexString.fromHex(script, true);
   const assembledScript = new sc.ScriptBuilder()
     .emit(sc.OpCode.ABORT)
     .emitPush(sender)
-    .emitPush(hexScript)
+    .emitPush(nefChecksum)
+    .emitPush(contractName)
     .build();
   return u.reverseHex(u.hash160(assembledScript));
 }

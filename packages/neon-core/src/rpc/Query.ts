@@ -3,6 +3,7 @@ import { Transaction, TransactionJson, Signer, SignerJson } from "../tx";
 import { ContractManifestJson, ContractParam, StackItemJson } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 import { HexString } from "../u";
+import { NEFJson } from "../sc";
 
 export type BooleanLikeParam = 0 | 1 | boolean;
 export interface QueryLike<T extends unknown[]> {
@@ -26,18 +27,20 @@ export interface RPCErrorResponse {
 
 export interface ApplicationLog {
   txid: string;
-  trigger: string;
-  vmstate: string;
-  gasconsumed: string;
-  stack?: StackItemJson[];
-  notifications: {
-    contract: string;
-    eventname: string;
-    state: string;
+  executions: {
+    trigger: string;
+    vmstate: string;
+    gasconsumed: string;
+    stack?: StackItemJson[];
+    notifications: {
+      contract: string;
+      eventname: string;
+      state: string;
+    }[];
   }[];
 }
 
-export type GetApplicationLogsResult = ApplicationLog[];
+export type GetApplicationLogResult = ApplicationLog[];
 
 /**
  * Result from calling invokescript or invokefunction.
@@ -67,7 +70,7 @@ export interface GetContractStateResult {
   /** 0x prefixed hexstring */
   hash: string;
   /** Base64 encoded string */
-  script: string;
+  nef: NEFJson;
   manifest: ContractManifestJson;
 }
 
@@ -171,11 +174,11 @@ export class Query<TParams extends unknown[], TResponse> {
   /**
    * Query returning the application log.
    */
-  public static getApplicationLogs(
+  public static getApplicationLog(
     hash: string
-  ): Query<[string], GetApplicationLogsResult> {
+  ): Query<[string], GetApplicationLogResult> {
     return new Query({
-      method: "getapplicationlogs",
+      method: "getapplicationlog",
       params: [hash],
     });
   }
@@ -377,7 +380,7 @@ export class Query<TParams extends unknown[], TResponse> {
   ): Query<[string, string], string> {
     return new Query({
       method: "getstorage",
-      params: [scriptHash, key],
+      params: [scriptHash, HexString.fromHex(key).toBase64()],
     });
   }
 

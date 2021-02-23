@@ -100,10 +100,12 @@ export enum OpCode {
   CALL_L = 0x35,
   // Pop the address of a function from the stack, and call the function.
   CALLA = 0x36,
+  // Calls the function which is described by the token.
+  CALLT = 0x37,
   // It turns the vm state to FAULT immediately, and cannot be caught.
-  ABORT = 0x37,
+  ABORT = 0x38,
   // Pop the top value of the stack, if it false, then exit vm execution and set vm state to FAULT.
-  ASSERT = 0x38,
+  ASSERT = 0x39,
   // Pop the top value of the stack, and throw it.
   THROW = 0x3a,
   // TRY CatchOffset(sbyte) FinallyOffset(sbyte). If there's no catch body, set CatchOffset 0. If there's no finally body, set FinallyOffset 0.
@@ -374,6 +376,8 @@ export enum OpCode {
   REMOVE = 0xd2,
   // Remove all the items from the compound-type.
   CLEARITEMS = 0xd3,
+  // Remove the last element from an array and push it onto the stack.
+  POPITEM = 0xd4,
 
   /* Types */
 

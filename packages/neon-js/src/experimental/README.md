@@ -50,7 +50,8 @@ async function run() {
     // Finally, deploy and get a transaction id in return if successful
     const contract_hash = Neon.experimental.getContractHash(
       Neon.u.HexString.fromHex(acc.scriptHash),
-      nef
+      nef,
+      manifst.name
     );
     console.log(`Atemping to deploy contract with hash: 0x${contract_hash}`);
     console.log(await Neon.experimental.deployContract(nef, manifest, config));
