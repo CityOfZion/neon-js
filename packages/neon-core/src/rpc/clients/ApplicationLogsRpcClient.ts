@@ -7,9 +7,9 @@ export function ApplicationLogsRpcMixin<TBase extends RpcDispatcherMixin>(
 ) {
   return class extends base {
     public async getApplicationLog(
-      blockOrTXHash: string
+      blockOrTxHash: string
     ): Promise<GetApplicationLogResult> {
-      return await this.execute(Query.getApplicationLog(blockOrTXHash));
+      return await this.execute(Query.getApplicationLog(blockOrTxHash));
     }
   };
 }
