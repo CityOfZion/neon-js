@@ -370,9 +370,9 @@ export class Query<TParams extends unknown[], TResponse> {
   }
 
   /**
-   * This Query returns the raw value stored at the specific key under a specific contract.
+   * This Query returns the value stored at the specific key under a specific contract in base64 format.
    * @param scriptHash - hash of contract.
-   * @param key - the storage key
+   * @param key - the storage key in as hex string
    */
   public static getStorage(
     scriptHash: string,

@@ -136,6 +136,7 @@ export interface NEFJson {
 }
 
 export class NEF {
+  public static MAX_SCRIPT_LENGTH = 512 * 1024;
   public magic: number;
   public compiler: string;
   public tokens: MethodToken[];
@@ -179,27 +180,27 @@ export class NEF {
     if (reader.read(2) !== "0000")
       throw new Error("NEF deserialization failure - reserved bytes must be 0");
 
-    const token_length = reader.readVarInt();
-    if (token_length > 128)
+    const tokenLength = reader.readVarInt();
+    if (tokenLength > 128)
       throw new Error(
         "NEF deserialization failure - token array exceeds maximum length of 128"
       );
     const tokens = [];
-    for (let i = 0; i < token_length; i++) {
+    for (let i = 0; i < tokenLength; i++) {
       tokens.push(MethodToken.fromStream(reader));
     }
 
     if (reader.read(2) !== "0000")
       throw new Error("NEF deserialization failure - reserved bytes must be 0");
 
-    const script_length = reader.readVarInt();
-    if (script_length == 0)
+    const scriptLength = reader.readVarInt();
+    if (scriptLength === 0)
       throw new Error("NEF deserialization failure - script length can't be 0");
-    if (script_length > 512 * 1024)
+    if (scriptLength > this.MAX_SCRIPT_LENGTH)
       throw new Error(
         "NEF deserialization failure - max script length exceeded"
       );
-    const script = reader.read(script_length);
+    const script = reader.read(scriptLength);
 
     const checksum = Buffer.from(reader.read(4), "hex").readUInt32LE();
 
