@@ -1,6 +1,7 @@
 import { ContractParam } from "../../../src/sc";
 import { Nep17Contract } from "../../../src/sc/contracts/Nep17Contract";
 import testWallet from "../../testWallet.json";
+import { CallFlags } from "../../../lib/sc";
 
 const scriptHash = "de5f57d430d3dece511cf975a8d37848cb9e0525";
 const contract = new Nep17Contract(scriptHash);
@@ -17,6 +18,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "totalSupply",
       args: [],
     });
@@ -27,6 +29,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "decimals",
       args: [],
     });
@@ -37,6 +40,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "symbol",
       args: [],
     });
@@ -47,6 +51,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "balanceOf",
       args: [ContractParam.hash160(addressScriptHash)],
     });
@@ -57,6 +62,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "transfer",
       args: [
         ContractParam.hash160(addressScriptHash),

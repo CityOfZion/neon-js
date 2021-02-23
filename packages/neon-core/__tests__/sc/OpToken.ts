@@ -64,7 +64,7 @@ const scriptAndOpCodes = [
   ],
   [
     "simple jump",
-    "212203371140",
+    "212203381140",
     [
       new OpToken(OpCode.NOP),
       new OpToken(OpCode.JMP, "03"),
