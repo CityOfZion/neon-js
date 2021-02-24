@@ -20,7 +20,7 @@ export interface NEFJson {
 
 export class NEF {
   private static MAX_SCRIPT_LENGTH = 512 * 1024;
-  private static MAGIC = 0x3346454e;
+  public static MAGIC = 0x3346454e;
   public compiler: string;
   public tokens: sc.MethodToken[];
   public script: string;
@@ -53,7 +53,9 @@ export class NEF {
     if (magic != this.MAGIC)
       throw new Error("NEF deserialization failure - incorrect magic");
 
-    const compiler = u.hexstring2str(reader.read(64));
+    const tmp_compiler = Buffer.from(reader.read(64), "hex");
+    const idx = tmp_compiler.indexOf(0x0);
+    const compiler = tmp_compiler.slice(0, idx).toString();
 
     if (reader.read(2) !== "0000")
       throw new Error("NEF deserialization failure - reserved bytes must be 0");
@@ -115,7 +117,7 @@ export class NEF {
   public serialize(): string {
     let out = "";
     out += u.num2hexstring(NEF.MAGIC, 4, true);
-    out += u.str2hexstring(this.compiler).padEnd(64, "0");
+    out += u.str2hexstring(this.compiler).padEnd(128, "0");
     out += "0000"; // reserved
     out += serializeArrayOf(this.tokens);
     out += "0000"; // reserved
