@@ -32,6 +32,10 @@ export class NEF {
     this.tokens = tokens.map((token) => new sc.MethodToken(token));
     this.script = script;
     this.checksum = checksum;
+    // this avoids having to compute and update the checksum after the object is created
+    if (this.checksum == 0) {
+      this.checksum = this.computeCheckSum();
+    }
   }
 
   public static fromJson(json: NEFJson): NEF {
@@ -134,6 +138,13 @@ export class NEF {
       script: this.script,
       checksum: this.checksum,
     };
+  }
+
+  private computeCheckSum(): number {
+    return Buffer.from(
+      u.hash256(this.serialize().slice(-8)),
+      "hex"
+    ).readUInt32LE();
   }
 }
 
