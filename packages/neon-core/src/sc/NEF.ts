@@ -1,5 +1,4 @@
 import { u } from "../";
-import { num2hexstring, num2VarInt } from "../u";
 import { serializeArrayOf } from "../tx/lib";
 export enum CallFlags {
   None = 0,
@@ -98,11 +97,11 @@ export class MethodToken {
   public serialize(): string {
     let out = "";
     out += this.hash;
-    out += num2VarInt(this.method.length);
-    out += this.method;
-    out += num2hexstring(this.parametersCount, 2, true);
+    out += u.num2VarInt(this.method.length);
+    out += u.str2hexstring(this.method);
+    out += u.num2hexstring(this.parametersCount, 2, true);
     out += this.hasReturnValue ? "01" : "00";
-    out += num2hexstring(this.callFlags);
+    out += u.num2hexstring(this.callFlags);
     return out;
   }
 
@@ -118,7 +117,6 @@ export class MethodToken {
 }
 
 export interface NEFLike {
-  magic?: number;
   compiler: string;
   tokens: MethodTokenLike[];
   /** Base64 encoded string */
@@ -136,22 +134,15 @@ export interface NEFJson {
 }
 
 export class NEF {
-  public static MAX_SCRIPT_LENGTH = 512 * 1024;
-  public magic: number;
+  private static MAX_SCRIPT_LENGTH = 512 * 1024;
+  private static MAGIC = 0x3346454e;
   public compiler: string;
   public tokens: MethodToken[];
   public script: string;
   public checksum: number;
 
   public constructor(obj: Partial<NEFLike>) {
-    const {
-      magic = 0x3346454e,
-      compiler = "",
-      tokens = [],
-      script = "",
-      checksum = 0,
-    } = obj;
-    this.magic = magic;
+    const { compiler = "", tokens = [], script = "", checksum = 0 } = obj;
     this.compiler = compiler;
     this.tokens = tokens.map((token) => new MethodToken(token));
     this.script = script;
@@ -159,8 +150,10 @@ export class NEF {
   }
 
   public static fromJson(json: NEFJson): NEF {
+    if (json.magic != this.MAGIC) {
+      throw new Error("Incorrect magic");
+    }
     return new NEF({
-      magic: json.magic,
       compiler: json.compiler,
       tokens: json.tokens.map((t) => MethodToken.fromJson(t)),
       script: json.script,
@@ -172,7 +165,7 @@ export class NEF {
     const reader = new u.StringStream(u.ab2hexstring(data));
 
     const magic = u.HexString.fromHex(reader.read(4), true).toNumber();
-    if (magic != 0x3346454e)
+    if (magic != this.MAGIC)
       throw new Error("NEF deserialization failure - incorrect magic");
 
     const compiler = u.hexstring2str(reader.read(64));
@@ -205,7 +198,6 @@ export class NEF {
     const checksum = Buffer.from(reader.read(4), "hex").readUInt32LE();
 
     return new NEF({
-      magic: magic,
       compiler: compiler,
       tokens: tokens,
       script: script,
@@ -215,7 +207,7 @@ export class NEF {
 
   public toJson(): NEFJson {
     return {
-      magic: this.magic,
+      magic: NEF.MAGIC,
       compiler: this.compiler,
       tokens: this.tokens.map((t) => t.toJson()),
       script: this.script,
@@ -237,20 +229,19 @@ export class NEF {
 
   public serialize(): string {
     let out = "";
-    out += num2hexstring(this.magic, 4, true);
-    out += u.str2hexstring(this.compiler.padEnd(64, "0"));
+    out += u.num2hexstring(NEF.MAGIC, 4, true);
+    out += u.str2hexstring(this.compiler).padEnd(64, "0");
     out += "0000"; // reserved
     out += serializeArrayOf(this.tokens);
     out += "0000"; // reserved
-    out += num2VarInt(this.script.length / 2);
+    out += u.num2VarInt(this.script.length / 2);
     out += this.script;
-    out += num2hexstring(this.checksum, 4, true);
+    out += u.num2hexstring(this.checksum, 4, true);
     return out;
   }
 
   public export(): NEFLike {
     return {
-      magic: this.magic,
       compiler: this.compiler,
       tokens: this.tokens.map((t) => t.export()),
       script: this.script,
