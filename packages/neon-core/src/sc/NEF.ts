@@ -1,124 +1,9 @@
-import { u } from "../";
+import { u, sc } from "../";
 import { serializeArrayOf } from "../tx/lib";
-export enum CallFlags {
-  None = 0,
-  ReadStates = 0b00000001,
-  WriteStates = 0b00000010,
-  AllowCall = 0b00000100,
-  AllowNotify = 0b00001000,
-  States = ReadStates | WriteStates,
-  ReadOnly = ReadStates | AllowCall,
-  All = States | AllowCall | AllowNotify,
-}
-
-export interface MethodTokenLike {
-  /** 0x prefixed hexstring */
-  hash: string;
-  method: string;
-  parametersCount: number;
-  hasReturnValue: boolean;
-  callFlags: CallFlags;
-}
-
-export interface MethodTokenJson {
-  /** 0x prefixed hexstring */
-  hash: string;
-  method: string;
-  parameterscount: number;
-  hasreturnvalue: boolean;
-  callflags: CallFlags;
-}
-
-export class MethodToken {
-  public hash: string;
-  public method: string;
-  public parametersCount: number;
-  public hasReturnValue: boolean;
-  public callFlags: CallFlags;
-
-  public constructor(obj: Partial<MethodTokenLike>) {
-    const {
-      hash = "",
-      method = "",
-      parametersCount = 0,
-      hasReturnValue = false,
-      callFlags = CallFlags.None,
-    } = obj;
-
-    this.hash = hash;
-    this.method = method;
-    this.parametersCount = parametersCount;
-    this.hasReturnValue = hasReturnValue;
-    this.callFlags = callFlags;
-  }
-
-  public static fromJson(json: MethodTokenJson): MethodToken {
-    return new MethodToken({
-      hash: json.hash,
-      method: json.method,
-      parametersCount: json.parameterscount,
-      hasReturnValue: json.hasreturnvalue,
-      callFlags: json.callflags,
-    });
-  }
-
-  public static fromStream(reader: u.StringStream): MethodToken {
-    const hash = reader.read(20);
-    const method = u.hexstring2str(reader.readVarBytes());
-    if (method.startsWith("_"))
-      throw new Error(
-        "MethodToken deserialization failure - method cannot start with '_'"
-      );
-    const parametersCount = Buffer.from(reader.read(2), "hex").readUInt16LE();
-    const hasReturnValue = reader.read(1) != "00";
-    const flags = Number.parseInt(reader.read(1)) as CallFlags;
-    return new MethodToken({
-      hash: hash,
-      method: method,
-      parametersCount: parametersCount,
-      hasReturnValue: hasReturnValue,
-      callFlags: flags,
-    });
-  }
-  public toJson(): MethodTokenJson {
-    return {
-      hash: this.hash,
-      method: this.method,
-      parameterscount: this.parametersCount,
-      hasreturnvalue: this.hasReturnValue,
-      callflags: this.callFlags,
-    };
-  }
-
-  public get size(): number {
-    return this.serialize().length;
-  }
-
-  public serialize(): string {
-    let out = "";
-    out += this.hash;
-    out += u.num2VarInt(this.method.length);
-    out += u.str2hexstring(this.method);
-    out += u.num2hexstring(this.parametersCount, 2, true);
-    out += this.hasReturnValue ? "01" : "00";
-    out += u.num2hexstring(this.callFlags);
-    return out;
-  }
-
-  public export(): MethodTokenLike {
-    return {
-      hash: this.hash,
-      method: this.method,
-      parametersCount: this.parametersCount,
-      hasReturnValue: this.hasReturnValue,
-      callFlags: this.callFlags,
-    };
-  }
-}
 
 export interface NEFLike {
   compiler: string;
-  tokens: MethodTokenLike[];
+  tokens: sc.MethodTokenLike[];
   /** Base64 encoded string */
   script: string;
   checksum: number;
@@ -127,7 +12,7 @@ export interface NEFLike {
 export interface NEFJson {
   magic: number;
   compiler: string;
-  tokens: MethodTokenJson[];
+  tokens: sc.MethodTokenJson[];
   /** Base64 encoded string */
   script: string;
   checksum: number;
@@ -137,14 +22,14 @@ export class NEF {
   private static MAX_SCRIPT_LENGTH = 512 * 1024;
   private static MAGIC = 0x3346454e;
   public compiler: string;
-  public tokens: MethodToken[];
+  public tokens: sc.MethodToken[];
   public script: string;
   public checksum: number;
 
   public constructor(obj: Partial<NEFLike>) {
     const { compiler = "", tokens = [], script = "", checksum = 0 } = obj;
     this.compiler = compiler;
-    this.tokens = tokens.map((token) => new MethodToken(token));
+    this.tokens = tokens.map((token) => new sc.MethodToken(token));
     this.script = script;
     this.checksum = checksum;
   }
@@ -155,7 +40,7 @@ export class NEF {
     }
     return new NEF({
       compiler: json.compiler,
-      tokens: json.tokens.map((t) => MethodToken.fromJson(t)),
+      tokens: json.tokens.map((t) => sc.MethodToken.fromJson(t)),
       script: json.script,
       checksum: json.checksum,
     });
@@ -180,7 +65,7 @@ export class NEF {
       );
     const tokens = [];
     for (let i = 0; i < tokenLength; i++) {
-      tokens.push(MethodToken.fromStream(reader));
+      tokens.push(sc.MethodToken.fromStream(reader));
     }
 
     if (reader.read(2) !== "0000")

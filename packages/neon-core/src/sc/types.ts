@@ -1,5 +1,5 @@
 import ContractParam, { ContractParamJson } from "./ContractParam";
-import { CallFlags } from "./NEF";
+import { CallFlags } from "./CallFlags";
 
 export interface ContractCall {
   /** Hexstring of 40 characters in BE */

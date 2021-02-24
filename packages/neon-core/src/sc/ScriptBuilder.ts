@@ -16,7 +16,7 @@ import { OpCode } from "./OpCode";
 import { InteropServiceCode } from "./InteropServiceCode";
 import { ContractCall, ContractCallJson } from "./types";
 import { TextEncoder as textEncoderNode10 } from "util";
-import { CallFlags } from "./NEF";
+import { CallFlags } from "./CallFlags";
 
 /**
  * Builds a VM script in hexstring. Used for constructing smart contract method calls.

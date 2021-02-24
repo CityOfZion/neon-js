@@ -4,7 +4,7 @@ import ContractParam, {
 } from "../ContractParam";
 import { ContractMethodDefinition } from "../manifest";
 import { ContractCall } from "../types";
-import { CallFlags } from "../NEF";
+import { CallFlags } from "../CallFlags";
 
 export class BaseContract {
   #scriptHash: string;
