@@ -1,9 +1,13 @@
 import { DEFAULT_REQ } from "../consts";
 import { Transaction, TransactionJson, Signer, SignerJson } from "../tx";
-import { ContractManifestJson, ContractParam, StackItemJson } from "../sc";
+import {
+  ContractManifestJson,
+  ContractParam,
+  StackItemJson,
+  NEFJson,
+} from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 import { HexString } from "../u";
-import { NEFJson } from "../sc";
 
 export type BooleanLikeParam = 0 | 1 | boolean;
 export interface QueryLike<T extends unknown[]> {

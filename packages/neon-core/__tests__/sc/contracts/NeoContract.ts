@@ -1,7 +1,6 @@
 import { NeoContract } from "../../../src/sc/contracts/NeoContract";
-import { ContractParam } from "../../../src/sc";
+import { ContractParam, CallFlags } from "../../../src/sc";
 import testWallet from "../../testWallet.json";
-import { CallFlags } from "../../../lib/sc";
 
 const contract = NeoContract.INSTANCE;
 const address = testWallet.accounts[0].address;

@@ -39,7 +39,7 @@ export class NEF {
   }
 
   public static fromJson(json: NEFJson): NEF {
-    if (json.magic != this.MAGIC) {
+    if (json.magic !== this.MAGIC) {
       throw new Error("Incorrect magic");
     }
     return new NEF({
@@ -54,7 +54,7 @@ export class NEF {
     const reader = new u.StringStream(u.ab2hexstring(data));
 
     const magic = u.HexString.fromHex(reader.read(4), true).toNumber();
-    if (magic != this.MAGIC)
+    if (magic !== this.MAGIC)
       throw new Error("NEF deserialization failure - incorrect magic");
 
     const tmp_compiler = Buffer.from(reader.read(64), "hex");

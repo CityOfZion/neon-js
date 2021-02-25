@@ -44,7 +44,7 @@ export class ScriptBuilder extends StringStream {
    * @param scriptHash - ScriptHash of the contract to call.
    * @param operation - The operation to call as a UTF8 string.
    * @param args - Any arguments to pass to the operation.
-   * @param callFlags - Optional required flags for calling the operation.
+   * @param callFlags - Flags used while calling the operation.
    *
    * @deprecated Please use emitContractCall which is better typed.
    */

@@ -1,7 +1,6 @@
-import { ContractParam } from "../../../src/sc";
+import { ContractParam, CallFlags } from "../../../src/sc";
 import { Nep17Contract } from "../../../src/sc/contracts/Nep17Contract";
 import testWallet from "../../testWallet.json";
-import { CallFlags } from "../../../lib/sc";
 
 const scriptHash = "de5f57d430d3dece511cf975a8d37848cb9e0525";
 const contract = new Nep17Contract(scriptHash);

@@ -1,9 +1,9 @@
 export enum CallFlags {
   None = 0,
-  ReadStates = 0b00000001,
-  WriteStates = 0b00000010,
-  AllowCall = 0b00000100,
-  AllowNotify = 0b00001000,
+  ReadStates = 1 << 0,
+  WriteStates = 1 << 1,
+  AllowCall = 1 << 2,
+  AllowNotify = 1 << 3,
   States = ReadStates | WriteStates,
   ReadOnly = ReadStates | AllowCall,
   All = States | AllowCall | AllowNotify,

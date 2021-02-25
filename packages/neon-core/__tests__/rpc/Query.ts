@@ -136,9 +136,9 @@ describe("static", () => {
   });
 
   test("getStorage", () => {
-    const result = Query.getStorage("contract", "key");
+    const result = Query.getStorage("contract", "0b");
     expect(result.method).toEqual("getstorage");
-    expect(result.params).toEqual(["contract", "key"]);
+    expect(result.params).toEqual(["contract", "Cw=="]);
   });
 
   test("getTransactionHeight", () => {

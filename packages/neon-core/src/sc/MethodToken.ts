@@ -59,7 +59,7 @@ export class MethodToken {
         "MethodToken deserialization failure - method cannot start with '_'"
       );
     const parametersCount = Buffer.from(reader.read(2), "hex").readUInt16LE();
-    const hasReturnValue = reader.read(1) != "00";
+    const hasReturnValue = reader.read(1) !== "00";
     const flags = Number.parseInt(reader.read(1)) as sc.CallFlags;
     return new MethodToken({
       hash: hash,
@@ -69,6 +69,7 @@ export class MethodToken {
       callFlags: flags,
     });
   }
+
   public toJson(): MethodTokenJson {
     return {
       hash: this.hash,

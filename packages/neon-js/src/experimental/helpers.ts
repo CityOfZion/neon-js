@@ -1,7 +1,6 @@
 import { CONST, rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { CommonConfig } from "./types";
 import { GASContract } from "./nep17";
-import { CallFlags, NEF } from "@cityofzion/neon-core/lib/sc";
 
 /**
  * Calculate the GAS costs for validation and inclusion of the transaction in a block
@@ -246,7 +245,7 @@ export async function addFees(
  * @param config -
  */
 export async function deployContract(
-  nef: NEF,
+  nef: sc.NEF,
   manifest: sc.ContractManifest,
   config: CommonConfig
 ): Promise<string> {
@@ -254,7 +253,7 @@ export async function deployContract(
   builder.emitContractCall({
     scriptHash: CONST.NATIVE_CONTRACT_HASH.ManagementContract,
     operation: "deploy",
-    callFlags: CallFlags.All,
+    callFlags: sc.CallFlags.All,
     args: [
       sc.ContractParam.byteArray(u.HexString.fromHex(nef.serialize(), true)),
       sc.ContractParam.byteArray(
