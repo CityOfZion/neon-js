@@ -6,7 +6,6 @@ export interface NEFLike {
   tokens: sc.MethodTokenLike[];
   /** Base64 encoded string */
   script: string;
-  checksum: number;
 }
 
 export interface NEFJson {
@@ -27,27 +26,29 @@ export class NEF {
   public checksum: number;
 
   public constructor(obj: Partial<NEFLike>) {
-    const { compiler = "", tokens = [], script = "", checksum = 0 } = obj;
+    const { compiler = "", tokens = [], script = "" } = obj;
     this.compiler = compiler;
     this.tokens = tokens.map((token) => new sc.MethodToken(token));
     this.script = script;
-    this.checksum = checksum;
-    // this avoids having to compute and update the checksum after the object is created
-    if (this.checksum == 0) {
-      this.checksum = this.computeCheckSum();
-    }
+    this.checksum = this.computeCheckSum();
   }
 
   public static fromJson(json: NEFJson): NEF {
     if (json.magic !== this.MAGIC) {
       throw new Error("Incorrect magic");
     }
-    return new NEF({
+
+    const nef = new NEF({
       compiler: json.compiler,
       tokens: json.tokens.map((t) => sc.MethodToken.fromJson(t)),
       script: json.script,
-      checksum: json.checksum,
     });
+
+    if (nef.checksum !== json.checksum) {
+      throw new Error("Invalid checksum");
+    }
+
+    return nef;
   }
 
   public static fromBuffer(data: Buffer): NEF {
@@ -88,12 +89,17 @@ export class NEF {
 
     const checksum = Buffer.from(reader.read(4), "hex").readUInt32LE();
 
-    return new NEF({
+    const nef = new NEF({
       compiler: compiler,
       tokens: tokens,
       script: script,
-      checksum: checksum,
     });
+
+    if (nef.checksum !== checksum) {
+      throw new Error("NEF deserialization failure - invalid checksum");
+    }
+
+    return nef;
   }
 
   public toJson(): NEFJson {
@@ -118,7 +124,7 @@ export class NEF {
     ); // checksum
   }
 
-  public serialize(): string {
+  private serializeWithoutChecksum(): string {
     let out = "";
     out += u.num2hexstring(NEF.MAGIC, 4, true);
     out += u.str2hexstring(this.compiler).padEnd(128, "0");
@@ -127,6 +133,11 @@ export class NEF {
     out += "0000"; // reserved
     out += u.num2VarInt(this.script.length / 2);
     out += this.script;
+    return out;
+  }
+
+  public serialize(): string {
+    let out = this.serializeWithoutChecksum();
     out += u.num2hexstring(this.checksum, 4, true);
     return out;
   }
@@ -136,13 +147,12 @@ export class NEF {
       compiler: this.compiler,
       tokens: this.tokens.map((t) => t.export()),
       script: this.script,
-      checksum: this.checksum,
     };
   }
 
   private computeCheckSum(): number {
     return Buffer.from(
-      u.hash256(this.serialize().slice(-8)),
+      u.hash256(this.serializeWithoutChecksum()),
       "hex"
     ).readUInt32LE();
   }

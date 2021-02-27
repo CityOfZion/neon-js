@@ -7,7 +7,6 @@ describe("constructor", () => {
       compiler: "test-compiler",
       tokens: [],
       script: "00",
-      checksum: 0,
     });
 
     expect(result instanceof NEF).toBeTruthy();
@@ -27,13 +26,25 @@ describe("fromJson", () => {
     ).toThrowError("Incorrect magic");
   });
 
+  test("invalid checksum", () => {
+    expect(() =>
+      NEF.fromJson({
+        magic: NEF.MAGIC,
+        compiler: "test-compiler",
+        tokens: [],
+        script: "00",
+        checksum: 0,
+      })
+    ).toThrowError("Invalid checksum");
+  });
+
   test("ok", () => {
     const result = NEF.fromJson({
       magic: NEF.MAGIC,
       compiler: "test-compiler",
       tokens: [],
       script: "00",
-      checksum: 0,
+      checksum: 3189119888,
     });
     expect(result instanceof NEF).toBeTruthy();
   });
