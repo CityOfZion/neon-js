@@ -2,9 +2,9 @@ import {
   ContractMethodDefinition,
   ContractParam,
   ContractParamType,
+  BaseContract,
+  CallFlags,
 } from "../../../src/sc";
-import { BaseContract } from "../../../src/sc/contracts/BaseContract";
-import { CallFlags } from "../../../lib/sc";
 
 const scriptHash = "";
 

@@ -1,5 +1,4 @@
-import { PolicyContract } from "../../../src/sc";
-import { CallFlags } from "../../../lib/sc";
+import { PolicyContract, CallFlags } from "../../../src/sc";
 
 const contract = PolicyContract.INSTANCE;
 const scriptHash = "79bcd398505eb779df6e67e4be6c14cded08e2f2";

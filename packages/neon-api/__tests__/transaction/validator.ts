@@ -10,7 +10,7 @@ describe("validate", () => {
       getBlockCount: jest.fn().mockImplementation(async () => 10),
       invokeScript: jest.fn().mockImplementation(async () => ({
         state: "HALT",
-        gasconsumed: "0.000001",
+        gasconsumed: "100",
       })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
@@ -37,7 +37,7 @@ describe("validate", () => {
       getBlockCount: jest.fn().mockImplementation(async () => 10),
       invokeScript: jest.fn().mockImplementation(async () => ({
         state: "HALT",
-        gasconsumed: "0.000001",
+        gasconsumed: "100",
       })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
@@ -210,7 +210,7 @@ describe("validateSystemFee", () => {
     const rpcClient: rpc.RPCClient = ({
       invokeScript: jest.fn().mockImplementation(async () => ({
         state: "HALT",
-        gasconsumed: "0.000001",
+        gasconsumed: "100",
       })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
@@ -232,7 +232,7 @@ describe("validateSystemFee", () => {
     const rpcClient: rpc.RPCClient = ({
       invokeScript: jest.fn().mockImplementation(async () => ({
         state: "HALT",
-        gasconsumed: "0.000001",
+        gasconsumed: "100",
       })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
@@ -256,7 +256,7 @@ describe("validateSystemFee", () => {
     const rpcClient: rpc.RPCClient = ({
       invokeScript: jest.fn().mockImplementation(async () => ({
         state: "HALT",
-        gasconsumed: "0.000001",
+        gasconsumed: "100",
       })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
@@ -280,7 +280,7 @@ describe("validateSystemFee", () => {
     const rpcClient: rpc.RPCClient = ({
       invokeScript: jest.fn().mockImplementation(async () => ({
         state: "HALT",
-        gasconsumed: "0.000001",
+        gasconsumed: "100",
       })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({
@@ -304,7 +304,7 @@ describe("validateSystemFee", () => {
     const rpcClient: rpc.RPCClient = ({
       invokeScript: jest.fn().mockImplementation(async () => ({
         state: "HALT",
-        gasconsumed: "0.000001",
+        gasconsumed: "100",
       })),
     } as unknown) as rpc.RPCClient;
     const txn = new tx.Transaction({

@@ -1,5 +1,5 @@
 import { NEF } from "../../src/sc/NEF";
-import { CallFlags } from "../../lib/sc";
+import { CallFlags } from "../../src/sc";
 
 describe("constructor", () => {
   test("ok", () => {
