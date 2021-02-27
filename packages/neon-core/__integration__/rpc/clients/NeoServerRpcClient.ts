@@ -281,14 +281,13 @@ describe("NeoServerRpcClient", () => {
         ]
       );
 
-      expect(Object.keys(result)).toHaveLength(6);
+      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
         gasconsumed: expect.any(String),
         exception: null,
         stack: expect.any(Array),
-        tx: expect.any(String),
       });
     });
 
@@ -336,14 +335,13 @@ describe("NeoServerRpcClient", () => {
         }),
       ]);
 
-      expect(Object.keys(result)).toHaveLength(6);
+      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
         gasconsumed: expect.any(String),
         exception: null,
         stack: expect.any(Array),
-        tx: expect.any(String),
       });
     });
   });
