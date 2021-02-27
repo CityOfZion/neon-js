@@ -116,6 +116,7 @@ describe("setter", () => {
     const transaction = new TransactionBuilder()
       .addContractCall(
         {
+          callFlags: sc.CallFlags.All,
           scriptHash: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
           operation: "test",
           args: [
@@ -130,6 +131,7 @@ describe("setter", () => {
           ],
         },
         {
+          callFlags: sc.CallFlags.All,
           scriptHash: "bd8bf7f95e33415fc242c48d143694a729172d9f",
           operation: "balanceOf",
           args: [
