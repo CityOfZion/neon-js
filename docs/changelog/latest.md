@@ -1,6 +1,6 @@
 ---
 id: latest
-title: Changelog (v6)
+title: Changelog (v5)
 ---
 
 # 6.0.0
