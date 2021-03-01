@@ -3,7 +3,7 @@ id: latest
 title: Changelog (v5)
 ---
 
-# 6.0.0
+# 5.0.0
 
 ## Preview5:
 
