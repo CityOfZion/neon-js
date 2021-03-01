@@ -281,7 +281,7 @@ export class ScriptBuilder extends StringStream {
           (param.value as string | HexString | null) ?? ""
         );
       case ContractParamType.String:
-        return this.emitString(str2hexstring(param.value as string));
+        return this.emitString(param.value as string);
       case ContractParamType.Boolean:
         return this.emitBoolean(param.value as boolean);
       case ContractParamType.Integer:

@@ -209,6 +209,11 @@ describe("emitContractParam", () => {
       ContractParam.hash160("5461c33e9bbc7de7076754540ba9e62b255ea9fc"),
       "0c14fca95e252be6a90b54546707e77dbc9b3ec36154",
     ],
+    [
+      "ContractParam(string)",
+      ContractParam.string("hello world"),
+      "0c0b68656c6c6f20776f726c64",
+    ],
   ])("%s", (_msg: string, data: ContractParam, expected: string) => {
     const result = new ScriptBuilder().emitContractParam(data).build();
     expect(result).toBe(expected);
