@@ -4,7 +4,6 @@ import {
   HexString,
   int2hex,
   num2hexstring,
-  str2hexstring,
   StringStream,
 } from "../u";
 import {
