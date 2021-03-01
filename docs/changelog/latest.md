@@ -1,9 +1,33 @@
 ---
 id: latest
-title: Changelog (v5)
+title: Changelog (v6)
 ---
 
-# 5.0.0
+# 6.0.0
+
+## Preview5:
+
+```
+neo-cli: v3.0.0-preview5
+neon-js: v5.0.0-next6
+```
+
+Key blockchain changes:
+- Smart contract hashes are determined in a new way causing all native contract hashes to change.
+- More RPC methods results been streamlined to return base64 values requiring interface updates.
+- Gas consumption results in RPC calls are no longer returned as decimal values.
+- Contract calling function signatures changed requiring modification of the transaction builder.
+
+SDK changes:
+- rpc
+   - Rename `getApplicationLogs` to `getApplicationLog`.
+   - `ApplicationLog` interface changed to move the majority of properties under the `executions` array.
+   - The `key` parameter to getStorage needs to be hex encodable. The return value is now base64 encoded.
+   - `getContractState` no longer returns `script` as a key in its result. Instead, it returns a `nef` key describing the smart contract including the `script`.
+
+- sc
+  - Neo Executable Format (NEF) class has been added. This allows loading compiled contracts from disk and inspect or deploy them.
+
 
 ## Preview4:
 
@@ -15,10 +39,10 @@ neon-js: v5.0.0-next5
 Key blockchain changes:
 
 - Prices for VM operations are now adjusted to be dynamic. It is now a baseline
-  price multipled by PolicyContract's GetExecFee.
+  price multiplied by PolicyContract's GetExecFee.
 - Contract deployment is now managed by a native contract.
-- NEP17 is now the new token standard superceding NEP5.
--
+- NEP17 is now the new token standard superseding NEP5.
+
 
 SDK changes:
 
@@ -35,7 +59,7 @@ SDK changes:
   - Nep5 is now deprecated in favor of Nep17. The new standard removes `name`,
     adjusts `transfer` and adds some new functionality.
   - Fees are now more dynamic. It now uses data from PolicyContract as a
-    multipler to the execution price.
+    multiplier to the execution price.
 
 - api
 
@@ -77,7 +101,7 @@ SDK changes:
     transmission of data.
   - rename getValidators to getNextBlockValidators
   - getVersion is updated to return the full payload (previously it only
-    returned the version strong). This allows users to access the magic number
+    returned the version string). This allows users to access the magic number
     inside this payload which will be needed to sign transactions.
 
 - sc
