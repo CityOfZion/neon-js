@@ -256,9 +256,7 @@ export async function deployContract(
     callFlags: sc.CallFlags.All,
     args: [
       sc.ContractParam.byteArray(u.HexString.fromHex(nef.serialize(), true)),
-      sc.ContractParam.byteArray(
-        u.HexString.fromAscii(JSON.stringify(manifest.toJson())).reversed()
-      ),
+      sc.ContractParam.string(JSON.stringify(manifest.toJson())),
     ],
   });
 
