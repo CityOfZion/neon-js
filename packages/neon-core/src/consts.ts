@@ -7,12 +7,15 @@ export enum MAGIC_NUMBER {
 }
 
 export enum NATIVE_CONTRACT_HASH {
-  NeoToken = "0a46e2e37c9987f570b4af253fb77e7eef0f72b6",
-  GasToken = "a6a6c15dcdc9b997dac448b6926522d22efeedfb",
-  PolicyContract = "dde31084c0fdbebc7f5ed5f53a38905305ccee14",
-  ManagementContract = "cd97b70d82d69adfcd9165374109419fade8d6ab",
-  OracleContract = "b1c37d5847c2ae36bdde31d0cc833a7ad9667f8f",
+  NeoToken = "f61eebf573ea36593fd43aa150c055ad7906ab83",
+  GasToken = "70e2301955bf1e74cbb31d18c2f96972abadb328",
+  PolicyContract = "79bcd398505eb779df6e67e4be6c14cded08e2f2",
+  ManagementContract = "a501d7d7d10983673b61b7a2d3a813b36f9f0e43",
+  OracleContract = "8dc0e742cbdfdeda51ff8a8b78d46829144c80ee",
   DesignationContract = "c0073f4c7069bf38995780c9da065f9b3949ea7a",
+  LedgerContract = "971d69c6dd10ce88e7dfffec1dc603c6125a8764",
+  RoleManagement = "597b1471bbce497b7809e2c8f10db67050008b02",
+  NameService = "a2b524b68dfe43a9d56af84f443c6b9843b8028c",
 }
 
 /**

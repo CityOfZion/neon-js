@@ -1,11 +1,11 @@
-import { PolicyContract } from "../../../src/sc";
+import { PolicyContract, CallFlags } from "../../../src/sc";
 
 const contract = PolicyContract.INSTANCE;
-const scriptHash = "dde31084c0fdbebc7f5ed5f53a38905305ccee14";
+const scriptHash = "79bcd398505eb779df6e67e4be6c14cded08e2f2";
 
 test("scriptHash", () => {
   expect(contract.scriptHash).toEqual(
-    "dde31084c0fdbebc7f5ed5f53a38905305ccee14"
+    "79bcd398505eb779df6e67e4be6c14cded08e2f2"
   );
 });
 
@@ -15,6 +15,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "getFeePerByte",
       args: [],
     });
@@ -25,6 +26,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "getExecFeeFactor",
       args: [],
     });

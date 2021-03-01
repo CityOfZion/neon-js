@@ -26,6 +26,6 @@ export interface BlockJson extends BlockHeaderJson {
 
 export interface Validator {
   publickey: string;
-  votes: string;
+  votes: number;
   active: boolean;
 }

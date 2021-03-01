@@ -2,8 +2,9 @@ import {
   ContractMethodDefinition,
   ContractParam,
   ContractParamType,
+  BaseContract,
+  CallFlags,
 } from "../../../src/sc";
-import { BaseContract } from "../../../src/sc/contracts/BaseContract";
 
 const scriptHash = "";
 
@@ -19,6 +20,7 @@ describe("call", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "customMethod",
       args: [],
     });
@@ -36,6 +38,7 @@ describe("call", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "boolMethod",
       args: [ContractParam.boolean(false)],
     });
@@ -91,6 +94,7 @@ describe("call", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "byteArrayMethod",
       args: [ContractParam.hash160("abcd".repeat(10))],
     });

@@ -1,5 +1,5 @@
 import { NeoContract } from "../../../src/sc/contracts/NeoContract";
-import { ContractParam } from "../../../src/sc";
+import { ContractParam, CallFlags } from "../../../src/sc";
 import testWallet from "../../testWallet.json";
 
 const contract = NeoContract.INSTANCE;
@@ -8,7 +8,7 @@ const addressScriptHash = testWallet.accounts[0].extra.scriptHash as string;
 
 test("scriptHash", () => {
   expect(contract.scriptHash).toEqual(
-    "0a46e2e37c9987f570b4af253fb77e7eef0f72b6"
+    "f61eebf573ea36593fd43aa150c055ad7906ab83"
   );
 });
 
@@ -17,7 +17,8 @@ describe("Neo specific methods", () => {
     const result = contract.unclaimedGas(address, 123);
 
     expect(result).toEqual({
-      scriptHash: "0a46e2e37c9987f570b4af253fb77e7eef0f72b6",
+      scriptHash: "f61eebf573ea36593fd43aa150c055ad7906ab83",
+      callFlags: CallFlags.All,
       operation: "unclaimedGas",
       args: [
         ContractParam.hash160(addressScriptHash),

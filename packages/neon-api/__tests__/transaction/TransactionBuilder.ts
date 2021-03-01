@@ -116,6 +116,7 @@ describe("setter", () => {
     const transaction = new TransactionBuilder()
       .addContractCall(
         {
+          callFlags: sc.CallFlags.All,
           scriptHash: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
           operation: "test",
           args: [
@@ -130,6 +131,7 @@ describe("setter", () => {
           ],
         },
         {
+          callFlags: sc.CallFlags.All,
           scriptHash: "bd8bf7f95e33415fc242c48d143694a729172d9f",
           operation: "balanceOf",
           args: [
@@ -142,8 +144,8 @@ describe("setter", () => {
       )
       .build();
     expect(transaction.script.toBigEndian()).toBe(
-      "121112c00c04746573740c14f91d6b7085db7c5aaf09f19eeec1ca3c0db2c6ec41627d5b52" +
-        "0c149f2d1729a79436148dc442c25f41335ef9f78bbd11c00c0962616c616e63654f660c149f2d1729a79436148dc442c25f41335ef9f78bbd41627d5b52"
+      "121112c01f0c04746573740c14f91d6b7085db7c5aaf09f19eeec1ca3c0db2c6ec41627d5b52" +
+        "0c149f2d1729a79436148dc442c25f41335ef9f78bbd11c01f0c0962616c616e63654f660c149f2d1729a79436148dc442c25f41335ef9f78bbd41627d5b52"
     );
   });
 

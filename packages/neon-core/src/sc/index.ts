@@ -10,5 +10,7 @@ export * from "./manifest";
 export * from "./OpToken";
 export * from "./contracts";
 export * from "./fees";
-
+export * from "./NEF";
+export * from "./CallFlags";
+export * from "./MethodToken";
 export * from "./types";

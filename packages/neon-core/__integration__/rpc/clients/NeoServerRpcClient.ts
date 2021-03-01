@@ -128,7 +128,7 @@ describe("NeoServerRpcClient", () => {
       id: expect.any(Number),
       updatecounter: expect.any(Number),
       hash: expect.any(String),
-      script: expect.any(String),
+      nef: expect.any(Object),
       manifest: expect.any(Object),
     });
   });
@@ -176,7 +176,7 @@ describe("NeoServerRpcClient", () => {
     const result = await client.getStorage(contractHash, "0b");
 
     // This storage is totalSupply of NEO. Should be safe and static for usage.
-    expect(result).toBe("00e1f505");
+    expect(result).toBe("AOH1BQ==");
   });
 
   test("getTransactionHeight", async () => {
@@ -191,7 +191,7 @@ describe("NeoServerRpcClient", () => {
       expect(v).toMatchObject({
         publickey: expect.any(String),
         active: expect.any(Boolean),
-        votes: expect.any(String),
+        votes: expect.any(Number),
       });
     });
   });

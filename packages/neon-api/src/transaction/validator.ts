@@ -118,7 +118,7 @@ export class TransactionValidator {
       );
     }
     const gasConsumed = invokeResponse.gasconsumed;
-    const suggestion = u.BigInteger.fromDecimal(gasConsumed, 8);
+    const suggestion = u.BigInteger.fromDecimal(gasConsumed, 0);
     const compareResult = suggestion.compare(prev);
     if (compareResult > 0) {
       // Did not hit the minimum fees to run the script.

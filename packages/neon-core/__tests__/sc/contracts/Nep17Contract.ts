@@ -1,4 +1,4 @@
-import { ContractParam } from "../../../src/sc";
+import { ContractParam, CallFlags } from "../../../src/sc";
 import { Nep17Contract } from "../../../src/sc/contracts/Nep17Contract";
 import testWallet from "../../testWallet.json";
 
@@ -17,6 +17,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "totalSupply",
       args: [],
     });
@@ -27,6 +28,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "decimals",
       args: [],
     });
@@ -37,6 +39,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "symbol",
       args: [],
     });
@@ -47,6 +50,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "balanceOf",
       args: [ContractParam.hash160(addressScriptHash)],
     });
@@ -57,6 +61,7 @@ describe("default methods", () => {
 
     expect(result).toEqual({
       scriptHash,
+      callFlags: CallFlags.All,
       operation: "transfer",
       args: [
         ContractParam.hash160(addressScriptHash),

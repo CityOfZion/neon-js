@@ -438,7 +438,7 @@ describe("RPC Methods", () => {
         expect(url).toEqual("http://testUrl.com");
         expect(data).toMatchObject({
           method: "getstorage",
-          params: ["hash", "key"],
+          params: ["hash", "Cw=="],
         });
         return {
           data: {
@@ -449,7 +449,7 @@ describe("RPC Methods", () => {
         };
       });
 
-      const result = await client.getStorage("hash", "key");
+      const result = await client.getStorage("hash", "0b");
       expect(result).toEqual(expected);
     });
   });

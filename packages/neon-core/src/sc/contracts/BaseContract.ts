@@ -4,6 +4,7 @@ import ContractParam, {
 } from "../ContractParam";
 import { ContractMethodDefinition } from "../manifest";
 import { ContractCall } from "../types";
+import { CallFlags } from "../CallFlags";
 
 export class BaseContract {
   #scriptHash: string;
@@ -54,10 +55,12 @@ export class BaseContract {
     const args = inputArgs.map((arg, index) =>
       convertParameter(arg, methodDefinition.parameters[index].type)
     );
+
     return {
       scriptHash: this.scriptHash,
       operation: methodDefinition.name,
-      args,
+      callFlags: CallFlags.All,
+      args: args,
     };
   }
 }

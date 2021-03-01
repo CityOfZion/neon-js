@@ -37,10 +37,10 @@ const config = {
 
 async function run() {
    // Load the smart contract files from disk, in this example we assume the contract is named "sample1"
-  const nef = Buffer.from(
+  const nef = Neon.sc.NEF.fromBuffer(
     await fs.readFile(
       "/path/to/your/contract/sample1.nef",
-      null // Specifying 'binary' causes junk bytes, because apparently it is an alias for 'latin1' *crazy*
+      null // specifying 'binary' causes extra junk bytes, because apparently it is an alias for 'latin1' *crazy*
     )
   );
   const manifest = Neon.sc.ContractManifest.fromJson(
@@ -50,7 +50,8 @@ async function run() {
     // Finally, deploy and get a transaction id in return if successful
     const contract_hash = Neon.experimental.getContractHash(
       Neon.u.HexString.fromHex(acc.scriptHash),
-      nef
+      nef.checksum,
+      manifest.name
     );
     console.log(`Atemping to deploy contract with hash: 0x${contract_hash}`);
     console.log(await Neon.experimental.deployContract(nef, manifest, config));
@@ -159,4 +160,6 @@ async function run() {
 
 run();
 ```
-The result of this call will be a transaction id if successful, or an error otherwise.
+The result of this call will be a transaction id if relayed successfully to the network, or an error otherwise.
+A transaction relayed to the network does not guarantee it executed correctly. Use the `getApplicationLog` RPC call with
+the transaction id to query the execution state. The value under the `vmstate` key should be `HALT`.

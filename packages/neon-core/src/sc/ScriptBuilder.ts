@@ -1,11 +1,11 @@
 import BN from "bn.js";
 import {
   ab2hexstring,
+  HexString,
+  int2hex,
   num2hexstring,
   str2hexstring,
   StringStream,
-  int2hex,
-  HexString,
 } from "../u";
 import {
   ContractParam,
@@ -16,6 +16,8 @@ import { OpCode } from "./OpCode";
 import { InteropServiceCode } from "./InteropServiceCode";
 import { ContractCall, ContractCallJson } from "./types";
 import { TextEncoder as textEncoderNode10 } from "util";
+import { CallFlags } from "./CallFlags";
+
 /**
  * Builds a VM script in hexstring. Used for constructing smart contract method calls.
  */
@@ -42,13 +44,15 @@ export class ScriptBuilder extends StringStream {
    * @param scriptHash - ScriptHash of the contract to call.
    * @param operation - The operation to call as a UTF8 string.
    * @param args - Any arguments to pass to the operation.
+   * @param callFlags - Flags used while calling the operation.
    *
    * @deprecated Please use emitContractCall which is better typed.
    */
   public emitAppCall(
     scriptHash: string | HexString,
     operation: string,
-    args: unknown[] = []
+    args: unknown[] = [],
+    callFlags: CallFlags = CallFlags.All
   ): this {
     if (args.length === 0) {
       this.emit(OpCode.NEWARRAY0);
@@ -60,7 +64,8 @@ export class ScriptBuilder extends StringStream {
       this.emit(OpCode.PACK);
     }
 
-    return this.emitString(operation)
+    return this.emitPush(callFlags)
+      .emitString(operation)
       .emitHexString(HexString.fromHex(scriptHash))
       .emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALL);
   }
@@ -303,7 +308,8 @@ export class ScriptBuilder extends StringStream {
     return this.emitAppCall(
       contractCall.scriptHash,
       contractCall.operation,
-      contractCall.args
+      contractCall.args,
+      contractCall.callFlags
     );
   }
 }

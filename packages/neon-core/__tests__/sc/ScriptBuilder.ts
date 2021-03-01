@@ -60,7 +60,7 @@ describe("emitContractCall", () => {
         operation: "name",
         args: [],
       },
-      "c20c046e616d650c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52",
+      "c21f0c046e616d650c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52",
     ],
     [
       "emitAppCall with args",
@@ -74,7 +74,7 @@ describe("emitContractCall", () => {
           },
         ],
       },
-      "0c1491beb9d138fd51d180821af90ad33d44c8c7204111c00c0962616c616e63654f660c1425059ecb4878d3a875f91c51ceded330d4575fde41627d5b52",
+      "0c1491beb9d138fd51d180821af90ad33d44c8c7204111c01f0c0962616c616e63654f660c1425059ecb4878d3a875f91c51ceded330d4575fde41627d5b52",
     ],
   ] as [string, ContractCallJson, string][])(
     "%s",

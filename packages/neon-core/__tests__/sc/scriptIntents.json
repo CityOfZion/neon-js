@@ -1,6 +1,6 @@
 {
   "1": {
-    "script": "c20c046e616d650c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52",
+    "script": "c21f0c046e616d650c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52",
     "scriptIntent": {
       "scriptHash": "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
       "operation": "name"
@@ -14,7 +14,7 @@
     ]
   },
   "2": {
-    "script": "c20c0673796d626f6c0c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52",
+    "script": "c21f0c0673796d626f6c0c14897720d8cd76f4f00abfa37c0edd889c208fde9b41627d5b52",
     "scriptIntent": {
       "scriptHash": "9bde8f209c88dd0e7ca3bf0af0f476cdd8207789",
       "operation": "symbol"
