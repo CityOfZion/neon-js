@@ -23,14 +23,20 @@ export class NEF {
   public compiler: string;
   public tokens: sc.MethodToken[];
   public script: string;
-  public checksum: number;
+  #checksum?: number;
+
+  public get checksum(): number {
+    if (!this.#checksum) {
+      this.#checksum = this.computeCheckSum();
+    }
+    return this.#checksum;
+  }
 
   public constructor(obj: Partial<NEFLike>) {
     const { compiler = "", tokens = [], script = "" } = obj;
     this.compiler = compiler;
     this.tokens = tokens.map((token) => new sc.MethodToken(token));
     this.script = script;
-    this.checksum = this.computeCheckSum();
   }
 
   public static fromJson(json: NEFJson): NEF {
