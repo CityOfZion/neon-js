@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-api",
   "description": "Neon-API module: High level API for neon-js",
-  "version": "5.0.0-next.5",
+  "version": "5.0.0-next.6",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
