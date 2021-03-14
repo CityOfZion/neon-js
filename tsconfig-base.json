@@ -9,7 +9,9 @@
     "declarationMap": true,
     "strict": true,
     "esModuleInterop": true,
-    "sourceMap":true,
-    "resolveJsonModule": true
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   }
 }
