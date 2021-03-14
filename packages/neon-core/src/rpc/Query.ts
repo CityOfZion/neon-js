@@ -5,6 +5,7 @@ import {
   ContractParam,
   StackItemJson,
   NEFJson,
+  ContractParamJson,
 } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 import { HexString } from "../u";
@@ -29,7 +30,7 @@ export interface RPCErrorResponse {
   message: string;
 }
 
-export interface ApplicationLog {
+export interface ApplicationLogJson {
   txid: string;
   executions: {
     trigger: string;
@@ -39,12 +40,10 @@ export interface ApplicationLog {
     notifications: {
       contract: string;
       eventname: string;
-      state: string;
+      state: ContractParamJson;
     }[];
   }[];
 }
-
-export type GetApplicationLogResult = ApplicationLog[];
 
 /**
  * Result from calling invokescript or invokefunction.
@@ -180,7 +179,7 @@ export class Query<TParams extends unknown[], TResponse> {
    */
   public static getApplicationLog(
     hash: string
-  ): Query<[string], GetApplicationLogResult> {
+  ): Query<[string], ApplicationLogJson> {
     return new Query({
       method: "getapplicationlog",
       params: [hash],
