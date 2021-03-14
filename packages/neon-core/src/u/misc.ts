@@ -1,6 +1,7 @@
 import { ab2hexstring } from "./convert";
 import { HexString } from "./HexString";
 import { OpCode } from "../sc/OpCode";
+import { Buffer } from "buffer";
 
 const hexRegex = /^([0-9A-Fa-f]{2})*$/;
 

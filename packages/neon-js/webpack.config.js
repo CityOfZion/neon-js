@@ -22,6 +22,11 @@ module.exports = function () {
       libraryTarget: "umd",
       library: "Neon", // This is the var name in browser
     },
+    plugins: [
+      new webpack.ProvidePlugin({
+        Buffer: ["buffer", "Buffer"],
+      }),
+    ],
   });
 
   return [nodeOutput, webOutput];
