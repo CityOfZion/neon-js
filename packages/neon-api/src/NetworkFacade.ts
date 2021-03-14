@@ -1,9 +1,10 @@
-import { rpc, sc, u, wallet } from "@cityofzion/neon-core";
+import { rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { getTokenInfos } from "./api";
 import {
   TransactionBuilder,
   TransactionValidator,
   ValidationAttributes,
+  ValidationResult,
 } from "./transaction";
 import { SigningFunction } from "./transaction/signing";
 
