@@ -1,26 +1,26 @@
 version: 2.1
 
 executors:
-  env-node10:
-    working_directory: ~/repo
-    docker:
-      - image: circleci/node:10-stretch
-
   env-node12:
     working_directory: ~/repo
     docker:
       - image: circleci/node:12-stretch
 
-  env-integration10:
+  env-node14:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:10-stretch
-      - image: snowypowers/neo-privatenet:v3.0.0-preview5
+      - image: circleci/node:14-stretch
 
   env-integration12:
     working_directory: ~/repo
     docker:
       - image: circleci/node:12-stretch
+      - image: snowypowers/neo-privatenet:v3.0.0-preview5
+
+  env-integration14:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:14-stretch
       - image: snowypowers/neo-privatenet:v3.0.0-preview5
 
 commands:
@@ -35,7 +35,9 @@ commands:
           environment:
             JEST_JUNIT_OUTPUT_DIR: reports/unit
             JEST_JUNIT_OUTPUT_NAME: results.xml
-          command: yarn test:unit --ci --runInBand --detectOpenHandles --reporters="jest-junit" --reporters="default"
+          command:
+            yarn test:unit --ci --runInBand --detectOpenHandles
+            --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -57,7 +59,9 @@ commands:
           environment:
             JEST_JUNIT_OUTPUT_DIR: reports/integration
             JEST_JUNIT_OUTPUT_NAME: results.xml
-          command: yarn test:integration --ci --runInBand --detectOpenHandles --reporters="jest-junit" --reporters="default"
+          command:
+            yarn test:integration --ci --runInBand --detectOpenHandles
+            --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -65,7 +69,7 @@ commands:
 
 jobs:
   setup:
-    executor: env-node10
+    executor: env-node12
     steps:
       - run:
           name: "Versions"
@@ -82,7 +86,8 @@ jobs:
             - neon-fallback
       - run:
           name: node hid compilation requirements
-          command: sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
+          command:
+            sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
       - run: yarn install --cache-folder .cache/yarn
       - save_cache:
           key: neon-yarn-{{ checksum "yarn.lock" }}
@@ -101,7 +106,7 @@ jobs:
             - packages
 
   lint:
-    executor: env-node10
+    executor: env-node12
     steps:
       - checkout
       - attach_workspace:
@@ -128,28 +133,28 @@ jobs:
       - store_artifacts:
           path: reports
 
-  unittest-node10:
-    executor: env-node10
-    steps:
-      - run-unittest
-
   unittest-node12:
     executor: env-node12
     steps:
       - run-unittest
 
-  integrationtest-node10:
-    executor: env-integration10
+  unittest-node14:
+    executor: env-node14
     steps:
-      - run-integrationtest
+      - run-unittest
 
   integrationtest-node12:
     executor: env-integration12
     steps:
       - run-integrationtest
 
+  integrationtest-node14:
+    executor: env-integration14
+    steps:
+      - run-integrationtest
+
   publish-latest:
-    executor: env-node10
+    executor: env-node12
     steps:
       - checkout
       - attach_workspace:
@@ -162,7 +167,7 @@ jobs:
           command: yarn release:latest --yes
 
   publish-next:
-    executor: env-node10
+    executor: env-node12
     steps:
       - checkout
       - attach_workspace:
@@ -175,7 +180,7 @@ jobs:
           command: yarn release:next --yes
 
   publish-docs:
-    executor: env-node10
+    executor: env-node12
     steps:
       - checkout
       - run:
@@ -205,20 +210,20 @@ workflows:
       - lint:
           requires:
             - setup
-      - unittest-node10:
-          requires:
-            - setup
       - unittest-node12:
           requires:
             - setup
-      - integrationtest-node10:
+      - unittest-node14:
           requires:
-            - lint
-            - unittest-node10
+            - setup
       - integrationtest-node12:
           requires:
             - lint
             - unittest-node12
+      - integrationtest-node14:
+          requires:
+            - lint
+            - unittest-node14
 
   publish:
     jobs:
