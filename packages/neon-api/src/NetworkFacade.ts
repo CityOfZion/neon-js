@@ -21,10 +21,6 @@ export interface Nep17TransferIntent {
   contractHash: string;
 }
 
-export interface GasClaimIntent {
-  account: wallet.Account;
-}
-
 export interface signingConfig {
   signingCallback: SigningFunction;
 }
