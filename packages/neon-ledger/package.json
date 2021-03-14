@@ -35,7 +35,7 @@
     "test:node": "node test.node.js"
   },
   "dependencies": {
-    "@ledgerhq/hw-transport": "5.40.0",
+    "@ledgerhq/hw-transport": "5.46.0",
     "@types/ledgerhq__hw-transport": "4.21.3"
   },
   "peerDependencies": {
