@@ -307,6 +307,11 @@ export class ScriptBuilder extends StringStream {
       contractCall.callFlags
     );
   }
+
+  public appendScript(script: string): this {
+    this.str += script;
+    return this;
+  }
 }
 
 export default ScriptBuilder;

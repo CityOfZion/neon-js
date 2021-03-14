@@ -83,16 +83,27 @@ export class NetworkFacade {
 
     const txn = txBuilder.build();
 
-    const validator = new TransactionValidator(client, txn);
-    const validateResult = await validator.validate(
-      ValidationAttributes.All,
-      ValidationAttributes.All
-    );
+    const validateResult = await this.validate(txn);
 
     if (!validateResult.valid) {
       throw new Error("Unable to validate transaction");
     }
 
+    return this.sign(txn, config);
+  }
+
+  public async validate(txn: tx.Transaction): Promise<ValidationResult> {
+    const validator = new TransactionValidator(this.getRpcNode(), txn);
+    return await validator.validate(
+      ValidationAttributes.All,
+      ValidationAttributes.All
+    );
+  }
+
+  public async sign(
+    txn: tx.Transaction,
+    config: signingConfig
+  ): Promise<string> {
     const txData = txn.getMessageForSigning(this.magicNumber);
 
     for (const w of txn.witnesses) {
@@ -108,7 +119,17 @@ export class NetworkFacade {
       w.invocationScript = u.HexString.fromHex(invocationScript);
     }
 
-    const sendResult = await client.sendRawTransaction(txn);
+    const sendResult = await this.getRpcNode().sendRawTransaction(txn);
     return sendResult;
+  }
+
+  public async invoke(
+    contractCall: sc.ContractCall
+  ): Promise<rpc.InvokeResult> {
+    return this.getRpcNode().invokeFunction(
+      contractCall.scriptHash,
+      contractCall.operation,
+      contractCall.args
+    );
   }
 }
