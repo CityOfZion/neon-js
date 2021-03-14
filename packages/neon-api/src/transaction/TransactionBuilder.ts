@@ -1,7 +1,7 @@
 import { tx, sc, u, wallet } from "@cityofzion/neon-core";
 
 export class TransactionBuilder {
-  private contractCalls: sc.ContractCall[] = [];
+  private vmScripts: (sc.ContractCall | string)[] = [];
   private networkFee: u.BigInteger = u.BigInteger.fromNumber(0);
   private systemFee: u.BigInteger = u.BigInteger.fromNumber(0);
   private validUntilBlock = 0;
@@ -102,7 +102,12 @@ export class TransactionBuilder {
    * You can add multiple intents to the transaction
    */
   public addContractCall(...contractCalls: sc.ContractCall[]): this {
-    this.contractCalls = this.contractCalls.concat(contractCalls);
+    this.vmScripts = this.vmScripts.concat(contractCalls);
+    return this;
+  }
+
+  public addScript(hexString: string): this {
+    this.vmScripts.push(hexString);
     return this;
   }
 
@@ -157,8 +162,14 @@ export class TransactionBuilder {
       signers: this.signers,
       attributes: this.attributes,
       validUntilBlock: this.validUntilBlock,
-      script: this.contractCalls
-        .reduce((sb, cc) => sb.emitContractCall(cc), new sc.ScriptBuilder())
+      script: this.vmScripts
+        .reduce(
+          (sb, cc) =>
+            typeof cc === "string"
+              ? sb.appendScript(cc)
+              : sb.emitContractCall(cc),
+          new sc.ScriptBuilder()
+        )
         .build(),
       witnesses: this.witnesses,
     });
