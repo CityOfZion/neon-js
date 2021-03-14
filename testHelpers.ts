@@ -18,6 +18,9 @@ export async function getIntegrationEnvUrl(): Promise<string> {
 export function isTestNet(): boolean {
   return (global["__TARGETNET__"] as string).toLowerCase() === "testnet";
 }
+export async function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export async function getBestUrl(urls: string[]): Promise<string> {
   const data = await Promise.all(urls.map((url) => safelyCheckHeight(url)));

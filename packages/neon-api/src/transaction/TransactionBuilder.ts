@@ -14,14 +14,13 @@ export class TransactionBuilder {
   }
 
   /**
-   * Adds the logic for claiming gas.
+   * Adds the logic for claiming gas. Alternatively, you may just trigger the gas claim by performing an actual transaction involving NEO.
    * @param account - Account to claim gas on.
-   * @param amt - Amount of NEO to claim gas from.
    */
-  public addGasClaim(account: wallet.Account, amt: number): TransactionBuilder {
+  public addGasClaim(account: wallet.Account): TransactionBuilder {
     const address = account.address;
     return this.addContractCall(
-      sc.NeoContract.INSTANCE.transfer(address, address, amt)
+      sc.NeoContract.INSTANCE.transfer(address, address, 0)
     )
       .addSigners({
         account: account.scriptHash,

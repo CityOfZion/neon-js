@@ -21,6 +21,10 @@ export interface Nep17TransferIntent {
   contractHash: string;
 }
 
+export interface GasClaimIntent {
+  account: wallet.Account;
+}
+
 export interface signingConfig {
   signingCallback: SigningFunction;
 }
@@ -51,6 +55,12 @@ export class NetworkFacade {
   public getRpcNode(): rpc.NeoServerRpcClient {
     return this.client;
   }
+
+  /**
+   * Constructs and executes a transaction of multiple token transfers
+   * @param intents - Token transfers
+   * @param config - Configuration
+   */
   public async transferToken(
     intents: Nep17TransferIntent[],
     config: signingConfig
@@ -90,9 +100,36 @@ export class NetworkFacade {
       throw new Error("Unable to validate transaction");
     }
 
-    return this.sign(txn, config);
+    const signedTxn = await this.sign(txn, config);
+    const sendResult = await this.getRpcNode().sendRawTransaction(signedTxn);
+    return sendResult;
   }
 
+  /**
+   * Claims all the gas available for the specified account. Do note that GAS is automatically claimed when you perform a transaction involving NEO.
+   * @param acct - The account to claim gas on
+   * @param config - Configuration
+   */
+  public async claimGas(
+    acct: wallet.Account,
+    config: signingConfig
+  ): Promise<string> {
+    const txn = TransactionBuilder.newBuilder().addGasClaim(acct).build();
+    const validateResult = await this.validate(txn);
+
+    if (!validateResult.valid) {
+      throw new Error("Unable to validate transaction");
+    }
+
+    const signedTxn = await this.sign(txn, config);
+    const sendResult = await this.getRpcNode().sendRawTransaction(signedTxn);
+    return sendResult;
+  }
+
+  /**
+   * Performs validation of all attributes on the given transaction.
+   * @param txn - Transaction to validate
+   */
   public async validate(txn: tx.Transaction): Promise<ValidationResult> {
     const validator = new TransactionValidator(this.getRpcNode(), txn);
     return await validator.validate(
@@ -101,10 +138,16 @@ export class NetworkFacade {
     );
   }
 
+  /**
+   *  Signs a transaction according to the signing configuration. The input transaction is modified with the signatures and returned.
+   * @param txn - Transaction to sign
+   * @param config - Configuration
+   * @returns
+   */
   public async sign(
     txn: tx.Transaction,
     config: signingConfig
-  ): Promise<string> {
+  ): Promise<tx.Transaction> {
     const txData = txn.getMessageForSigning(this.magicNumber);
 
     for (const w of txn.witnesses) {
@@ -120,8 +163,7 @@ export class NetworkFacade {
       w.invocationScript = u.HexString.fromHex(invocationScript);
     }
 
-    const sendResult = await this.getRpcNode().sendRawTransaction(txn);
-    return sendResult;
+    return txn;
   }
 
   public async invoke(
