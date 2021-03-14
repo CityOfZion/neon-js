@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 const common = require("../../webpack.common");
 const base = common(__dirname);
 module.exports = function () {
@@ -22,6 +23,11 @@ module.exports = function () {
       libraryTarget: "umd",
       library: "Neon", // This is the var name in browser
     },
+    plugins: [
+      new webpack.ProvidePlugin({
+        Buffer: ["buffer", "Buffer"],
+      }),
+    ],
   });
 
   return [nodeOutput, webOutput];

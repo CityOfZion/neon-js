@@ -1,5 +1,6 @@
 import { NEF } from "../../src/sc/NEF";
 import { CallFlags } from "../../src/sc";
+import { Buffer } from "buffer";
 
 describe("constructor", () => {
   test("ok", () => {

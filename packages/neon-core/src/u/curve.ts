@@ -1,5 +1,6 @@
 import { ec as EC } from "elliptic";
 import BN from "bn.js";
+import { Buffer } from "buffer";
 
 export interface EcdsaSignature {
   r: string;
