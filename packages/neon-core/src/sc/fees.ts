@@ -30,23 +30,17 @@ export function calculateExecutionFee(
         token.params.length === 8
       ) {
         const interopCode = token.params as InteropServiceCode;
-        if (
-          interopCode ===
-            InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256R1 ||
-          interopCode ===
-            InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256K1
-        ) {
+        if (interopCode === InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG) {
           const threshold = extractThresholdForMultiSig(opTokens, i);
           return BigInteger.fromNumber(OpCodePrices[token.code]).add(
             BigInteger.fromNumber(
-              getInteropServicePrice(
-                InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
-              )
+              getInteropServicePrice(InteropServiceCode.NEO_CRYPTO_CHECKSIG)
             )
               .mul(threshold)
               .mul(factor)
           );
         }
+
         return BigInteger.fromNumber(OpCodePrices[token.code])
           .add(BigInteger.fromNumber(getInteropServicePrice(interopCode)))
           .mul(factor);
@@ -63,9 +57,9 @@ function extractThresholdForMultiSig(
   sysCallIndex: number
 ): number {
   // We know that for a multisig of threshold t & no.of keys k the order is:
-  // t, key1, key2, ...keyk, k, OpToken.PUSHNULL, SYSCALL
-  const tokenK = tokens[sysCallIndex - 2];
+  // t, key1, key2, ...keyk, k, SYSCALL
+  const tokenK = tokens[sysCallIndex - 1];
   const k = OpToken.parseInt(tokenK);
-  const tokenT = tokens[sysCallIndex - 2 - k - 1];
+  const tokenT = tokens[sysCallIndex - 1 - k - 1];
   return OpToken.parseInt(tokenT);
 }

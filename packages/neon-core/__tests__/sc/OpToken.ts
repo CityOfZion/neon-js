@@ -1,4 +1,4 @@
-import { OpCode, OpToken } from "../../src/sc";
+import { OpCode, OpToken, InteropServiceCode } from "../../src/sc";
 
 describe("constructor", () => {
   test("opcode", () => {
@@ -80,7 +80,7 @@ const scriptAndOpCodes = [
   ],
   [
     "multisig script",
-    "120c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef0c21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c90c2102232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa130b41138defaf",
+    "120c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef0c21031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c90c2102232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa13417bce6ca5",
     [
       new OpToken(OpCode.PUSH2),
       new OpToken(
@@ -96,8 +96,7 @@ const scriptAndOpCodes = [
         "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa"
       ),
       new OpToken(OpCode.PUSH3),
-      new OpToken(OpCode.PUSHNULL),
-      new OpToken(OpCode.SYSCALL, "138defaf"),
+      new OpToken(OpCode.SYSCALL, InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG),
     ],
   ],
   ["PUSHDATA4", "0e020000001234", [new OpToken(OpCode.PUSHDATA4, "1234")]],

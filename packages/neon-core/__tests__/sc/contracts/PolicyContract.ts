@@ -1,11 +1,11 @@
 import { PolicyContract, CallFlags } from "../../../src/sc";
 
 const contract = PolicyContract.INSTANCE;
-const scriptHash = "79bcd398505eb779df6e67e4be6c14cded08e2f2";
+const scriptHash = "cc5e4edd9f5f8dba8bb65734541df7a1c081c67b";
 
 test("scriptHash", () => {
   expect(contract.scriptHash).toEqual(
-    "79bcd398505eb779df6e67e4be6c14cded08e2f2"
+    "cc5e4edd9f5f8dba8bb65734541df7a1c081c67b"
   );
 });
 

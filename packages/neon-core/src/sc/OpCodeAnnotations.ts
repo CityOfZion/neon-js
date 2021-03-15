@@ -158,6 +158,8 @@ export const OpCodeAnnotations: Record<OpCode, OpCodeAnnotation> = {
   [OpCode.MUL]: {},
   [OpCode.DIV]: {},
   [OpCode.MOD]: {},
+  [OpCode.POW]: {},
+  [OpCode.SQRT]: {},
   [OpCode.SHL]: {},
   [OpCode.SHR]: {},
   [OpCode.NOT]: {},

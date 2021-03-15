@@ -12,7 +12,7 @@ const data: [string, string, SignerJson][] = [
     "000000000000000000000000000000000000000000",
     {
       account: "0x0000000000000000000000000000000000000000",
-      scopes: "FeeOnly",
+      scopes: "None",
     },
   ],
   [

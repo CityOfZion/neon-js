@@ -128,12 +128,11 @@ export function isSignatureContract(input: HexString): boolean {
   const PUBLIC_KEY_LENGTH = 33;
   const script = Buffer.from(input.toString(), "hex");
   return !(
-    script.length != 41 ||
+    script.length != 40 ||
     script[0] != OpCode.PUSHDATA1 ||
     script[1] != PUBLIC_KEY_LENGTH ||
-    script[35] != OpCode.PUSHNULL ||
-    script[36] != OpCode.SYSCALL ||
-    script.readUInt32LE(37) != 2014135445
+    script[35] != OpCode.SYSCALL ||
+    script.readUInt32LE(36) != 2859889780
   );
 }
 
@@ -142,7 +141,7 @@ export function isSignatureContract(input: HexString): boolean {
  */
 export function isMultisigContract(input: HexString): boolean {
   const script = Buffer.from(input.toString(), "hex");
-  if (script.length < 43) {
+  if (script.length < 42) {
     return false;
   }
 
@@ -200,17 +199,13 @@ export function isMultisigContract(input: HexString): boolean {
     return false;
   }
 
-  if (
-    script.length != i + 6 ||
-    script[i] != OpCode.PUSHNULL ||
-    script[i + 1] != OpCode.SYSCALL
-  ) {
+  if (script.length != i + 5 || script[i + 1] != OpCode.SYSCALL) {
     return false;
   }
 
   i += 2;
 
-  if (script.readUInt32LE(i) != 2951712019) {
+  if (script.readUInt32LE(i) != 2775371387) {
     return false;
   }
 

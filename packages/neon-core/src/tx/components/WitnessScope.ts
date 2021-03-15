@@ -3,7 +3,7 @@
  * The execution in vm of a script is kind of opaque, user could add scope on his signature to avoid abuse of signature
  */
 export enum WitnessScope {
-  FeeOnly = 0,
+  None = 0,
 
   /**
    * CalledByEntry means that this condition must hold: EntryScriptHash == CallingScriptHash
@@ -33,7 +33,7 @@ export function parse(stringFlags: string): WitnessScope {
   const flags = stringFlags.split(/\,/g);
   return flags.reduce(
     (p, c) => p | WitnessScope[c.trim() as keyof typeof WitnessScope],
-    WitnessScope.FeeOnly
+    WitnessScope.None
   );
 }
 
@@ -44,8 +44,8 @@ function getEnums(): WitnessScope[] {
 }
 
 export function toString(flags: WitnessScope): string {
-  if (flags === WitnessScope.FeeOnly) {
-    return "FeeOnly";
+  if (flags === WitnessScope.None) {
+    return "None";
   }
   return getEnums()
     .filter((f) => flags & f)

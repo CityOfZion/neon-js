@@ -1,145 +1,145 @@
 {
-    "name": "testWallet",
-    "version": "3.0",
-    "scrypt": {
-        "n": 16384,
-        "r": 8,
-        "p": 8
+  "name":null,
+  "version":"3.0",
+  "scrypt":{
+    "n":16384,
+    "r":8,
+    "p":8
+  },
+  "accounts":[
+    {
+      "address":"NQrEVKgpx2qEg6DpVMT5H8kFa7kc2DFgqS",
+      "label":"A",
+      "isdefault":false,
+      "lock":false,
+      "key":"6PYWaEBMeD2Jzuy97CScCu5GpTErduZLW2Fi7zpPJKMKDoTXotUiiHvNhA",
+      "contract":{
+        "script":"DCECAoqZgm7cDJfRjiK2kyNz2QjTI6p/kmVqd\u002Bwm6IYWme9BdHR2qg==",
+        "parameters":[
+          {
+            "name":"signature",
+            "type":"Signature"
+          }
+        ],
+        "deployed":false
+      },
+      "extra":{
+        "WIF":"L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
+        "publicKey":"02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
+        "scriptHash":"b611bfa60886125e0071b56deeaf6efb40bd2336"
+      }
     },
-    "accounts": [
-        {
-            "address": "NNWAo5vdVJz1oyCuNiaTBA3amBHnWCF4Yk",
-            "label": "A",
-            "isdefault": false,
-            "lock": false,
-            "key": "6PYSeMMbHPpzD9jFvtytPLatcDJA1qraaKaxrkMDxxvN4XV5VZe2tdus8e",
-            "contract": {
-                "script": "DCECAoqZgm7cDJfRjiK2kyNz2QjTI6p/kmVqd\u002Bwm6IYWme8LQZVEDXg=",
-                "parameters": [
-                    {
-                        "name": "signature",
-                        "type": "Signature"
-                    }
-                ],
-                "deployed": false
-            },
-            "extra": {
-                "WIF": "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
-                "publicKey": "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
-                "scriptHash": "36a6e6a7c4658acf096f5d288cc81129c815681c"
-            }
-        },
-        {
-            "address": "NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV",
-            "label": "B",
-            "isdefault": false,
-            "lock": false,
-            "key": "6PYKWKaq5Wd6vEH3f56ELyqWVPNsSaF6wftEqV2z53iuLGJUfyXnmWv3uf",
-            "contract": {
-                "script": "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckLQZVEDXg=",
-                "parameters": [
-                    {
-                        "name": "signature",
-                        "type": "Signature"
-                    }
-                ],
-                "deployed": false
-            },
-            "extra": {
-                "WIF": "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
-                "publicKey": "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
-                "scriptHash": "5461c33e9bbc7de7076754540ba9e62b255ea9fc"
-            }
-        },
-        {
-            "address": "NTWHAzB82LRGWNuuqjVyyzpGvF3WxbbPoG",
-            "label": "C",
-            "isdefault": false,
-            "lock": false,
-            "key": "6PYSzKoJD7E6Do6vrPP4MfUDpCS3pw4ZWPcpPxBSkaRwRa44uEceCCGsTf",
-            "contract": {
-                "script": "DCECIyzo0uIGPc4EURMYUdR0Ib/E/B2k2xFvylMCwHVkYvoLQZVEDXg=",
-                "parameters": [
-                    {
-                        "name": "signature",
-                        "type": "Signature"
-                    }
-                ],
-                "deployed": false
-            },
-            "extra": {
-                "WIF": "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
-                "publicKey": "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
-                "scriptHash":"a38db239bb36ace1a69eb727a5b0157baa094653"
-            }
-        },
-        {
-            "address": "NSyfwYL3LUNgjiiXDZBi9SDYh5eoe5DA71",
-            "label": "multisigABC",
-            "isdefault": false,
-            "lock": false,
-            "key": "6PYSeMMbHPpzD9jFvtytPLatcDJA1qraaKaxrkMDxxvN4XV5VZe2tdus8e",
-            "contract": {
-                "script": "EgwhAgKKmYJu3AyX0Y4itpMjc9kI0yOqf5JlanfsJuiGFpnvDCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckMIQIjLOjS4gY9zgRRExhR1HQhv8T8HaTbEW/KUwLAdWRi\u002BhMLQRON768=",
-                "parameters": [
-                    {
-                        "name": "parameter0",
-                        "type": "Signature"
-                    },
-                    {
-                        "name": "parameter1",
-                        "type": "Signature"
-                    }
-                ],
-                "deployed": false
-            },
-            "extra": {
-                "description": "MultiSig made from A,B,C."
-            }
-        },
-        {
-            "address": "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV",
-            "label": "origin multisig",
-            "isdefault": false,
-            "lock": false,
-            "key": "6PYR6RrPk7JKXgv9ofCBtebsKSkUMMHJ1pk1tW235wTqVh4w6xahehZF9N",
-            "contract": {
-                "script": "EQwhAxGKK3li\u002BgIm\u002BjWs9dIkhVtpHH6peNGv4sU4Yx1fe\u002BheEQtBE43vrw==",
-                "parameters": [
-                    {
-                        "name": "parameter0",
-                        "type": "Signature"
-                    }
-                ],
-                "deployed": false
-            },
-            "extra": {
-                "publicKey": "03118a2b7962fa0226fa35acf5d224855b691c7ea978d1afe2c538631d5f7be85e"
-            }
-        },
-        {
-            "address": "NZcX6tJCGQreJbNZXewMC9TcKaa5LRsNJx",
-            "label": "origin base",
-            "isdefault": false,
-            "lock": false,
-            "key": "6PYR6RrPk7JKXgv9ofCBtebsKSkUMMHJ1pk1tW235wTqVh4w6xahehZF9N",
-            "contract": {
-                "script": "DCEDEYoreWL6Aib6Naz10iSFW2kcfql40a/ixThjHV976F4LQZVEDXg=",
-                "parameters": [
-                    {
-                        "name": "signature",
-                        "type": "Signature"
-                    }
-                ],
-                "deployed": false
-            },
-            "extra": {
-                "publicKey": "03118a2b7962fa0226fa35acf5d224855b691c7ea978d1afe2c538631d5f7be85e"
-            }
-        }
-    ],
-    "extra": {
-        "password": "wallet",
-        "description": "seed wallet for solonet 3.0.0-preview3"
+    {
+      "address":"NYaVsrMV9GS8aaspRS4odXf1WHZdMmJiPC",
+      "label":"B",
+      "isdefault":false,
+      "lock":false,
+      "key":"6PYUpn5uvskFoAaqYnasqG8ZzFrff2saWd9ehXegV5MS4HDeJLvnNbpB7C",
+      "contract":{
+        "script":"DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSclBdHR2qg==",
+        "parameters":[
+          {
+            "name":"signature",
+            "type":"Signature"
+          }
+        ],
+        "deployed":false
+      },
+      "extra":{
+        "WIF":"L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
+        "publicKey":"031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
+        "scriptHash":"04a781b6a8cd4de62ade3241d85b465a8eefea8a"
+      }
+    },
+    {
+      "address":"NWcpK2143ZjgzDYyQJhoKrodJUymHTxPzR",
+      "label":"C",
+      "isdefault":false,
+      "lock":false,
+      "key":"6PYRbKt54ad9t2uj63GZ5H5bK3XugYFD9W5eP86nfFPb5fW2ddJdR9W767",
+      "contract":{
+        "script":"DCECIyzo0uIGPc4EURMYUdR0Ib/E/B2k2xFvylMCwHVkYvpBdHR2qg==",
+        "parameters":[
+          {
+            "name":"signature",
+            "type":"Signature"
+          }
+        ],
+        "deployed":false
+      },
+      "extra":{
+        "WIF":"KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
+        "publicKey":"02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
+        "scriptHash":"de83c554f07755e600c3485366de477e6ae76a75"
+      }
+    },
+    {
+      "address":"Ni8Dw2zt7nGidkvwr55vssvG2R7JAEXsBM",
+      "label":null,
+      "isdefault":false,
+      "lock":false,
+      "key":"6PYWaEBMeD2Jzuy97CScCu5GpTErduZLW2Fi7zpPJKMKDoTXotUiiHvNhA",
+      "contract":{
+        "script":"EgwhAgKKmYJu3AyX0Y4itpMjc9kI0yOqf5JlanfsJuiGFpnvDCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckMIQIjLOjS4gY9zgRRExhR1HQhv8T8HaTbEW/KUwLAdWRi\u002BhNBe85spQ==",
+        "parameters":[
+          {
+            "name":"parameter0",
+            "type":"Signature"
+          },
+          {
+            "name":"parameter1",
+            "type":"Signature"
+          }
+        ],
+        "deployed":false
+      },
+      "extra":{
+        "description":"Multisig 2 out of 3 made from A,B,C."
+      }
+    },
+    {
+      "address":"NYvLBq6UtdvQnqLWog2Vtgf6AY4D6M1Kim",
+      "label": "origin base",
+      "isdefault":false,
+      "lock":false,
+      "key":"6PYSrLSbkmvpb8tigYRy9svecVRzXXqiRpJGXPxArt9LjCk3VsZSJ759jy",
+      "contract":{
+        "script":"DCECjqOobfWnhSWHt3atyQ4\u002B5TwmsBGmH1aOYUZtQMaRqTFBdHR2qg==",
+        "parameters":[
+          {
+            "name":"signature",
+            "type":"Signature"
+          }
+        ],
+        "deployed":false
+      },
+      "extra": {
+        "publicKey": "028ea3a86df5a7852587b776adc90e3ee53c26b011a61f568e61466d40c691a931"
+      }
+    },
+    {
+      "address":"NhxvE7rd27zdz3qTUdaBGpeckzd26VJHZr",
+      "label": "origin multisig",
+      "isdefault":false,
+      "lock":false,
+      "key":"6PYSrLSbkmvpb8tigYRy9svecVRzXXqiRpJGXPxArt9LjCk3VsZSJ759jy",
+      "contract":{
+        "script":"EQwhAo6jqG31p4Ulh7d2rckOPuU8JrARph9WjmFGbUDGkakxEUF7zmyl",
+        "parameters":[
+          {
+            "name":"parameter0",
+            "type":"Signature"
+          }
+        ],
+        "deployed":false
+      },
+      "extra": {
+        "publicKey": "028ea3a86df5a7852587b776adc90e3ee53c26b011a61f568e61466d40c691a931"
+      }
     }
+  ],
+  "extra":{
+    "password":"wallet",
+    "description":"seed wallet for solonet 3.0.0-preview5"
+  }
 }

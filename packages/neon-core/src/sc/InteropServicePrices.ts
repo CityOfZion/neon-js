@@ -7,25 +7,13 @@ export interface InteropServicePriceParam {
 
 const GAS_PER_BYTE = 100000e-8;
 const fixedPrices = {
-  [InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256K1]: 0,
-  [InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256R1]: 0,
-  [InteropServiceCode.NEO_CRYPTO_RIPEMD160]: 32768,
-  [InteropServiceCode.NEO_CRYPTO_SHA256]: 32768,
-  [InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256K1]: 32768,
-  [InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1]: 32768,
-  [InteropServiceCode.SYSTEM_BINARY_ATOI]: 4096,
-  [InteropServiceCode.SYSTEM_BINARY_BASE58DECODE]: 4096,
-  [InteropServiceCode.SYSTEM_BINARY_BASE58ENCODE]: 4096,
-  [InteropServiceCode.SYSTEM_BINARY_BASE64DECODE]: 4096,
-  [InteropServiceCode.SYSTEM_BINARY_BASE64ENCODE]: 4096,
-  [InteropServiceCode.SYSTEM_BINARY_DESERIALIZE]: 16384,
-  [InteropServiceCode.SYSTEM_BINARY_ITOA]: 4096,
-  [InteropServiceCode.SYSTEM_BINARY_SERIALIZE]: 4096,
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETBLOCK]: 65536,
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETHEIGHT]: 16,
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETTRANSACTION]: 32768,
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETTRANSACTIONFROMBLOCK]: 32768,
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETTRANSACTIONHEIGHT]: 32768,
+  [InteropServiceCode.NEO_CRYPTO_CHECKSIG]: 32768,
+  [InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG]: 0,
   [InteropServiceCode.SYSTEM_CALLBACK_CREATE]: 16,
   [InteropServiceCode.SYSTEM_CALLBACK_CREATEFROMMETHOD]: 32768,
   [InteropServiceCode.SYSTEM_CALLBACK_CREATEFROMSYSCALL]: 16,
@@ -47,8 +35,6 @@ const fixedPrices = {
   [InteropServiceCode.SYSTEM_ITERATOR_KEY]: 16,
   [InteropServiceCode.SYSTEM_ITERATOR_KEYS]: 16,
   [InteropServiceCode.SYSTEM_ITERATOR_VALUES]: 16,
-  [InteropServiceCode.SYSTEM_JSON_DESERIALIZE]: 16384,
-  [InteropServiceCode.SYSTEM_JSON_SERIALIZE]: 4096,
   [InteropServiceCode.SYSTEM_RUNTIME_CHECKWITNESS]: 1024,
   [InteropServiceCode.SYSTEM_RUNTIME_GASLEFT]: 16,
   [InteropServiceCode.SYSTEM_RUNTIME_GETCALLINGSCRIPTHASH]: 16,
@@ -69,7 +55,6 @@ const fixedPrices = {
   [InteropServiceCode.SYSTEM_STORAGE_GETCONTEXT]: 16,
   [InteropServiceCode.SYSTEM_STORAGE_GETREADONLYCONTEXT]: 16,
   [InteropServiceCode.SYSTEM_STORAGE_PUT]: 0,
-  [InteropServiceCode.SYSTEM_STORAGE_PUTEX]: 0,
 };
 
 function getStoragePrice(size: number): number {
@@ -77,9 +62,7 @@ function getStoragePrice(size: number): number {
 }
 
 function getCheckMultiSigPrice(size: number): number {
-  return (
-    size * fixedPrices[InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1]
-  );
+  return size * fixedPrices[InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG];
 }
 
 type fixedPriceInteropServiceCode = keyof typeof fixedPrices;
@@ -103,11 +86,9 @@ export function getInteropServicePrice(
     );
   }
   switch (service) {
-    case InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256R1:
-    case InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256K1:
+    case InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG:
       return getCheckMultiSigPrice(param.size);
     case InteropServiceCode.SYSTEM_STORAGE_PUT:
-    case InteropServiceCode.SYSTEM_STORAGE_PUTEX:
     case InteropServiceCode.SYSTEM_STORAGE_DELETE:
       return getStoragePrice(param.size);
     case InteropServiceCode.SYSTEM_CONTRACT_NATIVEONPERSIST:
