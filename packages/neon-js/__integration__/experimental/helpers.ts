@@ -52,7 +52,7 @@ beforeAll(async () => {
 });
 
 describe("contract", () => {
-  test("deploy", async () => {
+  test("deploy & invoke", async () => {
     console.log(`Deploying contract with hash: 0x${contractHash}`);
 
     const txid = await experimental.deployContract(nef, manifest, config);
