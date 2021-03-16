@@ -6,7 +6,6 @@ import {
 } from "../../../src/tx";
 import samples from "./Transaction.json";
 import { Account } from "../../../src/wallet";
-import { MAGIC_NUMBER } from "../../../src/consts";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -287,7 +286,7 @@ describe.each(dataSet)(
     });
 
     test("hash", () => {
-      const result = neonObj.hash(MAGIC_NUMBER.SoloNet);
+      const result = neonObj.hash();
       expect(result).toEqual(txid);
     });
   }

@@ -185,7 +185,7 @@ export class Transaction implements NeonObject<TransactionLike> {
   /**
    * Transaction hash.
    */
-  public hash(networkMagic: number): string {
+  public hash(): string {
     return reverseHex(sha256(this.serialize(false)));
   }
 
@@ -309,7 +309,7 @@ export class Transaction implements NeonObject<TransactionLike> {
       signingKey = new Account(signingKey);
     }
     const signature = sign(
-      num2hexstring(networkMagic, 4, true) + reverseHex(this.hash(0)),
+      num2hexstring(networkMagic, 4, true) + reverseHex(this.hash()),
       signingKey.privateKey,
       k
     );
@@ -328,9 +328,9 @@ export class Transaction implements NeonObject<TransactionLike> {
 
   public equals(other: Partial<TransactionLike | Transaction>): boolean {
     if (other instanceof Transaction) {
-      return this.hash(0) === other.hash(0);
+      return this.hash() === other.hash();
     }
-    return this.hash(0) === new Transaction(other).hash(0);
+    return this.hash() === new Transaction(other).hash();
   }
 
   public export(): TransactionLike {
