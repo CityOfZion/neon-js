@@ -4,6 +4,28 @@ title: Changelog (v5)
 ---
 
 # 5.0.0
+## RC1
+
+```
+neo-cli: v3.0.0-rc1
+neon-js: v5.0.0-next7
+```
+
+Key blockchain changes:
+- Smart contract hashes are determined in a new way causing all native contract hashes to change.
+- Neo address format has changed.
+- Smart contract execution fees have changed.
+- JSON, Binary and most Crypto SYSCALLs have been moved to `StdLib` and `CryptoLib` native smart contracts.
+
+SDK changes:
+- sc
+  - `NEO_BINARY_*` and `NEO_JSON_*` SYSCALLs removed.
+  - Old `NEO_CRYPTO_*` SYSCALLs removed.  Introduced two new SYSCALLs `NEO_CRYPTO_CHECKSIG` & `NEO_CRYPTO_CHECKMULTISIG`.
+  - Transaction `networkfee` and `systemfee` representation changed to be without decimals.
+- u
+  - `isMultisigContract` and `isSignatureContract` helpers updated to new format changes.
+- wallet
+  - Updated signature and multisignature contract scripts to structure changes and using the new crypto syscalls.
 
 ## Preview5:
 
