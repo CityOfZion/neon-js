@@ -323,7 +323,7 @@ export class Transaction implements NeonObject<TransactionLike> {
    * @param networkMagic - magic number of network found in protocol.json.
    */
   public getMessageForSigning(networkMagic: number): string {
-    return num2hexstring(networkMagic, 4, true) + this.serialize(false);
+    return num2hexstring(networkMagic, 4, true) + reverseHex(this.hash());
   }
 
   public equals(other: Partial<TransactionLike | Transaction>): boolean {
