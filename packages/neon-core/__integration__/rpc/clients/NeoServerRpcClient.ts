@@ -282,7 +282,7 @@ describe("NeoServerRpcClient", () => {
         ]
       );
 
-      // expect(Object.keys(result)).toHaveLength(5);
+      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
@@ -336,7 +336,7 @@ describe("NeoServerRpcClient", () => {
         }),
       ]);
 
-      // expect(Object.keys(result)).toHaveLength(5);
+      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
