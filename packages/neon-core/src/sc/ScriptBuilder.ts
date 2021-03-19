@@ -14,7 +14,6 @@ import {
 import { OpCode } from "./OpCode";
 import { InteropServiceCode } from "./InteropServiceCode";
 import { ContractCall, ContractCallJson } from "./types";
-import { TextEncoder as textEncoderNode10 } from "util";
 import { CallFlags } from "./CallFlags";
 
 /**
@@ -134,10 +133,7 @@ export class ScriptBuilder extends StringStream {
    * Appends a UTF-8 string.
    */
   public emitString(str: string): this {
-    const encoder =
-      typeof TextEncoder !== "undefined"
-        ? new TextEncoder()
-        : new textEncoderNode10();
+    const encoder = new TextEncoder();
     const bytes = encoder.encode(str);
     return this.emitBytes(bytes);
   }
@@ -310,6 +306,11 @@ export class ScriptBuilder extends StringStream {
       contractCall.args,
       contractCall.callFlags
     );
+  }
+
+  public appendScript(script: string): this {
+    this.str += script;
+    return this;
   }
 }
 

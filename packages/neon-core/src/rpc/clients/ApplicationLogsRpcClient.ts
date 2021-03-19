@@ -1,4 +1,4 @@
-import Query, { GetApplicationLogResult } from "../Query";
+import Query, { ApplicationLogJson } from "../Query";
 import { RpcDispatcher, RpcDispatcherMixin } from "./RpcDispatcher";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
@@ -8,7 +8,7 @@ export function ApplicationLogsRpcMixin<TBase extends RpcDispatcherMixin>(
   return class extends base {
     public async getApplicationLog(
       blockOrTxHash: string
-    ): Promise<GetApplicationLogResult> {
+    ): Promise<ApplicationLogJson> {
       return await this.execute(Query.getApplicationLog(blockOrTxHash));
     }
   };
