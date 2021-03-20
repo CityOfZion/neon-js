@@ -140,6 +140,6 @@
   ],
   "extra":{
     "password":"wallet",
-    "description":"seed wallet for solonet 3.0.0-preview5"
+    "description":"seed wallet for solonet 3.0.0-rc1"
   }
 }
