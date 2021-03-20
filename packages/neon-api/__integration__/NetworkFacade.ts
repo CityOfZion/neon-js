@@ -1,4 +1,4 @@
-import { CONST, rpc, wallet } from "@cityofzion/neon-core";
+import { CONST, rpc, sc, u, wallet } from "@cityofzion/neon-core";
 import * as TestHelpers from "../../../testHelpers";
 import testWallet from "../../neon-core/__tests__/testWallet.json";
 import { NetworkFacade } from "../src/NetworkFacade";
@@ -32,5 +32,53 @@ describe("NetworkFacade", () => {
     );
 
     expect(txid).toBeDefined();
+  }, 30000);
+
+  test("gasClaim", async () => {
+    const facade = await NetworkFacade.fromConfig({ node: client });
+    const acct = new wallet.Account(testWallet.accounts[1]);
+
+    await acct.decrypt("wallet");
+
+    const currentHeight = await facade.getRpcNode().getBlockCount();
+    const unclaimedGasResult = await facade.invoke(
+      sc.NeoContract.INSTANCE.unclaimedGas(acct.address, currentHeight)
+    );
+
+    const expectedMinGasClaimed = parseInt(
+      unclaimedGasResult.stack[0].value as string
+    );
+    const txid = await facade.claimGas(acct, {
+      signingCallback: signWithAccount(acct),
+    });
+
+    expect(txid).toBeDefined();
+
+    await TestHelpers.sleep(3000);
+    const rpcClient = new rpc.RPCClient(client.url);
+    const logs = await rpcClient.getApplicationLog(txid);
+
+    expect(logs.executions.length).toBe(1);
+    expect(logs.executions[0].vmstate).toBe("HALT");
+    // 2 notifications, 1 GAS & 1 NEO
+    expect(logs.executions[0].notifications.length).toBe(2);
+
+    const gasNotification = logs.executions[0].notifications.find((n) =>
+      n.contract.includes(CONST.NATIVE_CONTRACT_HASH.GasToken)
+    );
+    if (gasNotification === undefined) {
+      throw new Error("gasNotification is undefined");
+    }
+
+    // "from" field of null
+    expect(gasNotification.state.value[0]).toEqual({ type: "Any" });
+    // "to" field to self.
+    expect(gasNotification.state.value[1]).toEqual({
+      type: "ByteString",
+      value: u.HexString.fromHex(acct.scriptHash).toBase64(true),
+    });
+    expect(
+      parseInt(gasNotification.state.value[2].value as string)
+    ).toBeGreaterThanOrEqual(expectedMinGasClaimed);
   }, 30000);
 });

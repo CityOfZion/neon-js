@@ -24,6 +24,7 @@ import {
   getScriptHashFromPublicKey,
 } from "./core";
 import base58 from "bs58";
+import { Buffer } from "buffer";
 
 const NEO2_ADDRESS_VERSION = "17";
 const enc = {

@@ -1,4 +1,3 @@
-import util from "util";
 import { DEFAULT_ACCOUNT_CONTRACT, DEFAULT_SCRYPT } from "../consts";
 import logger from "../logging";
 import { hash160, HexString, reverseHex, isMultisigContract } from "../u";
@@ -17,7 +16,6 @@ import { NeonObject } from "../model";
 
 const log = logger("wallet");
 
-const inspect = util.inspect.custom;
 export interface AccountJSON {
   /** Base58 encoded string */
   address: string;
@@ -150,10 +148,6 @@ export class Account implements NeonObject<AccountJSON> {
 
   public get [Symbol.toStringTag](): string {
     return "Account";
-  }
-
-  public [inspect](): string {
-    return `[Account: ${this.label}]`;
   }
 
   public get isMultiSig(): boolean {
