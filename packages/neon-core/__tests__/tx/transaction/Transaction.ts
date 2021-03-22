@@ -6,7 +6,6 @@ import {
 } from "../../../src/tx";
 import samples from "./Transaction.json";
 import { Account } from "../../../src/wallet";
-import { MAGIC_NUMBER } from "../../../src/consts";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -252,10 +251,10 @@ describe("Add Methods", () => {
     tx1.witnesses = [];
     tx1.sign(account, 1024);
     expect(tx1.witnesses[0].verificationScript.toBigEndian()).toBe(
-      "0c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b4195440d78"
+      "0c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba41747476aa"
     );
     expect(tx1.witnesses[0].invocationScript.toBigEndian()).toBe(
-      "0c40bfccd6e09f726104eef73498500004ed1cdb51fda023e28b29f7f7bf8fe1ca9ecfab32bc2559454fa347a270a03488989541987b6117da85d8c2a6cfa3b84bbb"
+      "0c408fb54a60e1763ec91876f57e6133e7f6e86b11525f016fe26cf85a15f1d8b24d5cc50f3269b64dc0450d32887c8dc73a21ff33bab7547c53f5745165625e2900"
     );
   });
 });
@@ -287,7 +286,7 @@ describe.each(dataSet)(
     });
 
     test("hash", () => {
-      const result = neonObj.hash(MAGIC_NUMBER.SoloNet);
+      const result = neonObj.hash();
       expect(result).toEqual(txid);
     });
   }

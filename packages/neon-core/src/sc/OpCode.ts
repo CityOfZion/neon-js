@@ -307,6 +307,10 @@ export enum OpCode {
   DIV = 0xa1,
   // Returns the remainder after dividing a by b.
   MOD = 0xa2,
+  // The result of raising value to the exponent power.
+  POW = 0xa3,
+  // Returns the square root of a specified number.
+  SQRT = 0xa4,
   // Shifts a left b bits, preserving sign.
   SHL = 0xa8,
   // Shifts a right b bits, preserving sign.

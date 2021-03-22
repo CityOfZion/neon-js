@@ -1,7 +1,7 @@
 import { TX_VERSION, MAGIC_NUMBER } from "../../consts";
 import logger from "../../logging";
 import {
-  hash256,
+  sha256,
   num2hexstring,
   reverseHex,
   StringStream,
@@ -128,8 +128,8 @@ export class Transaction implements NeonObject<TransactionLike> {
     return new Transaction({
       version: input.version,
       nonce: input.nonce,
-      systemFee: BigInteger.fromDecimal(input.sysfee, 8),
-      networkFee: BigInteger.fromDecimal(input.netfee, 8),
+      systemFee: BigInteger.fromDecimal(input.sysfee, 0),
+      networkFee: BigInteger.fromDecimal(input.netfee, 0),
       validUntilBlock: input.validuntilblock,
       attributes: input.attributes.map((a) => TransactionAttribute.fromJson(a)),
       signers: input.signers.map((c) => Signer.fromJson(c)),
@@ -185,10 +185,8 @@ export class Transaction implements NeonObject<TransactionLike> {
   /**
    * Transaction hash.
    */
-  public hash(networkMagic: number): string {
-    return reverseHex(
-      hash256(num2hexstring(networkMagic, 4, true) + this.serialize(false))
-    );
+  public hash(): string {
+    return reverseHex(sha256(this.serialize(false)));
   }
 
   public get size(): number {
@@ -311,7 +309,7 @@ export class Transaction implements NeonObject<TransactionLike> {
       signingKey = new Account(signingKey);
     }
     const signature = sign(
-      num2hexstring(networkMagic, 4, true) + this.serialize(false),
+      num2hexstring(networkMagic, 4, true) + reverseHex(this.hash()),
       signingKey.privateKey,
       k
     );
@@ -325,14 +323,14 @@ export class Transaction implements NeonObject<TransactionLike> {
    * @param networkMagic - magic number of network found in protocol.json.
    */
   public getMessageForSigning(networkMagic: number): string {
-    return num2hexstring(networkMagic, 4, true) + this.serialize(false);
+    return num2hexstring(networkMagic, 4, true) + reverseHex(this.hash());
   }
 
   public equals(other: Partial<TransactionLike | Transaction>): boolean {
     if (other instanceof Transaction) {
-      return this.hash(0) === other.hash(0);
+      return this.hash() === other.hash();
     }
-    return this.hash(0) === new Transaction(other).hash(0);
+    return this.hash() === new Transaction(other).hash();
   }
 
   public export(): TransactionLike {
@@ -358,8 +356,8 @@ export class Transaction implements NeonObject<TransactionLike> {
         this.sender.byteLength === 0
           ? ""
           : getAddressFromScriptHash(this.sender.toBigEndian()),
-      sysfee: this.systemFee.toDecimal(8),
-      netfee: this.networkFee.toDecimal(8),
+      sysfee: this.systemFee.toDecimal(0),
+      netfee: this.networkFee.toDecimal(0),
       validuntilblock: this.validUntilBlock,
       attributes: this.attributes.map((a) => a.toJson()),
       signers: this.signers.map((c) => c.toJson()),

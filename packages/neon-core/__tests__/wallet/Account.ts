@@ -18,12 +18,12 @@ describe("constructor", () => {
       "publicKeyUnencoded",
       "041d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c94617303f7408d9abfedfb6fbb00dd07e3e7735d918bbea7a7e2c1895ea1bc9b9",
     ],
-    ["scriptHash", "5461c33e9bbc7de7076754540ba9e62b255ea9fc"],
-    ["address", "NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV"],
+    ["scriptHash", "04a781b6a8cd4de62ade3241d85b465a8eefea8a"],
+    ["address", "NYaVsrMV9GS8aaspRS4odXf1WHZdMmJiPC"],
   ])("%s", (msg: string, data: string) => {
     const result = new Account(data);
     expect(result instanceof Account).toBeTruthy();
-    expect(result.address).toBe("NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV");
+    expect(result.address).toBe("NYaVsrMV9GS8aaspRS4odXf1WHZdMmJiPC");
   });
 
   test("empty", () => {
@@ -36,7 +36,7 @@ describe("constructor", () => {
 
   test("AccountJSON", () => {
     const testObject = {
-      address: "NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV",
+      address: "NYaVsrMV9GS8aaspRS4odXf1WHZdMmJiPC",
       label: "addressB",
       isdefault: false,
       lock: false,

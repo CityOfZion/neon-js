@@ -8,7 +8,7 @@ const addressScriptHash = testWallet.accounts[0].extra.scriptHash as string;
 
 test("scriptHash", () => {
   expect(contract.scriptHash).toEqual(
-    "f61eebf573ea36593fd43aa150c055ad7906ab83"
+    "ef4073a0f2b305a38ec4050e4d3d28bc40ea63f5"
   );
 });
 
@@ -17,7 +17,7 @@ describe("Neo specific methods", () => {
     const result = contract.unclaimedGas(address, 123);
 
     expect(result).toEqual({
-      scriptHash: "f61eebf573ea36593fd43aa150c055ad7906ab83",
+      scriptHash: "ef4073a0f2b305a38ec4050e4d3d28bc40ea63f5",
       callFlags: CallFlags.All,
       operation: "unclaimedGas",
       args: [

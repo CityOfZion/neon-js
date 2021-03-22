@@ -72,12 +72,9 @@ export async function calculateNetworkFee(
       networkFeeSize += 67 + u.getSerializedSize(witnessScript);
       networkFee =
         execFeeFactor *
-        (sc.OpCodePrices[sc.OpCode.PUSHDATA1] +
-          sc.OpCodePrices[sc.OpCode.PUSHDATA1] +
-          sc.OpCodePrices[sc.OpCode.PUSHNULL] +
-          sc.getInteropServicePrice(
-            sc.InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
-          ));
+        (sc.OpCodePrices[sc.OpCode.PUSHDATA1] * 2 +
+          sc.OpCodePrices[sc.OpCode.SYSCALL] +
+          sc.getInteropServicePrice(sc.InteropServiceCode.NEO_CRYPTO_CHECKSIG));
     } else if (u.isMultisigContract(witnessScript)) {
       const publicKeyCount = wallet.getPublicKeysFromVerificationScript(
         witnessScript.toString()
@@ -109,11 +106,10 @@ export async function calculateNetworkFee(
       networkFee += execFeeFactor * sc.OpCodePrices[pushOpcode];
       networkFee +=
         execFeeFactor *
-        (sc.OpCodePrices[sc.OpCode.PUSHNULL] +
-          sc.getInteropServicePrice(
-            sc.InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
-          ) *
-            publicKeyCount);
+        (sc.getInteropServicePrice(
+          sc.InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
+        ) *
+          publicKeyCount);
     }
     // else { // future supported contract types}
   });

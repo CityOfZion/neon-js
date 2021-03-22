@@ -53,7 +53,7 @@ export class Signer {
   public constructor(signer: Partial<SignerLike | Signer> = {}) {
     const {
       account = "",
-      scopes = WitnessScope.FeeOnly,
+      scopes = WitnessScope.None,
       allowedContracts = [],
       allowedGroups = [],
     } = signer;

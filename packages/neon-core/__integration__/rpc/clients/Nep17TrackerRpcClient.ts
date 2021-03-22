@@ -2,7 +2,7 @@ import { rpc } from "../../../src";
 import * as TestHelpers from "../../../../../testHelpers";
 
 let client: rpc.Nep17TrackerRpcClient;
-const address = "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV";
+const address = "NhxvE7rd27zdz3qTUdaBGpeckzd26VJHZr";
 
 beforeAll(async () => {
   const url = await TestHelpers.getIntegrationEnvUrl();

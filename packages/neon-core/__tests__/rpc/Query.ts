@@ -226,7 +226,7 @@ describe("static", () => {
         [
           {
             account: "0x" + "ab".repeat(20),
-            scopes: "FeeOnly",
+            scopes: "None",
           },
           {
             account: "cd".repeat(20),
@@ -264,7 +264,7 @@ describe("static", () => {
         [
           {
             account: "0x" + "ab".repeat(20),
-            scopes: "FeeOnly",
+            scopes: "None",
           },
           {
             account: "cd".repeat(20),

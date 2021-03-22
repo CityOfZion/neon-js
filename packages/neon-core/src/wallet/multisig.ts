@@ -29,8 +29,7 @@ export function constructMultiSigVerificationScript(
   });
   return sb
     .emitPush(keys.length)
-    .emit(OpCode.PUSHNULL)
-    .emitSysCall(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256R1)
+    .emitSysCall(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG)
     .build();
 }
 

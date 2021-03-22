@@ -71,7 +71,7 @@ export class TransactionBuilder {
       this.signers.unshift(
         new tx.Signer({
           account: account.scriptHash,
-          scopes: tx.WitnessScope.FeeOnly,
+          scopes: tx.WitnessScope.None,
         })
       );
       return this.addEmptyWitness(account);

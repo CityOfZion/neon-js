@@ -47,12 +47,12 @@ describe("NeoServerRpcClient", () => {
           "size",
           "version",
           "previousblockhash",
+          "primary",
           "merkleroot",
           "time",
           "index",
           "nextconsensus",
           "witnesses",
-          "consensusdata",
           "tx",
           "confirmations",
           "nextblockhash",
@@ -100,6 +100,7 @@ describe("NeoServerRpcClient", () => {
         "merkleroot",
         "time",
         "index",
+        "primary",
         "nextconsensus",
         "witnesses",
         "confirmations",
@@ -402,7 +403,7 @@ describe("NeoServerRpcClient", () => {
 
   test("getUnclaimedGas", async () => {
     const result = await client.getUnclaimedGas(
-      "NZCbeSDnadGsacF69zVvfaB4zDKMioMHJV"
+      "NhxvE7rd27zdz3qTUdaBGpeckzd26VJHZr"
     );
 
     expect(parseInt(result)).toBeGreaterThan(0);

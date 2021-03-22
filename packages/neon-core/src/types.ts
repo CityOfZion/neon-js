@@ -17,10 +17,7 @@ export interface BlockHeaderJson {
 }
 
 export interface BlockJson extends BlockHeaderJson {
-  consensusdata: {
-    nonce: string;
-    primary: number;
-  };
+  primary: number;
   tx: import("./tx/transaction").TransactionJson[];
 }
 

@@ -16,16 +16,12 @@ describe("calculateExecutionFees", () => {
     const result = calculateExecutionFee(
       [
         new OpToken(OpCode.PUSHDATA1, "0".repeat(66)),
-        new OpToken(OpCode.PUSHNULL),
-        new OpToken(
-          OpCode.SYSCALL,
-          InteropServiceCode.NEO_CRYPTO_VERIFYWITHECDSASECP256R1
-        ),
+        new OpToken(OpCode.SYSCALL, InteropServiceCode.NEO_CRYPTO_CHECKSIG),
       ],
       30
     );
 
-    expect(result.toString()).toBe("983310");
+    expect(result.toString()).toBe("983280");
   });
 
   test("multisig verification fee", () => {
@@ -36,16 +32,15 @@ describe("calculateExecutionFees", () => {
         new OpToken(OpCode.PUSHDATA1, "1".repeat(66)),
         new OpToken(OpCode.PUSHDATA1, "2".repeat(66)),
         new OpToken(OpCode.PUSH3),
-        new OpToken(OpCode.PUSHNULL),
         new OpToken(
           OpCode.SYSCALL,
-          InteropServiceCode.NEO_CRYPTO_CHECKMULTISIGWITHECDSASECP256R1
+          InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
         ),
       ],
       30
     );
 
-    expect(result.toString()).toBe("1966890");
+    expect(result.toString()).toBe("1966860");
   });
 
   test("invocationScript fee", () => {

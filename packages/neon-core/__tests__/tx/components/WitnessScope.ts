@@ -6,7 +6,7 @@ import {
 
 describe("parse", () => {
   test.each([
-    ["null", "", WitnessScope.FeeOnly],
+    ["null", "", WitnessScope.None],
     ["single CallByEntry", "CalledByEntry", WitnessScope.CalledByEntry],
     ["single Global", "Global", WitnessScope.Global],
     ["single CustomContracts", "CustomContracts", WitnessScope.CustomContracts],
