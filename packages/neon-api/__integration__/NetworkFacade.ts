@@ -54,7 +54,7 @@ describe("NetworkFacade", () => {
 
     expect(txid).toBeDefined();
 
-    await TestHelpers.sleep(3000);
+    await TestHelpers.sleep(2000);
     const rpcClient = new rpc.RPCClient(client.url);
     const logs = await rpcClient.getApplicationLog(txid);
 
@@ -81,4 +81,38 @@ describe("NetworkFacade", () => {
       parseInt(gasNotification.state.value[2].value as string)
     ).toBeGreaterThanOrEqual(expectedMinGasClaimed);
   }, 30000);
+
+  test("vote", async () => {
+    const facade = await NetworkFacade.fromConfig({ node: client });
+    const votingAccount = new wallet.Account(testWallet.accounts[1]);
+    await votingAccount.decrypt("wallet");
+
+    const candidates = await facade.getCandidates();
+
+    if (candidates.length === 0) {
+      throw new Error("No candidates available to vote!");
+    }
+    const candidateToVoteFor = candidates[0];
+    const currentVotes = candidateToVoteFor.votes;
+    const txid = await facade.vote(
+      votingAccount,
+      candidateToVoteFor.publicKey,
+      {
+        signingCallback: signWithAccount(votingAccount),
+      }
+    );
+
+    expect(txid).toBeDefined();
+
+    await TestHelpers.sleep(2000);
+
+    const candidatesAfterVoting = await facade.getCandidates();
+
+    const newCandidateStatus = candidatesAfterVoting.find(
+      (c) => c.publicKey === candidateToVoteFor.publicKey
+    );
+
+    const newVotes = newCandidateStatus.votes;
+    expect(newVotes).toBeGreaterThan(currentVotes);
+  });
 });
