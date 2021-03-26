@@ -5,7 +5,7 @@ import { NeoContract } from "../../../src/sc/contracts/NeoContract";
 import testWalletJson from "../../../__tests__/testWallet.json";
 
 let rpcClient: RPCClient;
-let testWallet = new wallet.Wallet(testWalletJson);
+const testWallet = new wallet.Wallet(testWalletJson);
 beforeAll(async () => {
   const url = await getIntegrationEnvUrl();
   rpcClient = new RPCClient(url);
