@@ -22,7 +22,7 @@ This is the JS SDK for the NEO blockchain platform. This project aims to be a li
 
 It is currently in use by [Neon](https://github.com/CityOfZion/neon-wallet/).
 
-Visit the [docs](https://cityofzion.io/neon-js) to learn how to use this library!
+Visit the docs to learn how to use this library! [[Neo2](https://docs.coz.io/neo2/neon-js)] [[Neo3](https://docs.coz.io/neo3/neon-js)]
 
 # Getting started
 
