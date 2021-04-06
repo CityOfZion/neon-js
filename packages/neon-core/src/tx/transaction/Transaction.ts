@@ -10,6 +10,7 @@ import {
   ab2hexstring,
   HexString,
   BigInteger,
+  serializeArrayOf,
 } from "../../u";
 import { Account, sign, getAddressFromScriptHash } from "../../wallet";
 import {
@@ -33,7 +34,6 @@ import {
   deserializeValidUntilBlock,
   deserializeSigners,
 } from "./main";
-import { serializeArrayOf } from "../lib";
 import { NeonObject } from "../../model";
 const log = logger("tx");
 

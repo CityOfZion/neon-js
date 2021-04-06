@@ -3,8 +3,13 @@ import {
   parse as parseWitnessScope,
   toString,
 } from "./WitnessScope";
-import { StringStream, num2hexstring, HexString } from "../../u";
-import { deserializeArrayOf, serializeArrayOf } from "../lib";
+import {
+  StringStream,
+  num2hexstring,
+  HexString,
+  deserializeArrayOf,
+  serializeArrayOf,
+} from "../../u";
 
 export interface SignerLike {
   /* account scripthash in big endian */

@@ -1,9 +1,14 @@
-import { StringStream, ensureHex, reverseHex, BigInteger } from "../../u";
+import {
+  StringStream,
+  ensureHex,
+  reverseHex,
+  BigInteger,
+  deserializeArrayOf,
+} from "../../u";
 import { TransactionAttribute, Witness, Signer } from "../components";
 import type { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
 import logger from "../../logging";
-import { deserializeArrayOf } from "../lib";
 
 const log = logger("tx");
 
