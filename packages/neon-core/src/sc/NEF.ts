@@ -7,9 +7,9 @@ import {
   str2hexstring,
   num2VarInt,
   hash256,
+  serializeArrayOf,
 } from "../u";
 import { MethodTokenLike, MethodTokenJson, MethodToken } from "./MethodToken";
-import { serializeArrayOf } from "../tx/lib";
 
 export interface NEFLike {
   compiler: string;

@@ -1,5 +1,6 @@
+import { num2VarInt } from "./convert";
 import { HexString } from "./HexString";
-
+import { StringStream } from "./StringStream";
 interface NeonSerializable {
   size: number;
   serialize: () => string;
@@ -38,4 +39,23 @@ export function getSerializedSize(value: Serializables): number {
     default:
       throw new Error("Unsupported value type: " + typeof value);
   }
+}
+
+export function deserializeArrayOf<T>(
+  type: (ss: StringStream) => T,
+  ss: StringStream
+): T[] {
+  const output = [];
+  const len = ss.readVarInt();
+  for (let i = 0; i < len; i++) {
+    output.push(type(ss));
+  }
+  return output;
+}
+
+export function serializeArrayOf(prop: (NeonSerializable | string)[]): string {
+  return (
+    num2VarInt(prop.length) +
+    prop.map((p) => (typeof p === "string" ? p : p.serialize())).join("")
+  );
 }
