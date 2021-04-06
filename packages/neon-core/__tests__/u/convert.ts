@@ -24,24 +24,6 @@ describe.each([
 });
 
 describe.each([
-  ["0000000000000000", 0],
-  ["00e1f50500000000", 1],
-  ["0100000000000000", 0.00000001],
-  ["0080c6a47e8d0300", 10000000],
-  ["5004fb711f010000", 12345.6789],
-])("(%s)Fixed8 <-> Number(%d)", (fixed8: string, num: number) => {
-  test("Fixed8 -> NUM", () => {
-    const result = convert.fixed82num(fixed8);
-    expect(result).toBe(num);
-  });
-
-  test("NUM -> Fixed8", () => {
-    const result = convert.num2fixed8(num);
-    expect(result).toBe(fixed8);
-  });
-});
-
-describe.each([
   [[], ""],
   [[84, 101, 115, 116], "Test"],
   [Uint8Array.from([84, 101, 115, 116]), "Test"],
