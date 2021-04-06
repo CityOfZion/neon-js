@@ -1,4 +1,4 @@
-import * as hash from "../../src/u/basic/hash";
+import * as hash from "../../../src/u/basic/hash";
 
 describe.each([
   [

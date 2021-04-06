@@ -1,4 +1,4 @@
-import { reverseHex } from "../../src/u/basic/hex";
+import { reverseHex } from "../../../src/u/basic/hex";
 
 describe("reverseHex", () => {
   test("throws if not hexstring", () => {

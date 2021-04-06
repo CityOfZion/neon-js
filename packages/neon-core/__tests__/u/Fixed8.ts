@@ -1,6 +1,6 @@
 import Fixed8 from "../../src/u/Fixed8";
 import BN from "bignumber.js";
-import { reverseHex } from "../../src/u/misc";
+import { reverseHex } from "../../src/u/basic";
 
 describe.each([
   ["0000000000000000", 0, 0],
