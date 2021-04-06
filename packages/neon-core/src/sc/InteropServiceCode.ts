@@ -1,7 +1,4 @@
-import { str2hexstring, sha256, hash160, reverseHex } from "../u";
-import { ContractParam } from "./ContractParam";
-import { OpCode } from "./OpCode";
-import ScriptBuilder from "./ScriptBuilder";
+import { str2hexstring, sha256 } from "../u";
 
 export enum InteropServiceCode {
   NEO_CRYPTO_CHECKSIG = "747476aa",
@@ -68,18 +65,4 @@ export function fromMethodName(methodName: string): InteropServiceCode {
     return InteropServiceCode[enumName as keyof typeof InteropServiceCode];
   }
   throw new Error("Method name not found in InteropServiceCode!");
-}
-
-export function getNativeContractHash(contractName: string): string {
-  const innerScript = new ScriptBuilder()
-    .emitString(contractName)
-    .emitSysCall(InteropServiceCode.SYSTEM_CONTRACT_CALLNATIVE)
-    .build();
-
-  const script = new ScriptBuilder()
-    .emit(OpCode.ABORT)
-    .emitContractParam(ContractParam.hash160("0".repeat(40)))
-    .emitHexString(innerScript)
-    .build();
-  return reverseHex(hash160(script));
 }

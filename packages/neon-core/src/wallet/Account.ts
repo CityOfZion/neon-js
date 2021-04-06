@@ -1,6 +1,7 @@
 import { DEFAULT_ACCOUNT_CONTRACT, DEFAULT_SCRYPT } from "../consts";
 import logger from "../logging";
-import { hash160, HexString, reverseHex, isMultisigContract } from "../u";
+import { hash160, HexString, reverseHex } from "../u";
+import { isMultisigContract } from "../sc";
 import * as core from "./core";
 import { constructMultiSigVerificationScript } from "./multisig";
 import { decrypt, encrypt, ScryptParams } from "./nep2";

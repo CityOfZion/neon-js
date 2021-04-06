@@ -1,4 +1,11 @@
-import { u, sc } from "../";
+import {
+  hexstring2str,
+  num2hexstring,
+  num2VarInt,
+  str2hexstring,
+  StringStream,
+} from "../u";
+import { CallFlags } from "./CallFlags";
 
 export interface MethodTokenLike {
   /** 0x prefixed hexstring */
@@ -6,7 +13,7 @@ export interface MethodTokenLike {
   method: string;
   parametersCount: number;
   hasReturnValue: boolean;
-  callFlags: sc.CallFlags;
+  callFlags: CallFlags;
 }
 
 export interface MethodTokenJson {
@@ -15,7 +22,7 @@ export interface MethodTokenJson {
   method: string;
   parameterscount: number;
   hasreturnvalue: boolean;
-  callflags: sc.CallFlags;
+  callflags: CallFlags;
 }
 
 export class MethodToken {
@@ -23,7 +30,7 @@ export class MethodToken {
   public method: string;
   public parametersCount: number;
   public hasReturnValue: boolean;
-  public callFlags: sc.CallFlags;
+  public callFlags: CallFlags;
 
   public constructor(obj: Partial<MethodTokenLike>) {
     const {
@@ -31,7 +38,7 @@ export class MethodToken {
       method = "",
       parametersCount = 0,
       hasReturnValue = false,
-      callFlags = sc.CallFlags.None,
+      callFlags = CallFlags.None,
     } = obj;
 
     this.hash = hash;
@@ -51,16 +58,16 @@ export class MethodToken {
     });
   }
 
-  public static fromStream(reader: u.StringStream): MethodToken {
+  public static fromStream(reader: StringStream): MethodToken {
     const hash = reader.read(20);
-    const method = u.hexstring2str(reader.readVarBytes());
+    const method = hexstring2str(reader.readVarBytes());
     if (method.startsWith("_"))
       throw new Error(
         "MethodToken deserialization failure - method cannot start with '_'"
       );
     const parametersCount = Buffer.from(reader.read(2), "hex").readUInt16LE();
     const hasReturnValue = reader.read(1) !== "00";
-    const flags = Number.parseInt(reader.read(1)) as sc.CallFlags;
+    const flags = Number.parseInt(reader.read(1)) as CallFlags;
     return new MethodToken({
       hash: hash,
       method: method,
@@ -87,11 +94,11 @@ export class MethodToken {
   public serialize(): string {
     let out = "";
     out += this.hash;
-    out += u.num2VarInt(this.method.length);
-    out += u.str2hexstring(this.method);
-    out += u.num2hexstring(this.parametersCount, 2, true);
+    out += num2VarInt(this.method.length);
+    out += str2hexstring(this.method);
+    out += num2hexstring(this.parametersCount, 2, true);
     out += this.hasReturnValue ? "01" : "00";
-    out += u.num2hexstring(this.callFlags);
+    out += num2hexstring(this.callFlags);
     return out;
   }
 

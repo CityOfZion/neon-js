@@ -1,6 +1,6 @@
 import { StringStream, ensureHex, reverseHex, BigInteger } from "../../u";
 import { TransactionAttribute, Witness, Signer } from "../components";
-import { TransactionLike } from "./Transaction";
+import type { TransactionLike } from "./Transaction";
 import { getScriptHashFromAddress } from "../../wallet";
 import logger from "../../logging";
 import { deserializeArrayOf } from "../lib";
