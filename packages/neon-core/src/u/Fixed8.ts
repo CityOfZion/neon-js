@@ -1,5 +1,5 @@
 import BN from "bignumber.js";
-import { reverseHex } from "./misc";
+import { reverseHex } from "./basic";
 
 const DECIMALS = 100000000;
 

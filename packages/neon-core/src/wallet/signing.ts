@@ -44,3 +44,15 @@ export function verify(hex: string, sig: string, publicKey: string): boolean {
   const messageHash = sha256(hex);
   return curve.verify(messageHash, ecdsaSignature, publicKey);
 }
+
+/**
+ * Generates a signature of the transaction based on given private key.
+ * @param tx - serialized unsigned transaction
+ * @param privateKey - private Key
+ * @returns Signature. Does not include tx.
+ *
+ * @deprecated please use sign(tx, privateKey).
+ */
+export function generateSignature(tx: string, privateKey: string): string {
+  return sign(tx, privateKey);
+}

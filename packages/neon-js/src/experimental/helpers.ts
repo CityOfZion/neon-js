@@ -68,14 +68,14 @@ export async function calculateNetworkFee(
       throw new Error(
         "Using a smart contract as a witness is not yet supported in neon-js"
       );
-    else if (u.isSignatureContract(witnessScript)) {
+    else if (sc.isSignatureContract(witnessScript)) {
       networkFeeSize += 67 + u.getSerializedSize(witnessScript);
       networkFee =
         execFeeFactor *
         (sc.OpCodePrices[sc.OpCode.PUSHDATA1] * 2 +
           sc.OpCodePrices[sc.OpCode.SYSCALL] +
           sc.getInteropServicePrice(sc.InteropServiceCode.NEO_CRYPTO_CHECKSIG));
-    } else if (u.isMultisigContract(witnessScript)) {
+    } else if (sc.isMultisigContract(witnessScript)) {
       const publicKeyCount = wallet.getPublicKeysFromVerificationScript(
         witnessScript.toString()
       ).length;

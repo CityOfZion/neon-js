@@ -14,3 +14,4 @@ export * from "./NEF";
 export * from "./CallFlags";
 export * from "./MethodToken";
 export * from "./types";
+export * from "./util";

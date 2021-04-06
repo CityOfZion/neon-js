@@ -1,9 +1,19 @@
-import { u, sc } from "../";
+import {
+  StringStream,
+  HexString,
+  ab2hexstring,
+  getSerializedSize,
+  num2hexstring,
+  str2hexstring,
+  num2VarInt,
+  hash256,
+} from "../u";
+import { MethodTokenLike, MethodTokenJson, MethodToken } from "./MethodToken";
 import { serializeArrayOf } from "../tx/lib";
 
 export interface NEFLike {
   compiler: string;
-  tokens: sc.MethodTokenLike[];
+  tokens: MethodTokenLike[];
   /** Base64 encoded string */
   script: string;
 }
@@ -11,7 +21,7 @@ export interface NEFLike {
 export interface NEFJson {
   magic: number;
   compiler: string;
-  tokens: sc.MethodTokenJson[];
+  tokens: MethodTokenJson[];
   /** Base64 encoded string */
   script: string;
   checksum: number;
@@ -21,7 +31,7 @@ export class NEF {
   private static MAX_SCRIPT_LENGTH = 512 * 1024;
   public static MAGIC = 0x3346454e;
   public compiler: string;
-  public tokens: sc.MethodToken[];
+  public tokens: MethodToken[];
   public script: string;
   #checksum?: number;
 
@@ -35,7 +45,7 @@ export class NEF {
   public constructor(obj: Partial<NEFLike>) {
     const { compiler = "", tokens = [], script = "" } = obj;
     this.compiler = compiler;
-    this.tokens = tokens.map((token) => new sc.MethodToken(token));
+    this.tokens = tokens.map((token) => new MethodToken(token));
     this.script = script;
   }
 
@@ -46,7 +56,7 @@ export class NEF {
 
     const nef = new NEF({
       compiler: json.compiler,
-      tokens: json.tokens.map((t) => sc.MethodToken.fromJson(t)),
+      tokens: json.tokens.map((t) => MethodToken.fromJson(t)),
       script: json.script,
     });
 
@@ -58,9 +68,9 @@ export class NEF {
   }
 
   public static fromBuffer(data: Buffer): NEF {
-    const reader = new u.StringStream(u.ab2hexstring(data));
+    const reader = new StringStream(ab2hexstring(data));
 
-    const magic = u.HexString.fromHex(reader.read(4), true).toNumber();
+    const magic = HexString.fromHex(reader.read(4), true).toNumber();
     if (magic !== this.MAGIC)
       throw new Error("NEF deserialization failure - incorrect magic");
 
@@ -78,7 +88,7 @@ export class NEF {
       );
     const tokens = [];
     for (let i = 0; i < tokenLength; i++) {
-      tokens.push(sc.MethodToken.fromStream(reader));
+      tokens.push(MethodToken.fromStream(reader));
     }
 
     if (reader.read(2) !== "0000")
@@ -123,28 +133,28 @@ export class NEF {
       32 + // magic
       64 + // compiler
       2 + // reserved
-      u.getSerializedSize(this.tokens) +
+      getSerializedSize(this.tokens) +
       2 + // reserved
-      u.getSerializedSize(u.HexString.fromHex(this.script)) +
+      getSerializedSize(HexString.fromHex(this.script)) +
       4
     ); // checksum
   }
 
   private serializeWithoutChecksum(): string {
     let out = "";
-    out += u.num2hexstring(NEF.MAGIC, 4, true);
-    out += u.str2hexstring(this.compiler).padEnd(128, "0");
+    out += num2hexstring(NEF.MAGIC, 4, true);
+    out += str2hexstring(this.compiler).padEnd(128, "0");
     out += "0000"; // reserved
     out += serializeArrayOf(this.tokens);
     out += "0000"; // reserved
-    out += u.num2VarInt(this.script.length / 2);
+    out += num2VarInt(this.script.length / 2);
     out += this.script;
     return out;
   }
 
   public serialize(): string {
     let out = this.serializeWithoutChecksum();
-    out += u.num2hexstring(this.checksum, 4, true);
+    out += num2hexstring(this.checksum, 4, true);
     return out;
   }
 
@@ -158,7 +168,7 @@ export class NEF {
 
   private computeCheckSum(): number {
     return Buffer.from(
-      u.hash256(this.serializeWithoutChecksum()),
+      hash256(this.serializeWithoutChecksum()),
       "hex"
     ).readUInt32LE();
   }

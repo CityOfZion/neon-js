@@ -1,4 +1,4 @@
-import { reverseHex } from "./misc";
+import { reverseHex } from "./basic";
 
 /**
  * A simple string stream that allows user to read a hexstring byte by byte using read().

@@ -24,9 +24,7 @@ import {
   getCurve,
   EllipticCurvePreset,
 } from "../u";
-import { sign } from "./signing";
 import { OpCode, InteropServiceCode, ScriptBuilder, OpToken } from "../sc";
-import { isPublicKey } from "./verify";
 
 const curve = getCurve(EllipticCurvePreset.SECP256R1);
 /**
@@ -112,11 +110,7 @@ export function getPublicKeyFromVerificationScript(script: string): string {
     throw new Error("script is not a single key account.");
   }
   const publicKeyToken = ops[0];
-  if (
-    publicKeyToken.code !== OpCode.PUSHDATA1 ||
-    !publicKeyToken.params ||
-    !isPublicKey(publicKeyToken.params)
-  ) {
+  if (publicKeyToken.code !== OpCode.PUSHDATA1 || !publicKeyToken.params) {
     throw new Error("cannot find public key");
   }
   return publicKeyToken.params;
@@ -162,16 +156,6 @@ export function getAddressFromScriptHash(scriptHash: string): string {
 export function getScriptHashFromAddress(address: string): string {
   const hash = ab2hexstring(base58.decode(address));
   return reverseHex(hash.substr(2, 40));
-}
-
-/**
- * Generates a signature of the transaction based on given private key.
- * @param tx - serialized unsigned transaction
- * @param privateKey - private Key
- * @returns Signature. Does not include tx.
- */
-export function generateSignature(tx: string, privateKey: string): string {
-  return sign(tx, privateKey);
 }
 
 /**

@@ -1,7 +1,4 @@
 import * as misc from "../../src/u/misc";
-import { HexString } from "../../src/u/HexString";
-import { getSerializedSize } from "../../src/u/misc";
-import { Witness } from "../../src/tx/components";
 
 describe("hexXor", () => {
   test("throws if inputs of different length", () => {
@@ -29,60 +26,5 @@ describe("reverseArray", () => {
     const input = [1, 2, 3, 4, 5];
     const result = misc.reverseArray(input);
     expect(result).toEqual([5, 4, 3, 2, 1]);
-  });
-});
-
-describe("reverseHex", () => {
-  test("throws if not hexstring", () => {
-    expect(() => misc.reverseHex("fg")).toThrow();
-  });
-
-  test("Reverses hex", () => {
-    const input = "000102030405060708090a0b0c0d0e0f";
-    const result = misc.reverseHex(input);
-    expect(result).toBe("0f0e0d0c0b0a09080706050403020100");
-  });
-});
-
-describe("getSerializedSize", () => {
-  test("size of HexString", () => {
-    const input = HexString.fromHex("112233");
-    const result = getSerializedSize(input);
-    expect(result).toBe(4);
-  });
-
-  test("size of number < 0xfd", () => {
-    const result = getSerializedSize(0xfc);
-    expect(result).toBe(1);
-  });
-
-  test("size of number <= 0xffff", () => {
-    // lower boundary
-    let result = getSerializedSize(0xfd);
-    expect(result).toBe(3);
-    // upper boundary
-    result = getSerializedSize(0xffff);
-    expect(result).toBe(3);
-  });
-
-  test("size of number > 0xffff", () => {
-    const result = getSerializedSize(0xffff + 1);
-    expect(result).toBe(5);
-  });
-
-  test("array of serializable objects", () => {
-    const input = [
-      new Witness({
-        invocationScript: "01".repeat(256),
-        verificationScript: "03",
-      }),
-      new Witness({
-        invocationScript: "01".repeat(256),
-        verificationScript: "03",
-      }),
-    ];
-
-    const result = getSerializedSize(input);
-    expect(result).toBe(523);
   });
 });
