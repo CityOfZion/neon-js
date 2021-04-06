@@ -21,7 +21,7 @@ export function calculateNetworkFee(
   const txClone = new tx.Transaction(txn);
   txClone.witnesses = txn.witnesses.map((w) => {
     const verificationScript = w.verificationScript;
-    if (u.isMultisigContract(verificationScript)) {
+    if (sc.isMultisigContract(verificationScript)) {
       const threshold = wallet.getSigningThresholdFromVerificationScript(
         verificationScript.toBigEndian()
       );
