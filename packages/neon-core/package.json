@@ -38,7 +38,6 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "axios": "0.21.1",
     "bn.js": "5.2.0",
     "bs58": "4.0.1",
     "buffer": "6.0.3",
@@ -47,7 +46,9 @@
     "loglevel": "1.7.1",
     "loglevel-plugin-prefix": "0.8.4",
     "scrypt-js": "3.0.1",
-    "secure-random": "1.1.2"
+    "secure-random": "1.1.2",
+    "abort-controller": "3.0.0",
+    "cross-fetch": "^3.1.4"
   },
   "devDependencies": {
     "@types/bn.js": "5.1.0",

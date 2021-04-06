@@ -1,7 +1,7 @@
 import { Query, RPCResponse, RPCErrorResponse } from "../Query";
 import logger from "../../logging";
-import Axios, { AxiosRequestConfig } from "axios";
-import { timeout } from "../../settings";
+import { fetch } from "cross-fetch";
+import { AbortController } from "abort-controller";
 
 const log = logger("rpc");
 
@@ -20,18 +20,27 @@ export async function sendQuery<TResponse>(
   config: RpcConfig = {}
 ): Promise<RPCResponse<TResponse>> {
   log.info(`RPC: ${url} executing Query[${query.method}]`);
-  const conf = Object.assign(
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      timeout: timeout.rpc,
+  const fetchConfig: RequestInit = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-    config
-  );
+    body: JSON.stringify(query.export()),
+  };
 
-  const response = await Axios.post(url, query.export(), conf);
-  return response.data as RPCResponse<TResponse>;
+  if (config.timeout) {
+    const timeoutController = new AbortController();
+    setTimeout(() => timeoutController.abort(), config.timeout);
+    fetchConfig.signal = timeoutController.signal;
+  }
+  const response = await fetch(url, fetchConfig);
+
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error(
+    `Encountered HTTP code ${response.status} while executing Query[${query.method}]`
+  );
 }
 
 /**
@@ -62,7 +71,7 @@ export class RpcDispatcher {
    */
   public async execute<TResponse>(
     query: Query<unknown[], TResponse>,
-    config?: AxiosRequestConfig
+    config?: RpcConfig
   ): Promise<TResponse> {
     const rpcResponse = await sendQuery(this.url, query, config ?? {});
     if (rpcResponse.error) {
