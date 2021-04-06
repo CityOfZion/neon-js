@@ -1,11 +1,11 @@
-import { ensureHex, reverseHex, hexXor } from "./misc";
+import { base642hex, hex2base64, ensureHex, reverseHex } from "./basic";
+import { hexXor } from "./misc";
 import {
   str2hexstring,
   hexstring2ab,
   ab2hexstring,
   hexstring2str,
 } from "./convert";
-import { base642hex, hex2base64 } from "./base64";
 
 export class HexString {
   /**

@@ -2,7 +2,7 @@ import {
   getCurve,
   EllipticCurvePreset,
   EllipticCurve,
-} from "../../src/u/curve";
+} from "../../src/u/basic/curve";
 
 type CurveData = string[][];
 describe("EllipticCurve", () => {

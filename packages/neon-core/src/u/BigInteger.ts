@@ -1,4 +1,4 @@
-import { reverseHex } from "./hex";
+import { reverseHex } from "./basic";
 import BN from "bn.js";
 import { HexString } from "./HexString";
 
