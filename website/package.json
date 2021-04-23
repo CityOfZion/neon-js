@@ -3,7 +3,7 @@
     "start": "docusaurus start",
     "build": "docusaurus build",
     "build:guides": "ljs2",
-    "publish": "aws s3 sync ./build/neon-js  s3://docs-coz/neo3/neon-js --acl public-read",
+    "publish": "aws s3 sync ./build  s3://docs-coz/neo3/neon-js --acl public-read",
     "write-translations": "./node_modules/.bin/docusaurus-write-translations",
     "version": "./node_modules/.bin/docusaurus-version",
     "release": "yarn build && yarn run publish",
