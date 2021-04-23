@@ -1,6 +1,7 @@
 ---
 id: index
 title: API
+sidebar_position: 1
 ---
 
 `neon-js` is laid out in a modules style, with each folder in the source code

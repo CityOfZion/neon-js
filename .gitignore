@@ -23,3 +23,6 @@ packages/**/dist
 
 # Eslint cache
 .eslintcache
+
+# Website
+website/.docusaurus
