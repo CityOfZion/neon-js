@@ -1,6 +1,7 @@
 ---
 id: overview
 title: Overview
+slug: /
 ---
 
 `neon-js` is a Javascript library to interface with NEO blockchain, providing
