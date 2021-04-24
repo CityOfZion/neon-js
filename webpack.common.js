@@ -1,5 +1,4 @@
 const path = require("path");
-const webpack = require("webpack");
 
 let env = process.env.NODE_ENV || "development";
 
@@ -26,7 +25,6 @@ module.exports = function (rootDir) {
           options: {
             projectReferences: true,
             compilerOptions: {
-              declarationDir: path.resolve(rootDir, "dist"),
               sourceMap: env === "development",
               module: "commonjs",
             },

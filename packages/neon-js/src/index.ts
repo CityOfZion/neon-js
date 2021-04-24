@@ -4,9 +4,8 @@ import * as neonCore from "@cityofzion/neon-core";
 import defaultNetworks from "./networks";
 const neonJs = apiPlugin(neonCore);
 import * as experimental from "./experimental";
-export { experimental };
-export const { api, settings, sc, rpc, wallet, CONST, u, tx, logging } = neonJs;
 
+const { api, settings, sc, rpc, wallet, CONST, u, tx, logging } = neonJs;
 const bootstrap: {
   [net: string]: Partial<neonCore.rpc.NetworkJSON>;
 } = defaultNetworks;
@@ -124,3 +123,5 @@ export default {
   CONST,
   experimental,
 };
+
+export { experimental, api, settings, sc, rpc, wallet, CONST, u, tx, logging };
