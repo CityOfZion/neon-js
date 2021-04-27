@@ -38,7 +38,10 @@ export function transformBalance({
         unspent: assetBalance.unspent.map(transformTx),
       });
     } else {
-      bal.addToken(assetBalance.asset_symbol, assetBalance.amount);
+      bal.addToken(
+        assetBalance.asset_symbol ?? assetBalance.asset,
+        assetBalance.amount
+      );
     }
   }
 

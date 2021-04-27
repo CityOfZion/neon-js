@@ -9,7 +9,7 @@ const addr = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
 const invalidAddr = "address";
 const emptyAddr = "AR6NuGFzZfzqbXR3YasfXNmR3VHVNKi2yo";
 
-const DORA_TESTNET_URL = "https://dora.coz.io/api/v1/neo2/mainnet";
+const DORA_TESTNET_URL = "https://dora.coz.io/api/v1/neo2/testnet";
 
 const provider = new neonJs.api.dora.instance(DORA_TESTNET_URL);
 
