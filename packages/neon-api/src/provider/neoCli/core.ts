@@ -1,11 +1,10 @@
 import { CONST, logging, rpc, u, wallet } from "@cityofzion/neon-core";
 import axios from "axios";
+import { transformBalance, transformClaims } from "./transform";
 import {
-  NeoCliClaimable,
   NeoCliGetClaimableResponse,
   NeoCliGetUnclaimedResponse,
   NeoCliGetUnspentsResponse,
-  NeoCliTx,
 } from "./responses";
 const log = logging.default("api");
 
@@ -17,21 +16,6 @@ function throwRpcError(err: rpc.RPCErrorResponse): void {
 
 export function getRPCEndpoint(url: string): string {
   return url;
-}
-
-function convertNeoCliTx(tx: NeoCliTx): wallet.CoinLike {
-  return { index: tx.n, txid: tx.txid, value: tx.value };
-}
-
-function convertNeoCliClaimable(c: NeoCliClaimable): wallet.ClaimItemLike {
-  return {
-    claim: c.unclaimed,
-    txid: c.txid,
-    index: c.n,
-    value: c.value,
-    start: c.start_height,
-    end: c.end_height,
-  };
 }
 
 /**
@@ -52,22 +36,11 @@ export async function getBalance(
   if (data.error) {
     throwRpcError(data.error);
   }
-  const bal = new wallet.Balance({
+  const bal = transformBalance({
     net: url,
-    address: data.result.address,
+    address,
+    balance: data.result.balance,
   });
-  for (const assetBalance of data.result.balance) {
-    if (assetBalance.amount === 0) {
-      continue;
-    }
-    if (assetBalance.unspent.length > 0) {
-      bal.addAsset(assetBalance.asset_symbol, {
-        unspent: assetBalance.unspent.map(convertNeoCliTx),
-      });
-    } else {
-      bal.addToken(assetBalance.asset_symbol, assetBalance.amount);
-    }
-  }
   log.info(`Retrieved Balance for ${address} from neonDB ${url}`);
   return bal;
 }
@@ -84,11 +57,7 @@ export async function getClaims(
   if (data.error) {
     throwRpcError(data.error);
   }
-  return new wallet.Claims({
-    net: url,
-    address: data.result.address,
-    claims: data.result.claimable.map(convertNeoCliClaimable),
-  });
+  return transformClaims({ net: url, address, claims: data.result.claimable });
 }
 
 export async function getMaxClaimAmount(
