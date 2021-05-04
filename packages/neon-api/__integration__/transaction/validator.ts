@@ -15,13 +15,13 @@ const sig = {
   invocationScript:
     "40f52d1206315dfac64c14ec2dfef1edd62f4460487c23be6bbbbf9080973784ca7dbfe4dfcf4b6b82f2921b968e0d693020b76be0b20171ac56e7da50ab1c4b06",
   verificationScript:
-    "0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef41747476aa",
+    "0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef4156e7b327",
 };
 const multiSig = {
   invocationScript:
     "40f52d1206315dfac64c14ec2dfef1edd62f4460487c23be6bbbbf9080973784ca7dbfe4dfcf4b6b82f2921b968e0d693020b76be0b20171ac56e7da50ab1c4b0640efe3ccf3a49dd670d8785a12218324f60a6b56ed5a628f15522b883a81b51ea9256c0be62008377b156eb1a76e6dc25aad776524c18eb01b0810ed833b15a1ca",
   verificationScript:
-    "110c2103118a2b7962fa0226fa35acf5d224855b691c7ea978d1afe2c538631d5f7be85e11417bce6ca5",
+    "110c2103118a2b7962fa0226fa35acf5d224855b691c7ea978d1afe2c538631d5f7be85e11419ed0dc3a",
 };
 
 describe("validateValidUntilBlock", () => {
@@ -131,7 +131,7 @@ describe("validateSystemFee", () => {
 
     test("script execution error in neoVM", async () => {
       const addressInHash160 = sc.ContractParam.hash160(
-        "NQrEVKgpx2qEg6DpVMT5H8kFa7kc2DFgqS"
+        "NPTmAHDxo6Pkyic8Nvu3kwyXoYJCvcCB6i"
       );
       const script = sc.createScript({
         scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,

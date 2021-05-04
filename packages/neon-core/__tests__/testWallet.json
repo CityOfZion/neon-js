@@ -1,145 +1,147 @@
 {
-  "name":null,
-  "version":"3.0",
-  "scrypt":{
-    "n":16384,
-    "r":8,
-    "p":8
+  "name": null,
+  "version": "1.0",
+  "scrypt": {
+    "n": 16384,
+    "r": 8,
+    "p": 8
   },
-  "accounts":[
+  "accounts": [
     {
-      "address":"NQrEVKgpx2qEg6DpVMT5H8kFa7kc2DFgqS",
-      "label":"A",
-      "isdefault":false,
-      "lock":false,
-      "key":"6PYWaEBMeD2Jzuy97CScCu5GpTErduZLW2Fi7zpPJKMKDoTXotUiiHvNhA",
-      "contract":{
-        "script":"DCECAoqZgm7cDJfRjiK2kyNz2QjTI6p/kmVqd\u002Bwm6IYWme9BdHR2qg==",
-        "parameters":[
+      "address": "NPTmAHDxo6Pkyic8Nvu3kwyXoYJCvcCB6i",
+      "label": "A",
+      "isDefault": false,
+      "lock": false,
+      "key": "6PYUUUFehvuqDB3uD8NqwBLcGJe92nhVSRXuJyjQdASttMVvX661t8Nr9B",
+      "contract": {
+        "script": "DCECAoqZgm7cDJfRjiK2kyNz2QjTI6p/kmVqd\u002Bwm6IYWme9BVuezJw==",
+        "parameters": [
           {
-            "name":"signature",
-            "type":"Signature"
+            "name": "signature",
+            "type": "Signature"
           }
         ],
-        "deployed":false
+        "deployed": false
       },
-      "extra":{
-        "WIF":"L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
-        "publicKey":"02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
-        "scriptHash":"b611bfa60886125e0071b56deeaf6efb40bd2336"
+      "extra": {
+        "WIF": "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
+        "publicKey": "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
+        "scriptHash": "0xa7cbfee3f01f89d58c042644b0b6df2d59a6eb26"
       }
     },
     {
-      "address":"NYaVsrMV9GS8aaspRS4odXf1WHZdMmJiPC",
-      "label":"B",
-      "isdefault":false,
-      "lock":false,
-      "key":"6PYUpn5uvskFoAaqYnasqG8ZzFrff2saWd9ehXegV5MS4HDeJLvnNbpB7C",
-      "contract":{
-        "script":"DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSclBdHR2qg==",
-        "parameters":[
+      "address": "NMBfzaEq2c5zodiNbLPoohVENARMbJim1r",
+      "label": "B",
+      "isDefault": false,
+      "lock": false,
+      "key": "6PYUmBuLcYxPAhigYaKQi2VAjmdf4d1zSdnD9aBVNtsfM1persEep9wa6S",
+      "contract": {
+        "script": "DCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSclBVuezJw==",
+        "parameters": [
           {
-            "name":"signature",
-            "type":"Signature"
+            "name": "signature",
+            "type": "Signature"
           }
         ],
-        "deployed":false
+        "deployed": false
       },
-      "extra":{
-        "WIF":"L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
-        "publicKey":"031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
-        "scriptHash":"04a781b6a8cd4de62ade3241d85b465a8eefea8a"
+      "extra": {
+        "WIF": "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
+        "publicKey": "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
+        "scriptHash": "0x118ba6f59931a56ec469770f7fc790ece96df00d"
       }
     },
     {
-      "address":"NWcpK2143ZjgzDYyQJhoKrodJUymHTxPzR",
-      "label":"C",
-      "isdefault":false,
-      "lock":false,
-      "key":"6PYRbKt54ad9t2uj63GZ5H5bK3XugYFD9W5eP86nfFPb5fW2ddJdR9W767",
-      "contract":{
-        "script":"DCECIyzo0uIGPc4EURMYUdR0Ib/E/B2k2xFvylMCwHVkYvpBdHR2qg==",
-        "parameters":[
+      "address": "NfVdwyaJbijrWkRagrvs4eSRQUpP7WpukT",
+      "label": "C",
+      "isDefault": false,
+      "lock": false,
+      "key": "6PYLQ9oCnnCUaBScegWweJFTKX9bXHetmxjfFkwRuzbdiSYjSpaEzK5haR",
+      "contract": {
+        "script": "DCECIyzo0uIGPc4EURMYUdR0Ib/E/B2k2xFvylMCwHVkYvpBVuezJw==",
+        "parameters": [
           {
-            "name":"signature",
-            "type":"Signature"
+            "name": "signature",
+            "type": "Signature"
           }
         ],
-        "deployed":false
+        "deployed": false
       },
-      "extra":{
-        "WIF":"KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
-        "publicKey":"02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
-        "scriptHash":"de83c554f07755e600c3485366de477e6ae76a75"
+      "extra": {
+        "WIF": "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG",
+        "publicKey": "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa"
       }
     },
     {
-      "address":"Ni8Dw2zt7nGidkvwr55vssvG2R7JAEXsBM",
-      "label":null,
-      "isdefault":false,
-      "lock":false,
-      "key":"6PYWaEBMeD2Jzuy97CScCu5GpTErduZLW2Fi7zpPJKMKDoTXotUiiHvNhA",
-      "contract":{
-        "script":"EgwhAgKKmYJu3AyX0Y4itpMjc9kI0yOqf5JlanfsJuiGFpnvDCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckMIQIjLOjS4gY9zgRRExhR1HQhv8T8HaTbEW/KUwLAdWRi\u002BhNBe85spQ==",
-        "parameters":[
+      "address": "NfScrtKDZFefNjVotBfrhEQR6GWhe8SXkH",
+      "label": "ABC multisig",
+      "isDefault": false,
+      "lock": false,
+      "key": "6PYUUUFehvuqDB3uD8NqwBLcGJe92nhVSRXuJyjQdASttMVvX661t8Nr9B",
+      "contract": {
+        "script": "EgwhAgKKmYJu3AyX0Y4itpMjc9kI0yOqf5JlanfsJuiGFpnvDCEDHY4WMM5kCWaWe8bZUiPSH0QwQTMAMUDDtSAE3JgTSckMIQIjLOjS4gY9zgRRExhR1HQhv8T8HaTbEW/KUwLAdWRi\u002BhNBntDcOg==",
+        "parameters": [
           {
-            "name":"parameter0",
-            "type":"Signature"
+            "name": "parameter0",
+            "type": "Signature"
           },
           {
-            "name":"parameter1",
-            "type":"Signature"
+            "name": "parameter1",
+            "type": "Signature"
           }
         ],
-        "deployed":false
+        "deployed": false
       },
-      "extra":{
-        "description":"Multisig 2 out of 3 made from A,B,C."
+      "extra": {
+        "description": "Multisig 2 out of 3 made from A,B,C."
       }
     },
     {
-      "address":"NYvLBq6UtdvQnqLWog2Vtgf6AY4D6M1Kim",
-      "label": "origin base",
-      "isdefault":false,
-      "lock":false,
-      "key":"6PYSrLSbkmvpb8tigYRy9svecVRzXXqiRpJGXPxArt9LjCk3VsZSJ759jy",
-      "contract":{
-        "script":"DCECjqOobfWnhSWHt3atyQ4\u002B5TwmsBGmH1aOYUZtQMaRqTFBdHR2qg==",
-        "parameters":[
+      "address": "NR4SHeS9kfgN5EXVcAuFwfu6Y56xaSPxg9",
+      "label": "origin multisig",
+      "isDefault": false,
+      "lock": false,
+      "key": "6PYUh4mXBQKoV23hc2PmTRPWYvnbxHqNhzkhmay6tJHJrdFvyhKGQZ3TzE",
+      "contract": {
+        "script": "EQwhAo6jqG31p4Ulh7d2rckOPuU8JrARph9WjmFGbUDGkakxEUGe0Nw6",
+        "parameters": [
           {
-            "name":"signature",
-            "type":"Signature"
+            "name": "parameter0",
+            "type": "Signature"
           }
         ],
-        "deployed":false
+        "deployed": false
       },
       "extra": {
         "publicKey": "028ea3a86df5a7852587b776adc90e3ee53c26b011a61f568e61466d40c691a931"
       }
     },
     {
-      "address":"NhxvE7rd27zdz3qTUdaBGpeckzd26VJHZr",
-      "label": "origin multisig",
-      "isdefault":false,
-      "lock":false,
-      "key":"6PYSrLSbkmvpb8tigYRy9svecVRzXXqiRpJGXPxArt9LjCk3VsZSJ759jy",
-      "contract":{
-        "script":"EQwhAo6jqG31p4Ulh7d2rckOPuU8JrARph9WjmFGbUDGkakxEUF7zmyl",
-        "parameters":[
+      "address": "Nf586VLNQE3mnriHyNR7k2pTCHm9jenLtc",
+      "label": "origin base",
+      "isDefault": false,
+      "lock": false,
+      "key": "6PYUh4mXBQKoV23hc2PmTRPWYvnbxHqNhzkhmay6tJHJrdFvyhKGQZ3TzE",
+      "contract": {
+        "script": "DCECjqOobfWnhSWHt3atyQ4\u002B5TwmsBGmH1aOYUZtQMaRqTFBVuezJw==",
+        "parameters": [
           {
-            "name":"parameter0",
-            "type":"Signature"
+            "name": "signature",
+            "type": "Signature"
           }
         ],
-        "deployed":false
+        "deployed": false
       },
       "extra": {
+        "WIF": "L5ZMZBEovRtVLri3H4pYuMyAcLciRKburJEgJrp2phfsgRpu5Lvq",
         "publicKey": "028ea3a86df5a7852587b776adc90e3ee53c26b011a61f568e61466d40c691a931"
       }
     }
   ],
-  "extra":{
-    "password":"wallet",
-    "description":"seed wallet for solonet 3.0.0-rc1"
+  "extra": {
+    "password": "wallet",
+    "description": "seed wallet for solonet 3.0.0-rc2",
+    "NEO": "ef4073a0f2b305a38ec4050e4d3d28bc40ea63f5",
+    "GAS": "d2a4cff31913016155e38e474a2c06d08be276cf"
   }
 }

@@ -233,7 +233,7 @@ describe("RPC Methods", () => {
       wsport: expect.any(Number),
       nonce: expect.any(Number),
       useragent: expect.any(String),
-      magic: expect.any(Number),
+      network: expect.any(Number),
     });
   });
 

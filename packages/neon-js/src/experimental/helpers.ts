@@ -74,7 +74,9 @@ export async function calculateNetworkFee(
         execFeeFactor *
         (sc.OpCodePrices[sc.OpCode.PUSHDATA1] * 2 +
           sc.OpCodePrices[sc.OpCode.SYSCALL] +
-          sc.getInteropServicePrice(sc.InteropServiceCode.NEO_CRYPTO_CHECKSIG));
+          sc.getInteropServicePrice(
+            sc.InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG
+          ));
     } else if (sc.isMultisigContract(witnessScript)) {
       const publicKeyCount = wallet.getPublicKeysFromVerificationScript(
         witnessScript.toString()
@@ -107,7 +109,7 @@ export async function calculateNetworkFee(
       networkFee +=
         execFeeFactor *
         (sc.getInteropServicePrice(
-          sc.InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
+          sc.InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG
         ) *
           publicKeyCount);
     }

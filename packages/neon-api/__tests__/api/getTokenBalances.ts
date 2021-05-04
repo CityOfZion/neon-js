@@ -40,7 +40,7 @@ describe("getTokenBalances", () => {
     } as unknown) as rpc.NeoServerRpcClient;
 
     const result = await getTokenBalances(
-      "NQrEVKgpx2qEg6DpVMT5H8kFa7kc2DFgqS",
+      "NPTmAHDxo6Pkyic8Nvu3kwyXoYJCvcCB6i",
       [
         "0000000000000000000000000000000000000000",
         "0000000000000000000000000000000000000001",
@@ -68,7 +68,7 @@ describe("getTokenBalances", () => {
     expect(
       async () =>
         await getTokenBalances(
-          "NQrEVKgpx2qEg6DpVMT5H8kFa7kc2DFgqS",
+          "NPTmAHDxo6Pkyic8Nvu3kwyXoYJCvcCB6i",
           [
             "0000000000000000000000000000000000000000",
             "0000000000000000000000000000000000000001",
@@ -94,7 +94,7 @@ describe("getTokenBalances", () => {
     expect(
       async () =>
         await getTokenBalances(
-          "NQrEVKgpx2qEg6DpVMT5H8kFa7kc2DFgqS",
+          "NPTmAHDxo6Pkyic8Nvu3kwyXoYJCvcCB6i",
           [
             "0000000000000000000000000000000000000000",
             "0000000000000000000000000000000000000001",

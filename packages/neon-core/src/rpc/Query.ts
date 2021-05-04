@@ -129,7 +129,7 @@ export interface GetVersionResult {
   wsport: number;
   nonce: number;
   useragent: string;
-  magic: number;
+  network: number;
 }
 
 export interface NodePeer {
