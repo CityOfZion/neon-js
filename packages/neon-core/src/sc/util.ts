@@ -16,7 +16,7 @@ export function isSignatureContract(input: HexString): boolean {
     script[0] != OpCode.PUSHDATA1 ||
     script[1] != PUBLIC_KEY_LENGTH ||
     script[35] != OpCode.SYSCALL ||
-    script.readUInt32LE(36) != 2859889780
+    script.readUInt32LE(36) != 666101590
   );
 }
 
@@ -89,7 +89,7 @@ export function isMultisigContract(input: HexString): boolean {
 
   i += 2;
 
-  if (script.readUInt32LE(i) != 2775371387) {
+  if (script.readUInt32LE(i) != 987549854) {
     return false;
   }
 

@@ -16,7 +16,7 @@ describe("calculateExecutionFees", () => {
     const result = calculateExecutionFee(
       [
         new OpToken(OpCode.PUSHDATA1, "0".repeat(66)),
-        new OpToken(OpCode.SYSCALL, InteropServiceCode.NEO_CRYPTO_CHECKSIG),
+        new OpToken(OpCode.SYSCALL, InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG),
       ],
       30
     );
@@ -34,7 +34,7 @@ describe("calculateExecutionFees", () => {
         new OpToken(OpCode.PUSH3),
         new OpToken(
           OpCode.SYSCALL,
-          InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG
+          InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG
         ),
       ],
       30

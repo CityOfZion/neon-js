@@ -91,7 +91,7 @@ export function getVerificationScriptFromPublicKey(publicKey: string): string {
   const sb = new ScriptBuilder();
   return sb
     .emit(OpCode.PUSHDATA1, "21" + publicKey)
-    .emitSysCall(InteropServiceCode.NEO_CRYPTO_CHECKSIG)
+    .emitSysCall(InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG)
     .build();
 }
 
@@ -105,7 +105,7 @@ export function getPublicKeyFromVerificationScript(script: string): string {
   if (
     sysCallToken === undefined ||
     sysCallToken.code !== OpCode.SYSCALL ||
-    (sysCallToken.params ?? "") !== InteropServiceCode.NEO_CRYPTO_CHECKSIG
+    (sysCallToken.params ?? "") !== InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG
   ) {
     throw new Error("script is not a single key account.");
   }

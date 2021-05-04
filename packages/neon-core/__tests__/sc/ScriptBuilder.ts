@@ -42,7 +42,7 @@ describe("emitSysCall", () => {
     const sb = new ScriptBuilder();
     const result = sb
       .emitSysCall(
-        InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG,
+        InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG,
         HexString.fromHex("a45f"),
         HexString.fromHex("2bc5")
       )

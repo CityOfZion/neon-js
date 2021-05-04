@@ -96,7 +96,7 @@ const scriptAndOpCodes = [
         "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa"
       ),
       new OpToken(OpCode.PUSH3),
-      new OpToken(OpCode.SYSCALL, InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG),
+      new OpToken(OpCode.SYSCALL, InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG),
     ],
   ],
   ["PUSHDATA4", "0e020000001234", [new OpToken(OpCode.PUSHDATA4, "1234")]],
