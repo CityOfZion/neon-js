@@ -36,6 +36,7 @@ const fixedPrices = {
   [InteropServiceCode.SYSTEM_ITERATOR_KEY]: 16,
   [InteropServiceCode.SYSTEM_ITERATOR_KEYS]: 16,
   [InteropServiceCode.SYSTEM_ITERATOR_VALUES]: 16,
+  [InteropServiceCode.SYSTEM_RUNTIME_BURNGAS]: 16,
   [InteropServiceCode.SYSTEM_RUNTIME_CHECKWITNESS]: 1024,
   [InteropServiceCode.SYSTEM_RUNTIME_GASLEFT]: 16,
   [InteropServiceCode.SYSTEM_RUNTIME_GETCALLINGSCRIPTHASH]: 16,
