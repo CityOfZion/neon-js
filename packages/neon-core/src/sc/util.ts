@@ -16,7 +16,8 @@ export function isSignatureContract(input: HexString): boolean {
     script[0] != OpCode.PUSHDATA1 ||
     script[1] != PUBLIC_KEY_LENGTH ||
     script[35] != OpCode.SYSCALL ||
-    script.readUInt32LE(36) != 666101590
+    script.slice(36, 40).toString("hex") !=
+      InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG
   );
 }
 
@@ -88,8 +89,10 @@ export function isMultisigContract(input: HexString): boolean {
   }
 
   i += 2;
-
-  if (script.readUInt32LE(i) != 987549854) {
+  if (
+    script.slice(i, i + 4).toString("hex") !=
+    InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG
+  ) {
     return false;
   }
 
