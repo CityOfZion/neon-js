@@ -109,8 +109,8 @@ export class TransactionValidator {
   public async validateSystemFee(
     autoFix = false
   ): Promise<ValidationSuggestion<u.BigInteger>> {
-    const { script, systemFee: prev } = this.transaction;
-    const invokeResponse = await this.rpcClient.invokeScript(script);
+    const { script, signers, systemFee: prev } = this.transaction;
+    const invokeResponse = await this.rpcClient.invokeScript(script, signers);
 
     if (invokeResponse.state === "FAULT") {
       return err(
