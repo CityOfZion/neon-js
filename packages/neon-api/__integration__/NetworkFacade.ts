@@ -112,7 +112,7 @@ describe("NetworkFacade", () => {
       (c) => c.publicKey === candidateToVoteFor.publicKey
     );
 
-    const newVotes = newCandidateStatus.votes;
+    const newVotes = parseInt(newCandidateStatus.votes);
     expect(newVotes).toBeGreaterThan(currentVotes);
   });
 });

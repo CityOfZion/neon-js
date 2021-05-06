@@ -12,7 +12,7 @@ type getCandidatesStack = [
       type: "Struct";
       value: [
         { type: "ByteArray"; value: string },
-        { type: "Integer"; value: number }
+        { type: "Integer"; value: string }
       ];
     }[];
   }
@@ -29,7 +29,7 @@ export async function getCandidates(
   return arrayOfCandidates[0].value.map((i) => {
     return {
       publicKey: u.HexString.fromBase64(i.value[0].value).toBigEndian(),
-      votes: i.value[1].value,
+      votes: parseInt(i.value[1].value),
     };
   });
 }
