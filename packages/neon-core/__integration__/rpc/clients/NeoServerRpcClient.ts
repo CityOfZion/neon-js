@@ -206,7 +206,7 @@ describe("NeoServerRpcClient", () => {
       wsport: expect.any(Number),
       nonce: expect.any(Number),
       useragent: expect.any(String),
-      magic: expect.any(Number),
+      network: expect.any(Number),
     });
   });
 
@@ -403,7 +403,7 @@ describe("NeoServerRpcClient", () => {
 
   test("getUnclaimedGas", async () => {
     const result = await client.getUnclaimedGas(
-      "NhxvE7rd27zdz3qTUdaBGpeckzd26VJHZr"
+      "NR4SHeS9kfgN5EXVcAuFwfu6Y56xaSPxg9"
     );
 
     expect(parseInt(result)).toBeGreaterThan(0);

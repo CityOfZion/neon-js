@@ -1,6 +1,7 @@
 {
     "name": "contract3",
     "groups": [],
+    "features": {},
     "abi": {
         "methods": [
             {

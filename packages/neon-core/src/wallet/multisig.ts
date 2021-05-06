@@ -29,7 +29,7 @@ export function constructMultiSigVerificationScript(
   });
   return sb
     .emitPush(keys.length)
-    .emitSysCall(InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG)
+    .emitSysCall(InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG)
     .build();
 }
 

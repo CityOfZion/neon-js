@@ -87,7 +87,7 @@ describe("setter", () => {
         {
           invocationScript: "",
           verificationScript:
-            "0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef41747476aa",
+            "0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef4156e7b327",
         },
       ]);
     });
@@ -106,7 +106,7 @@ describe("setter", () => {
         {
           invocationScript: "",
           verificationScript:
-            "0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef41747476aa",
+            "0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef4156e7b327",
         },
       ]);
     });
@@ -182,7 +182,7 @@ describe("template methods", () => {
         new tx.Witness({
           invocationScript: "",
           verificationScript:
-            "0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef41747476aa",
+            "0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef4156e7b327",
         }),
       ],
     });
@@ -192,7 +192,7 @@ describe("template methods", () => {
     const account = new wallet.Account(
       "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g"
     );
-    const destination = "NYaVsrMV9GS8aaspRS4odXf1WHZdMmJiPC";
+    const destination = "NMBfzaEq2c5zodiNbLPoohVENARMbJim1r";
 
     const result = new TransactionBuilder()
       .addNep17Transfer(
@@ -218,7 +218,7 @@ describe("template methods", () => {
         new tx.Witness({
           invocationScript: "",
           verificationScript:
-            "0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef41747476aa",
+            "0c2102028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef4156e7b327",
         }),
       ],
     });

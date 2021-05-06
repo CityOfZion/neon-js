@@ -42,12 +42,12 @@ describe("emitSysCall", () => {
     const sb = new ScriptBuilder();
     const result = sb
       .emitSysCall(
-        InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG,
+        InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG,
         HexString.fromHex("a45f"),
         HexString.fromHex("2bc5")
       )
       .build();
-    expect(result).toBe("0c02c52b0c025fa4417bce6ca5");
+    expect(result).toBe("0c02c52b0c025fa4419ed0dc3a");
   });
 });
 

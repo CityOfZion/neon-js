@@ -30,11 +30,11 @@ export function calculateExecutionFee(
         token.params.length === 8
       ) {
         const interopCode = token.params as InteropServiceCode;
-        if (interopCode === InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG) {
+        if (interopCode === InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG) {
           const threshold = extractThresholdForMultiSig(opTokens, i);
           return BigInteger.fromNumber(OpCodePrices[token.code]).add(
             BigInteger.fromNumber(
-              getInteropServicePrice(InteropServiceCode.NEO_CRYPTO_CHECKSIG)
+              getInteropServicePrice(InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG)
             )
               .mul(threshold)
               .mul(factor)

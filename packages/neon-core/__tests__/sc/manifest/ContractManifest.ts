@@ -13,6 +13,7 @@ const defaultManifestLike: ContractManifestLike = {
     methods: [],
   },
   groups: [],
+  features: {},
   permissions: [],
   trusts: "*",
   extra: undefined,
@@ -70,6 +71,7 @@ const definedManifestLike: ContractManifestLike = {
       signature: "this_is_a_signature",
     },
   ],
+  features: {},
   permissions: [
     {
       contract: "a1760976db5fcdfab2a9930e8f6ce875b2d18225",
@@ -96,6 +98,7 @@ describe("fromJson", () => {
   test("neo", () => {
     const neoManifestJson = {
       groups: [],
+      features: {},
       supportedstandards: ["NEP-5"],
       name: "NeoToken",
       abi: {

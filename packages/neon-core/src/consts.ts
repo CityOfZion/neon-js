@@ -12,10 +12,8 @@ export enum NATIVE_CONTRACT_HASH {
   PolicyContract = "cc5e4edd9f5f8dba8bb65734541df7a1c081c67b",
   ManagementContract = "fffdc93764dbaddd97c48f252a53ea4643faa3fd",
   OracleContract = "fe924b7cfe89ddd271abaf7210a80a7e11178758",
-  DesignationContract = "49cf4e5378ffcd4dec034fd98a174c5491e395e2", // renamed to RoleManagement
   LedgerContract = "da65b600f7124ce6c79950c1772a36403104f2be",
   RoleManagement = "49cf4e5378ffcd4dec034fd98a174c5491e395e2",
-  NameService = "7a8fcf0392cd625647907afa8e45cc66872b596b",
   StdLib = "acce6fd80d44e1796aa0c2c625e9e4e0ce39efc0",
   CryptoLib = "726cb6e0cd8628a1350a611384688911ab75f51b",
 }

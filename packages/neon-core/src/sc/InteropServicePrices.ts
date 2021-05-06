@@ -12,8 +12,8 @@ const fixedPrices = {
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETTRANSACTION]: 32768,
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETTRANSACTIONFROMBLOCK]: 32768,
   [InteropServiceCode.SYSTEM_BLOCKCHAIN_GETTRANSACTIONHEIGHT]: 32768,
-  [InteropServiceCode.NEO_CRYPTO_CHECKSIG]: 32768,
-  [InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG]: 0,
+  [InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG]: 32768,
+  [InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG]: 0,
   [InteropServiceCode.SYSTEM_CALLBACK_CREATE]: 16,
   [InteropServiceCode.SYSTEM_CALLBACK_CREATEFROMMETHOD]: 32768,
   [InteropServiceCode.SYSTEM_CALLBACK_CREATEFROMSYSCALL]: 16,
@@ -36,6 +36,7 @@ const fixedPrices = {
   [InteropServiceCode.SYSTEM_ITERATOR_KEY]: 16,
   [InteropServiceCode.SYSTEM_ITERATOR_KEYS]: 16,
   [InteropServiceCode.SYSTEM_ITERATOR_VALUES]: 16,
+  [InteropServiceCode.SYSTEM_RUNTIME_BURNGAS]: 16,
   [InteropServiceCode.SYSTEM_RUNTIME_CHECKWITNESS]: 1024,
   [InteropServiceCode.SYSTEM_RUNTIME_GASLEFT]: 16,
   [InteropServiceCode.SYSTEM_RUNTIME_GETCALLINGSCRIPTHASH]: 16,
@@ -63,7 +64,7 @@ function getStoragePrice(size: number): number {
 }
 
 function getCheckMultiSigPrice(size: number): number {
-  return size * fixedPrices[InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG];
+  return size * fixedPrices[InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG];
 }
 
 type fixedPriceInteropServiceCode = keyof typeof fixedPrices;
@@ -87,7 +88,7 @@ export function getInteropServicePrice(
     );
   }
   switch (service) {
-    case InteropServiceCode.NEO_CRYPTO_CHECKMULTISIG:
+    case InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG:
       return getCheckMultiSigPrice(param.size);
     case InteropServiceCode.SYSTEM_STORAGE_PUT:
     case InteropServiceCode.SYSTEM_STORAGE_DELETE:

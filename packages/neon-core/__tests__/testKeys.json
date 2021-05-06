@@ -5,15 +5,15 @@
     "publicKey": "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
     "wif": "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g",
     "passphrase": "city of zion",
-    "encryptedWif": "6PYWaEBMd9UTVFKi1YahYXY5NMLDg9U6w2gpQYUnx8wvaFgdo8EeVPaD7o"
+    "encryptedWif": "6PYUUUFei9PBBfVkSn8q7hFCnewWFRBKPxcn6Kz6Bmk3FqWyLyuTQE2XFH"
   },
   "b": {
-    "address": "NYaVsrMV9GS8aaspRS4odXf1WHZdMmJiPC",
+    "address": "NMBfzaEq2c5zodiNbLPoohVENARMbJim1r",
     "privateKey": "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69",
     "publicKey": "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
     "wif": "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
     "passphrase": "password",
-    "encryptedWif": "6PYUpn5uvskFoAaqYnasqG8ZzFrff2saWd9ehXegV5MS4HDeJLvnNbpB7C"
+    "encryptedWif": "6PYUmBuLcYxPAhigYaKQi2VAjmdf4d1zSdnD9aBVNtsfM1persEep9wa6S"
   },
   "c": {
     "address": "NWcpK2143ZjgzDYyQJhoKrodJUymHTxPzR",
