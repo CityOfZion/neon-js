@@ -219,7 +219,7 @@ describe("RPC Methods", () => {
       expect(v).toMatchObject({
         publickey: expect.any(String),
         active: expect.any(Boolean),
-        votes: expect.any(Number),
+        votes: expect.any(String),
       })
     );
   });

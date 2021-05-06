@@ -192,8 +192,10 @@ describe("NeoServerRpcClient", () => {
       expect(v).toMatchObject({
         publickey: expect.any(String),
         active: expect.any(Boolean),
-        votes: expect.any(Number),
+        votes: expect.any(String),
       });
+
+      expect(parseInt(v.votes)).toBeDefined();
     });
   });
 

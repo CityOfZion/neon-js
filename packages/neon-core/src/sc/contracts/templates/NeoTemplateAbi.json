@@ -1,11 +1,70 @@
 {
   "methods": [
     {
-      "name": "totalSupply",
-      "parameters": [],
-      "offset": 0,
+      "name": "balanceOf",
+      "parameters": [
+        {
+          "name": "account",
+          "type": "Hash160"
+        }
+      ],
       "returntype": "Integer",
+      "offset": 0,
       "safe": true
+    },
+    {
+      "name": "decimals",
+      "parameters": [],
+      "returntype": "Integer",
+      "offset": 7,
+      "safe": true
+    },
+    {
+      "name": "getCandidates",
+      "parameters": [],
+      "returntype": "Array",
+      "offset": 14,
+      "safe": true
+    },
+    {
+      "name": "getCommittee",
+      "parameters": [],
+      "returntype": "Array",
+      "offset": 21,
+      "safe": true
+    },
+    {
+      "name": "getGasPerBlock",
+      "parameters": [],
+      "returntype": "Integer",
+      "offset": 28,
+      "safe": true
+    },
+    {
+      "name": "getNextBlockValidators",
+      "parameters": [],
+      "returntype": "Array",
+      "offset": 35,
+      "safe": true
+    },
+    {
+      "name": "getRegisterPrice",
+      "parameters": [],
+      "returntype": "Integer",
+      "offset": 42,
+      "safe": true
+    },
+    {
+      "name": "registerCandidate",
+      "parameters": [
+        {
+          "name": "pubkey",
+          "type": "PublicKey"
+        }
+      ],
+      "returntype": "Boolean",
+      "offset": 49,
+      "safe": false
     },
     {
       "name": "setGasPerBlock",
@@ -15,104 +74,34 @@
           "type": "Integer"
         }
       ],
-      "offset": 0,
-      "returntype": "Boolean",
+      "returntype": "Void",
+      "offset": 56,
       "safe": false
     },
     {
-      "name": "getGasPerBlock",
-      "parameters": [],
-      "offset": 0,
-      "returntype": "Integer",
-      "safe": true
-    },
-    {
-      "name": "unclaimedGas",
+      "name": "setRegisterPrice",
       "parameters": [
         {
-          "name": "account",
-          "type": "ByteArray"
-        },
-        {
-          "name": "end",
+          "name": "registerPrice",
           "type": "Integer"
         }
       ],
-      "offset": 0,
+      "returntype": "Void",
+      "offset": 63,
+      "safe": false
+    },
+    {
+      "name": "symbol",
+      "parameters": [],
+      "returntype": "String",
+      "offset": 70,
+      "safe": true
+    },
+    {
+      "name": "totalSupply",
+      "parameters": [],
       "returntype": "Integer",
-      "safe": true
-    },
-    {
-      "name": "registerCandidate",
-      "parameters": [
-        {
-          "name": "pubkey",
-          "type": "ByteArray"
-        }
-      ],
-      "offset": 0,
-      "returntype": "Boolean",
-      "safe": false
-    },
-    {
-      "name": "unregisterCandidate",
-      "parameters": [
-        {
-          "name": "pubkey",
-          "type": "ByteArray"
-        }
-      ],
-      "offset": 0,
-      "returntype": "Boolean",
-      "safe": false
-    },
-    {
-      "name": "vote",
-      "parameters": [
-        {
-          "name": "account",
-          "type": "ByteArray"
-        },
-        {
-          "name": "voteTo",
-          "type": "ByteArray"
-        }
-      ],
-      "offset": 0,
-      "returntype": "Boolean",
-      "safe": false
-    },
-    {
-      "name": "getCandidates",
-      "parameters": [],
-      "offset": 0,
-      "returntype": "Array",
-      "safe": true
-    },
-    {
-      "name": "getCommittee",
-      "parameters": [],
-      "offset": 0,
-      "returntype": "Array",
-      "safe": true
-    },
-    {
-      "name": "getNextBlockValidators",
-      "parameters": [],
-      "offset": 0,
-      "returntype": "Array",
-      "safe": true
-    },
-    {
-      "name": "balanceOf",
-      "parameters": [
-        {
-          "name": "account",
-          "type": "ByteArray"
-        }
-      ],
-      "offset": 0,
-      "returntype": "Integer",
+      "offset": 77,
       "safe": true
     },
     {
@@ -120,11 +109,11 @@
       "parameters": [
         {
           "name": "from",
-          "type": "ByteArray"
+          "type": "Hash160"
         },
         {
           "name": "to",
-          "type": "ByteArray"
+          "type": "Hash160"
         },
         {
           "name": "amount",
@@ -135,23 +124,53 @@
           "type": "Any"
         }
       ],
-      "offset": 0,
       "returntype": "Boolean",
+      "offset": 84,
       "safe": false
     },
     {
-      "name": "symbol",
-      "parameters": [],
-      "offset": 0,
-      "returntype": "String",
+      "name": "unclaimedGas",
+      "parameters": [
+        {
+          "name": "account",
+          "type": "Hash160"
+        },
+        {
+          "name": "end",
+          "type": "Integer"
+        }
+      ],
+      "returntype": "Integer",
+      "offset": 91,
       "safe": true
     },
     {
-      "name": "decimals",
-      "parameters": [],
-      "offset": 0,
-      "returntype": "Integer",
-      "safe": true
+      "name": "unregisterCandidate",
+      "parameters": [
+        {
+          "name": "pubkey",
+          "type": "PublicKey"
+        }
+      ],
+      "returntype": "Boolean",
+      "offset": 98,
+      "safe": false
+    },
+    {
+      "name": "vote",
+      "parameters": [
+        {
+          "name": "account",
+          "type": "Hash160"
+        },
+        {
+          "name": "voteTo",
+          "type": "PublicKey"
+        }
+      ],
+      "returntype": "Boolean",
+      "offset": 105,
+      "safe": false
     }
   ],
   "events": [

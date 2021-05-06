@@ -1,5 +1,6 @@
 import { rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { getTokenInfos } from "./api";
+import { Candidate, getCandidates } from "./api/getCandidates";
 import {
   TransactionBuilder,
   TransactionValidator,
@@ -111,6 +112,32 @@ export class NetworkFacade {
     config: signingConfig
   ): Promise<string> {
     const txn = TransactionBuilder.newBuilder().addGasClaim(acct).build();
+    const validateResult = await this.validate(txn);
+
+    if (!validateResult.valid) {
+      throw new Error("Unable to validate transaction");
+    }
+
+    const signedTxn = await this.sign(txn, config);
+    const sendResult = await this.getRpcNode().sendRawTransaction(signedTxn);
+    return sendResult;
+  }
+
+  /**
+   * Convenience method for getting list of candidates.
+   */
+  public async getCandidates(): Promise<Candidate[]> {
+    return getCandidates(this.getRpcNode());
+  }
+  public async vote(
+    acct: wallet.Account,
+    candidatePublicKey: string,
+    config: signingConfig
+  ): Promise<string> {
+    const txn = TransactionBuilder.newBuilder()
+      .addVote(acct, candidatePublicKey)
+      .build();
+
     const validateResult = await this.validate(txn);
 
     if (!validateResult.valid) {

@@ -53,6 +53,27 @@ export class TransactionBuilder {
   }
 
   /**
+   * Adds the logic to vote for a candidate.
+   * @param account - Account containing the NEO.
+   * @param candidatePublicKey - The candidate's publickey in hex big endian.
+   */
+  public addVote(
+    account: wallet.Account,
+    candidatePublicKey: string
+  ): TransactionBuilder {
+    const address = account.address;
+
+    return this.addContractCall(
+      sc.NeoContract.INSTANCE.vote(address, candidatePublicKey)
+    )
+      .addSigners({
+        account: account.scriptHash,
+        scopes: tx.WitnessScope.CalledByEntry,
+      })
+      .addEmptyWitness(account);
+  }
+
+  /**
    * Sets an account to pay fees for this transaction.
    * The first Signer defaults to the payer.
    * @param account - Account to pay fees from.
