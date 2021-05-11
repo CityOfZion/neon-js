@@ -2,6 +2,9 @@ import { NEF } from "../../src/sc/NEF";
 import { CallFlags } from "../../src/sc";
 import { Buffer } from "buffer";
 
+import { readFileSync } from "fs";
+import { join as joinPath } from "path";
+
 describe("constructor", () => {
   test("ok", () => {
     const result = new NEF({
@@ -87,6 +90,16 @@ describe("fromBuffer", () => {
     expect(nef.tokens[0].callFlags).toBe(CallFlags.None);
     expect(nef.script).toBe("40");
     expect(nef.checksum).toBe(1178442000);
+  });
+
+  test("local file: djnicholson.NeoPetShopContract", () => {
+    const nefFile = readFileSync(
+      joinPath(__dirname, "./djnicholson.NeoPetShopContract.nef")
+    );
+
+    const nef = NEF.fromBuffer(nefFile);
+
+    expect(nef.checksum).toBeDefined();
   });
 
   test("incorrect magic", () => {
