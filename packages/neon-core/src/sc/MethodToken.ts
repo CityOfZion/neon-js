@@ -67,7 +67,7 @@ export class MethodToken {
       );
     const parametersCount = Buffer.from(reader.read(2), "hex").readUInt16LE();
     const hasReturnValue = reader.read(1) !== "00";
-    const flags = Number.parseInt(reader.read(1)) as CallFlags;
+    const flags = Number.parseInt(reader.read(1), 16) as CallFlags;
     return new MethodToken({
       hash: hash,
       method: method,

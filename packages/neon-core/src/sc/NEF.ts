@@ -167,10 +167,9 @@ export class NEF {
   }
 
   private computeCheckSum(): number {
-    return Buffer.from(
-      hash256(this.serializeWithoutChecksum()),
-      "hex"
-    ).readUInt32LE();
+    const data = this.serializeWithoutChecksum();
+    const hash = hash256(data);
+    return Buffer.from(hash, "hex").readUInt32LE();
   }
 }
 
