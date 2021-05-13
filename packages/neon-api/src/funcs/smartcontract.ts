@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { tx, u } from "@cityofzion/neon-core";
 import { getVerificationSignatureForSmartContract } from "./common";
 import { ManagedApiBasicConfig } from "./types";
@@ -13,7 +14,7 @@ export async function addAttributeIfExecutingAsSmartContract<
   if (!config.sendingFromSmartContract) {
     return config;
   }
-  config.tx!.addAttribute(
+  config.tx?.addAttribute(
     tx.TxAttrUsage.Script,
     u.reverseHex(config.sendingFromSmartContract)
   );

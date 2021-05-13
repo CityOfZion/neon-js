@@ -101,12 +101,14 @@ describe("getSignature", () => {
     const mockDer = "9999";
     const expectedSig = "9876";
     const mockLedgerLib = {
-      send: jest.fn().mockImplementation(async (cla, ins, p1, p2, ...args) => {
-        if (p1 === 0x80) {
-          return Buffer.from(mockDer, "hex");
-        }
-        return Buffer.from("9000", "hex");
-      }),
+      send: jest
+        .fn()
+        .mockImplementation(async (_cla, _ins, p1, _p2, ..._args) => {
+          if (p1 === 0x80) {
+            return Buffer.from(mockDer, "hex");
+          }
+          return Buffer.from("9000", "hex");
+        }),
     } as any;
     DerToHexSignature.mockImplementationOnce(() => expectedSig);
 

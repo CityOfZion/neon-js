@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { tx, u } from "@cityofzion/neon-core";
 import { getVerificationSignatureForSmartContract } from "./common";
 import { DoInvokeConfig } from "./types";

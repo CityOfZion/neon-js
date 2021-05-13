@@ -29,7 +29,7 @@ export class TransactionOutput {
     symbol: string,
     value: number | Fixed8,
     address: string
-  ) {
+  ): TransactionOutput {
     const assetId = ASSET_ID[symbol];
     const scriptHash = getScriptHashFromAddress(address);
     return new TransactionOutput({ assetId, value, scriptHash });

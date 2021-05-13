@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { rpc, tx, u, wallet } from "@cityofzion/neon-core";
 import { ManagedApiBasicConfig } from "./types";
 
@@ -6,6 +7,7 @@ import { ManagedApiBasicConfig } from "./types";
  * @param obj - Object to check.
  * @param props - List of properties to check.
  */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function checkProperty<T extends object, K extends keyof T>(
   obj: T,
   ...props: K[]

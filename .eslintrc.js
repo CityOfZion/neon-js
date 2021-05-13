@@ -17,6 +17,10 @@ module.exports = {
       },
     ],
     "@typescript-eslint/no-non-null-assertion": ["warn"],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { varsIgnorePattern: "^_", argsIgnorePattern: "^_" },
+    ],
     "@typescript-eslint/naming-convention": [
       "error",
       {
@@ -25,5 +29,6 @@ module.exports = {
         leadingUnderscore: "allow",
       },
     ],
+    "@typescript-eslint/no-explicit-any": 0,
   },
 };

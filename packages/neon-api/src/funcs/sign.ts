@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { tx, wallet } from "@cityofzion/neon-core";
 import { checkProperty } from "./common";
 import { ManagedApiBasicConfig } from "./types";

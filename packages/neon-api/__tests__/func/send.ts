@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 jest.mock("@cityofzion/neon-core");
 import { logging as _logging, rpc as _rpc } from "@cityofzion/neon-core";
 import { mocked } from "ts-jest/utils";
@@ -22,7 +23,7 @@ describe("sendTx", () => {
     rpc.Query.sendRawTransaction.mockImplementationOnce(() => ({
       execute: mockExecute,
     }));
-    const result = await send.sendTx(config);
+    await send.sendTx(config);
     expect(config).toHaveProperty("response");
     expect(config.response!.result).toBe(false);
     expect(rpc.Query.sendRawTransaction).toBeCalledWith(config.tx);
@@ -41,7 +42,7 @@ describe("sendTx", () => {
     rpc.Query.sendRawTransaction.mockImplementationOnce(() => ({
       execute: mockExecute,
     }));
-    const result = await send.sendTx(config);
+    await send.sendTx(config);
     expect(config).toHaveProperty("response");
     expect(config.response!).toEqual({
       result: true,
@@ -59,7 +60,7 @@ describe("applyTxToBalance", () => {
       balance: { applyTx: jest.fn() } as any,
     } as SendAssetConfig;
 
-    const result = await send.applyTxToBalance(config);
+    await send.applyTxToBalance(config);
     expect(config.balance.applyTx).not.toBeCalled();
   });
 
@@ -70,7 +71,7 @@ describe("applyTxToBalance", () => {
       balance: { applyTx: jest.fn() } as any,
     } as SendAssetConfig;
 
-    const result = await send.applyTxToBalance(config);
+    await send.applyTxToBalance(config);
     expect(config.balance.applyTx).toBeCalledWith(config.tx, false);
   });
 });

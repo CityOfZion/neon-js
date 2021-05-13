@@ -61,9 +61,9 @@ async function verifyAssetBalance(
   return new AssetBalance(newAssetBalance);
 }
 
-function exportAssets(assets: {
-  [sym: string]: AssetBalance;
-}): { [sym: string]: AssetBalanceLike } {
+function exportAssets(assets: { [sym: string]: AssetBalance }): {
+  [sym: string]: AssetBalanceLike;
+} {
   const output: { [sym: string]: AssetBalanceLike } = {};
   const keys = Object.keys(assets);
   for (const key of keys) {
@@ -72,7 +72,9 @@ function exportAssets(assets: {
   return output;
 }
 
-function exportTokens(tokens: { [sym: string]: Fixed8 }) {
+function exportTokens(tokens: {
+  [sym: string]: Fixed8;
+}): Record<string, number> {
   const out: { [sym: string]: number } = {};
   Object.keys(tokens).forEach((symbol) => {
     out[symbol] = tokens[symbol].toNumber();
@@ -107,7 +109,7 @@ export class Balance {
       const keys = Object.keys(bal.assets);
       for (const key of keys) {
         if (typeof bal.assets[key] === "object") {
-          this.addAsset(key, bal.assets![key]);
+          this.addAsset(key, bal.assets?.[key]);
         }
       }
     }
@@ -116,7 +118,7 @@ export class Balance {
     if (typeof bal.tokens === "object") {
       const keys = Object.keys(bal.tokens);
       for (const key of keys) {
-        this.addToken(key, bal.tokens![key]);
+        this.addToken(key, bal.tokens?.[key]);
       }
     }
   }
@@ -164,7 +166,7 @@ export class Balance {
     const symbols = this.assetSymbols;
     // Spend coins
     for (const input of tx.inputs) {
-      const findFunc = (el: Coin) =>
+      const findFunc = (el: Coin): boolean =>
         el.txid === input.prevHash && el.index === input.prevIndex;
       for (const sym of symbols) {
         const assetBalance = this.assets[sym];
@@ -188,7 +190,7 @@ export class Balance {
       }
       const coin = new Coin({ index: i, txid: hash, value: output.value });
       if (confirmed) {
-        const findFunc = (el: Coin) =>
+        const findFunc = (el: Coin): boolean =>
           el.txid === coin.txid && el.index === coin.index;
         const unconfirmedIndex = assetBalance.unconfirmed.findIndex(findFunc);
         if (unconfirmedIndex >= 0) {

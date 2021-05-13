@@ -66,6 +66,7 @@ export class PublishTransaction extends BaseTransaction {
         `version need to be less or equal than 1. Got ${tx.version}`
       );
     }
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     let NeedStorage = false;
     if (tx.version >= 1) {
       NeedStorage = !!parseInt(ss.read(1), 16);
@@ -139,7 +140,7 @@ export class PublishTransaction extends BaseTransaction {
     out += num2VarInt(this.parameterList.length);
     out += ab2hexstring(this.parameterList);
     if (this.version >= 1) {
-      out += num2hexstring(this.needStorage, 1);
+      out += num2hexstring(this.needStorage ? 1 : 0, 1);
     }
     out += num2VarInt(this.returnType);
     out += num2VarInt(this.name.length);

@@ -59,7 +59,10 @@ export class Transaction extends BaseTransaction {
   public static deserialize<T extends BaseTransaction>(hex: string): T {
     const ss = new StringStream(hex);
     let txObj = deserializeType(ss);
-    const txClass = getType(txObj.type!);
+    if (txObj.type === undefined) {
+      throw new Error("Deserialization error: TransactionType is undefined!");
+    }
+    const txClass = getType(txObj.type);
     txObj = deserializeVersion(ss, txObj);
     txObj = txClass.deserializeExclusive(ss, txObj);
     txObj = deserializeAttributes(ss, txObj);
@@ -72,8 +75,8 @@ export class Transaction extends BaseTransaction {
   }
 
   public static deserializeExclusive(
-    ss: StringStream,
-    tx: Partial<TransactionLike>
+    _ss: StringStream,
+    _tx: Partial<TransactionLike>
   ): Partial<TransactionLike> {
     throw new Error("Method not implemented.");
   }

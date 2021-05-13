@@ -10,9 +10,7 @@ describe("addAttributeIfExecutingAsSmartContract", () => {
       tx: { addAttribute: jest.fn() },
     } as any;
 
-    const result = await smartcontract.addAttributeIfExecutingAsSmartContract(
-      config
-    );
+    await smartcontract.addAttributeIfExecutingAsSmartContract(config);
     expect(config.tx.addAttribute).not.toBeCalled();
   });
 
@@ -25,9 +23,7 @@ describe("addAttributeIfExecutingAsSmartContract", () => {
       tx: { addAttribute: jest.fn() },
     } as any;
 
-    const result = await smartcontract.addAttributeIfExecutingAsSmartContract(
-      config
-    );
+    await smartcontract.addAttributeIfExecutingAsSmartContract(config);
     expect(config.tx.addAttribute).toBeCalledWith(
       tx.TxAttrUsage.Script,
       "11c4d1f4fba619f2628870d36e3a9773e874705b"
@@ -41,9 +37,7 @@ describe("addSignatureIfExecutingAsSmartContract", () => {
       tx: { addAttribute: jest.fn() },
     } as any;
 
-    const result = await smartcontract.addSignatureIfExecutingAsSmartContract(
-      config
-    );
+    await smartcontract.addSignatureIfExecutingAsSmartContract(config);
     expect(config.tx.addAttribute).not.toBeCalled();
     expect(getVerificationSignatureForSmartContract).not.toBeCalled();
   });
@@ -61,9 +55,7 @@ describe("addSignatureIfExecutingAsSmartContract", () => {
     getVerificationSignatureForSmartContract.mockResolvedValueOnce(
       mockSignature
     );
-    const result = await smartcontract.addSignatureIfExecutingAsSmartContract(
-      config
-    );
+    await smartcontract.addSignatureIfExecutingAsSmartContract(config);
     expect(getVerificationSignatureForSmartContract).toBeCalledWith(
       config.url,
       config.sendingFromSmartContract

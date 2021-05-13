@@ -1,5 +1,5 @@
 import { ASSET_ID } from "../../src/consts";
-import { TransactionOutput } from "../../src/tx";
+import { TransactionInput, TransactionOutput } from "../../src/tx";
 import { calculateInputs } from "../../src/tx/calculate";
 import { Balance } from "../../src/wallet";
 import { AssetBalanceLike } from "../../src/wallet/components";
@@ -14,7 +14,8 @@ describe("calculateInputs", () => {
         scriptHash: "ab",
       }),
     ];
-    const f = () => calculateInputs(balance, intents);
+    const f = (): { inputs: TransactionInput[]; change: TransactionOutput[] } =>
+      calculateInputs(balance, intents);
     expect(f).toThrow();
   });
 
@@ -31,7 +32,8 @@ describe("calculateInputs", () => {
         scriptHash: "ab",
       }),
     ];
-    const f = () => calculateInputs(balance, intents);
+    const f = (): { inputs: TransactionInput[]; change: TransactionOutput[] } =>
+      calculateInputs(balance, intents);
     expect(f).toThrow("Insufficient");
   });
 

@@ -250,7 +250,7 @@ export class Query {
    * This Query runs the specific script through the VM.
    * @param script
    */
-  public static invokeScript(script: string) {
+  public static invokeScript(script: string): Query {
     return new Query({
       method: "invokescript",
       params: [script],

@@ -42,7 +42,7 @@ export class Dora implements Provider {
     return getHeight(this.url);
   }
   public async getTransactionHistory(
-    address: string
+    _address: string
   ): Promise<PastTransaction[]> {
     throw new Error("Method not implemented.");
   }

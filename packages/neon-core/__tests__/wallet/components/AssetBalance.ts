@@ -1,7 +1,4 @@
-import Fixed8 from "../../../src/u/Fixed8";
-import AssetBalance, {
-  AssetBalanceLike,
-} from "../../../src/wallet/components/AssetBalance";
+import AssetBalance from "../../../src/wallet/components/AssetBalance";
 import Coin from "../../../src/wallet/components/Coin";
 
 const dataSet = [

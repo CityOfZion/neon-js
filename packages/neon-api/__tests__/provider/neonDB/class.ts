@@ -3,12 +3,12 @@ import neonDB from "../../../src/provider/neonDB/class";
 import * as core from "../../../src/provider/neonDB/core";
 jest.mock("../../../src/provider/neonDB/core");
 
-const UnitTestNetUrl = "http://testurl.com";
+const unitTestNetUrl = "http://testurl.com";
 beforeEach(() => {
   jest.resetModules();
   settings.networks.UnitTestNet = new rpc.Network({
     name: "UnitTestNet",
-    extra: { neonDB: UnitTestNetUrl, neoscan: "http://wrongurl.com" },
+    extra: { neonDB: unitTestNetUrl, neoscan: "http://wrongurl.com" },
   });
 });
 
@@ -21,7 +21,7 @@ describe("constructor", () => {
 
   test("Network name", () => {
     const result = new neonDB("UnitTestNet");
-    expect(result.name).toMatch(UnitTestNetUrl);
+    expect(result.name).toMatch(unitTestNetUrl);
   });
 });
 

@@ -6,6 +6,7 @@ import { wallet } from "../../src";
 
 jest.mock("../../src/rpc/Query");
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const Query = mocked(_Query, true);
 
 describe("constructor", () => {

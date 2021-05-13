@@ -19,7 +19,7 @@ describe("signTx", () => {
     } as any;
     tx.Witness.deserialize.mockImplementationOnce(() => mockSignature);
 
-    const result = await sign.signTx(config);
+    await sign.signTx(config);
     expect(config.signingFunction).toBeCalledWith(
       mockSerialize,
       config.account.publicKey
@@ -45,7 +45,7 @@ describe("signTx", () => {
       .mockImplementationOnce(() => mockSignatures[0])
       .mockImplementationOnce(() => mockSignatures[1]);
 
-    const result = await sign.signTx(config);
+    await sign.signTx(config);
     expect(config.signingFunction).toBeCalledWith(
       mockSerialize,
       config.account.publicKey

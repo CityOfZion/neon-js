@@ -7,7 +7,7 @@ const log = logging.default("neon-domain");
 export class NeoNS implements DomainProvider {
   private contract: string;
 
-  public get name() {
+  public get name(): string {
     return `NeoNs[${this.contract}]`;
   }
 

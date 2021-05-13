@@ -3,12 +3,12 @@ import neoscan from "../../../src/provider/neoscan/class";
 import * as core from "../../../src/provider/neoscan/core";
 jest.mock("../../../src/provider/neoscan/core");
 
-const UnitTestNetUrl = "http://testurl.com";
+const unitTestNetUrl = "http://testurl.com";
 beforeEach(() => {
   jest.resetModules();
   settings.networks.UnitTestNet = new rpc.Network({
     name: "UnitTestNet",
-    extra: { neoscan: UnitTestNetUrl, neonDB: "http://wrongurl.com" },
+    extra: { neoscan: unitTestNetUrl, neonDB: "http://wrongurl.com" },
   });
 });
 
@@ -21,7 +21,7 @@ describe("constructor", () => {
 
   test("Network name", () => {
     const result = new neoscan("UnitTestNet");
-    expect(result.name).toMatch(UnitTestNetUrl);
+    expect(result.name).toMatch(unitTestNetUrl);
   });
 });
 
