@@ -6,8 +6,8 @@ import TransactionType from "./TransactionType";
 
 export class IssueTransaction extends BaseTransaction {
   public static deserializeExclusive(
-    ss: StringStream,
-    tx: Partial<TransactionLike>
+    _ss: StringStream,
+    _tx: Partial<TransactionLike>
   ): Partial<TransactionLike> {
     return {};
   }
@@ -17,7 +17,7 @@ export class IssueTransaction extends BaseTransaction {
   public constructor(obj: Partial<TransactionLike> = {}) {
     super(Object.assign({ version: TX_VERSION.ISSUE }, obj));
   }
-  public get exclusiveData(): object {
+  public get exclusiveData(): Record<string, unknown> {
     return {};
   }
   public get fees(): number {

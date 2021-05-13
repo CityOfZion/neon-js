@@ -5,7 +5,7 @@ import { getBalance, getClaims, getMaxClaimAmount } from "./core";
 const log = logging.default("api");
 
 export class NeoCli implements Provider {
-  public get name() {
+  public get name(): string {
     return `NeoCli[${this.url}]`;
   }
   private url: string;
@@ -17,7 +17,7 @@ export class NeoCli implements Provider {
     this.rpc = new rpc.RPCClient(url);
     log.info(`Created NeoCli Provider: ${this.url}`);
   }
-  public getRPCEndpoint(noCache?: boolean | undefined): Promise<string> {
+  public getRPCEndpoint(_noCache?: boolean | undefined): Promise<string> {
     return Promise.resolve(this.url);
   }
   public getBalance(address: string): Promise<wallet.Balance> {
@@ -32,7 +32,7 @@ export class NeoCli implements Provider {
   public getHeight(): Promise<number> {
     return this.rpc.getBlockCount();
   }
-  public getTransactionHistory(address: string): Promise<PastTransaction[]> {
+  public getTransactionHistory(_address: string): Promise<PastTransaction[]> {
     throw new Error("Method not implemented.");
   }
 }

@@ -88,8 +88,8 @@ describe("export", () => {
     admin: "",
   } as Partial<TransactionLike>;
 
-  const RegisterTx = new RegisterTransaction(expected);
-  const result = RegisterTx.export();
+  const registerTx = new RegisterTransaction(expected);
+  const result = registerTx.export();
   expect(result).toEqual(expected);
 });
 
@@ -113,14 +113,14 @@ describe("equals", () => {
     owner: "ab",
     admin: "ab",
   };
-  const Register1 = new RegisterTransaction(obj1);
-  const Register2 = new RegisterTransaction(obj2);
+  const registerTx1 = new RegisterTransaction(obj1);
+  const registerTx2 = new RegisterTransaction(obj2);
 
   test.each([
-    ["Register1 === Register1", Register1, Register1, true],
-    ["Register1 !== Register2", Register1, Register2, false],
-    ["Register1 === Obj1", Register1, obj1, true],
-    ["Register1 !== Obj2", Register1, obj2, false],
+    ["Register1 === Register1", registerTx1, registerTx1, true],
+    ["Register1 !== Register2", registerTx1, registerTx2, false],
+    ["Register1 === Obj1", registerTx1, obj1, true],
+    ["Register1 !== Obj2", registerTx1, obj2, false],
   ])("%s", (msg: string, a: RegisterTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });

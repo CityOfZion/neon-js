@@ -34,8 +34,8 @@
     "test:node": "node test.node.js"
   },
   "dependencies": {
-    "@ledgerhq/hw-transport": "5.15.0",
-    "@types/ledgerhq__hw-transport": "4.21.2"
+    "@ledgerhq/hw-transport": "5.51.1",
+    "@types/ledgerhq__hw-transport": "4.21.3"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "^4.0.0"
@@ -46,8 +46,8 @@
   ],
   "devDependencies": {
     "@cityofzion/neon-js": "^4.8.3",
-    "@ledgerhq/hw-transport-node-hid": "5.15.0",
-    "@ledgerhq/hw-transport-u2f": "5.15.0",
-    "@types/ledgerhq__hw-transport-node-hid": "4.22.1"
+    "@ledgerhq/hw-transport-node-hid": "5.51.1",
+    "@ledgerhq/hw-transport-u2f": "5.36.0-deprecated",
+    "@types/ledgerhq__hw-transport-node-hid": "4.22.2"
   }
 }

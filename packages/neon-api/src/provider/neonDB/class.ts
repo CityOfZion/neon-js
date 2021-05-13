@@ -13,7 +13,7 @@ const log = logging.default("api");
 export class NeonDB implements Provider {
   private url: string;
 
-  public get name() {
+  public get name(): string {
     return `NeonDB[${this.url}]`;
   }
 

@@ -3,7 +3,7 @@ import { Account } from "../../../src/wallet";
 
 describe("constructor", () => {
   test("empty", () => {
-    const f = () => new Witness(undefined);
+    const f = (): Witness => new Witness(undefined);
     expect(f).toThrow(
       "Witness requires invocationScript and verificationScript fields"
     );
@@ -221,14 +221,14 @@ describe("buildMultiSig", () => {
 
   test("throws if invalid signature given", () => {
     const wrongSigs = [signatures[0].replace("1", "0"), signatures[1]];
-    const throwingFunc = () =>
+    const throwingFunc = (): Witness =>
       Witness.buildMultiSig(msg, wrongSigs, verificationScript);
     expect(throwingFunc).toThrowError("Invalid signature given");
   });
 
   test("throws if insufficient signatures", () => {
     const oneSig = [signatures[1]];
-    const throwingFunc = () =>
+    const throwingFunc = (): Witness =>
       Witness.buildMultiSig(msg, oneSig, verificationScript);
     expect(throwingFunc).toThrowError("Insufficient signatures");
   });

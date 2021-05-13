@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { tx, wallet } from "@cityofzion/neon-core";
 import { signWithPrivateKey } from "./sign";
 import {
@@ -65,7 +66,7 @@ export async function fillSigningFunction<
  */
 export async function fillClaims<
   U extends tx.BaseTransaction,
-  T extends ManagedApiBasicConfig<U>
+  _T extends ManagedApiBasicConfig<U>
 >(config: ClaimGasConfig): Promise<ClaimGasConfig> {
   if (!(config.claims instanceof wallet.Claims)) {
     config.claims = await config.api.getClaims(config.account!.address);

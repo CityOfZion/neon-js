@@ -10,6 +10,7 @@ import latin1Encoding from "crypto-js/enc-latin1";
 import ECBMode from "crypto-js/mode-ecb";
 import NoPadding from "crypto-js/pad-nopadding";
 import SHA256 from "crypto-js/sha256";
+import { lib } from "crypto-js";
 import { scrypt } from "scrypt-js";
 import { DEFAULT_SCRYPT, NEP_FLAG, NEP_HEADER } from "../consts";
 import logging from "../logging";
@@ -47,9 +48,7 @@ export async function encrypt(
   const account = new Account(wifKey);
   // SHA Salt (use the first 4 bytes)
   const firstSha = SHA256(enc.Latin1.parse(account.address));
-  const addressHash = SHA256(firstSha as any)
-    .toString()
-    .slice(0, 8);
+  const addressHash = SHA256(firstSha).toString().slice(0, 8);
 
   const key = await scrypt(
     Buffer.from(keyphrase.normalize("NFC"), "utf8"),
@@ -106,11 +105,9 @@ export async function decrypt(
   const derived = Buffer.from(key).toString("hex");
   const derived1 = derived.slice(0, 64);
   const derived2 = derived.slice(64);
-  const ciphertext = {
+  const ciphertext = lib.CipherParams.create({
     ciphertext: enc.Hex.parse(encrypted),
-    salt: "",
-    iv: "",
-  };
+  });
   const decrypted = AES.decrypt(
     ciphertext,
     enc.Hex.parse(derived2),
@@ -118,9 +115,7 @@ export async function decrypt(
   );
   const privateKey = hexXor(decrypted.toString(), derived1);
   const account = new Account(privateKey);
-  const newAddressHash = SHA256(
-    SHA256(enc.Latin1.parse(account.address)) as any
-  )
+  const newAddressHash = SHA256(SHA256(enc.Latin1.parse(account.address)))
     .toString()
     .slice(0, 8);
   if (addressHash !== newAddressHash) {

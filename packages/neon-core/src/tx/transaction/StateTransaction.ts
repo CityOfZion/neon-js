@@ -1,5 +1,5 @@
 import { TX_VERSION } from "../../consts";
-import { fixed82num, num2VarInt, StringStream } from "../../u";
+import { num2VarInt, StringStream } from "../../u";
 import { StateDescriptor, StateDescriptorLike } from "../components";
 import { BaseTransaction, TransactionLike } from "./BaseTransaction";
 import TransactionType from "./TransactionType";
@@ -30,7 +30,7 @@ export class StateTransaction extends BaseTransaction {
   public readonly type: TransactionType = TransactionType.StateTransaction;
   public descriptors: StateDescriptor[];
 
-  public get exclusiveData() {
+  public get exclusiveData(): { descriptors: StateDescriptor[] } {
     return { descriptors: this.descriptors };
   }
 

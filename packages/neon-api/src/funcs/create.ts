@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { checkProperty } from "./common";
 import {

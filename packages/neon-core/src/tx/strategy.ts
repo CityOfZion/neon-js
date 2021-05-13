@@ -86,12 +86,12 @@ export function balancedApproach(
   // Take the largest coin available and fill it up with little pieces
   const bigCoins = assetBalance.unspent.slice(smallCoins.length);
   const selectedInputs: Coin[] = [];
-  if (smallCoins.length > 0) {
-    selectedInputs.push(smallCoins.pop()!);
+  const lastCoin = smallCoins.pop();
+  if (lastCoin !== undefined) {
+    selectedInputs.push(lastCoin);
   }
-  const remainderAmt = requiredAmt.minus(
-    selectedInputs.length > 0 ? selectedInputs[0]!.value : 0
-  );
+  const firstCoinValue = selectedInputs[0] ? selectedInputs[0].value : 0;
+  const remainderAmt = requiredAmt.minus(firstCoinValue);
   const remainderInputs = fillFromLeft(
     remainderAmt,
     smallCoins.concat(bigCoins)

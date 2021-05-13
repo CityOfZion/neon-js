@@ -6,7 +6,7 @@ export interface ManagedApiBasicConfig<T extends tx.BaseTransaction> {
   url?: string;
   account: wallet.Account;
   fees?: number;
-  override?: object;
+  override?: Record<string, unknown>;
   signingFunction?: (
     tx: string,
     publicKey: string

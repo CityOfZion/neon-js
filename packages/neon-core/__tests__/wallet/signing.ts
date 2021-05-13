@@ -1,7 +1,7 @@
 import { str2hexstring } from "../../src/u";
 import { sign, verify } from "../../src/wallet/signing";
 
-const dataSet = [
+const _dataSet = [
   [
     "City of Zion",
     "a7b9775c6b9136bf89f63def7eab0c5f2d3d0c9e85492717f54386420cce5aa1",

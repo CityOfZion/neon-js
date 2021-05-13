@@ -47,7 +47,7 @@ export class ContractParam {
   /**
    * Creates a Boolean ContractParam. Does basic checks to convert value into a boolean.
    */
-  public static boolean(value: any): ContractParam {
+  public static boolean(value: boolean | string | number): ContractParam {
     return new ContractParam(ContractParamType.Boolean, !!value);
   }
 
@@ -95,7 +95,7 @@ export class ContractParam {
    * @param args Additional arguments such as decimal precision
    */
   public static byteArray(
-    value: any,
+    value: string | number | Fixed8,
     format: string,
     ...args: any[]
   ): ContractParam {
@@ -105,14 +105,14 @@ export class ContractParam {
     if (format === "address") {
       return new ContractParam(
         ContractParamType.ByteArray,
-        reverseHex(getScriptHashFromAddress(value))
+        reverseHex(getScriptHashFromAddress(value as string))
       );
     } else if (format === "fixed8") {
       let decimals = 8;
       if (args.length === 1) {
         decimals = args[0];
       }
-      if (!isFinite(value)) {
+      if (!isFinite(value as number)) {
         throw new Error(`Input should be number!`);
       }
       const divisor = new Fixed8(Math.pow(10, 8 - decimals));
@@ -150,7 +150,7 @@ export class ContractParam {
       | ContractParamType
       | keyof typeof ContractParamType
       | number,
-    value?: any
+    value?: unknown
   ) {
     if (typeof type === "object") {
       this.type = toContractParamType(type.type);
@@ -171,7 +171,7 @@ export class ContractParam {
     const exportedValue = Array.isArray(this.value)
       ? this.value.map((cp) => cp.export())
       : this.value;
-    return { type: ContractParamType[this.type], value: this.value };
+    return { type: ContractParamType[this.type], value: exportedValue };
   }
 
   public equal(other: ContractParamLike): boolean {
@@ -189,7 +189,9 @@ export class ContractParam {
 
 export default ContractParam;
 
-export function likeContractParam(cp: Partial<ContractParam>): boolean {
+export function likeContractParam(
+  cp: Partial<ContractParam | ContractParamLike>
+): cp is ContractParamLike {
   if (cp === null || cp === undefined) {
     return false;
   }
@@ -197,8 +199,9 @@ export function likeContractParam(cp: Partial<ContractParam>): boolean {
     return true;
   }
   return (
-    cp.type! in ContractParamType &&
-    cp.value! !== null &&
-    cp.value! !== undefined
+    cp.type !== undefined &&
+    cp.type in ContractParamType &&
+    cp.value !== null &&
+    cp.value !== undefined
   );
 }

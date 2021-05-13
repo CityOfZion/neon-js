@@ -7,6 +7,7 @@ import testIntents from "./scriptIntents.json";
 jest.mock("../../src/sc/ScriptBuilder");
 jest.mock("../../src/u");
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const ScriptBuilder = mocked(_ScriptBuilder, true);
 const u = mocked(_u, false);
 
@@ -17,7 +18,7 @@ beforeEach(() => {
 describe("createScript", () => {
   test("single ScriptIntent", () => {
     const intent = testIntents[1].scriptIntent;
-    const result = createScript(intent);
+    const _result = createScript(intent);
     expect(ScriptBuilder).toHaveBeenCalledTimes(1);
     const sb = ScriptBuilder.mock.instances[0];
     expect(sb.emitAppCall).toBeCalledWith(
@@ -44,7 +45,7 @@ describe("createScript", () => {
       return { str: expected, emitAppCall: mockEmitAppCall };
     });
     const intents = [1, 2, 3, 4, 5].map(
-      (i) =>
+      (_i) =>
         ({
           scriptHash: jest.fn(),
           operation: jest.fn(),
@@ -94,7 +95,7 @@ describe("generateDeployScript", () => {
       parameterList: jest.fn(),
     } as any;
 
-    const result = generateDeployScript(params);
+    const _result = generateDeployScript(params);
     expect(u.str2hexstring.mock.calls).toEqual([
       [params.description],
       [params.email],
@@ -127,7 +128,7 @@ describe("generateDeployScript", () => {
       parameterList: jest.fn(),
     } as any;
 
-    const result = generateDeployScript(params);
+    const _result = generateDeployScript(params);
     expect(u.str2hexstring.mock.calls).toEqual([
       [params.description],
       [params.email],

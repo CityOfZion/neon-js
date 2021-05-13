@@ -3,7 +3,6 @@ import { BaseTransaction } from "../../../src/tx/transaction/BaseTransaction";
 import PublishTransaction, {
   PublishTransactionLike,
 } from "../../../src/tx/transaction/PublishTransaction";
-import { Fixed8 } from "../../../src/u";
 import samples from "./publishTx.json";
 
 describe("constructor", () => {
@@ -94,8 +93,8 @@ describe("export", () => {
     description: "desc",
   } as Partial<TransactionLike>;
 
-  const RegisterTx = new PublishTransaction(expected);
-  const result = RegisterTx.export();
+  const publishTx = new PublishTransaction(expected);
+  const result = publishTx.export();
   expect(result).toEqual(expected);
 });
 
@@ -122,14 +121,14 @@ describe("equals", () => {
     email: "email",
     description: "desc",
   };
-  const Publish1 = new PublishTransaction(obj1);
-  const Publish2 = new PublishTransaction(obj2);
+  const publishTx1 = new PublishTransaction(obj1);
+  const publishTx2 = new PublishTransaction(obj2);
 
   test.each([
-    ["Publish1 === Publish1", Publish1, Publish1, true],
-    ["Publish1 !== Publish2", Publish1, Publish2, false],
-    ["Publish1 === Obj1", Publish1, obj1, true],
-    ["Publish1 !== Obj2", Publish1, obj2, false],
+    ["Publish1 === Publish1", publishTx1, publishTx1, true],
+    ["Publish1 !== Publish2", publishTx1, publishTx2, false],
+    ["Publish1 === Obj1", publishTx1, obj1, true],
+    ["Publish1 !== Obj2", publishTx1, obj2, false],
   ])("%s", (msg: string, a: PublishTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });

@@ -84,8 +84,8 @@ describe("export", () => {
     script: "00",
   } as Partial<TransactionLike>;
 
-  const InvocationTx = new InvocationTransaction(expected);
-  const result = InvocationTx.export();
+  const invocationTx = new InvocationTransaction(expected);
+  const result = invocationTx.export();
   expect(result).toEqual(expected);
 });
 
@@ -105,14 +105,14 @@ describe("equals", () => {
     inputs: [{ prevHash: "12", prevIndex: 1 }],
     script: "12",
   };
-  const Invocation1 = new InvocationTransaction(obj1);
-  const Invocation2 = new InvocationTransaction(obj2);
+  const invocationTx1 = new InvocationTransaction(obj1);
+  const invocationTx2 = new InvocationTransaction(obj2);
 
   test.each([
-    ["Invocation1 === Invocation1", Invocation1, Invocation1, true],
-    ["Invocation1 !== Invocation2", Invocation1, Invocation2, false],
-    ["Invocation1 === Obj1", Invocation1, obj1, true],
-    ["Invocation1 !== Obj2", Invocation1, obj2, false],
+    ["Invocation1 === Invocation1", invocationTx1, invocationTx1, true],
+    ["Invocation1 !== Invocation2", invocationTx1, invocationTx2, false],
+    ["Invocation1 === Obj1", invocationTx1, obj1, true],
+    ["Invocation1 !== Obj2", invocationTx1, obj2, false],
   ])("%s", (msg: string, a: InvocationTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });
