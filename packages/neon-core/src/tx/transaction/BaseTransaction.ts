@@ -6,7 +6,6 @@ import {
   num2hexstring,
   reverseHex,
   str2hexstring,
-  StringStream,
 } from "../../u";
 import { Account, Balance, sign } from "../../wallet";
 import { calculateInputs } from "../calculate";

@@ -1,8 +1,5 @@
 import { DEFAULT_SYSFEE } from "../consts";
 import { compareObject } from "../helper";
-import logger from "../logging";
-
-const log = logger("protocol");
 
 export interface ProtocolLike {
   magic: number;

@@ -1,4 +1,4 @@
-import { Transaction, TransactionLike, TransactionType } from "../../../src/tx";
+import { Transaction, TransactionType } from "../../../src/tx";
 import StateTransaction, {
   StateTransactionLike,
 } from "../../../src/tx/transaction/StateTransaction";
@@ -107,14 +107,14 @@ describe("equals", () => {
     inputs: [{ prevHash: "12", prevIndex: 1 }],
     descriptors: [{ type: 0x48, value: "cd", field: "Votes", key: "cd" }],
   };
-  const State1 = new StateTransaction(obj1);
-  const State2 = new StateTransaction(obj2);
+  const state1 = new StateTransaction(obj1);
+  const state2 = new StateTransaction(obj2);
 
   test.each([
-    ["State1 === State1", State1, State1, true],
-    ["State1 !== State2", State1, State2, false],
-    ["State1 === Obj1", State1, obj1, true],
-    ["State1 !== Obj2", State1, obj2, false],
+    ["State1 === State1", state1, state1, true],
+    ["State1 !== State2", state1, state2, false],
+    ["State1 === Obj1", state1, obj1, true],
+    ["State1 !== Obj2", state1, obj2, false],
   ])("%s", (msg: string, a: StateTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });

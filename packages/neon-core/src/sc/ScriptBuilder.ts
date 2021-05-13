@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import BN from "bn.js";
 import {
   ensureHex,
@@ -8,6 +9,7 @@ import {
   StringStream,
 } from "../u";
 import ContractParam, {
+  ContractParamLike,
   ContractParamType,
   likeContractParam,
 } from "./ContractParam";
@@ -157,7 +159,7 @@ export class ScriptBuilder extends StringStream {
    * @param data
    * @return this
    */
-  public emitPush(data?: any): this {
+  public emitPush(data?: unknown): this {
     switch (typeof data) {
       case "boolean":
         return this.emit(data ? OpCode.PUSHT : OpCode.PUSHF);
@@ -170,8 +172,8 @@ export class ScriptBuilder extends StringStream {
       case "object":
         if (Array.isArray(data)) {
           return this._emitArray(data);
-        } else if (likeContractParam(data)) {
-          return this._emitParam(new ContractParam(data));
+        } else if (likeContractParam(data as Record<string, unknown>)) {
+          return this._emitParam(new ContractParam(data as ContractParamLike));
         } else if (data === null) {
           return this.emitPush(false);
         }

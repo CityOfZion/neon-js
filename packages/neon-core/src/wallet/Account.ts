@@ -148,16 +148,15 @@ export class Account {
     return "Account";
   }
 
-  public [inspect]() {
+  public [inspect](): string {
     return `[Account: ${this.label}]`;
   }
 
-  public get isMultiSig() {
-    return (
-      this.contract &&
+  public get isMultiSig(): boolean {
+    return (this.contract !== null &&
       this.contract.script &&
-      this.contract.script.slice(this.contract.script.length - 2) === "ae"
-    );
+      this.contract.script.slice(this.contract.script.length - 2) ===
+        "ae") as boolean;
   }
 
   /**
@@ -349,9 +348,8 @@ export class Account {
     try {
       if (this.contract.script === "") {
         const publicKey = this.publicKey;
-        this.contract.script = core.getVerificationScriptFromPublicKey(
-          publicKey
-        );
+        this.contract.script =
+          core.getVerificationScriptFromPublicKey(publicKey);
         this._scriptHash = this._getScriptHashFromVerificationScript();
         log.debug(`Updated ContractScript for Account: ${this.address}`);
       }

@@ -26,8 +26,7 @@ describe("getBalance", () => {
               {
                 unspent: [
                   {
-                    txid:
-                      "0917f5cbfeccbe9c385965e7884bd10450c652325c7aa7bd8c61b0f52a019b7f",
+                    txid: "0917f5cbfeccbe9c385965e7884bd10450c652325c7aa7bd8c61b0f52a019b7f",
                     n: 0,
                     value: 24088,
                   },
@@ -41,8 +40,7 @@ describe("getBalance", () => {
               {
                 unspent: [
                   {
-                    txid:
-                      "94f11dd277dd48cf1fccef8c02664adacdd9890410aaed8ddb01535433b3fc41",
+                    txid: "94f11dd277dd48cf1fccef8c02664adacdd9890410aaed8ddb01535433b3fc41",
                     n: 0,
                     value: 100000000,
                   },
@@ -72,8 +70,7 @@ describe("getBalance", () => {
             unspent: [
               {
                 value: 100000000,
-                txid:
-                  "94f11dd277dd48cf1fccef8c02664adacdd9890410aaed8ddb01535433b3fc41",
+                txid: "94f11dd277dd48cf1fccef8c02664adacdd9890410aaed8ddb01535433b3fc41",
                 index: 0,
               },
             ],
@@ -83,8 +80,7 @@ describe("getBalance", () => {
             unspent: [
               {
                 value: 24088,
-                txid:
-                  "0917f5cbfeccbe9c385965e7884bd10450c652325c7aa7bd8c61b0f52a019b7f",
+                txid: "0917f5cbfeccbe9c385965e7884bd10450c652325c7aa7bd8c61b0f52a019b7f",
                 index: 0,
               },
             ],

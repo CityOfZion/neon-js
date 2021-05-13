@@ -33,7 +33,7 @@ describe("Strategy", () => {
       ["biggestFirst", biggestFirst],
       ["balancedApproach", balancedApproach],
     ])("%s", (msg: string, func: calculationStrategyFunction) => {
-      const f = () => func(assetBalance, new Fixed8(100));
+      const f = (): Coin[] => func(assetBalance, new Fixed8(100));
       expect(f).toThrow("Insufficient assets");
     });
   });

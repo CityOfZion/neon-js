@@ -1,9 +1,4 @@
-import {
-  Transaction,
-  TransactionLike,
-  TransactionType,
-  Witness,
-} from "../../../src/tx";
+import { Transaction, TransactionLike, TransactionType } from "../../../src/tx";
 import IssueTransaction from "../../../src/tx/transaction/IssueTransaction";
 
 import samples from "./issueTx.json";

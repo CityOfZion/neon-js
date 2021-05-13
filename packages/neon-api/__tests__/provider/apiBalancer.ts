@@ -1,4 +1,4 @@
-import { mocked } from "ts-jest/utils";
+import { mocked as _mocked } from "ts-jest/utils";
 import ApiBalancer from "../../src/provider/apiBalancer";
 import { instance as NeonDB } from "../../src/provider/neonDB";
 import { instance as Neoscan } from "../../src/provider/neoscan";
@@ -34,7 +34,7 @@ describe("frozen", () => {
     balancer.preference = 0.5;
     right.getRPCEndpoint.mockResolvedValue(true);
     left.getRPCEndpoint.mockResolvedValue(true);
-    const result = await balancer.getRPCEndpoint();
+    const _result = await balancer.getRPCEndpoint();
     expect(balancer.preference).not.toBe(0.5);
   });
 
@@ -43,7 +43,7 @@ describe("frozen", () => {
     balancer.preference = 0.5;
     right.getRPCEndpoint.mockResolvedValue(true);
     left.getRPCEndpoint.mockResolvedValue(true);
-    const result = await balancer.getRPCEndpoint();
+    await balancer.getRPCEndpoint();
     expect(balancer.preference).toBe(0.5);
   });
 });
@@ -51,13 +51,13 @@ describe("frozen", () => {
 describe("loadBalance", () => {
   test("calls LeftProvider when preference = 0", async () => {
     balancer.preference = 0;
-    const result = await balancer.getRPCEndpoint();
+    await balancer.getRPCEndpoint();
     expect(left.getRPCEndpoint).toBeCalled();
   });
 
   test("calls rightProvider when preference = 1", async () => {
     balancer.preference = 1;
-    const result = await balancer.getRPCEndpoint();
+    await balancer.getRPCEndpoint();
     expect(right.getRPCEndpoint).toBeCalled();
   });
 

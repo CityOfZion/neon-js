@@ -9,8 +9,6 @@ import Query from "./Query";
 
 const log = logger("rpc");
 
-const versionRegex = /NEO:(\d+\.\d+\.\d+)/;
-
 export interface Validator {
   publickey: string;
   votes: string;
@@ -67,7 +65,7 @@ export class RPCClient {
     );
   }
 
-  public set latency(lat) {
+  public set latency(lat: number) {
     if (this._latencies.length > 4) {
       this._latencies.shift();
     }
@@ -104,7 +102,10 @@ export class RPCClient {
   /**
    * Creates a query with the given req and immediately executes it.
    */
-  public query(req: object, config?: AxiosRequestConfig): Promise<any> {
+  public query(
+    req: Record<string, unknown>,
+    config?: AxiosRequestConfig
+  ): Promise<any> {
     const query = new Query(req);
     return this.execute(query, config);
   }
@@ -134,7 +135,7 @@ export class RPCClient {
   public async getBlock(
     indexOrHash: string | number,
     verbose = 1
-  ): Promise<object | string> {
+  ): Promise<Record<string, unknown> | string> {
     const response = await this.execute(Query.getBlock(indexOrHash, verbose));
     return response.result;
   }
@@ -185,7 +186,9 @@ export class RPCClient {
   /**
    * Gets the state of the contract at the given scriptHash.
    */
-  public async getContractState(scriptHash: string): Promise<object> {
+  public async getContractState(
+    scriptHash: string
+  ): Promise<Record<string, unknown>> {
     const response = await this.execute(Query.getContractState(scriptHash));
     return response.result;
   }
@@ -193,7 +196,7 @@ export class RPCClient {
   /**
    * Gets a list of all peers that this node has discovered.
    */
-  public async getPeers(): Promise<object> {
+  public async getPeers(): Promise<Record<string, unknown>> {
     const response = await this.execute(Query.getPeers());
     return response.result;
   }
@@ -247,7 +250,7 @@ export class RPCClient {
         const useragent = response.result.useragent;
         const responseLength = useragent.length;
         const strippedResponse = useragent.substring(1, responseLength - 1);
-        const [header, newVersion] = strippedResponse.split(":");
+        const [_header, newVersion] = strippedResponse.split(":");
         this.version = newVersion;
       } else {
         throw new Error("Empty or unexpected version pattern");

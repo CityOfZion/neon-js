@@ -78,9 +78,8 @@ export class Witness {
         throw new Error("Unable to process given signature");
       }
     });
-    const signingThreshold = getSigningThresholdFromVerificationScript(
-      verificationScript
-    );
+    const signingThreshold =
+      getSigningThresholdFromVerificationScript(verificationScript);
     const validSigs = orderedSigs.filter((s) => s !== "");
     if (validSigs.length < signingThreshold) {
       throw new Error(
@@ -129,7 +128,7 @@ export class Witness {
     }
   }
 
-  public set scriptHash(value) {
+  public set scriptHash(value: string) {
     if (this.verificationScript) {
       throw new Error(
         "Unable to set scriptHash when verificationScript is not empty"

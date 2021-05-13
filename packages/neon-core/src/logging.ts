@@ -11,13 +11,13 @@ export function setAll(lvl: loglevel.LogLevelDesc): void {
   });
 }
 
-const fn = (level: string, name?: string, timestamp?: Date) => {
+const fn = (level: string, name?: string, timestamp?: Date): string => {
   const ts = timestamp ? timestamp : new Date().toUTCString();
   level = level.toUpperCase();
   return `[${ts}] (${name}) ${level}: `;
 };
 
-export default (label: string) => {
+export default (label: string): loglevel.Logger => {
   const l = loglevel.getLogger(label);
   prefix.apply(l, { format: fn });
   return l;

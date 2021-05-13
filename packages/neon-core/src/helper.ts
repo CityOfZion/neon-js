@@ -1,14 +1,17 @@
 export interface NeonObject {
-  export(): object;
+  export(): unknown;
   equals<T>(other: Partial<T>): boolean;
 }
 
-export function compareNeonObjectArray(arr1: NeonObject[], arr2: any[] = []) {
+export function compareNeonObjectArray(
+  arr1: NeonObject[],
+  arr2: any[] = []
+): boolean {
   if (arr1.length !== arr2.length) {
     return false;
   }
   for (const c of arr1) {
-    if (!arr2.find((cl) => c.equals(c))) {
+    if (!arr2.find((cl) => c.equals(cl))) {
       return false;
     }
   }

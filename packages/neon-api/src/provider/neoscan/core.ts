@@ -197,5 +197,5 @@ export async function getTransactionHistory(
   );
   const data = response.data as NeoscanPastTx[];
   log.info(`Retrieved History for ${address} from neoscan ${url}`);
-  return parseTxHistory(response.data, address);
+  return parseTxHistory(data, address);
 }

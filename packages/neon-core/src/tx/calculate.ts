@@ -12,13 +12,15 @@ export let defaultCalculationStrategy = balancedApproach;
  * This is useful during the calculations as we just need to know much of an asset we need.
  * @param intents List of TransactionOutputs to reduce.
  */
-export function combineIntents(intents: TransactionOutput[]) {
+export function combineIntents(
+  intents: TransactionOutput[]
+): Record<string, Fixed8> {
   return intents.reduce((assets, intent) => {
     assets[intent.assetId]
       ? (assets[intent.assetId] = assets[intent.assetId].add(intent.value))
       : (assets[intent.assetId] = intent.value);
     return assets;
-  }, {} as { [assetId: string]: Fixed8 });
+  }, {} as Record<string, Fixed8>);
 }
 
 export function calculateInputsForAsset(
@@ -27,7 +29,7 @@ export function calculateInputsForAsset(
   assetId: string,
   address: string,
   strategy: calculationStrategyFunction
-) {
+): { inputs: TransactionInput[]; change: TransactionOutput[] } {
   const selectedInputs = strategy(assetBalance, requiredAmt);
   const selectedAmt = selectedInputs.reduce(
     (prev, curr) => prev.add(curr.value),

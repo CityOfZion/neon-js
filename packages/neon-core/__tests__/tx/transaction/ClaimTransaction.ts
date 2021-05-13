@@ -76,8 +76,8 @@ describe("export", () => {
     scripts: [{ invocationScript: "ab", verificationScript: "" }],
   } as Partial<TransactionLike>;
 
-  const ClaimTx = new ClaimTransaction(expected);
-  const result = ClaimTx.export();
+  const claimTx = new ClaimTransaction(expected);
+  const result = claimTx.export();
   expect(result).toEqual(expected);
 });
 
@@ -96,14 +96,14 @@ describe("equals", () => {
     version: 1,
     inputs: [{ prevHash: "12", prevIndex: 1 }],
   };
-  const Claim1 = new ClaimTransaction(obj1);
-  const Claim2 = new ClaimTransaction(obj2);
+  const claimTx1 = new ClaimTransaction(obj1);
+  const claimTx2 = new ClaimTransaction(obj2);
 
   test.each([
-    ["Claim1 === Claim1", Claim1, Claim1, true],
-    ["Claim1 !== Claim2", Claim1, Claim2, false],
-    ["Claim1 === Obj1", Claim1, obj1, true],
-    ["Claim1 !== Obj2", Claim1, obj2, false],
+    ["Claim1 === Claim1", claimTx1, claimTx1, true],
+    ["Claim1 !== Claim2", claimTx1, claimTx2, false],
+    ["Claim1 === Obj1", claimTx1, obj1, true],
+    ["Claim1 !== Obj2", claimTx1, obj2, false],
   ])("%s", (msg: string, a: ClaimTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });

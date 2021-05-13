@@ -6,15 +6,15 @@ import BaseTransaction, { TransactionLike } from "./BaseTransaction";
  */
 export class ContractTransaction extends BaseTransaction {
   public static deserializeExclusive(
-    ss: StringStream,
-    tx: Partial<TransactionLike>
+    _ss: StringStream,
+    _tx: Partial<TransactionLike>
   ): Partial<TransactionLike> {
     return {};
   }
 
   public readonly type: number = 0x80;
 
-  public get exclusiveData() {
+  public get exclusiveData(): Record<string, unknown> {
     return {};
   }
 

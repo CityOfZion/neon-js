@@ -77,8 +77,8 @@ describe("export", () => {
     scripts: [{ invocationScript: "ab", verificationScript: "" }],
   } as Partial<TransactionLike>;
 
-  const MinerTx = new MinerTransaction(expected);
-  const result = MinerTx.export();
+  const minerTx = new MinerTransaction(expected);
+  const result = minerTx.export();
   expect(result).toEqual(expected);
 });
 
@@ -97,14 +97,14 @@ describe("equals", () => {
     version: 1,
     inputs: [{ prevHash: "12", prevIndex: 1 }],
   };
-  const Miner1 = new MinerTransaction(obj1);
-  const Miner2 = new MinerTransaction(obj2);
+  const minerTx1 = new MinerTransaction(obj1);
+  const minerTx2 = new MinerTransaction(obj2);
 
   test.each([
-    ["Miner1 === Miner1", Miner1, Miner1, true],
-    ["Miner1 !== Miner2", Miner1, Miner2, false],
-    ["Miner1 === Obj1", Miner1, obj1, true],
-    ["Miner1 !== Obj2", Miner1, obj2, false],
+    ["Miner1 === Miner1", minerTx1, minerTx1, true],
+    ["Miner1 !== Miner2", minerTx1, minerTx2, false],
+    ["Miner1 === Obj1", minerTx1, obj1, true],
+    ["Miner1 !== Obj2", minerTx1, obj2, false],
   ])("%s", (msg: string, a: MinerTransaction, b: any, cond: boolean) => {
     expect(a.equals(b)).toBe(cond);
   });

@@ -33,7 +33,7 @@ export function deserializeType(
 
 export function deserializeVersion(
   ss: StringStream,
-  tx: Partial<TransactionLike> = {}
+  _tx: Partial<TransactionLike> = {}
 ): Partial<TransactionLike> {
   const byte = ss.read();
   return Object.assign({ version: parseInt(byte, 16) });
@@ -64,10 +64,9 @@ export function deserializeOutputs(
   ss: StringStream,
   tx: Partial<TransactionLike>
 ): Partial<TransactionLike> {
-  const outputs = deserializeArrayOf(
-    TransactionOutput.fromStream,
-    ss
-  ).map((i) => i.export());
+  const outputs = deserializeArrayOf(TransactionOutput.fromStream, ss).map(
+    (i) => i.export()
+  );
   return Object.assign(tx, { outputs });
 }
 

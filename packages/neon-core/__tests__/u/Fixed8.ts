@@ -64,13 +64,13 @@ describe.each([
 
 test("throws on new Fixed8", () => {
   expect(() => {
-    const result = new Fixed8("fffffffffff", 16);
+    const _result = new Fixed8("fffffffffff", 16);
   }).toThrowError(
     "expected input to be less than 92233720368.54775807. Got input = 17592186044415"
   );
 
   expect(() => {
-    const result = new Fixed8(-92233720369);
+    const _result = new Fixed8(-92233720369);
   }).toThrowError(
     "expected input to be greater than -92233720368.54775808. Got input = -92233720369"
   );
@@ -78,7 +78,7 @@ test("throws on new Fixed8", () => {
 
 test("throws on new fromHex", () => {
   expect(() => {
-    const result = Fixed8.fromHex("ffffffffffffffffff");
+    const _result = Fixed8.fromHex("ffffffffffffffffff");
   }).toThrowError(
     "expected hex string to have length less or equal than 16: got 18 for hex = ffffffffffffffffff"
   );

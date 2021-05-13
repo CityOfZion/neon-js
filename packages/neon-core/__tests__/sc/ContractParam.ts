@@ -95,12 +95,12 @@ describe("Static constructors", () => {
     });
 
     test("Errors on non-string", () => {
-      const thrower = () => ContractParam.hash160(1 as any);
+      const thrower = (): ContractParam => ContractParam.hash160(1 as any);
       expect(thrower).toThrow();
     });
 
     test("Errors on non-address or scripthash", () => {
-      const thrower = () => ContractParam.hash160("1");
+      const thrower = (): ContractParam => ContractParam.hash160("1");
       expect(thrower).toThrow();
     });
   });
@@ -125,7 +125,7 @@ describe("Static constructors", () => {
     });
 
     test("errors when exceeds allowed precision for fixed8", () => {
-      const thrower = () => {
+      const thrower = (): ContractParam => {
         ContractParam.byteArray(222.12345, "fixed8", 4);
       };
       expect(thrower).toThrow("wrong precision");

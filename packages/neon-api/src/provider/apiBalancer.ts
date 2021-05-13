@@ -6,15 +6,15 @@ export default class ApiBalancer implements Provider {
   public leftProvider: Provider;
   public rightProvider: Provider;
 
-  public get name() {
+  public get name(): string {
     return `${this.leftProvider.name}ApiBalancer${this.rightProvider.name}`;
   }
 
   private _preference = 0;
-  public get preference() {
+  public get preference(): number {
     return this._preference;
   }
-  public set preference(val) {
+  public set preference(val: number) {
     const newVal = Math.max(0, Math.min(1, val));
     if (newVal !== this._preference) {
       log.info(`Preference set to ${newVal}`);
@@ -23,10 +23,10 @@ export default class ApiBalancer implements Provider {
   }
 
   private _frozen = false;
-  public get frozen() {
+  public get frozen(): boolean {
     return this._frozen;
   }
-  public set frozen(val) {
+  public set frozen(val: boolean) {
     if (this._frozen !== val) {
       val
         ? log.info(`ApiBalancer frozen at preference of ${this._preference}`)
@@ -48,34 +48,38 @@ export default class ApiBalancer implements Provider {
   }
 
   public async getRPCEndpoint(): Promise<string> {
-    const f = async (p: Provider) => await p.getRPCEndpoint();
+    const f = async (p: Provider): Promise<string> => await p.getRPCEndpoint();
     return await this.loadBalance(f);
   }
 
   public async getBalance(address: string): Promise<wallet.Balance> {
-    const f = async (p: Provider) => await p.getBalance(address);
+    const f = async (p: Provider): Promise<wallet.Balance> =>
+      await p.getBalance(address);
     return await this.loadBalance(f);
   }
 
   public async getClaims(address: string): Promise<wallet.Claims> {
-    const f = async (p: Provider) => await p.getClaims(address);
+    const f = async (p: Provider): Promise<wallet.Claims> =>
+      await p.getClaims(address);
     return await this.loadBalance(f);
   }
 
   public async getMaxClaimAmount(address: string): Promise<u.Fixed8> {
-    const f = async (p: Provider) => await p.getMaxClaimAmount(address);
+    const f = async (p: Provider): Promise<u.Fixed8> =>
+      await p.getMaxClaimAmount(address);
     return await this.loadBalance(f);
   }
 
   public async getHeight(): Promise<number> {
-    const f = async (p: Provider) => await p.getHeight();
+    const f = async (p: Provider): Promise<number> => await p.getHeight();
     return await this.loadBalance(f);
   }
 
   public async getTransactionHistory(
     address: string
   ): Promise<PastTransaction[]> {
-    const f = async (p: Provider) => await p.getTransactionHistory(address);
+    const f = async (p: Provider): Promise<PastTransaction[]> =>
+      await p.getTransactionHistory(address);
     return await this.loadBalance(f);
   }
 
@@ -86,7 +90,6 @@ export default class ApiBalancer implements Provider {
   private async loadBalance<T>(func: (provider: Provider) => T): Promise<T> {
     const i = Math.random() > this._preference ? 0 : 1;
     const primary = i === 0 ? this.leftProvider : this.rightProvider;
-    const primaryShift = i === 0;
     try {
       const result = await func(primary);
       i === 0 ? this.increaseLeftWeight() : this.increaseRightWeight();
@@ -98,7 +101,7 @@ export default class ApiBalancer implements Provider {
     }
   }
 
-  private increaseLeftWeight() {
+  private increaseLeftWeight(): void {
     if (!this._frozen) {
       this.preference -= 0.2;
       log.info(
@@ -107,7 +110,7 @@ export default class ApiBalancer implements Provider {
     }
   }
 
-  private increaseRightWeight() {
+  private increaseRightWeight(): void {
     if (!this._frozen) {
       this.preference += 0.2;
       log.info(

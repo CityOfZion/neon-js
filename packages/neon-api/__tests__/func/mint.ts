@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { tx } from "@cityofzion/neon-core";
 import { mocked } from "ts-jest/utils";
 import { getVerificationSignatureForSmartContract as _getVerificationSignatureForSmartContract } from "../../src/funcs/common";

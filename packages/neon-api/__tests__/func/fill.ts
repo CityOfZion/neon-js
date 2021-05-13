@@ -82,7 +82,7 @@ describe("fillSigningFunction", () => {
       signingFunction: expectedFunc,
     } as SendAssetConfig;
 
-    const result = await fill.fillSigningFunction(config);
+    await fill.fillSigningFunction(config);
 
     expect(config.signingFunction).toBe(expectedFunc);
   });
@@ -97,7 +97,7 @@ describe("fillSigningFunction", () => {
       },
     } as SendAssetConfig;
 
-    const result = await fill.fillSigningFunction(config);
+    await fill.fillSigningFunction(config);
 
     expect(config.signingFunction).toBe(expectedFunc);
     expect(signWithPrivateKey).toBeCalledWith(mockKey);

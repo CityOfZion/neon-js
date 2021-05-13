@@ -27,7 +27,7 @@ export class InvocationTransaction extends BaseTransaction {
   public script: string;
   public gas: Fixed8;
 
-  public get exclusiveData() {
+  public get exclusiveData(): { gas: Fixed8; script: string } {
     return { gas: this.gas, script: this.script };
   }
 

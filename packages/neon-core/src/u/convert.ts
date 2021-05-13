@@ -28,7 +28,7 @@ export function str2ab(str: string): Uint8Array {
  * @param str HEX string
  * @returns
  */
-export function hexstring2ab(str: any): Uint8Array {
+export function hexstring2ab(str: string): Uint8Array {
   ensureHex(str);
   if (!str.length) {
     return new Uint8Array(0);
@@ -95,7 +95,7 @@ export function int2hex(num: number): string {
  * @param littleEndian Encode the hex in little endian form
  */
 export function num2hexstring(
-  num: any,
+  num: number,
   size = 1,
   littleEndian = false
 ): string {
@@ -148,7 +148,6 @@ export function num2fixed8(num: number, size = 8): string {
       `num2fixed expected an integer for argument size but got ${size} instead.`
     );
   }
-  const i = new Fixed8(num);
   return new Fixed8(num).toReverseHex().slice(0, size * 2);
 }
 
