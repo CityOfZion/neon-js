@@ -3,6 +3,17 @@ id: latest
 title: Changelog (v4)
 ---
 
+4.9.0
+=====
+
+- API
+
+  - Add Dora API support.
+
+- Other
+
+  - Update dependencies to latest, with axios package the one to note.
+
 4.8.3
 =====
 
