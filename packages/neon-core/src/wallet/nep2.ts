@@ -48,9 +48,7 @@ export async function encrypt(
   const account = new Account(wifKey);
   // SHA Salt (use the first 4 bytes)
   const firstSha = SHA256(enc.Latin1.parse(account.address));
-  const addressHash = SHA256(firstSha as any)
-    .toString()
-    .slice(0, 8);
+  const addressHash = SHA256(firstSha).toString().slice(0, 8);
 
   const key = await scrypt(
     Buffer.from(keyphrase.normalize("NFC"), "utf8"),
@@ -117,9 +115,7 @@ export async function decrypt(
   );
   const privateKey = hexXor(decrypted.toString(), derived1);
   const account = new Account(privateKey);
-  const newAddressHash = SHA256(
-    SHA256(enc.Latin1.parse(account.address)) as any
-  )
+  const newAddressHash = SHA256(SHA256(enc.Latin1.parse(account.address)))
     .toString()
     .slice(0, 8);
   if (addressHash !== newAddressHash) {
