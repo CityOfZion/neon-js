@@ -153,11 +153,10 @@ export class Account {
   }
 
   public get isMultiSig(): boolean {
-    return (
-      this.contract &&
+    return (this.contract !== null &&
       this.contract.script &&
-      this.contract.script.slice(this.contract.script.length - 2) === "ae"
-    );
+      this.contract.script.slice(this.contract.script.length - 2) ===
+        "ae") as boolean;
   }
 
   /**

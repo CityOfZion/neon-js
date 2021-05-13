@@ -1,5 +1,5 @@
 export interface NeonObject {
-  export(): Record<string, unknown>;
+  export(): unknown;
   equals<T>(other: Partial<T>): boolean;
 }
 
