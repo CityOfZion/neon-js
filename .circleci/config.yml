@@ -133,7 +133,11 @@ workflows:
       - setup:
           filters:
             branches:
-              ignore: gh-pages
+              ignore:
+                - gh-pages
+                - master
+            tags:
+              ignore: /.*/
       - lint:
           requires:
             - setup
@@ -144,19 +148,20 @@ workflows:
           requires:
             - lint
             - unit-test
-      - publish-latest:
-          requires:
-            - integration-test
+
+  publish:
+    jobs:
+      - setup:
           filters:
             branches:
               only: master
             tags:
               only: /v[0-9]+\.[0-9]+\.[0-9]+$/
-      - publish-next:
+      - publish-latest:
           requires:
-            - integration-test
+            - setup
           filters:
             branches:
-              only: next
+              only: master
             tags:
-              only: /v[0-9]+\.[0-9]+\.[0-9]+-next.*/
+              only: /v[0-9]+\.[0-9]+\.[0-9]+$/
