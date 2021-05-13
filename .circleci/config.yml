@@ -50,7 +50,17 @@ jobs:
       - run: mkdir reports && mkdir reports/lint
       - run:
           name: Lint
-          command: yarn lint --format junit -o reports/lint/lint.xml
+          command: |
+            CURRENT_BRANCH=$(git symbolic-ref -q --short HEAD)
+            BASE_BRANCH=$(curl -s https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pulls/${CIRCLE_PR_NUMBER} | jq -r '.base.ref')
+            git checkout --track origin/$BASE_BRANCH
+            git checkout $CURRENT_BRANCH
+            echo "Finding files to lint"
+            FILES=$(git diff --name-only --diff-filter=bd $(git merge-base HEAD $BASE_BRANCH) | grep '^packages/.*\.[tj]s$') || true
+            [ -z "$FILES" ] && echo "No files found" && exit 0
+            echo "Found:"
+            echo $FILES
+            yarn run eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -150,4 +160,3 @@ workflows:
               only: next
             tags:
               only: /v[0-9]+\.[0-9]+\.[0-9]+-next.*/
-
