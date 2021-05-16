@@ -36,8 +36,7 @@ commands:
           environment:
             JEST_JUNIT_OUTPUT_DIR: reports/unit
             JEST_JUNIT_OUTPUT_NAME: results.xml
-          command:
-            yarn test:unit --ci --runInBand --detectOpenHandles
+          command: yarn test:unit --ci --runInBand --detectOpenHandles
             --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
@@ -60,8 +59,7 @@ commands:
           environment:
             JEST_JUNIT_OUTPUT_DIR: reports/integration
             JEST_JUNIT_OUTPUT_NAME: results.xml
-          command:
-            yarn test:integration --ci --runInBand --detectOpenHandles
+          command: yarn test:integration --ci --runInBand --detectOpenHandles
             --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
@@ -87,8 +85,7 @@ jobs:
             - neon-fallback
       - run:
           name: node hid compilation requirements
-          command:
-            sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
+          command: sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
       - run: yarn install --cache-folder .cache/yarn
       - save_cache:
           key: neon-yarn-{{ checksum "yarn.lock" }}
@@ -225,29 +222,37 @@ workflows:
             - lint
             - unittest-<< matrix.version >>
 
-  # Workflow that runs on the stable branches
-  main_flow:
+  # Workflow that runs on the master branch
+  master_flow:
     jobs:
       - setup:
           filters:
             branches:
               only:
                 - master
-                - next
       - publish-latest:
           requires:
             - setup
           filters:
             branches:
-              only: master
+              ignore: /.*/
             tags:
               only: /v[0-9]+\.[0-9]+\.[0-9]+/
+
+  # Workflow that runs on the next branch
+  next_flow:
+    jobs:
+      - setup:
+          filters:
+            branches:
+              only:
+                - next
       - publish-next:
           requires:
             - setup
           filters:
             branches:
-              only: next
+              ignore: /.*/
             tags:
               only: /v[0-9]+\.[0-9]+\.[0-9]+-next.*/
 
