@@ -211,6 +211,8 @@ workflows:
           matrix:
             parameters:
               env: ["env-node12", "env-node14"]
+          requires:
+            - setup
       - integrationtest:
           name: integrationtest-<< matrix.env >>
           matrix:
