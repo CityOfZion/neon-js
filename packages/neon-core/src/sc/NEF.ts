@@ -74,9 +74,9 @@ export class NEF {
     if (magic !== this.MAGIC)
       throw new Error("NEF deserialization failure - incorrect magic");
 
-    const tmp_compiler = Buffer.from(reader.read(64), "hex");
-    const idx = tmp_compiler.indexOf(0x0);
-    const compiler = tmp_compiler.slice(0, idx).toString();
+    const compilerHexArray = Buffer.from(reader.read(64), "hex");
+    const idx = compilerHexArray.indexOf(0x0);
+    const compiler = compilerHexArray.slice(0, idx).toString();
 
     if (reader.read(2) !== "0000")
       throw new Error("NEF deserialization failure - reserved bytes must be 0");

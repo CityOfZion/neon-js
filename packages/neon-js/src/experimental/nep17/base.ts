@@ -171,12 +171,12 @@ export class Nep17Contract {
     const decimals = await this.decimals();
     const builder = new sc.ScriptBuilder();
 
-    const amount_to_transfer =
+    const amtToTransfer =
       decimals == 0 ? amount : amount * Math.pow(10, decimals);
     builder.emitAppCall(this.contractHash, "transfer", [
       u.HexString.fromHex(wallet.getScriptHashFromAddress(from)),
       u.HexString.fromHex(wallet.getScriptHashFromAddress(to)),
-      amount_to_transfer,
+      amtToTransfer,
       sc.ContractParam.any(null),
     ]);
     builder.emit(sc.OpCode.ASSERT);

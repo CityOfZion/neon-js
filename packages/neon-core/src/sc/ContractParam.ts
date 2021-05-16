@@ -264,11 +264,8 @@ export class ContractParam implements NeonObject<ContractParamLike> {
 
       case ContractParamType.Array:
         if (Array.isArray(arg)) {
-          this.value = (arg as (
-            | ContractParam
-            | ContractParamLike
-          )[]).map((i: ContractParam | ContractParamLike) =>
-            ContractParam.fromJson(i)
+          this.value = (arg as (ContractParam | ContractParamLike)[]).map(
+            (i: ContractParam | ContractParamLike) => ContractParam.fromJson(i)
           );
           return;
         } else {

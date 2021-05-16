@@ -8,9 +8,9 @@ jest.mock("../src/utils");
 
 describe("getDevicePaths", () => {
   test("throws error when not supported", async () => {
-    const mockLedgerLib = ({
+    const mockLedgerLib = {
       isSupported: jest.fn().mockImplementation(async () => false),
-    } as unknown) as typeof Transport;
+    } as unknown as typeof Transport;
 
     const result = getDevicePaths(mockLedgerLib);
     expect(result).rejects.toThrow("not support the ledger");
@@ -18,10 +18,10 @@ describe("getDevicePaths", () => {
 
   test("returns data from list method", async () => {
     const expected = [] as ReadonlyArray<string>;
-    const mockLedgerLib = ({
+    const mockLedgerLib = {
       isSupported: jest.fn().mockImplementation(async () => true),
       list: jest.fn().mockImplementation(async () => expected),
-    } as unknown) as typeof Transport;
+    } as unknown as typeof Transport;
 
     const result = await getDevicePaths(mockLedgerLib);
 
@@ -33,11 +33,11 @@ describe("getPublicKey", () => {
   test("throws processed error if error", () => {
     const thrownError = new Error();
     const expectedError = new Error();
-    const mockLedgerInstance = ({
+    const mockLedgerInstance = {
       send: jest.fn().mockImplementation(() => {
         return Promise.reject(thrownError);
       }),
-    } as unknown) as Transport;
+    } as unknown as Transport;
 
     evalTransportError.mockImplementationOnce((e) => {
       if (e === thrownError) {
@@ -53,9 +53,9 @@ describe("getPublicKey", () => {
     const expected = "1234";
     const expectedBuffer = Buffer.from(expected, "hex");
     const bip44Input = "abcd";
-    const mockLedgerInstance = ({
+    const mockLedgerInstance = {
       send: jest.fn().mockImplementation(async () => expectedBuffer),
-    } as unknown) as Transport;
+    } as unknown as Transport;
 
     const result = await getPublicKey(mockLedgerInstance, bip44Input);
 
@@ -67,11 +67,11 @@ describe("getSignature", () => {
   test("throws processed error if error", () => {
     const thrownError = new Error();
     const expectedError = new Error();
-    const mockLedgerInstance = ({
+    const mockLedgerInstance = {
       send: jest.fn().mockImplementation(() => {
         return Promise.reject(thrownError);
       }),
-    } as unknown) as Transport;
+    } as unknown as Transport;
 
     evalTransportError.mockImplementationOnce((e) => {
       if (e === thrownError) {
@@ -86,11 +86,11 @@ describe("getSignature", () => {
   test("throws error if ledger does not return signature after finalising", () => {
     const inputMsg = "1".repeat(512) + "2".repeat(512);
     const bip44Input = "abcd";
-    const mockLedgerInstance = ({
+    const mockLedgerInstance = {
       send: jest.fn().mockImplementation(async () => {
         return Buffer.from("9000", "hex");
       }),
-    } as unknown) as Transport;
+    } as unknown as Transport;
 
     const result = getSignature(mockLedgerInstance, inputMsg, bip44Input);
     expect(result).rejects.toThrowError("did not return signature");
@@ -101,7 +101,7 @@ describe("getSignature", () => {
     const bip44Input = "abcd";
     const mockDer = "9999";
     const expectedSig = "9876";
-    const mockLedgerInstance = ({
+    const mockLedgerInstance = {
       send: jest
         .fn()
         .mockImplementation(async (_cla, _ins, p1, _p2, ..._args) => {
@@ -110,7 +110,7 @@ describe("getSignature", () => {
           }
           return Buffer.from("9000", "hex");
         }),
-    } as unknown) as Transport;
+    } as unknown as Transport;
     DerToHexSignature.mockImplementationOnce(() => expectedSig);
 
     const result = await getSignature(mockLedgerInstance, inputMsg, bip44Input);

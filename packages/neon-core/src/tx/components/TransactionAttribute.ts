@@ -40,7 +40,8 @@ export function toTxAttrUsage(
  * For example, a remark is attached as an attribute.
  */
 export class TransactionAttribute
-  implements NeonObject<TransactionAttributeLike> {
+  implements NeonObject<TransactionAttributeLike>
+{
   public static deserialize(hex: string): TransactionAttribute {
     const ss = new StringStream(hex);
     return this.fromStream(ss);
