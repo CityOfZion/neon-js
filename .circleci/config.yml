@@ -1,27 +1,27 @@
 version: 2.1
 
 executors:
-  env-node12:
+  env_node:
+    parameters:
+      version: &parameter-version
+        description: "Node version"
+        type: enum
+        enum: ["12-stretch", "14-stretch"]
+        default: "12-stretch"
     working_directory: ~/repo
     docker:
-      - image: circleci/node:12-stretch
+      - image: circleci/node:<< parameters.version >>
 
-  env-node14:
+  env_node_integration:
+    parameters:
+      version:
+        description: "Node version"
+        type: enum
+        enum: ["12-stretch", "14-stretch"]
+        default: "12-stretch"
     working_directory: ~/repo
     docker:
-      - image: circleci/node:14-stretch
-
-  env-integration12:
-    working_directory: ~/repo
-    docker:
-      - image: circleci/node:12-stretch
-      - image: snowypowers/neo-privatenet:v3.0.0-rc2
-
-  env-integration14:
-    working_directory: ~/repo
-    docker:
-      - image: circleci/node:14-stretch
-      - image: snowypowers/neo-privatenet:v3.0.0-rc2
+      - image: circleci/node:<< parameters.version >>
 
 commands:
   run-unittest:
@@ -69,7 +69,7 @@ commands:
 
 jobs:
   setup:
-    executor: env-node12
+    executor: env_node
     steps:
       - run:
           name: "Versions"
@@ -106,7 +106,7 @@ jobs:
             - packages
 
   lint:
-    executor: env-node12
+    executor: env_node
     steps:
       - checkout
       - attach_workspace:
@@ -135,22 +135,24 @@ jobs:
 
   unittest:
     parameters:
-      env:
-        type: executor
-    executor: << parameters.env >>
+      version: *parameter-version
+    executor:
+      name: env_node
+      version: << parameters.version >>
     steps:
       - run-unittest
 
   integrationtest:
     parameters:
-      env:
-        type: executor
-    executor: << parameters.env >>
+      version: *parameter-version
+    executor:
+      name: env_node_integration
+      version: << parameters.version >>
     steps:
       - run-integrationtest
 
   publish-latest:
-    executor: env-node12
+    executor: env_node
     steps:
       - checkout
       - attach_workspace:
@@ -163,7 +165,7 @@ jobs:
           command: yarn release:latest --yes
 
   publish-next:
-    executor: env-node12
+    executor: env_node
     steps:
       - checkout
       - attach_workspace:
@@ -176,7 +178,7 @@ jobs:
           command: yarn release:next --yes
 
   publish-docs:
-    executor: env-node12
+    executor: env_node
     steps:
       - checkout
       - run:
@@ -207,20 +209,20 @@ workflows:
           requires:
             - setup
       - unittest:
-          name: unittest-<< matrix.env >>
+          name: unittest-<< matrix.version >>
           matrix:
             parameters:
-              env: ["env-node12", "env-node14"]
+              version: ["12-stretch", "14-stretch"]
           requires:
             - setup
       - integrationtest:
-          name: integrationtest-<< matrix.env >>
+          name: integrationtest-<< matrix.version >>
           matrix:
             parameters:
-              env: ["env-node12", "env-node14"]
+              version: ["12-stretch", "14-stretch"]
           requires:
             - lint
-            - unittest-<< matrix.env >>
+            - unittest-<< matrix.version >>
 
   # Workflow that runs on the stable branches
   main_flow:
