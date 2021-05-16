@@ -35,7 +35,7 @@
     "test:node": "node test.node.js"
   },
   "dependencies": {
-    "@ledgerhq/hw-transport": "5.46.0",
+    "@ledgerhq/hw-transport": "5.51.1",
     "@types/ledgerhq__hw-transport": "4.21.3"
   },
   "peerDependencies": {
@@ -47,7 +47,7 @@
   ],
   "devDependencies": {
     "@cityofzion/neon-js": "^4.8.0",
-    "@ledgerhq/hw-transport-node-hid": "5.46.0",
+    "@ledgerhq/hw-transport-node-hid": "5.51.1",
     "@ledgerhq/hw-transport-u2f": "5.36.0-deprecated",
     "@types/ledgerhq__hw-transport-node-hid": "4.22.2"
   }
