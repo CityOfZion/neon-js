@@ -114,5 +114,5 @@ describe("NetworkFacade", () => {
 
     const newVotes = parseInt(newCandidateStatus.votes);
     expect(newVotes).toBeGreaterThan(currentVotes);
-  });
+  }, 30000);
 });
