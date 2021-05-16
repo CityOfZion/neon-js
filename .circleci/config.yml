@@ -116,7 +116,7 @@ jobs:
           name: Lint
           command: |
             CURRENT_BRANCH=$(git symbolic-ref -q --short HEAD)
-            BASE_BRANCH=$(node helpers/getBaseBranch.js $CIRCLE_PULL_REQUEST)
+            BASE_BRANCH=$(curl -s https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pulls/${CIRCLE_PR_NUMBER} | jq -r '.base.ref')
             git checkout --track origin/$BASE_BRANCH
             git checkout $CURRENT_BRANCH
             echo "Finding files to lint"
@@ -133,23 +133,19 @@ jobs:
       - store_artifacts:
           path: reports
 
-  unittest-node12:
-    executor: env-node12
+  unittest:
+    parameters:
+      env:
+        type: executor
+    executor: << parameters.env >>
     steps:
       - run-unittest
 
-  unittest-node14:
-    executor: env-node14
-    steps:
-      - run-unittest
-
-  integrationtest-node12:
-    executor: env-integration12
-    steps:
-      - run-integrationtest
-
-  integrationtest-node14:
-    executor: env-integration14
+  integrationtest:
+    parameters:
+      env:
+        type: executor
+    executor: << parameters.env >>
     steps:
       - run-integrationtest
 
@@ -196,43 +192,51 @@ jobs:
             yarn install
             yarn run release
 
+# Branch based workflows
 workflows:
   version: 2
-  build_and_test:
+
+  # Workflow that runs on all pull requests.
+  pull_request:
     jobs:
       - setup:
-          filters:
+          filters: &filters-pull-request
             branches:
-              ignore: gh-pages
               only: /pull\/.*/
-            tags:
-              ignore: /.*/
       - lint:
           requires:
             - setup
-      - unittest-node12:
-          requires:
-            - setup
-      - unittest-node14:
-          requires:
-            - setup
-      - integrationtest-node12:
+      - unittest:
+          name: unittest-<< matrix.env >>
+          matrix:
+            parameters:
+              env: ["env-node12", "env-node14"]
+      - integrationtest:
+          name: integrationtest-<< matrix.env >>
+          matrix:
+            parameters:
+              env: ["env-node12", "env-node14"]
           requires:
             - lint
-            - unittest-node12
-      - integrationtest-node14:
-          requires:
-            - lint
-            - unittest-node14
+            - unittest-<< matrix.env >>
 
-  publish:
+  # Workflow that runs on the stable branches
+  main_flow:
     jobs:
       - setup:
           filters:
             branches:
-              ignore: /.*/
+              only:
+                - master
+                - next
+      - publish-latest:
+          requires:
+            - setup
+          filters:
+            branches:
+              only: master
             tags:
-              only: /v[0-9]+\.[0-9]+\.[0-9]+-next.*/
+              only: /v[0-9]+\.[0-9]+\.[0-9]+/
       - publish-next:
           requires:
             - setup
