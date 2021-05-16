@@ -101,9 +101,8 @@ export class Witness implements NeonObject<WitnessLike> {
         throw new Error("Unable to process given signature");
       }
     });
-    const signingThreshold = getSigningThresholdFromVerificationScript(
-      verificationScript
-    );
+    const signingThreshold =
+      getSigningThresholdFromVerificationScript(verificationScript);
     const validSigs = orderedSigs.filter((s) => s !== "");
     if (validSigs.length < signingThreshold) {
       throw new Error(

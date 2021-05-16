@@ -95,12 +95,12 @@ describe("add methods", () => {
       "a1760976db5fcdfab2a9930e8f6ce875b2d18225"
     );
     expect(!!(cosigner.scopes & WitnessScope.CustomContracts)).toBeTruthy();
-    expect(
-      cosigner.allowedContracts.map((i) => i.toBigEndian())
-    ).toStrictEqual([
-      "43cf98eddbe047e198a3e5d57006311442a0ca15",
-      "a1760976db5fcdfab2a9930e8f6ce875b2d18225",
-    ]);
+    expect(cosigner.allowedContracts.map((i) => i.toBigEndian())).toStrictEqual(
+      [
+        "43cf98eddbe047e198a3e5d57006311442a0ca15",
+        "a1760976db5fcdfab2a9930e8f6ce875b2d18225",
+      ]
+    );
   });
 
   test("addAllowedGroups", () => {

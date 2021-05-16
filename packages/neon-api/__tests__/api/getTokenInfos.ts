@@ -3,7 +3,7 @@ import { getTokenInfos } from "../../src/api/getTokenInfos";
 
 describe("getTokenInfos", () => {
   test("success", async () => {
-    const mockClient = ({
+    const mockClient = {
       invokeScript: jest.fn(async () => {
         return {
           script: "",
@@ -38,7 +38,7 @@ describe("getTokenInfos", () => {
           ],
         };
       }),
-    } as unknown) as rpc.NeoServerRpcClient;
+    } as unknown as rpc.NeoServerRpcClient;
 
     const result = await getTokenInfos(
       [
@@ -63,7 +63,7 @@ describe("getTokenInfos", () => {
   });
 
   test("VM fault", async () => {
-    const mockClient = ({
+    const mockClient = {
       invokeScript: jest.fn(async () => {
         return {
           script: "",
@@ -73,7 +73,7 @@ describe("getTokenInfos", () => {
           stack: [],
         };
       }),
-    } as unknown) as rpc.NeoServerRpcClient;
+    } as unknown as rpc.NeoServerRpcClient;
 
     expect(
       async () =>
@@ -85,7 +85,7 @@ describe("getTokenInfos", () => {
   });
 
   test("VM fault without exception message", async () => {
-    const mockClient = ({
+    const mockClient = {
       invokeScript: jest.fn(async () => {
         return {
           script: "",
@@ -94,7 +94,7 @@ describe("getTokenInfos", () => {
           stack: [],
         };
       }),
-    } as unknown) as rpc.NeoServerRpcClient;
+    } as unknown as rpc.NeoServerRpcClient;
 
     expect(
       async () =>

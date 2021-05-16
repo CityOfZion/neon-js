@@ -29,10 +29,17 @@ module.exports = {
           },
         ],
         "@typescript-eslint/no-non-null-assertion": ["warn"],
-        "@typescript-eslint/camelcase": 0,
         "@typescript-eslint/no-unused-vars": [
           "error",
           { varsIgnorePattern: "^_", argsIgnorePattern: "^_" },
+        ],
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            selector: "variable",
+            format: ["camelCase", "UPPER_CASE"],
+            leadingUnderscore: "allow",
+          },
         ],
       },
     },

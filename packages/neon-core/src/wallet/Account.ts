@@ -221,9 +221,8 @@ export class Account implements NeonObject<AccountJSON> {
         const verificationScript = HexString.fromBase64(
           this.contract.script
         ).toBigEndian();
-        this._publicKey = core.getPublicKeyFromVerificationScript(
-          verificationScript
-        );
+        this._publicKey =
+          core.getPublicKeyFromVerificationScript(verificationScript);
         return this._publicKey;
       } catch {
         // Failed to get public key from contract. Account might be malformed.

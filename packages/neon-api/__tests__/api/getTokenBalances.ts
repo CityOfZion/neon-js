@@ -3,7 +3,7 @@ import { getTokenBalances } from "../../src/api/getTokenBalances";
 
 describe("getTokenBalances", () => {
   test("success", async () => {
-    const mockClient = ({
+    const mockClient = {
       invokeScript: jest.fn(async () => {
         return {
           script: "",
@@ -37,7 +37,7 @@ describe("getTokenBalances", () => {
           ],
         };
       }),
-    } as unknown) as rpc.NeoServerRpcClient;
+    } as unknown as rpc.NeoServerRpcClient;
 
     const result = await getTokenBalances(
       "NPTmAHDxo6Pkyic8Nvu3kwyXoYJCvcCB6i",
@@ -53,7 +53,7 @@ describe("getTokenBalances", () => {
   });
 
   test("VM fault", async () => {
-    const mockClient = ({
+    const mockClient = {
       invokeScript: jest.fn(async () => {
         return {
           script: "",
@@ -63,7 +63,7 @@ describe("getTokenBalances", () => {
           stack: [],
         };
       }),
-    } as unknown) as rpc.NeoServerRpcClient;
+    } as unknown as rpc.NeoServerRpcClient;
 
     expect(
       async () =>
@@ -80,7 +80,7 @@ describe("getTokenBalances", () => {
   });
 
   test("VM fault without exception message", async () => {
-    const mockClient = ({
+    const mockClient = {
       invokeScript: jest.fn(async () => {
         return {
           script: "",
@@ -89,7 +89,7 @@ describe("getTokenBalances", () => {
           stack: [],
         };
       }),
-    } as unknown) as rpc.NeoServerRpcClient;
+    } as unknown as rpc.NeoServerRpcClient;
 
     expect(
       async () =>

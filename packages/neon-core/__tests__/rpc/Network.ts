@@ -40,10 +40,10 @@ describe("constructor", () => {
       },
     };
 
-    const NetworkObj = new Network(testObject);
-    const result = new Network(NetworkObj);
+    const networkObj = new Network(testObject);
+    const result = new Network(networkObj);
     expect(result instanceof Network).toBeTruthy();
-    expect(result).not.toBe(NetworkObj);
+    expect(result).not.toBe(networkObj);
     expect(result.extra).not.toBe(testObject.extra);
     expect(result.extra).toEqual(testObject.extra);
   });
@@ -62,8 +62,8 @@ describe("export", () => {
       },
     };
 
-    const NetworkObj = new Network(expected);
-    const result = NetworkObj.export();
+    const networkObj = new Network(expected);
+    const result = networkObj.export();
     expect(result).toEqual(expected);
   });
 
@@ -79,8 +79,8 @@ describe("export", () => {
       },
     };
 
-    const NetworkObj = new Network(expected);
-    const result = NetworkObj.toConfiguration();
+    const networkObj = new Network(expected);
+    const result = networkObj.toConfiguration();
     expect(result).toEqual(expected);
   });
 });
@@ -108,14 +108,14 @@ describe("equals", () => {
       neoscan: "neoscanUrl",
     },
   };
-  const Network1 = new Network(obj1);
-  const Network2 = new Network(obj2);
+  const network1 = new Network(obj1);
+  const network2 = new Network(obj2);
 
   test.each([
-    ["Network1 === Network1", Network1, Network1, true],
-    ["Network1 !== Network2", Network1, Network2, false],
-    ["Network1 === Obj1", Network1, obj1, true],
-    ["Network1 !== Obj2", Network1, obj2, false],
+    ["Network1 === Network1", network1, network1, true],
+    ["Network1 !== Network2", network1, network2, false],
+    ["Network1 === Obj1", network1, obj1, true],
+    ["Network1 !== Obj2", network1, obj2, false],
   ])(
     "%s",
     (

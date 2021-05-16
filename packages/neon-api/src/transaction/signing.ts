@@ -7,9 +7,8 @@ export type SigningFunction = (
 
 export function signWithAccount(acct: wallet.Account): SigningFunction {
   return async (txData, verificationScript) => {
-    const scriptHash = wallet.getScriptHashFromVerificationScript(
-      verificationScript
-    );
+    const scriptHash =
+      wallet.getScriptHashFromVerificationScript(verificationScript);
     if (scriptHash !== acct.scriptHash) {
       throw new Error(
         `Request for ${wallet.getAddressFromScriptHash(

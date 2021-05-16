@@ -8,6 +8,7 @@ export interface OpCodeAnnotation {
 }
 
 /** Annotation details for OpCode. Tracks neo-vm/OpCode.cs */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const OpCodeAnnotations: Record<OpCode, OpCodeAnnotation> = {
   [OpCode.PUSHINT8]: { operandSize: 1 },
   [OpCode.PUSHINT16]: { operandSize: 2 },

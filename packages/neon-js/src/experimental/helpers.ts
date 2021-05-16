@@ -84,10 +84,10 @@ export async function calculateNetworkFee(
       const signatureCount = wallet.getSigningThresholdFromVerificationScript(
         witnessScript.toString()
       );
-      const size_inv = 66 * signatureCount;
+      const invocationScriptSize = 66 * signatureCount;
       networkFeeSize +=
-        u.getSerializedSize(size_inv) +
-        size_inv +
+        u.getSerializedSize(invocationScriptSize) +
+        invocationScriptSize +
         u.getSerializedSize(witnessScript);
       networkFee +=
         execFeeFactor * sc.OpCodePrices[sc.OpCode.PUSHDATA1] * signatureCount;
@@ -225,13 +225,13 @@ export async function addFees(
   }
 
   const GAS = new GASContract(config);
-  const GASBalance = await GAS.balanceOf(config.account.address);
+  const gasBalance = await GAS.balanceOf(config.account.address);
   const requiredGAS = parseFloat(
     transaction.systemFee.add(transaction.networkFee).toDecimal(8)
   );
-  if (GASBalance < requiredGAS) {
+  if (gasBalance < requiredGAS) {
     throw new Error(
-      `Insufficient GAS. Required: ${requiredGAS} Available: ${GASBalance}`
+      `Insufficient GAS. Required: ${requiredGAS} Available: ${gasBalance}`
     );
   }
 }

@@ -38,9 +38,9 @@ beforeAll(async () => {
 
   manifest = sc.ContractManifest.fromJson(
     JSON.parse(
-      ((await fs.readFile(
+      (await fs.readFile(
         path.resolve(__dirname, "./contract3.manifest.json")
-      )) as unknown) as string
+      )) as unknown as string
     )
   );
 
@@ -61,8 +61,8 @@ describe("contract", () => {
     console.log(`TXID: ${txid}`);
 
     await sleep(3000);
-    const tx_log = await rpcClient.getApplicationLog(txid);
-    expect(tx_log["executions"][0]["vmstate"] as string).toBe("HALT");
+    const txLog = await rpcClient.getApplicationLog(txid);
+    expect(txLog["executions"][0]["vmstate"] as string).toBe("HALT");
 
     const state = await rpcClient.getContractState(contractHash);
     // if contract state fails it throws an RpcError
@@ -111,8 +111,8 @@ describe("contract", () => {
     console.log(`TXID: ${txid}`);
 
     await sleep(3000);
-    const tx_log = await rpcClient.getApplicationLog(txid);
-    const execution = tx_log["executions"][0];
+    const txLog = await rpcClient.getApplicationLog(txid);
+    const execution = txLog["executions"][0];
     expect(execution["vmstate"] as string).toBe("FAULT");
     expect(execution["exception"] as string).toContain(
       "Contract Already Exists"

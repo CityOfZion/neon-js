@@ -1,6 +1,7 @@
 import { OpCode } from "./OpCode";
 
 /** Prices of individual OpCodes in GAS. Tracks Neo.SmartContract.ApplicationEngine.OpCodePrices */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const OpCodePrices = {
   [OpCode.PUSHINT8]: 1 << 0,
   [OpCode.PUSHINT16]: 1 << 0,

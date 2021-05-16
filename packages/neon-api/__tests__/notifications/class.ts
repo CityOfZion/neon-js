@@ -3,7 +3,7 @@ import WebSocket from "isomorphic-ws";
 import notifications from "../../src/notifications/class";
 jest.mock("isomorphic-ws");
 
-const UnitTestNetUrl = "wss://testurl.com";
+const unitTestNetUrl = "wss://testurl.com";
 beforeEach(() => {
   jest.resetModules();
   WebSocket.mockClear();
@@ -12,7 +12,7 @@ beforeEach(() => {
     extra: {
       neoscan: "http://wrongurl.com",
       neonDB: "http://wrongurl.com",
-      notifications: UnitTestNetUrl,
+      notifications: unitTestNetUrl,
     },
   });
 });
@@ -26,7 +26,7 @@ describe("constructor", () => {
 
   test("Network name", () => {
     const result = new notifications("UnitTestNet");
-    expect(result.name).toMatch(UnitTestNetUrl);
+    expect(result.name).toMatch(unitTestNetUrl);
   });
 });
 
@@ -65,12 +65,12 @@ describe("subscribe", () => {
   test("subscribe opens correct websocket connection", async () => {
     const subscriptions = new notifications("UnitTestNet");
     subscriptions.subscribe(contract, jest.fn());
-    expect(WebSocket).toBeCalledWith(UnitTestNetUrl + "?contract=" + contract);
+    expect(WebSocket).toBeCalledWith(unitTestNetUrl + "?contract=" + contract);
   });
   test("subscribe works with non-0x-prefixed contracts", async () => {
     const subscriptions = new notifications("UnitTestNet");
     subscriptions.subscribe(contract.slice(2), jest.fn());
-    expect(WebSocket).toBeCalledWith(UnitTestNetUrl + "?contract=" + contract);
+    expect(WebSocket).toBeCalledWith(unitTestNetUrl + "?contract=" + contract);
   });
   test("subscribe relays messages properly", async () => {
     const callback = jest.fn();
