@@ -1,26 +1,27 @@
 version: 2.1
 
 executors:
-  env-node12:
+  env_node:
+    parameters:
+      version: &parameter-version
+        description: "Node version"
+        type: enum
+        enum: ["12-stretch", "14-stretch"]
+        default: "12-stretch"
     working_directory: ~/repo
     docker:
-      - image: circleci/node:12-stretch
+      - image: circleci/node:<< parameters.version >>
 
-  env-node14:
+  env_node_integration:
+    parameters:
+      version:
+        description: "Node version"
+        type: enum
+        enum: ["12-stretch", "14-stretch"]
+        default: "12-stretch"
     working_directory: ~/repo
     docker:
-      - image: circleci/node:14-stretch
-
-  env-integration12:
-    working_directory: ~/repo
-    docker:
-      - image: circleci/node:12-stretch
-      - image: snowypowers/neo-privatenet:v3.0.0-rc2
-
-  env-integration14:
-    working_directory: ~/repo
-    docker:
-      - image: circleci/node:14-stretch
+      - image: circleci/node:<< parameters.version >>
       - image: snowypowers/neo-privatenet:v3.0.0-rc2
 
 commands:
@@ -69,7 +70,7 @@ commands:
 
 jobs:
   setup:
-    executor: env-node12
+    executor: env_node
     steps:
       - run:
           name: "Versions"
@@ -106,7 +107,7 @@ jobs:
             - packages
 
   lint:
-    executor: env-node12
+    executor: env_node
     steps:
       - checkout
       - attach_workspace:
@@ -116,7 +117,7 @@ jobs:
           name: Lint
           command: |
             CURRENT_BRANCH=$(git symbolic-ref -q --short HEAD)
-            BASE_BRANCH=$(node helpers/getBaseBranch.js $CIRCLE_PULL_REQUEST)
+            BASE_BRANCH=$(curl -s https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pulls/${CIRCLE_PR_NUMBER} | jq -r '.base.ref')
             git checkout --track origin/$BASE_BRANCH
             git checkout $CURRENT_BRANCH
             echo "Finding files to lint"
@@ -133,28 +134,26 @@ jobs:
       - store_artifacts:
           path: reports
 
-  unittest-node12:
-    executor: env-node12
+  unittest:
+    parameters:
+      version: *parameter-version
+    executor:
+      name: env_node
+      version: << parameters.version >>
     steps:
       - run-unittest
 
-  unittest-node14:
-    executor: env-node14
-    steps:
-      - run-unittest
-
-  integrationtest-node12:
-    executor: env-integration12
-    steps:
-      - run-integrationtest
-
-  integrationtest-node14:
-    executor: env-integration14
+  integrationtest:
+    parameters:
+      version: *parameter-version
+    executor:
+      name: env_node_integration
+      version: << parameters.version >>
     steps:
       - run-integrationtest
 
   publish-latest:
-    executor: env-node12
+    executor: env_node
     steps:
       - checkout
       - attach_workspace:
@@ -167,7 +166,7 @@ jobs:
           command: yarn release:latest --yes
 
   publish-next:
-    executor: env-node12
+    executor: env_node
     steps:
       - checkout
       - attach_workspace:
@@ -180,7 +179,7 @@ jobs:
           command: yarn release:next --yes
 
   publish-docs:
-    executor: env-node12
+    executor: env_node
     steps:
       - checkout
       - run:
@@ -196,43 +195,53 @@ jobs:
             yarn install
             yarn run release
 
+# Branch based workflows
 workflows:
   version: 2
-  build_and_test:
+
+  # Workflow that runs on all pull requests.
+  pull_request:
     jobs:
       - setup:
-          filters:
+          filters: &filters-pull-request
             branches:
-              ignore: gh-pages
               only: /pull\/.*/
-            tags:
-              ignore: /.*/
       - lint:
           requires:
             - setup
-      - unittest-node12:
+      - unittest:
+          name: unittest-<< matrix.version >>
+          matrix:
+            parameters:
+              version: ["12-stretch", "14-stretch"]
           requires:
             - setup
-      - unittest-node14:
-          requires:
-            - setup
-      - integrationtest-node12:
-          requires:
-            - lint
-            - unittest-node12
-      - integrationtest-node14:
+      - integrationtest:
+          name: integrationtest-<< matrix.version >>
+          matrix:
+            parameters:
+              version: ["12-stretch", "14-stretch"]
           requires:
             - lint
-            - unittest-node14
+            - unittest-<< matrix.version >>
 
-  publish:
+  # Workflow that runs on the stable branches
+  main_flow:
     jobs:
       - setup:
           filters:
             branches:
-              ignore: /.*/
+              only:
+                - master
+                - next
+      - publish-latest:
+          requires:
+            - setup
+          filters:
+            branches:
+              only: master
             tags:
-              only: /v[0-9]+\.[0-9]+\.[0-9]+-next.*/
+              only: /v[0-9]+\.[0-9]+\.[0-9]+/
       - publish-next:
           requires:
             - setup
