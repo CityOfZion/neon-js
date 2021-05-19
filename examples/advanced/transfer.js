@@ -62,7 +62,7 @@ async function createTransaction() {
       sc.ContractParam.hash160(inputs.fromAccount.address),
       sc.ContractParam.hash160(inputs.toAccount.address),
       inputs.amountToTransfer,
-      sc.ContractParam.any()
+      sc.ContractParam.any(),
     ],
   });
 
@@ -102,7 +102,9 @@ async function checkNetworkFee() {
       vars.tx.networkFee = u.BigInteger.fromNumber(inputs.networkFee);
     }
   }
-  const feePerByte = u.BigInteger.fromNumber(feePerByteInvokeResponse.stack[0].value)
+  const feePerByte = u.BigInteger.fromNumber(
+    feePerByteInvokeResponse.stack[0].value
+  );
   // Account for witness size
   const transactionByteSize = vars.tx.serialize().length / 2 + 109;
   // Hardcoded. Running a witness is always the same cost for the basic account.
@@ -113,15 +115,17 @@ async function checkNetworkFee() {
   if (inputs.networkFee && inputs.networkFee >= networkFeeEstimate.toNumber()) {
     vars.tx.networkFee = u.BigInteger.fromNumber(inputs.networkFee);
     console.log(
-      `  i Node indicates ${networkFeeEstimate.toDecimal(8)} networkFee but using user provided value of ${
-        inputs.networkFee
-      }`
+      `  i Node indicates ${networkFeeEstimate.toDecimal(
+        8
+      )} networkFee but using user provided value of ${inputs.networkFee}`
     );
   } else {
     vars.tx.networkFee = networkFeeEstimate;
   }
   console.log(
-    `\u001b[32m  ✓ Network Fee set: ${vars.tx.networkFee.toDecimal(8)} \u001b[0m`
+    `\u001b[32m  ✓ Network Fee set: ${vars.tx.networkFee.toDecimal(
+      8
+    )} \u001b[0m`
   );
 }
 
@@ -154,12 +158,15 @@ SystemFees pay for the processing of the script carried in the transaction. We
 can easily get this number by using invokeScript with the appropriate signers.
  */
 async function checkSystemFee() {
-  const invokeFunctionResponse = await rpcClient.invokeScript(u.HexString.fromHex(vars.tx.script), [
-    {
-      account: inputs.fromAccount.scriptHash,
-      scopes: tx.WitnessScope.CalledByEntry,
-    },
-  ]);
+  const invokeFunctionResponse = await rpcClient.invokeScript(
+    u.HexString.fromHex(vars.tx.script),
+    [
+      {
+        account: inputs.fromAccount.scriptHash,
+        scopes: tx.WitnessScope.CalledByEntry,
+      },
+    ]
+  );
   if (invokeFunctionResponse.state !== "HALT") {
     throw new Error(
       `Transfer script errored out: ${invokeFunctionResponse.exception}`
@@ -189,12 +196,14 @@ For this, we rely on the NEP5Tracker plugin. Hopefully, the node we select has t
 async function checkBalance() {
   let balanceResponse;
   try {
-    balanceResponse = await rpcClient.execute(new rpc.Query({
-      method: "getnep17balances",
-      params: [inputs.fromAccount.address],
-    }));
+    balanceResponse = await rpcClient.execute(
+      new rpc.Query({
+        method: "getnep17balances",
+        params: [inputs.fromAccount.address],
+      })
+    );
   } catch (e) {
-    console.log(e)
+    console.log(e);
     console.log(
       "\u001b[31m  ✗ Unable to get balances as plugin was not available. \u001b[0m"
     );
@@ -213,9 +222,7 @@ async function checkBalance() {
   }
 
   // Check for gas funds for fees
-  const gasRequirements = vars.tx.networkFee.add(
-    vars.tx.systemFee
-  );
+  const gasRequirements = vars.tx.networkFee.add(vars.tx.systemFee);
   const gasBalance = balanceResponse.balance.filter((bal) =>
     bal.assethash.includes(CONST.NATIVE_CONTRACT_HASH.GasToken)
   );
