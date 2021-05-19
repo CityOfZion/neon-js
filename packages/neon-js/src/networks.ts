@@ -26,7 +26,7 @@ export default {
   TestNet: {
     Name: "TestNet",
     ProtocolConfiguration: {
-      Magic: 827601742,
+      Magic: 844378958,
       MillisecondsPerBlock: 15000,
       AddressVersion: 23,
       StandbyValidators: [
