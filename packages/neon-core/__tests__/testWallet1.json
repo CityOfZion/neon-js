@@ -6,7 +6,7 @@
     {
       "address": "NMPAXGtMfZ8s8rcfP9JhrYrNeZHG4xSVmd",
       "label": null,
-      "isdefault": false,
+      "isDefault": false,
       "lock": false,
       "key": "6PYWdzMKGbfxHbfb2JqZJ5Yr1y6jjjuSPLjvgS4byvDkgz2NdiBgeJwBFc",
       "contract": {
