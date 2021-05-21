@@ -2,7 +2,7 @@ export const ADDR_VERSION = "35";
 
 export enum MAGIC_NUMBER {
   MainNet = 5195086,
-  TestNet = 1951352142,
+  TestNet = 844378958,
   SoloNet = 1234567890,
 }
 
