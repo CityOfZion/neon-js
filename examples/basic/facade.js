@@ -22,11 +22,11 @@ method call returns a promise. During initialization, the class will make an API
 call to the endpoint to grab some basic details that we will use later.
  */
 
-const Neon = require("@cityofzion/neon-js");
+import Neon from "@cityofzion/neon-js";
 
 const url = "http://localhost:20332";
 const privateKey = "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g";
-const address = "NiwvMyWYeNghLG8tDyKkWwuZV3wS8CPrrV";
+const address = "NMBfzaEq2c5zodiNbLPoohVENARMbJim1r";
 
 const facadePromise = Neon.api.NetworkFacade.fromConfig({
   node: url,
@@ -53,7 +53,7 @@ the transaction. In this example, we will use a private key.
  */
 
 const signingConfig = {
-  signingCallback: Neon.api.transaction.signWithAccount(
+  signingCallback: Neon.api.signWithAccount(
     new Neon.wallet.Account(privateKey)
   ),
 };
