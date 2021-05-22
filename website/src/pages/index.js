@@ -14,7 +14,7 @@ export default () => {
           <div>
             <a
               class="button button--secondary button--outline button--lg"
-              href={baseUrl + "docs/"}
+              href={baseUrl + "docs"}
             >
               Get Started
             </a>
