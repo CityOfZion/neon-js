@@ -1,7 +1,10 @@
 import Layout from "@theme/Layout";
 import React from "react";
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 export default () => {
+  const {siteConfig} = useDocusaurusContext();
+  const {baseUrl} = siteConfig;
   return (
     <Layout title="NeonJS">
       <div class="hero hero--primary">
@@ -11,7 +14,7 @@ export default () => {
           <div>
             <a
               class="button button--secondary button--outline button--lg"
-              href="./docs"
+              href={baseUrl + "docs/"}
             >
               Get Started
             </a>
