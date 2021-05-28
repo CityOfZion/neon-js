@@ -247,6 +247,8 @@ workflows:
             branches:
               only:
                 - next
+            tags:
+              only: /.*/
       - publish-next:
           requires:
             - setup
