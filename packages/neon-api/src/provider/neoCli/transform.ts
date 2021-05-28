@@ -13,6 +13,8 @@ function transformClaimable(c: NeoCliClaimable): wallet.ClaimItemLike {
     value: c.value,
     start: c.start_height,
     end: c.end_height,
+    generated: c.generated,
+    sysFee: c.sys_fee,
   };
 }
 
@@ -41,6 +43,12 @@ export function transformBalance({
       bal.addToken(
         assetBalance.asset_symbol ?? assetBalance.asset,
         assetBalance.amount
+      );
+    }
+    if (assetBalance.asset_hash) {
+      bal.addAssetHash(
+        assetBalance.asset_symbol ?? assetBalance.asset,
+        assetBalance.asset_hash
       );
     }
   }

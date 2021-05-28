@@ -26,6 +26,7 @@ describe("constructor", () => {
         ASS: {} as AssetBalanceLike,
       },
       tokens: { TOK: 1 },
+      assetHashes: {},
     } as BalanceLike;
 
     const result = new Balance(testObject);
@@ -77,6 +78,7 @@ describe("export", () => {
         } as AssetBalanceLike,
       },
       tokens: { TOK: 1 },
+      assetHashes: {},
     };
 
     const balanceObj = new Balance(expected);

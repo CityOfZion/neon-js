@@ -7,6 +7,8 @@ export interface ClaimItemLike {
   value: number;
   start?: number;
   end?: number;
+  generated: number;
+  sysFee: number;
 }
 
 /**
@@ -20,6 +22,8 @@ export class ClaimItem {
   public value: number;
   public start?: number;
   public end?: number;
+  public generated: number;
+  public sysFee: number;
 
   public constructor(claimItemLike: Partial<ClaimItemLike> = {}) {
     this.claim = new Fixed8(claimItemLike.claim);
@@ -28,6 +32,8 @@ export class ClaimItem {
     this.value = claimItemLike.value || 0;
     this.start = claimItemLike.start;
     this.end = claimItemLike.end;
+    this.generated = claimItemLike.generated || 0;
+    this.sysFee = claimItemLike.sysFee || 0;
   }
 
   public export(): ClaimItemLike {
@@ -38,6 +44,8 @@ export class ClaimItem {
       value: this.value,
       start: this.start,
       end: this.end,
+      generated: this.generated,
+      sysFee: this.sysFee,
     };
   }
 

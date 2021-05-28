@@ -12,6 +12,8 @@ describe("constructor", () => {
       txid: "",
       index: 0,
       value: 0,
+      generated: 0,
+      sysFee: 0,
     });
   });
 
@@ -50,6 +52,8 @@ describe("export", () => {
       txid: "12345678",
       value: 1,
       start: 10000,
+      generated: 0,
+      sysFee: 0,
     };
     const c = new ClaimItem(expected);
     const result = c.export();
