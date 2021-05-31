@@ -131,7 +131,7 @@ export class Balance {
     return "Balance";
   }
 
-  public addAssetHash(sym: string, hash: string) {
+  public addAssetHash(sym: string, hash: string): this {
     const symUP = sym.toUpperCase();
     this.assetHashes[symUP] = hash;
     return this;
