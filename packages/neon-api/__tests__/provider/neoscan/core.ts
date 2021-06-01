@@ -118,7 +118,7 @@ describe("getBalance", () => {
         tokens: {
           TEST: 100,
         },
-        tokenHashes: {}
+        tokenHashes: {},
       } as wallet.BalanceLike)
     );
     expect(httpCall).toBeCalledWith(testUrl + "/v1/get_balance/address");

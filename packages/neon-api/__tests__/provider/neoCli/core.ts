@@ -173,7 +173,7 @@ describe("getClaims", () => {
             start: testClaim.start_height,
             end: testClaim.end_height,
             generated: testClaim.generated,
-            sys_fee: testClaim.sys_fee
+            sys_fee: testClaim.sys_fee,
           },
         ],
       })

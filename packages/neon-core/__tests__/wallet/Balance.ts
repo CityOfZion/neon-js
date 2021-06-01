@@ -26,7 +26,7 @@ describe("constructor", () => {
         ASS: {} as AssetBalanceLike,
       },
       tokens: { TOK: 1 },
-      tokenHashes: {}
+      tokenHashes: {},
     } as BalanceLike;
 
     const result = new Balance(testObject);

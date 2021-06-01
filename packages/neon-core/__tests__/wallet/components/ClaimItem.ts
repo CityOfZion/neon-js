@@ -13,7 +13,7 @@ describe("constructor", () => {
       index: 0,
       value: 0,
       generated: 0,
-      sys_fee: 0
+      sys_fee: 0,
     });
   });
 
@@ -53,7 +53,7 @@ describe("export", () => {
       value: 1,
       start: 10000,
       generated: 0,
-      sys_fee: 0
+      sys_fee: 0,
     };
     const c = new ClaimItem(expected);
     const result = c.export();

@@ -7,7 +7,7 @@ export interface AssetBalanceLike {
   unspent: CoinLike[];
   spent: CoinLike[];
   unconfirmed: CoinLike[];
-  hash: string
+  hash: string;
 }
 
 /**
@@ -21,7 +21,7 @@ export class AssetBalance implements NeonObject {
   public unspent: Coin[];
   public spent: Coin[];
   public unconfirmed: Coin[];
-  public hash: string
+  public hash: string;
 
   public constructor(abLike: Partial<AssetBalanceLike> = {}) {
     this.unspent = abLike.unspent
@@ -32,7 +32,7 @@ export class AssetBalance implements NeonObject {
       ? abLike.unconfirmed.map((coin) => new Coin(coin))
       : [];
 
-    this.hash = abLike.hash || ''  
+    this.hash = abLike.hash || "";
   }
 
   public get balance(): Fixed8 {
@@ -45,7 +45,7 @@ export class AssetBalance implements NeonObject {
       unspent: this.unspent.map((c) => c.export()),
       spent: this.spent.map((c) => c.export()),
       unconfirmed: this.unconfirmed.map((c) => c.export()),
-      hash: this.hash
+      hash: this.hash,
     };
   }
 

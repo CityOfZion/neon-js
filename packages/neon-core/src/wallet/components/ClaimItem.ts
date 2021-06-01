@@ -8,7 +8,7 @@ export interface ClaimItemLike {
   start?: number;
   end?: number;
   generated: number;
-  sys_fee: number
+  sys_fee: number;
 }
 
 /**
@@ -32,8 +32,8 @@ export class ClaimItem {
     this.value = claimItemLike.value || 0;
     this.start = claimItemLike.start;
     this.end = claimItemLike.end;
-    this.generated = claimItemLike.generated || 0
-    this.sys_fee = claimItemLike.sys_fee || 0
+    this.generated = claimItemLike.generated || 0;
+    this.sys_fee = claimItemLike.sys_fee || 0;
   }
 
   public export(): ClaimItemLike {
@@ -45,7 +45,7 @@ export class ClaimItem {
       start: this.start,
       end: this.end,
       generated: this.generated,
-      sys_fee: this.sys_fee
+      sys_fee: this.sys_fee,
     };
   }
 

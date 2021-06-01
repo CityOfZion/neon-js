@@ -24,7 +24,7 @@ describe("constructor", () => {
           index: 0,
           value: 1,
           generated: 0,
-          sys_fee: 0
+          sys_fee: 0,
         },
         {
           claim: 2,
@@ -32,7 +32,7 @@ describe("constructor", () => {
           index: 1,
           value: 2,
           generated: 0,
-          sys_fee: 0
+          sys_fee: 0,
         },
       ],
     };
@@ -58,7 +58,7 @@ describe("constructor", () => {
           index: 0,
           value: 1,
           generated: 0,
-          sys_fee: 0
+          sys_fee: 0,
         },
         {
           claim: 2,
@@ -66,7 +66,7 @@ describe("constructor", () => {
           index: 1,
           value: 2,
           generated: 0,
-          sys_fee: 0
+          sys_fee: 0,
         },
       ],
     });
@@ -95,7 +95,7 @@ describe("export", () => {
           index: 0,
           value: 1,
           generated: 0,
-          sys_fee: 0
+          sys_fee: 0,
         },
         {
           claim: 2,
@@ -103,7 +103,7 @@ describe("export", () => {
           index: 1,
           value: 2,
           generated: 0,
-          sys_fee: 0
+          sys_fee: 0,
         },
       ],
     };
@@ -125,7 +125,7 @@ describe("slice", () => {
         index: 1,
         value: 1,
         generated: 0,
-        sys_fee: 0
+        sys_fee: 0,
       },
       {
         claim: 2,
@@ -133,7 +133,7 @@ describe("slice", () => {
         index: 2,
         value: 2,
         generated: 0,
-        sys_fee: 0
+        sys_fee: 0,
       },
       {
         claim: 3,
@@ -141,7 +141,7 @@ describe("slice", () => {
         index: 3,
         value: 3,
         generated: 0,
-        sys_fee: 0
+        sys_fee: 0,
       },
       {
         claim: 4,
@@ -149,7 +149,7 @@ describe("slice", () => {
         index: 4,
         value: 4,
         generated: 0,
-        sys_fee: 0
+        sys_fee: 0,
       },
     ],
   });

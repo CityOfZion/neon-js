@@ -14,7 +14,7 @@ function transformClaimable(c: NeoCliClaimable): wallet.ClaimItemLike {
     start: c.start_height,
     end: c.end_height,
     generated: c.generated,
-    sys_fee: c.sys_fee
+    sys_fee: c.sys_fee,
   };
 }
 
