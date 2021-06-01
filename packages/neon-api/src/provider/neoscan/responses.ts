@@ -7,6 +7,7 @@ export interface NeoscanBalance {
   asset: string;
   amount: number;
   unspent: NeoscanTx[];
+  asset_hash: string
 }
 
 export interface NeoscanTx {
@@ -28,6 +29,8 @@ export interface NeoscanClaim {
   unclaimed: number;
   start_height: number;
   end_height: number;
+  sys_fee: number;
+  generated: number
 }
 
 export interface NeoscanV1GetUnclaimedResponse {

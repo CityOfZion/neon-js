@@ -136,7 +136,7 @@ describe("getClaims", () => {
   test("returns successful claims", async () => {
     const testClaim = {
       end_height: 231,
-      generated: 1464,
+      generated: 0,
       n: 0,
       start_height: 48,
       sys_fee: 0,
@@ -172,6 +172,8 @@ describe("getClaims", () => {
             value: testClaim.value,
             start: testClaim.start_height,
             end: testClaim.end_height,
+            generated: testClaim.generated,
+            sys_fee: testClaim.sys_fee
           },
         ],
       })

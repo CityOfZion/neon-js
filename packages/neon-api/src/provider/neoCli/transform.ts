@@ -13,6 +13,8 @@ function transformClaimable(c: NeoCliClaimable): wallet.ClaimItemLike {
     value: c.value,
     start: c.start_height,
     end: c.end_height,
+    generated: c.generated,
+    sys_fee: c.sys_fee
   };
 }
 

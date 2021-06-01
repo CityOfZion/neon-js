@@ -4,12 +4,14 @@ import Coin from "../../../src/wallet/components/Coin";
 const dataSet = [
   {
     balance: 1,
+    hash: "",
     unspent: [{ index: 0, txid: "coin1", value: 1 }],
     spent: [{ index: 1, txid: "coin2", value: 1.2 }],
     unconfirmed: [{ index: 2, txid: "coin3", value: 3 }],
   },
   {
     balance: 7,
+    hash: "",
     unspent: [
       { index: 0, txid: "coin1", value: 1 },
       { index: 1, txid: "coin1", value: 6 },

@@ -26,6 +26,7 @@ describe("constructor", () => {
         ASS: {} as AssetBalanceLike,
       },
       tokens: { TOK: 1 },
+      tokenHashes: {}
     } as BalanceLike;
 
     const result = new Balance(testObject);
@@ -66,11 +67,13 @@ describe("export", () => {
     const expected = {
       address: "address",
       net: "UnitTestNet",
+      tokenHashes: {},
       assetSymbols: ["ASS"],
       tokenSymbols: ["TOK"],
       assets: {
         ASS: {
           balance: 1,
+          hash: "",
           unspent: [{ index: 0, txid: "a", value: 1 }],
           spent: [],
           unconfirmed: [],

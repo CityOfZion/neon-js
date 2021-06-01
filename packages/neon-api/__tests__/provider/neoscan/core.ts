@@ -118,6 +118,7 @@ describe("getBalance", () => {
         tokens: {
           TEST: 100,
         },
+        tokenHashes: {}
       } as wallet.BalanceLike)
     );
     expect(httpCall).toBeCalledWith(testUrl + "/v1/get_balance/address");
@@ -155,10 +156,10 @@ describe("getClaims", () => {
               value: 10,
               unclaimed: 1,
               txid: "1",
-              sys_fee: 0.01,
+              sys_fee: 0,
               start_height: 5,
               n: 2,
-              generated: 0.1,
+              generated: 0,
               end_height: 11,
             },
           ],
