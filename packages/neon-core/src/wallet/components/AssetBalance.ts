@@ -10,6 +10,9 @@ export interface AssetBalanceLike {
   hash: string;
 }
 
+export type AssetBalanceWithHash = Partial<AssetBalanceLike> &
+  Required<Pick<AssetBalanceLike, "hash">>;
+
 /**
  * Balance of an UTXO asset.
  * We keep track of 3 states: unspent, spent and unconfirmed.
@@ -23,7 +26,7 @@ export class AssetBalance implements NeonObject {
   public unconfirmed: Coin[];
   public hash: string;
 
-  public constructor(abLike: Partial<AssetBalanceLike> = {}) {
+  public constructor(abLike: AssetBalanceWithHash = { hash: "nonHash" }) {
     this.unspent = abLike.unspent
       ? abLike.unspent.map((coin) => new Coin(coin))
       : [];
@@ -32,7 +35,7 @@ export class AssetBalance implements NeonObject {
       ? abLike.unconfirmed.map((coin) => new Coin(coin))
       : [];
 
-    this.hash = abLike.hash || "";
+    this.hash = abLike.hash;
   }
 
   public get balance(): Fixed8 {

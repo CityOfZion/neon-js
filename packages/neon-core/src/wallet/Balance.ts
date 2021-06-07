@@ -3,14 +3,17 @@ import { Query } from "../rpc";
 import { Transaction } from "../tx";
 import { BaseTransaction } from "../tx/transaction/BaseTransaction";
 import Fixed8 from "../u/Fixed8";
-import AssetBalance, { AssetBalanceLike } from "./components/AssetBalance";
+import AssetBalance, {
+  AssetBalanceLike,
+  AssetBalanceWithHash,
+} from "./components/AssetBalance";
 import Coin from "./components/Coin";
 
 export interface BalanceLike {
   address: string;
   net: string;
   assetSymbols: string[];
-  assets: { [sym: string]: Partial<AssetBalanceLike> };
+  assets: { [sym: string]: AssetBalanceWithHash };
   tokenSymbols: string[];
   tokens: { [sym: string]: number | string | Fixed8 };
   tokenHashes: { [sym: string]: string };
@@ -48,6 +51,7 @@ async function verifyAssetBalance(
     spent: [] as Coin[],
     unspent: [] as Coin[],
     unconfirmed: [] as Coin[],
+    hash: assetBalance.hash,
   };
   const validCoins = await verifyCoins(url, assetBalance.unspent);
   validCoins.forEach((valid, i) => {
@@ -142,7 +146,7 @@ export class Balance {
    * @param  sym The symbol to refer by. This function will force it to upper-case.
    * @param assetBalance The assetBalance if initialized. Default is a zero balance object.
    */
-  public addAsset(sym: string, assetBalance?: Partial<AssetBalanceLike>): this {
+  public addAsset(sym: string, assetBalance?: AssetBalanceWithHash): this {
     sym = sym.toUpperCase();
     this.assetSymbols.push(sym);
     this.assetSymbols.sort();

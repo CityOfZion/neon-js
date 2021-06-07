@@ -8,6 +8,7 @@ export interface NeoscanBalance {
   amount: number;
   unspent: NeoscanTx[];
   asset_hash: string;
+  asset_symbol: string;
 }
 
 export interface NeoscanTx {
