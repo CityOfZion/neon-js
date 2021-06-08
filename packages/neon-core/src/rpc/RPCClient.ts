@@ -382,7 +382,7 @@ export class RPCClient {
                 value: utxo.value,
               })
           ),
-          hash: bal.tokenHashes[assetBalance.asset_symbol],
+          hash: assetBalance.asset_hash,
         });
       } else {
         bal.addToken(assetBalance.asset_symbol, assetBalance.amount);

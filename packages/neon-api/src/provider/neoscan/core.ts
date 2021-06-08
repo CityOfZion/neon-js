@@ -18,7 +18,7 @@ import {
   NeoscanV1GetHeightResponse,
   NeoscanV1GetUnclaimedResponse,
 } from "./responses";
-import { AssetBalanceWithHash } from "@cityofzion/neon-core/src/wallet";
+import { AssetBalanceLike } from "@cityofzion/neon-core/src/wallet";
 const log = logging.default("api");
 
 function parseUnspent(unspentArr: NeoscanTx[]): wallet.CoinLike[] {
@@ -124,7 +124,7 @@ export async function getBalance(
       bal.addAsset(b.asset, {
         unspent: parseUnspent(b.unspent),
         hash: b.asset_hash,
-      } as AssetBalanceWithHash);
+      } as Partial<AssetBalanceLike>);
     } else {
       bal.addToken(b.asset, b.amount);
       bal.addTokenHash(b.asset_symbol ?? b.asset, b.asset_hash);

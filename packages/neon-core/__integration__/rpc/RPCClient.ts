@@ -12,7 +12,7 @@ const TESTNET_URLS = [
 ];
 
 let client: rpc.RPCClient;
-const address = "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW";
+const address = "AXSoNQEKjmqPBNPg5cNrHyWivfjok3Vj9D";
 const contractHash = "5b7074e873973a6ed3708862f219a6fbf4d1c411";
 
 beforeAll(async () => {

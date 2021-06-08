@@ -1,6 +1,7 @@
 import { compareNeonObjectArray, NeonObject } from "../../helper";
 import Fixed8 from "../../u/Fixed8";
 import Coin, { CoinLike } from "./Coin";
+import { isAssetHash } from "../verify";
 
 export interface AssetBalanceLike {
   balance: Fixed8 | number | string;
@@ -10,8 +11,7 @@ export interface AssetBalanceLike {
   hash: string;
 }
 
-export type AssetBalanceWithHash = Partial<AssetBalanceLike> &
-  Required<Pick<AssetBalanceLike, "hash">>;
+export const EXCEPTION_HASH_MSG = "The hash parameter is required";
 
 /**
  * Balance of an UTXO asset.
@@ -26,7 +26,7 @@ export class AssetBalance implements NeonObject {
   public unconfirmed: Coin[];
   public hash: string;
 
-  public constructor(abLike: AssetBalanceWithHash = { hash: "nonHash" }) {
+  public constructor(abLike: Partial<AssetBalanceLike> = {}) {
     this.unspent = abLike.unspent
       ? abLike.unspent.map((coin) => new Coin(coin))
       : [];
@@ -35,6 +35,9 @@ export class AssetBalance implements NeonObject {
       ? abLike.unconfirmed.map((coin) => new Coin(coin))
       : [];
 
+    if (!abLike.hash || !isAssetHash(abLike.hash)) {
+      throw new Error(EXCEPTION_HASH_MSG);
+    }
     this.hash = abLike.hash;
   }
 
