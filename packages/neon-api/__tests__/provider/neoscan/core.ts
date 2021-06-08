@@ -184,7 +184,16 @@ describe("getClaims", () => {
         net: testUrl,
         address: "address",
         claims: [
-          { claim: 1, txid: "1", index: 2, value: 10, start: 5, end: 11, generated: 1337, sys_fee: 1337 },
+          {
+            claim: 1,
+            txid: "1",
+            index: 2,
+            value: 10,
+            start: 5,
+            end: 11,
+            generated: 1337,
+            sys_fee: 1337,
+          },
         ],
       } as wallet.ClaimsLike)
     );

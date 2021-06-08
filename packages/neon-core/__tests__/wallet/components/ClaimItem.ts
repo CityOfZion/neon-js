@@ -24,7 +24,7 @@ describe("constructor", () => {
       txid: "id",
       value: 100,
       generated: 1337,
-      sys_fee: 1337
+      sys_fee: 1337,
     } as ClaimItemLike;
 
     const result = new ClaimItem(testObject);
