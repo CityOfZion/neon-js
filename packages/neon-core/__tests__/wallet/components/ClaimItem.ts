@@ -12,8 +12,8 @@ describe("constructor", () => {
       txid: "",
       index: 0,
       value: 0,
-      generated: 1337,
-      sys_fee: 1337,
+      generated: 0,
+      sys_fee: 0,
     });
   });
 
@@ -23,6 +23,8 @@ describe("constructor", () => {
       index: 1,
       txid: "id",
       value: 100,
+      generated: 1337,
+      sys_fee: 1337
     } as ClaimItemLike;
 
     const result = new ClaimItem(testObject);
