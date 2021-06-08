@@ -8,6 +8,10 @@ jest.mock("axios");
 jest.mock("../../../src/provider/common");
 
 const testUrl = "http://testurl.com";
+const NEO_ASSET_HASH =
+  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
+const GAS_ASSET_HASH =
+  "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
 
 describe("getRPCEndpoint", () => {
   test("returns good RPC endpoint", async () => {
@@ -85,10 +89,12 @@ describe("getBalance", () => {
           GAS: {
             balance: 1.234,
             unspent: [{ index: 1, txid: "2", value: 1.234 }],
+            hash: GAS_ASSET_HASH,
           },
           NEO: {
             balance: 5,
             unspent: [{ index: 1, txid: "1", value: 5 }],
+            hash: NEO_ASSET_HASH,
           },
           address: "address",
           net: testUrl,
@@ -106,10 +112,12 @@ describe("getBalance", () => {
             spent: [],
             unspent: [{ value: 5, txid: "1", index: 1 }],
             balance: 5,
+            hash: NEO_ASSET_HASH,
           },
           GAS: {
             unspent: [{ value: 1.234, txid: "2", index: 1 }],
             balance: 1.234,
+            hash: GAS_ASSET_HASH,
           } as any,
         },
       } as any)

@@ -1,7 +1,8 @@
 import Balance, { BalanceLike } from "../../src/wallet/Balance";
 import { AssetBalance, AssetBalanceLike } from "../../src/wallet/components";
 
-const NEO_ASSET_HASH = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"
+const NEO_ASSET_HASH =
+  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
 
 describe("constructor", () => {
   test("empty", () => {
@@ -25,7 +26,7 @@ describe("constructor", () => {
       assetSymbols: ["ASS"],
       tokenSymbols: ["TOK"],
       assets: {
-        ASS: {hash: NEO_ASSET_HASH} as AssetBalanceLike,
+        ASS: { hash: NEO_ASSET_HASH } as AssetBalanceLike,
       },
       tokens: { TOK: 1 },
       tokenHashes: {},
@@ -52,7 +53,7 @@ describe("constructor", () => {
         ASS: {
           balance: 1,
           unspent: [{ index: 0, txid: "coin1", value: 1 }],
-          hash: NEO_ASSET_HASH
+          hash: NEO_ASSET_HASH,
         } as Partial<AssetBalanceLike>,
       },
       tokens: { TOK: 1 },

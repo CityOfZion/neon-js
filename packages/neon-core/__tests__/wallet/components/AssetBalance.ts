@@ -1,7 +1,10 @@
-import AssetBalance, { EXCEPTION_HASH_MSG } from "../../../src/wallet/components/AssetBalance";
+import AssetBalance, {
+  EXCEPTION_HASH_MSG,
+} from "../../../src/wallet/components/AssetBalance";
 import Coin from "../../../src/wallet/components/Coin";
 
-const NEO_ASSET_HASH = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"
+const NEO_ASSET_HASH =
+  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
 
 const dataSet = [
   {
@@ -23,22 +26,21 @@ const dataSet = [
   },
 ];
 describe("constructor", () => {
-
   test("onlyHash", () => {
-    const result = new AssetBalance({ hash: NEO_ASSET_HASH })
+    const result = new AssetBalance({ hash: NEO_ASSET_HASH });
     expect(result instanceof AssetBalance).toBeTruthy();
     expect(result).toMatchObject({
       unspent: [],
       spent: [],
       unconfirmed: [],
-      hash: NEO_ASSET_HASH
+      hash: NEO_ASSET_HASH,
     });
   });
-  
+
   test("empty", () => {
     expect(() => {
-      new AssetBalance()
-    }).toThrow()
+      new AssetBalance();
+    }).toThrow();
   });
 
   test("AssetBalanceLike", () => {
