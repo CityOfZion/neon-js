@@ -8,10 +8,13 @@ jest.mock("axios");
 jest.mock("../../../src/provider/common");
 
 const testUrl = "http://testurl.com";
-const NEO_ASSET_HASH =
-  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
+const DEFAULT_HASH =
+  "290d1ada0276f703904960aa6f10baae1b17af9fe2fbe58799032be9484a9422";
 const GAS_ASSET_HASH =
   "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
+
+const NEO_ASSET_HASH =
+  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
 
 describe("getRPCEndpoint", () => {
   test("returns good RPC endpoint", async () => {

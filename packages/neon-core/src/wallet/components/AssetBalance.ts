@@ -11,8 +11,6 @@ export interface AssetBalanceLike {
   hash: string;
 }
 
-export const EXCEPTION_HASH_MSG = "The hash parameter is required";
-
 /**
  * Balance of an UTXO asset.
  * We keep track of 3 states: unspent, spent and unconfirmed.
@@ -36,7 +34,7 @@ export class AssetBalance implements NeonObject {
       : [];
 
     if (!abLike.hash || !isAssetHash(abLike.hash)) {
-      throw new Error(EXCEPTION_HASH_MSG);
+      throw new Error("The hash parameter is required");
     }
     this.hash = abLike.hash;
   }

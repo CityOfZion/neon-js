@@ -1,22 +1,20 @@
-import AssetBalance, {
-  EXCEPTION_HASH_MSG,
-} from "../../../src/wallet/components/AssetBalance";
+import AssetBalance from "../../../src/wallet/components/AssetBalance";
 import Coin from "../../../src/wallet/components/Coin";
 
-const NEO_ASSET_HASH =
-  "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
+const DEFAULT_HASH =
+  "290d1ada0276f703904960aa6f10baae1b17af9fe2fbe58799032be9484a9422";
 
 const dataSet = [
   {
     balance: 1,
-    hash: NEO_ASSET_HASH,
+    hash: DEFAULT_HASH,
     unspent: [{ index: 0, txid: "coin1", value: 1 }],
     spent: [{ index: 1, txid: "coin2", value: 1.2 }],
     unconfirmed: [{ index: 2, txid: "coin3", value: 3 }],
   },
   {
     balance: 7,
-    hash: NEO_ASSET_HASH,
+    hash: DEFAULT_HASH,
     unspent: [
       { index: 0, txid: "coin1", value: 1 },
       { index: 1, txid: "coin1", value: 6 },
@@ -27,13 +25,13 @@ const dataSet = [
 ];
 describe("constructor", () => {
   test("onlyHash", () => {
-    const result = new AssetBalance({ hash: NEO_ASSET_HASH });
+    const result = new AssetBalance({ hash: DEFAULT_HASH });
     expect(result instanceof AssetBalance).toBeTruthy();
     expect(result).toMatchObject({
       unspent: [],
       spent: [],
       unconfirmed: [],
-      hash: NEO_ASSET_HASH,
+      hash: DEFAULT_HASH,
     });
   });
 

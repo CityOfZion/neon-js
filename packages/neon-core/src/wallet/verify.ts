@@ -140,7 +140,5 @@ export function isAddress(address: string): boolean {
 }
 
 export function isAssetHash(assetHash: string): boolean {
-  return (
-    (isHex(assetHash) && assetHash.length === 40) || assetHash.length === 64
-  );
+  return isHex(assetHash) && assetHash.length === 64;
 }
