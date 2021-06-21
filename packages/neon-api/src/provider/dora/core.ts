@@ -9,7 +9,7 @@ import {
   RpcNode,
   Entry,
 } from "../common";
-import { DoraAddressAbstracts, TEntry } from "../neoCli/responses";
+import { DoraAddressAbstracts, TEntry } from "../dora/responses";
 import { transformBalance, transformClaims } from "../neoCli/transform";
 import {
   DoraGetBalanceResponse,
