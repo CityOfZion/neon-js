@@ -37,7 +37,7 @@ export class NeoCli implements Provider {
   }
   public getAddressAbstracts(
     _address: string,
-    page: number
+    _page: number
   ): Promise<IAddressAbstract> {
     throw new Error("Method not implemented.");
   }

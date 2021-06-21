@@ -90,4 +90,4 @@ export interface NeoscanPastTx {
   asset: null;
 }
 
-export interface NeoscanAddressAbstracts extends IAddressAbstract {}
+export type NeoscanAddressAbstracts = IAddressAbstract
