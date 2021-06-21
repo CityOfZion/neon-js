@@ -1,5 +1,5 @@
 import { logging, rpc, settings, u, wallet } from "@cityofzion/neon-core";
-import { PastTransaction, Provider } from "../common";
+import { IAddressAbstract, PastTransaction, Provider } from "../common";
 import {
   getBalance,
   getClaims,
@@ -61,6 +61,12 @@ export class NeonDB implements Provider {
   }
   public getTransactionHistory(address: string): Promise<PastTransaction[]> {
     return getTransactionHistory(this.url, address);
+  }
+  public getAddressAbstracts(
+    address: string,
+    page: number
+  ): Promise<IAddressAbstract> {
+    throw new Error("Method not implemented.");
   }
 }
 

@@ -1,4 +1,5 @@
 import { rpc } from "@cityofzion/neon-core";
+import { IAddressAbstract, Entry } from "../common";
 
 export interface NeoCliGetUnspentsResponse extends rpc.RPCResponse {
   result: {
@@ -45,4 +46,11 @@ export interface NeoCliClaimable {
   txid: string;
   unclaimed: number;
   value: number;
+}
+
+export type TEntry = Omit<Entry, "amount"> & { amount: number };
+
+export interface DoraAddressAbstracts
+  extends Omit<IAddressAbstract, "entries"> {
+  entries: TEntry[];
 }

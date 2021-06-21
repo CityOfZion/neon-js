@@ -13,6 +13,7 @@ export interface Provider {
   getMaxClaimAmount(address: string): Promise<u.Fixed8>;
   getHeight(): Promise<number>;
   getTransactionHistory(address: string): Promise<PastTransaction[]>;
+  getAddressAbstracts(address: string, page: number): Promise<IAddressAbstract>;
 }
 
 export interface DataProvider extends Provider {
@@ -60,4 +61,22 @@ export function findGoodNodesFromHeight(
   const bestHeight = sortedNodes[0].height;
   const threshold = bestHeight - tolerance;
   return sortedNodes.filter((n) => n.height >= threshold);
+}
+
+export interface Entry {
+  txid: string;
+  time: number;
+  block_height: number;
+  asset: string;
+  amount: string;
+  address_to: string;
+  address_from: string;
+}
+
+export interface IAddressAbstract {
+  total_pages: number;
+  total_entries: number;
+  page_size: number;
+  page_number: number;
+  entries: Entry[];
 }
