@@ -6,6 +6,7 @@ import {
   getHeight,
   getMaxClaimAmount,
   getRPCEndpoint,
+  getTransaction,
 } from "./core";
 
 const log = logging.default("api");
@@ -46,8 +47,8 @@ export class Dora implements Provider {
   ): Promise<PastTransaction[]> {
     throw new Error("Method not implemented.");
   }
-  public getTransaction(_txid: string): Promise<ITransaction> {
-    throw new Error("Method not implemented.");
+  public getTransaction(txid: string): Promise<ITransaction> {
+    return getTransaction(this.url, txid);
   }
 }
 
