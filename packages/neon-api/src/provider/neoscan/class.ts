@@ -1,5 +1,5 @@
 import { logging, rpc, settings, u, wallet } from "@cityofzion/neon-core";
-import { PastTransaction, Provider } from "../common";
+import { ITransaction, PastTransaction, Provider } from "../common";
 import {
   getBalance,
   getClaims,
@@ -7,6 +7,7 @@ import {
   getMaxClaimAmount,
   getRPCEndpoint,
   getTransactionHistory,
+  getTransaction,
 } from "./core";
 const log = logging.default("api");
 
@@ -56,6 +57,9 @@ export class Neoscan implements Provider {
   }
   public getTransactionHistory(address: string): Promise<PastTransaction[]> {
     return getTransactionHistory(this.url, address);
+  }
+  public getTransaction(txid: string): Promise<ITransaction> {
+    return getTransaction(this.url, txid);
   }
 }
 

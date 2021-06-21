@@ -1,5 +1,5 @@
 import { logging, u, wallet } from "@cityofzion/neon-core";
-import { PastTransaction, Provider } from "./common";
+import { ITransaction, PastTransaction, Provider } from "./common";
 const log = logging.default("api");
 
 export default class ApiBalancer implements Provider {
@@ -80,6 +80,12 @@ export default class ApiBalancer implements Provider {
   ): Promise<PastTransaction[]> {
     const f = async (p: Provider): Promise<PastTransaction[]> =>
       await p.getTransactionHistory(address);
+    return await this.loadBalance(f);
+  }
+
+  public async getTransaction(txid: string): Promise<ITransaction> {
+    const f = async (p: Provider): Promise<ITransaction> =>
+      await p.getTransaction(txid);
     return await this.loadBalance(f);
   }
 

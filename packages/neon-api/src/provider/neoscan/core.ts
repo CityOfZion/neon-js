@@ -5,13 +5,17 @@ import {
   filterHttpsOnly,
   findGoodNodesFromHeight,
   getBestUrl,
+  ITransaction,
   PastTransaction,
   RpcNode,
+  Vin,
+  Vout,
 } from "../common";
 import {
   NeoscanBalance,
   NeoscanClaim,
   NeoscanPastTx,
+  NeoscanTransaction,
   NeoscanTx,
   NeoscanV1GetBalanceResponse,
   NeoscanV1GetClaimableResponse,
@@ -78,6 +82,48 @@ function parseTxHistory(
       change,
     };
   });
+}
+
+function parseVin(vins: Required<Omit<Vin, "vout">>[]): Vin[] {
+  return vins.map((vin) => {
+    return {
+      value: vin.value,
+      txid: vin.txid,
+      n: vin.n,
+      asset: vin.asset,
+      address_hash: vin.address_hash,
+    };
+  });
+}
+
+function parseVout(vouts: Required<Omit<Vout, "address">>[]): Vout[] {
+  return vouts.map((vout) => {
+    return {
+      value: vout.value,
+      txid: vout.txid,
+      n: vout.n,
+      asset: vout.asset,
+      address_hash: vout.address_hash,
+    };
+  });
+}
+
+function parseTransaction(data: NeoscanTransaction): ITransaction {
+  return {
+    attributes: data.attributes,
+    block_height: data.block_height,
+    claims: data.claims,
+    net_fee: data.net_fee,
+    scripts: data.scripts,
+    size: data.size,
+    sys_fee: data.sys_fee,
+    time: data.time,
+    txid: data.txid,
+    type: data.type,
+    version: data.version,
+    vin: parseVin(data.vin),
+    vouts: parseVout(data.vouts),
+  };
 }
 
 /**
@@ -198,4 +244,13 @@ export async function getTransactionHistory(
   const data = response.data as NeoscanPastTx[];
   log.info(`Retrieved History for ${address} from neoscan ${url}`);
   return parseTxHistory(data, address);
+}
+
+export async function getTransaction(
+  url: string,
+  txid: string
+): Promise<ITransaction> {
+  const response = await axios.get(url + "/v1/get_transaction/" + txid);
+  const data = response.data as NeoscanTransaction;
+  return parseTransaction(data);
 }
