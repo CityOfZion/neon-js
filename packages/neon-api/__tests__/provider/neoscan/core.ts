@@ -82,16 +82,25 @@ describe("getBalance", () => {
           txids: [],
           claimed: [],
           balance: [
-            { unspent: [], asset: "TEST", amount: 100 },
+            {
+              unspent: [],
+              asset: "TEST",
+              amount: 100,
+              asset_hash: "hash_test",
+            },
             {
               unspent: [{ value: 2, txid: "1", n: 1 }],
               asset: "NEO",
               amount: 2,
+              asset_hash:
+                "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
             },
             {
               unspent: [{ value: 5, txid: "1", n: 1 }],
               asset: "GAS",
               amount: 5,
+              asset_hash:
+                "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
             },
           ],
           address: "address",
@@ -108,16 +117,19 @@ describe("getBalance", () => {
           NEO: {
             unspent: [{ value: 2, txid: "1", index: 1 }],
             balance: 2,
+            hash: "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
           } as wallet.AssetBalanceLike,
           GAS: {
             unspent: [{ value: 5, txid: "1", index: 1 }],
             balance: 5,
+            hash: "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
           } as wallet.AssetBalanceLike,
         },
         tokenSymbols: ["TEST"],
         tokens: {
           TEST: 100,
         },
+        tokenHashes: { TEST: "hash_test" },
       } as wallet.BalanceLike)
     );
     expect(httpCall).toBeCalledWith(testUrl + "/v1/get_balance/address");
@@ -155,10 +167,10 @@ describe("getClaims", () => {
               value: 10,
               unclaimed: 1,
               txid: "1",
-              sys_fee: 0.01,
+              sys_fee: 1337,
               start_height: 5,
               n: 2,
-              generated: 0.1,
+              generated: 1337,
               end_height: 11,
             },
           ],
@@ -172,7 +184,16 @@ describe("getClaims", () => {
         net: testUrl,
         address: "address",
         claims: [
-          { claim: 1, txid: "1", index: 2, value: 10, start: 5, end: 11 },
+          {
+            claim: 1,
+            txid: "1",
+            index: 2,
+            value: 10,
+            start: 5,
+            end: 11,
+            generated: 1337,
+            sys_fee: 1337,
+          },
         ],
       } as wallet.ClaimsLike)
     );

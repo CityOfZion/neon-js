@@ -75,6 +75,7 @@ describe("getBalance", () => {
               },
             ],
             balance: 100000000,
+            hash: "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b",
           } as wallet.AssetBalanceLike,
           GAS: {
             unspent: [
@@ -85,6 +86,7 @@ describe("getBalance", () => {
               },
             ],
             balance: 24088,
+            hash: "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
           } as wallet.AssetBalanceLike,
         },
       })
@@ -136,10 +138,10 @@ describe("getClaims", () => {
   test("returns successful claims", async () => {
     const testClaim = {
       end_height: 231,
-      generated: 1464,
+      generated: 1337,
       n: 0,
       start_height: 48,
-      sys_fee: 0,
+      sys_fee: 1337,
       txid: "dc44739e2f97743f2ed258988327560e2185ed13eec0097938eef4aea584bf04",
       unclaimed: 1464,
       value: 100000000,
@@ -172,6 +174,8 @@ describe("getClaims", () => {
             value: testClaim.value,
             start: testClaim.start_height,
             end: testClaim.end_height,
+            generated: testClaim.generated,
+            sys_fee: testClaim.sys_fee,
           },
         ],
       })

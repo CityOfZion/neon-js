@@ -1,6 +1,9 @@
 import Balance, { BalanceLike } from "../../src/wallet/Balance";
 import { AssetBalance, AssetBalanceLike } from "../../src/wallet/components";
 
+const DEFAULT_HASH =
+  "290d1ada0276f703904960aa6f10baae1b17af9fe2fbe58799032be9484a9422";
+
 describe("constructor", () => {
   test("empty", () => {
     const result = new Balance();
@@ -23,9 +26,10 @@ describe("constructor", () => {
       assetSymbols: ["ASS"],
       tokenSymbols: ["TOK"],
       assets: {
-        ASS: {} as AssetBalanceLike,
+        ASS: { hash: DEFAULT_HASH } as AssetBalanceLike,
       },
       tokens: { TOK: 1 },
+      tokenHashes: { TOK: DEFAULT_HASH },
     } as BalanceLike;
 
     const result = new Balance(testObject);
@@ -49,6 +53,7 @@ describe("constructor", () => {
         ASS: {
           balance: 1,
           unspent: [{ index: 0, txid: "coin1", value: 1 }],
+          hash: DEFAULT_HASH,
         } as Partial<AssetBalanceLike>,
       },
       tokens: { TOK: 1 },
@@ -66,11 +71,15 @@ describe("export", () => {
     const expected = {
       address: "address",
       net: "UnitTestNet",
+      tokenHashes: {
+        TEST: DEFAULT_HASH,
+      },
       assetSymbols: ["ASS"],
       tokenSymbols: ["TOK"],
       assets: {
         ASS: {
           balance: 1,
+          hash: DEFAULT_HASH,
           unspent: [{ index: 0, txid: "a", value: 1 }],
           spent: [],
           unconfirmed: [],

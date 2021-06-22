@@ -13,6 +13,7 @@ export interface BalanceLike {
   assets: { [sym: string]: Partial<AssetBalanceLike> };
   tokenSymbols: string[];
   tokens: { [sym: string]: number | string | Fixed8 };
+  tokenHashes: { [sym: string]: string };
 }
 
 async function verifyCoin(url: string, c: Coin): Promise<boolean> {
@@ -47,6 +48,7 @@ async function verifyAssetBalance(
     spent: [] as Coin[],
     unspent: [] as Coin[],
     unconfirmed: [] as Coin[],
+    hash: assetBalance.hash,
   };
   const validCoins = await verifyCoins(url, assetBalance.unspent);
   validCoins.forEach((valid, i) => {
@@ -100,6 +102,8 @@ export class Balance {
   /** The token balances in this Balance for each token keyed by its symbol. */
   public tokens: { [sym: string]: Fixed8 };
 
+  public tokenHashes: { [sym: string]: string };
+
   public constructor(bal: Partial<BalanceLike> = {}) {
     this.address = bal.address || "";
     this.net = bal.net || "NoNet";
@@ -115,6 +119,7 @@ export class Balance {
     }
     this.tokenSymbols = [];
     this.tokens = {};
+    this.tokenHashes = bal.tokenHashes || {};
     if (typeof bal.tokens === "object") {
       const keys = Object.keys(bal.tokens);
       for (const key of keys) {
@@ -125,6 +130,12 @@ export class Balance {
 
   public get [Symbol.toStringTag](): string {
     return "Balance";
+  }
+
+  public addTokenHash(sym: string, hash: string): this {
+    sym = sym.toUpperCase();
+    this.tokenHashes[sym] = hash;
+    return this;
   }
 
   /**
@@ -237,6 +248,7 @@ export class Balance {
       assets: exportAssets(this.assets),
       tokenSymbols: this.tokenSymbols,
       tokens: exportTokens(this.tokens),
+      tokenHashes: this.tokenHashes,
     };
   }
 

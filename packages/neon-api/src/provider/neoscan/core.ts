@@ -38,6 +38,8 @@ function parseClaims(claimArr: NeoscanClaim[]): wallet.ClaimItemLike[] {
       claim: c.unclaimed,
       txid: c.txid,
       value: c.value,
+      generated: c.generated,
+      sys_fee: c.sys_fee,
     };
   });
 }
@@ -120,9 +122,11 @@ export async function getBalance(
     if (b.amount > 0 && b.unspent.length > 0) {
       bal.addAsset(b.asset, {
         unspent: parseUnspent(b.unspent),
+        hash: b.asset_hash,
       } as Partial<wallet.AssetBalanceLike>);
     } else {
       bal.addToken(b.asset, b.amount);
+      bal.addTokenHash(b.asset_symbol ?? b.asset, b.asset_hash);
     }
   }
   log.info(`Retrieved Balance for ${address} from neoscan ${url}`);

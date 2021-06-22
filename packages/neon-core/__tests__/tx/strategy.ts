@@ -8,6 +8,9 @@ import { Fixed8 } from "../../src/u";
 import { AssetBalance } from "../../src/wallet/components";
 import Coin from "../../src/wallet/components/Coin";
 
+const DEFAULT_HASH =
+  "290d1ada0276f703904960aa6f10baae1b17af9fe2fbe58799032be9484a9422";
+
 describe("Strategy", () => {
   let coins: Coin[];
   let assetBalance: AssetBalance;
@@ -24,6 +27,7 @@ describe("Strategy", () => {
     ];
     assetBalance = new AssetBalance({
       unspent: coins.slice(0),
+      hash: DEFAULT_HASH,
     });
   });
 

@@ -1,12 +1,14 @@
 import { compareNeonObjectArray, NeonObject } from "../../helper";
 import Fixed8 from "../../u/Fixed8";
 import Coin, { CoinLike } from "./Coin";
+import { isAssetHash } from "../verify";
 
 export interface AssetBalanceLike {
   balance: Fixed8 | number | string;
   unspent: CoinLike[];
   spent: CoinLike[];
   unconfirmed: CoinLike[];
+  hash: string;
 }
 
 /**
@@ -20,6 +22,7 @@ export class AssetBalance implements NeonObject {
   public unspent: Coin[];
   public spent: Coin[];
   public unconfirmed: Coin[];
+  public hash: string;
 
   public constructor(abLike: Partial<AssetBalanceLike> = {}) {
     this.unspent = abLike.unspent
@@ -29,6 +32,11 @@ export class AssetBalance implements NeonObject {
     this.unconfirmed = abLike.unconfirmed
       ? abLike.unconfirmed.map((coin) => new Coin(coin))
       : [];
+
+    if (!abLike.hash || !isAssetHash(abLike.hash)) {
+      throw new Error("The hash parameter is required");
+    }
+    this.hash = abLike.hash;
   }
 
   public get balance(): Fixed8 {
@@ -41,6 +49,7 @@ export class AssetBalance implements NeonObject {
       unspent: this.unspent.map((c) => c.export()),
       spent: this.spent.map((c) => c.export()),
       unconfirmed: this.unconfirmed.map((c) => c.export()),
+      hash: this.hash,
     };
   }
 

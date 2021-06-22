@@ -138,3 +138,7 @@ export function isAddress(address: string): boolean {
     return false;
   }
 }
+
+export function isAssetHash(assetHash: string): boolean {
+  return isHex(assetHash) && assetHash.length === 64;
+}
