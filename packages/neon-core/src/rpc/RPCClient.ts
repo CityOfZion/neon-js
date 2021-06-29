@@ -1,4 +1,3 @@
-import { timeout } from "../settings";
 import { NeoServerRpcMixin } from "./clients/NeoServerRpcClient";
 import {
   RpcDispatcher,
@@ -7,6 +6,7 @@ import {
 } from "./clients";
 import { Query } from "./Query";
 
+const PING_TIMEOUT = 2000;
 class FullRpcClient extends Nep17TrackerRpcMixin(
   ApplicationLogsRpcMixin(NeoServerRpcMixin(RpcDispatcher))
 ) {
@@ -68,8 +68,8 @@ export class RPCClient extends FullRpcClient {
       this.latency = newPing;
       return newPing;
     } catch (err) {
-      this.latency = timeout.ping;
-      return timeout.ping;
+      this.latency = PING_TIMEOUT;
+      return PING_TIMEOUT;
     }
   }
 }

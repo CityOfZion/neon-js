@@ -1,4 +1,4 @@
-import { logging, settings } from "@cityofzion/neon-core";
+import { logging } from "@cityofzion/neon-core";
 import WebSocket from "isomorphic-ws";
 import { NotificationMessage, CallbackFunction } from "./responses";
 import Subscription from "./subscription";
@@ -26,7 +26,7 @@ export class Notifications {
    */
   public constructor(url: string) {
     this.uniqueIdentifier = 0;
-    this.url = settings.networks[url]?.extra?.notifications ?? url;
+    this.url = url;
     this.subscriptions = new Map<string | null, ContractSubscriptions>();
     log.info(`Created Notifications Provider: ${this.url}`);
   }
