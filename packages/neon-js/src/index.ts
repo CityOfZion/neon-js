@@ -1,19 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import apiPlugin from "@cityofzion/neon-api";
 import * as neonCore from "@cityofzion/neon-core";
-import defaultNetworks from "./networks";
 const neonJs = apiPlugin(neonCore);
 import * as experimental from "./experimental";
 
-const { api, settings, sc, rpc, wallet, CONST, u, tx, logging } = neonJs;
-const bootstrap: {
-  [net: string]: Partial<neonCore.rpc.NetworkJSON>;
-} = defaultNetworks;
-Object.keys(bootstrap).map((key) => {
-  settings.networks[key] = new rpc.Network(
-    bootstrap[key] as neonCore.rpc.NetworkJSON
-  );
-});
+const { api, sc, rpc, wallet, CONST, u, tx, logging } = neonJs;
 
 /**
  * Semantic path for creation of a resource.
@@ -101,27 +92,9 @@ export default {
   decrypt: {
     privateKey: wallet.decrypt,
   },
-  add: {
-    network: (network: neonCore.rpc.Network, override = false): boolean => {
-      if (override && settings.networks[network.name]) {
-        return false;
-      }
-      settings.networks[network.name] = network;
-      return true;
-    },
-  },
-  remove: {
-    network: (name: string): boolean => {
-      if (settings.networks[name]) {
-        delete settings.networks[name];
-        return true;
-      }
-      return false;
-    },
-  },
   u,
   CONST,
   experimental,
 };
 
-export { experimental, api, settings, sc, rpc, wallet, CONST, u, tx, logging };
+export { experimental, api, sc, rpc, wallet, CONST, u, tx, logging };

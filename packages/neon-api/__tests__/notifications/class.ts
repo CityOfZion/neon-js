@@ -1,4 +1,3 @@
-import { settings, rpc } from "@cityofzion/neon-core";
 import WebSocket from "isomorphic-ws";
 import notifications from "../../src/notifications/class";
 jest.mock("isomorphic-ws");
@@ -7,14 +6,6 @@ const unitTestNetUrl = "wss://testurl.com";
 beforeEach(() => {
   jest.resetModules();
   WebSocket.mockClear();
-  settings.networks.UnitTestNet = new rpc.Network({
-    name: "UnitTestNet",
-    extra: {
-      neoscan: "http://wrongurl.com",
-      neonDB: "http://wrongurl.com",
-      notifications: unitTestNetUrl,
-    },
-  });
 });
 
 describe("constructor", () => {
@@ -22,11 +13,6 @@ describe("constructor", () => {
     const expectedUrl = "www.test.com";
     const result = new notifications(expectedUrl);
     expect(result.name).toMatch(expectedUrl);
-  });
-
-  test("Network name", () => {
-    const result = new notifications("UnitTestNet");
-    expect(result.name).toMatch(unitTestNetUrl);
   });
 });
 
@@ -63,51 +49,51 @@ function triggerWebsocketSampleEvent(): void {
 
 describe("subscribe", () => {
   test("subscribe opens correct websocket connection", async () => {
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     subscriptions.subscribe(contract, jest.fn());
     expect(WebSocket).toBeCalledWith(unitTestNetUrl + "?contract=" + contract);
   });
   test("subscribe works with non-0x-prefixed contracts", async () => {
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     subscriptions.subscribe(contract.slice(2), jest.fn());
     expect(WebSocket).toBeCalledWith(unitTestNetUrl + "?contract=" + contract);
   });
   test("subscribe relays messages properly", async () => {
     const callback = jest.fn();
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     subscriptions.subscribe(contract, callback);
     triggerWebsocketSampleEvent();
     expect(callback).toBeCalledWith(sampleEvent);
   });
   test("same subscription can be repeated", async () => {
     const callback = jest.fn();
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     subscriptions.subscribe(contract, callback);
     subscriptions.subscribe(contract, callback);
     triggerWebsocketSampleEvent();
     expect(callback).toBeCalledTimes(2);
   });
   test("subscription name is correct", async () => {
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     const subscription = subscriptions.subscribe(contract, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
     expect(subscription.name).toBe(`Subscription[${contract}]`);
   });
   test("null subscription is accepted", async () => {
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     subscriptions.subscribe(null, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
   });
 });
 
 describe("unsubscribe", () => {
   test("unsubscribe can be called several times on the same subscription without problem", async () => {
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     const subscription = subscriptions.subscribe(contract, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
     subscription.unsubscribe();
     subscription.unsubscribe();
   });
   test("unsubscribe only removes a single instance of a repeated subscription", async () => {
     const callback = jest.fn();
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     const subscription = subscriptions.subscribe(contract, callback);
     subscriptions.subscribe(contract, callback);
     subscription.unsubscribe();
@@ -115,7 +101,7 @@ describe("unsubscribe", () => {
     expect(callback).toBeCalledTimes(1);
   });
   test("unsubscribe closes the websocket connection when there's only 1 subscription", async () => {
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     const subscription = subscriptions.subscribe(contract, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
     subscription.unsubscribe();
     expect(WebSocket.mock.instances[0].close).toHaveBeenCalledTimes(1);
@@ -124,20 +110,20 @@ describe("unsubscribe", () => {
 
 describe("unsubscribeContract", () => {
   test("unsubscribeContract closes the websocket connection and works with non-0x-prefixed strings", async () => {
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     subscriptions.subscribe(contract, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
     subscriptions.unsubscribeContract(contract.slice(2));
     expect(WebSocket.mock.instances[0].close).toHaveBeenCalledTimes(1);
   });
   test("unsubscribeContract can be called on a non-subscribed contract", async () => {
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     subscriptions.unsubscribeContract(contract);
   });
 });
 
 describe("unsubscribeAll", () => {
   test("closes all websocket connections", async () => {
-    const subscriptions = new notifications("UnitTestNet");
+    const subscriptions = new notifications(unitTestNetUrl);
     subscriptions.subscribe(contract, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
     subscriptions.subscribe(contract2, () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
     subscriptions.unsubscribeAll();
