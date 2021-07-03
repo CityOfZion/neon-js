@@ -78,7 +78,9 @@ export class ContractManifest {
     this.permissions = permissions.map(
       (permission) => new ContractPermission(permission)
     );
-    this.trusts = trusts;
+    this.trusts = Array.isArray(trusts)
+      ? trusts.map((t) => ContractPermission.parseJsonDescriptor(t))
+      : trusts;
     this.extra = extra;
   }
 
@@ -90,7 +92,9 @@ export class ContractManifest {
       supportedstandards: this.supportedStandards,
       abi: this.abi.toJson(),
       permissions: this.permissions.map((p) => p.toJson()),
-      trusts: this.trusts,
+      trusts: Array.isArray(this.trusts)
+        ? this.trusts.map((t) => ContractPermission.toJsonDescriptor(t))
+        : this.trusts,
       extra: this.extra,
     };
   }

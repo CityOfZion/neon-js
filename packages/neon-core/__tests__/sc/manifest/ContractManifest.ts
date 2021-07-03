@@ -1,5 +1,6 @@
 import {
   ContractManifest,
+  ContractManifestJson,
   ContractManifestLike,
   ContractParamType,
   ContractPermissionJson,
@@ -266,5 +267,55 @@ describe("fromJson", () => {
 
     const manifest = ContractManifest.fromJson(neoManifestJson);
     expect(manifest.toJson()).toStrictEqual(neoManifestJson);
+  });
+
+  test("custom permissions", () => {
+    const manifestWithPermissionsJson: ContractManifestJson = {
+      name: "custom_permissions",
+      supportedstandards: [],
+      abi: {
+        events: [],
+        methods: [
+          {
+            name: "method1",
+            offset: 0,
+            parameters: [
+              {
+                name: "param1",
+                type: "ByteArray",
+              },
+              {
+                name: "param2",
+                type: "String",
+              },
+            ],
+            returntype: "Boolean",
+            safe: false,
+          },
+        ],
+      },
+      groups: [],
+      features: {},
+      permissions: [
+        {
+          contract: "0xabcd000000000000000000000000000000000000",
+          methods: ["method1"],
+        },
+        {
+          contract:
+            "021234567890000000000000000000000000000000000000000000000000000000",
+          methods: ["method1"],
+        },
+      ],
+      trusts: [
+        "0x1234000000000000000000000000000000000000",
+        "02abcdef1230000000000000000000000000000000000000000000000000000000",
+      ],
+      extra: undefined,
+    };
+
+    const manifest = ContractManifest.fromJson(manifestWithPermissionsJson);
+
+    expect(manifest.toJson()).toStrictEqual(manifestWithPermissionsJson);
   });
 });
