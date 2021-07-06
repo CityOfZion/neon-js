@@ -94,7 +94,8 @@ export class TransactionValidator {
    */
   public async validateScript(): Promise<ValidationSuggestion<void>> {
     const { state } = await this.rpcClient.invokeScript(
-      this.transaction.script
+      this.transaction.script,
+      this.transaction.signers
     );
     if (state !== "HALT") {
       return err("Encountered FAULT when validating script.");
