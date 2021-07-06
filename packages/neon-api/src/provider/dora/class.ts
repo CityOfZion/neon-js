@@ -10,7 +10,15 @@ import {
 } from "./core";
 
 const log = logging.default("api");
-export class Dora implements Provider {
+
+interface DoraProvider extends Provider {
+  getAddressAbstracts: (
+    address: string,
+    page: number
+  ) => Promise<IAddressAbstract>;
+}
+
+export class Dora implements DoraProvider {
   private url: string;
 
   public get name(): string {
@@ -23,7 +31,7 @@ export class Dora implements Provider {
     } else {
       this.url = url;
     }
-    log.info(`Created Neoscan Provider: ${this.url}`);
+    log.info(`Created Dora Provider: ${this.url}`);
   }
 
   public getRPCEndpoint(): Promise<string> {

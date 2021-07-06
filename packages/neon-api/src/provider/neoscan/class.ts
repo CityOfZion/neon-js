@@ -11,7 +11,14 @@ import {
 } from "./core";
 const log = logging.default("api");
 
-export class Neoscan implements Provider {
+interface ProviderNeoScan extends Provider {
+  getAddressAbstracts: (
+    address: string,
+    page: number
+  ) => Promise<IAddressAbstract>;
+}
+
+export class Neoscan implements ProviderNeoScan {
   private url: string;
 
   public get name(): string {

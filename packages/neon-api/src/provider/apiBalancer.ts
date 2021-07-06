@@ -83,15 +83,6 @@ export default class ApiBalancer implements Provider {
     return await this.loadBalance(f);
   }
 
-  public async getAddressAbstracts(
-    address: string,
-    page: number
-  ): Promise<IAddressAbstract> {
-    const f = async (p: Provider): Promise<IAddressAbstract> =>
-      await p.getAddressAbstracts(address, page);
-    return await this.loadBalance(f);
-  }
-
   /**
    * Load balances a API call according to the API switch. Selects the appropriate provider and sends the call towards it.
    * @param func - The API call to load balance function

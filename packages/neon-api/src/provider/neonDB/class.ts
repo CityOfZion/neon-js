@@ -62,12 +62,5 @@ export class NeonDB implements Provider {
   public getTransactionHistory(address: string): Promise<PastTransaction[]> {
     return getTransactionHistory(this.url, address);
   }
-  public getAddressAbstracts(
-    _address: string,
-    _page: number
-  ): Promise<IAddressAbstract> {
-    throw new Error("Method not implemented.");
-  }
 }
-
 export default NeonDB;

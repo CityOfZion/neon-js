@@ -13,7 +13,6 @@ export interface Provider {
   getMaxClaimAmount(address: string): Promise<u.Fixed8>;
   getHeight(): Promise<number>;
   getTransactionHistory(address: string): Promise<PastTransaction[]>;
-  getAddressAbstracts(address: string, page: number): Promise<IAddressAbstract>;
 }
 
 export interface DataProvider extends Provider {
