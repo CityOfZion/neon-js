@@ -1,5 +1,5 @@
 import { logging, settings, u, wallet } from "@cityofzion/neon-core";
-import { IAddressAbstract, PastTransaction, Provider } from "../common";
+import { AddressAbstract, PastTransaction, Provider } from "../common";
 import {
   getBalance,
   getClaims,
@@ -15,7 +15,7 @@ interface DoraProvider extends Provider {
   getAddressAbstracts: (
     address: string,
     page: number
-  ) => Promise<IAddressAbstract>;
+  ) => Promise<AddressAbstract>;
 }
 
 export class Dora implements DoraProvider {
@@ -58,7 +58,7 @@ export class Dora implements DoraProvider {
   public getAddressAbstracts(
     address: string,
     page: number
-  ): Promise<IAddressAbstract> {
+  ): Promise<AddressAbstract> {
     return getAddressAbstracts(this.url, address, page);
   }
 }

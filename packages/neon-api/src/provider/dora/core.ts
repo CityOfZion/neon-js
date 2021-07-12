@@ -5,7 +5,7 @@ import {
   filterHttpsOnly,
   findGoodNodesFromHeight,
   getBestUrl,
-  IAddressAbstract,
+  AddressAbstract,
   RpcNode,
   Entry,
 } from "../common";
@@ -82,7 +82,7 @@ export async function getAddressAbstracts(
   url: string,
   address: string,
   page: number
-): Promise<IAddressAbstract> {
+): Promise<AddressAbstract> {
   const response = await axios.get(
     `${url}/get_address_abstracts/${address}/${page}`
   );

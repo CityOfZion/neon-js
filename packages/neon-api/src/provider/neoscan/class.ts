@@ -1,5 +1,5 @@
 import { logging, rpc, settings, u, wallet } from "@cityofzion/neon-core";
-import { IAddressAbstract, PastTransaction, Provider } from "../common";
+import { AddressAbstract, PastTransaction, Provider } from "../common";
 import {
   getBalance,
   getClaims,
@@ -11,14 +11,14 @@ import {
 } from "./core";
 const log = logging.default("api");
 
-interface ProviderNeoScan extends Provider {
+interface NeoscanProvider extends Provider {
   getAddressAbstracts: (
     address: string,
     page: number
-  ) => Promise<IAddressAbstract>;
+  ) => Promise<AddressAbstract>;
 }
 
-export class Neoscan implements ProviderNeoScan {
+export class Neoscan implements NeoscanProvider {
   private url: string;
 
   public get name(): string {
@@ -68,7 +68,7 @@ export class Neoscan implements ProviderNeoScan {
   public getAddressAbstracts(
     address: string,
     page: number
-  ): Promise<IAddressAbstract> {
+  ): Promise<AddressAbstract> {
     return getAddressAbstracts(this.url, address, page);
   }
 }

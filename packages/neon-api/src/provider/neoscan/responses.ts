@@ -1,4 +1,4 @@
-import { IAddressAbstract } from "../common";
+import { AddressAbstract } from "../common";
 export interface NeoscanV1GetBalanceResponse {
   balance: NeoscanBalance[] | null;
   address: string;
@@ -90,4 +90,4 @@ export interface NeoscanPastTx {
   asset: null;
 }
 
-export type NeoscanAddressAbstracts = IAddressAbstract;
+export type NeoscanAddressAbstracts = AddressAbstract;

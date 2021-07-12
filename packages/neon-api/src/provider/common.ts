@@ -72,7 +72,7 @@ export interface Entry {
   address_from: string;
 }
 
-export interface IAddressAbstract {
+export interface AddressAbstract {
   total_pages: number;
   total_entries: number;
   page_size: number;

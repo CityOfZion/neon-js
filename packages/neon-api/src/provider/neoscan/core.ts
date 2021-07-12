@@ -7,7 +7,7 @@ import {
   getBestUrl,
   PastTransaction,
   RpcNode,
-  IAddressAbstract,
+  AddressAbstract,
 } from "../common";
 import {
   NeoscanAddressAbstracts,
@@ -206,7 +206,7 @@ export async function getAddressAbstracts(
   url: string,
   address: string,
   page: number
-): Promise<IAddressAbstract> {
+): Promise<AddressAbstract> {
   const response = await axios.get(
     `${url}/v1/get_address_abstracts/${address}/${page}`
   );
