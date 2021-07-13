@@ -28,4 +28,5 @@ export interface DoraTransaction
   vin: Required<Pick<Vin, "txid" | "vout">>[];
   vout: Required<Omit<Vout, "address_hash" | "txid">>[];
   block: number;
+  jsonsize: number;
 }

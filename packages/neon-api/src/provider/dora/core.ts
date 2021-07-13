@@ -95,7 +95,9 @@ function parseVout(
   });
 }
 
-function parseTransaction(data: DoraTransaction): ITransaction {
+function parseTransaction(
+  data: DoraTransaction
+): ITransaction & Pick<DoraTransaction, "jsonsize"> {
   return {
     attributes: data.attributes,
     block_height: data.block,
@@ -110,13 +112,14 @@ function parseTransaction(data: DoraTransaction): ITransaction {
     version: data.version,
     vin: parseVin(data.vin),
     vouts: parseVout(data.vout),
+    jsonsize: data.jsonsize,
   };
 }
 
 export async function getTransaction(
   url: string,
   txid: string
-): Promise<ITransaction> {
+): Promise<ITransaction & Pick<DoraTransaction, "jsonsize">> {
   const response = await axios.get(`${url}/transaction/${txid}`);
   const data = response.data as DoraTransaction;
   return parseTransaction(data);

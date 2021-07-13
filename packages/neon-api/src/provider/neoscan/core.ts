@@ -108,7 +108,13 @@ function parseVout(vouts: Required<Omit<Vout, "address">>[]): Vout[] {
   });
 }
 
-function parseTransaction(data: NeoscanTransaction): ITransaction {
+function parseTransaction(
+  data: NeoscanTransaction
+): ITransaction &
+  Pick<
+    NeoscanTransaction,
+    "asset" | "block_hash" | "contract" | "description" | "nonce" | "pubkey"
+  > {
   return {
     attributes: data.attributes,
     block_height: data.block_height,
@@ -123,6 +129,12 @@ function parseTransaction(data: NeoscanTransaction): ITransaction {
     version: data.version,
     vin: parseVin(data.vin),
     vouts: parseVout(data.vouts),
+    asset: data.asset,
+    block_hash: data.block_hash,
+    contract: data.contract,
+    description: data.description,
+    nonce: data.nonce,
+    pubkey: data.pubkey,
   };
 }
 
@@ -249,7 +261,13 @@ export async function getTransactionHistory(
 export async function getTransaction(
   url: string,
   txid: string
-): Promise<ITransaction> {
+): Promise<
+  ITransaction &
+    Pick<
+      NeoscanTransaction,
+      "asset" | "block_hash" | "contract" | "description" | "nonce" | "pubkey"
+    >
+> {
   const response = await axios.get(url + "/v1/get_transaction/" + txid);
   const data = response.data as NeoscanTransaction;
   return parseTransaction(data);

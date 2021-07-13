@@ -2,6 +2,7 @@ import { rpc, settings, u, wallet } from "@cityofzion/neon-core";
 import axios from "axios";
 import * as common from "../../../src/provider/common";
 import * as neoscan from "../../../src/provider/neoscan/core";
+import { NeoscanTransaction } from "../../../src/provider/neoscan/responses";
 import { default as internal } from "../../../src/settings";
 jest.mock("axios");
 jest.mock("../../../src/provider/common");
@@ -482,7 +483,17 @@ describe("getTransaction", () => {
       version: resMockObj.version,
       vin: resMockObj.vin,
       vouts: resMockObj.vouts,
-    } as common.ITransaction;
+      asset: resMockObj.asset,
+      block_hash: resMockObj.block_hash,
+      contract: resMockObj.contract,
+      description: resMockObj.description,
+      nonce: resMockObj.nonce,
+      pubkey: resMockObj.pubkey,
+    } as common.ITransaction &
+      Pick<
+        NeoscanTransaction,
+        "asset" | "block_hash" | "contract" | "description" | "nonce" | "pubkey"
+      >;
 
     const httpCall = jest
       .fn()

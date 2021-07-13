@@ -8,9 +8,17 @@ import {
   getRPCEndpoint,
   getTransaction,
 } from "./core";
+import { DoraTransaction } from "./responses";
 
 const log = logging.default("api");
-export class Dora implements Provider {
+
+interface DoraProvider extends Provider {
+  getTransaction: (
+    txid: string
+  ) => Promise<ITransaction & Pick<DoraTransaction, "jsonsize">>;
+}
+
+export class Dora implements DoraProvider {
   private url: string;
 
   public get name(): string {
@@ -47,7 +55,9 @@ export class Dora implements Provider {
   ): Promise<PastTransaction[]> {
     throw new Error("Method not implemented.");
   }
-  public getTransaction(txid: string): Promise<ITransaction> {
+  public getTransaction(
+    txid: string
+  ): Promise<ITransaction & Pick<DoraTransaction, "jsonsize">> {
     return getTransaction(this.url, txid);
   }
 }

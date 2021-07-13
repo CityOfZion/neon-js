@@ -35,9 +35,6 @@ export class NeoCli implements Provider {
   public getTransactionHistory(_address: string): Promise<PastTransaction[]> {
     throw new Error("Method not implemented.");
   }
-  public getTransaction(_txid: string): Promise<ITransaction> {
-    throw new Error("Method not implemented.");
-  }
 }
 
 export default NeoCli;

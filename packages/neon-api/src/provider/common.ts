@@ -65,7 +65,6 @@ export interface Provider {
   getMaxClaimAmount(address: string): Promise<u.Fixed8>;
   getHeight(): Promise<number>;
   getTransactionHistory(address: string): Promise<PastTransaction[]>;
-  getTransaction(txid: string): Promise<ITransaction>;
 }
 
 export interface DataProvider extends Provider {
