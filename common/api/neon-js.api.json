@@ -1,0 +1,1934 @@
+{
+  "metadata": {
+    "toolPackage": "@microsoft/api-extractor",
+    "toolVersion": "7.18.4",
+    "schemaVersion": 1004,
+    "oldestForwardsCompatibleVersion": 1001,
+    "tsdocConfig": {
+      "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+      "noStandardTags": true,
+      "tagDefinitions": [
+        {
+          "tagName": "@alpha",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@beta",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@defaultValue",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@decorator",
+          "syntaxKind": "block",
+          "allowMultiple": true
+        },
+        {
+          "tagName": "@deprecated",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@eventProperty",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@example",
+          "syntaxKind": "block",
+          "allowMultiple": true
+        },
+        {
+          "tagName": "@experimental",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@inheritDoc",
+          "syntaxKind": "inline"
+        },
+        {
+          "tagName": "@internal",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@label",
+          "syntaxKind": "inline"
+        },
+        {
+          "tagName": "@link",
+          "syntaxKind": "inline",
+          "allowMultiple": true
+        },
+        {
+          "tagName": "@override",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@packageDocumentation",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@param",
+          "syntaxKind": "block",
+          "allowMultiple": true
+        },
+        {
+          "tagName": "@privateRemarks",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@public",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@readonly",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@remarks",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@returns",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@sealed",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@see",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@throws",
+          "syntaxKind": "block",
+          "allowMultiple": true
+        },
+        {
+          "tagName": "@typeParam",
+          "syntaxKind": "block",
+          "allowMultiple": true
+        },
+        {
+          "tagName": "@virtual",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@betaDocumentation",
+          "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@internalRemarks",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@preapproved",
+          "syntaxKind": "modifier"
+        }
+      ],
+      "supportForTags": {
+        "@alpha": true,
+        "@beta": true,
+        "@defaultValue": true,
+        "@decorator": true,
+        "@deprecated": true,
+        "@eventProperty": true,
+        "@example": true,
+        "@experimental": true,
+        "@inheritDoc": true,
+        "@internal": true,
+        "@label": true,
+        "@link": true,
+        "@override": true,
+        "@packageDocumentation": true,
+        "@param": true,
+        "@privateRemarks": true,
+        "@public": true,
+        "@readonly": true,
+        "@remarks": true,
+        "@returns": true,
+        "@sealed": true,
+        "@see": true,
+        "@throws": true,
+        "@typeParam": true,
+        "@virtual": true,
+        "@betaDocumentation": true,
+        "@internalRemarks": true,
+        "@preapproved": true
+      }
+    }
+  },
+  "kind": "Package",
+  "canonicalReference": "@cityofzion/neon-js!",
+  "docComment": "",
+  "name": "@cityofzion/neon-js",
+  "members": [
+    {
+      "kind": "EntryPoint",
+      "canonicalReference": "@cityofzion/neon-js!",
+      "name": "",
+      "members": [
+        {
+          "kind": "Variable",
+          "canonicalReference": "@cityofzion/neon-js!_default:var",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "_default: "
+            },
+            {
+              "kind": "Content",
+              "text": "{\n    create: {\n        account: (k: string) => neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "Account",
+              "canonicalReference": "@cityofzion/neon-core!Account:class"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        privateKey: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "generatePrivateKey",
+              "canonicalReference": "@cityofzion/neon-core!generatePrivateKey:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        signature: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "generateSignature",
+              "canonicalReference": "@cityofzion/neon-core!generateSignature:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        wallet: (k: neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "WalletJSON",
+              "canonicalReference": "@cityofzion/neon-core!WalletJSON:interface"
+            },
+            {
+              "kind": "Content",
+              "text": ") => neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "Wallet",
+              "canonicalReference": "@cityofzion/neon-core!Wallet:class"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        contractParam: (type: \"Any\" | \"Boolean\" | \"Integer\" | \"ByteArray\" | \"String\" | \"Hash160\" | \"Hash256\" | \"PublicKey\" | \"Signature\" | \"Array\" | \"Map\" | \"InteropInterface\" | \"Void\", value?: string | number | boolean | neonCore.sc."
+            },
+            {
+              "kind": "Reference",
+              "text": "ContractParamJson",
+              "canonicalReference": "@cityofzion/neon-core!ContractParamJson:interface"
+            },
+            {
+              "kind": "Content",
+              "text": "[] | null | undefined) => neonCore.sc."
+            },
+            {
+              "kind": "Reference",
+              "text": "ContractParam",
+              "canonicalReference": "@cityofzion/neon-core!ContractParam:class"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        script: typeof neonCore.sc."
+            },
+            {
+              "kind": "Reference",
+              "text": "createScript",
+              "canonicalReference": "@cityofzion/neon-core!createScript:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        scriptBuilder: () => neonCore.sc."
+            },
+            {
+              "kind": "Reference",
+              "text": "ScriptBuilder",
+              "canonicalReference": "@cityofzion/neon-core!ScriptBuilder:class"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        rpcClient: (net: string) => neonCore.rpc."
+            },
+            {
+              "kind": "Reference",
+              "text": "RPCClient",
+              "canonicalReference": "@cityofzion/neon-core!RPCClient:class"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        query: (req: neonCore.rpc."
+            },
+            {
+              "kind": "Reference",
+              "text": "QueryLike",
+              "canonicalReference": "@cityofzion/neon-core!QueryLike:interface"
+            },
+            {
+              "kind": "Content",
+              "text": "<unknown[]>) => neonCore.rpc."
+            },
+            {
+              "kind": "Reference",
+              "text": "Query",
+              "canonicalReference": "@cityofzion/neon-core!Query:class"
+            },
+            {
+              "kind": "Content",
+              "text": "<unknown[], unknown>;\n        network: (net: "
+            },
+            {
+              "kind": "Reference",
+              "text": "Partial",
+              "canonicalReference": "!Partial:type"
+            },
+            {
+              "kind": "Content",
+              "text": "<neonCore.rpc."
+            },
+            {
+              "kind": "Reference",
+              "text": "NetworkJSON",
+              "canonicalReference": "@cityofzion/neon-core!NetworkJSON:interface"
+            },
+            {
+              "kind": "Content",
+              "text": ">) => neonCore.rpc."
+            },
+            {
+              "kind": "Reference",
+              "text": "Network",
+              "canonicalReference": "@cityofzion/neon-core!Network:class"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        stringStream: (str?: string | undefined) => neonCore.u."
+            },
+            {
+              "kind": "Reference",
+              "text": "StringStream",
+              "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n    };\n    deserialize: {\n        attribute: typeof neonCore.tx."
+            },
+            {
+              "kind": "Reference",
+              "text": "TransactionAttribute.deserialize",
+              "canonicalReference": "@cityofzion/neon-core!TransactionAttribute.deserialize:member"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        script: typeof neonCore.tx."
+            },
+            {
+              "kind": "Reference",
+              "text": "Witness.deserialize",
+              "canonicalReference": "@cityofzion/neon-core!Witness.deserialize:member"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        tx: typeof neonCore.tx."
+            },
+            {
+              "kind": "Reference",
+              "text": "Transaction.deserialize",
+              "canonicalReference": "@cityofzion/neon-core!Transaction.deserialize:member"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n    };\n    is: {\n        address: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "isAddress",
+              "canonicalReference": "@cityofzion/neon-core!isAddress:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        publicKey: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "isPublicKey",
+              "canonicalReference": "@cityofzion/neon-core!isPublicKey:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        encryptedKey: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "isNEP2",
+              "canonicalReference": "@cityofzion/neon-core!isNEP2:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        privateKey: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "isPrivateKey",
+              "canonicalReference": "@cityofzion/neon-core!isPrivateKey:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        wif: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "isWIF",
+              "canonicalReference": "@cityofzion/neon-core!isWIF:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        scriptHash: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "isScriptHash",
+              "canonicalReference": "@cityofzion/neon-core!isScriptHash:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n    };\n    sign: {\n        hex: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "sign",
+              "canonicalReference": "@cityofzion/neon-core!sign:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        message: (msg: string, privateKey: string) => string;\n    };\n    verify: {\n        hex: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "verify",
+              "canonicalReference": "@cityofzion/neon-core!verify:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n        message: (msg: string, sig: string, publicKey: string) => boolean;\n    };\n    encrypt: {\n        privateKey: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "encrypt",
+              "canonicalReference": "@cityofzion/neon-core!encrypt:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n    };\n    decrypt: {\n        privateKey: typeof neonCore.wallet."
+            },
+            {
+              "kind": "Reference",
+              "text": "decrypt",
+              "canonicalReference": "@cityofzion/neon-core!decrypt:function"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n    };\n    u: typeof neonCore.u;\n    CONST: typeof neonCore.CONST;\n    experimental: typeof experimental;\n}"
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "_default",
+          "variableTypeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 60
+          }
+        },
+        {
+          "kind": "Variable",
+          "canonicalReference": "@cityofzion/neon-js!api:var",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "api: "
+            },
+            {
+              "kind": "Content",
+              "text": "typeof import(\"@cityofzion/neon-api/lib/plugin\")"
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "api",
+          "variableTypeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          }
+        },
+        {
+          "kind": "Variable",
+          "canonicalReference": "@cityofzion/neon-js!CONST:var",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "CONST: "
+            },
+            {
+              "kind": "Content",
+              "text": "typeof neonCore.CONST"
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CONST",
+          "variableTypeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          }
+        },
+        {
+          "kind": "Namespace",
+          "canonicalReference": "@cityofzion/neon-js!experimental:namespace",
+          "docComment": "",
+          "excerptTokens": [],
+          "releaseTag": "None",
+          "name": "experimental",
+          "members": [
+            {
+              "kind": "Function",
+              "canonicalReference": "@cityofzion/neon-js!experimental.deployContract:function(1)",
+              "docComment": "/**\n * Deploy a smart contract\n *\n * @param nef - A smart contract in Neo executable file format. Commonly created by a NEO compiler and stored as .NEF on disk\n *\n * @param manifest - the manifest corresponding to the smart contract\n *\n * @param config - \n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare function deployContract(nef: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "sc."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "NEF",
+                  "canonicalReference": "@cityofzion/neon-core!NEF:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", manifest: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "sc."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ContractManifest",
+                  "canonicalReference": "@cityofzion/neon-core!ContractManifest:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", config: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "CommonConfig",
+                  "canonicalReference": "@cityofzion/neon-js!CommonConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<string>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "returnTypeTokenRange": {
+                "startIndex": 9,
+                "endIndex": 11
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "nef",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  }
+                },
+                {
+                  "parameterName": "manifest",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 4,
+                    "endIndex": 6
+                  }
+                },
+                {
+                  "parameterName": "config",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 7,
+                    "endIndex": 8
+                  }
+                }
+              ],
+              "name": "deployContract"
+            },
+            {
+              "kind": "Function",
+              "canonicalReference": "@cityofzion/neon-js!experimental.getContractHash:function(1)",
+              "docComment": "/**\n * Get the hash that identifies the contract on the chain matching the specified NEF\n *\n * @param sender - The sender of the transaction\n *\n * @param nefChecksum - The checksum of the Neo Executable File. A NEF file is a smart contract commonly created by a NEO compiler and stored as .NEF on disk\n *\n * @param contractName - The name as indicated in the manifest\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare function getContractHash(sender: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "u."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "HexString",
+                  "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", nefChecksum: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", contractName: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "returnTypeTokenRange": {
+                "startIndex": 8,
+                "endIndex": 9
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "sender",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  }
+                },
+                {
+                  "parameterName": "nefChecksum",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 4,
+                    "endIndex": 5
+                  }
+                },
+                {
+                  "parameterName": "contractName",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 6,
+                    "endIndex": 7
+                  }
+                }
+              ],
+              "name": "getContractHash"
+            },
+            {
+              "kind": "Namespace",
+              "canonicalReference": "@cityofzion/neon-js!experimental.nep17:namespace",
+              "docComment": "",
+              "excerptTokens": [],
+              "releaseTag": "None",
+              "name": "nep17",
+              "members": [
+                {
+                  "kind": "Class",
+                  "canonicalReference": "@cityofzion/neon-js!experimental.nep17.GASContract:class",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "export declare class GASContract extends "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Nep17Contract",
+                      "canonicalReference": "@cityofzion/neon-js!Nep17Contract:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": " "
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "GASContract",
+                  "members": [
+                    {
+                      "kind": "Constructor",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.GASContract:constructor(1)",
+                      "docComment": "/**\n * Convenience class initializing a Nep17Contract to GAS token\n *\n * @param config - \n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "constructor(config: "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "CommonConfig",
+                          "canonicalReference": "@cityofzion/neon-js!CommonConfig:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ");"
+                        }
+                      ],
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [
+                        {
+                          "parameterName": "config",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 1,
+                            "endIndex": 2
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "extendsTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "implementsTokenRanges": []
+                },
+                {
+                  "kind": "Class",
+                  "canonicalReference": "@cityofzion/neon-js!experimental.nep17.NEOContract:class",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "export declare class NEOContract extends "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Nep17Contract",
+                      "canonicalReference": "@cityofzion/neon-js!Nep17Contract:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": " "
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "NEOContract",
+                  "members": [
+                    {
+                      "kind": "Constructor",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.NEOContract:constructor(1)",
+                      "docComment": "/**\n * Convenience class initializing a Nep17Contract to the NEO token exposing additional claim functions\n *\n * @param config - \n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "constructor(config: "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "CommonConfig",
+                          "canonicalReference": "@cityofzion/neon-js!CommonConfig:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ");"
+                        }
+                      ],
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [
+                        {
+                          "parameterName": "config",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 1,
+                            "endIndex": 2
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "Method",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.NEOContract#claimGas:member(1)",
+                      "docComment": "/**\n * Claim gas for address\n *\n * @param address - NEO address\n *\n * @returns transaction id\n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "claimGas(address: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "string"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "): "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "Promise",
+                          "canonicalReference": "!Promise:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "<string>"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "isStatic": false,
+                      "returnTypeTokenRange": {
+                        "startIndex": 3,
+                        "endIndex": 5
+                      },
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [
+                        {
+                          "parameterName": "address",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 1,
+                            "endIndex": 2
+                          }
+                        }
+                      ],
+                      "name": "claimGas"
+                    },
+                    {
+                      "kind": "Method",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.NEOContract#getUnclaimedGas:member(1)",
+                      "docComment": "/**\n * Get the available bonus GAS for address\n *\n * @param address - NEO address\n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "getUnclaimedGas(address: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "string"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "): "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "Promise",
+                          "canonicalReference": "!Promise:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "<number>"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "isStatic": false,
+                      "returnTypeTokenRange": {
+                        "startIndex": 3,
+                        "endIndex": 5
+                      },
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [
+                        {
+                          "parameterName": "address",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 1,
+                            "endIndex": 2
+                          }
+                        }
+                      ],
+                      "name": "getUnclaimedGas"
+                    },
+                    {
+                      "kind": "Method",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.NEOContract#transfer:member(1)",
+                      "docComment": "/**\n * Move tokens from one address to another\n *\n * @param from - source NEO address\n *\n * @param to - destination NEO address\n *\n * @param amount - quantity of tokens to send\n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "transfer(from: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "string"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ", to: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "string"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ", amount: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "number"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "): "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "Promise",
+                          "canonicalReference": "!Promise:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "<string>"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "isStatic": false,
+                      "returnTypeTokenRange": {
+                        "startIndex": 7,
+                        "endIndex": 9
+                      },
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [
+                        {
+                          "parameterName": "from",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 1,
+                            "endIndex": 2
+                          }
+                        },
+                        {
+                          "parameterName": "to",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 3,
+                            "endIndex": 4
+                          }
+                        },
+                        {
+                          "parameterName": "amount",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 5,
+                            "endIndex": 6
+                          }
+                        }
+                      ],
+                      "name": "transfer"
+                    }
+                  ],
+                  "extendsTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "implementsTokenRanges": []
+                },
+                {
+                  "kind": "Class",
+                  "canonicalReference": "@cityofzion/neon-js!experimental.nep17.Nep17Contract:class",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "export declare class Nep17Contract "
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "Nep17Contract",
+                  "members": [
+                    {
+                      "kind": "Constructor",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.Nep17Contract:constructor(1)",
+                      "docComment": "/**\n * Constructs a new instance of the `Nep17Contract` class\n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "constructor(contractHash: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "u."
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "HexString",
+                          "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ", config: "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "CommonConfig",
+                          "canonicalReference": "@cityofzion/neon-js!CommonConfig:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ");"
+                        }
+                      ],
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [
+                        {
+                          "parameterName": "contractHash",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 1,
+                            "endIndex": 3
+                          }
+                        },
+                        {
+                          "parameterName": "config",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 4,
+                            "endIndex": 5
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "Method",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.Nep17Contract#balanceOf:member(1)",
+                      "docComment": "/**\n * Get the number of tokens owned by NEO address\n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "balanceOf(address: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "string"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "): "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "Promise",
+                          "canonicalReference": "!Promise:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "<number>"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "isStatic": false,
+                      "returnTypeTokenRange": {
+                        "startIndex": 3,
+                        "endIndex": 5
+                      },
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [
+                        {
+                          "parameterName": "address",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 1,
+                            "endIndex": 2
+                          }
+                        }
+                      ],
+                      "name": "balanceOf"
+                    },
+                    {
+                      "kind": "Property",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.Nep17Contract#config:member",
+                      "docComment": "",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "protected config: "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "CommonConfig",
+                          "canonicalReference": "@cityofzion/neon-js!CommonConfig:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "releaseTag": "Public",
+                      "name": "config",
+                      "propertyTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      },
+                      "isStatic": false
+                    },
+                    {
+                      "kind": "Property",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.Nep17Contract#contractHash:member",
+                      "docComment": "/**\n * Base class for communicating with NEP-5 contracts on the block chain.\n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "contractHash: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "u."
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "HexString",
+                          "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "releaseTag": "Public",
+                      "name": "contractHash",
+                      "propertyTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      },
+                      "isStatic": false
+                    },
+                    {
+                      "kind": "Method",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.Nep17Contract#decimals:member(1)",
+                      "docComment": "/**\n * Get the number of decimals the token can have\n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "decimals(): "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "Promise",
+                          "canonicalReference": "!Promise:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "<number>"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "isStatic": false,
+                      "returnTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      },
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [],
+                      "name": "decimals"
+                    },
+                    {
+                      "kind": "Method",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.Nep17Contract#name:member(1)",
+                      "docComment": "/**\n * Get the human readable name of the token\n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "name(): "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "Promise",
+                          "canonicalReference": "!Promise:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "<string>"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "isStatic": false,
+                      "returnTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      },
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [],
+                      "name": "name"
+                    },
+                    {
+                      "kind": "Property",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.Nep17Contract#rpcClient:member",
+                      "docComment": "",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "protected rpcClient: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "rpc."
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "RPCClient",
+                          "canonicalReference": "@cityofzion/neon-core!RPCClient:class"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "releaseTag": "Public",
+                      "name": "rpcClient",
+                      "propertyTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      },
+                      "isStatic": false
+                    },
+                    {
+                      "kind": "Method",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.Nep17Contract#symbol:member(1)",
+                      "docComment": "/**\n * Get the abbreviated name of the token. Often used to represent the token in exchanges\n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "symbol(): "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "Promise",
+                          "canonicalReference": "!Promise:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "<string>"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "isStatic": false,
+                      "returnTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      },
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [],
+                      "name": "symbol"
+                    },
+                    {
+                      "kind": "Method",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.Nep17Contract#totalSupply:member(1)",
+                      "docComment": "/**\n * Get the total amount of tokens deployed to the system\n *\n * Note: this is not the same as the total freely available tokens for exchanging. A certain amount might be locked in the contract until a specific release date.\n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "totalSupply(): "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "Promise",
+                          "canonicalReference": "!Promise:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "<number>"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "isStatic": false,
+                      "returnTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      },
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [],
+                      "name": "totalSupply"
+                    },
+                    {
+                      "kind": "Method",
+                      "canonicalReference": "@cityofzion/neon-js!experimental.nep17.Nep17Contract#transfer:member(1)",
+                      "docComment": "/**\n * Move tokens from one address to another\n *\n * @param from - source NEO address\n *\n * @param to - destination NEO address\n *\n * @param amount - quantity of tokens to send\n */\n",
+                      "excerptTokens": [
+                        {
+                          "kind": "Content",
+                          "text": "transfer(from: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "string"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ", to: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "string"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ", amount: "
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "number"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "): "
+                        },
+                        {
+                          "kind": "Reference",
+                          "text": "Promise",
+                          "canonicalReference": "!Promise:interface"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": "<string>"
+                        },
+                        {
+                          "kind": "Content",
+                          "text": ";"
+                        }
+                      ],
+                      "isOptional": false,
+                      "isStatic": false,
+                      "returnTypeTokenRange": {
+                        "startIndex": 7,
+                        "endIndex": 9
+                      },
+                      "releaseTag": "Public",
+                      "overloadIndex": 1,
+                      "parameters": [
+                        {
+                          "parameterName": "from",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 1,
+                            "endIndex": 2
+                          }
+                        },
+                        {
+                          "parameterName": "to",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 3,
+                            "endIndex": 4
+                          }
+                        },
+                        {
+                          "parameterName": "amount",
+                          "parameterTypeTokenRange": {
+                            "startIndex": 5,
+                            "endIndex": 6
+                          }
+                        }
+                      ],
+                      "name": "transfer"
+                    }
+                  ],
+                  "implementsTokenRanges": []
+                }
+              ]
+            },
+            {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-js!experimental.SmartContract:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class SmartContract "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "SmartContract",
+              "members": [
+                {
+                  "kind": "Constructor",
+                  "canonicalReference": "@cityofzion/neon-js!experimental.SmartContract:constructor(1)",
+                  "docComment": "/**\n * Constructs a new instance of the `SmartContract` class\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "constructor(contractHash: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "u."
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "HexString",
+                      "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", config: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CommonConfig",
+                      "canonicalReference": "@cityofzion/neon-js!CommonConfig:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ");"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "contractHash",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      }
+                    },
+                    {
+                      "parameterName": "config",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 4,
+                        "endIndex": 5
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-js!experimental.SmartContract#config:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "protected config: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CommonConfig",
+                      "canonicalReference": "@cityofzion/neon-js!CommonConfig:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "config",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-js!experimental.SmartContract#contractHash:member",
+                  "docComment": "/**\n * A class for communicating with smart contracts on the block chain.\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "contractHash: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "u."
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "HexString",
+                      "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "contractHash",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-js!experimental.SmartContract#invoke:member(1)",
+                  "docComment": "/**\n * Run an invocation on the smart contract. Requires the contract to be created with a valid CommonConfig.account\n *\n * Note: - results are persisted to the blockchain. - currently only supports Sender as signer Tip: use `testInvoke` for querying data without needing to pay GAS.\n *\n * @param operation - name of operation to call\n *\n * @param params - parameters to pass.\n *\n * @param callFlags - call flag required for the operation to call.\n *\n * @returns transaction id\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "invoke(operation: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", params?: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "sc."
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "ContractParam",
+                      "canonicalReference": "@cityofzion/neon-core!ContractParam:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Promise",
+                      "canonicalReference": "!Promise:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<string>"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 7,
+                    "endIndex": 9
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "operation",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    },
+                    {
+                      "parameterName": "params",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 3,
+                        "endIndex": 6
+                      }
+                    }
+                  ],
+                  "name": "invoke"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-js!experimental.SmartContract#rpcClient:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "protected rpcClient: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "rpc."
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "RPCClient",
+                      "canonicalReference": "@cityofzion/neon-core!RPCClient:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "rpcClient",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-js!experimental.SmartContract#testInvoke:member(1)",
+                  "docComment": "/**\n * Run a test invocation on the smart contract.\n *\n * Note: The results are not persisted to the blockchain. To persist use `invoke` instead.\n *\n * @param operation - name of operation to call\n *\n * @param params - parameters to pass\n *\n * @param signers - script hashes of witnesses that should sign the transaction containing this script\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "testInvoke(operation: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", params?: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "sc."
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "ContractParam",
+                      "canonicalReference": "@cityofzion/neon-core!ContractParam:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", signers?: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "tx."
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Signer",
+                      "canonicalReference": "@cityofzion/neon-core!Signer:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Promise",
+                      "canonicalReference": "!Promise:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<rpc."
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "InvokeResult",
+                      "canonicalReference": "@cityofzion/neon-core!InvokeResult:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ">"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 11,
+                    "endIndex": 15
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "operation",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    },
+                    {
+                      "parameterName": "params",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 3,
+                        "endIndex": 6
+                      }
+                    },
+                    {
+                      "parameterName": "signers",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 7,
+                        "endIndex": 10
+                      }
+                    }
+                  ],
+                  "name": "testInvoke"
+                }
+              ],
+              "implementsTokenRanges": []
+            },
+            {
+              "kind": "Variable",
+              "canonicalReference": "@cityofzion/neon-js!experimental.txHelpers:var",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "txHelpers: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "{\n    getSystemFee: typeof "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "getSystemFee",
+                  "canonicalReference": "@cityofzion/neon-js!getSystemFee:function"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";\n    calculateNetworkFee: typeof "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "calculateNetworkFee",
+                  "canonicalReference": "@cityofzion/neon-js!calculateNetworkFee:function"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";\n    setBlockExpiry: typeof "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "setBlockExpiry",
+                  "canonicalReference": "@cityofzion/neon-js!setBlockExpiry:function"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";\n    addFees: typeof "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "addFees",
+                  "canonicalReference": "@cityofzion/neon-js!addFees:function"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";\n}"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "txHelpers",
+              "variableTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 10
+              }
+            }
+          ]
+        },
+        {
+          "kind": "Variable",
+          "canonicalReference": "@cityofzion/neon-js!logging:var",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "logging: "
+            },
+            {
+              "kind": "Content",
+              "text": "typeof neonCore.logging"
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "logging",
+          "variableTypeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          }
+        },
+        {
+          "kind": "Variable",
+          "canonicalReference": "@cityofzion/neon-js!rpc:var",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "rpc: "
+            },
+            {
+              "kind": "Content",
+              "text": "typeof neonCore.rpc"
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "rpc",
+          "variableTypeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          }
+        },
+        {
+          "kind": "Variable",
+          "canonicalReference": "@cityofzion/neon-js!sc:var",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "sc: "
+            },
+            {
+              "kind": "Content",
+              "text": "typeof neonCore.sc"
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "sc",
+          "variableTypeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          }
+        },
+        {
+          "kind": "Variable",
+          "canonicalReference": "@cityofzion/neon-js!tx:var",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "tx: "
+            },
+            {
+              "kind": "Content",
+              "text": "typeof neonCore.tx"
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "tx",
+          "variableTypeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          }
+        },
+        {
+          "kind": "Variable",
+          "canonicalReference": "@cityofzion/neon-js!u:var",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "u: "
+            },
+            {
+              "kind": "Content",
+              "text": "typeof neonCore.u"
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "u",
+          "variableTypeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          }
+        },
+        {
+          "kind": "Variable",
+          "canonicalReference": "@cityofzion/neon-js!wallet:var",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "wallet: "
+            },
+            {
+              "kind": "Content",
+              "text": "typeof neonCore.wallet"
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "wallet",
+          "variableTypeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          }
+        }
+      ]
+    }
+  ]
+}

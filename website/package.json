@@ -10,7 +10,8 @@
     "rename-version": "./node_modules/.bin/docusaurus-rename-version",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
-    "docusaurus": "docusaurus"
+    "docusaurus": "docusaurus",
+    "apidocs": "api-documenter markdown --input-folder ../common/api --output-folder ../docs/api"
   },
   "dependencies": {
     "ljs2": "^2.0.3",

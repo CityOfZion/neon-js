@@ -21,10 +21,11 @@
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "ae": "api-extractor run --local",
     "build": "tsc -b",
     "dist": "tsc -m commonjs --outDir dist",
     "dist:prod": "tsc -m commonjs --outDir dist",
-    "clean": "rimraf ./lib ./dist tsconfig.tsbuildinfo",
+    "clean": "rimraf ./lib ./dist ./temp tsconfig.tsbuildinfo",
     "prepublishOnly": "yarn clean && yarn build && yarn dist:prod",
     "lint": "eslint src/**/*.ts __tests__/**/*.ts",
     "pretty": "prettier --write --loglevel=warn \"./{src,__{tests,integration}__}/**/*.ts\"",

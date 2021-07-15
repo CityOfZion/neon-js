@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "ae": "lerna run ae",
     "clean": "lerna run clean",
     "bootstrap": "lerna bootstrap",
     "build": "tsc -b",
@@ -23,6 +24,7 @@
     "test:unit": "jest /packages/neon-core/__tests__/.*  /packages/neon-api/__tests__/.*"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.18.4",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.3.0",
     "@types/tapable": "2.2.2",
