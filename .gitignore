@@ -17,6 +17,7 @@ build
 # Package stuff
 packages/**/lib
 packages/**/dist
+packages/**/temp
 
 # Typescript
 *.tsbuildinfo

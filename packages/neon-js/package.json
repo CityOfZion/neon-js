@@ -21,8 +21,9 @@
   "browser": "dist/browser.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "ae": "api-extractor run --local",
     "build": "tsc -b",
-    "clean": "rimraf ./lib ./dist tsconfig.tsbuildinfo",
+    "clean": "rimraf ./lib ./dist ./temp tsconfig.tsbuildinfo",
     "dist": "cross-env NODE_ENV=development webpack --mode development",
     "dist:prod": "cross-env NODE_ENV=production webpack --mode production",
     "prepublishOnly": "yarn clean && yarn build && yarn dist:prod",
