@@ -22,8 +22,12 @@ function ab2str(buf: ArrayBuffer | ArrayLike<number>): string;
 class Account implements NeonObject<AccountJSON> {
     // (undocumented)
     get [Symbol.toStringTag](): string;
-    constructor(str?: string | Partial<AccountJSON>);
+    constructor(str?: string | Partial<AccountJSON>, config?: {
+        addressVersion: number;
+    });
     get address(): string;
+    // (undocumented)
+    addressVersion: number;
     // (undocumented)
     contract: {
         script: string;
@@ -79,7 +83,7 @@ interface AccountJSON {
     lock: boolean;
 }
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 const ADDR_VERSION = "35";
 
 // @public (undocumented)
@@ -206,6 +210,7 @@ interface CliPlugin {
 declare namespace CONST {
     export {
         ADDR_VERSION,
+        DEFAULT_ADDRESS_VERSION,
         MAGIC_NUMBER,
         NATIVE_CONTRACT_HASH,
         ASSET_ID,
@@ -578,7 +583,7 @@ interface ContractPermissionLike {
 function createScript(...scripts: (ContractCall | ContractCallJson | string)[]): string;
 
 // @public
-function decrypt(encryptedKey: string, keyphrase: string, scryptParams?: ScryptParams): Promise<string>;
+function decrypt(encryptedKey: string, keyphrase: string, scryptParams?: ScryptParams, addressVersion?: number): Promise<string>;
 
 // @public (undocumented)
 function decryptNeo2(encryptedKey: string, keyphrase: string, scryptParams?: ScryptParams): Promise<string>;
@@ -595,6 +600,9 @@ const DEFAULT_ACCOUNT_CONTRACT: {
     }[];
     deployed: boolean;
 };
+
+// @public (undocumented)
+const DEFAULT_ADDRESS_VERSION = 53;
 
 // @public (undocumented)
 const DEFAULT_REQ: {
@@ -662,7 +670,7 @@ enum EllipticCurvePreset {
 }
 
 // @public
-function encrypt(wifKey: string, keyphrase: string, scryptParams?: ScryptParams): Promise<string>;
+function encrypt(wifKey: string, keyphrase: string, scryptParams?: ScryptParams, addressVersion?: number): Promise<string>;
 
 // @public
 function ensureHex(str: string): void;
@@ -744,7 +752,10 @@ const generateRandomArray: (length: number) => number[];
 function generateSignature(tx: string, privateKey: string): string;
 
 // @public
-function getAddressFromScriptHash(scriptHash: string): string;
+function getAddressFromScriptHash(scriptHash: string, addressVersion?: number): string;
+
+// @public
+function getAddressVersion(address: string): number;
 
 // @public (undocumented)
 interface GetContractStateResult {
@@ -2817,6 +2828,7 @@ declare namespace wallet {
         getAddressFromScriptHash,
         getScriptHashFromAddress,
         generatePrivateKey,
+        getAddressVersion,
         encrypt,
         decrypt,
         decryptNeo2,
