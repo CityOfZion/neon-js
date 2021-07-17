@@ -13,7 +13,7 @@ Neon-API plugin. Provides the package `api` within `neon-js`.
 NPM:
 
 ```sh
-npm install @cityofzion/neo-api
+npm install @cityofzion/neon-api
 ```
 
 Yarn:
