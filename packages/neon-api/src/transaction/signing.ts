@@ -11,9 +11,10 @@ export function signWithAccount(acct: wallet.Account): SigningFunction {
       wallet.getScriptHashFromVerificationScript(verificationScript);
     if (scriptHash !== acct.scriptHash) {
       throw new Error(
-        `Request for ${wallet.getAddressFromScriptHash(
-          scriptHash
-        )} signature but only have ${acct.address}.`
+        `Requested signature from ${wallet.getAddressFromScriptHash(
+          scriptHash,
+          acct.addressVersion
+        )} but only have key of ${acct.address}.`
       );
     }
     return wallet.sign(txData, acct.privateKey);

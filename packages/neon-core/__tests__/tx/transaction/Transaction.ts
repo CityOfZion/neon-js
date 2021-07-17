@@ -277,7 +277,7 @@ describe.each(dataSet)(
 
     test("toJson", () => {
       const result = deserialized.toJson();
-      expect(result).toEqual(json);
+      expect(result).toEqual(Object.assign({}, json, { sender: "" }));
     });
 
     test("serialize", () => {

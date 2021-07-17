@@ -26,6 +26,14 @@ describe("constructor", () => {
     expect(result.address).toBe("NMBfzaEq2c5zodiNbLPoohVENARMbJim1r");
   });
 
+  test("custom address version", () => {
+    const result = new Account(
+      "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
+      { addressVersion: 77 }
+    );
+
+    expect(result.address).toBe("Y1J9dBPk4wD2S34TBQPTSi27UGbzezrfdf");
+  });
   test("empty", () => {
     const result = new Account();
 
