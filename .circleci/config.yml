@@ -22,7 +22,7 @@ executors:
     working_directory: ~/repo
     docker:
       - image: circleci/node:<< parameters.version >>
-      - image: snowypowers/neo-privatenet:v3.0.0-rc2
+      - image: snowypowers/neo-privatenet:v3.0.0-rc3
 
 commands:
   run-unittest:

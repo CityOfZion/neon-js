@@ -229,7 +229,6 @@ describe("NeoServerRpcClient", () => {
     test.skip("invokeContractVerify", async () => {
       const result = await client.invokeContractVerify(contractHash, []);
 
-      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
@@ -241,7 +240,6 @@ describe("NeoServerRpcClient", () => {
     test("invokeFunction with HALT", async () => {
       const result = await client.invokeFunction(contractHash, "symbol");
 
-      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
@@ -254,7 +252,6 @@ describe("NeoServerRpcClient", () => {
     test("invokeFunction with FAULT", async () => {
       const result = await client.invokeFunction(contractHash, "fail");
 
-      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "FAULT",
@@ -284,7 +281,6 @@ describe("NeoServerRpcClient", () => {
         ]
       );
 
-      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
@@ -301,7 +297,6 @@ describe("NeoServerRpcClient", () => {
         )
       );
 
-      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
@@ -338,7 +333,6 @@ describe("NeoServerRpcClient", () => {
         }),
       ]);
 
-      expect(Object.keys(result)).toHaveLength(5);
       expect(result).toMatchObject({
         script: expect.any(String),
         state: "HALT",
