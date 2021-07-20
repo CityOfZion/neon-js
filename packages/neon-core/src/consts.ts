@@ -1,4 +1,9 @@
+/**
+ * @deprecated If you are looking for the default MainNet address version for N3, please use DEFAULT_ADDRESS_VERSION.
+ */
 export const ADDR_VERSION = "35";
+
+export const DEFAULT_ADDRESS_VERSION = 0x35;
 
 export enum MAGIC_NUMBER {
   MainNet = 5195086,

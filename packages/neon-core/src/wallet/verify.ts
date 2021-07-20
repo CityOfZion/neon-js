@@ -116,6 +116,7 @@ export function isScriptHash(scriptHash: string): boolean {
 export function isAddress(address: string): boolean {
   try {
     const programHash = ab2hexstring(base58.decode(address));
+    const addressVersion = parseInt(programHash.slice(0, 2), 16);
     const shaChecksum = hash256(programHash.slice(0, 42)).substr(0, 8);
     // We use the checksum to verify the address
     if (shaChecksum !== programHash.substr(42, 8)) {
@@ -123,7 +124,7 @@ export function isAddress(address: string): boolean {
     }
     // As other chains use similar checksum methods, we need to attempt to transform the programHash back into the address
     const scriptHash = reverseHex(programHash.slice(2, 42));
-    if (getAddressFromScriptHash(scriptHash) !== address) {
+    if (getAddressFromScriptHash(scriptHash, addressVersion) !== address) {
       // address is not valid Neo address, could be btc, ltc etc.
       return false;
     }

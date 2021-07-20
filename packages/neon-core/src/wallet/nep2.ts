@@ -12,7 +12,12 @@ import NoPadding from "crypto-js/pad-nopadding";
 import SHA256 from "crypto-js/sha256";
 import { lib } from "crypto-js";
 import { scrypt } from "scrypt-js";
-import { DEFAULT_SCRYPT, NEP2_FLAG, NEP2_HEADER } from "../consts";
+import {
+  DEFAULT_ADDRESS_VERSION,
+  DEFAULT_SCRYPT,
+  NEP2_FLAG,
+  NEP2_HEADER,
+} from "../consts";
 import logging from "../logging";
 import { ab2hexstring, hexXor, hash160, hash256, hexstring2ab } from "../u";
 import { isWIF } from "./verify";
@@ -85,9 +90,13 @@ async function createNep2Key(
   return encryptedKey;
 }
 
-function getAddressFromPrivateKey(privateKey: string): string {
+function getAddressFromPrivateKey(
+  privateKey: string,
+  addressVersion: number
+): string {
   return getAddressFromScriptHash(
-    getScriptHashFromPublicKey(getPublicKeyFromPrivateKey(privateKey))
+    getScriptHashFromPublicKey(getPublicKeyFromPrivateKey(privateKey)),
+    addressVersion
   );
 }
 
@@ -111,10 +120,11 @@ function getNeo2AddressFromPrivateKey(privateKey: string): string {
 export function encrypt(
   wifKey: string,
   keyphrase: string,
-  scryptParams: ScryptParams = DEFAULT_SCRYPT
+  scryptParams: ScryptParams = DEFAULT_SCRYPT,
+  addressVersion = DEFAULT_ADDRESS_VERSION
 ): Promise<string> {
   const privateKey = isWIF(wifKey) ? getPrivateKeyFromWIF(wifKey) : wifKey;
-  const address = getAddressFromPrivateKey(privateKey);
+  const address = getAddressFromPrivateKey(privateKey, addressVersion);
   return createNep2Key(
     NEP2_HEADER + NEP2_FLAG,
     privateKey,
@@ -186,12 +196,13 @@ async function decipherNep2Key(
 export async function decrypt(
   encryptedKey: string,
   keyphrase: string,
-  scryptParams: ScryptParams = DEFAULT_SCRYPT
+  scryptParams: ScryptParams = DEFAULT_SCRYPT,
+  addressVersion = DEFAULT_ADDRESS_VERSION
 ): Promise<string> {
   const privateKey = await decipherNep2Key(
     encryptedKey,
     keyphrase,
-    getAddressFromPrivateKey,
+    (privateKey) => getAddressFromPrivateKey(privateKey, addressVersion),
     scryptParams
   );
   return getWIFFromPrivateKey(privateKey);

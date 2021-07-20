@@ -13,7 +13,7 @@
  */
 import base58 from "bs58";
 import { Buffer } from "buffer";
-import { ADDR_VERSION } from "../consts";
+import { DEFAULT_ADDRESS_VERSION } from "../consts";
 import {
   ab2hexstring,
   hash160,
@@ -142,11 +142,15 @@ export function getScriptHashFromPublicKey(publicKey: string): string {
 /**
  * Converts a scripthash to address.
  */
-export function getAddressFromScriptHash(scriptHash: string): string {
+export function getAddressFromScriptHash(
+  scriptHash: string,
+  addressVersion = DEFAULT_ADDRESS_VERSION
+): string {
   scriptHash = reverseHex(scriptHash);
-  const shaChecksum = hash256(ADDR_VERSION + scriptHash).substr(0, 8);
+  const addressVersionHex = addressVersion.toString(16);
+  const shaChecksum = hash256(addressVersionHex + scriptHash).substr(0, 8);
   return base58.encode(
-    Buffer.from(ADDR_VERSION + scriptHash + shaChecksum, "hex")
+    Buffer.from(addressVersionHex + scriptHash + shaChecksum, "hex")
   );
 }
 
@@ -163,4 +167,13 @@ export function getScriptHashFromAddress(address: string): string {
  */
 export function generatePrivateKey(): string {
   return ab2hexstring(generateRandomArray(32));
+}
+
+/**
+ * Extracts the address version from a given correct NEO address.
+ * @param address - A NEO address string.
+ * @returns Address version
+ */
+export function getAddressVersion(address: string): number {
+  return base58.decode(address).readUInt8();
 }

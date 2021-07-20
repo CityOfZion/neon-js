@@ -124,8 +124,12 @@ export class Transaction implements NeonObject<TransactionLike> {
    */
   public static MAX_TRANSACTION_LIFESPAN = 5760;
 
+  /**
+   * Stores the address version if the data is made available.
+   */
+  #addressVersion: number | null = null;
   public static fromJson(input: TransactionJson): Transaction {
-    return new Transaction({
+    const output = new Transaction({
       version: input.version,
       nonce: input.nonce,
       systemFee: BigInteger.fromDecimal(input.sysfee, 0),
@@ -136,6 +140,13 @@ export class Transaction implements NeonObject<TransactionLike> {
       script: HexString.fromBase64(input.script),
       witnesses: input.witnesses.map((w) => Witness.fromJson(w)),
     });
+
+    // We attempt to extract the address version here.
+    if (input.sender) {
+      output.#addressVersion = new Account(input.sender).addressVersion;
+    }
+
+    return output;
   }
 
   public constructor(
@@ -353,9 +364,12 @@ export class Transaction implements NeonObject<TransactionLike> {
       version: this.version,
       nonce: this.nonce,
       sender:
-        this.sender.byteLength === 0
+        this.sender.byteLength === 0 || this.#addressVersion === null
           ? ""
-          : getAddressFromScriptHash(this.sender.toBigEndian()),
+          : getAddressFromScriptHash(
+              this.sender.toBigEndian(),
+              this.#addressVersion
+            ),
       sysfee: this.systemFee.toDecimal(0),
       netfee: this.networkFee.toDecimal(0),
       validuntilblock: this.validUntilBlock,

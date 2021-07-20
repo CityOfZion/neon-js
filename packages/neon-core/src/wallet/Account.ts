@@ -1,4 +1,8 @@
-import { DEFAULT_ACCOUNT_CONTRACT, DEFAULT_SCRYPT } from "../consts";
+import {
+  DEFAULT_ADDRESS_VERSION,
+  DEFAULT_ACCOUNT_CONTRACT,
+  DEFAULT_SCRYPT,
+} from "../consts";
 import logger from "../logging";
 import { hash160, HexString, reverseHex } from "../u";
 import { isMultisigContract } from "../sc";
@@ -93,6 +97,8 @@ export class Account implements NeonObject<AccountJSON> {
   };
   public label: string;
 
+  public addressVersion: number = DEFAULT_ADDRESS_VERSION;
+
   // tslint:disable:variable-name
   private _privateKey?: string;
   private _encrypted?: string;
@@ -102,11 +108,19 @@ export class Account implements NeonObject<AccountJSON> {
   private _WIF?: string;
   // tslint:enables:variable-name
 
-  public constructor(str: string | Partial<AccountJSON> = "") {
+  public constructor(
+    str: string | Partial<AccountJSON> = "",
+    config = { addressVersion: 0 }
+  ) {
     this.label = "";
     this.isDefault = false;
     this.lock = false;
     this.contract = Object.assign({}, DEFAULT_ACCOUNT_CONTRACT);
+
+    if (config && config.addressVersion > 0) {
+      this.addressVersion = config.addressVersion;
+    }
+
     if (!str) {
       this._privateKey = core.generatePrivateKey();
     } else if (typeof str === "object") {
@@ -127,6 +141,16 @@ export class Account implements NeonObject<AccountJSON> {
       this._scriptHash = str;
     } else if (isAddress(str)) {
       this._address = str;
+      const addressVersionFromAddress = core.getAddressVersion(str);
+
+      if (
+        config.addressVersion > 0 &&
+        config.addressVersion !== addressVersionFromAddress
+      ) {
+        throw new Error(
+          `Uncompatible address versions! Address ${str} uses version ${addressVersionFromAddress} but config declares version ${config.addressVersion}`
+        );
+      }
     } else if (isWIF(str)) {
       this._privateKey = core.getPrivateKeyFromWIF(str);
       this._WIF = str;
@@ -270,7 +294,10 @@ export class Account implements NeonObject<AccountJSON> {
     if (this._address) {
       return this._address;
     } else {
-      this._address = core.getAddressFromScriptHash(this.scriptHash);
+      this._address = core.getAddressFromScriptHash(
+        this.scriptHash,
+        this.addressVersion
+      );
       return this._address;
     }
   }

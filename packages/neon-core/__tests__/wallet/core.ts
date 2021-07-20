@@ -104,3 +104,27 @@ describe("Public key", () => {
     );
   });
 });
+
+describe("getAddressFromScriptHash", () => {
+  test("custom address version", () => {
+    const result = C.getAddressFromScriptHash(
+      "118ba6f59931a56ec469770f7fc790ece96df00d",
+      77
+    );
+
+    expect(result).toBe("Y1J9dBPk4wD2S34TBQPTSi27UGbzezrfdf");
+  });
+});
+describe("getAddressVersion", () => {
+  test("Neo3", () => {
+    const result = C.getAddressVersion("NPTmAHDxo6Pkyic8Nvu3kwyXoYJCvcCB6i");
+
+    expect(result).toBe(0x35);
+  });
+
+  test("Neo2", () => {
+    const result = C.getAddressVersion("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW");
+
+    expect(result).toBe(0x17);
+  });
+});
