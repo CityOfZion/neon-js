@@ -1,8 +1,8 @@
 const nodeLedger = require("@ledgerhq/hw-transport-node-hid").default;
-const ledgerPlugin = require("@cityofzion/neon-ledger").default;
+const ledger = require("@cityofzion/neon-ledger").default;
 const neon = require("@cityofzion/neon-js");
 
-const neonJs = ledgerPlugin(neon);
+const neonJs = { ...neon, ledger };
 const addressNumber = 0;
 
 const neoscan = new neonJs.api.neoscan.instance("TestNet");
