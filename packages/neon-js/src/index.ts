@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import apiPlugin from "@cityofzion/neon-api";
+import * as api from "@cityofzion/neon-api";
 import * as neonCore from "@cityofzion/neon-core";
-const neonJs = apiPlugin(neonCore);
 import * as experimental from "./experimental";
 
-const { api, sc, rpc, wallet, CONST, u, tx, logging } = neonJs;
+const { sc, rpc, wallet, CONST, u, tx, logging } = neonCore;
 
 /**
  * Semantic path for creation of a resource.

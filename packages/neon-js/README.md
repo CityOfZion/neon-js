@@ -4,7 +4,6 @@ Constructed package using:
 
 - `neon-core`
 - `neon-api`
-- `neon-nep5`
 
 In addition, this package exposes a high level semantic API binding for beginner usage. The semantic API can be found in the default export of the package.
 
@@ -23,13 +22,4 @@ The semantic API follows a convention of Verb-Noun. Any extra words beyond the f
 ```js
 NeonJs.create.stringStream("1234");
 NeonJs.encrypt.privateKey("key");
-```
-
-The exceptions to this rule are the managed methods provided by `api`:
-
-```js
-NeonJs.sendAsset
-NeonJs.claimGas
-NeonJs.doInvoke
-NeonJs.setupVote
 ```

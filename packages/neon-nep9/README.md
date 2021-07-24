@@ -13,12 +13,7 @@ yarn i @cityofzion/neon-nep9 @cityofzion/neon-core
 ```
 
 ```js
-const neonCore = require("@cityofzion/neon-core");
-const nep9Plugin = require("@cityofzion/neon-nep9");
-
-const neonJs = nep9Plugin(neonCore);
-
-module.exports = neonJs;
+const nep9 = require("@cityofzion/neon-nep9");
 ```
 
 ## API

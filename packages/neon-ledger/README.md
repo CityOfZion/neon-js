@@ -2,23 +2,12 @@
 
 ## Overview
 
-Neon-Ledger plugin. Provides the package `ledger` within `neon-js`.
-
-- Wrapper for interacting with Ledger.
+Wrapper for interacting with Ledger.
 
 ## Installation
 
 ```sh
-yarn i @cityofzion/neon-node-ledger
-```
-
-```js
-const neonCore = require("@cityofzion/neon-core");
-const ledgerPlugin = require("@cityofzion/neon-ledger");
-
-const neonJs = ledgerPlugin(neonCore);
-
-module.exports = neonJs;
+yarn i @cityofzion/neon-node-ledger @cityofzion-neon-core
 ```
 
 This package only provides an easy wrapper for communicating with the Ledger. You will need one of the ledger libraries depending on your use-case:

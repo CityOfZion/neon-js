@@ -2,23 +2,12 @@
 
 ## Overview
 
-Neon-API plugin. Provides the package `api` within `neon-js`.
-
-- Provides high level functionality for crafting transactions.
-- Provides API for accessing external data (neoscan) and notifications (neo-pubsub) providers.
+Provides high level functionality for crafting transactions.
 
 
 ## Installation
 
 ```sh
-yarn i @cityofzion/neon-api
+yarn i @cityofzion/neon-api @cityofzion/neon-core
 ```
 
-```js
-const neonCore = require("@cityofzion/neon-core");
-const apiPlugin = require("@cityofzion/neon-api");
-
-const neonJs = apiPlugin(neonCore);
-
-module.exports = neonJs;
-```
