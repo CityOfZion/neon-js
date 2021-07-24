@@ -4,7 +4,7 @@
   "references": [
     { "path": "./packages/neon-core" },
     { "path": "./packages/neon-api" },
-    { "path": "./packages/neon-nep9" },
+    { "path": "./packages/neon-uri" },
     { "path": "./packages/neon-ledger"},
     { "path": "./packages/neon-js" }
   ]
