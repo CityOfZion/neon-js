@@ -6,17 +6,10 @@
 
 /// <reference types="ledgerhq__hw-transport" />
 
-import * as _Neon from '@cityofzion/neon-core';
 import Transport from '@ledgerhq/hw-transport';
 
 // @public
 export function BIP44(address?: number, change?: number, account?: number): string;
-
-// @public (undocumented)
-function bundle<T extends typeof _Neon>(neonCore: T): T & {
-    ledger: typeof ledger;
-};
-export default bundle;
 
 // @public
 export function evalTransportError(err: Error): Error;
@@ -29,10 +22,6 @@ export function getPublicKey(ledger: Transport, bip44String: string): Promise<st
 
 // @public
 export function getSignature(ledger: Transport, hex: string, bip44String: string): Promise<string>;
-
-// Warnings were encountered during analysis:
-//
-// src/index.ts:6:10 - (ae-forgotten-export) The symbol "ledger" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

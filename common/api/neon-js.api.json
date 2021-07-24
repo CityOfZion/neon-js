@@ -453,27 +453,6 @@
         },
         {
           "kind": "Variable",
-          "canonicalReference": "@cityofzion/neon-js!api:var",
-          "docComment": "",
-          "excerptTokens": [
-            {
-              "kind": "Content",
-              "text": "api: "
-            },
-            {
-              "kind": "Content",
-              "text": "typeof import(\"@cityofzion/neon-api/lib/plugin\")"
-            }
-          ],
-          "releaseTag": "Public",
-          "name": "api",
-          "variableTypeTokenRange": {
-            "startIndex": 1,
-            "endIndex": 2
-          }
-        },
-        {
-          "kind": "Variable",
           "canonicalReference": "@cityofzion/neon-js!CONST:var",
           "docComment": "",
           "excerptTokens": [

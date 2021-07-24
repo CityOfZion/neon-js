@@ -4,7 +4,7 @@
 
 ```ts
 
-import { cityofzionNeonApiLibPlugin } from '@cityofzion/neon-api/lib/plugin';
+import * as api from '@cityofzion/neon-api';
 import * as neonCore from '@cityofzion/neon-core';
 import { rpc as rpc_2 } from '@cityofzion/neon-core';
 import { sc as sc_2 } from '@cityofzion/neon-core';
@@ -12,8 +12,7 @@ import { tx as tx_2 } from '@cityofzion/neon-core';
 import { u as u_2 } from '@cityofzion/neon-core';
 import { wallet as wallet_2 } from '@cityofzion/neon-core';
 
-// @public (undocumented)
-export const api: cityofzionNeonApiLibPlugin;
+export { api }
 
 // @public (undocumented)
 export const CONST: typeof neonCore.CONST;
