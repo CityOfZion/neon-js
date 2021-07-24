@@ -160,35 +160,43 @@
     }
   },
   "kind": "Package",
-  "canonicalReference": "@cityofzion/neon-nep9!",
+  "canonicalReference": "@cityofzion/neon-uri!",
   "docComment": "",
-  "name": "@cityofzion/neon-nep9",
+  "name": "@cityofzion/neon-uri",
   "members": [
     {
       "kind": "EntryPoint",
-      "canonicalReference": "@cityofzion/neon-nep9!",
+      "canonicalReference": "@cityofzion/neon-uri!",
       "name": "",
       "members": [
         {
           "kind": "Function",
-          "canonicalReference": "@cityofzion/neon-nep9!bundle:function(1)",
-          "docComment": "",
+          "canonicalReference": "@cityofzion/neon-uri!createPayUri:function(1)",
+          "docComment": "/**\n * Creates a uri to request token transfer.\n *\n * @param toAddress - Receipent address of the tokens.\n *\n * @param asset - 'neo', 'gas' or a contract scripthash.\n *\n * @param amount - Amount of tokens to transfer in integer amounts.\n *\n * @example\n *\n * To request 1.23456789 GAS to `NNWAo5vdVJz1oyCuNiaTBA3amBHnWCF4Yk`:\n * ```ts\n * import {createPayUri} from \"@cityofzion/neon-uri\";\n * const uri = createPayUri(\"NNWAo5vdVJz1oyCuNiaTBA3amBHnWCF4Yk\", \"gas\", 123456789);\n * ```\n *\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "declare function bundle<T extends "
+              "text": "export declare function createPayUri(toAddress: "
             },
             {
               "kind": "Content",
-              "text": "typeof _Neon"
+              "text": "string"
             },
             {
               "kind": "Content",
-              "text": ">(neonCore: "
+              "text": ", asset: "
             },
             {
               "kind": "Content",
-              "text": "T"
+              "text": "string"
+            },
+            {
+              "kind": "Content",
+              "text": ", amount?: "
+            },
+            {
+              "kind": "Content",
+              "text": "number"
             },
             {
               "kind": "Content",
@@ -196,7 +204,7 @@
             },
             {
               "kind": "Content",
-              "text": "T & {\n    nep9: typeof nep9;\n}"
+              "text": "string"
             },
             {
               "kind": "Content",
@@ -204,167 +212,82 @@
             }
           ],
           "returnTypeTokenRange": {
-            "startIndex": 5,
-            "endIndex": 6
+            "startIndex": 7,
+            "endIndex": 8
           },
           "releaseTag": "Public",
           "overloadIndex": 1,
           "parameters": [
             {
-              "parameterName": "neonCore",
+              "parameterName": "toAddress",
+              "parameterTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "parameterName": "asset",
               "parameterTypeTokenRange": {
                 "startIndex": 3,
                 "endIndex": 4
               }
-            }
-          ],
-          "typeParameters": [
-            {
-              "typeParameterName": "T",
-              "constraintTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              },
-              "defaultTypeTokenRange": {
-                "startIndex": 0,
-                "endIndex": 0
-              }
-            }
-          ],
-          "name": "bundle"
-        },
-        {
-          "kind": "Interface",
-          "canonicalReference": "@cityofzion/neon-nep9!NEP9Intent:interface",
-          "docComment": "/**\n * Intent as expressed by an NEP9 URI string\n */\n",
-          "excerptTokens": [
-            {
-              "kind": "Content",
-              "text": "export interface NEP9Intent "
-            }
-          ],
-          "releaseTag": "Public",
-          "name": "NEP9Intent",
-          "members": [
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@cityofzion/neon-nep9!NEP9Intent#address:member",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "address: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isOptional": false,
-              "releaseTag": "Public",
-              "name": "address",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
             },
             {
-              "kind": "PropertySignature",
-              "canonicalReference": "@cityofzion/neon-nep9!NEP9Intent#amount:member",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "amount?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "number"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isOptional": true,
-              "releaseTag": "Public",
-              "name": "amount",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@cityofzion/neon-nep9!NEP9Intent#asset:member",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "asset?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isOptional": true,
-              "releaseTag": "Public",
-              "name": "asset",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@cityofzion/neon-nep9!NEP9Intent#attributes:member",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "attributes: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
-                  "kind": "Reference",
-                  "text": "TransactionAttributeLike",
-                  "canonicalReference": "@cityofzion/neon-core!TransactionAttributeLike:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "[]"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isOptional": false,
-              "releaseTag": "Public",
-              "name": "attributes",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 4
+              "parameterName": "amount",
+              "parameterTypeTokenRange": {
+                "startIndex": 5,
+                "endIndex": 6
               }
             }
           ],
-          "extendsTokenRanges": []
+          "name": "createPayUri"
         },
         {
           "kind": "Function",
-          "canonicalReference": "@cityofzion/neon-nep9!parse:function(1)",
+          "canonicalReference": "@cityofzion/neon-uri!createVoteUri:function(1)",
+          "docComment": "/**\n * Creates a uri with voting intent.\n *\n * @param publicKey - The candidate to vote for.\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare function createVoteUri(publicKey: "
+            },
+            {
+              "kind": "Content",
+              "text": "string"
+            },
+            {
+              "kind": "Content",
+              "text": "): "
+            },
+            {
+              "kind": "Content",
+              "text": "string"
+            },
+            {
+              "kind": "Content",
+              "text": ";"
+            }
+          ],
+          "returnTypeTokenRange": {
+            "startIndex": 3,
+            "endIndex": 4
+          },
+          "releaseTag": "Public",
+          "overloadIndex": 1,
+          "parameters": [
+            {
+              "parameterName": "publicKey",
+              "parameterTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "name": "createVoteUri"
+        },
+        {
+          "kind": "Function",
+          "canonicalReference": "@cityofzion/neon-uri!parse:function(1)",
           "docComment": "/**\n * Parses an NEP9 URI string into a consumable intent object. This function does not check for runtime validity conditions (eg address or contract validity).\n *\n * @param uri - case sensitive URI string.\n */\n",
           "excerptTokens": [
             {
@@ -381,8 +304,8 @@
             },
             {
               "kind": "Reference",
-              "text": "NEP9Intent",
-              "canonicalReference": "@cityofzion/neon-nep9!NEP9Intent:interface"
+              "text": "UriIntent",
+              "canonicalReference": "@cityofzion/neon-uri!UriIntent:interface"
             },
             {
               "kind": "Content",
@@ -405,6 +328,105 @@
             }
           ],
           "name": "parse"
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@cityofzion/neon-uri!UriIntent:interface",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface UriIntent "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "UriIntent",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@cityofzion/neon-uri!UriIntent#contractCall:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "contractCall: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "sc."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ContractCallJson",
+                  "canonicalReference": "@cityofzion/neon-core!ContractCallJson:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "contractCall",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@cityofzion/neon-uri!UriIntent#description:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "description: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "description",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@cityofzion/neon-uri!UriIntent#intent:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "intent: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "\"pay\" | \"vote\""
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "intent",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
         }
       ]
     }

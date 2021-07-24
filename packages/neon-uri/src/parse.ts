@@ -7,11 +7,15 @@ const NATIVE_TOKENS = {
   neo: "ef4073a0f2b305a38ec4050e4d3d28bc40ea63f5",
   gas: "d2a4cff31913016155e38e474a2c06d08be276cf",
 };
+
+/**
+ * Results of parsing a NEO uri. Contains a displayable string describing the intent and a partial ContractCall object that requires more information to be used in a Transaction.
+ */
 export interface UriIntent {
   intent: "pay" | "vote";
   // Human-readable description of the intent.
   description: string;
-  // Partial ContractCall that can be filled up further and used in neon-js.
+  // Partial ContractCall that can be filled up further and used to create a script for Transaction.
   contractCall: sc.ContractCallJson;
 }
 

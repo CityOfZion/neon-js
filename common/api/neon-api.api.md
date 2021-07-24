@@ -4,36 +4,41 @@
 
 ```ts
 
-import * as _Neon from '@cityofzion/neon-core';
 import { rpc } from '@cityofzion/neon-core';
 import { sc } from '@cityofzion/neon-core';
 import { tx } from '@cityofzion/neon-core';
 import { u } from '@cityofzion/neon-core';
 import { wallet } from '@cityofzion/neon-core';
 
-// @public (undocumented)
-function bundle<T extends typeof _Neon>(neonCore: T): T & {
-    api: typeof api;
-};
-export default bundle;
+// @public
+export function calculateNetworkFee(txn: tx.Transaction, feePerByte: number | u.BigInteger, executionFeeFactor: number | u.BigInteger): u.BigInteger;
 
 // @public
-function calculateNetworkFee(txn: tx.Transaction, feePerByte: number | u.BigInteger, executionFeeFactor: number | u.BigInteger): u.BigInteger;
-
-// @public
-function getFeeInformation(client: rpc.NeoServerRpcClient): Promise<{
+export function getFeeInformation(client: rpc.NeoServerRpcClient): Promise<{
     feePerByte: u.BigInteger;
     executionFeeFactor: u.BigInteger;
 }>;
 
 // @public (undocumented)
-function getTokenBalances(address: string, contracts: (string | sc.Nep17Contract)[], client: rpc.NeoServerRpcClient): Promise<string[]>;
+export function getTokenBalances(address: string, contracts: (string | sc.Nep17Contract)[], client: rpc.NeoServerRpcClient): Promise<string[]>;
 
 // @public (undocumented)
-function getTokenInfos(contracts: (string | sc.Nep17Contract)[], client: rpc.NeoServerRpcClient): Promise<TokenInfo[]>;
+export function getTokenInfos(contracts: (string | sc.Nep17Contract)[], client: rpc.NeoServerRpcClient): Promise<TokenInfo[]>;
 
 // @public (undocumented)
-interface Nep17TransferIntent {
+export class instance {
+    constructor(url: string);
+    // (undocumented)
+    get name(): string;
+    // Warning: (ae-forgotten-export) The symbol "CallbackFunction" needs to be exported by the entry point index.d.ts
+    // Warning: (ae-forgotten-export) The symbol "Subscription" needs to be exported by the entry point index.d.ts
+    subscribe(contract: string | null, callback: CallbackFunction): Subscription;
+    unsubscribeAll(): Promise<void>;
+    unsubscribeContract(contract: string | null): Promise<void>;
+}
+
+// @public (undocumented)
+export interface Nep17TransferIntent {
     // (undocumented)
     contractHash: string;
     // (undocumented)
@@ -47,7 +52,7 @@ interface Nep17TransferIntent {
 }
 
 // @public (undocumented)
-class NetworkFacade {
+export class NetworkFacade {
     claimGas(acct: wallet.Account, config: signingConfig): Promise<string>;
     // (undocumented)
     client: rpc.NeoServerRpcClient;
@@ -71,37 +76,25 @@ class NetworkFacade {
 }
 
 // @public (undocumented)
-interface NetworkFacadeConfig {
+export interface NetworkFacadeConfig {
     // (undocumented)
     node: string | rpc.NeoServerRpcClient;
 }
 
 // @public (undocumented)
-class Notifications {
-    constructor(url: string);
-    // (undocumented)
-    get name(): string;
-    // Warning: (ae-forgotten-export) The symbol "CallbackFunction" needs to be exported by the entry point index.d.ts
-    // Warning: (ae-forgotten-export) The symbol "Subscription" needs to be exported by the entry point index.d.ts
-    subscribe(contract: string | null, callback: CallbackFunction): Subscription;
-    unsubscribeAll(): Promise<void>;
-    unsubscribeContract(contract: string | null): Promise<void>;
-}
-
-// @public (undocumented)
-interface signingConfig {
+export interface signingConfig {
     // (undocumented)
     signingCallback: SigningFunction;
 }
 
 // @public (undocumented)
-type SigningFunction = (txData: string, verificationScript: string) => Promise<string>;
+export type SigningFunction = (txData: string, verificationScript: string) => Promise<string>;
 
 // @public (undocumented)
-function signWithAccount(acct: wallet.Account): SigningFunction;
+export function signWithAccount(acct: wallet.Account): SigningFunction;
 
 // @public (undocumented)
-interface TokenInfo {
+export interface TokenInfo {
     // (undocumented)
     decimals: number;
     // (undocumented)
@@ -111,7 +104,7 @@ interface TokenInfo {
 }
 
 // @public (undocumented)
-class TransactionBuilder {
+export class TransactionBuilder {
     addAttributes(...attrs: tx.TransactionAttributeLike[]): this;
     addContractCall(...contractCalls: sc.ContractCall[]): this;
     addEmptyWitness(account: wallet.Account): this;
@@ -133,7 +126,7 @@ class TransactionBuilder {
 }
 
 // @public
-class TransactionSigner {
+export class TransactionSigner {
     constructor(transaction: tx.Transaction);
     signWithAccount(...accounts: (wallet.Account | string)[]): void;
     signWithMultiSigAccount(multisigAccount: wallet.Account, ...witnesses: tx.Witness[]): void;
@@ -142,7 +135,7 @@ class TransactionSigner {
 }
 
 // @public
-class TransactionValidator {
+export class TransactionValidator {
     constructor(rpc: rpc.NeoServerRpcClient, transaction: tx.Transaction);
     rpcClient: rpc.NeoServerRpcClient;
     transaction: tx.Transaction;
@@ -157,7 +150,7 @@ class TransactionValidator {
 }
 
 // @public (undocumented)
-enum ValidationAttributes {
+export enum ValidationAttributes {
     // (undocumented)
     All = 15,
     // (undocumented)
@@ -173,7 +166,7 @@ enum ValidationAttributes {
 }
 
 // @public (undocumented)
-interface ValidationResult {
+export interface ValidationResult {
     // (undocumented)
     result: {
         validUntilBlock?: ValidationSuggestion<number>;
@@ -185,17 +178,13 @@ interface ValidationResult {
 }
 
 // @public (undocumented)
-type ValidationSuggestion<T> = {
+export type ValidationSuggestion<T> = {
     valid: boolean;
     fixed: boolean;
     prev?: T;
     suggestion?: T;
     message?: string;
 };
-
-// Warnings were encountered during analysis:
-//
-// src/index.ts:4:61 - (ae-forgotten-export) The symbol "api" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 
