@@ -332,7 +332,7 @@
         {
           "kind": "Interface",
           "canonicalReference": "@cityofzion/neon-uri!UriIntent:interface",
-          "docComment": "",
+          "docComment": "/**\n * Results of parsing a NEO uri. Contains a displayable string describing the intent and a partial ContractCall object that requires more information to be used in a Transaction.\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",

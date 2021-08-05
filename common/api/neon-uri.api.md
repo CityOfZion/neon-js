@@ -15,7 +15,7 @@ export function createVoteUri(publicKey: string): string;
 // @public
 export function parse(uri: string): UriIntent;
 
-// @public (undocumented)
+// @public
 export interface UriIntent {
     // (undocumented)
     contractCall: sc.ContractCallJson;

@@ -16075,7 +16075,7 @@
                     {
                       "kind": "Reference",
                       "text": "Buffer",
-                      "canonicalReference": "!Buffer:class"
+                      "canonicalReference": "!__global.Buffer:interface"
                     },
                     {
                       "kind": "Content",
