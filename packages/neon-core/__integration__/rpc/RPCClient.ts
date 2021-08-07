@@ -86,6 +86,7 @@ describe("RPC Methods", () => {
           "previousblockhash",
           "primary",
           "merkleroot",
+          "nonce",
           "time",
           "index",
           "nextconsensus",
