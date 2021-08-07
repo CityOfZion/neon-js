@@ -137,6 +137,7 @@ describe("RPC Methods", () => {
           "version",
           "previousblockhash",
           "merkleroot",
+          "nonce",
           "time",
           "index",
           "primary",
