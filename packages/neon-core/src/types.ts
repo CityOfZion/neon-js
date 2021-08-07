@@ -9,6 +9,9 @@ export interface BlockHeaderJson {
   previousblockhash: string;
   merkleroot: string;
   time: number;
+
+  /** Random hexstring used for uniqueness. */
+  nonce: string;
   index: number;
   nextconsensus: string;
   witnesses: import("./tx/components/Witness").WitnessJson[];

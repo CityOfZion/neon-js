@@ -49,6 +49,7 @@ describe("NeoServerRpcClient", () => {
           "previousblockhash",
           "primary",
           "merkleroot",
+          "nonce",
           "time",
           "index",
           "nextconsensus",
@@ -92,20 +93,23 @@ describe("NeoServerRpcClient", () => {
     test("hash as index, verbose = 1", async () => {
       const result = await client.getBlockHeader(blockhash, 1);
       expect(result.hash).toBe(blockhash);
-      expect(Object.keys(result)).toEqual([
-        "hash",
-        "size",
-        "version",
-        "previousblockhash",
-        "merkleroot",
-        "time",
-        "index",
-        "primary",
-        "nextconsensus",
-        "witnesses",
-        "confirmations",
-        "nextblockhash",
-      ]);
+      expect(Object.keys(result).sort()).toEqual(
+        [
+          "confirmations",
+          "hash",
+          "index",
+          "merkleroot",
+          "nextblockhash",
+          "nextconsensus",
+          "nonce",
+          "previousblockhash",
+          "primary",
+          "time",
+          "size",
+          "witnesses",
+          "version",
+        ].sort()
+      );
     });
   });
 

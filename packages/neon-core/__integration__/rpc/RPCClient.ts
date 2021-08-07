@@ -86,6 +86,7 @@ describe("RPC Methods", () => {
           "previousblockhash",
           "primary",
           "merkleroot",
+          "nonce",
           "time",
           "index",
           "nextconsensus",
@@ -129,20 +130,23 @@ describe("RPC Methods", () => {
     test("hash as index, verbose = 1", async () => {
       const result = await client.getBlockHeader(blockhash, 1);
       expect(result.hash).toBe(blockhash);
-      expect(Object.keys(result)).toEqual([
-        "hash",
-        "size",
-        "version",
-        "previousblockhash",
-        "merkleroot",
-        "time",
-        "index",
-        "primary",
-        "nextconsensus",
-        "witnesses",
-        "confirmations",
-        "nextblockhash",
-      ]);
+      expect(Object.keys(result).sort()).toEqual(
+        [
+          "hash",
+          "size",
+          "version",
+          "previousblockhash",
+          "merkleroot",
+          "nonce",
+          "time",
+          "index",
+          "primary",
+          "nextconsensus",
+          "witnesses",
+          "confirmations",
+          "nextblockhash",
+        ].sort()
+      );
     });
   });
 

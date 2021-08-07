@@ -1,5 +1,5 @@
 {
-    "name": "neo3-preview neon-js dev environment",
+    "name": "neo N3 neon-js dev environment",
     "dockerComposeFile": "docker-compose.yml",
     "service": "main",
     "workspaceFolder": "/workspace",
