@@ -93,7 +93,12 @@ describe("getSignature", () => {
       }),
     } as unknown as Transport;
 
-    const result = getSignature(mockLedgerInstance, inputMsg, bip44Input, networkMagic);
+    const result = getSignature(
+      mockLedgerInstance,
+      inputMsg,
+      bip44Input,
+      networkMagic
+    );
     expect(result).rejects.toThrowError("did not return signature");
   });
 
