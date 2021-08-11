@@ -41,7 +41,7 @@ async function sendDataToSign(
 }
 
 /**
- * Requests the public key of a requested address from the Ledger.
+ * Requests the open application name from the Ledger.
  * @param ledger - Ledger instance
  * @returns the ledger application name. Expected "NEO3"
  */
@@ -66,9 +66,9 @@ export async function getAppName(ledger: Transport): Promise<string> {
 }
 
 /**
- * Requests the public key of a requested address from the Ledger.
+ * Requests the application version from the Ledger.
  * @param ledger - Ledger instance
- * @returns the application version in Major.Minor.Patch format
+ * @returns the application version in Major.Minor.Patch format i.e. "0.1.0"
  */
 export async function getAppVersion(ledger: Transport): Promise<string> {
   try {
@@ -139,7 +139,7 @@ export async function getPublicKey(
  * @param ledger - Ledger instance
  * @param payload - message to sign as a hexstring.
  * @param bip44String - BIP44 string (40 bytes)
- * @param networkMagic - MainNet, TestNet or custom network magic
+ * @param networkMagic - MainNet, TestNet or custom network magic number
  * @returns Signature as a hexstring (64 bytes)
  */
 export async function getSignature(

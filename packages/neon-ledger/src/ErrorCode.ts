@@ -5,6 +5,7 @@ export enum StatusWord {
   WRONG_DATA_LENGTH = 0x6a87,
   INS_NOT_SUPPORTED = 0x6d00,
   CLA_NOT_SUPPORTED = 0x6e00,
+  APP_CLOSED = 0x6e01,
   WRONG_RESPONSE_LENGTH = 0xb000,
   WRONG_TX_LENGTH = 0xb001,
   TX_PARSING_FAIL = 0xb002,
@@ -37,6 +38,9 @@ export interface TransportStatusError extends Error {
 export function evalTransportError(err: Error): Error {
   const transportErr = err as TransportStatusError;
   switch (transportErr.statusCode) {
+    case StatusWord.APP_CLOSED:
+      transportErr.message = "Your NEO app is closed! Please login.";
+      break;
     case StatusWord.DENY:
       transportErr.message = "Action rejected by user";
       break;
