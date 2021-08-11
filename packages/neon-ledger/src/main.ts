@@ -162,6 +162,7 @@ export async function getSignature(
       2 + chunks.length,
       true
     );
+    // Expected signature + 2 status bytes to be returned here upon completion
     if (response.length <= 2) {
       throw new Error(`No more data but Ledger did not return signature!`);
     }
