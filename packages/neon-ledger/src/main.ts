@@ -162,6 +162,9 @@ export async function getSignature(
       2 + chunks.length,
       true
     );
+    if (response.length <= 2) {
+      throw new Error(`No more data but Ledger did not return signature!`);
+    }
     return DerToHexSignature(response.toString("hex"));
   } catch (e) {
     if (e.statusCode) {
