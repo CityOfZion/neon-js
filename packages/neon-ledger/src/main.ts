@@ -139,17 +139,17 @@ export async function getPublicKey(
  * @param ledger - Ledger instance
  * @param payload - message to sign as a hexstring.
  * @param bip44String - BIP44 string (40 bytes)
- * @param networkMagic - MainNet, TestNet or custom network magic number
+ * @param network - MainNet, TestNet or custom network number
  * @returns Signature as a hexstring (64 bytes)
  */
 export async function getSignature(
   ledger: Transport,
   payload: string,
   bip44String: string,
-  networkMagic: number
+  network: number
 ): Promise<string> {
   await sendDataToSign(ledger, bip44String, 0);
-  await sendDataToSign(ledger, u.num2hexstring(networkMagic, 4, true), 1);
+  await sendDataToSign(ledger, u.num2hexstring(network, 4, true), 1);
 
   const chunks = payload.match(/.{1,510}/g) || [];
   try {
@@ -162,9 +162,6 @@ export async function getSignature(
       2 + chunks.length,
       true
     );
-    if (response.readUIntBE(0, 2) === StatusWord.OK) {
-      throw new Error(`No more data but Ledger did not return signature!`);
-    }
     return DerToHexSignature(response.toString("hex"));
   } catch (e) {
     if (e.statusCode) {
