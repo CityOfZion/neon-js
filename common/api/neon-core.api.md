@@ -1122,11 +1122,11 @@ export { logging }
 // @public (undocumented)
 enum MAGIC_NUMBER {
     // (undocumented)
-    MainNet = 5195086,
+    MainNet = 860833102,
     // (undocumented)
     SoloNet = 1234567890,
     // (undocumented)
-    TestNet = 844378958
+    TestNet = 877933390
 }
 
 // @public (undocumented)
