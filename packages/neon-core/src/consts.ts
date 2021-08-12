@@ -6,8 +6,8 @@ export const ADDR_VERSION = "35";
 export const DEFAULT_ADDRESS_VERSION = 0x35;
 
 export enum MAGIC_NUMBER {
-  MainNet = 5195086,
-  TestNet = 844378958,
+  MainNet = 860833102,
+  TestNet = 877933390,
   SoloNet = 1234567890,
 }
 
