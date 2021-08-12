@@ -79,33 +79,40 @@ describe("getSignature", () => {
       }
     });
 
-    const result = getSignature(mockLedgerInstance, "cdcd", "abab");
+    const result = getSignature(mockLedgerInstance, "cdcd", "abab", 123);
     expect(result).rejects.toThrowError(expectedError);
   });
 
   test("throws error if ledger does not return signature after finalising", () => {
     const inputMsg = "1".repeat(512) + "2".repeat(512);
     const bip44Input = "abcd";
+    const networkMagic = 123;
     const mockLedgerInstance = {
       send: jest.fn().mockImplementation(async () => {
         return Buffer.from("9000", "hex");
       }),
     } as unknown as Transport;
 
-    const result = getSignature(mockLedgerInstance, inputMsg, bip44Input);
+    const result = getSignature(
+      mockLedgerInstance,
+      inputMsg,
+      bip44Input,
+      networkMagic
+    );
     expect(result).rejects.toThrowError("did not return signature");
   });
 
   test("returns signature successfully after sending message", async () => {
     const inputMsg = "1".repeat(512) + "2".repeat(512);
     const bip44Input = "abcd";
+    const networkMagic = 123;
     const mockDer = "9999";
     const expectedSig = "9876";
     const mockLedgerInstance = {
       send: jest
         .fn()
-        .mockImplementation(async (_cla, _ins, p1, _p2, ..._args) => {
-          if (p1 === 0x80) {
+        .mockImplementation(async (_cla, _ins, _p1, p2, ..._args) => {
+          if (p2 === 0x00) {
             return Buffer.from(mockDer, "hex");
           }
           return Buffer.from("9000", "hex");
@@ -113,11 +120,16 @@ describe("getSignature", () => {
     } as unknown as Transport;
     DerToHexSignature.mockImplementationOnce(() => expectedSig);
 
-    const result = await getSignature(mockLedgerInstance, inputMsg, bip44Input);
+    const result = await getSignature(
+      mockLedgerInstance,
+      inputMsg,
+      bip44Input,
+      networkMagic
+    );
 
     expect(result).toBe(expectedSig);
 
     expect(DerToHexSignature).toBeCalledWith(mockDer);
-    expect(mockLedgerInstance.send).toBeCalledTimes(3);
+    expect(mockLedgerInstance.send).toBeCalledTimes(5);
   });
 });
