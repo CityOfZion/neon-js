@@ -47,12 +47,14 @@ export class SmartContract {
    * Tip: use `testInvoke` for querying data without needing to pay GAS.
    * @param operation - name of operation to call
    * @param params - parameters to pass.
-   * @param callFlags - call flag required for the operation to call.
+   * @param signers - custom list of signers to add to the transaction. It is up
+   * to the user to ensure that the sender is the first signer.
    * @returns transaction id
    */
   public async invoke(
     operation: string,
-    params?: sc.ContractParam[]
+    params?: sc.ContractParam[],
+    signers?: tx.Signer[]
   ): Promise<string> {
     const builder = new sc.ScriptBuilder();
     builder.emitAppCall(this.contractHash.toString(), operation, params);
@@ -66,15 +68,16 @@ export class SmartContract {
       this.config.blocksTillExpiry
     );
 
-    // add a sender
     if (this.config.account === undefined)
       throw new Error("Account in your config cannot be undefined");
-
-    transaction.addSigner({
-      account: this.config.account.scriptHash,
-      scopes: "CalledByEntry",
-    });
-
+    if (signers !== undefined && signers.length > 0) {
+      transaction.signers = signers;
+    } else {
+      transaction.addSigner({
+        account: this.config.account.scriptHash,
+        scopes: "CalledByEntry",
+      });
+    }
     await addFees(transaction, this.config);
 
     transaction.sign(this.config.account, this.config.networkMagic);
