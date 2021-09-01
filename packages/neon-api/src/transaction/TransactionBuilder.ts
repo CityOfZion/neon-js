@@ -21,12 +21,7 @@ export class TransactionBuilder {
     const address = account.address;
     return this.addContractCall(
       sc.NeoContract.INSTANCE.transfer(address, address, 0)
-    )
-      .addSigners({
-        account: account.scriptHash,
-        scopes: tx.WitnessScope.CalledByEntry,
-      })
-      .addEmptyWitness(account);
+    ).addBasicSignatureField(account);
   }
 
   /**
@@ -44,12 +39,9 @@ export class TransactionBuilder {
   ): TransactionBuilder {
     const address = account.address;
     const contract = new sc.Nep17Contract(tokenScriptHash);
-    return this.addContractCall(contract.transfer(address, destination, amt))
-      .addSigners({
-        account: account.scriptHash,
-        scopes: tx.WitnessScope.CalledByEntry,
-      })
-      .addEmptyWitness(account);
+    return this.addContractCall(
+      contract.transfer(address, destination, amt)
+    ).addBasicSignatureField(account);
   }
 
   /**
@@ -65,12 +57,20 @@ export class TransactionBuilder {
 
     return this.addContractCall(
       sc.NeoContract.INSTANCE.vote(address, candidatePublicKey)
-    )
-      .addSigners({
-        account: account.scriptHash,
-        scopes: tx.WitnessScope.CalledByEntry,
-      })
-      .addEmptyWitness(account);
+    ).addBasicSignatureField(account);
+  }
+
+  /**
+   * Adds a signature field representing the request for a signature from this account.
+   * Under the hood, this adds a Signer and empty Witness to the transaction. The Signer defaults to the basic scope.
+   * For more advanced usage, plase manually add your own Signers and Witnesses.
+   * @param account - account that has to sign the transaction.
+   */
+  public addBasicSignatureField(account: wallet.Account): this {
+    return this.addSigners({
+      account: account.scriptHash,
+      scopes: tx.WitnessScope.CalledByEntry,
+    }).addEmptyWitness(account);
   }
 
   /**
@@ -103,6 +103,7 @@ export class TransactionBuilder {
 
   /**
    * Add signers. Will deduplicate signers and merge scopes.
+   * This does not add any Witnesses.
    */
   public addSigners(...signers: tx.SignerLike[]): this {
     for (const newSigner of signers) {
@@ -162,6 +163,11 @@ export class TransactionBuilder {
         })
       );
     }
+    return this;
+  }
+
+  public addEmptyWitnesses(...accounts: wallet.Account[]): this {
+    accounts.forEach((a) => this.addEmptyWitness(a));
     return this;
   }
 
