@@ -1,6 +1,7 @@
 import { rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { getTokenInfos } from "./api";
 import { Candidate, getCandidates } from "./api/getCandidates";
+import { DeployedContract } from "./DeployedContract";
 import {
   TransactionBuilder,
   TransactionValidator,
@@ -23,6 +24,7 @@ export interface Nep17TransferIntent {
 }
 
 export interface signingConfig {
+  signingAccounts: wallet.Account[];
   signingCallback: SigningFunction;
 }
 
@@ -51,6 +53,17 @@ export class NetworkFacade {
 
   public getRpcNode(): rpc.NeoServerRpcClient {
     return this.client;
+  }
+
+  public async getDeployedContract(
+    scriptHash: string
+  ): Promise<DeployedContract> {
+    const contractState = await this.getRpcNode().getContractState(scriptHash);
+    return new DeployedContract(
+      this.getRpcNode(),
+      scriptHash,
+      sc.ContractManifest.fromJson(contractState.manifest)
+    );
   }
 
   /**
@@ -129,6 +142,7 @@ export class NetworkFacade {
   public async getCandidates(): Promise<Candidate[]> {
     return getCandidates(this.getRpcNode());
   }
+
   public async vote(
     acct: wallet.Account,
     candidatePublicKey: string,

@@ -74,6 +74,19 @@ export class TransactionBuilder {
   }
 
   /**
+   * Adds a signature field representing the request for a signature from this account.
+   * Under the hood, this adds a Signer and empty Witness to the transaction. The Signer defaults to the basic scope.
+   * For more advanced usage, plase manually add your own Signers and Witnesses.
+   * @param account - account that has to sign the transaction.
+   */
+  public addBasicSignatureField(account: wallet.Account): this {
+    return this.addSigners({
+      account: account.scriptHash,
+      scopes: tx.WitnessScope.CalledByEntry,
+    }).addEmptyWitness(account);
+  }
+
+  /**
    * Sets an account to pay fees for this transaction.
    * The first Signer defaults to the payer.
    * @param account - Account to pay fees from.
@@ -182,6 +195,7 @@ export class TransactionBuilder {
   }
 
   public build(): tx.Transaction {
+    this.sortWitnesses();
     return new tx.Transaction({
       networkFee: this.networkFee,
       systemFee: this.systemFee,
@@ -199,5 +213,28 @@ export class TransactionBuilder {
         .build(),
       witnesses: this.witnesses,
     });
+  }
+
+  /**
+   * Sort witnesses according to the order of Signers.
+   * Call at build step to order the witnesses correctly.
+   */
+  private sortWitnesses(): this {
+    const scriptHashes = this.witnesses.map((w) =>
+      wallet.getScriptHashFromVerificationScript(
+        w.verificationScript.toString()
+      )
+    );
+
+    const orderedWitnesses = this.signers.map((s) => {
+      const i = scriptHashes.indexOf(s.account.toString());
+      if (i !== -1) {
+        return this.witnesses[i];
+      }
+      throw new Error(`Witness for Signer ${s.account.toString()} not found.`);
+    });
+
+    this.witnesses = orderedWitnesses;
+    return this;
   }
 }

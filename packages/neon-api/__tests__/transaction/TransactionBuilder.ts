@@ -123,6 +123,41 @@ describe("setter", () => {
     });
   });
 
+  describe("build", () => {
+    test("sorts witnesses according to signers", () => {
+      const account1 = new wallet.Account(
+        "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g"
+      );
+      const account2 = new wallet.Account(
+        "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG"
+      );
+      const account3 = new wallet.Account(
+        "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG"
+      );
+
+      const result = new TransactionBuilder()
+        .addSigners(
+          { account: account1.scriptHash, scopes: "None" },
+          { account: account2.scriptHash, scopes: "None" },
+          { account: account3.scriptHash, scopes: "None" }
+        )
+        .addEmptyWitnesses(account3, account2, account1)
+        .build();
+
+      expect(
+        result.witnesses.map((w) =>
+          wallet.getScriptHashFromVerificationScript(
+            w.verificationScript.toString()
+          )
+        )
+      ).toEqual([
+        account1.scriptHash,
+        account2.scriptHash,
+        account3.scriptHash,
+      ]);
+    });
+  });
+
   test("addContractCall", () => {
     const transaction = new TransactionBuilder()
       .addContractCall(
