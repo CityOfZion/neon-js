@@ -171,12 +171,11 @@ export class NetworkFacade {
     txn: tx.Transaction,
     config: signingConfig
   ): Promise<tx.Transaction> {
-    const txData = txn.getMessageForSigning(this.magicNumber);
-
-    for (const w of txn.witnesses) {
+    for (const [idx, w] of txn.witnesses.entries()) {
       const signature = await config.signingCallback(
-        txData,
-        w.verificationScript.toString()
+        txn,
+        this.magicNumber,
+        idx
       );
 
       const invocationScript = new sc.OpToken(
