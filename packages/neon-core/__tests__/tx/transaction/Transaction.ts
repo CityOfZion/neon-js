@@ -3,6 +3,7 @@ import {
   TransactionLike,
   WitnessScope,
   TransactionJson,
+  Witness,
 } from "../../../src/tx";
 import samples from "./Transaction.json";
 import { Account } from "../../../src/wallet";
@@ -202,7 +203,7 @@ describe("Add Methods", () => {
     });
   }
 
-  test("addCosigner", () => {
+  test("addSigner", () => {
     const tx1 = createTxforTestAddMethods();
     tx1.addSigner({
       account: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
@@ -230,17 +231,64 @@ describe("Add Methods", () => {
     expect(tx1.attributes[0].data.toBigEndian()).toBe("72e9a2");
   });
 
-  test("addWitness", () => {
-    const tx1 = createTxforTestAddMethods();
-    tx1.addWitness({
-      invocationScript: "ab",
-      verificationScript:
-        "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4",
+  describe("addWitness", () => {
+    test("simple", () => {
+      const tx1 = createTxforTestAddMethods();
+      tx1.addWitness({
+        invocationScript: "ab",
+        verificationScript:
+          "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4",
+      });
+      expect(tx1.witnesses[0].invocationScript.toBigEndian()).toBe("ab");
+      expect(tx1.witnesses[0].verificationScript.toBigEndian()).toBe(
+        "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4"
+      );
     });
-    expect(tx1.witnesses[0].invocationScript.toBigEndian()).toBe("ab");
-    expect(tx1.witnesses[0].verificationScript.toBigEndian()).toBe(
-      "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4"
-    );
+
+    test("new signature overrides", () => {
+      const tx1 = createTxforTestAddMethods();
+      tx1.addWitness({
+        invocationScript: "ab",
+        verificationScript:
+          "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4",
+      });
+      tx1.addWitness({
+        invocationScript: "cd",
+        verificationScript:
+          "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4",
+      });
+      expect(tx1.witnesses.length).toBe(1);
+      expect(tx1.witnesses[0].invocationScript.toBigEndian()).toBe("cd");
+      expect(tx1.witnesses[0].verificationScript.toBigEndian()).toBe(
+        "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4"
+      );
+    });
+
+    test("signature orders according to signers", () => {
+      const account1 = new Account("1".repeat(64));
+      const account2 = new Account("2".repeat(64));
+      const tx1 = new Transaction();
+      tx1.addSigner({ account: account1.scriptHash, scopes: "None" });
+      tx1.addSigner({ account: account2.scriptHash, scopes: "None" });
+      tx1.addWitness(
+        Witness.fromJson({
+          invocation: "",
+          verification: account2.contract.script,
+        })
+      );
+      tx1.addWitness(
+        Witness.fromJson({
+          invocation: "",
+          verification: account1.contract.script,
+        })
+      );
+
+      expect(tx1.witnesses.length).toBe(2);
+      expect(tx1.witnesses.map((w) => w.scriptHash)).toEqual([
+        account1.scriptHash,
+        account2.scriptHash,
+      ]);
+    });
   });
 
   test("sign", () => {

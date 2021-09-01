@@ -1,6 +1,13 @@
 import { TransactionBuilder } from "../../src/transaction";
 import { CONST, sc, tx, u, wallet } from "@cityofzion/neon-core";
 
+const account1 = new wallet.Account(
+  "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g"
+);
+const account2 = new wallet.Account(
+  "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG"
+);
+
 describe("setter", () => {
   test("addAttributes", () => {
     const transaction = new TransactionBuilder()
@@ -26,48 +33,48 @@ describe("setter", () => {
       const transaction = new TransactionBuilder()
         .addSigners(
           {
-            account: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
+            account: account1.scriptHash,
             scopes: tx.WitnessScope.Global,
           },
           {
-            account: "bd8bf7f95e33415fc242c48d143694a729172d9f",
+            account: account2.scriptHash,
             scopes: tx.WitnessScope.CalledByEntry,
           }
         )
+        .addEmptyWitnesses(account1, account2)
         .build();
       expect(transaction.signers.map((s) => s.export())).toEqual([
         {
-          account: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
+          account: account1.scriptHash,
           scopes: 128,
         },
         {
-          account: "bd8bf7f95e33415fc242c48d143694a729172d9f",
+          account: account2.scriptHash,
           scopes: 1,
         },
       ]);
-      expect(transaction.sender.toBigEndian()).toBe(
-        "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9"
-      );
+      expect(transaction.sender.toBigEndian()).toBe(account1.scriptHash);
     });
 
     test("dedup through merging", () => {
       const transaction = new TransactionBuilder()
         .addSigners(
           {
-            account: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
+            account: account1.scriptHash,
             scopes: tx.WitnessScope.CalledByEntry,
           },
           {
-            account: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
+            account: account1.scriptHash,
             scopes: tx.WitnessScope.CustomContracts,
             allowedContracts: ["0".repeat(40)],
           }
         )
+        .addEmptyWitness(account1)
         .build();
 
       expect(transaction.signers.map((s) => s.export())).toEqual([
         {
-          account: "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
+          account: account1.scriptHash,
           allowedContracts: ["0".repeat(40)],
           scopes: 17,
         },
@@ -81,7 +88,10 @@ describe("setter", () => {
         "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g"
       );
 
-      const result = new TransactionBuilder().addEmptyWitness(account).build();
+      const result = new TransactionBuilder()
+        .addSigners({ account: account.scriptHash, scopes: "None" })
+        .addEmptyWitness(account)
+        .build();
 
       expect(result.witnesses.map((w) => w.export())).toEqual([
         {
@@ -98,6 +108,7 @@ describe("setter", () => {
       );
 
       const result = new TransactionBuilder()
+        .addSigners({ account: account.scriptHash, scopes: "None" })
         .addEmptyWitness(account)
         .addEmptyWitness(account)
         .build();
@@ -165,7 +176,7 @@ describe("template methods", () => {
       "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g"
     );
 
-    const result = new TransactionBuilder().addGasClaim(account, 100).build();
+    const result = new TransactionBuilder().addGasClaim(account).build();
 
     expect(result).toMatchObject({
       nonce: expect.any(Number),

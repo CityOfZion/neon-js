@@ -171,14 +171,12 @@ export class Transaction implements NeonObject<TransactionLike> {
           (a) => new TransactionAttribute(a)
         )
       : [];
+    this.signers = [];
+    this.witnesses = [];
+    signers.forEach((s) => this.addSigner(s));
     this.witnesses = Array.isArray(witnesses)
       ? (witnesses as (Witness | WitnessLike)[]).map((a) => new Witness(a))
       : [];
-    this.witnesses = this.witnesses.sort(
-      (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
-    );
-    this.signers = [];
-    signers.forEach((s) => this.addSigner(s));
     this.systemFee =
       systemFee instanceof BigInteger
         ? systemFee
@@ -261,6 +259,7 @@ export class Transaction implements NeonObject<TransactionLike> {
       throw new Error(`Cannot add duplicate cosigner: ${newSigner.account}`);
     }
     this.signers.push(new Signer(newSigner));
+    this.orderWitnesses();
     return this;
   }
 
@@ -270,14 +269,39 @@ export class Transaction implements NeonObject<TransactionLike> {
   }
 
   /**
-   * Adds Witness to the Transaction and automatically sorts the witnesses according to scripthash.
+   * Adds Witness to the Transaction and automatically sorts the witnesses.
+   * If the witness already exists, attempts to override the invocationScript
+   * with the newly provided one.
    * @param obj - Witness object to add as witness
    */
   public addWitness(obj: WitnessLike | Witness): this {
-    this.witnesses.push(new Witness(obj));
-    this.witnesses = this.witnesses.sort(
-      (w1, w2) => parseInt(w1.scriptHash, 16) - parseInt(w2.scriptHash, 16)
+    const newWitness = new Witness(obj);
+    const existingWitness = this.witnesses.find((w) =>
+      w.verificationScript.equals(newWitness.verificationScript)
     );
+
+    if (existingWitness && newWitness.invocationScript.byteLength !== 0) {
+      // Existing witness, we simply replace the signature.
+      existingWitness.invocationScript = newWitness.invocationScript;
+      return this;
+    }
+
+    this.witnesses.push(newWitness);
+    this.orderWitnesses();
+    return this;
+  }
+
+  private orderWitnesses(): this {
+    this.signers.forEach((signer, ind) => {
+      const signerScriptHash = signer.account.toBigEndian();
+      const witnessIndex = this.witnesses.findIndex(
+        (w) => w.scriptHash === signerScriptHash
+      );
+      if (witnessIndex !== -1) {
+        const extractedWitness = this.witnesses.splice(witnessIndex, 1)[0];
+        this.witnesses.splice(ind, 0, extractedWitness);
+      }
+    });
     return this;
   }
 
