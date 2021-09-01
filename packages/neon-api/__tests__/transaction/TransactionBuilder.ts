@@ -7,11 +7,6 @@ const account1 = new wallet.Account(
 const account2 = new wallet.Account(
   "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG"
 );
-const account3 = new wallet.Account(
-  "KyKvWLZsNwBJx5j9nurHYRwhYfdQUu9tTEDsLCUHDbYBL8cHxMiG"
-);
-
-const account4 = new wallet.Account("1".repeat(64));
 
 describe("setter", () => {
   test("addAttributes", () => {
