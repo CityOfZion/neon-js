@@ -1,14 +1,19 @@
-import { wallet } from "@cityofzion/neon-core";
+import { wallet, tx } from "@cityofzion/neon-core";
 
 export type SigningFunction = (
-  txData: string,
-  verificationScript: string
+  tx: tx.Transaction,
+  details: {
+    network: number;
+    witnessIndex: number;
+  }
 ) => Promise<string>;
 
 export function signWithAccount(acct: wallet.Account): SigningFunction {
-  return async (txData, verificationScript) => {
-    const scriptHash =
-      wallet.getScriptHashFromVerificationScript(verificationScript);
+  return async (tx, details) => {
+    const txData = tx.getMessageForSigning(details.network);
+    const scriptHash = wallet.getScriptHashFromVerificationScript(
+      tx.witnesses[details.witnessIndex].verificationScript.toString()
+    );
     if (scriptHash !== acct.scriptHash) {
       throw new Error(
         `Requested signature from ${wallet.getAddressFromScriptHash(
