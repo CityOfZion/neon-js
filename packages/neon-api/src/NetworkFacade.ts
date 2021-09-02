@@ -172,11 +172,10 @@ export class NetworkFacade {
     config: signingConfig
   ): Promise<tx.Transaction> {
     for (const [idx, w] of txn.witnesses.entries()) {
-      const signature = await config.signingCallback(
-        txn,
-        this.magicNumber,
-        idx
-      );
+      const signature = await config.signingCallback(txn, {
+        network: this.magicNumber,
+        witnessIndex: idx,
+      });
 
       const invocationScript = new sc.OpToken(
         sc.OpCode.PUSHDATA1,
