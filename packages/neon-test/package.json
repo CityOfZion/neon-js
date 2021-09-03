@@ -1,6 +1,6 @@
 {
   "name": "neon-test",
-  "version": "5.0.0-next.14",
+  "version": "5.0.0-next.15",
   "main": "index.js",
   "type": "module",
   "license": "MIT",
@@ -10,6 +10,6 @@
     "test": "node lib/index.js"
   },
   "dependencies": {
-    "@cityofzion/neon-js": "^5.0.0-next.14"
+    "@cityofzion/neon-js": "^5.0.0-next.15"
   }
 }
