@@ -24,6 +24,7 @@ export enum StatusWord {
   DISPLAY_SYSTEM_FEE_FAIL = 0xb107,
   DISPLAY_NETWORK_FEE_FAIL = 0xb108,
   DISPLAY_TOTAL_FEE_FAIL = 0xb109,
+  DISPLAY_TOKEN_TRANSFER_AMOUNT_FAIL = 0xb10a,
 }
 
 export interface TransportStatusError extends Error {
