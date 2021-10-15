@@ -1,11 +1,11 @@
 import { rpc } from "./packages/neon-core/src";
 
 export const TESTNET_URLS = [
-  "http://seed1t.neo.org:20332",
-  "http://seed2t.neo.org:20332",
-  "http://seed3t.neo.org:20332",
-  "http://seed4t.neo.org:20332",
-  "http://seed5t.neo.org:20332",
+  "http://seed1t4.neo.org:20332",
+  "http://seed2t4.neo.org:20332",
+  "http://seed3t4.neo.org:20332",
+  "http://seed4t4.neo.org:20332",
+  "http://seed5t4.neo.org:20332",
 ];
 
 export const LOCALNET_URLS = ["http://localhost:20332"];
@@ -13,7 +13,7 @@ export const LOCALNET_URLS = ["http://localhost:20332"];
 export async function getIntegrationEnvUrl(): Promise<string> {
   const urls = isTestNet() ? TESTNET_URLS : LOCALNET_URLS;
   return await getBestUrl(urls);
-}
+e
 
 export function isTestNet(): boolean {
   return (global["__TARGETNET__"] as string).toLowerCase() === "testnet";
