@@ -129,7 +129,17 @@ export interface GetVersionResult {
   wsport: number;
   nonce: number;
   useragent: string;
-  network: number;
+  protocol: {
+   addressversion: number;
+   network: number;
+   validatorscount: number;
+   msperblock: number;
+   maxtraceableblocks: number;
+   maxvaliduntilblockincrement: number;
+   maxtransactionsperblock: number;
+   memorypoolmaxtransactions: number;
+   initialgasdistribution: number;
+  }
 }
 
 export interface NodePeer {
