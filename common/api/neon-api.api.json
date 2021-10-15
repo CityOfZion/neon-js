@@ -1,7 +1,7 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.18.4",
+    "toolVersion": "7.18.16",
     "schemaVersion": 1004,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
@@ -1669,7 +1669,16 @@
             },
             {
               "kind": "Content",
-              "text": "(txData: string, verificationScript: string) => "
+              "text": "(tx: tx."
+            },
+            {
+              "kind": "Reference",
+              "text": "Transaction",
+              "canonicalReference": "@cityofzion/neon-core!Transaction:class"
+            },
+            {
+              "kind": "Content",
+              "text": ", details: {\n    network: number;\n    witnessIndex: number;\n}) => "
             },
             {
               "kind": "Reference",
@@ -1689,7 +1698,7 @@
           "name": "SigningFunction",
           "typeTokenRange": {
             "startIndex": 1,
-            "endIndex": 4
+            "endIndex": 6
           }
         },
         {
@@ -1904,6 +1913,56 @@
             },
             {
               "kind": "Method",
+              "canonicalReference": "@cityofzion/neon-api!TransactionBuilder#addBasicSignatureField:member(1)",
+              "docComment": "/**\n * Adds a signature field representing the request for a signature from this account. Under the hood, this adds a Signer and empty Witness to the transaction. The Signer defaults to the basic scope. For more advanced usage, plase manually add your own Signers and Witnesses.\n *\n * @param account - account that has to sign the transaction.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "addBasicSignatureField(account: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "wallet."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Account",
+                  "canonicalReference": "@cityofzion/neon-core!Account:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "this"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isOptional": false,
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 4,
+                "endIndex": 5
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "account",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  }
+                }
+              ],
+              "name": "addBasicSignatureField"
+            },
+            {
+              "kind": "Method",
               "canonicalReference": "@cityofzion/neon-api!TransactionBuilder#addContractCall:member(1)",
               "docComment": "/**\n * You can add multiple intents to the transaction\n */\n",
               "excerptTokens": [
@@ -2005,6 +2064,60 @@
                 }
               ],
               "name": "addEmptyWitness"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@cityofzion/neon-api!TransactionBuilder#addEmptyWitnesses:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "addEmptyWitnesses(...accounts: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "wallet."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Account",
+                  "canonicalReference": "@cityofzion/neon-core!Account:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "this"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isOptional": false,
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 5,
+                "endIndex": 6
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "accounts",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 4
+                  }
+                }
+              ],
+              "name": "addEmptyWitnesses"
             },
             {
               "kind": "Method",
@@ -2206,7 +2319,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@cityofzion/neon-api!TransactionBuilder#addSigners:member(1)",
-              "docComment": "/**\n * Add signers. Will deduplicate signers and merge scopes.\n */\n",
+              "docComment": "/**\n * Add signers. Will deduplicate signers and merge scopes. This does not add any Witnesses.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",

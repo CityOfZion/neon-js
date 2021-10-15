@@ -15,13 +15,19 @@ export function BIP44(address?: number, change?: number, account?: number): stri
 export function evalTransportError(err: Error): Error;
 
 // @public
+export function getAppName(ledger: Transport): Promise<string>;
+
+// @public
+export function getAppVersion(ledger: Transport): Promise<string>;
+
+// @public
 export function getDevicePaths(ledgerLibrary: typeof Transport): Promise<ReadonlyArray<string>>;
 
 // @public
 export function getPublicKey(ledger: Transport, bip44String: string): Promise<string>;
 
 // @public
-export function getSignature(ledger: Transport, hex: string, bip44String: string): Promise<string>;
+export function getSignature(ledger: Transport, payload: string, bip44String: string, network: number): Promise<string>;
 
 // (No @packageDocumentation comment for this package)
 

@@ -884,9 +884,19 @@ function getVerificationScriptFromPublicKey(publicKey: string): string;
 // @public (undocumented)
 interface GetVersionResult {
     // (undocumented)
-    network: number;
-    // (undocumented)
     nonce: number;
+    // (undocumented)
+    protocol: {
+        addressversion: number;
+        network: number;
+        validatorscount: number;
+        msperblock: number;
+        maxtraceableblocks: number;
+        maxvaliduntilblockincrement: number;
+        maxtransactionsperblock: number;
+        memorypoolmaxtransactions: number;
+        initialgasdistribution: number;
+    };
     // (undocumented)
     tcpport: number;
     // (undocumented)
