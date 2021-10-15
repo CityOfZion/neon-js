@@ -4,6 +4,7 @@ import {
   StatusWord,
   evalTransportError,
   TransportStatusError,
+  looksLikeTransportStatusError,
 } from "./ErrorCode";
 
 import { DerToHexSignature } from "./utils";
@@ -58,7 +59,7 @@ export async function getAppName(ledger: Transport): Promise<string> {
     const version = response.toString("ascii");
     return version.substring(0, version.length - 2); // take of status word
   } catch (e) {
-    if (e.statusCode) {
+    if (looksLikeTransportStatusError(e)) {
       throw evalTransportError(e as TransportStatusError);
     }
     throw e;
@@ -85,7 +86,7 @@ export async function getAppVersion(ledger: Transport): Promise<string> {
     const patch = response.readUInt8(2);
     return major.toString() + "." + minor.toString() + "." + patch.toString();
   } catch (e) {
-    if (e.statusCode) {
+    if (looksLikeTransportStatusError(e)) {
       throw evalTransportError(e as TransportStatusError);
     }
     throw e;
@@ -127,7 +128,7 @@ export async function getPublicKey(
     );
     return response.toString("hex").substring(0, 130);
   } catch (e) {
-    if (e.statusCode) {
+    if (looksLikeTransportStatusError(e)) {
       throw evalTransportError(e as TransportStatusError);
     }
     throw e;
@@ -168,7 +169,7 @@ export async function getSignature(
     }
     return DerToHexSignature(response.toString("hex"));
   } catch (e) {
-    if (e.statusCode) {
+    if (looksLikeTransportStatusError(e)) {
       throw evalTransportError(e as TransportStatusError);
     }
     throw e;

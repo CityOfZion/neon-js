@@ -24,7 +24,7 @@ const _default: {
         privateKey: typeof neonCore.wallet.generatePrivateKey;
         signature: typeof neonCore.wallet.generateSignature;
         wallet: (k: neonCore.wallet.WalletJSON) => neonCore.wallet.Wallet;
-        contractParam: (type: "Any" | "Boolean" | "Integer" | "ByteArray" | "String" | "Hash160" | "Hash256" | "PublicKey" | "Signature" | "Array" | "Map" | "InteropInterface" | "Void", value?: string | number | boolean | neonCore.sc.ContractParamJson[] | null | undefined) => neonCore.sc.ContractParam;
+        contractParam: (type: "Any" | "Boolean" | "Integer" | "Array" | "Map" | "InteropInterface" | "ByteArray" | "String" | "Hash160" | "Hash256" | "PublicKey" | "Signature" | "Void", value?: string | number | boolean | neonCore.sc.ContractParamJson[] | null | undefined) => neonCore.sc.ContractParam;
         script: typeof neonCore.sc.createScript;
         scriptBuilder: () => neonCore.sc.ScriptBuilder;
         rpcClient: (net: string) => neonCore.rpc.RPCClient;
@@ -136,7 +136,7 @@ class SmartContract {
     // (undocumented)
     protected config: CommonConfig;
     contractHash: u_2.HexString;
-    invoke(operation: string, params?: sc_2.ContractParam[]): Promise<string>;
+    invoke(operation: string, params?: sc_2.ContractParam[], signers?: tx_2.Signer[]): Promise<string>;
     // (undocumented)
     protected rpcClient: rpc_2.RPCClient;
     testInvoke(operation: string, params?: sc_2.ContractParam[], signers?: tx_2.Signer[]): Promise<rpc_2.InvokeResult>;

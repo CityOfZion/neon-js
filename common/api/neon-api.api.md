@@ -88,7 +88,10 @@ export interface signingConfig {
 }
 
 // @public (undocumented)
-export type SigningFunction = (txData: string, verificationScript: string) => Promise<string>;
+export type SigningFunction = (tx: tx.Transaction, details: {
+    network: number;
+    witnessIndex: number;
+}) => Promise<string>;
 
 // @public (undocumented)
 export function signWithAccount(acct: wallet.Account): SigningFunction;
@@ -106,8 +109,11 @@ export interface TokenInfo {
 // @public (undocumented)
 export class TransactionBuilder {
     addAttributes(...attrs: tx.TransactionAttributeLike[]): this;
+    addBasicSignatureField(account: wallet.Account): this;
     addContractCall(...contractCalls: sc.ContractCall[]): this;
     addEmptyWitness(account: wallet.Account): this;
+    // (undocumented)
+    addEmptyWitnesses(...accounts: wallet.Account[]): this;
     addGasClaim(account: wallet.Account): TransactionBuilder;
     addNep17Transfer(account: wallet.Account, destination: string, tokenScriptHash: string, amt: number | string | u.BigInteger): TransactionBuilder;
     // (undocumented)

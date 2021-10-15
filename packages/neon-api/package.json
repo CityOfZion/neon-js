@@ -35,7 +35,6 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "axios": "0.21.1",
     "isomorphic-ws": "4.0.1",
     "ws": "7.4.4"
   },
@@ -47,6 +46,6 @@
     "lib/"
   ],
   "devDependencies": {
-    "@types/ws": "7.4.7"
+    "@types/ws": "8.2.0"
   }
 }

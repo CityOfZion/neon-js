@@ -1,7 +1,7 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.18.4",
+    "toolVersion": "7.18.16",
     "schemaVersion": 1004,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
@@ -225,7 +225,7 @@
             },
             {
               "kind": "Content",
-              "text": ";\n        contractParam: (type: \"Any\" | \"Boolean\" | \"Integer\" | \"ByteArray\" | \"String\" | \"Hash160\" | \"Hash256\" | \"PublicKey\" | \"Signature\" | \"Array\" | \"Map\" | \"InteropInterface\" | \"Void\", value?: string | number | boolean | neonCore.sc."
+              "text": ";\n        contractParam: (type: \"Any\" | \"Boolean\" | \"Integer\" | \"Array\" | \"Map\" | \"InteropInterface\" | \"ByteArray\" | \"String\" | \"Hash160\" | \"Hash256\" | \"PublicKey\" | \"Signature\" | \"Void\", value?: string | number | boolean | neonCore.sc."
             },
             {
               "kind": "Reference",
@@ -1509,7 +1509,7 @@
                 {
                   "kind": "Method",
                   "canonicalReference": "@cityofzion/neon-js!experimental.SmartContract#invoke:member(1)",
-                  "docComment": "/**\n * Run an invocation on the smart contract. Requires the contract to be created with a valid CommonConfig.account\n *\n * Note: - results are persisted to the blockchain. - currently only supports Sender as signer Tip: use `testInvoke` for querying data without needing to pay GAS.\n *\n * @param operation - name of operation to call\n *\n * @param params - parameters to pass.\n *\n * @param callFlags - call flag required for the operation to call.\n *\n * @returns transaction id\n */\n",
+                  "docComment": "/**\n * Run an invocation on the smart contract. Requires the contract to be created with a valid CommonConfig.account\n *\n * Note: - results are persisted to the blockchain. - currently only supports Sender as signer Tip: use `testInvoke` for querying data without needing to pay GAS.\n *\n * @param operation - name of operation to call\n *\n * @param params - parameters to pass.\n *\n * @param signers - custom list of signers to add to the transaction. It is up to the user to ensure that the sender is the first signer.\n *\n * @returns transaction id\n */\n",
                   "excerptTokens": [
                     {
                       "kind": "Content",
@@ -1538,6 +1538,23 @@
                     },
                     {
                       "kind": "Content",
+                      "text": ", signers?: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "tx."
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Signer",
+                      "canonicalReference": "@cityofzion/neon-core!Signer:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
                       "text": "): "
                     },
                     {
@@ -1557,8 +1574,8 @@
                   "isOptional": false,
                   "isStatic": false,
                   "returnTypeTokenRange": {
-                    "startIndex": 7,
-                    "endIndex": 9
+                    "startIndex": 11,
+                    "endIndex": 13
                   },
                   "releaseTag": "Public",
                   "overloadIndex": 1,
@@ -1575,6 +1592,13 @@
                       "parameterTypeTokenRange": {
                         "startIndex": 3,
                         "endIndex": 6
+                      }
+                    },
+                    {
+                      "parameterName": "signers",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 7,
+                        "endIndex": 10
                       }
                     }
                   ],

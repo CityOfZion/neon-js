@@ -1,7 +1,7 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.18.4",
+    "toolVersion": "7.18.16",
     "schemaVersion": 1004,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
@@ -2046,32 +2046,6 @@
               "members": [
                 {
                   "kind": "PropertySignature",
-                  "canonicalReference": "@cityofzion/neon-core!rpc.GetVersionResult#network:member",
-                  "docComment": "",
-                  "excerptTokens": [
-                    {
-                      "kind": "Content",
-                      "text": "network: "
-                    },
-                    {
-                      "kind": "Content",
-                      "text": "number"
-                    },
-                    {
-                      "kind": "Content",
-                      "text": ";"
-                    }
-                  ],
-                  "isOptional": false,
-                  "releaseTag": "Public",
-                  "name": "network",
-                  "propertyTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 2
-                  }
-                },
-                {
-                  "kind": "PropertySignature",
                   "canonicalReference": "@cityofzion/neon-core!rpc.GetVersionResult#nonce:member",
                   "docComment": "",
                   "excerptTokens": [
@@ -2091,6 +2065,32 @@
                   "isOptional": false,
                   "releaseTag": "Public",
                   "name": "nonce",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.GetVersionResult#protocol:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "protocol: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "{\n        addressversion: number;\n        network: number;\n        validatorscount: number;\n        msperblock: number;\n        maxtraceableblocks: number;\n        maxvaliduntilblockincrement: number;\n        maxtransactionsperblock: number;\n        memorypoolmaxtransactions: number;\n        initialgasdistribution: number;\n    }"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "protocol",
                   "propertyTypeTokenRange": {
                     "startIndex": 1,
                     "endIndex": 2
@@ -16075,7 +16075,7 @@
                     {
                       "kind": "Reference",
                       "text": "Buffer",
-                      "canonicalReference": "!__global.Buffer:interface"
+                      "canonicalReference": "!Buffer:class"
                     },
                     {
                       "kind": "Content",
@@ -24495,7 +24495,7 @@
                 {
                   "kind": "Method",
                   "canonicalReference": "@cityofzion/neon-core!tx.Transaction#addWitness:member(1)",
-                  "docComment": "/**\n * Adds Witness to the Transaction and automatically sorts the witnesses according to scripthash.\n *\n * @param obj - Witness object to add as witness\n */\n",
+                  "docComment": "/**\n * Adds Witness to the Transaction and automatically sorts the witnesses. If the witness already exists, attempts to override the invocationScript with the newly provided one.\n *\n * @param obj - Witness object to add as witness\n */\n",
                   "excerptTokens": [
                     {
                       "kind": "Content",
