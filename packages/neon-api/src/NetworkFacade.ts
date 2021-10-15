@@ -46,7 +46,7 @@ export class NetworkFacade {
 
   async initialize(): Promise<void> {
     const response = await this.client.getVersion();
-    this.magicNumber = response.network;
+    this.magicNumber = response.protocol.network;
   }
 
   public getRpcNode(): rpc.NeoServerRpcClient {

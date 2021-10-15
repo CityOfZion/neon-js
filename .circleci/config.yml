@@ -22,7 +22,7 @@ executors:
     working_directory: ~/repo
     docker:
       - image: circleci/node:<< parameters.version >>
-      - image: snowypowers/n3-csharp-solonet:3.0.1
+      - image: snowypowers/n3-csharp-solonet:3.0.3
 
 commands:
   run-unittest:

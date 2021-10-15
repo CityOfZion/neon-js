@@ -9,11 +9,11 @@ import testWallet from "../../__tests__/testWallet.json";
 const wallet = new Wallet(testWallet);
 
 const TESTNET_URLS = [
-  "http://seed1t.neo.org:20332",
-  "http://seed2t.neo.org:20332",
-  "http://seed3t.neo.org:20332",
-  "http://seed4t.neo.org:20332",
-  "http://seed5t.neo.org:20332",
+  "http://seed1t4.neo.org:20332",
+  "http://seed2t4.neo.org:20332",
+  "http://seed3t4.neo.org:20332",
+  "http://seed4t4.neo.org:20332",
+  "http://seed5t4.neo.org:20332",
 ];
 
 const LOCALNET_URLS = ["http://localhost:20332"];
@@ -237,7 +237,17 @@ describe("RPC Methods", () => {
       wsport: expect.any(Number),
       nonce: expect.any(Number),
       useragent: expect.any(String),
-      network: expect.any(Number),
+      protocol: expect.objectContaining({
+        addressversion: expect.any(Number),
+        network: expect.any(Number),
+        validatorscount: expect.any(Number),
+        msperblock: expect.any(Number),
+        maxtraceableblocks: expect.any(Number),
+        maxvaliduntilblockincrement: expect.any(Number),
+        maxtransactionsperblock: expect.any(Number),
+        memorypoolmaxtransactions: expect.any(Number),
+        initialgasdistribution: expect.any(Number),
+      }),
     });
   });
 
