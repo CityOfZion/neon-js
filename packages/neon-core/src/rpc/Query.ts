@@ -130,15 +130,15 @@ export interface GetVersionResult {
   nonce: number;
   useragent: string;
   protocol: {
-   addressversion: number;
-   network: number;
-   validatorscount: number;
-   msperblock: number;
-   maxtraceableblocks: number;
-   maxvaliduntilblockincrement: number;
-   maxtransactionsperblock: number;
-   memorypoolmaxtransactions: number;
-   initialgasdistribution: number;
+    addressversion: number;
+    network: number;
+    validatorscount: number;
+    msperblock: number;
+    maxtraceableblocks: number;
+    maxvaliduntilblockincrement: number;
+    maxtransactionsperblock: number;
+    memorypoolmaxtransactions: number;
+    initialgasdistribution: number;
   }
 }
 
