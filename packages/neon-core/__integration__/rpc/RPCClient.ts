@@ -237,17 +237,17 @@ describe("RPC Methods", () => {
       wsport: expect.any(Number),
       nonce: expect.any(Number),
       useragent: expect.any(String),
-      protocol: expect.arrayContaining([
-        "addressversion",
-        "network",
-        "validatorscount",
-        "msperblock",
-        "maxtraceableblocks",
-        "maxvaliduntilblockincrement",
-        "maxtransactionsperblock",
-        "memorypoolmaxtransactions",
-        "initialgasdistribution",
-      ]),
+      protocol: expect.objectContaining({
+        addressversion: expect.any(Number),
+        network: expect.any(Number),
+        validatorscount: expect.any(Number),
+        msperblock: expect.any(Number),
+        maxtraceableblocks: expect.any(Number),
+        maxvaliduntilblockincrement: expect.any(Number),
+        maxtransactionsperblock: expect.any(Number),
+        memorypoolmaxtransactions: expect.any(Number),
+        initialgasdistribution: expect.any(Number),
+      }),
     });
   });
 
