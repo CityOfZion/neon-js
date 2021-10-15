@@ -13,7 +13,7 @@ export const LOCALNET_URLS = ["http://localhost:20332"];
 export async function getIntegrationEnvUrl(): Promise<string> {
   const urls = isTestNet() ? TESTNET_URLS : LOCALNET_URLS;
   return await getBestUrl(urls);
-e
+}
 
 export function isTestNet(): boolean {
   return (global["__TARGETNET__"] as string).toLowerCase() === "testnet";
