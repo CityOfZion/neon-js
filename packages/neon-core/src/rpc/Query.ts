@@ -139,7 +139,7 @@ export interface GetVersionResult {
     maxtransactionsperblock: number;
     memorypoolmaxtransactions: number;
     initialgasdistribution: number;
-  }
+  };
 }
 
 export interface NodePeer {
