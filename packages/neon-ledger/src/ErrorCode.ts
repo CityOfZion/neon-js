@@ -26,11 +26,15 @@ export enum StatusWord {
 export interface TransportStatusError extends Error {
   name: "TransportStatusError";
   message: string;
-  stack: Error["stack"];
   statusCode: number;
   statusText: string;
 }
 
+export function looksLikeTransportStatusError(
+  err: unknown
+): err is TransportStatusError {
+  return (err as TransportStatusError).statusCode != undefined;
+}
 /**
  * Evaluates Transport Error thrown and rewrite the error message to be more user friendly.
  * @returns error with modified message if found.
