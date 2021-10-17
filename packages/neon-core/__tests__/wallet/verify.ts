@@ -60,13 +60,13 @@ describe("Verify: Valid", () => {
       verify.isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW", 23)
     ).toBeTruthy();
     expect(
-      verify.isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM", 35)
+      verify.isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM", 53)
     ).toBeTruthy();
   });
 
   test("Address with wrong version returns false", () => {
     expect(
-      verify.isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW", 35)
+      verify.isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW", 53)
     ).toBeFalsy();
     expect(
       verify.isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM", 23)
