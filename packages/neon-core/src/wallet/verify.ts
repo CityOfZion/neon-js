@@ -111,12 +111,36 @@ export function isScriptHash(scriptHash: string): boolean {
 }
 
 /**
- * Verifies an address using its checksum.
+ * Verifies an address using its checksum. Note that this does not check the address version to be equal to the one in the network.
+ * If you wish to verify the exact address version, pass the version number to verifyAddressVersion.
+ *
+ * @param address - Base58 address
+ * @param verifyAddressVersion - address version to verify against. If set, this will return false if the address version does not match.
+ *
+ * @example
+ * isAddress("not an address"); // false
+ * isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM"); // true
+ * isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW"); // true
+ *
+ * isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM", 17); // false
+ * isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW", 17); // true
+ *
+ * isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM", 35); // true
+ * isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW", 35); // false
  */
-export function isAddress(address: string): boolean {
+export function isAddress(address: string, verifyAddressVersion = -1): boolean {
   try {
     const programHash = ab2hexstring(base58.decode(address));
-    const addressVersion = parseInt(programHash.slice(0, 2), 16);
+    const givenAddressVersion = parseInt(programHash.slice(0, 2), 16);
+
+    if (
+      verifyAddressVersion >= 0 &&
+      givenAddressVersion !== verifyAddressVersion
+    ) {
+      // Address might have come from a different network such as Neo Legacy.
+      return false;
+    }
+
     const shaChecksum = hash256(programHash.slice(0, 42)).substr(0, 8);
     // We use the checksum to verify the address
     if (shaChecksum !== programHash.substr(42, 8)) {
@@ -124,7 +148,7 @@ export function isAddress(address: string): boolean {
     }
     // As other chains use similar checksum methods, we need to attempt to transform the programHash back into the address
     const scriptHash = reverseHex(programHash.slice(2, 42));
-    if (getAddressFromScriptHash(scriptHash, addressVersion) !== address) {
+    if (getAddressFromScriptHash(scriptHash, givenAddressVersion) !== address) {
       // address is not valid Neo address, could be btc, ltc etc.
       return false;
     }
