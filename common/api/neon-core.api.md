@@ -1088,7 +1088,7 @@ interface InvokeResult {
 }
 
 // @public
-function isAddress(address: string): boolean;
+function isAddress(address: string, verifyAddressVersion?: number): boolean;
 
 // @public
 function isHex(str: string): boolean;

@@ -54,6 +54,24 @@ describe("Verify: Valid", () => {
   ])("Address: %s", (i: string) => {
     expect(verify.isAddress(i)).toBeTruthy();
   });
+
+  test("Able to validate addresses with custom version", () => {
+    expect(
+      verify.isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW", 23)
+    ).toBeTruthy();
+    expect(
+      verify.isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM", 35)
+    ).toBeTruthy();
+  });
+
+  test("Address with wrong version returns false", () => {
+    expect(
+      verify.isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW", 35)
+    ).toBeFalsy();
+    expect(
+      verify.isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM", 23)
+    ).toBeFalsy();
+  });
 });
 
 describe("Verify: Invalid", () => {
