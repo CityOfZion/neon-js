@@ -77,6 +77,14 @@ export interface GetContractStateResult {
   manifest: ContractManifestJson;
 }
 
+export interface NativeContractState {
+  id: number;
+  hash: string;
+  nef: NEFJson;
+  manifest: ContractManifestJson;
+  updatehistory: number[];
+}
+
 export interface GetNep11BalancesResult {
   /* Base58-encoded string */
   address: string;
@@ -318,6 +326,15 @@ export class Query<TParams extends unknown[], TResponse> {
     return new Query({
       method: "getcontractstate",
       params: [scriptHash],
+    });
+  }
+
+  /**
+   * This Query returns all the native contracts state.
+   */
+  public static getNativeContracts(): Query<[], NativeContractState[]> {
+    return new Query({
+      method: "getnativecontracts",
     });
   }
 
