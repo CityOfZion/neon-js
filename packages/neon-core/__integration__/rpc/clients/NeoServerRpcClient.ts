@@ -138,6 +138,24 @@ describe("NeoServerRpcClient", () => {
     });
   });
 
+  test("getNativeContracts", async () => {
+    const result = await client.getNativeContracts();
+    expect(result.length).toBe(8);
+
+    // We briefly check for the token contracts as a smoke test.
+    const contractNames = result.map((r) => r.manifest.name);
+    expect(contractNames).toContain("NeoToken");
+    expect(contractNames).toContain("GasToken");
+
+    expect(result[0]).toMatchObject({
+      id: expect.any(Number),
+      hash: expect.any(String),
+      nef: expect.any(Object),
+      manifest: expect.any(Object),
+      updatehistory: expect.arrayContaining(expect.any(Number)),
+    });
+  });
+
   test("getPeers", async () => {
     const result = await client.getPeers();
     expect(Object.keys(result)).toEqual(

@@ -13,6 +13,7 @@ import {
 import { BlockJson, BlockHeaderJson, Validator } from "../../types";
 import { RpcDispatcher, RpcDispatcherMixin } from "./RpcDispatcher";
 import { HexString } from "../../u";
+import { NativeContractState } from "..";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
 export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
@@ -107,6 +108,10 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
       return response;
     }
 
+    public async getNativeContracts(): Promise<NativeContractState[]> {
+      const response = await this.execute(Query.getNativeContracts());
+      return response;
+    }
     /**
      * This Query returns the transaction hashes of the transactions confirmed or unconfirmed.
      * @param shouldGetUnverified - shouldGetUnverified Optional. Default is 0.
