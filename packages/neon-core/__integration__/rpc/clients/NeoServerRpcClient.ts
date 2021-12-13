@@ -152,7 +152,7 @@ describe("NeoServerRpcClient", () => {
       hash: expect.any(String),
       nef: expect.any(Object),
       manifest: expect.any(Object),
-      updatehistory: expect.arrayContaining(expect.any(Number)),
+      updatehistory: expect.any(Array),
     });
   });
 
