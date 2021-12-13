@@ -1,7 +1,7 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.18.16",
+    "toolVersion": "7.19.2",
     "schemaVersion": 1004,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
@@ -299,7 +299,7 @@
             {
               "kind": "Reference",
               "text": "Transport",
-              "canonicalReference": "@types/ledgerhq__hw-transport!~Transport:class"
+              "canonicalReference": "@ledgerhq/hw-transport!default:class"
             },
             {
               "kind": "Content",
@@ -348,7 +348,7 @@
             {
               "kind": "Reference",
               "text": "Transport",
-              "canonicalReference": "@types/ledgerhq__hw-transport!~Transport:class"
+              "canonicalReference": "@ledgerhq/hw-transport!default:class"
             },
             {
               "kind": "Content",
@@ -401,7 +401,7 @@
             {
               "kind": "Reference",
               "text": "Transport",
-              "canonicalReference": "@types/ledgerhq__hw-transport!~Transport:class"
+              "canonicalReference": "@ledgerhq/hw-transport!default:class"
             },
             {
               "kind": "Content",
@@ -459,7 +459,7 @@
             {
               "kind": "Reference",
               "text": "Transport",
-              "canonicalReference": "@types/ledgerhq__hw-transport!~Transport:class"
+              "canonicalReference": "@ledgerhq/hw-transport!default:class"
             },
             {
               "kind": "Content",
@@ -523,7 +523,7 @@
             {
               "kind": "Reference",
               "text": "Transport",
-              "canonicalReference": "@types/ledgerhq__hw-transport!~Transport:class"
+              "canonicalReference": "@ledgerhq/hw-transport!default:class"
             },
             {
               "kind": "Content",

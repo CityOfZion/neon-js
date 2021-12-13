@@ -779,6 +779,31 @@ function getInteropServicePrice(service: InteropServiceCode, param?: Partial<Int
 function getNativeContractHash(contractName: string): string;
 
 // @public (undocumented)
+interface GetNep11BalancesResult {
+    // (undocumented)
+    address: string;
+    // (undocumented)
+    balance: {
+        assethash: string;
+        tokens: {
+            tokenid: string;
+            amount: string;
+            lastupdatedblock: number;
+        }[];
+    }[];
+}
+
+// @public (undocumented)
+interface GetNep11TransfersResult {
+    // (undocumented)
+    address: string;
+    // (undocumented)
+    received: Nep11TransferEvent[];
+    // (undocumented)
+    sent: Nep11TransferEvent[];
+}
+
+// @public (undocumented)
 interface GetNep17BalancesResult {
     // (undocumented)
     address: string;
@@ -1324,6 +1349,26 @@ function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase): {
     };
 } & TBase;
 
+// @public (undocumented)
+interface Nep11TransferEvent {
+    // (undocumented)
+    amount: string;
+    // (undocumented)
+    assethash: string;
+    // (undocumented)
+    blockindex: number;
+    // (undocumented)
+    timestamp: number;
+    // (undocumented)
+    tokenid: string;
+    // (undocumented)
+    transferaddress: string;
+    // (undocumented)
+    transfernotifyindex: number;
+    // (undocumented)
+    txhash: string;
+}
+
 // @public
 class Nep17Contract extends BaseContract {
     constructor(scriptHash: string, additionalMethods?: ContractMethodDefinition[]);
@@ -1337,24 +1382,6 @@ class Nep17Contract extends BaseContract {
     totalSupply(): ContractCall;
     transfer(from: string, to: string, amount: string | number | BigInteger, data?: string): ContractCall;
 }
-
-// Warning: (ae-forgotten-export) The symbol "Nep17TrackerRpcClient_base" needs to be exported by the entry point index.d.ts
-//
-// @public (undocumented)
-class Nep17TrackerRpcClient extends Nep17TrackerRpcClient_base {
-    // (undocumented)
-    get [Symbol.toStringTag](): string;
-}
-
-// @public (undocumented)
-function Nep17TrackerRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase): {
-    new (...args: any[]): {
-        getNep17Transfers(accountIdentifier: string, startTime?: string | undefined, endTime?: string | undefined): Promise<GetNep17TransfersResult>;
-        getNep17Balances(accountIdentifier: string): Promise<GetNep17BalancesResult>;
-        url: string;
-        execute<TResponse>(query: Query<unknown[], TResponse>, config?: RpcConfig | undefined): Promise<TResponse>;
-    };
-} & TBase;
 
 // @public (undocumented)
 interface Nep17TransferEvent {
@@ -2115,6 +2142,12 @@ class Query<TParams extends unknown[], TResponse> {
     static getCommittee(): Query<[], string[]>;
     static getConnectionCount(): Query<[], number>;
     static getContractState(scriptHash: string): Query<[string], GetContractStateResult>;
+    // (undocumented)
+    static getNep11Balances(accountIdentifier: string): Query<[string], GetNep11BalancesResult>;
+    // (undocumented)
+    static getNep11Properties(contractHash: string, tokenId: string): Query<[string, string], Record<string, unknown>>;
+    // (undocumented)
+    static getNep11Transfers(accountIdentifer: string, startTime?: string, endTime?: string): Query<[string, string?, string?], GetNep11TransfersResult>;
     static getNep17Balances(accountIdentifer: string): Query<[string], GetNep17BalancesResult>;
     static getNep17Transfers(accountIdentifer: string, startTime?: string, endTime?: string): Query<[string, string?, string?], GetNep17TransfersResult>;
     static getNextBlockValidators(): Query<[], Validator[]>;
@@ -2180,6 +2213,9 @@ declare namespace rpc {
         ApplicationLogJson,
         InvokeResult,
         GetContractStateResult,
+        GetNep11BalancesResult,
+        GetNep11TransfersResult,
+        Nep11TransferEvent,
         GetNep17TransfersResult,
         Nep17TransferEvent,
         GetNep17BalancesResult,
@@ -2210,8 +2246,8 @@ declare namespace rpc {
         RpcError,
         ApplicationLogsRpcMixin,
         ApplicationLogsRpcClient,
-        Nep17TrackerRpcMixin,
-        Nep17TrackerRpcClient,
+        TokenTrackerRpcMixin,
+        TokenTrackerRpcClient,
         NeoServerRpcMixin,
         NeoServerRpcClient
     }
@@ -2554,6 +2590,26 @@ class StringStream {
     // (undocumented)
     str: string;
 }
+
+// Warning: (ae-forgotten-export) The symbol "TokenTrackerRpcClient_base" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+class TokenTrackerRpcClient extends TokenTrackerRpcClient_base {
+    // (undocumented)
+    get [Symbol.toStringTag](): string;
+}
+
+// @public (undocumented)
+function TokenTrackerRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase): {
+    new (...args: any[]): {
+        getNep17Transfers(accountIdentifier: string, startTime?: string | undefined, endTime?: string | undefined): Promise<GetNep17TransfersResult>;
+        getNep17Balances(accountIdentifier: string): Promise<GetNep17BalancesResult>;
+        getNep11Transfers(accountIdentifier: string, startTime?: string | undefined, endTime?: string | undefined): Promise<GetNep11TransfersResult>;
+        getNep11Balances(accountIdentifier: string): Promise<GetNep11BalancesResult>;
+        url: string;
+        execute<TResponse>(query: Query<unknown[], TResponse>, config?: RpcConfig | undefined): Promise<TResponse>;
+    };
+} & TBase;
 
 // @public (undocumented)
 function toString(flags: WitnessScope): string;

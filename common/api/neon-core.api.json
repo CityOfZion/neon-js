@@ -1,7 +1,7 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.18.16",
+    "toolVersion": "7.19.2",
     "schemaVersion": 1004,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
@@ -1423,6 +1423,178 @@
                   "propertyTypeTokenRange": {
                     "startIndex": 1,
                     "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!rpc.GetNep11BalancesResult:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface GetNep11BalancesResult "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "GetNep11BalancesResult",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.GetNep11BalancesResult#address:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "address: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "address",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.GetNep11BalancesResult#balance:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "balance: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "{\n        assethash: string;\n        tokens: {\n            tokenid: string;\n            amount: string;\n            lastupdatedblock: number;\n        }[];\n    }[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "balance",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!rpc.GetNep11TransfersResult:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface GetNep11TransfersResult "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "GetNep11TransfersResult",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.GetNep11TransfersResult#address:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "address: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "address",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.GetNep11TransfersResult#received:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "received: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Nep11TransferEvent",
+                      "canonicalReference": "@cityofzion/neon-core!Nep11TransferEvent:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "received",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.GetNep11TransfersResult#sent:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "sent: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Nep11TransferEvent",
+                      "canonicalReference": "@cityofzion/neon-core!Nep11TransferEvent:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "sent",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
                   }
                 }
               ],
@@ -2988,44 +3160,26 @@
               "name": "NeoServerRpcMixin"
             },
             {
-              "kind": "Class",
-              "canonicalReference": "@cityofzion/neon-core!rpc.Nep17TrackerRpcClient:class",
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!rpc.Nep11TransferEvent:interface",
               "docComment": "",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "export declare class Nep17TrackerRpcClient extends "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Nep17TrackerRpcClient_base",
-                  "canonicalReference": "@cityofzion/neon-core!~Nep17TrackerRpcClient_base"
-                },
-                {
-                  "kind": "Content",
-                  "text": " "
+                  "text": "export interface Nep11TransferEvent "
                 }
               ],
               "releaseTag": "Public",
-              "name": "Nep17TrackerRpcClient",
+              "name": "Nep11TransferEvent",
               "members": [
                 {
-                  "kind": "Property",
-                  "canonicalReference": "@cityofzion/neon-core!rpc.Nep17TrackerRpcClient#[Symbol.toStringTag]:member",
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Nep11TransferEvent#amount:member",
                   "docComment": "",
                   "excerptTokens": [
                     {
                       "kind": "Content",
-                      "text": "get ["
-                    },
-                    {
-                      "kind": "Reference",
-                      "text": "Symbol.toStringTag",
-                      "canonicalReference": "!SymbolConstructor#toStringTag"
-                    },
-                    {
-                      "kind": "Content",
-                      "text": "](): "
+                      "text": "amount: "
                     },
                     {
                       "kind": "Content",
@@ -3038,147 +3192,196 @@
                   ],
                   "isOptional": false,
                   "releaseTag": "Public",
-                  "name": "[Symbol.toStringTag]",
+                  "name": "amount",
                   "propertyTypeTokenRange": {
-                    "startIndex": 3,
-                    "endIndex": 4
-                  },
-                  "isStatic": false
-                }
-              ],
-              "extendsTokenRange": {
-                "startIndex": 1,
-                "endIndex": 3
-              },
-              "implementsTokenRanges": []
-            },
-            {
-              "kind": "Function",
-              "canonicalReference": "@cityofzion/neon-core!rpc.Nep17TrackerRpcMixin:function(1)",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "export declare function Nep17TrackerRpcMixin<TBase extends "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "RpcDispatcherMixin",
-                  "canonicalReference": "@cityofzion/neon-core!RpcDispatcherMixin:type"
-                },
-                {
-                  "kind": "Content",
-                  "text": ">(base: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "TBase"
-                },
-                {
-                  "kind": "Content",
-                  "text": "): "
-                },
-                {
-                  "kind": "Content",
-                  "text": "{\n    new (...args: any[]): {\n        getNep17Transfers(accountIdentifier: string, startTime?: string | undefined, endTime?: string | undefined): "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Promise",
-                  "canonicalReference": "!Promise:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "<"
-                },
-                {
-                  "kind": "Reference",
-                  "text": "GetNep17TransfersResult",
-                  "canonicalReference": "@cityofzion/neon-core!GetNep17TransfersResult:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ">;\n        getNep17Balances(accountIdentifier: string): "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Promise",
-                  "canonicalReference": "!Promise:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "<"
-                },
-                {
-                  "kind": "Reference",
-                  "text": "GetNep17BalancesResult",
-                  "canonicalReference": "@cityofzion/neon-core!GetNep17BalancesResult:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ">;\n        url: string;\n        execute<TResponse>(query: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Query",
-                  "canonicalReference": "@cityofzion/neon-core!Query:class"
-                },
-                {
-                  "kind": "Content",
-                  "text": "<unknown[], TResponse>, config?: import(\"./RpcDispatcher\")."
-                },
-                {
-                  "kind": "Reference",
-                  "text": "RpcConfig",
-                  "canonicalReference": "@cityofzion/neon-core!RpcConfig:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": " | undefined): "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Promise",
-                  "canonicalReference": "!Promise:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "<TResponse>;\n    };\n} & TBase"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "returnTypeTokenRange": {
-                "startIndex": 5,
-                "endIndex": 20
-              },
-              "releaseTag": "Public",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "base",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 3,
-                    "endIndex": 4
-                  }
-                }
-              ],
-              "typeParameters": [
-                {
-                  "typeParameterName": "TBase",
-                  "constraintTokenRange": {
                     "startIndex": 1,
                     "endIndex": 2
-                  },
-                  "defaultTypeTokenRange": {
-                    "startIndex": 0,
-                    "endIndex": 0
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Nep11TransferEvent#assethash:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "assethash: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "assethash",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Nep11TransferEvent#blockindex:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "blockindex: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "blockindex",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Nep11TransferEvent#timestamp:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "timestamp: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "timestamp",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Nep11TransferEvent#tokenid:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "tokenid: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "tokenid",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Nep11TransferEvent#transferaddress:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "transferaddress: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "transferaddress",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Nep11TransferEvent#transfernotifyindex:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "transfernotifyindex: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "transfernotifyindex",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Nep11TransferEvent#txhash:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "txhash: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "txhash",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
                   }
                 }
               ],
-              "name": "Nep17TrackerRpcMixin"
+              "extendsTokenRanges": []
             },
             {
               "kind": "Interface",
@@ -5483,6 +5686,228 @@
                     }
                   ],
                   "name": "getContractState"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Query.getNep11Balances:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static getNep11Balances(accountIdentifier: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Query",
+                      "canonicalReference": "@cityofzion/neon-core!Query:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<[string], "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "GetNep11BalancesResult",
+                      "canonicalReference": "@cityofzion/neon-core!GetNep11BalancesResult:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ">"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 7
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "accountIdentifier",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "getNep11Balances"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Query.getNep11Properties:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static getNep11Properties(contractHash: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", tokenId: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Query",
+                      "canonicalReference": "@cityofzion/neon-core!Query:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<[string, string], "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Record",
+                      "canonicalReference": "!Record:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<string, unknown>>"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 5,
+                    "endIndex": 9
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "contractHash",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    },
+                    {
+                      "parameterName": "tokenId",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 3,
+                        "endIndex": 4
+                      }
+                    }
+                  ],
+                  "name": "getNep11Properties"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Query.getNep11Transfers:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static getNep11Transfers(accountIdentifer: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", startTime?: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", endTime?: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Query",
+                      "canonicalReference": "@cityofzion/neon-core!Query:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<[string, string?, string?], "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "GetNep11TransfersResult",
+                      "canonicalReference": "@cityofzion/neon-core!GetNep11TransfersResult:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ">"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 7,
+                    "endIndex": 11
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "accountIdentifer",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    },
+                    {
+                      "parameterName": "startTime",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 3,
+                        "endIndex": 4
+                      }
+                    },
+                    {
+                      "parameterName": "endTime",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 5,
+                        "endIndex": 6
+                      }
+                    }
+                  ],
+                  "name": "getNep11Transfers"
                 },
                 {
                   "kind": "Method",
@@ -8034,6 +8459,235 @@
                 }
               ],
               "name": "StringParser"
+            },
+            {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!rpc.TokenTrackerRpcClient:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class TokenTrackerRpcClient extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "TokenTrackerRpcClient_base",
+                  "canonicalReference": "@cityofzion/neon-core!~TokenTrackerRpcClient_base"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "TokenTrackerRpcClient",
+              "members": [
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.TokenTrackerRpcClient#[Symbol.toStringTag]:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get ["
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Symbol.toStringTag",
+                      "canonicalReference": "!SymbolConstructor#toStringTag"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "](): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "[Symbol.toStringTag]",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "isStatic": false
+                }
+              ],
+              "extendsTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "implementsTokenRanges": []
+            },
+            {
+              "kind": "Function",
+              "canonicalReference": "@cityofzion/neon-core!rpc.TokenTrackerRpcMixin:function(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare function TokenTrackerRpcMixin<TBase extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RpcDispatcherMixin",
+                  "canonicalReference": "@cityofzion/neon-core!RpcDispatcherMixin:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">(base: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "TBase"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "{\n    new (...args: any[]): {\n        getNep17Transfers(accountIdentifier: string, startTime?: string | undefined, endTime?: string | undefined): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "GetNep17TransfersResult",
+                  "canonicalReference": "@cityofzion/neon-core!GetNep17TransfersResult:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">;\n        getNep17Balances(accountIdentifier: string): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "GetNep17BalancesResult",
+                  "canonicalReference": "@cityofzion/neon-core!GetNep17BalancesResult:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">;\n        getNep11Transfers(accountIdentifier: string, startTime?: string | undefined, endTime?: string | undefined): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "GetNep11TransfersResult",
+                  "canonicalReference": "@cityofzion/neon-core!GetNep11TransfersResult:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">;\n        getNep11Balances(accountIdentifier: string): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "GetNep11BalancesResult",
+                  "canonicalReference": "@cityofzion/neon-core!GetNep11BalancesResult:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">;\n        url: string;\n        execute<TResponse>(query: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Query",
+                  "canonicalReference": "@cityofzion/neon-core!Query:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<unknown[], TResponse>, config?: import(\"./RpcDispatcher\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RpcConfig",
+                  "canonicalReference": "@cityofzion/neon-core!RpcConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | undefined): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<TResponse>;\n    };\n} & TBase"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "returnTypeTokenRange": {
+                "startIndex": 5,
+                "endIndex": 28
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "base",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  }
+                }
+              ],
+              "typeParameters": [
+                {
+                  "typeParameterName": "TBase",
+                  "constraintTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "defaultTypeTokenRange": {
+                    "startIndex": 0,
+                    "endIndex": 0
+                  }
+                }
+              ],
+              "name": "TokenTrackerRpcMixin"
             },
             {
               "kind": "Interface",
@@ -16075,7 +16729,7 @@
                     {
                       "kind": "Reference",
                       "text": "Buffer",
-                      "canonicalReference": "!__global.Buffer:interface"
+                      "canonicalReference": "!Buffer:class"
                     },
                     {
                       "kind": "Content",

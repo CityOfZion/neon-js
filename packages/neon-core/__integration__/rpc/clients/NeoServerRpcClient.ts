@@ -140,7 +140,7 @@ describe("NeoServerRpcClient", () => {
 
   test("getNativeContracts", async () => {
     const result = await client.getNativeContracts();
-    expect(result.length).toBe(8);
+    expect(result.length).toBeGreaterThanOrEqual(9);
 
     // We briefly check for the token contracts as a smoke test.
     const contractNames = result.map((r) => r.manifest.name);
