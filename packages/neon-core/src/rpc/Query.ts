@@ -77,6 +77,33 @@ export interface GetContractStateResult {
   manifest: ContractManifestJson;
 }
 
+export interface GetNep11BalancesResult {
+  /* Base58-encoded string */
+  address: string;
+  balance: {
+    /* 0x-prefixed scripthash of the contract. */
+    assethash: string;
+    tokens: { tokenid: string; amount: string; lastupdatedblock: number }[];
+  }[];
+}
+
+export interface GetNep11TransfersResult {
+  address: string;
+  sent: Nep11TransferEvent[];
+  received: Nep11TransferEvent[];
+}
+
+export interface Nep11TransferEvent {
+  timestamp: number;
+  assethash: string;
+  transferaddress: string;
+  amount: string;
+  blockindex: number;
+  transfernotifyindex: number;
+  txhash: string;
+  tokenid: string;
+}
+
 export interface GetNep17TransfersResult {
   sent: Nep17TransferEvent[];
   received: Nep17TransferEvent[];
@@ -291,6 +318,39 @@ export class Query<TParams extends unknown[], TResponse> {
     return new Query({
       method: "getcontractstate",
       params: [scriptHash],
+    });
+  }
+
+  public static getNep11Balances(
+    accountIdentifier: string
+  ): Query<[string], GetNep11BalancesResult> {
+    return new Query({
+      method: "getnep11balances",
+      params: [accountIdentifier],
+    });
+  }
+
+  public static getNep11Properties(
+    contractHash: string,
+    tokenId: string
+  ): Query<[string, string], Record<string, unknown>> {
+    return new Query({
+      method: "getnep11properties",
+      params: [contractHash, tokenId],
+    });
+  }
+
+  public static getNep11Transfers(
+    accountIdentifer: string,
+    startTime?: string,
+    endTime?: string
+  ): Query<[string, string?, string?], GetNep11TransfersResult> {
+    const params: [string, string?, string?] = [accountIdentifer];
+    if (startTime) params.push(startTime);
+    if (endTime) params.push(endTime);
+    return new Query({
+      method: "getnep17transfers",
+      params,
     });
   }
 

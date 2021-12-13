@@ -1,15 +1,30 @@
 import { rpc } from "../../../src";
 import * as TestHelpers from "../../../../../testHelpers";
 
-let client: rpc.Nep17TrackerRpcClient;
+let client: rpc.TokenTrackerRpcClient;
 const address = "NR4SHeS9kfgN5EXVcAuFwfu6Y56xaSPxg9";
 
 beforeAll(async () => {
   const url = await TestHelpers.getIntegrationEnvUrl();
-  client = new rpc.Nep17TrackerRpcClient(url);
+  client = new rpc.TokenTrackerRpcClient(url);
 }, 20000);
 
-describe("Nep17TrackerRpcClient", () => {
+describe("TokenTrackerRpcClient", () => {
+  describe("getNep11Transfers", () => {
+    test("empty address", async () => {
+      const result = await client.getNep11Transfers("0".repeat(40));
+      expect(result.received.length).toBe(0);
+      expect(result.sent.length).toBe(0);
+    });
+  });
+
+  describe("getNep11Balances", () => {
+    test("empty address", async () => {
+      const result = await client.getNep11Balances("0".repeat(40));
+      expect(result.balance.length).toBe(0);
+    });
+  });
+
   describe("getNep17Transfers", () => {
     test("empty address", async () => {
       const result = await client.getNep17Transfers("0".repeat(40));
