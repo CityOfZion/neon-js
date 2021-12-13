@@ -2,12 +2,12 @@ import { NeoServerRpcMixin } from "./clients/NeoServerRpcClient";
 import {
   RpcDispatcher,
   ApplicationLogsRpcMixin,
-  Nep17TrackerRpcMixin,
+  TokenTrackerRpcMixin,
 } from "./clients";
 import { Query } from "./Query";
 
 const PING_TIMEOUT = 2000;
-class FullRpcClient extends Nep17TrackerRpcMixin(
+class FullRpcClient extends TokenTrackerRpcMixin(
   ApplicationLogsRpcMixin(NeoServerRpcMixin(RpcDispatcher))
 ) {
   public get [Symbol.toStringTag](): string {
