@@ -45,6 +45,11 @@ describe("equals", () => {
 });
 
 describe("static", () => {
+  test("calculateNetworkFee", () => {
+    const result = Query.calculateNetworkFee("12345");
+    expect(result.method).toEqual("calculatenetworkfee");
+    expect(result.params).toEqual(["12345"]);
+  });
   test("getBestBlockHash", () => {
     const result = Query.getBestBlockHash();
     expect(result.method).toEqual("getbestblockhash");
