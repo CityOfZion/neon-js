@@ -2571,6 +2571,154 @@
               "extendsTokenRanges": []
             },
             {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!rpc.NativeContractState:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface NativeContractState "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "NativeContractState",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.NativeContractState#hash:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "hash: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "hash",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.NativeContractState#id:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "id: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "id",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.NativeContractState#manifest:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "manifest: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "ContractManifestJson",
+                      "canonicalReference": "@cityofzion/neon-core!ContractManifestJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "manifest",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.NativeContractState#nef:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "nef: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "NEFJson",
+                      "canonicalReference": "@cityofzion/neon-core!NEFJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "nef",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.NativeContractState#updatehistory:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "updatehistory: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "updatehistory",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
               "kind": "Class",
               "canonicalReference": "@cityofzion/neon-core!rpc.NeoServerRpcClient:class",
               "docComment": "/**\n * RPC Client model to query a NEO node. Contains built-in methods to query using RPC calls.\n */\n",
@@ -2771,7 +2919,25 @@
                 },
                 {
                   "kind": "Content",
-                  "text": ">;\n        getRawMemPool(shouldGetUnverified?: false | 0 | undefined): "
+                  "text": ">;\n        getNativeContracts(): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "NativeContractState",
+                  "canonicalReference": "@cityofzion/neon-core!NativeContractState:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[]>;\n        getRawMemPool(shouldGetUnverified?: false | 0 | undefined): "
                 },
                 {
                   "kind": "Reference",
@@ -3068,7 +3234,34 @@
                 },
                 {
                   "kind": "Content",
-                  "text": ">;\n        listPlugins(): "
+                  "text": ">;\n        calculateNetworkFee(tx: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Transaction",
+                  "canonicalReference": "@cityofzion/neon-core!Transaction:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "HexString",
+                  "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | string): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<string>;\n        listPlugins(): "
                 },
                 {
                   "kind": "Reference",
@@ -3131,7 +3324,7 @@
               ],
               "returnTypeTokenRange": {
                 "startIndex": 5,
-                "endIndex": 108
+                "endIndex": 118
               },
               "releaseTag": "Public",
               "overloadIndex": 1,
@@ -5014,6 +5207,70 @@
                 },
                 {
                   "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Query.calculateNetworkFee:member(1)",
+                  "docComment": "/**\n * Query returning the network fee required for a given transaction.\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static calculateNetworkFee(tx: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Transaction",
+                      "canonicalReference": "@cityofzion/neon-core!Transaction:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": " | "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "HexString",
+                      "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": " | string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Query",
+                      "canonicalReference": "@cityofzion/neon-core!Query:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<[string], {\n        networkfee: string;\n    }>"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 6,
+                    "endIndex": 8
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "tx",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 5
+                      }
+                    }
+                  ],
+                  "name": "calculateNetworkFee"
+                },
+                {
+                  "kind": "Method",
                   "canonicalReference": "@cityofzion/neon-core!rpc.Query#equals:member(1)",
                   "docComment": "",
                   "excerptTokens": [
@@ -5686,6 +5943,49 @@
                     }
                   ],
                   "name": "getContractState"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.Query.getNativeContracts:member(1)",
+                  "docComment": "/**\n * This Query returns all the native contracts state.\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static getNativeContracts(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Query",
+                      "canonicalReference": "@cityofzion/neon-core!Query:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<[], "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "NativeContractState",
+                      "canonicalReference": "@cityofzion/neon-core!NativeContractState:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]>"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 5
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "getNativeContracts"
                 },
                 {
                   "kind": "Method",

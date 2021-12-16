@@ -1240,6 +1240,20 @@ enum NATIVE_CONTRACT_HASH {
 }
 
 // @public (undocumented)
+interface NativeContractState {
+    // (undocumented)
+    hash: string;
+    // (undocumented)
+    id: number;
+    // (undocumented)
+    manifest: ContractManifestJson;
+    // (undocumented)
+    nef: NEFJson;
+    // (undocumented)
+    updatehistory: number[];
+}
+
+// @public (undocumented)
 class NEF {
     constructor(obj: Partial<NEFLike>);
     // (undocumented)
@@ -1326,6 +1340,7 @@ function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase): {
         getBlockHeader(indexOrHash: number | string, verbose: 1): Promise<BlockHeaderJson>;
         getCommittee(): Promise<string[]>;
         getContractState(scriptHash: string): Promise<GetContractStateResult>;
+        getNativeContracts(): Promise<NativeContractState[]>;
         getRawMemPool(shouldGetUnverified?: false | 0 | undefined): Promise<string[]>;
         getRawMemPool(shouldGetUnverified: 1 | true): Promise<GetRawMemPoolResult>;
         getRawTransaction(txid: string, verbose?: false | 0 | undefined): Promise<string>;
@@ -1342,6 +1357,7 @@ function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase): {
         invokeContractVerify(scriptHash: string, args: unknown[], signers?: (Signer | SignerJson)[]): Promise<InvokeResult>;
         invokeFunction(scriptHash: string, operation: string, params?: unknown[], signers?: (Signer | SignerJson)[]): Promise<InvokeResult>;
         invokeScript(script: string | HexString, signers?: (Signer | SignerJson)[]): Promise<InvokeResult>;
+        calculateNetworkFee(tx: Transaction | HexString | string): Promise<string>;
         listPlugins(): Promise<CliPlugin[]>;
         validateAddress(addr: string): Promise<boolean>;
         url: string;
@@ -2125,6 +2141,9 @@ class Query<TParams extends unknown[], TResponse> {
     // (undocumented)
     get [Symbol.toStringTag](): string;
     constructor(req: Partial<QueryLike<TParams>>);
+    static calculateNetworkFee(tx: Transaction | HexString | string): Query<[string], {
+        networkfee: string;
+    }>;
     // (undocumented)
     equals(other: Partial<QueryLike<TParams>>): boolean;
     // (undocumented)
@@ -2142,6 +2161,7 @@ class Query<TParams extends unknown[], TResponse> {
     static getCommittee(): Query<[], string[]>;
     static getConnectionCount(): Query<[], number>;
     static getContractState(scriptHash: string): Query<[string], GetContractStateResult>;
+    static getNativeContracts(): Query<[], NativeContractState[]>;
     // (undocumented)
     static getNep11Balances(accountIdentifier: string): Query<[string], GetNep11BalancesResult>;
     // (undocumented)
@@ -2213,6 +2233,7 @@ declare namespace rpc {
         ApplicationLogJson,
         InvokeResult,
         GetContractStateResult,
+        NativeContractState,
         GetNep11BalancesResult,
         GetNep11TransfersResult,
         Nep11TransferEvent,
@@ -2989,9 +3010,9 @@ enum WitnessScope {
 
 // Warnings were encountered during analysis:
 //
-// src/rpc/clients/NeoServerRpcClient.ts:38:5 - (ae-forgotten-export) The symbol "BlockJson" needs to be exported by the entry point index.d.ts
-// src/rpc/clients/NeoServerRpcClient.ts:77:5 - (ae-forgotten-export) The symbol "BlockHeaderJson" needs to be exported by the entry point index.d.ts
-// src/rpc/clients/NeoServerRpcClient.ts:185:5 - (ae-forgotten-export) The symbol "Validator" needs to be exported by the entry point index.d.ts
+// src/rpc/clients/NeoServerRpcClient.ts:39:5 - (ae-forgotten-export) The symbol "BlockJson" needs to be exported by the entry point index.d.ts
+// src/rpc/clients/NeoServerRpcClient.ts:78:5 - (ae-forgotten-export) The symbol "BlockHeaderJson" needs to be exported by the entry point index.d.ts
+// src/rpc/clients/NeoServerRpcClient.ts:190:5 - (ae-forgotten-export) The symbol "Validator" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 
