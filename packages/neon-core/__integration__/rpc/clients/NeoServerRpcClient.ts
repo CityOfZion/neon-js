@@ -33,6 +33,27 @@ beforeAll(async () => {
 }, 20000);
 
 describe("NeoServerRpcClient", () => {
+  test("calculateNetworkFee", async () => {
+    const acct = new wallet.Account();
+    const testTx = new tx.Transaction();
+    // Requires non-zero script
+    testTx.script = HexString.fromHex("1234");
+    // We also need a signer and empty witness.
+    testTx.addSigner(new tx.Signer({ account: acct.scriptHash }));
+    testTx.addWitness(
+      new tx.Witness({
+        invocationScript: "",
+        verificationScript: HexString.fromBase64(
+          acct.contract.script
+        ).toString(),
+      })
+    );
+
+    const result = await client.calculateNetworkFee(testTx);
+
+    expect(parseInt(result)).toBeGreaterThan(0);
+  });
+
   describe("getBlock", () => {
     test("height as index, verbose = 0", async () => {
       const result = await client.getBlock(0);

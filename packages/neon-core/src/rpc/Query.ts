@@ -202,6 +202,15 @@ export interface GetUnclaimedGasResult {
   address: string;
 }
 
+function transformInputTransaction(
+  tx: Transaction | HexString | string
+): string {
+  return tx instanceof Transaction
+    ? HexString.fromHex(tx.serialize(true)).toBase64()
+    : tx instanceof HexString
+    ? tx.toBase64()
+    : tx;
+}
 /**
  * A Query object helps us to construct and record requests for the Neo node RPC. For each RPC endpoint, the equivalent static method is camelcased. Each Query object can only be used once.
  *
@@ -210,6 +219,15 @@ export interface GetUnclaimedGasResult {
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class Query<TParams extends unknown[], TResponse> {
+  /**
+   * Query returning the network fee required for a given transaction.
+   */
+  public static calculateNetworkFee(
+    tx: Transaction | HexString | string
+  ): Query<[string], { networkfee: string }> {
+    const base64Tx = transformInputTransaction(tx);
+    return new Query({ method: "calculatenetworkfee", params: [base64Tx] });
+  }
   /**
    * This Query returns the hash of the highest block.
    */
@@ -584,15 +602,10 @@ export class Query<TParams extends unknown[], TResponse> {
   public static sendRawTransaction(
     transaction: Transaction | string | HexString
   ): Query<[string], SendResult> {
-    const serialized =
-      transaction instanceof Transaction
-        ? HexString.fromHex(transaction.serialize(true)).toBase64()
-        : transaction instanceof HexString
-        ? transaction.toBase64()
-        : transaction;
+    const base64Tx = transformInputTransaction(transaction);
     return new Query({
       method: "sendrawtransaction",
-      params: [serialized],
+      params: [base64Tx],
     });
   }
 

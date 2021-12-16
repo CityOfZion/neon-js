@@ -286,6 +286,26 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
 
     //#endregion
 
+    //#region Wallet
+
+    /**
+     * Returns the gas fee for a transaction.
+     * Transaction needs to have:
+     * - All the intended signers
+     * - Empty witnesses corresponding to the signers
+     * - Non-zero script
+     *
+     * @param tx - transaction to calculate fee for
+     * @returns GAS fee as an stringified integer
+     */
+    public async calculateNetworkFee(
+      tx: Transaction | HexString | string
+    ): Promise<string> {
+      const response = await this.execute(Query.calculateNetworkFee(tx));
+      return response.networkfee;
+    }
+    //#endregion
+
     //#region Utilities
 
     /**
