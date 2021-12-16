@@ -172,7 +172,7 @@
         {
           "kind": "Function",
           "canonicalReference": "@cityofzion/neon-api!calculateNetworkFee:function(1)",
-          "docComment": "/**\n * Calculates the network fee required to process the transaction. The fields signers, attributes and script needs to be fully populated for this to work.\n *\n * @param txn - A partially filled out transaction.\n *\n * @param feePerByte - The current feePerByte in Policy contract.\n *\n * @param signingAccts - The accounts that will be signing this.\n */\n",
+          "docComment": "/**\n * Calculates the network fee required to process the transaction. The fields signers, attributes and script needs to be fully populated for this to work.\n *\n * @deprecated\n *\n * use the RPC call calculateNetworkFee instead.\n *\n * @param txn - A partially filled out transaction.\n *\n * @param feePerByte - The current feePerByte in Policy contract.\n *\n * @param signingAccts - The accounts that will be signing this.\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",

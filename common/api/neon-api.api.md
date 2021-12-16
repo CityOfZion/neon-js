@@ -10,7 +10,7 @@ import { tx } from '@cityofzion/neon-core';
 import { u } from '@cityofzion/neon-core';
 import { wallet } from '@cityofzion/neon-core';
 
-// @public
+// @public @deprecated
 export function calculateNetworkFee(txn: tx.Transaction, feePerByte: number | u.BigInteger, executionFeeFactor: number | u.BigInteger): u.BigInteger;
 
 // @public
