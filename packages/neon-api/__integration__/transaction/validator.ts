@@ -2,7 +2,7 @@ import {
   TransactionValidator,
   ValidationAttributes,
 } from "../../src/transaction";
-import { sc, tx, u, rpc, CONST } from "@cityofzion/neon-core";
+import { sc, tx, u, rpc, wallet, CONST } from "@cityofzion/neon-core";
 import * as TestHelpers from "../../../../testHelpers";
 
 let rpcClient: rpc.NeoServerRpcClient;
@@ -23,6 +23,19 @@ const multiSig = {
   verificationScript:
     "110c2103118a2b7962fa0226fa35acf5d224855b691c7ea978d1afe2c538631d5f7be85e11419ed0dc3a",
 };
+
+const signers: tx.SignerLike[] = [
+  {
+    account: wallet.getScriptHashFromVerificationScript(sig.verificationScript),
+    scopes: 1,
+  },
+  {
+    account: wallet.getScriptHashFromVerificationScript(
+      multiSig.invocationScript
+    ),
+    scopes: 1,
+  },
+];
 
 describe("validateValidUntilBlock", () => {
   test("valid", async () => {
@@ -199,6 +212,8 @@ describe("validateSystemFee", () => {
 describe("validateNetworkFee", () => {
   test("valid", async () => {
     const transaction = new tx.Transaction({
+      script: "1234",
+      signers,
       witnesses: [sig, multiSig],
       networkFee: 2376540,
     });
@@ -209,6 +224,8 @@ describe("validateNetworkFee", () => {
 
   test("invalid", async () => {
     const transaction = new tx.Transaction({
+      script: "1234",
+      signers,
       witnesses: [sig, multiSig],
       networkFee: 1,
     });
@@ -219,6 +236,8 @@ describe("validateNetworkFee", () => {
 
   test("autoFix", async () => {
     const transaction = new tx.Transaction({
+      script: "1234",
+      signers,
       witnesses: [sig, multiSig],
       networkFee: 1,
     });
@@ -244,6 +263,7 @@ describe("validateAll", () => {
     const transaction = new tx.Transaction({
       validUntilBlock:
         tx.Transaction.MAX_TRANSACTION_LIFESPAN + currentBlock - 1,
+      signers,
       witnesses: [sig, multiSig],
       script,
       networkFee: 100000000,
@@ -264,6 +284,7 @@ describe("validateAll", () => {
     const transaction = new tx.Transaction({
       validUntilBlock:
         tx.Transaction.MAX_TRANSACTION_LIFESPAN + currentBlock - 1,
+      signers,
       witnesses: [sig, multiSig],
       script,
       networkFee: 1,
@@ -285,6 +306,7 @@ describe("validateAll", () => {
       const transaction = new tx.Transaction({
         validUntilBlock:
           tx.Transaction.MAX_TRANSACTION_LIFESPAN + currentBlock - 1,
+        signers,
         witnesses: [sig, multiSig],
         script,
         networkFee: 1,
@@ -332,6 +354,7 @@ describe("validateAll", () => {
       const transaction = new tx.Transaction({
         validUntilBlock:
           tx.Transaction.MAX_TRANSACTION_LIFESPAN + currentBlock - 1,
+        signers,
         witnesses: [sig, multiSig],
         script,
         networkFee: 1,

@@ -1,5 +1,4 @@
 import { tx, rpc, u } from "@cityofzion/neon-core";
-import { calculateNetworkFee, getFeeInformation } from "../api";
 
 export enum ValidationAttributes {
   None = 0,
@@ -148,15 +147,11 @@ export class TransactionValidator {
   ): Promise<ValidationSuggestion<u.BigInteger>> {
     const { networkFee: prev } = this.transaction;
 
-    const { feePerByte, executionFeeFactor } = await getFeeInformation(
-      this.rpcClient
+    const calculateResponse = await this.rpcClient.calculateNetworkFee(
+      this.transaction
     );
 
-    const suggestion = calculateNetworkFee(
-      this.transaction,
-      feePerByte,
-      executionFeeFactor
-    );
+    const suggestion = u.BigInteger.fromNumber(calculateResponse);
     const compareResult = suggestion.compare(prev);
     if (compareResult > 0) {
       // Underpaying

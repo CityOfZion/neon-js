@@ -7,6 +7,8 @@ import { tx, sc, u, wallet } from "@cityofzion/neon-core";
  * @param txn - A partially filled out transaction.
  * @param feePerByte - The current feePerByte in Policy contract.
  * @param signingAccts - The accounts that will be signing this.
+ *
+ * @deprecated use the RPC call calculateNetworkFee instead.
  */
 export function calculateNetworkFee(
   txn: tx.Transaction,
