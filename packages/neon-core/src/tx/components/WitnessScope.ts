@@ -23,6 +23,11 @@ export enum WitnessScope {
   CustomGroups = 1 << 5,
 
   /**
+   * Custom rules for witness to adhere by.
+   */
+  WitnessRules = 1 << 6,
+
+  /**
    * Global allows this witness in all contexts (default Neo2 behavior)
    * This cannot be combined with other flags
    */

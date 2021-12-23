@@ -10,6 +10,7 @@ import {
   deserializeArrayOf,
   serializeArrayOf,
 } from "../../u";
+import { WitnessRule, WitnessRuleJson } from "./WitnessRule";
 
 export interface SignerLike {
   /* account scripthash in big endian */
@@ -17,6 +18,7 @@ export interface SignerLike {
   scopes: number | string | WitnessScope;
   allowedContracts?: (string | HexString)[];
   allowedGroups?: (string | HexString)[];
+  rules?: WitnessRuleJson[];
 }
 
 export interface SignerJson {
@@ -28,6 +30,8 @@ export interface SignerJson {
   allowedcontracts?: string[];
   // Array of public keys (BE)
   allowedgroups?: string[];
+
+  rules?: WitnessRuleJson[];
 }
 
 export class Signer {
@@ -46,12 +50,15 @@ export class Signer {
    */
   public allowedGroups: HexString[];
 
+  public rules: WitnessRule[];
+
   public static fromJson(input: SignerJson): Signer {
     return new Signer({
       account: input.account,
       scopes: parseWitnessScope(input.scopes),
       allowedContracts: input.allowedcontracts ?? [],
       allowedGroups: input.allowedgroups ?? [],
+      rules: input.rules ?? [],
     });
   }
 
@@ -61,12 +68,14 @@ export class Signer {
       scopes = WitnessScope.None,
       allowedContracts = [],
       allowedGroups = [],
+      rules = [],
     } = signer;
     this.account = HexString.fromHex(account);
     this.scopes =
       (typeof scopes === "string" ? parseWitnessScope(scopes) : scopes) & 0xff;
     this.allowedContracts = allowedContracts.map((i) => HexString.fromHex(i));
     this.allowedGroups = allowedGroups.map((i) => HexString.fromHex(i));
+    this.rules = rules.map((i) => new WitnessRule(i));
   }
 
   /**
@@ -98,6 +107,17 @@ export class Signer {
       .forEach((i) => this.allowedGroups.push(i));
   }
 
+  public addRules(...rules: WitnessRule[]): void {
+    if (this.scopes & WitnessScope.Global) {
+      return;
+    }
+
+    this.scopes |= WitnessScope.WitnessRules;
+    for (const rule of rules) {
+      this.rules.push(rule);
+    }
+  }
+
   public static deserialize(ss: StringStream): Signer {
     const account = HexString.fromHex(ss.read(20), true);
     const scopes = parseInt(ss.read(), 16);
@@ -110,7 +130,17 @@ export class Signer {
       scopes & WitnessScope.CustomGroups
         ? deserializeArrayOf((s) => HexString.fromHex(s.read(33)), ss)
         : [];
-    return new Signer({ account, scopes, allowedContracts, allowedGroups });
+    const rules =
+      scopes & WitnessScope.WitnessRules
+        ? deserializeArrayOf(WitnessRule.deserialize, ss)
+        : [];
+    return new Signer({
+      account,
+      scopes,
+      allowedContracts,
+      allowedGroups,
+      rules,
+    });
   }
 
   /**
@@ -165,6 +195,10 @@ export class Signer {
       out += serializeArrayOf(this.allowedGroups.map((i) => i.toBigEndian()));
     }
 
+    if (this.scopes & WitnessScope.WitnessRules) {
+      out += serializeArrayOf(this.rules);
+    }
+
     return out;
   }
 
@@ -200,6 +234,9 @@ export class Signer {
       output.allowedgroups = [
         ...this.allowedGroups.map((i) => i.toBigEndian()),
       ];
+    }
+    if (this.scopes & WitnessScope.WitnessRules) {
+      output.rules = [...this.rules.map((i) => i.toJson())];
     }
     return output;
   }

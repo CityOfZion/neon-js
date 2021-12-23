@@ -13,3 +13,12 @@ export function parseEnum<T>(
   }
   return input as T[keyof T];
 }
+
+/**
+ * Simple type helper to merge types that have the same field names.
+ */
+export type NeonLike<NeonType, JsonType> = {
+  [Property in keyof NeonType & keyof JsonType]:
+    | NeonType[Property]
+    | JsonType[Property];
+};
