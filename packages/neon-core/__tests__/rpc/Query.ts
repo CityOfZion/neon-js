@@ -44,6 +44,28 @@ describe("equals", () => {
   );
 });
 
+describe("JSONRPC spec", () => {
+  test("allows structured values in params", () => {
+    const objectquery = {
+      method: "objectquery",
+      params: {
+        key: "value",
+        anotherfield: 1,
+        thirdfield: [1, 2, 3],
+        fourthfield: {
+          nested: "string",
+        },
+      },
+    };
+    const result = new Query(objectquery);
+
+    const exportedQuery = result.export();
+
+    expect(exportedQuery.jsonrpc).toBe("2.0");
+    expect(exportedQuery.method).toBe(objectquery.method);
+    expect(exportedQuery.params).toBe(objectquery.params);
+  });
+});
 describe("static", () => {
   test("calculateNetworkFee", () => {
     const result = Query.calculateNetworkFee("12345");
