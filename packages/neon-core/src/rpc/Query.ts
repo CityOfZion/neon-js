@@ -9,9 +9,11 @@ import {
 } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 import { HexString } from "../u";
+import { isEqual } from "lodash";
 
+export type JsonRpcParams = unknown[] | Record<string | number, unknown>;
 export type BooleanLikeParam = 0 | 1 | boolean;
-export interface QueryLike<T extends unknown[]> {
+export interface QueryLike<T extends JsonRpcParams> {
   method: string;
   params: T;
   id: number;
@@ -211,6 +213,17 @@ function transformInputTransaction(
     ? tx.toBase64()
     : tx;
 }
+
+/**
+ * Type guard for narrowing down to an object.
+ * @returns
+ */
+function isJsonRpcParamRecord(
+  i?: JsonRpcParams
+): i is Record<string | number, unknown> {
+  return i !== undefined && i !== null && typeof i === "object";
+}
+
 /**
  * A Query object helps us to construct and record requests for the Neo node RPC. For each RPC endpoint, the equivalent static method is camelcased. Each Query object can only be used once.
  *
@@ -218,7 +231,7 @@ function transformInputTransaction(
  * const q1 = Query.getBestBlockHash();
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export class Query<TParams extends unknown[], TResponse> {
+export class Query<TParams extends JsonRpcParams, TResponse> {
   /**
    * Query returning the network fee required for a given transaction.
    */
@@ -669,13 +682,26 @@ export class Query<TParams extends unknown[], TResponse> {
     };
   }
 
-  public equals(other: Partial<QueryLike<TParams>>): boolean {
-    return (
-      this.id === other.id &&
-      this.method === other.method &&
-      this.params.length === (other.params ?? []).length &&
-      this.params.every((val, ind) => (other.params ?? [])[ind] === val)
-    );
+  public equals(other: Partial<QueryLike<JsonRpcParams>>): boolean {
+    if (this.id !== other.id && this.method !== other.method) {
+      return false;
+    }
+    if (Array.isArray(this.params) && Array.isArray(other.params)) {
+      const otherParams = other.params;
+      return (
+        this.params.length === otherParams.length &&
+        this.params.every((val, ind) => otherParams[ind] === val)
+      );
+    }
+
+    if (
+      isJsonRpcParamRecord(this.params) &&
+      isJsonRpcParamRecord(other.params)
+    ) {
+      return isEqual(this.params, other.params);
+    }
+
+    return false;
   }
 }
 

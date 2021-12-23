@@ -47,6 +47,7 @@
     "cross-fetch": "^3.1.4",
     "crypto-js": "4.1.1",
     "elliptic": "6.5.4",
+    "lodash": "4.17.21",
     "loglevel": "1.8.0",
     "loglevel-plugin-prefix": "0.8.4",
     "scrypt-js": "3.0.1"
@@ -55,7 +56,8 @@
     "@types/bn.js": "5.1.0",
     "@types/bs58": "4.0.1",
     "@types/crypto-js": "4.0.2",
-    "@types/elliptic": "6.4.14"
+    "@types/elliptic": "6.4.14",
+    "@types/lodash": "4.14.178"
   },
   "files": [
     "dist/",
