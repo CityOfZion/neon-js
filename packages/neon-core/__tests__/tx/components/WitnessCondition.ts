@@ -4,13 +4,14 @@ import {
   GroupWitnessCondition,
   ScriptHashWitnessCondition,
   WitnessCondition,
+  WitnessConditionJson,
   WitnessConditionType,
 } from "../../../src/tx/components/WitnessCondition";
 import { StringStream } from "../../../src/u";
 
 describe("static", () => {
   test("json conversion", async () => {
-    const result = WitnessCondition.fromJson({
+    const input: WitnessConditionJson = {
       type: "And",
       expressions: [
         {
@@ -22,7 +23,8 @@ describe("static", () => {
           hash: "1".repeat(40),
         },
       ],
-    });
+    };
+    const result = WitnessCondition.fromJson(input);
 
     expect(result.type).toBe(WitnessConditionType.And);
 
@@ -35,7 +37,7 @@ describe("static", () => {
 
     const jsonResult = result.toJson();
 
-    expect(jsonResult).toEqual(result);
+    expect(jsonResult).toEqual(input);
   });
 
   test("serialization", () => {
