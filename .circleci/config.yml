@@ -6,7 +6,7 @@ executors:
       version: &parameter-version
         description: "Node version"
         type: enum
-        enum: ["12-stretch", "14-stretch"]
+        enum: ["12-stretch", "14-stretch", "16-stretch"]
         default: "12-stretch"
     working_directory: ~/repo
     docker:
@@ -210,14 +210,14 @@ workflows:
           name: unittest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["12-stretch", "14-stretch"]
+              version: ["12-stretch", "14-stretch", "16-stretch"]
           requires:
             - setup
       - integrationtest:
           name: integrationtest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["12-stretch", "14-stretch"]
+              version: ["12-stretch", "14-stretch", "16-stretch"]
           requires:
             - lint
             - unittest-<< matrix.version >>
