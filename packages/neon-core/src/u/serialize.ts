@@ -1,7 +1,7 @@
 import { num2VarInt } from "./convert";
 import { HexString } from "./HexString";
 import { StringStream } from "./StringStream";
-interface NeonSerializable {
+export interface NeonSerializable {
   size: number;
   serialize: () => string;
 }

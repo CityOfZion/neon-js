@@ -373,6 +373,7 @@ describe("compare", () => {
 
   test("accepts unsafe numbers", () => {
     const result =
+      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
       BigInteger.fromNumber(5).compare(9999999999999999999999999999999999);
 
     expect(result).toBe(-1);
