@@ -17,7 +17,7 @@ executors:
       version:
         description: "Node version"
         type: enum
-        enum: ["12-stretch", "14-stretch"]
+        enum: ["12-stretch", "14-stretch", "16-stretch"]
         default: "12-stretch"
     working_directory: ~/repo
     docker:
