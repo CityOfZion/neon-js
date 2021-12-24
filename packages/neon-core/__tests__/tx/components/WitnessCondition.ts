@@ -8,7 +8,7 @@ import {
 } from "../../../src/tx/components/WitnessCondition";
 import { StringStream } from "../../../src/u";
 
-describe("static", async () => {
+describe("static", () => {
   test("json conversion", async () => {
     const result = WitnessCondition.fromJson({
       type: "And",
