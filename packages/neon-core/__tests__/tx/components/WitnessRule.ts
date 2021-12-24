@@ -44,10 +44,10 @@ describe("JSON", () => {
     ],
     [
       "group",
-      { action: "Deny", condition: { type: "Group", group: "0".repeat(33) } },
+      { action: "Deny", condition: { type: "Group", group: "0".repeat(66) } },
       new WitnessRule({
         action: WitnessRuleAction.Deny,
-        condition: new GroupWitnessCondition("0".repeat(33)),
+        condition: new GroupWitnessCondition("0".repeat(66)),
       }),
     ],
   ];

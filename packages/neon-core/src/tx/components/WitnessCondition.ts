@@ -90,7 +90,7 @@ export abstract class WitnessCondition implements NeonSerializable {
   }
 
   public static deserialize(ss: StringStream): WitnessCondition {
-    const rawType = ss.peek(1);
+    const rawType = parseInt(ss.peek(1), 16);
     const witnessType = parseEnum(rawType, WitnessConditionType);
     const implementingClass = this.getImplementation(witnessType);
     return implementingClass.deserialize(ss);
@@ -492,7 +492,7 @@ export class CalledByGroupWitnessCondition extends WitnessCondition {
 }
 
 function readAndAssertType(ss: StringStream, type: WitnessConditionType): void {
-  const rawType = ss.read(1);
+  const rawType = parseInt(ss.read(1), 16);
   const witnessType = parseEnum(rawType, WitnessConditionType);
   if (witnessType !== type) {
     throw new Error(

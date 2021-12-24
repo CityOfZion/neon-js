@@ -9,7 +9,7 @@ export function parseEnum<T>(
     if (input in enumType) {
       return enumType[input as keyof typeof enumType];
     }
-    throw new Error(`${input} not found in ${enumType}!`);
+    throw new Error(`${input} not found in enum!`);
   }
   return input as T[keyof T];
 }
