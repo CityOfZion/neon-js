@@ -87,6 +87,33 @@ interface AccountJSON {
 const ADDR_VERSION = "35";
 
 // @public (undocumented)
+class AndWitnessCondition extends WitnessCondition {
+    constructor(expressions: WitnessCondition[]);
+    // (undocumented)
+    static deserialize(ss: StringStream): AndWitnessCondition;
+    // (undocumented)
+    expressions: WitnessCondition[];
+    // (undocumented)
+    static fromJson(input: AndWitnessConditionJson): AndWitnessCondition;
+    // (undocumented)
+    serialize(): string;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    toJson(): AndWitnessConditionJson;
+    // (undocumented)
+    get type(): WitnessConditionType;
+}
+
+// @public (undocumented)
+interface AndWitnessConditionJson {
+    // (undocumented)
+    expressions: WitnessConditionJson[];
+    // (undocumented)
+    type: "And";
+}
+
+// @public (undocumented)
 interface ApplicationLogJson {
     // (undocumented)
     executions: {
@@ -171,11 +198,113 @@ class BigInteger {
 // @public (undocumented)
 type BooleanLikeParam = 0 | 1 | boolean;
 
+// @public (undocumented)
+class BooleanWitnessCondition extends WitnessCondition {
+    constructor(expression: boolean);
+    // (undocumented)
+    static deserialize(ss: StringStream): BooleanWitnessCondition;
+    // (undocumented)
+    expression: boolean;
+    // (undocumented)
+    static fromJson(input: BooleanWitnessConditionJson): BooleanWitnessCondition;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    toJson(): BooleanWitnessConditionJson;
+    // (undocumented)
+    get type(): WitnessConditionType;
+}
+
+// @public (undocumented)
+interface BooleanWitnessConditionJson {
+    // (undocumented)
+    expression: boolean;
+    // (undocumented)
+    type: "Boolean";
+}
+
 // @public
 function buildParser(...args: StackItemParser[]): VMResultParser;
 
 // @public
 function calculateExecutionFee(script: string | OpToken[], executionFeeFactor: number | BigInteger): BigInteger;
+
+// @public (undocumented)
+class CalledByContractWitnessCondition extends WitnessCondition {
+    constructor(inputHash: string | HexString);
+    // (undocumented)
+    static deserialize(ss: StringStream): CalledByContractWitnessCondition;
+    // (undocumented)
+    static fromJson(input: CalledByContractWitnessConditionJson): CalledByContractWitnessCondition;
+    // (undocumented)
+    hash: HexString;
+    // (undocumented)
+    serialize(): string;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    toJson(): CalledByContractWitnessConditionJson;
+    // (undocumented)
+    get type(): WitnessConditionType;
+}
+
+// @public (undocumented)
+interface CalledByContractWitnessConditionJson {
+    // (undocumented)
+    hash: string;
+    // (undocumented)
+    type: "CalledByContract";
+}
+
+// @public (undocumented)
+class CalledByEntryWitnessCondition extends WitnessCondition {
+    constructor();
+    // (undocumented)
+    static deserialize(ss: StringStream): CalledByEntryWitnessCondition;
+    // (undocumented)
+    static fromJson(_input: CalledByEntryWitnessConditionJson): CalledByEntryWitnessCondition;
+    // (undocumented)
+    serialize(): string;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    toJson(): CalledByEntryWitnessConditionJson;
+    // (undocumented)
+    get type(): WitnessConditionType;
+}
+
+// @public (undocumented)
+interface CalledByEntryWitnessConditionJson {
+    // (undocumented)
+    type: "CalledByEntry";
+}
+
+// @public (undocumented)
+class CalledByGroupWitnessCondition extends WitnessCondition {
+    constructor(inputGroup: string | HexString);
+    // (undocumented)
+    static deserialize(ss: StringStream): CalledByGroupWitnessCondition;
+    // (undocumented)
+    static fromJson(input: CalledByGroupWitnessConditionJson): CalledByGroupWitnessCondition;
+    // (undocumented)
+    group: HexString;
+    // (undocumented)
+    serialize(): string;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    toJson(): CalledByGroupWitnessConditionJson;
+    // (undocumented)
+    get type(): WitnessConditionType;
+}
+
+// @public (undocumented)
+interface CalledByGroupWitnessConditionJson {
+    // (undocumented)
+    group: string;
+    // (undocumented)
+    type: "CalledByGroup";
+}
 
 // @public (undocumented)
 enum CallFlags {
@@ -933,6 +1062,33 @@ interface GetVersionResult {
 // @public
 function getWIFFromPrivateKey(privateKey: string): string;
 
+// @public (undocumented)
+class GroupWitnessCondition extends WitnessCondition {
+    constructor(inputGroup: string | HexString);
+    // (undocumented)
+    static deserialize(ss: StringStream): GroupWitnessCondition;
+    // (undocumented)
+    static fromJson(input: GroupWitnessConditionJson): GroupWitnessCondition;
+    // (undocumented)
+    group: HexString;
+    // (undocumented)
+    serialize(): string;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    toJson(): GroupWitnessConditionJson;
+    // (undocumented)
+    get type(): WitnessConditionType;
+}
+
+// @public (undocumented)
+interface GroupWitnessConditionJson {
+    // (undocumented)
+    group: string;
+    // (undocumented)
+    type: "Group";
+}
+
 // @public
 function hasChildren(type: StackItemType): boolean;
 
@@ -1140,6 +1296,9 @@ function isSignatureContract(input: HexString): boolean;
 function isWIF(wif: string): boolean;
 
 // @public (undocumented)
+type JsonRpcParams = unknown[] | Record<string | number, unknown>;
+
+// @public (undocumented)
 function likeContractParam(cp: Partial<ContractParamLike>): cp is ContractParamLike;
 
 // @public (undocumented)
@@ -1320,6 +1479,14 @@ class NeoContract extends Nep17Contract {
     vote(address: string, voteTo: string | HexString): ContractCall;
 }
 
+// @public (undocumented)
+interface NeonSerializable {
+    // (undocumented)
+    serialize: () => string;
+    // (undocumented)
+    size: number;
+}
+
 // Warning: (ae-forgotten-export) The symbol "NeoServerRpcClient_base" needs to be exported by the entry point index.d.ts
 //
 // @public
@@ -1479,6 +1646,33 @@ interface NodePeer {
 
 // @public
 function NoOpParser(item: StackItemJson): unknown;
+
+// @public (undocumented)
+class NotWitnessCondition extends WitnessCondition {
+    constructor(expression: WitnessCondition);
+    // (undocumented)
+    static deserialize(ss: StringStream): NotWitnessCondition;
+    // (undocumented)
+    expression: WitnessCondition;
+    // (undocumented)
+    static fromJson(input: NotWitnessConditionJson): NotWitnessCondition;
+    // (undocumented)
+    serialize(): string;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    toJson(): NotWitnessConditionJson;
+    // (undocumented)
+    get type(): WitnessConditionType;
+}
+
+// @public (undocumented)
+interface NotWitnessConditionJson {
+    // (undocumented)
+    expression: WitnessConditionJson;
+    // (undocumented)
+    type: "Not";
+}
 
 // @public @deprecated
 function num2fixed8(num: number, size?: number): string;
@@ -2076,6 +2270,33 @@ class OpToken {
 }
 
 // @public (undocumented)
+class OrWitnessCondition extends WitnessCondition {
+    constructor(expressions: WitnessCondition[]);
+    // (undocumented)
+    static deserialize(ss: StringStream): OrWitnessCondition;
+    // (undocumented)
+    expressions: WitnessCondition[];
+    // (undocumented)
+    static fromJson(input: OrWitnessConditionJson): OrWitnessCondition;
+    // (undocumented)
+    serialize(): string;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    toJson(): OrWitnessConditionJson;
+    // (undocumented)
+    get type(): WitnessConditionType;
+}
+
+// @public (undocumented)
+interface OrWitnessConditionJson {
+    // (undocumented)
+    expressions: WitnessConditionJson[];
+    // (undocumented)
+    type: "Or";
+}
+
+// @public (undocumented)
 function parse(stringFlags: string): WitnessScope;
 
 // @public
@@ -2137,7 +2358,7 @@ interface ProtocolLike {
 }
 
 // @public
-class Query<TParams extends unknown[], TResponse> {
+class Query<TParams extends JsonRpcParams, TResponse> {
     // (undocumented)
     get [Symbol.toStringTag](): string;
     constructor(req: Partial<QueryLike<TParams>>);
@@ -2145,7 +2366,7 @@ class Query<TParams extends unknown[], TResponse> {
         networkfee: string;
     }>;
     // (undocumented)
-    equals(other: Partial<QueryLike<TParams>>): boolean;
+    equals(other: Partial<QueryLike<JsonRpcParams>>): boolean;
     // (undocumented)
     export(): QueryLike<TParams>;
     static getApplicationLog(hash: string): Query<[string], ApplicationLogJson>;
@@ -2198,7 +2419,7 @@ class Query<TParams extends unknown[], TResponse> {
 }
 
 // @public (undocumented)
-interface QueryLike<T extends unknown[]> {
+interface QueryLike<T extends JsonRpcParams> {
     // (undocumented)
     id: number;
     // (undocumented)
@@ -2226,6 +2447,7 @@ declare namespace rpc {
         ProtocolLike,
         ProtocolJSON,
         Protocol,
+        JsonRpcParams,
         BooleanLikeParam,
         QueryLike,
         RPCResponse,
@@ -2430,6 +2652,33 @@ class ScriptBuilder extends StringStream {
 }
 
 // @public (undocumented)
+class ScriptHashWitnessCondition extends WitnessCondition {
+    constructor(inputHash: string | HexString);
+    // (undocumented)
+    static deserialize(ss: StringStream): ScriptHashWitnessCondition;
+    // (undocumented)
+    static fromJson(input: ScriptHashWitnessConditionJson): ScriptHashWitnessCondition;
+    // (undocumented)
+    hash: HexString;
+    // (undocumented)
+    serialize(): string;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    toJson(): ScriptHashWitnessConditionJson;
+    // (undocumented)
+    get type(): WitnessConditionType;
+}
+
+// @public (undocumented)
+interface ScriptHashWitnessConditionJson {
+    // (undocumented)
+    hash: string;
+    // (undocumented)
+    type: "ScriptHash";
+}
+
+// @public (undocumented)
 interface ScryptParams {
     // (undocumented)
     n: number;
@@ -2447,8 +2696,6 @@ interface SendResult {
     hash: string;
 }
 
-// Warning: (ae-forgotten-export) The symbol "NeonSerializable" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 function serializeArrayOf(prop: (NeonSerializable | string)[]): string;
 
@@ -2469,6 +2716,8 @@ class Signer {
     addAllowedContracts(...contracts: string[]): void;
     // (undocumented)
     addAllowedGroups(...groups: string[]): void;
+    // (undocumented)
+    addRules(...rules: WitnessRule[]): void;
     allowedContracts: HexString[];
     allowedGroups: HexString[];
     // (undocumented)
@@ -2478,6 +2727,8 @@ class Signer {
     // (undocumented)
     static fromJson(input: SignerJson): Signer;
     merge(other: SignerLike | Signer): this;
+    // (undocumented)
+    rules: WitnessRule[];
     // (undocumented)
     scopes: WitnessScope;
     // (undocumented)
@@ -2496,6 +2747,8 @@ interface SignerJson {
     // (undocumented)
     allowedgroups?: string[];
     // (undocumented)
+    rules?: WitnessRuleJson[];
+    // (undocumented)
     scopes: string;
 }
 
@@ -2507,6 +2760,8 @@ interface SignerLike {
     allowedContracts?: (string | HexString)[];
     // (undocumented)
     allowedGroups?: (string | HexString)[];
+    // (undocumented)
+    rules?: WitnessRuleJson[];
     // (undocumented)
     scopes: number | string | WitnessScope;
 }
@@ -2793,6 +3048,31 @@ declare namespace tx {
         parse,
         toString,
         WitnessScope,
+        WitnessRuleAction,
+        WitnessRuleJson,
+        WitnessRuleLike,
+        WitnessRule,
+        WitnessConditionType,
+        BooleanWitnessConditionJson,
+        NotWitnessConditionJson,
+        AndWitnessConditionJson,
+        OrWitnessConditionJson,
+        ScriptHashWitnessConditionJson,
+        GroupWitnessConditionJson,
+        CalledByEntryWitnessConditionJson,
+        CalledByContractWitnessConditionJson,
+        CalledByGroupWitnessConditionJson,
+        WitnessConditionJson,
+        WitnessCondition,
+        BooleanWitnessCondition,
+        AndWitnessCondition,
+        NotWitnessCondition,
+        OrWitnessCondition,
+        ScriptHashWitnessCondition,
+        GroupWitnessCondition,
+        CalledByEntryWitnessCondition,
+        CalledByContractWitnessCondition,
+        CalledByGroupWitnessCondition,
         TransactionLike,
         TransactionJson,
         Transaction
@@ -2846,7 +3126,8 @@ declare namespace u {
         BigInteger,
         getSerializedSize,
         deserializeArrayOf,
-        serializeArrayOf
+        serializeArrayOf,
+        NeonSerializable
     }
 }
 export { u }
@@ -2983,6 +3264,47 @@ class Witness implements NeonObject<WitnessLike> {
 }
 
 // @public (undocumented)
+abstract class WitnessCondition implements NeonSerializable {
+    // (undocumented)
+    static deserialize(ss: StringStream): WitnessCondition;
+    // (undocumented)
+    static fromJson(input: WitnessConditionJson): WitnessCondition;
+    // (undocumented)
+    serialize(): string;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    abstract toJson(): WitnessConditionJson;
+    // (undocumented)
+    abstract get type(): WitnessConditionType;
+}
+
+// @public (undocumented)
+type WitnessConditionJson = BooleanWitnessConditionJson | AndWitnessConditionJson | NotWitnessConditionJson | OrWitnessConditionJson | ScriptHashWitnessConditionJson | GroupWitnessConditionJson | CalledByEntryWitnessConditionJson | CalledByContractWitnessConditionJson | CalledByGroupWitnessConditionJson;
+
+// @public (undocumented)
+enum WitnessConditionType {
+    // (undocumented)
+    And = 2,
+    // (undocumented)
+    Boolean = 0,
+    // (undocumented)
+    CalledByContract = 40,
+    // (undocumented)
+    CalledByEntry = 32,
+    // (undocumented)
+    CalledByGroup = 41,
+    // (undocumented)
+    Group = 25,
+    // (undocumented)
+    Not = 1,
+    // (undocumented)
+    Or = 3,
+    // (undocumented)
+    ScriptHash = 24
+}
+
+// @public (undocumented)
 interface WitnessJson {
     // (undocumented)
     invocation: string;
@@ -2998,6 +3320,46 @@ interface WitnessLike {
     verificationScript: string;
 }
 
+// @public (undocumented)
+class WitnessRule implements NeonSerializable {
+    constructor(input?: Partial<WitnessRuleLike>);
+    // (undocumented)
+    action: WitnessRuleAction;
+    // (undocumented)
+    condition: WitnessCondition;
+    // (undocumented)
+    static deserialize(ss: StringStream): WitnessRule;
+    // (undocumented)
+    static fromJson(input: WitnessRuleJson): WitnessRule;
+    // (undocumented)
+    serialize(): string;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    toJson(): WitnessRuleJson;
+}
+
+// @public (undocumented)
+enum WitnessRuleAction {
+    // (undocumented)
+    Allow = 1,
+    // (undocumented)
+    Deny = 0
+}
+
+// @public (undocumented)
+interface WitnessRuleJson {
+    // (undocumented)
+    action: string;
+    // (undocumented)
+    condition: WitnessConditionJson;
+}
+
+// Warning: (ae-forgotten-export) The symbol "NeonLike" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+type WitnessRuleLike = NeonLike<WitnessRule, WitnessRuleJson>;
+
 // @public
 enum WitnessScope {
     CalledByEntry = 1,
@@ -3005,7 +3367,8 @@ enum WitnessScope {
     CustomGroups = 32,
     Global = 128,
     // (undocumented)
-    None = 0
+    None = 0,
+    WitnessRules = 64
 }
 
 // Warnings were encountered during analysis:
