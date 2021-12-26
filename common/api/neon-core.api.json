@@ -2571,6 +2571,40 @@
               "extendsTokenRanges": []
             },
             {
+              "kind": "TypeAlias",
+              "canonicalReference": "@cityofzion/neon-core!rpc.JsonRpcParams:type",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare type JsonRpcParams = "
+                },
+                {
+                  "kind": "Content",
+                  "text": "unknown[] | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Record",
+                  "canonicalReference": "!Record:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<string | number, unknown>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "JsonRpcParams",
+              "typeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 4
+              }
+            },
+            {
               "kind": "Interface",
               "canonicalReference": "@cityofzion/neon-core!rpc.NativeContractState:interface",
               "docComment": "",
@@ -5090,8 +5124,9 @@
                   "text": "export declare class Query<TParams extends "
                 },
                 {
-                  "kind": "Content",
-                  "text": "unknown[]"
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
                 },
                 {
                   "kind": "Content",
@@ -5294,7 +5329,16 @@
                     },
                     {
                       "kind": "Content",
-                      "text": "<TParams>>"
+                      "text": "<"
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "JsonRpcParams",
+                      "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ">>"
                     },
                     {
                       "kind": "Content",
@@ -5312,8 +5356,8 @@
                   "isOptional": false,
                   "isStatic": false,
                   "returnTypeTokenRange": {
-                    "startIndex": 6,
-                    "endIndex": 7
+                    "startIndex": 8,
+                    "endIndex": 9
                   },
                   "releaseTag": "Public",
                   "overloadIndex": 1,
@@ -5322,7 +5366,7 @@
                       "parameterName": "other",
                       "parameterTypeTokenRange": {
                         "startIndex": 1,
-                        "endIndex": 5
+                        "endIndex": 7
                       }
                     }
                   ],
@@ -7586,8 +7630,9 @@
                   "text": "export interface QueryLike<T extends "
                 },
                 {
-                  "kind": "Content",
-                  "text": "unknown[]"
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
                 },
                 {
                   "kind": "Content",
@@ -17029,7 +17074,7 @@
                     {
                       "kind": "Reference",
                       "text": "Buffer",
-                      "canonicalReference": "!Buffer:class"
+                      "canonicalReference": "!__global.Buffer:interface"
                     },
                     {
                       "kind": "Content",
@@ -24259,6 +24304,2855 @@
           "name": "tx",
           "members": [
             {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessCondition:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class AndWitnessCondition extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WitnessCondition",
+                  "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "AndWitnessCondition",
+              "members": [
+                {
+                  "kind": "Constructor",
+                  "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessCondition:constructor(1)",
+                  "docComment": "/**\n * Constructs a new instance of the `AndWitnessCondition` class\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "constructor(expressions: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ");"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "expressions",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessCondition.deserialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static deserialize(ss: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "StringStream",
+                      "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "AndWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!AndWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "ss",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "deserialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessCondition#expressions:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "expressions: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "expressions",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessCondition.fromJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static fromJson(input: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "AndWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!AndWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "AndWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!AndWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "fromJson"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessCondition#serialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "serialize(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "serialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessCondition#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get size(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessCondition#toJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "toJson(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "AndWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!AndWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "toJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessCondition#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get type(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionType",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionType:enum"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                }
+              ],
+              "extendsTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "implementsTokenRanges": []
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessConditionJson:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface AndWitnessConditionJson "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "AndWitnessConditionJson",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessConditionJson#expressions:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "expressions: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionJson:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "expressions",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.AndWitnessConditionJson#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "type: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "\"And\""
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!tx.BooleanWitnessCondition:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class BooleanWitnessCondition extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WitnessCondition",
+                  "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "BooleanWitnessCondition",
+              "members": [
+                {
+                  "kind": "Constructor",
+                  "canonicalReference": "@cityofzion/neon-core!tx.BooleanWitnessCondition:constructor(1)",
+                  "docComment": "/**\n * Constructs a new instance of the `BooleanWitnessCondition` class\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "constructor(expression: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "boolean"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ");"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "expression",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.BooleanWitnessCondition.deserialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static deserialize(ss: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "StringStream",
+                      "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "BooleanWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!BooleanWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "ss",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "deserialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.BooleanWitnessCondition#expression:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "expression: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "boolean"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "expression",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.BooleanWitnessCondition.fromJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static fromJson(input: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "BooleanWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!BooleanWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "BooleanWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!BooleanWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "fromJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.BooleanWitnessCondition#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get size(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.BooleanWitnessCondition#toJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "toJson(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "BooleanWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!BooleanWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "toJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.BooleanWitnessCondition#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get type(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionType",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionType:enum"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                }
+              ],
+              "extendsTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "implementsTokenRanges": []
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!tx.BooleanWitnessConditionJson:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface BooleanWitnessConditionJson "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "BooleanWitnessConditionJson",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.BooleanWitnessConditionJson#expression:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "expression: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "boolean"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "expression",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.BooleanWitnessConditionJson#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "type: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "\"Boolean\""
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessCondition:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class CalledByContractWitnessCondition extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WitnessCondition",
+                  "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "CalledByContractWitnessCondition",
+              "members": [
+                {
+                  "kind": "Constructor",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessCondition:constructor(1)",
+                  "docComment": "/**\n * Constructs a new instance of the `CalledByContractWitnessCondition` class\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "constructor(inputHash: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string | "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "HexString",
+                      "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ");"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "inputHash",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessCondition.deserialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static deserialize(ss: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "StringStream",
+                      "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByContractWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByContractWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "ss",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "deserialize"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessCondition.fromJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static fromJson(input: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByContractWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByContractWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByContractWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByContractWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "fromJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessCondition#hash:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "hash: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "HexString",
+                      "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "hash",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessCondition#serialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "serialize(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "serialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessCondition#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get size(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessCondition#toJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "toJson(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByContractWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByContractWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "toJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessCondition#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get type(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionType",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionType:enum"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                }
+              ],
+              "extendsTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "implementsTokenRanges": []
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessConditionJson:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface CalledByContractWitnessConditionJson "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "CalledByContractWitnessConditionJson",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessConditionJson#hash:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "hash: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "hash",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByContractWitnessConditionJson#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "type: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "\"CalledByContract\""
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!tx.CalledByEntryWitnessCondition:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class CalledByEntryWitnessCondition extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WitnessCondition",
+                  "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "CalledByEntryWitnessCondition",
+              "members": [
+                {
+                  "kind": "Constructor",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByEntryWitnessCondition:constructor(1)",
+                  "docComment": "/**\n * Constructs a new instance of the `CalledByEntryWitnessCondition` class\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "constructor();"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": []
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByEntryWitnessCondition.deserialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static deserialize(ss: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "StringStream",
+                      "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByEntryWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByEntryWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "ss",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "deserialize"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByEntryWitnessCondition.fromJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static fromJson(_input: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByEntryWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByEntryWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByEntryWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByEntryWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "_input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "fromJson"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByEntryWitnessCondition#serialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "serialize(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "serialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByEntryWitnessCondition#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get size(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByEntryWitnessCondition#toJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "toJson(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByEntryWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByEntryWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "toJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByEntryWitnessCondition#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get type(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionType",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionType:enum"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                }
+              ],
+              "extendsTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "implementsTokenRanges": []
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!tx.CalledByEntryWitnessConditionJson:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface CalledByEntryWitnessConditionJson "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "CalledByEntryWitnessConditionJson",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByEntryWitnessConditionJson#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "type: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "\"CalledByEntry\""
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessCondition:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class CalledByGroupWitnessCondition extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WitnessCondition",
+                  "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "CalledByGroupWitnessCondition",
+              "members": [
+                {
+                  "kind": "Constructor",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessCondition:constructor(1)",
+                  "docComment": "/**\n * Constructs a new instance of the `CalledByGroupWitnessCondition` class\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "constructor(inputGroup: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string | "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "HexString",
+                      "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ");"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "inputGroup",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessCondition.deserialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static deserialize(ss: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "StringStream",
+                      "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByGroupWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByGroupWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "ss",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "deserialize"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessCondition.fromJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static fromJson(input: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByGroupWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByGroupWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByGroupWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByGroupWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "fromJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessCondition#group:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "group: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "HexString",
+                      "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "group",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessCondition#serialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "serialize(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "serialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessCondition#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get size(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessCondition#toJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "toJson(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "CalledByGroupWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!CalledByGroupWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "toJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessCondition#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get type(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionType",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionType:enum"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                }
+              ],
+              "extendsTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "implementsTokenRanges": []
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessConditionJson:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface CalledByGroupWitnessConditionJson "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "CalledByGroupWitnessConditionJson",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessConditionJson#group:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "group: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "group",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.CalledByGroupWitnessConditionJson#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "type: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "\"CalledByGroup\""
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessCondition:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class GroupWitnessCondition extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WitnessCondition",
+                  "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "GroupWitnessCondition",
+              "members": [
+                {
+                  "kind": "Constructor",
+                  "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessCondition:constructor(1)",
+                  "docComment": "/**\n * Constructs a new instance of the `GroupWitnessCondition` class\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "constructor(inputGroup: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string | "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "HexString",
+                      "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ");"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "inputGroup",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessCondition.deserialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static deserialize(ss: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "StringStream",
+                      "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "GroupWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!GroupWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "ss",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "deserialize"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessCondition.fromJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static fromJson(input: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "GroupWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!GroupWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "GroupWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!GroupWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "fromJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessCondition#group:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "group: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "HexString",
+                      "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "group",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessCondition#serialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "serialize(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "serialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessCondition#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get size(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessCondition#toJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "toJson(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "GroupWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!GroupWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "toJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessCondition#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get type(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionType",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionType:enum"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                }
+              ],
+              "extendsTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "implementsTokenRanges": []
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessConditionJson:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface GroupWitnessConditionJson "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "GroupWitnessConditionJson",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessConditionJson#group:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "group: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "group",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.GroupWitnessConditionJson#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "type: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "\"Group\""
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessCondition:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class NotWitnessCondition extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WitnessCondition",
+                  "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "NotWitnessCondition",
+              "members": [
+                {
+                  "kind": "Constructor",
+                  "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessCondition:constructor(1)",
+                  "docComment": "/**\n * Constructs a new instance of the `NotWitnessCondition` class\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "constructor(expression: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ");"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "expression",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessCondition.deserialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static deserialize(ss: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "StringStream",
+                      "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "NotWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!NotWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "ss",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "deserialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessCondition#expression:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "expression: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "expression",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessCondition.fromJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static fromJson(input: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "NotWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!NotWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "NotWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!NotWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "fromJson"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessCondition#serialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "serialize(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "serialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessCondition#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get size(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessCondition#toJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "toJson(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "NotWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!NotWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "toJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessCondition#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get type(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionType",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionType:enum"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                }
+              ],
+              "extendsTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "implementsTokenRanges": []
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessConditionJson:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface NotWitnessConditionJson "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "NotWitnessConditionJson",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessConditionJson#expression:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "expression: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionJson:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "expression",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.NotWitnessConditionJson#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "type: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "\"Not\""
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessCondition:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class OrWitnessCondition extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WitnessCondition",
+                  "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "OrWitnessCondition",
+              "members": [
+                {
+                  "kind": "Constructor",
+                  "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessCondition:constructor(1)",
+                  "docComment": "/**\n * Constructs a new instance of the `OrWitnessCondition` class\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "constructor(expressions: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ");"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "expressions",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessCondition.deserialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static deserialize(ss: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "StringStream",
+                      "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "OrWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!OrWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "ss",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "deserialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessCondition#expressions:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "expressions: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "expressions",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessCondition.fromJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static fromJson(input: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "OrWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!OrWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "OrWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!OrWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "fromJson"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessCondition#serialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "serialize(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "serialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessCondition#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get size(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessCondition#toJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "toJson(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "OrWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!OrWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "toJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessCondition#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get type(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionType",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionType:enum"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                }
+              ],
+              "extendsTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "implementsTokenRanges": []
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessConditionJson:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface OrWitnessConditionJson "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "OrWitnessConditionJson",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessConditionJson#expressions:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "expressions: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionJson:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "expressions",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.OrWitnessConditionJson#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "type: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "\"Or\""
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
               "kind": "Function",
               "canonicalReference": "@cityofzion/neon-core!tx.parse:function(1)",
               "docComment": "",
@@ -24301,6 +27195,374 @@
                 }
               ],
               "name": "parse"
+            },
+            {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessCondition:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class ScriptHashWitnessCondition extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WitnessCondition",
+                  "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "ScriptHashWitnessCondition",
+              "members": [
+                {
+                  "kind": "Constructor",
+                  "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessCondition:constructor(1)",
+                  "docComment": "/**\n * Constructs a new instance of the `ScriptHashWitnessCondition` class\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "constructor(inputHash: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string | "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "HexString",
+                      "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ");"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "inputHash",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessCondition.deserialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static deserialize(ss: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "StringStream",
+                      "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "ScriptHashWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!ScriptHashWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "ss",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "deserialize"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessCondition.fromJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static fromJson(input: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "ScriptHashWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!ScriptHashWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "ScriptHashWitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!ScriptHashWitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "fromJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessCondition#hash:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "hash: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "HexString",
+                      "canonicalReference": "@cityofzion/neon-core!HexString:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "hash",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessCondition#serialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "serialize(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "serialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessCondition#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get size(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessCondition#toJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "toJson(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "ScriptHashWitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!ScriptHashWitnessConditionJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "toJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessCondition#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get type(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionType",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionType:enum"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                }
+              ],
+              "extendsTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "implementsTokenRanges": []
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessConditionJson:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface ScriptHashWitnessConditionJson "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "ScriptHashWitnessConditionJson",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessConditionJson#hash:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "hash: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "hash",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.ScriptHashWitnessConditionJson#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "type: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "\"ScriptHash\""
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
             },
             {
               "kind": "Class",
@@ -24485,6 +27747,56 @@
                     }
                   ],
                   "name": "addAllowedGroups"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.Signer#addRules:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "addRules(...rules: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessRule",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessRule:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "void"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 4,
+                    "endIndex": 5
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "rules",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 3
+                      }
+                    }
+                  ],
+                  "name": "addRules"
                 },
                 {
                   "kind": "Property",
@@ -24731,6 +28043,38 @@
                 },
                 {
                   "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.Signer#rules:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "rules: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessRule",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessRule:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "rules",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Property",
                   "canonicalReference": "@cityofzion/neon-core!tx.Signer#scopes:member",
                   "docComment": "",
                   "excerptTokens": [
@@ -24939,6 +28283,37 @@
                 },
                 {
                   "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.SignerJson#rules:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "rules?: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessRuleJson",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessRuleJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": true,
+                  "releaseTag": "Public",
+                  "name": "rules",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
                   "canonicalReference": "@cityofzion/neon-core!tx.SignerJson#scopes:member",
                   "docComment": "",
                   "excerptTokens": [
@@ -25078,6 +28453,37 @@
                   "propertyTypeTokenRange": {
                     "startIndex": 1,
                     "endIndex": 4
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.SignerLike#rules:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "rules?: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessRuleJson",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessRuleJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": true,
+                  "releaseTag": "Public",
+                  "name": "rules",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
                   }
                 },
                 {
@@ -28373,6 +31779,546 @@
               ]
             },
             {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!tx.WitnessCondition:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare abstract class WitnessCondition implements "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "NeonSerializable",
+                  "canonicalReference": "@cityofzion/neon-core!NeonSerializable:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "WitnessCondition",
+              "members": [
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessCondition.deserialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static deserialize(ss: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "StringStream",
+                      "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "ss",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "deserialize"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessCondition.fromJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static fromJson(input: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionJson:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "fromJson"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessCondition#serialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "serialize(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "serialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessCondition#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get size(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessCondition#toJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "abstract toJson(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionJson:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "toJson"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessCondition#type:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "abstract get type(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionType",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionType:enum"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "type",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                }
+              ],
+              "implementsTokenRanges": [
+                {
+                  "startIndex": 1,
+                  "endIndex": 3
+                }
+              ]
+            },
+            {
+              "kind": "TypeAlias",
+              "canonicalReference": "@cityofzion/neon-core!tx.WitnessConditionJson:type",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare type WitnessConditionJson = "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "BooleanWitnessConditionJson",
+                  "canonicalReference": "@cityofzion/neon-core!BooleanWitnessConditionJson:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "AndWitnessConditionJson",
+                  "canonicalReference": "@cityofzion/neon-core!AndWitnessConditionJson:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "NotWitnessConditionJson",
+                  "canonicalReference": "@cityofzion/neon-core!NotWitnessConditionJson:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "OrWitnessConditionJson",
+                  "canonicalReference": "@cityofzion/neon-core!OrWitnessConditionJson:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ScriptHashWitnessConditionJson",
+                  "canonicalReference": "@cityofzion/neon-core!ScriptHashWitnessConditionJson:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "GroupWitnessConditionJson",
+                  "canonicalReference": "@cityofzion/neon-core!GroupWitnessConditionJson:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "CalledByEntryWitnessConditionJson",
+                  "canonicalReference": "@cityofzion/neon-core!CalledByEntryWitnessConditionJson:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "CalledByContractWitnessConditionJson",
+                  "canonicalReference": "@cityofzion/neon-core!CalledByContractWitnessConditionJson:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "CalledByGroupWitnessConditionJson",
+                  "canonicalReference": "@cityofzion/neon-core!CalledByGroupWitnessConditionJson:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "WitnessConditionJson",
+              "typeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 18
+              }
+            },
+            {
+              "kind": "Enum",
+              "canonicalReference": "@cityofzion/neon-core!tx.WitnessConditionType:enum",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare enum WitnessConditionType "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "WitnessConditionType",
+              "members": [
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessConditionType.And:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "And = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "2"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "And",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessConditionType.Boolean:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "Boolean = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "0"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "Boolean",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessConditionType.CalledByContract:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "CalledByContract = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "40"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "CalledByContract",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessConditionType.CalledByEntry:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "CalledByEntry = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "32"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "CalledByEntry",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessConditionType.CalledByGroup:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "CalledByGroup = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "41"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "CalledByGroup",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessConditionType.Group:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "Group = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "25"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "Group",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessConditionType.Not:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "Not = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "1"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "Not",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessConditionType.Or:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "Or = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "3"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "Or",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessConditionType.ScriptHash:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "ScriptHash = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "24"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "ScriptHash",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ]
+            },
+            {
               "kind": "Interface",
               "canonicalReference": "@cityofzion/neon-core!tx.WitnessJson:interface",
               "docComment": "",
@@ -28509,6 +32455,490 @@
               "extendsTokenRanges": []
             },
             {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!tx.WitnessRule:class",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class WitnessRule implements "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "NeonSerializable",
+                  "canonicalReference": "@cityofzion/neon-core!NeonSerializable:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "WitnessRule",
+              "members": [
+                {
+                  "kind": "Constructor",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRule:constructor(1)",
+                  "docComment": "/**\n * Constructs a new instance of the `WitnessRule` class\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "constructor(input?: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Partial",
+                      "canonicalReference": "!Partial:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<"
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessRuleLike",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessRuleLike:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ">"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ");"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 5
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRule#action:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "action: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessRuleAction",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessRuleAction:enum"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "action",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRule#condition:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "condition: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessCondition",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessCondition:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "condition",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRule.deserialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static deserialize(ss: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "StringStream",
+                      "canonicalReference": "@cityofzion/neon-core!StringStream:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessRule",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessRule:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "ss",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "deserialize"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRule.fromJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static fromJson(input: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessRuleJson",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessRuleJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessRule",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessRule:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "input",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      }
+                    }
+                  ],
+                  "name": "fromJson"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRule#serialize:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "serialize(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "serialize"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRule#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "get size(): "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isStatic": false
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRule#toJson:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "toJson(): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessRuleJson",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessRuleJson:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [],
+                  "name": "toJson"
+                }
+              ],
+              "implementsTokenRanges": [
+                {
+                  "startIndex": 1,
+                  "endIndex": 3
+                }
+              ]
+            },
+            {
+              "kind": "Enum",
+              "canonicalReference": "@cityofzion/neon-core!tx.WitnessRuleAction:enum",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare enum WitnessRuleAction "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "WitnessRuleAction",
+              "members": [
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRuleAction.Allow:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "Allow = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "1"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "Allow",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRuleAction.Deny:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "Deny = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "0"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "Deny",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!tx.WitnessRuleJson:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface WitnessRuleJson "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "WitnessRuleJson",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRuleJson#action:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "action: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "action",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessRuleJson#condition:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "condition: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "WitnessConditionJson",
+                      "canonicalReference": "@cityofzion/neon-core!WitnessConditionJson:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "condition",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
+              "kind": "TypeAlias",
+              "canonicalReference": "@cityofzion/neon-core!tx.WitnessRuleLike:type",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare type WitnessRuleLike = "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "NeonLike",
+                  "canonicalReference": "@cityofzion/neon-core!NeonLike:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WitnessRule",
+                  "canonicalReference": "@cityofzion/neon-core!WitnessRule:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WitnessRuleJson",
+                  "canonicalReference": "@cityofzion/neon-core!WitnessRuleJson:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "WitnessRuleLike",
+              "typeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 7
+              }
+            },
+            {
               "kind": "Enum",
               "canonicalReference": "@cityofzion/neon-core!tx.WitnessScope:enum",
               "docComment": "/**\n * Used to constrain witness to specified scope The execution in vm of a script is kind of opaque, user could add scope on his signature to avoid abuse of signature\n */\n",
@@ -28621,6 +33051,27 @@
                   ],
                   "releaseTag": "Public",
                   "name": "None",
+                  "initializerTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "EnumMember",
+                  "canonicalReference": "@cityofzion/neon-core!tx.WitnessScope.WitnessRules:member",
+                  "docComment": "/**\n * Custom rules for witness to adhere by.\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "WitnessRules = "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "64"
+                    }
+                  ],
+                  "releaseTag": "Public",
+                  "name": "WitnessRules",
                   "initializerTokenRange": {
                     "startIndex": 1,
                     "endIndex": 2
@@ -32752,6 +37203,74 @@
               "name": "isHex"
             },
             {
+              "kind": "Interface",
+              "canonicalReference": "@cityofzion/neon-core!u.NeonSerializable:interface",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export interface NeonSerializable "
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "NeonSerializable",
+              "members": [
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!u.NeonSerializable#serialize:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "serialize: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "() => string"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "serialize",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "kind": "PropertySignature",
+                  "canonicalReference": "@cityofzion/neon-core!u.NeonSerializable#size:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "size: "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "number"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "size",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "extendsTokenRanges": []
+            },
+            {
               "kind": "Function",
               "canonicalReference": "@cityofzion/neon-core!u.num2fixed8:function(1)",
               "docComment": "/**\n * Converts a number to a Fixed8 format hex string\n *\n * @deprecated\n *\n * BigInteger.fromDecimal(num,8).toHex()\n *\n * @param num - the value to convert\n *\n * @param size - output size in bytes\n *\n * @returns number in Fixed8 representation.\n */\n",
@@ -33088,7 +37607,7 @@
                 {
                   "kind": "Reference",
                   "text": "NeonSerializable",
-                  "canonicalReference": "@cityofzion/neon-core!~NeonSerializable:interface"
+                  "canonicalReference": "@cityofzion/neon-core!NeonSerializable:interface"
                 },
                 {
                   "kind": "Content",

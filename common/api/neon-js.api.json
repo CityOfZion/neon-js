@@ -225,7 +225,7 @@
             },
             {
               "kind": "Content",
-              "text": ";\n        contractParam: (type: \"Any\" | \"Boolean\" | \"Integer\" | \"ByteArray\" | \"String\" | \"Hash160\" | \"Hash256\" | \"PublicKey\" | \"Signature\" | \"Array\" | \"Map\" | \"InteropInterface\" | \"Void\", value?: string | number | boolean | neonCore.sc."
+              "text": ";\n        contractParam: (type: \"Boolean\" | \"Any\" | \"Integer\" | \"Array\" | \"Map\" | \"InteropInterface\" | \"ByteArray\" | \"String\" | \"Hash160\" | \"Hash256\" | \"PublicKey\" | \"Signature\" | \"Void\", value?: string | number | boolean | neonCore.sc."
             },
             {
               "kind": "Reference",
