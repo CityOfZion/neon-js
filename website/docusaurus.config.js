@@ -62,7 +62,7 @@ module.exports = {
           position: "left",
         },
         {
-          to: "docs/api/index",
+          to: "docs/api",
           label: "API",
           position: "left",
         },
