@@ -144,7 +144,9 @@ function ApplicationLogsRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase):
     new (...args: any[]): {
         getApplicationLog(blockOrTxHash: string): Promise<ApplicationLogJson>;
         url: string;
-        execute<TResponse>(query: Query<unknown[], TResponse>, config?: RpcConfig | undefined): Promise<TResponse>;
+        execute<TResponse>(query: Query<JsonRpcParams, TResponse>, config?: RpcConfig | undefined): Promise<TResponse>;
+        executeAll<TResponses extends unknown[]>(batchQuery: BatchQuery<JsonRpcParams[], TResponses>, config?: RpcConfig | undefined): Promise<TResponses>;
+        executeAll<TResponses_1 extends unknown[]>(batchQuery: Query<JsonRpcParams, unknown>[], config?: RpcConfig | undefined): Promise<TResponses_1>;
     };
 } & TBase;
 
@@ -167,6 +169,16 @@ class BaseContract {
     get methods(): Readonly<Record<string, ContractMethodDefinition>>;
     // (undocumented)
     get scriptHash(): string;
+}
+
+// @public
+class BatchQuery<TParams extends JsonRpcParams[], TResponses extends unknown[]> {
+    // (undocumented)
+    add<TParam extends JsonRpcParams, TResponse>(q: Query<TParam, TResponse>): BatchQuery<[...TParams, TParam], [...TResponses, TResponse]>;
+    // (undocumented)
+    static of<TParams extends JsonRpcParams, TResponse>(q: Query<TParams, TResponse>): BatchQuery<[TParams], [TResponse]>;
+    // (undocumented)
+    queries: Query<JsonRpcParams, unknown>[];
 }
 
 // @public
@@ -1488,7 +1500,9 @@ function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase): {
         listPlugins(): Promise<CliPlugin[]>;
         validateAddress(addr: string): Promise<boolean>;
         url: string;
-        execute<TResponse>(query: Query<unknown[], TResponse>, config?: RpcConfig | undefined): Promise<TResponse>;
+        execute<TResponse>(query: Query<JsonRpcParams, TResponse>, config?: RpcConfig | undefined): Promise<TResponse>;
+        executeAll<TResponses extends unknown[]>(batchQuery: BatchQuery<JsonRpcParams[], TResponses>, config?: RpcConfig | undefined): Promise<TResponses>;
+        executeAll<TResponses_1 extends unknown[]>(batchQuery: Query<JsonRpcParams, unknown>[], config?: RpcConfig | undefined): Promise<TResponses_1>;
     };
 } & TBase;
 
@@ -2448,6 +2462,7 @@ declare namespace rpc {
         StackItemParser,
         VMResultParser,
         sendQuery,
+        sendQueryList,
         RpcConfig,
         GConstructor,
         RpcDispatcherMixin,
@@ -2458,7 +2473,8 @@ declare namespace rpc {
         TokenTrackerRpcMixin,
         TokenTrackerRpcClient,
         NeoServerRpcMixin,
-        NeoServerRpcClient
+        NeoServerRpcClient,
+        BatchQuery
     }
 }
 export { rpc }
@@ -2491,7 +2507,10 @@ interface RpcConfig {
 // @public
 class RpcDispatcher {
     constructor(url: string);
-    execute<TResponse>(query: Query<unknown[], TResponse>, config?: RpcConfig): Promise<TResponse>;
+    execute<TResponse>(query: Query<JsonRpcParams, TResponse>, config?: RpcConfig): Promise<TResponse>;
+    executeAll<TResponses extends unknown[]>(batchQuery: BatchQuery<JsonRpcParams[], TResponses>, config?: RpcConfig): Promise<TResponses>;
+    // (undocumented)
+    executeAll<TResponses extends unknown[]>(batchQuery: Query<JsonRpcParams, unknown>[], config?: RpcConfig): Promise<TResponses>;
     // (undocumented)
     url: string;
 }
@@ -2653,8 +2672,11 @@ interface ScryptParams {
     r: number;
 }
 
-// @public (undocumented)
-function sendQuery<TResponse>(url: string, query: Query<unknown[], TResponse>, config?: RpcConfig): Promise<RPCResponse<TResponse>>;
+// @public
+function sendQuery<TResponse>(url: string, query: Query<JsonRpcParams, TResponse>, config?: RpcConfig): Promise<RPCResponse<TResponse>>;
+
+// @public
+function sendQueryList(url: string, batch: Query<JsonRpcParams, unknown>[], config?: RpcConfig): Promise<RPCResponse<unknown>[]>;
 
 // @public (undocumented)
 interface SendResult {
@@ -2848,7 +2870,9 @@ function TokenTrackerRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase): {
         getNep11Transfers(accountIdentifier: string, startTime?: string | undefined, endTime?: string | undefined): Promise<GetNep11TransfersResult>;
         getNep11Balances(accountIdentifier: string): Promise<GetNep11BalancesResult>;
         url: string;
-        execute<TResponse>(query: Query<unknown[], TResponse>, config?: RpcConfig | undefined): Promise<TResponse>;
+        execute<TResponse>(query: Query<JsonRpcParams, TResponse>, config?: RpcConfig | undefined): Promise<TResponse>;
+        executeAll<TResponses extends unknown[]>(batchQuery: BatchQuery<JsonRpcParams[], TResponses>, config?: RpcConfig | undefined): Promise<TResponses>;
+        executeAll<TResponses_1 extends unknown[]>(batchQuery: Query<JsonRpcParams, unknown>[], config?: RpcConfig | undefined): Promise<TResponses_1>;
     };
 } & TBase;
 
