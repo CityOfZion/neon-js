@@ -176,6 +176,8 @@ export const OpCodeAnnotations: Record<OpCode, OpCodeAnnotation> = {
   [OpCode.MIN]: {},
   [OpCode.MAX]: {},
   [OpCode.WITHIN]: {},
+  [OpCode.PACKMAP]: {},
+  [OpCode.PACKSTRUCT]: {},
   [OpCode.PACK]: {},
   [OpCode.UNPACK]: {},
   [OpCode.NEWARRAY0]: {},

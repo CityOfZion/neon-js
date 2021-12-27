@@ -902,7 +902,7 @@ interface GetContractStateResult {
 function getCurve(curveName: EllipticCurvePreset): EllipticCurve;
 
 // @public (undocumented)
-function getInteropServicePrice(service: InteropServiceCode, param?: Partial<InteropServicePriceParam>): number;
+function getInteropServicePrice(service: InteropServiceCode): number;
 
 // @public (undocumented)
 function getNativeContractHash(contractName: string): string;
@@ -1148,27 +1148,7 @@ function IntegerParser(item: StackItemJson): number;
 // @public (undocumented)
 enum InteropServiceCode {
     // (undocumented)
-    SYSTEM_BLOCKCHAIN_GETBLOCK = "8347922d",
-    // (undocumented)
-    SYSTEM_BLOCKCHAIN_GETHEIGHT = "7ef5721f",
-    // (undocumented)
-    SYSTEM_BLOCKCHAIN_GETTRANSACTION = "e6558d48",
-    // (undocumented)
-    SYSTEM_BLOCKCHAIN_GETTRANSACTIONFROMBLOCK = "7e56fd69",
-    // (undocumented)
-    SYSTEM_BLOCKCHAIN_GETTRANSACTIONHEIGHT = "4a3288b1",
-    // (undocumented)
-    SYSTEM_CALLBACK_CREATE = "d6a52d2a",
-    // (undocumented)
-    SYSTEM_CALLBACK_CREATEFROMMETHOD = "7c507485",
-    // (undocumented)
-    SYSTEM_CALLBACK_CREATEFROMSYSCALL = "d46efa70",
-    // (undocumented)
-    SYSTEM_CALLBACK_INVOKE = "d42b3dad",
-    // (undocumented)
     SYSTEM_CONTRACT_CALL = "627d5b52",
-    // (undocumented)
-    SYSTEM_CONTRACT_CALLEX = "eef40cdb",
     // (undocumented)
     SYSTEM_CONTRACT_CALLNATIVE = "1af77b67",
     // (undocumented)
@@ -1178,8 +1158,6 @@ enum InteropServiceCode {
     // (undocumented)
     SYSTEM_CONTRACT_GETCALLFLAGS = "95da3a81",
     // (undocumented)
-    SYSTEM_CONTRACT_ISSTANDARD = "d76b9d85",
-    // (undocumented)
     SYSTEM_CONTRACT_NATIVEONPERSIST = "2edbbc93",
     // (undocumented)
     SYSTEM_CONTRACT_NATIVEPOSTPERSIST = "44a15d16",
@@ -1188,23 +1166,9 @@ enum InteropServiceCode {
     // (undocumented)
     SYSTEM_CRYPTO_CHECKSIG = "56e7b327",
     // (undocumented)
-    SYSTEM_ENUMERATOR_CONCAT = "d406e5e1",
+    SYSTEM_ITERATOR_NEXT = "9c08ed9c",
     // (undocumented)
-    SYSTEM_ENUMERATOR_CREATE = "bbaa607a",
-    // (undocumented)
-    SYSTEM_ENUMERATOR_NEXT = "926d4cf0",
-    // (undocumented)
-    SYSTEM_ENUMERATOR_VALUE = "bd20202c",
-    // (undocumented)
-    SYSTEM_ITERATOR_CONCAT = "e5870a81",
-    // (undocumented)
-    SYSTEM_ITERATOR_CREATE = "ed64f727",
-    // (undocumented)
-    SYSTEM_ITERATOR_KEY = "0e9488ba",
-    // (undocumented)
-    SYSTEM_ITERATOR_KEYS = "fd9096e9",
-    // (undocumented)
-    SYSTEM_ITERATOR_VALUES = "beee30ad",
+    SYSTEM_ITERATOR_VALUE = "f354bf1d",
     // (undocumented)
     SYSTEM_RUNTIME_BURNGAS = "c35a8cbc",
     // (undocumented)
@@ -1220,7 +1184,11 @@ enum InteropServiceCode {
     // (undocumented)
     SYSTEM_RUNTIME_GETINVOCATIONCOUNTER = "84271143",
     // (undocumented)
+    SYSTEM_RUNTIME_GETNETWORK = "c5fba0e0",
+    // (undocumented)
     SYSTEM_RUNTIME_GETNOTIFICATIONS = "274335f1",
+    // (undocumented)
+    SYSTEM_RUNTIME_GETRANDOM = "6bdea928",
     // (undocumented)
     SYSTEM_RUNTIME_GETSCRIPTCONTAINER = "2d510830",
     // (undocumented)
@@ -1247,14 +1215,6 @@ enum InteropServiceCode {
     SYSTEM_STORAGE_GETREADONLYCONTEXT = "f6b46be2",
     // (undocumented)
     SYSTEM_STORAGE_PUT = "e63f1884"
-}
-
-// @public (undocumented)
-interface InteropServicePriceParam {
-    // (undocumented)
-    method: string;
-    // (undocumented)
-    size: number;
 }
 
 // @public
@@ -1892,6 +1852,10 @@ enum OpCode {
     // (undocumented)
     PACK = 192,
     // (undocumented)
+    PACKMAP = 190,
+    // (undocumented)
+    PACKSTRUCT = 191,
+    // (undocumented)
     PICK = 77,
     // (undocumented)
     PICKITEM = 206,
@@ -2231,6 +2195,8 @@ const OpCodePrices: {
     185: number;
     186: number;
     187: number;
+    190: number;
+    191: number;
     192: number;
     193: number;
     194: number;
@@ -2577,7 +2543,6 @@ declare namespace sc {
         fromMethodName,
         InteropServiceCode,
         getInteropServicePrice,
-        InteropServicePriceParam,
         hasChildren,
         StackItemType,
         StackItemValue,
