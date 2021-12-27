@@ -967,7 +967,16 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<unknown[], TResponse>, config?: import(\"./RpcDispatcher\")."
+                  "text": "<import(\"../Query\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", TResponse>, config?: import(\"./RpcDispatcher\")."
                 },
                 {
                   "kind": "Reference",
@@ -985,7 +994,79 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<TResponse>;\n    };\n} & TBase"
+                  "text": "<TResponse>;\n        executeAll<TResponses extends unknown[]>(batchQuery: import(\"..\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "BatchQuery",
+                  "canonicalReference": "@cityofzion/neon-core!BatchQuery:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<import(\"../Query\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[], TResponses>, config?: import(\"./RpcDispatcher\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RpcConfig",
+                  "canonicalReference": "@cityofzion/neon-core!RpcConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | undefined): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<TResponses>;\n        executeAll<TResponses_1 extends unknown[]>(batchQuery: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Query",
+                  "canonicalReference": "@cityofzion/neon-core!Query:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<import(\"../Query\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", unknown>[], config?: import(\"./RpcDispatcher\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RpcConfig",
+                  "canonicalReference": "@cityofzion/neon-core!RpcConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | undefined): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<TResponses_1>;\n    };\n} & TBase"
                 },
                 {
                   "kind": "Content",
@@ -994,7 +1075,7 @@
               ],
               "returnTypeTokenRange": {
                 "startIndex": 5,
-                "endIndex": 16
+                "endIndex": 34
               },
               "releaseTag": "Public",
               "overloadIndex": 1,
@@ -1021,6 +1102,284 @@
                 }
               ],
               "name": "ApplicationLogsRpcMixin"
+            },
+            {
+              "kind": "Class",
+              "canonicalReference": "@cityofzion/neon-core!rpc.BatchQuery:class",
+              "docComment": "/**\n * Helper class that maintains the types in a list of Queries. This allows the RpcDispatcher to return correctly typed responses.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare class BatchQuery<TParams extends "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", TResponses extends "
+                },
+                {
+                  "kind": "Content",
+                  "text": "unknown[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": "> "
+                }
+              ],
+              "releaseTag": "Public",
+              "typeParameters": [
+                {
+                  "typeParameterName": "TParams",
+                  "constraintTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "defaultTypeTokenRange": {
+                    "startIndex": 0,
+                    "endIndex": 0
+                  }
+                },
+                {
+                  "typeParameterName": "TResponses",
+                  "constraintTokenRange": {
+                    "startIndex": 4,
+                    "endIndex": 5
+                  },
+                  "defaultTypeTokenRange": {
+                    "startIndex": 0,
+                    "endIndex": 0
+                  }
+                }
+              ],
+              "name": "BatchQuery",
+              "members": [
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.BatchQuery#add:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "add<TParam extends "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "JsonRpcParams",
+                      "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", TResponse>(q: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Query",
+                      "canonicalReference": "@cityofzion/neon-core!Query:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<TParam, TResponse>"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "BatchQuery",
+                      "canonicalReference": "@cityofzion/neon-core!BatchQuery:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<[...TParams, TParam], [...TResponses, TResponse]>"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 6,
+                    "endIndex": 8
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "q",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 3,
+                        "endIndex": 5
+                      }
+                    }
+                  ],
+                  "typeParameters": [
+                    {
+                      "typeParameterName": "TParam",
+                      "constraintTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      },
+                      "defaultTypeTokenRange": {
+                        "startIndex": 0,
+                        "endIndex": 0
+                      }
+                    },
+                    {
+                      "typeParameterName": "TResponse",
+                      "constraintTokenRange": {
+                        "startIndex": 0,
+                        "endIndex": 0
+                      },
+                      "defaultTypeTokenRange": {
+                        "startIndex": 0,
+                        "endIndex": 0
+                      }
+                    }
+                  ],
+                  "name": "add"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.BatchQuery.of:member(1)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "static of<TParams extends "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "JsonRpcParams",
+                      "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", TResponse>(q: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Query",
+                      "canonicalReference": "@cityofzion/neon-core!Query:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<TParams, TResponse>"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "BatchQuery",
+                      "canonicalReference": "@cityofzion/neon-core!BatchQuery:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<[TParams], [TResponse]>"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": true,
+                  "returnTypeTokenRange": {
+                    "startIndex": 6,
+                    "endIndex": 8
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "q",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 3,
+                        "endIndex": 5
+                      }
+                    }
+                  ],
+                  "typeParameters": [
+                    {
+                      "typeParameterName": "TParams",
+                      "constraintTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      },
+                      "defaultTypeTokenRange": {
+                        "startIndex": 0,
+                        "endIndex": 0
+                      }
+                    },
+                    {
+                      "typeParameterName": "TResponse",
+                      "constraintTokenRange": {
+                        "startIndex": 0,
+                        "endIndex": 0
+                      },
+                      "defaultTypeTokenRange": {
+                        "startIndex": 0,
+                        "endIndex": 0
+                      }
+                    }
+                  ],
+                  "name": "of"
+                },
+                {
+                  "kind": "Property",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.BatchQuery#queries:member",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "queries: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Query",
+                      "canonicalReference": "@cityofzion/neon-core!Query:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<"
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "JsonRpcParams",
+                      "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", unknown>[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "releaseTag": "Public",
+                  "name": "queries",
+                  "propertyTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 5
+                  },
+                  "isStatic": false
+                }
+              ],
+              "implementsTokenRanges": []
             },
             {
               "kind": "TypeAlias",
@@ -3331,7 +3690,16 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<unknown[], TResponse>, config?: import(\"./RpcDispatcher\")."
+                  "text": "<import(\"..\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", TResponse>, config?: import(\"./RpcDispatcher\")."
                 },
                 {
                   "kind": "Reference",
@@ -3349,7 +3717,79 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<TResponse>;\n    };\n} & TBase"
+                  "text": "<TResponse>;\n        executeAll<TResponses extends unknown[]>(batchQuery: import(\"..\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "BatchQuery",
+                  "canonicalReference": "@cityofzion/neon-core!BatchQuery:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<import(\"..\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[], TResponses>, config?: import(\"./RpcDispatcher\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RpcConfig",
+                  "canonicalReference": "@cityofzion/neon-core!RpcConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | undefined): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<TResponses>;\n        executeAll<TResponses_1 extends unknown[]>(batchQuery: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Query",
+                  "canonicalReference": "@cityofzion/neon-core!Query:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<import(\"..\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", unknown>[], config?: import(\"./RpcDispatcher\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RpcConfig",
+                  "canonicalReference": "@cityofzion/neon-core!RpcConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | undefined): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<TResponses_1>;\n    };\n} & TBase"
                 },
                 {
                   "kind": "Content",
@@ -3358,7 +3798,7 @@
               ],
               "returnTypeTokenRange": {
                 "startIndex": 5,
-                "endIndex": 118
+                "endIndex": 136
               },
               "releaseTag": "Public",
               "overloadIndex": 1,
@@ -8109,7 +8549,16 @@
                     },
                     {
                       "kind": "Content",
-                      "text": "<unknown[], TResponse>"
+                      "text": "<"
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "JsonRpcParams",
+                      "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", TResponse>"
                     },
                     {
                       "kind": "Content",
@@ -8141,8 +8590,8 @@
                   "isOptional": false,
                   "isStatic": false,
                   "returnTypeTokenRange": {
-                    "startIndex": 6,
-                    "endIndex": 8
+                    "startIndex": 8,
+                    "endIndex": 10
                   },
                   "releaseTag": "Public",
                   "overloadIndex": 1,
@@ -8151,14 +8600,14 @@
                       "parameterName": "query",
                       "parameterTypeTokenRange": {
                         "startIndex": 1,
-                        "endIndex": 3
+                        "endIndex": 5
                       }
                     },
                     {
                       "parameterName": "config",
                       "parameterTypeTokenRange": {
-                        "startIndex": 4,
-                        "endIndex": 5
+                        "startIndex": 6,
+                        "endIndex": 7
                       }
                     }
                   ],
@@ -8176,6 +8625,208 @@
                     }
                   ],
                   "name": "execute"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.RpcDispatcher#executeAll:member(1)",
+                  "docComment": "/**\n * Takes an array of Queries and executes them. Throws if any of the queries encounters an error.\n *\n * @param batchQuery - Array of queries or a BatchQuery\n *\n * @param config - Configuration to apply to the RPC call\n *\n * @returns list of unwrapped json-rpc results\n *\n * @example\n * ```ts\n * const dispatcher = new RpcDispatcher(\"http://www.example.com\");\n * const response = dispatcher.executeAll(\n *    BatchQuery.of(new Query({method: \"getversion\"}))\n *      .add(new Query({method: \"getblockcount\"}))\n * );\n * // Correctly typed response when using BatchQuery\n * console.log(response[0].protocol.network);\n *\n * // You will have to manually type the response when using a plain array\n * const response = dispatcher.executeAll<GetVersionResult, number>([\n *    new Query({method: \"getversion\"}),\n *    new Query({method: \"getblockcount\"})\n * ]);\n *\n * console.log(response[0].protocol.network);\n * ```\n *\n */\n",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "executeAll<TResponses extends "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "unknown[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ">(batchQuery: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "BatchQuery",
+                      "canonicalReference": "@cityofzion/neon-core!BatchQuery:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<"
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "JsonRpcParams",
+                      "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "[], TResponses>"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", config?: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "RpcConfig",
+                      "canonicalReference": "@cityofzion/neon-core!RpcConfig:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Promise",
+                      "canonicalReference": "!Promise:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<TResponses>"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 10,
+                    "endIndex": 12
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 1,
+                  "parameters": [
+                    {
+                      "parameterName": "batchQuery",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 3,
+                        "endIndex": 7
+                      }
+                    },
+                    {
+                      "parameterName": "config",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 8,
+                        "endIndex": 9
+                      }
+                    }
+                  ],
+                  "typeParameters": [
+                    {
+                      "typeParameterName": "TResponses",
+                      "constraintTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      },
+                      "defaultTypeTokenRange": {
+                        "startIndex": 0,
+                        "endIndex": 0
+                      }
+                    }
+                  ],
+                  "name": "executeAll"
+                },
+                {
+                  "kind": "Method",
+                  "canonicalReference": "@cityofzion/neon-core!rpc.RpcDispatcher#executeAll:member(2)",
+                  "docComment": "",
+                  "excerptTokens": [
+                    {
+                      "kind": "Content",
+                      "text": "executeAll<TResponses extends "
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "unknown[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ">(batchQuery: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Query",
+                      "canonicalReference": "@cityofzion/neon-core!Query:class"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<"
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "JsonRpcParams",
+                      "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", unknown>[]"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ", config?: "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "RpcConfig",
+                      "canonicalReference": "@cityofzion/neon-core!RpcConfig:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "): "
+                    },
+                    {
+                      "kind": "Reference",
+                      "text": "Promise",
+                      "canonicalReference": "!Promise:interface"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": "<TResponses>"
+                    },
+                    {
+                      "kind": "Content",
+                      "text": ";"
+                    }
+                  ],
+                  "isOptional": false,
+                  "isStatic": false,
+                  "returnTypeTokenRange": {
+                    "startIndex": 10,
+                    "endIndex": 12
+                  },
+                  "releaseTag": "Public",
+                  "overloadIndex": 2,
+                  "parameters": [
+                    {
+                      "parameterName": "batchQuery",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 3,
+                        "endIndex": 7
+                      }
+                    },
+                    {
+                      "parameterName": "config",
+                      "parameterTypeTokenRange": {
+                        "startIndex": 8,
+                        "endIndex": 9
+                      }
+                    }
+                  ],
+                  "typeParameters": [
+                    {
+                      "typeParameterName": "TResponses",
+                      "constraintTokenRange": {
+                        "startIndex": 1,
+                        "endIndex": 2
+                      },
+                      "defaultTypeTokenRange": {
+                        "startIndex": 0,
+                        "endIndex": 0
+                      }
+                    }
+                  ],
+                  "name": "executeAll"
                 },
                 {
                   "kind": "Property",
@@ -8538,7 +9189,7 @@
             {
               "kind": "Function",
               "canonicalReference": "@cityofzion/neon-core!rpc.sendQuery:function(1)",
-              "docComment": "",
+              "docComment": "/**\n * Low level method to directly send a json-rpc request.\n *\n * @param url - address to send request to\n *\n * @param query - json-rpc request body\n *\n * @param config - rpc configuration\n *\n * @returns a json-rpc response\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -8559,7 +9210,16 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<unknown[], TResponse>"
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", TResponse>"
                 },
                 {
                   "kind": "Content",
@@ -8598,8 +9258,8 @@
                 }
               ],
               "returnTypeTokenRange": {
-                "startIndex": 8,
-                "endIndex": 12
+                "startIndex": 10,
+                "endIndex": 14
               },
               "releaseTag": "Public",
               "overloadIndex": 1,
@@ -8615,14 +9275,14 @@
                   "parameterName": "query",
                   "parameterTypeTokenRange": {
                     "startIndex": 3,
-                    "endIndex": 5
+                    "endIndex": 7
                   }
                 },
                 {
                   "parameterName": "config",
                   "parameterTypeTokenRange": {
-                    "startIndex": 6,
-                    "endIndex": 7
+                    "startIndex": 8,
+                    "endIndex": 9
                   }
                 }
               ],
@@ -8640,6 +9300,108 @@
                 }
               ],
               "name": "sendQuery"
+            },
+            {
+              "kind": "Function",
+              "canonicalReference": "@cityofzion/neon-core!rpc.sendQueryList:function(1)",
+              "docComment": "/**\n * Low level method to directly send a list of json-rpc requests. Note that the responses will not be typed.\n *\n * @param url - address to send request to\n *\n * @param batch - array\n *\n * @param config - rpc configuration\n *\n * @returns a list of untyped json-rpc responses\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "export declare function sendQueryList(url: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", batch: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Query",
+                  "canonicalReference": "@cityofzion/neon-core!Query:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", unknown>[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", config?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RpcConfig",
+                  "canonicalReference": "@cityofzion/neon-core!RpcConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RPCResponse",
+                  "canonicalReference": "@cityofzion/neon-core!RPCResponse:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<unknown>[]>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "returnTypeTokenRange": {
+                "startIndex": 10,
+                "endIndex": 14
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "url",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "parameterName": "batch",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 7
+                  }
+                },
+                {
+                  "parameterName": "config",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 8,
+                    "endIndex": 9
+                  }
+                }
+              ],
+              "name": "sendQueryList"
             },
             {
               "kind": "Interface",
@@ -8979,7 +9741,16 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<unknown[], TResponse>, config?: import(\"./RpcDispatcher\")."
+                  "text": "<import(\"../Query\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", TResponse>, config?: import(\"./RpcDispatcher\")."
                 },
                 {
                   "kind": "Reference",
@@ -8997,7 +9768,79 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<TResponse>;\n    };\n} & TBase"
+                  "text": "<TResponse>;\n        executeAll<TResponses extends unknown[]>(batchQuery: import(\"..\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "BatchQuery",
+                  "canonicalReference": "@cityofzion/neon-core!BatchQuery:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<import(\"../Query\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[], TResponses>, config?: import(\"./RpcDispatcher\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RpcConfig",
+                  "canonicalReference": "@cityofzion/neon-core!RpcConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | undefined): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<TResponses>;\n        executeAll<TResponses_1 extends unknown[]>(batchQuery: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Query",
+                  "canonicalReference": "@cityofzion/neon-core!Query:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<import(\"../Query\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "JsonRpcParams",
+                  "canonicalReference": "@cityofzion/neon-core!JsonRpcParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", unknown>[], config?: import(\"./RpcDispatcher\")."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RpcConfig",
+                  "canonicalReference": "@cityofzion/neon-core!RpcConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | undefined): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<TResponses_1>;\n    };\n} & TBase"
                 },
                 {
                   "kind": "Content",
@@ -9006,7 +9849,7 @@
               ],
               "returnTypeTokenRange": {
                 "startIndex": 5,
-                "endIndex": 28
+                "endIndex": 46
               },
               "releaseTag": "Public",
               "overloadIndex": 1,
