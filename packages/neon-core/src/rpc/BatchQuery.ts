@@ -1,5 +1,9 @@
 import { Query, JsonRpcParams } from "./Query";
 
+/**
+ * Helper class that maintains the types in a list of Queries.
+ * This allows the RpcDispatcher to return correctly typed responses.
+ */
 export class BatchQuery<
   TParams extends JsonRpcParams[],
   TResponses extends unknown[]

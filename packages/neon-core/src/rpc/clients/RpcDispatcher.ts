@@ -15,6 +15,13 @@ export interface RpcConfig {
 export type GConstructor<T = {}> = new (...args: any[]) => T;
 export type RpcDispatcherMixin = GConstructor<RpcDispatcher>;
 
+/**
+ * Low level method to directly send a json-rpc request.
+ * @param url - address to send request to
+ * @param query - json-rpc request body
+ * @param config - rpc configuration
+ * @returns a json-rpc response
+ */
 export async function sendQuery<TResponse>(
   url: string,
   query: Query<JsonRpcParams, TResponse>,
@@ -32,16 +39,21 @@ export async function sendQuery<TResponse>(
   );
 }
 
-async function sendBatch<
-  TParams extends JsonRpcParams[],
-  TResponses extends unknown[]
->(
+/**
+ * Low level method to directly send a list of json-rpc requests.
+ * Note that the responses will not be typed.
+ * @param url - address to send request to
+ * @param batch - array
+ * @param config - rpc configuration
+ * @returns a list of untyped json-rpc responses
+ */
+export async function sendQueryList(
   url: string,
-  batch: BatchQuery<TParams, TResponses>,
+  batch: Query<JsonRpcParams, unknown>[],
   config: RpcConfig = {}
 ): Promise<RPCResponse<unknown>[]> {
   const fetchConfig = _createFetchReq(
-    batch.queries.map((q) => q.export()),
+    batch.map((q) => q.export()),
     config
   );
 
@@ -51,9 +63,9 @@ async function sendBatch<
     return response.json();
   }
   throw new Error(
-    `Encountered HTTP code ${
-      response.status
-    } while executing Query[${batch.queries.map((q) => q.method).join(",")}]`
+    `Encountered HTTP code ${response.status} while executing Query[${batch
+      .map((q) => q.method)
+      .join(",")}]`
   );
 }
 
@@ -115,18 +127,49 @@ export class RpcDispatcher {
   /**
    * Takes an array of Queries and executes them.
    * Throws if any of the queries encounters an error.
-   * @param batchQuery - Array of queries wrapped in BatchQuery
+   * @param batchQuery - Array of queries or a BatchQuery
    * @param config - Configuration to apply to the RPC call
-   * @returns
+   * @returns list of unwrapped json-rpc results
+   *
+   * @example
+   *
+   * ```ts
+   * const dispatcher = new RpcDispatcher("http://www.example.com");
+   * const response = dispatcher.executeAll(
+   *    BatchQuery.of(new Query({method: "getversion"}))
+   *      .add(new Query({method: "getblockcount"}))
+   * );
+   * // Correctly typed response when using BatchQuery
+   * console.log(response[0].protocol.network);
+   *
+   * // You will have to manually type the response when using a plain array
+   * const response = dispatcher.executeAll<GetVersionResult, number>([
+   *    new Query({method: "getversion"}),
+   *    new Query({method: "getblockcount"})
+   * ]);
+   *
+   * console.log(response[0].protocol.network);
+   * ```
    */
-  public async batch<
-    TParams extends JsonRpcParams[],
-    TResponses extends unknown[]
-  >(
-    batchQuery: BatchQuery<TParams, TResponses>,
+  public async executeAll<TResponses extends unknown[]>(
+    batchQuery: BatchQuery<JsonRpcParams[], TResponses>,
+    config?: RpcConfig
+  ): Promise<TResponses>;
+  public async executeAll<TResponses extends unknown[]>(
+    batchQuery: Query<JsonRpcParams, unknown>[],
+    config?: RpcConfig
+  ): Promise<TResponses>;
+  public async executeAll<TResponses extends unknown[]>(
+    batchQuery:
+      | BatchQuery<JsonRpcParams[], TResponses>
+      | Query<JsonRpcParams, unknown>[],
     config?: RpcConfig
   ): Promise<TResponses> {
-    const responses = await sendBatch(this.url, batchQuery, config ?? {});
+    const responses = await sendQueryList(
+      this.url,
+      Array.isArray(batchQuery) ? batchQuery : batchQuery.queries,
+      config ?? {}
+    );
     if (responses.some((r) => r.error)) {
       const allErrs: Record<string, RPCErrorResponse> = {};
 
