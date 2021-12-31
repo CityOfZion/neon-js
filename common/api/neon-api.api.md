@@ -26,18 +26,6 @@ export function getTokenBalances(address: string, contracts: (string | sc.Nep17C
 export function getTokenInfos(contracts: (string | sc.Nep17Contract)[], client: rpc.NeoServerRpcClient): Promise<TokenInfo[]>;
 
 // @public (undocumented)
-export class instance {
-    constructor(url: string);
-    // (undocumented)
-    get name(): string;
-    // Warning: (ae-forgotten-export) The symbol "CallbackFunction" needs to be exported by the entry point index.d.ts
-    // Warning: (ae-forgotten-export) The symbol "Subscription" needs to be exported by the entry point index.d.ts
-    subscribe(contract: string | null, callback: CallbackFunction): Subscription;
-    unsubscribeAll(): Promise<void>;
-    unsubscribeContract(contract: string | null): Promise<void>;
-}
-
-// @public (undocumented)
 export interface Nep17TransferIntent {
     // (undocumented)
     contractHash: string;

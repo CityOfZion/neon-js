@@ -34,10 +34,7 @@
     "test:integration": "jest /packages/.*/__integration__/.*",
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
-  "dependencies": {
-    "isomorphic-ws": "4.0.1",
-    "ws": "8.3.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@cityofzion/neon-core": "~5.0.0-next.7"
   },
