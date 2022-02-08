@@ -492,6 +492,9 @@ export function likeContractParam(
   if (cp instanceof ContractParam) {
     return true;
   }
+  if (cp.type === "Any" && cp.value === null) {
+    return true;
+  }
   return (
     cp.type !== undefined &&
     cp.type in ContractParamType &&
