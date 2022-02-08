@@ -219,3 +219,30 @@ describe("emitContractParam", () => {
     expect(result).toBe(expected);
   });
 });
+
+describe("null_any_param", () => {
+  const builder = new ScriptBuilder();
+  builder.emitContractCall({
+    scriptHash: "d2a4cff31913016155e38e474a2c06d08be276cf",
+    operation: "transfer",
+    args: [
+      {
+        type: "Hash160",
+        value: "f898fec9055cc080f46ed38f2a7430b9b245a5a8",
+      },
+      {
+        type: "Hash160",
+        value: "f898fec9055cc080f46ed38f2a7430b9b245a5a8",
+      },
+      {
+        type: "Integer",
+        value: "1000",
+      },
+      {
+        type: "Any",
+        value: null,
+      },
+    ],
+  });
+  expect(builder.build()).toBeTruthy();
+});
