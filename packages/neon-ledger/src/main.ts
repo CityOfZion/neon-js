@@ -111,18 +111,21 @@ export async function getDevicePaths(
  * Requests the public key of a requested address from the Ledger.
  * @param ledger - Ledger instance
  * @param bip44String - BIP44 string (40 bytes)
+ * @param showAddressOnDevice - whether to show the public key as NEO3 address
+ * on the Ledger
  * @returns An unencoded public key (65 bytes)
  */
 export async function getPublicKey(
   ledger: Transport,
-  bip44String: string
+  bip44String: string,
+  showAddressOnDevice = false
 ): Promise<string> {
   try {
     const response = await ledger.send(
       0x80,
       Command.GET_PUBLIC_KEY,
       0x00,
-      0x00,
+      showAddressOnDevice ? 0x01 : 0x0,
       Buffer.from(bip44String, "hex"),
       DEFAULT_STATUSLIST
     );

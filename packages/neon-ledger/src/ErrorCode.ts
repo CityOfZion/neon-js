@@ -1,3 +1,5 @@
+import { cloneDeep } from "lodash-es";
+
 export enum StatusWord {
   OK = 0x9000,
   DENY = 0x6985,
@@ -21,6 +23,9 @@ export enum StatusWord {
   MAGIC_PARSING_FAIL = 0xb106,
   DISPLAY_SYSTEM_FEE_FAIL = 0xb107,
   DISPLAY_NETWORK_FEE_FAIL = 0xb108,
+  DISPLAY_TOTAL_FEE_FAIL = 0xb109,
+  DISPLAY_TOKEN_TRANSFER_AMOUNT_FAIL = 0xb10a,
+  CONVERT_TO_ADDRESS_FAIL = 0xb200,
 }
 
 export interface TransportStatusError extends Error {
@@ -40,7 +45,7 @@ export function looksLikeTransportStatusError(
  * @returns error with modified message if found.
  */
 export function evalTransportError(err: Error): Error {
-  const transportErr = err as TransportStatusError;
+  const transportErr = cloneDeep(err) as TransportStatusError;
   switch (transportErr.statusCode) {
     case StatusWord.APP_CLOSED:
       transportErr.message = "Your NEO app is closed! Please login.";
