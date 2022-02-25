@@ -8,13 +8,13 @@ title: Installation
 To install
 
 ```sh
-npm install @cityofzion/neon-js@next
+npm install @cityofzion/neon-js
 ```
 
 or
 
 ```sh
-npm install @cityofzion/neon-core@next
+npm install @cityofzion/neon-core
 ```
 
 This will give you the release that is compatible for the neo3 mainnet and testnet.
