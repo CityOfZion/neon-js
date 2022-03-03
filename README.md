@@ -22,7 +22,7 @@ This is the JS SDK for the NEO blockchain platform. This project aims to be a li
 
 It is currently in use by [Neon](https://github.com/CityOfZion/neon-wallet/).
 
-Visit the [docs](https://cityofzion.io/neon-js) to learn how to use this library!
+Visit the [docs](https://dojo.coz.io/neo3/neon-js/index.html) to learn how to use this library!
 
 # Getting started
 
@@ -45,8 +45,8 @@ npm i @cityofzion/neon-js
 ### Nodejs
 
 ```js
-const Neon = require("@cityofzion/neon-js");
-const acct = Neon.create.Account("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW");
+import {default as Neon} from "@cityofzion/neon-js";
+const acct = Neon.create.account("NKuyBkoGdZZSLyPbJEetheRhMjeznFZszf");
 ```
 
 ### Browser
@@ -55,10 +55,8 @@ Once imported using the script tag, the module is available as a global object `
 
 ```js
 console.log(Neon);
-var acct = Neon.create.Account("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW");
+var acct = Neon.create.account("NKuyBkoGdZZSLyPbJEetheRhMjeznFZszf");
 ```
-
-> Find more guides on our [documentation website](https://cityofzion.io/neon-js/docs/en/guides/basic/sendasset.html)
 
 # Contributing
 
@@ -104,5 +102,4 @@ yarn start
 # License
 
 - Open-source [MIT](https://github.com/CityOfZion/neon-js/blob/master/LICENSE.md).
-- Main author is [Ethan Fast](https://github.com/Ejhfast).
-- Maintainer is [Yak Jun Xiang](https://github.com/snowypowers)
+- Main author and maintainer is [Yak Jun Xiang](https://github.com/snowypowers).
