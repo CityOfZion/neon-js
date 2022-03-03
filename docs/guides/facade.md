@@ -14,12 +14,15 @@ For this tutorial, you will need:
 - A private key which contains funds.
 - An address to send some funds to.
 
+> While we highly recommend using a private network for development, if you wish to use the TestNet and are looking
+> for a public RPC node you can try one from https://dora.coz.io/monitor
+
 # Setup
 
 First, we initialize the `NetworkFacade` pointing to our endpoint. Note that the
 method call returns a promise. During initialization, the class will make an API
 call to the endpoint to grab some basic details that we will use later.
- 
+
 
 ```js
 import Neon from "@cityofzion/neon-js";
@@ -50,7 +53,7 @@ const intent = {
 
 We will also need to create a siging configuration to tell the class how to sign
 the transaction. In this example, we will use a private key.
- 
+
 
 ```js
 const signingConfig = {
@@ -64,7 +67,7 @@ const signingConfig = {
 
 The facade will take care of all the details such as setting an appropriate
 validUntilBlock, filling in the minimum GAS fees required and sending it off.
- 
+
 
 ```js
 facadePromise
