@@ -54,7 +54,7 @@ const Neon = require("@cityofzion/neon-js");
 
 console.log(Neon); // {wallet, tx, api, nep5, etc...}
 
-const NeonJs = neon.default;
+const NeonJs = Neon.default;
 
 console.log(NeonJs); // {create, get, sign, verify,...}
 ```
