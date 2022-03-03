@@ -8,7 +8,7 @@ different functionality.
 
 ## Core
 
-The core package is `neon-core`, comprising of the following folders:
+The core package is `neon-core`, comprised of the following folders:
 
 - `rpc`
 - `sc`
@@ -17,18 +17,15 @@ The core package is `neon-core`, comprising of the following folders:
 - `wallet`
 
 These are the minimum packages deemed necessary for basic functionality for
-interaction with the blockchain. Two other sub modules, `CONST` and `settings`
-round off the core module with some defaults.
+interaction with the blockchain. The sub module `CONST` rounds off the core module with some defaults.
 
 For users who just require the bare functionality, you may just use the core
 package:
 
 ```js
-import { tx, wallet, settings } from "@cityofzion/neon-core";
+import { tx, wallet } from "@cityofzion/neon-core";
 const t = new tx.Transaction();
 const acct = new wallet.Account();
-
-console.log(settings.networks); // {} (empty object as there are no defaults)
 ```
 
 ## Other packages
