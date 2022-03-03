@@ -29,8 +29,8 @@ beyond 2 levels, the rest of the name is camelCased at the noun level.
 ```js
 import Neon from "@cityofzion/neon-js";
 Neon.create.privateKey();
-Neon.serialize.tx(transactionObj);
-Neon.get.publicKeyFromPrivateKey(privateKey);
+Neon.deserialize.tx(serializedTransaction);
+Neon.verify.message(message, signature, publicKey)
 ```
 
 This style is recommended for beginners or anyone who just wishes to use Neon
