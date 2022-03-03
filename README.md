@@ -45,8 +45,8 @@ npm i @cityofzion/neon-js
 ### Nodejs
 
 ```js
-import Neon from "@cityofzion/neon-js";
-const acct = Neon.default.create.account("NKuyBkoGdZZSLyPbJEetheRhMjeznFZszf");
+import {default as Neon} from "@cityofzion/neon-js";
+const acct = Neon.create.account("NKuyBkoGdZZSLyPbJEetheRhMjeznFZszf");
 ```
 
 ### Browser
@@ -55,7 +55,7 @@ Once imported using the script tag, the module is available as a global object `
 
 ```js
 console.log(Neon);
-var acct = Neon.default.create.account("NKuyBkoGdZZSLyPbJEetheRhMjeznFZszf");
+var acct = Neon.create.account("NKuyBkoGdZZSLyPbJEetheRhMjeznFZszf");
 ```
 
 # Contributing
