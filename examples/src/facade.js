@@ -15,6 +15,9 @@ For this tutorial, you will need:
 - A private key which contains funds.
 - An address to send some funds to.
 
+> While we highly recommend using a private network for development, if you wish to use the TestNet and are looking
+> for a public RPC node you can try one from https://dora.coz.io/monitor
+
 # Setup
 
 First, we initialize the `NetworkFacade` pointing to our endpoint. Note that the

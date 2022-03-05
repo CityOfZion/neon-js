@@ -13,7 +13,7 @@ the [NEP-17](https://github.com/neo-project/proposals/blob/master/nep-17.mediawi
 native assets but operate very similarly to how NEP-5 tokens work in Neo2.
 
 First, some setup:
-
+ 
 
 ```js
 import { CONST, rpc, sc, wallet, tx, u } from "@cityofzion/neon-core";
@@ -43,7 +43,7 @@ We will perform the following checks:
 3. The amount of GAS for fees exists on fromAccount.
 
 All these checks can be performed through RPC calls to a NEO node.
-
+ 
 
 ```js
 const rpcClient = new rpc.RPCClient(inputs.nodeUrl);
@@ -87,7 +87,7 @@ async function createTransaction() {
 Network fees pay for the processing and storage of the transaction in the
 network. There is a cost incurred per byte of the transaction (without the
 signatures) and also the cost of running the verification of signatures.
-
+ 
 
 ```js
 async function checkNetworkFee() {
@@ -137,7 +137,7 @@ async function checkNetworkFee() {
 First, we check that the token exists. We perform an invokeFunction RPC call
 which calls the `name` method of the contract. The VM should exit successfully
 with `HALT` and give us the token name if it exists.
-
+ 
 
 ```js
 async function checkToken() {
@@ -162,7 +162,7 @@ async function checkToken() {
 
 SystemFees pay for the processing of the script carried in the transaction. We
 can easily get this number by using invokeScript with the appropriate signers.
-
+ 
 
 ```js
 async function checkSystemFee() {
@@ -201,7 +201,7 @@ We will also need to check that the inital address has sufficient funds for the 
 We look for both funds of the token we intend to transfer and GAS required to pay for the transaction.
 For this, we rely on the [TokensTracker](https://github.com/neo-project/neo-modules/tree/master/src/TokensTracker)
 plugin. Hopefully, the node we select has the plugin installed.
-
+ 
 
 ```js
 async function checkBalance() {
@@ -255,7 +255,7 @@ async function checkBalance() {
 ```
 
 And finally, to send it off to network.
-
+ 
 
 ```js
 async function performTransfer() {
@@ -284,4 +284,4 @@ createTransaction()
 
 You should be able to see the transaction hash printed in the console log.
 After waiting for the network to process the transaction, you can check on your new account balance.
-
+ 

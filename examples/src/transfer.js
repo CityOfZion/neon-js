@@ -10,8 +10,8 @@ In Neo2, NEO and GAS are considered native assets and operate using the UTXO
 system.
 
 In Neo3, the UTXO system is removed. In its place, NEO and GAS now implements
-the NEP-5 interface. They are still considered native assets but operate very
-similarly to how NEP-5 tokens work in Neo2.
+the [NEP-17](https://github.com/neo-project/proposals/blob/master/nep-17.mediawiki) interface. They are still considered
+native assets but operate very similarly to how NEP-5 tokens work in Neo2.
 
 First, some setup:
  */
@@ -54,7 +54,7 @@ async function createTransaction() {
       `to ${inputs.toAccount.address}`
   );
 
-  // Since the token is now an NEP-5 token, we transfer using a VM script.
+  // Since the token is now an NEP-17 token, we transfer using a VM script.
   const script = sc.createScript({
     scriptHash: inputs.tokenScriptHash,
     operation: "transfer",
@@ -191,7 +191,8 @@ async function checkSystemFee() {
 /**
 We will also need to check that the inital address has sufficient funds for the transfer.
 We look for both funds of the token we intend to transfer and GAS required to pay for the transaction.
-For this, we rely on the NEP5Tracker plugin. Hopefully, the node we select has the plugin installed.
+For this, we rely on the [TokensTracker](https://github.com/neo-project/neo-modules/tree/master/src/TokensTracker)
+plugin. Hopefully, the node we select has the plugin installed.
  */
 async function checkBalance() {
   let balanceResponse;
