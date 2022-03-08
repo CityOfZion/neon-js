@@ -235,28 +235,9 @@ workflows:
             - setup
           filters:
             branches:
-              ignore: /.*/
+              only: master
             tags:
-              only: /v[0-9]+\.[0-9]+\.[0-9]+/
-
-  # Workflow that runs on the next branch
-  next_flow:
-    jobs:
-      - setup:
-          filters:
-            branches:
-              only:
-                - next
-            tags:
-              only: /.*/
-      - publish-next:
-          requires:
-            - setup
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /v[0-9]+\.[0-9]+\.[0-9]+-next.*/
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 
   update-docs:
     jobs:
@@ -264,7 +245,7 @@ workflows:
           type: approval
           filters:
             branches:
-              only: next
+              only: master
       - publish-docs:
           context: aws
           requires:
