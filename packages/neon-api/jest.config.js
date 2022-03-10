@@ -1,4 +1,3 @@
 const config = require("../../jest.config");
-config.globals["ts-jest"]["tsConfig"] = "../../tsconfig-test.json";
-config.testRegex = "./(__(tests|integration)__/.*)\\.ts$";
+config.globals["ts-jest"]["tsconfig"] = "../../tsconfig-test.json";
 module.exports = config;
