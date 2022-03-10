@@ -38,8 +38,8 @@
   "dependencies": {
     "@ledgerhq/hw-transport": "5.51.1",
     "@types/ledgerhq__hw-transport": "4.21.3",
-    "@types/lodash-es": "^4.17.4",
-    "lodash-es": "4.17.15"
+    "@types/lodash": "^4.14.179",
+    "lodash": "4.17.15"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "~5.0.0-next.7"

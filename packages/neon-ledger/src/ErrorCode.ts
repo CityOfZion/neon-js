@@ -1,4 +1,4 @@
-import { cloneDeep } from "lodash-es";
+import { cloneDeep } from "lodash";
 
 export enum StatusWord {
   OK = 0x9000,

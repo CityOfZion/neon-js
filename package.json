@@ -17,9 +17,9 @@
     "release:latest": "lerna publish from-package",
     "start": "jest --watch",
     "test": "jest",
-    "version:latest": "lerna version --conventional-commits --no-changelog",
-    "test:integration": "jest /packages/neon-core/__integration__/.* /packages/neon-api/__integration__/.* /packages/neon-js/__integration__/.*",
-    "test:unit": "jest /packages/neon-core/__tests__/.*  /packages/neon-api/__tests__/.* /packages/neon-uri/__tests__/.*"
+    "test:integration": "jest /packages/.*/__integration__/.*",
+    "test:unit": "jest /packages/.*/__tests__/.*",
+    "version:latest": "lerna version --conventional-commits --no-changelog"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.19.2",
