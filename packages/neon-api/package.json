@@ -35,7 +35,7 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "peerDependencies": {
-    "@cityofzion/neon-core": "~5.0.0-next.7"
+    "@cityofzion/neon-core": "^5.0.0"
   },
   "files": [
     "dist/",

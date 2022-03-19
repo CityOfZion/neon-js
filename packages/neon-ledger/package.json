@@ -36,13 +36,13 @@
     "test:node": "node test.node.js"
   },
   "dependencies": {
-    "@ledgerhq/hw-transport": "5.51.1",
-    "@types/ledgerhq__hw-transport": "4.21.3",
-    "@types/lodash": "^4.14.179",
-    "lodash": "4.17.15"
+    "@ledgerhq/hw-transport": "6.24.1",
+    "@types/ledgerhq__hw-transport": "4.21.4",
+    "@types/lodash": "^4.14.180",
+    "lodash": "4.17.21"
   },
   "peerDependencies": {
-    "@cityofzion/neon-core": "~5.0.0-next.7"
+    "@cityofzion/neon-core": "^5.0.0"
   },
   "files": [
     "lib/",
@@ -50,7 +50,7 @@
   ],
   "devDependencies": {
     "@cityofzion/neon-js": "^5.0.0",
-    "@ledgerhq/hw-transport-node-hid": "6.11.2",
+    "@ledgerhq/hw-transport-node-hid": "6.24.1",
     "@ledgerhq/hw-transport-u2f": "5.36.0-deprecated",
     "@types/ledgerhq__hw-transport-node-hid": "4.22.2"
   }
