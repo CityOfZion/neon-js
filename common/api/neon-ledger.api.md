@@ -22,7 +22,7 @@ export function getAppVersion(ledger: Transport): Promise<string>;
 export function getDevicePaths(ledgerLibrary: typeof Transport): Promise<ReadonlyArray<string>>;
 
 // @public
-export function getPublicKey(ledger: Transport, bip44String: string): Promise<string>;
+export function getPublicKey(ledger: Transport, bip44String: string, showAddressOnDevice?: boolean): Promise<string>;
 
 // @public
 export function getSignature(ledger: Transport, payload: string, bip44String: string, network: number): Promise<string>;

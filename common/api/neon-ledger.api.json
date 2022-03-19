@@ -1,7 +1,7 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.19.2",
+    "toolVersion": "7.19.5",
     "schemaVersion": 1004,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
@@ -450,7 +450,7 @@
         {
           "kind": "Function",
           "canonicalReference": "@cityofzion/neon-ledger!getPublicKey:function(1)",
-          "docComment": "/**\n * Requests the public key of a requested address from the Ledger.\n *\n * @param ledger - Ledger instance\n *\n * @param bip44String - BIP44 string (40 bytes)\n *\n * @returns An unencoded public key (65 bytes)\n */\n",
+          "docComment": "/**\n * Requests the public key of a requested address from the Ledger.\n *\n * @param ledger - Ledger instance\n *\n * @param bip44String - BIP44 string (40 bytes)\n *\n * @param showAddressOnDevice - whether to show the public key as NEO3 address on the Ledger\n *\n * @returns An unencoded public key (65 bytes)\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -471,6 +471,14 @@
             },
             {
               "kind": "Content",
+              "text": ", showAddressOnDevice?: "
+            },
+            {
+              "kind": "Content",
+              "text": "boolean"
+            },
+            {
+              "kind": "Content",
               "text": "): "
             },
             {
@@ -488,8 +496,8 @@
             }
           ],
           "returnTypeTokenRange": {
-            "startIndex": 5,
-            "endIndex": 7
+            "startIndex": 7,
+            "endIndex": 9
           },
           "releaseTag": "Public",
           "overloadIndex": 1,
@@ -506,6 +514,13 @@
               "parameterTypeTokenRange": {
                 "startIndex": 3,
                 "endIndex": 4
+              }
+            },
+            {
+              "parameterName": "showAddressOnDevice",
+              "parameterTypeTokenRange": {
+                "startIndex": 5,
+                "endIndex": 6
               }
             }
           ],

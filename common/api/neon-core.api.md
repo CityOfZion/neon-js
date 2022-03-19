@@ -6,7 +6,6 @@
 
 /// <reference types="node" />
 
-import BN from 'bignumber.js';
 import { Logger } from 'loglevel';
 import loglevel from 'loglevel';
 
@@ -815,47 +814,6 @@ function encrypt(wifKey: string, keyphrase: string, scryptParams?: ScryptParams,
 
 // @public
 function ensureHex(str: string): void;
-
-// @public @deprecated
-class Fixed8 extends BN {
-    constructor(input?: number | string | BN, base?: number);
-    // Warning: (ae-unresolved-inheritdoc-reference) The @inheritDoc reference could not be resolved: The package "@cityofzion/neon-core" does not have an export "Fixed8"
-    //
-    // (undocumented)
-    add(n: string | number | BN, base?: number): Fixed8;
-    ceil(): Fixed8;
-    // Warning: (ae-unresolved-inheritdoc-reference) The @inheritDoc reference could not be resolved: The package "@cityofzion/neon-core" does not have an export "Fixed8"
-    //
-    // (undocumented)
-    div(n: string | number | BN, base?: number): Fixed8;
-    dividedBy(n: string | number | BN, base?: number): Fixed8;
-    equals(other: string | number | Fixed8 | BN): boolean;
-    floor(): Fixed8;
-    // (undocumented)
-    static fromHex(hex: string): Fixed8;
-    static fromRawNumber(input: string | number, decimals?: number): Fixed8;
-    // (undocumented)
-    static fromReverseHex(hex: string): Fixed8;
-    static readonly MAX_VALUE: Fixed8;
-    static readonly MIN_VALUE: Fixed8;
-    minus(n: string | number | BN, base?: number): Fixed8;
-    // Warning: (ae-unresolved-inheritdoc-reference) The @inheritDoc reference could not be resolved: The package "@cityofzion/neon-core" does not have an export "Fixed8"
-    //
-    // (undocumented)
-    mul(n: string | number | BN, base?: number): Fixed8;
-    plus(n: string | number | BN, base?: number): Fixed8;
-    round(dp?: number, rm?: BN.RoundingMode): Fixed8;
-    // Warning: (ae-unresolved-inheritdoc-reference) The @inheritDoc reference could not be resolved: The package "@cityofzion/neon-core" does not have an export "Fixed8"
-    //
-    // (undocumented)
-    sub(n: string | number | BN, base?: number): Fixed8;
-    times(n: string | number | BN, base?: number): Fixed8;
-    // (undocumented)
-    toHex(): string;
-    toRawNumber(): BN;
-    // (undocumented)
-    toReverseHex(): string;
-}
 
 // @public @deprecated
 function fixed82num(fixed8hex: string): number;
@@ -3107,7 +3065,6 @@ declare namespace u {
         int2hex,
         num2hexstring,
         num2VarInt,
-        Fixed8,
         StringStream,
         HexString,
         num2fixed8,
