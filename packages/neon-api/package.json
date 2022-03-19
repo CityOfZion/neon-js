@@ -40,8 +40,5 @@
   "files": [
     "dist/",
     "lib/"
-  ],
-  "devDependencies": {
-    "@types/ws": "8.2.2"
-  }
+  ]
 }
