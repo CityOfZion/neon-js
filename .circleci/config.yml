@@ -210,14 +210,14 @@ workflows:
           name: unittest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["12-stretch", "14-stretch", "16-stretch"]
+              version: ["14-stretch", "16-stretch", "18-stretch"]
           requires:
             - setup
       - integrationtest:
           name: integrationtest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["12-stretch", "14-stretch", "16-stretch"]
+              version: ["14-stretch", "16-stretch", "18-stretch"]
           requires:
             - lint
             - unittest-<< matrix.version >>
