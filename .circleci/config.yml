@@ -6,8 +6,8 @@ executors:
       version: &parameter-version
         description: "Node version"
         type: enum
-        enum: ["12-stretch", "14-stretch", "16-stretch"]
-        default: "14-stretch"
+        enum: ["14-stretch", "16-stretch", "18-stretch"]
+        default: "16-stretch"
     working_directory: ~/repo
     docker:
       - image: circleci/node:<< parameters.version >>
@@ -17,8 +17,8 @@ executors:
       version:
         description: "Node version"
         type: enum
-        enum: ["12-stretch", "14-stretch", "16-stretch"]
-        default: "14-stretch"
+        enum: ["14-stretch", "16-stretch", "18-stretch"]
+        default: "16-stretch"
     working_directory: ~/repo
     docker:
       - image: circleci/node:<< parameters.version >>
