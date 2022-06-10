@@ -6,22 +6,22 @@ executors:
       version: &parameter-version
         description: "Node version"
         type: enum
-        enum: ["14-stretch", "16-stretch", "18-stretch"]
-        default: "16-stretch"
+        enum: ["14.19", "lts", "current"]
+        default: "lts"
     working_directory: ~/repo
     docker:
-      - image: circleci/node:<< parameters.version >>
+      - image: cimg/node:<< parameters.version >>
 
   env_node_integration:
     parameters:
       version:
         description: "Node version"
         type: enum
-        enum: ["14-stretch", "16-stretch", "18-stretch"]
-        default: "16-stretch"
+        enum: ["14.19", "lts", "current"]
+        default: "lts"
     working_directory: ~/repo
     docker:
-      - image: circleci/node:<< parameters.version >>
+      - image: cimg/node:<< parameters.version >>
       - image: snowypowers/n3-csharp-solonet:3.1.0
 
 commands:
@@ -210,14 +210,14 @@ workflows:
           name: unittest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["14-stretch", "16-stretch", "18-stretch"]
+              version: ["14.19", "lts", "current"]
           requires:
             - setup
       - integrationtest:
           name: integrationtest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["14-stretch", "16-stretch", "18-stretch"]
+              version: ["14.19", "lts", "current"]
           requires:
             - lint
             - unittest-<< matrix.version >>
