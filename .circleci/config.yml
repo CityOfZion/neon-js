@@ -6,22 +6,22 @@ executors:
       version: &parameter-version
         description: "Node version"
         type: enum
-        enum: ["12-stretch", "14-stretch", "16-stretch"]
-        default: "14-stretch"
+        enum: ["14.19", "lts", "current"]
+        default: "lts"
     working_directory: ~/repo
     docker:
-      - image: circleci/node:<< parameters.version >>
+      - image: cimg/node:<< parameters.version >>
 
   env_node_integration:
     parameters:
       version:
         description: "Node version"
         type: enum
-        enum: ["12-stretch", "14-stretch", "16-stretch"]
-        default: "14-stretch"
+        enum: ["14.19", "lts", "current"]
+        default: "lts"
     working_directory: ~/repo
     docker:
-      - image: circleci/node:<< parameters.version >>
+      - image: cimg/node:<< parameters.version >>
       - image: snowypowers/n3-csharp-solonet:3.1.0
 
 commands:
@@ -85,7 +85,7 @@ jobs:
             - neon-fallback
       - run:
           name: node hid compilation requirements
-          command: sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
+          command: sudo apt-get update && sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
       - run: yarn install --cache-folder .cache/yarn
       - save_cache:
           key: neon-yarn-{{ checksum "yarn.lock" }}
@@ -210,14 +210,14 @@ workflows:
           name: unittest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["12-stretch", "14-stretch", "16-stretch"]
+              version: ["14.19", "lts", "current"]
           requires:
             - setup
       - integrationtest:
           name: integrationtest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["12-stretch", "14-stretch", "16-stretch"]
+              version: ["14.19", "lts", "current"]
           requires:
             - lint
             - unittest-<< matrix.version >>

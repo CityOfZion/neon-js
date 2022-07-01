@@ -106,7 +106,7 @@ describe("getSignature", () => {
     const inputMsg = "1".repeat(512) + "2".repeat(512);
     const bip44Input = "abcd";
     const networkMagic = 123;
-    const mockDer = "9999";
+    const mockDer = "9999999999";
     const expectedSig = "9876";
     const mockLedgerInstance = {
       send: jest

@@ -175,5 +175,5 @@ export function generatePrivateKey(): string {
  * @returns Address version
  */
 export function getAddressVersion(address: string): number {
-  return base58.decode(address).readUInt8();
+  return base58.decode(address)[0];
 }
