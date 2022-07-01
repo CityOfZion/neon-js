@@ -261,8 +261,7 @@ describe("RPC Methods", () => {
     result.map((v) =>
       expect(v).toMatchObject({
         publickey: expect.any(String),
-        active: expect.any(Boolean),
-        votes: expect.any(String),
+        votes: expect.any(Number),
       })
     );
   });

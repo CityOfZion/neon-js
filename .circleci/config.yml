@@ -22,7 +22,7 @@ executors:
     working_directory: ~/repo
     docker:
       - image: cimg/node:<< parameters.version >>
-      - image: snowypowers/n3-csharp-solonet:3.1.0
+      - image: snowypowers/n3-csharp-solonet:3.3.1
 
 commands:
   run-unittest:

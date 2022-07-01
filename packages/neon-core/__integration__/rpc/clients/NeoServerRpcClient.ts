@@ -231,11 +231,10 @@ describe("NeoServerRpcClient", () => {
   test("getNextBlockValidators", async () => {
     const result = await client.getNextBlockValidators();
     result.map((v) => {
-      expect(Object.keys(v)).toHaveLength(3);
+      expect(Object.keys(v)).toHaveLength(2);
       expect(v).toMatchObject({
         publickey: expect.any(String),
-        active: expect.any(Boolean),
-        votes: expect.any(String),
+        votes: expect.any(Number),
       });
 
       expect(parseInt(v.votes)).toBeDefined();
