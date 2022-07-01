@@ -13,7 +13,6 @@ const fixedPrices = {
   [InteropServiceCode.SYSTEM_RUNTIME_GETINVOCATIONCOUNTER]: 16,
   [InteropServiceCode.SYSTEM_RUNTIME_GETNETWORK]: 8,
   [InteropServiceCode.SYSTEM_RUNTIME_GETNOTIFICATIONS]: 256,
-  [InteropServiceCode.SYSTEM_RUNTIME_GETRANDOM]: 16,
   [InteropServiceCode.SYSTEM_RUNTIME_GETSCRIPTCONTAINER]: 8,
   [InteropServiceCode.SYSTEM_RUNTIME_GETTIME]: 8,
   [InteropServiceCode.SYSTEM_RUNTIME_GETTRIGGER]: 8,
