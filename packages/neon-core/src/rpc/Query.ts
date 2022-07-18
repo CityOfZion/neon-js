@@ -5,7 +5,6 @@ import {
   ContractParam,
   StackItemJson,
   NEFJson,
-  ContractParamJson,
 } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 import { HexString } from "../u";
@@ -42,7 +41,7 @@ export interface ApplicationLogJson {
     notifications: {
       contract: string;
       eventname: string;
-      state: ContractParamJson;
+      state: StackItemJson;
     }[];
   }[];
 }
