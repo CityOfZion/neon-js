@@ -5,7 +5,7 @@ describe("constructor", () => {
     const result = new Protocol();
     expect(result instanceof Protocol).toBeTruthy();
     expect(result.magic).toEqual(0);
-    expect(result.addressVersion).toEqual(23);
+    expect(result.addressVersion).toEqual(53);
     expect(result.standbyValidators).toEqual([]);
     expect(result.seedList).toEqual([]);
   });
