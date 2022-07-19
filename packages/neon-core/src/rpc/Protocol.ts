@@ -40,7 +40,7 @@ export class Protocol implements NeonObject<ProtocolLike> {
 
   public constructor(config: Partial<ProtocolLike & ProtocolJSON> = {}) {
     this.magic = config.magic ?? config.Magic ?? 0;
-    this.addressVersion = config.addressVersion ?? config.AddressVersion ?? 23;
+    this.addressVersion = config.addressVersion ?? config.AddressVersion ?? 53;
     this.standbyValidators =
       config.standbyValidators ?? config.StandbyValidators ?? [];
     this.seedList = config.seedList ?? config.SeedList ?? [];
