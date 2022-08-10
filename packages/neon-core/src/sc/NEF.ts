@@ -2,7 +2,6 @@ import {
   StringStream,
   HexString,
   ab2hexstring,
-  getSerializedSize,
   num2hexstring,
   str2hexstring,
   num2VarInt,
@@ -13,6 +12,7 @@ import { MethodTokenLike, MethodTokenJson, MethodToken } from "./MethodToken";
 
 export interface NEFLike {
   compiler: string;
+  source: string;
   tokens: MethodTokenLike[];
   /** Base64 encoded string */
   script: string;
@@ -21,6 +21,7 @@ export interface NEFLike {
 export interface NEFJson {
   magic: number;
   compiler: string;
+  source: string;
   tokens: MethodTokenJson[];
   /** Base64 encoded string */
   script: string;
@@ -31,6 +32,7 @@ export class NEF {
   private static MAX_SCRIPT_LENGTH = 512 * 1024;
   public static MAGIC = 0x3346454e;
   public compiler: string;
+  public source: string;
   public tokens: MethodToken[];
   public script: string;
   #checksum?: number;
@@ -43,8 +45,9 @@ export class NEF {
   }
 
   public constructor(obj: Partial<NEFLike>) {
-    const { compiler = "", tokens = [], script = "" } = obj;
+    const { compiler = "", source = "", tokens = [], script = "" } = obj;
     this.compiler = compiler;
+    this.source = source;
     this.tokens = tokens.map((token) => new MethodToken(token));
     this.script = script;
   }
@@ -56,6 +59,7 @@ export class NEF {
 
     const nef = new NEF({
       compiler: json.compiler,
+      source: json.source,
       tokens: json.tokens.map((t) => MethodToken.fromJson(t)),
       script: json.script,
     });
@@ -78,7 +82,14 @@ export class NEF {
     const idx = compilerHexArray.indexOf(0x0);
     const compiler = compilerHexArray.slice(0, idx).toString();
 
-    if (reader.read(2) !== "0000")
+    const sourceSize = reader.readVarInt();
+    if (sourceSize > 256)
+      throw new Error(
+        "NEF deserialization failure - source field size exceeds maximum length of 256"
+      );
+    const source = Buffer.from(reader.read(sourceSize), "hex").toString();
+
+    if (reader.read(1) !== "00")
       throw new Error("NEF deserialization failure - reserved bytes must be 0");
 
     const tokenLength = reader.readVarInt();
@@ -107,6 +118,7 @@ export class NEF {
 
     const nef = new NEF({
       compiler: compiler,
+      source: source,
       tokens: tokens,
       script: script,
     });
@@ -122,6 +134,7 @@ export class NEF {
     return {
       magic: NEF.MAGIC,
       compiler: this.compiler,
+      source: this.source,
       tokens: this.tokens.map((t) => t.toJson()),
       script: this.script,
       checksum: this.checksum,
@@ -129,22 +142,16 @@ export class NEF {
   }
 
   public get size(): number {
-    return (
-      32 + // magic
-      64 + // compiler
-      2 + // reserved
-      getSerializedSize(this.tokens) +
-      2 + // reserved
-      getSerializedSize(HexString.fromHex(this.script)) +
-      4
-    ); // checksum
+    return this.serialize().length;
   }
 
   private serializeWithoutChecksum(): string {
     let out = "";
     out += num2hexstring(NEF.MAGIC, 4, true);
     out += str2hexstring(this.compiler).padEnd(128, "0");
-    out += "0000"; // reserved
+    out += num2VarInt(this.source.length);
+    out += str2hexstring(this.source);
+    out += "00"; // reserved
     out += serializeArrayOf(this.tokens);
     out += "0000"; // reserved
     out += num2VarInt(this.script.length / 2);
@@ -161,6 +168,7 @@ export class NEF {
   public export(): NEFLike {
     return {
       compiler: this.compiler,
+      source: this.source,
       tokens: this.tokens.map((t) => t.export()),
       script: this.script,
     };
