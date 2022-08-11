@@ -23,6 +23,7 @@ describe("fromJson", () => {
       NEF.fromJson({
         magic: 0,
         compiler: "test-compiler",
+        source: "",
         tokens: [],
         script: "00",
         checksum: 0,
@@ -35,6 +36,7 @@ describe("fromJson", () => {
       NEF.fromJson({
         magic: NEF.MAGIC,
         compiler: "test-compiler",
+        source: "github",
         tokens: [],
         script: "00",
         checksum: 0,
@@ -46,9 +48,10 @@ describe("fromJson", () => {
     const result = NEF.fromJson({
       magic: NEF.MAGIC,
       compiler: "test-compiler",
+      source: "github",
       tokens: [],
       script: "00",
-      checksum: 3189119888,
+      checksum: 3977318361,
     });
     expect(result instanceof NEF).toBeTruthy();
   });
@@ -60,6 +63,7 @@ describe("fromBuffer", () => {
       var nef = new NefFile
       {
           Compiler = "test-compiler 0.1",
+          Source = "github",
           Script = new byte[] {(byte) OpCode.RET},
           Tokens = new MethodToken[]
           {
@@ -77,11 +81,12 @@ describe("fromBuffer", () => {
       Console.WriteLine(nef.ToArray().ToHexString());
      */
     const data = Buffer.from(
-      "4e454633746573742d636f6d70696c657220302e31000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000b746573745f6d6574686f64000001000000014010993d46",
+      "4e454633746573742d636f6d70696c657220302e31000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006676974687562000100000000000000000000000000000000000000000b746573745f6d6574686f6400000100000001403374b4fd",
       "hex"
     );
     const nef = NEF.fromBuffer(data);
     expect(nef.compiler).toBe("test-compiler 0.1");
+    expect(nef.source).toBe("github");
     expect(nef.tokens.length).toBe(1);
     expect(nef.tokens[0].hash).toBe("0000000000000000000000000000000000000000");
     expect(nef.tokens[0].method).toBe("test_method");
@@ -89,7 +94,7 @@ describe("fromBuffer", () => {
     expect(nef.tokens[0].hasReturnValue).toBe(true);
     expect(nef.tokens[0].callFlags).toBe(CallFlags.None);
     expect(nef.script).toBe("40");
-    expect(nef.checksum).toBe(1178442000);
+    expect(nef.checksum).toBe(4256461875);
   });
 
   test("local file: djnicholson.NeoPetShopContract", () => {
@@ -109,10 +114,21 @@ describe("fromBuffer", () => {
     );
   });
 
+  test("invalid source length", () => {
+    const magic = "4e454633";
+    const compiler = Buffer.alloc(64, 0).toString("hex");
+    const source = "fd0101"; // var size of 257 (limit is 256)
+    const data = Buffer.from(magic + compiler + source, "hex");
+    expect(() => NEF.fromBuffer(data)).toThrowError(
+      "NEF deserialization failure - source field size exceeds maximum length of 256"
+    );
+  });
+
   test("invalid reserved 1", () => {
     const magic = "4e454633";
-    const method = Buffer.alloc(64, 0).toString("hex");
-    const data = Buffer.from(magic + method + "0001", "hex");
+    const compiler = Buffer.alloc(64, 0).toString("hex");
+    const source = "00";
+    const data = Buffer.from(magic + compiler + source + "01", "hex");
     expect(() => NEF.fromBuffer(data)).toThrowError(
       "NEF deserialization failure - reserved bytes must be 0"
     );
@@ -120,9 +136,13 @@ describe("fromBuffer", () => {
 
   test("invalid token length", () => {
     const magic = "4e454633";
-    const method = Buffer.alloc(64, 0).toString("hex");
-    const reserved = "0000";
-    const data = Buffer.from(magic + method + reserved + "ffff", "hex");
+    const compiler = Buffer.alloc(64, 0).toString("hex");
+    const source = "00";
+    const reserved = "00";
+    const data = Buffer.from(
+      magic + compiler + source + reserved + "ffff",
+      "hex"
+    );
     expect(() => NEF.fromBuffer(data)).toThrowError(
       "NEF deserialization failure - token array exceeds maximum length of 128"
     );
@@ -130,11 +150,12 @@ describe("fromBuffer", () => {
 
   test("invalid reserved 2", () => {
     const magic = "4e454633";
-    const method = Buffer.alloc(64, 0).toString("hex");
-    const reserved = "0000";
+    const compiler = Buffer.alloc(64, 0).toString("hex");
+    const source = "00";
+    const reserved = "00";
     const methodLength = "00";
     const data = Buffer.from(
-      magic + method + reserved + methodLength + "0001",
+      magic + compiler + source + reserved + methodLength + "0001",
       "hex"
     );
     expect(() => NEF.fromBuffer(data)).toThrowError(
@@ -144,11 +165,13 @@ describe("fromBuffer", () => {
 
   test("script length cannot be 0", () => {
     const magic = "4e454633";
-    const method = Buffer.alloc(64, 0).toString("hex");
-    const reserved = "0000";
+    const compiler = Buffer.alloc(64, 0).toString("hex");
+    const source = "00";
+    const reserved1 = "00";
+    const reserved2 = "0000";
     const methodLength = "00";
     const data = Buffer.from(
-      magic + method + reserved + methodLength + reserved + "00",
+      magic + compiler + source + reserved1 + methodLength + reserved2 + "00",
       "hex"
     );
     expect(() => NEF.fromBuffer(data)).toThrowError(
@@ -158,11 +181,19 @@ describe("fromBuffer", () => {
 
   test("script length exceeds max value", () => {
     const magic = "4e454633";
-    const method = Buffer.alloc(64, 0).toString("hex");
-    const reserved = "0000";
+    const compiler = Buffer.alloc(64, 0).toString("hex");
+    const source = "00";
+    const reserved1 = "00";
+    const reserved2 = "0000";
     const methodLength = "00";
     const data = Buffer.from(
-      magic + method + reserved + methodLength + reserved + "ffffffffffffffff",
+      magic +
+        compiler +
+        source +
+        reserved1 +
+        methodLength +
+        reserved2 +
+        "ffffffffffffffff",
       "hex"
     );
     expect(() => NEF.fromBuffer(data)).toThrowError(
@@ -175,7 +206,7 @@ describe("serialize", () => {
   test("ok", () => {
     // hexstring captured from C#, see fromBuffer test for the capture code
     const hexstring =
-      "4e454633746573742d636f6d70696c657220302e31000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000b746573745f6d6574686f64000001000000014010993d46";
+      "4e454633746573742d636f6d70696c657220302e31000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006676974687562000100000000000000000000000000000000000000000b746573745f6d6574686f6400000100000001403374b4fd";
     const data = Buffer.from(hexstring, "hex");
     const nef = NEF.fromBuffer(data);
     expect(nef.serialize()).toEqual(hexstring);
