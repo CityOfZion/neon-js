@@ -75,6 +75,12 @@ export async function smartCalculateNetworkFee(
 ): Promise<u.BigInteger> {
   const txClone = new tx.Transaction(txn);
 
+  if (txn.witnesses.length < 1) {
+    throw new Error(
+      "Cannot calculate network fee without at least one witness"
+    );
+  }
+
   txClone.witnesses = txn.witnesses.map((w) => {
     const verificationScript = w.verificationScript;
     if (sc.isMultisigContract(verificationScript)) {
@@ -95,7 +101,7 @@ export async function smartCalculateNetworkFee(
       });
     }
   });
-  const result = await client.calculateNetworkFee(txn);
+  const result = await client.calculateNetworkFee(txClone);
 
   return u.BigInteger.fromNumber(result);
 }

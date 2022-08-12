@@ -221,10 +221,19 @@ export async function addFees(
     transaction.networkFee = config.networkFeeOverride;
   } else {
     const rpcClient = new rpc.RPCClient(config.rpcAddress);
-    transaction.networkFee = await smartCalculateNetworkFee(
-      transaction,
-      rpcClient
-    );
+    const txClone = new tx.Transaction(transaction);
+
+    if (txClone.witnesses.length < 1) {
+      txClone.addWitness(
+        new tx.Witness({
+          invocationScript: "",
+          verificationScript: u.HexString.fromBase64(
+            config.account.contract.script
+          ).toString(),
+        })
+      );
+    }
+    transaction.networkFee = await smartCalculateNetworkFee(txClone, rpcClient);
   }
 
   const GAS = new GASContract(config);
