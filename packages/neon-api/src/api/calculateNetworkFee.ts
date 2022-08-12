@@ -1,4 +1,5 @@
 import { tx, sc, u, wallet } from "@cityofzion/neon-core";
+import RPCClient from "@cityofzion/neon-core/lib/rpc/RPCClient";
 
 /**
  * Calculates the network fee required to process the transaction.
@@ -8,7 +9,7 @@ import { tx, sc, u, wallet } from "@cityofzion/neon-core";
  * @param feePerByte - The current feePerByte in Policy contract.
  * @param signingAccts - The accounts that will be signing this.
  *
- * @deprecated use the RPC call calculateNetworkFee instead.
+ * @deprecated use the smartCalculateNetworkFee helper instead.
  */
 export function calculateNetworkFee(
   txn: tx.Transaction,
@@ -66,4 +67,35 @@ export function calculateNetworkFee(
 
 function generateFakeInvocationScript(): sc.OpToken {
   return new sc.OpToken(sc.OpCode.PUSHDATA1, "0".repeat(128));
+}
+
+export async function smartCalculateNetworkFee(
+  txn: tx.Transaction,
+  client: RPCClient
+): Promise<u.BigInteger> {
+  const txClone = new tx.Transaction(txn);
+
+  txClone.witnesses = txn.witnesses.map((w) => {
+    const verificationScript = w.verificationScript;
+    if (sc.isMultisigContract(verificationScript)) {
+      const threshold = wallet.getSigningThresholdFromVerificationScript(
+        verificationScript.toBigEndian()
+      );
+
+      return new tx.Witness({
+        invocationScript: generateFakeInvocationScript()
+          .toScript()
+          .repeat(threshold),
+        verificationScript,
+      });
+    } else {
+      return new tx.Witness({
+        invocationScript: generateFakeInvocationScript().toScript(),
+        verificationScript,
+      });
+    }
+  });
+  const result = await client.calculateNetworkFee(txn);
+
+  return u.BigInteger.fromNumber(result);
 }
