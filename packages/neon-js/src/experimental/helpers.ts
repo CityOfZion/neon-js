@@ -224,6 +224,18 @@ export async function addFees(
     );
   }
 
+  if (config.networkFeeOverride && config.prioritisationFee) {
+    throw new Error(
+      "networkFeeOverride and prioritisationFee are mutually exclusive"
+    );
+  }
+
+  if (config.prioritisationFee) {
+    transaction.networkFee = transaction.networkFee.add(
+      u.BigInteger.fromNumber(config.prioritisationFee)
+    );
+  }
+
   const GAS = new GASContract(config);
   const gasBalance = await GAS.balanceOf(config.account.address);
   const requiredGAS = parseFloat(
