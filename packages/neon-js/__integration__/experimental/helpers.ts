@@ -1,7 +1,8 @@
 // import { getIntegrationEnvUrl } from "../../../../../testHelpers";
 import { experimental } from "../../src";
-import { rpc, sc, u, wallet } from "@cityofzion/neon-core";
+import { CONST, rpc, sc, u, wallet } from "@cityofzion/neon-core";
 import { promises as fs } from "fs";
+import * as TestHelpers from "../../../../testHelpers";
 import path from "path";
 import { CommonConfig } from "../../src/experimental/types";
 
@@ -10,14 +11,11 @@ let nef: sc.NEF;
 let manifest: sc.ContractManifest;
 let contractHash: string;
 
-// const wif = "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g";
-// const acc = new wallet.Account(wif);
-const acc = new wallet.Account(
-  "6PYP5AxU9fZzocL5h88Af7idcPwKLmSfzcHPmVd5uLL6LKrBYH9N7cMYWn"
-);
+const wif = "L1QqQJnpBwbsPGAuutuzPTac8piqvbR1HRjrY5qHup48TBCBFe4g";
+const acc = new wallet.Account(wif);
 
 const config: CommonConfig = {
-  networkMagic: 12345678, //CONST.MAGIC_NUMBER.SoloNet,
+  networkMagic: CONST.MAGIC_NUMBER.SoloNet,
   rpcAddress: "",
   account: acc,
 };
@@ -28,8 +26,7 @@ async function sleep(ms: number): Promise<void> {
 
 beforeAll(async () => {
   await acc.decrypt("123");
-  const url = "http://127.0.0.1:10332";
-  // const url = await TestHelpers.getIntegrationEnvUrl();
+  const url = await TestHelpers.getIntegrationEnvUrl();
   config.rpcAddress = url;
   rpcClient = new rpc.RPCClient(url);
 
