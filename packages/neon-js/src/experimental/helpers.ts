@@ -1,12 +1,15 @@
 import { CONST, rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { CommonConfig } from "./types";
 import { GASContract } from "./nep17";
+import { smartCalculateNetworkFee } from "@cityofzion/neon-api";
 
 /**
  * Calculate the GAS costs for validation and inclusion of the transaction in a block
  * @param transaction - the transaction to calculate the network fee for
  * @param account -
  * @param config -
+ *
+ * @deprecated use the smartCalculateNetworkFee helper instead.
  */
 export async function calculateNetworkFee(
   transaction: tx.Transaction,
@@ -217,10 +220,10 @@ export async function addFees(
   if (config.networkFeeOverride) {
     transaction.networkFee = config.networkFeeOverride;
   } else {
-    transaction.networkFee = await calculateNetworkFee(
+    const rpcClient = new rpc.RPCClient(config.rpcAddress);
+    transaction.networkFee = await smartCalculateNetworkFee(
       transaction,
-      config.account,
-      config
+      rpcClient
     );
   }
 
