@@ -25,7 +25,6 @@ async function sleep(ms: number): Promise<void> {
 }
 
 beforeAll(async () => {
-  await acc.decrypt("123");
   const url = await TestHelpers.getIntegrationEnvUrl();
   config.rpcAddress = url;
   rpcClient = new rpc.RPCClient(url);
