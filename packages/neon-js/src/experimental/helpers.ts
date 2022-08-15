@@ -194,9 +194,14 @@ export async function setBlockExpiry(
 /**
  * Add system and network fees to a transaction.
  * Validates that the source Account has sufficient balance
+ *
+ * Note: Witnesses must be present on the transaction. If no witnesses are
+ * present a temporary single signature account witness will be used for
+ * fee calculation. For fee calculation using a multi signature account you
+ * must add the witness yourself. See TransactionBuilder.addEmptyWitnesses()
+ * for reference how this could be done.
  * @param transaction - the transaction to add network and system fees to
  * @param config -
- * @param token_decimals -
  */
 export async function addFees(
   transaction: tx.Transaction,
