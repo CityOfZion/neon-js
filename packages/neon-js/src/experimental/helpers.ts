@@ -199,6 +199,12 @@ export async function addFees(
   transaction: tx.Transaction,
   config: CommonConfig
 ): Promise<void> {
+  if (config.networkFeeOverride && config.prioritisationFee) {
+    throw new Error(
+      "networkFeeOverride and prioritisationFee are mutually exclusive"
+    );
+  }
+
   if (config.systemFeeOverride) {
     transaction.systemFee = config.systemFeeOverride;
   } else {
@@ -221,6 +227,12 @@ export async function addFees(
       transaction,
       config.account,
       config
+    );
+  }
+
+  if (config.prioritisationFee) {
+    transaction.networkFee = transaction.networkFee.add(
+      u.BigInteger.fromNumber(config.prioritisationFee)
     );
   }
 
