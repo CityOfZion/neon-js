@@ -502,3 +502,17 @@ export function likeContractParam(
     cp.value !== undefined
   );
 }
+
+// eslint-disable-next-line
+export function isContractParam(value: any): value is ContractParam {
+  if (value instanceof ContractParam) {
+    return true;
+  }
+
+  return (
+    value.type !== undefined &&
+    value.type in ContractParamType &&
+    value.value !== null &&
+    value.value !== undefined
+  );
+}

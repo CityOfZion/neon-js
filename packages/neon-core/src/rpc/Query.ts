@@ -5,6 +5,7 @@ import {
   ContractParam,
   StackItemJson,
   NEFJson,
+  isContractParam,
 } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 import { HexString } from "../u";
@@ -573,7 +574,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
       params: [
         scriptHash,
         operation,
-        params.map((p) => (p instanceof ContractParam ? p.toJson() : p)),
+        params.map((p) => (isContractParam(p) ? p.toJson() : p)),
         signers.map((s) => (s instanceof Signer ? s.toJson() : s)),
       ],
     });
