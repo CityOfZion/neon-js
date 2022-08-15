@@ -318,36 +318,3 @@ function getBytesForTwos(value: BN): number {
   }
   throw new Error("Number too large to convert!");
 }
-
-/**
- * Converts a number to a Fixed8 format hex string
- * @param num - the value to convert
- * @param size - output size in bytes
- * @returns number in Fixed8 representation.
- *
- * @deprecated BigInteger.fromDecimal(num,8).toHex()
- */
-export function num2fixed8(num: number, size = 8): string {
-  if (typeof num !== "number") {
-    throw new Error(
-      `num2fixed8 expected a number but got ${typeof num} instead.`
-    );
-  }
-  if (size % 1 !== 0) {
-    throw new Error(
-      `num2fixed8 expected an integer for argument size but got ${size} instead.`
-    );
-  }
-  const hexString = BigInteger.fromDecimal(num, 8).toReverseTwos();
-  return hexString.padEnd(size * 2, "0");
-}
-
-/**
- * Converts a Fixed8 hex string to its original number
- * @param fixed8hex - number in Fixed8 representation
- *
- * @deprecated  parseInt(BigInteger.fromTwos(fixed8hex, true).toDecimal(8))
- */
-export function fixed82num(fixed8hex: string): number {
-  return parseFloat(BigInteger.fromTwos(fixed8hex, true).toDecimal(8));
-}

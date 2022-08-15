@@ -1,6 +1,5 @@
 import {
   buildParser,
-  Fixed8Parser,
   IntegerParser,
   NoOpParser,
   SimpleParser,
@@ -42,16 +41,6 @@ describe("IntegerParser", () => {
       expect(result).toBe(expected);
     }
   );
-});
-
-describe("Fixed8Parser", () => {
-  test.each([
-    ["0", { type: "ByteString", value: "" }],
-    ["40000", { type: "ByteString", value: "00409452a303" }],
-  ] as [string, StackItemJson][])("%s", (msg: string, item: StackItemJson) => {
-    const result = Fixed8Parser(item);
-    expect(result.toString()).toBe(msg);
-  });
 });
 
 describe("StringParser", () => {
