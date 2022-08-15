@@ -4,7 +4,6 @@ import { ensureHex, reverseHex } from "./basic";
  * Converts an ArrayBuffer to an ASCII string.
  */
 export function ab2str(buf: ArrayBuffer | ArrayLike<number>): string {
-  Text;
   return String.fromCharCode.apply(null, Array.from(new Uint8Array(buf)));
 }
 
