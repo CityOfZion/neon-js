@@ -207,6 +207,12 @@ export async function addFees(
   transaction: tx.Transaction,
   config: CommonConfig
 ): Promise<void> {
+  if (config.networkFeeOverride && config.prioritisationFee) {
+    throw new Error(
+      "networkFeeOverride and prioritisationFee are mutually exclusive"
+    );
+  }
+
   if (config.systemFeeOverride) {
     transaction.systemFee = config.systemFeeOverride;
   } else {
@@ -239,6 +245,12 @@ export async function addFees(
       );
     }
     transaction.networkFee = await smartCalculateNetworkFee(txClone, rpcClient);
+  }
+
+  if (config.prioritisationFee) {
+    transaction.networkFee = transaction.networkFee.add(
+      u.BigInteger.fromNumber(config.prioritisationFee)
+    );
   }
 
   const GAS = new GASContract(config);
