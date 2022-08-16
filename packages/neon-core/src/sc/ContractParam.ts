@@ -513,6 +513,7 @@ export function isContractParam(value: any): value is ContractParam {
     value.type !== undefined &&
     value.type in ContractParamType &&
     value.value !== null &&
-    value.value !== undefined
+    value.value !== undefined &&
+    typeof value.toJson === "function"
   );
 }
