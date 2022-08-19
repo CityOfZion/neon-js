@@ -1,12 +1,15 @@
 import { CONST, rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 import { CommonConfig } from "./types";
 import { GASContract } from "./nep17";
+import { smartCalculateNetworkFee } from "@cityofzion/neon-api";
 
 /**
  * Calculate the GAS costs for validation and inclusion of the transaction in a block
  * @param transaction - the transaction to calculate the network fee for
  * @param account -
  * @param config -
+ *
+ * @deprecated use the smartCalculateNetworkFee helper instead.
  */
 export async function calculateNetworkFee(
   transaction: tx.Transaction,
@@ -191,9 +194,14 @@ export async function setBlockExpiry(
 /**
  * Add system and network fees to a transaction.
  * Validates that the source Account has sufficient balance
+ *
+ * Note: Witnesses must be present on the transaction. If no witnesses are
+ * present a temporary single signature account witness will be used for
+ * fee calculation. For fee calculation using a multi signature account you
+ * must add the witness yourself. See TransactionBuilder.addEmptyWitnesses()
+ * for reference how this could be done.
  * @param transaction - the transaction to add network and system fees to
  * @param config -
- * @param token_decimals -
  */
 export async function addFees(
   transaction: tx.Transaction,
@@ -223,11 +231,20 @@ export async function addFees(
   if (config.networkFeeOverride) {
     transaction.networkFee = config.networkFeeOverride;
   } else {
-    transaction.networkFee = await calculateNetworkFee(
-      transaction,
-      config.account,
-      config
-    );
+    const rpcClient = new rpc.RPCClient(config.rpcAddress);
+    const txClone = new tx.Transaction(transaction);
+
+    if (txClone.witnesses.length < 1) {
+      txClone.addWitness(
+        new tx.Witness({
+          invocationScript: "",
+          verificationScript: u.HexString.fromBase64(
+            config.account.contract.script
+          ).toString(),
+        })
+      );
+    }
+    transaction.networkFee = await smartCalculateNetworkFee(txClone, rpcClient);
   }
 
   if (config.prioritisationFee) {
