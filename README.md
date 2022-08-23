@@ -58,6 +58,11 @@ console.log(Neon);
 var acct = Neon.create.account("NKuyBkoGdZZSLyPbJEetheRhMjeznFZszf");
 ```
 
+> **Note**
+> mixing import `neon-core` and `neon-js` (the latter which includes `neon-core`) in the same project can lead to undesired
+> behaviour ([example](https://github.com/CityOfZion/neon-js/issues/850)). Unless all you need is contained in `neon-core`, use
+> `neon-js`.
+
 # Contributing
 
 Please refer to [`CONTRIBUTING`](./CONTRIBUTING.md) for development practices.
