@@ -11,8 +11,7 @@ const sb = Neon.create.scriptBuilder();
 const alternative = new sc.scriptBuilder();
 ```
 
-In NEO, users interact with smart contracts through InvocationTransactions.
-These transactions carry the hex output from scriptBuilder and assets involved
+Users interact with smart contracts through Transactions. These transactions carry the hex output from scriptBuilder and
 to the network for processing.
 
 To test out smart contracts, you are better off using RPC calls:
@@ -21,14 +20,13 @@ To test out smart contracts, you are better off using RPC calls:
 - `invokefunction`
 - `invokescript`
 
-These are implemented in v2.3.3. These RPC calls execute the provided script and
-returns the result based on the current blockchain state. However, it is not
-actually recorded on the chain. Thus, their purpose is to test out the script to
+These RPC calls execute the provided script and  returns the result based on the current blockchain state.
+However, it is not actually recorded on the chain. Thus, their purpose is to test out the script to
 ensure validity and find out the gas cost required.
 
-For example, in the NEP5 token standard, we do not require an actual transaction
+For example, in the NEP-17 token standard, we do not require an actual transaction
 to retrieve the name or symbol of the token. Thus, it is better to use a
-`invoke` RPC call instead of a real invocationTransaction.
+`invoke` RPC call instead of a real Transaction which costs gas.
 
 We will use a transaction when we want to effect a state change. For example, we
 want to transfer tokens from address A to B. We will use invoke to ensure the
@@ -41,18 +39,15 @@ script is valid before sending the actual transaction.
 ### ScriptBuilder
 
 The `ScriptBuilder` is an object that converts a smart contract method call into
-a hexstring that can be sent to the network with a InvocationTransaction.
+a hexstring that can be sent to the network with a Transaction.
 
 ```js
 const sb = Neon.create.scriptBuilder();
-// Build script to call 'name' from contract at 5b7074e873973a6ed3708862f219a6fbf4d1c411
-sb.emitAppCall("5b7074e873973a6ed3708862f219a6fbf4d1c411", "name");
+// Build script to call 'symbol()' from contract at ef4073a0f2b305a38ec4050e4d3d28bc40ea63f5
+sb.emitAppCall("ef4073a0f2b305a38ec4050e4d3d28bc40ea63f5", "symbol");
 
 // Test the script with invokescript
 rpc.Query.invokeScript(sb.str).execute(nodeURL);
-
-// Create InvocationTransaction for real execution
-const tx = Neon.create.invocationTx(publicKey, {}, {}, sb.str, 0);
 ```
 
 You may chain multiple calls together in a single VM script. The results will be
@@ -60,11 +55,11 @@ returned in order.
 
 ```js
 const sb = Neon.create.scriptBuilder();
-sb.emitAppCall(scriptHash, "name").emitAppCall(scriptHash, "symbol");
+sb.emitAppCall(scriptHash, "decimals").emitAppCall(scriptHash, "symbol");
 
-// Returns name, symbol
+// Returns decimals, symbol
 rpc.Query.invokeScript(sb.str)
-  .execute(Neon.CONST.DEFAULT_RPC.MAIN)
+  .execute("http://seed1.neo.org:10332")
   .then((res) => {
     console.log(res);
   });
@@ -74,34 +69,12 @@ A simple wrapper method is provided for convenience.
 
 ```js
 const props = {
-  scriptHash: Neon.CONST.CONTRACTS.TEST_RPX,
-  operation: "name",
+  scriptHash: Neon.CONST.NATIVE_CONTRACT_HASH.NeoToken,
+  operation: "symbol",
   args: [],
 };
 // Returns a hexstring
 const vmScript = Neon.create.script(props);
-```
-
-The ScriptBuilder can also reverse scripts back to its arguments. However, this
-process is not a complete reverse engineer due to the varied nature of
-arguments. The arguments are returned as hexstrings and it is left to the
-developer to parse them meaningfully.
-
-```js
-const sb = new sb.ScriptBuilder(
-  "00c1046e616d65675f0e5a86edd8e1f62b68d2b3f7c0a761fc5a67dc"
-);
-const params = sb.toScriptParams();
-params = [
-  {
-    scriptHash: "dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f",
-    args: [
-      "6e616d65", // 'name' in hexstring
-      [],
-    ],
-    useTailCall: false,
-  },
-];
 ```
 
 ### ContractParam
@@ -122,14 +95,11 @@ and array.
 
 ```js
 const param1 = Neon.create.contractParam("String", "balanceOf");
-// This is a convenient way to convert an address to a reversed scriptHash that smart contracts use.
-const param2 = sc.ContractParam.byteArray(
-  "AVf4UGKevVrMR1j3UkPsuoYKSC4ocoAkKx",
-  "address"
-);
+// This will automatically convert an address to a scriptHash that smart contracts use.
+const param2 = sc.ContractParam.hash160("NNtxeX9UhKfHySqPQ29hQnZe22k8LwcFk1");
 
 rpc.Query.invoke(
-  CONST.CONTRACTS.TEST_RPX,
+  CONST.NATIVE_CONTRACT_HASH.NeoToken,
   param1,
   sc.ContractParam.array(param2)
 ).then((res) => {
@@ -137,5 +107,4 @@ rpc.Query.invoke(
 });
 ```
 
-ContractParams are compatible with ScriptBuilder so it is fine to pass them in
-as arguments directly.
+ContractParams are compatible with ScriptBuilder, so it is fine to pass them in as arguments directly.

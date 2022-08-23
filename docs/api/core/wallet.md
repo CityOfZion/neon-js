@@ -6,12 +6,12 @@ title: Wallet
 The `wallet` module is exposed as:
 
 ```js
-import Neon, { wallet } from "@cityofzion/neon-js";
+import Neon, { wallet, CONST } from "@cityofzion/neon-js";
 const account = Neon.create.account(privateKey);
 const alternative = new wallet.Account(privateKey);
 
-Neon.is.address(string);
-wallet.isAddress(string);
+Neon.is.address(string, CONST.DEFAULT_ADDRESS_VERSION);
+wallet.isAddress(string, CONST.DEFAULT_ADDRESS_VERSION);
 ```
 
 The `wallet` module contains methods for manipulating keys, creating signatures
@@ -45,8 +45,8 @@ It can be instantiated with any key format and is smart enough to recognise the
 format and store it appropriately.
 
 ```js
-const a = Neon.create.Account("ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s");
-console.log(a.address); // ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s
+const a = Neon.create.Account("NNtxeX9UhKfHySqPQ29hQnZe22k8LwcFk1");
+console.log(a.address); // NNtxeX9UhKfHySqPQ29hQnZe22k8LwcFk1
 
 const b = new wallet.Account(
   "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69"
@@ -104,90 +104,6 @@ c.encrypt("new password").then(() => c.export());
 
 This action will encrypt the private key with the provided password and replace
 any old NEP2 key.
-
-### Balance
-
-```ts
-class Balance {
-  constructor(bal?: Balance);
-
-  address: string;
-  net: "MainNet" | "TestNet";
-  assetSymbols: string[];
-  assets: { [index: string]: AssetBalance };
-  tokenSymbols: string[];
-  tokens: { [index: string]: number };
-
-  static import(jsonString: string): Balance;
-
-  addAsset(sym: string, assetBalance?: AssetBalance): this;
-  addToken(sym: string, tokenBalance?: number | Fixed8): this;
-  applyTx(tx: Transaction, confirmed?: boolean): this;
-  export(): string;
-  verifyAssets(url: string): Promise<Balance>;
-}
-```
-
-The Balance class stores the balance of the account. It is usually retrieved
-using a 3rd party API as NEO nodes do not have a RPC call to easily retrieve
-this information with a single call.
-
-```js
-// This creates a balance object but it is empty and not really useful
-Neon.create.balance({
-  net: "TestNet",
-  address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
-});
-
-import { wallet } from "@cityofzion/neon-js";
-// This form is useless as it is an empty balance.
-const balance = new wallet.Balance({
-  net: "TestNet",
-  address: "ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW",
-});
-
-// This contains all symbols of assets available in this balance
-const symbols = filledBalance.assetSymbols;
-// We retrieve the unspent coins from the assets object using the symbol
-const neoCoins = filledBalance.assets["NEO"].unspent;
-// We can verify the information retrieved using verifyAssets
-filledBalance.verifyAssets("https://seed1.neo.org:20332");
-```
-
-The class is used to track the unspent coins available to construct transactions
-with. `verifyAssets` is a handy method to make sure the unspent coins provided
-by the 3rd party API is really unspent by verifying them against a NEO node.
-However, this is an expensive operation so use sparingly.
-
-The constructor is a handy method to convert a Balance-like javascript object
-into a `neon-js` Balance.
-
-### Claims
-
-```ts
-class Claims {
-  constructor(claims?: Claims);
-
-  address: string;
-  net: string;
-  claims: ClaimItem[];
-}
-```
-
-The Claims class is a collection of claims data belonging to an account. It is
-usually retrieved from a 3rd part API. We do not recommend you craft your own
-Claims manually. This class is here for completeness in terms of high level
-objects.
-
-Like Balance, the constructor is the way to convert a Claims-like object into a
-`neon-js` Claims object. This is the primary method we use to convert the claims
-object we get from 3rd party API.
-
-NEO generates GAS when held. When NEO is spent, the gas that it generates is
-unlocked and made claimable through ClaimTransaction. The formula for calcuating
-the claim per transaction is:
-
-    claim = ((start - end) * 8 + sysfee) * value
 
 ### Wallet
 
