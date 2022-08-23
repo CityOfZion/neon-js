@@ -58,10 +58,11 @@ console.log(Neon);
 var acct = Neon.create.account("NKuyBkoGdZZSLyPbJEetheRhMjeznFZszf");
 ```
 
+
 > **Note**
-> mixing import `neon-core` and `neon-js` (the latter which includes `neon-core`) in the same project can lead to undesired
-> behaviour ([example](https://github.com/CityOfZion/neon-js/issues/850)). Unless all you need is contained in `neon-core`, use
-> `neon-js`.
+> For most use-cases, we recommend `neon-js`.
+> Do not use `neon-js` and `neon-core`  in the same project.  The classes are not cross-package compatible. See https://github.com/CityOfZion/neon-js/issues/850.
+
 
 # Contributing
 
