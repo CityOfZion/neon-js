@@ -36,19 +36,6 @@ describe("twos complement", () => {
   });
 
   test.each([
-    ["0000000000000000", "0"],
-    ["00e1f50500000000", "100000000"],
-    ["0100000000000000", "1"],
-    ["0080c6a47e8d0300", "1000000000000000"],
-    ["5004fb711f010000", "1234567890000"],
-    ["ffffffffffffffff", "-1"],
-    ["31e28e7915000000", "92233720369"],
-  ])("Fixed8: %s -> %s", (n: string, s: string) => {
-    const result = BigInteger.fromTwos(n, true);
-    expect(result.toString()).toBe(s);
-  });
-
-  test.each([
     [0, "00"],
     [-1, "ff"],
     [1, "01"],

@@ -9,7 +9,6 @@ The `u` module is exposed as:
 import Neon, { u } from "@cityofzion/neon-js";
 Neon.u.reverseHex(hexstring);
 
-const fixed8 = new Neon.u.Fixed8(123.456);
 ```
 
 The utility module contains:
@@ -42,22 +41,6 @@ ss.isEmpty(); // true
 ss.str; // 'abcdefgh'
 ```
 
-### Fixed8
-
-Fixed8 is a class based off bignumber.js for storage and accurate calculations
-of values. It is extended to have helper methods for converting between decimal
-and hex representation.
-
-```js
-const a = new Neon.u.Fixed8(1);
-a.toHex(); // '0000000005f5e100'
-a.toReverseHex(); // '00e1f50500000000'
-
-const b = Neon.u.Fixed8.fromHex("0000000005f5e100"); // 1
-const c = new u.Fixed8("2");
-const d = u.Fixed8.fromReverseHex("00e1f50500000000");
-```
-
 ## Methods
 
 ### Format
@@ -67,7 +50,6 @@ underlying logic requires a lot of format conversions.
 
 ```js
 Neon.u.reverseHex(hexstring);
-Neon.u.num2fixed8(1);
 Neon.u.ab2str(arrayBuffer);
 
 // Conversions to hex
@@ -84,11 +66,6 @@ Neon.u.hexstring2ab(hexString);
 The most common format is hex string. This is a string where every 2 characters
 represents a byte in an bytearray. `neon-js` intentionally works with hex
 strings because strings are easy to print and manipulate.
-
-A special format used in NEO is the fixed8 number format. It is a fixed point
-float with precision of 8 decimal places. It is usually received as a hexstring
-from `getrawtransaction`. `neon-js` has functions to convert it to and from a JS
-number type.
 
 ### Hashing
 
