@@ -19,6 +19,10 @@ npm install @cityofzion/neon-core
 
 This will give you the release that is compatible for the neo3 mainnet and testnet.
 
+> **Note**
+> For most use-cases, we recommend `neon-js`.
+> Do not use `neon-js` and `neon-core`  in the same project.  The classes are not cross-package compatible. See https://github.com/CityOfZion/neon-js/issues/850.
+
 ## Node
 
 Support policy is to support the maintainence and LTS versions of Node. At the

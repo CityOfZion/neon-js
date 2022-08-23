@@ -58,6 +58,12 @@ console.log(Neon);
 var acct = Neon.create.account("NKuyBkoGdZZSLyPbJEetheRhMjeznFZszf");
 ```
 
+
+> **Note**
+> For most use-cases, we recommend `neon-js`.
+> Do not use `neon-js` and `neon-core`  in the same project.  The classes are not cross-package compatible. See https://github.com/CityOfZion/neon-js/issues/850.
+
+
 # Contributing
 
 Please refer to [`CONTRIBUTING`](./CONTRIBUTING.md) for development practices.
