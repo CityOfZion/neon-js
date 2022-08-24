@@ -6,12 +6,12 @@ title: Wallet
 The `wallet` module is exposed as:
 
 ```js
-import Neon, { wallet } from "@cityofzion/neon-js";
+import Neon, { wallet, CONST } from "@cityofzion/neon-js";
 const account = Neon.create.account(privateKey);
 const alternative = new wallet.Account(privateKey);
 
-Neon.is.address(string);
-wallet.isAddress(string);
+Neon.is.address(string, CONST.DEFAULT_ADDRESS_VERSION);
+wallet.isAddress(string, CONST.DEFAULT_ADDRESS_VERSION);
 ```
 
 The `wallet` module contains methods for manipulating keys, creating signatures
@@ -45,8 +45,8 @@ It can be instantiated with any key format and is smart enough to recognise the
 format and store it appropriately.
 
 ```js
-const a = Neon.create.Account("ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s");
-console.log(a.address); // ALfnhLg7rUyL6Jr98bzzoxz5J7m64fbR4s
+const a = Neon.create.Account("NNtxeX9UhKfHySqPQ29hQnZe22k8LwcFk1");
+console.log(a.address); // NNtxeX9UhKfHySqPQ29hQnZe22k8LwcFk1
 
 const b = new wallet.Account(
   "9ab7e154840daca3a2efadaf0df93cd3a5b51768c632f5433f86909d9b994a69"

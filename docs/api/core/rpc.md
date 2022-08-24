@@ -8,7 +8,7 @@ The `rpc` module is exposed as:
 ```js
 import Neon, { rpc } from "@cityofzion/neon-js";
 const client = Neon.create.rpcClient(URL);
-const alternative = new rpc.rpcClient(URL);
+const alternative = new rpc.RPCClient(URL);
 ```
 
 This module contains the classes and interfaces to interact with the RPC
@@ -43,7 +43,7 @@ const alternative = new rpc.RPCClient("http://seed1.neo.org:10332");
 // Returns block number
 client.getBlockCount();
 client.getRawTransaction(
-  "f5412dba662ec8023e6fc93dba23e7b62679e0a7bebed52a0c3f70795cbb51d2",
+  "88c302bd409cbb3940f6d13e5624f832eb769e346b28afcb79e05cfd13a68fec",
   1
 );
 
@@ -142,6 +142,5 @@ interface ProtocolJSON {
   AddressVersion: number;
   StandbyValidators: string[];
   SeedList: string[];
-  SystemFee: { [key: string]: number };
 }
 ```
