@@ -27,7 +27,7 @@ For deserialization, we have the `Transaction` static class:
 
 ```js
 const transaction = tx.Transaction.deserialize(hexstring);
-console.log(contractTx instanceof tx.ContractTransaction); // true
+console.log(transaction instanceof tx.Transaction); // true
 ```
 
 ---
