@@ -22,14 +22,6 @@ processed into a block by the consensus nodes.
 // We can use this serializedTx string and send it through sendrawtransaction RPC call.
 const serializedTx = transaction.serialize();
 ```
-
-For deserialization, we have the `Transaction` static class:
-
-```js
-const transaction = tx.Transaction.deserialize(hexstring);
-console.log(transaction instanceof tx.Transaction); // true
-```
-
 ---
 
 ## Components
