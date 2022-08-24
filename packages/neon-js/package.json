@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-js",
   "description": "Neon-JS SDK for interacting with NEO blockchain",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
@@ -31,8 +31,8 @@
     "pretty": "prettier --write --loglevel=warn \"./{src,__{tests,integration}__}/**/*.ts\""
   },
   "dependencies": {
-    "@cityofzion/neon-api": "^5.1.0",
-    "@cityofzion/neon-core": "^5.1.0"
+    "@cityofzion/neon-api": "^5.2.0",
+    "@cityofzion/neon-core": "^5.2.0"
   },
   "files": [
     "dist/",
