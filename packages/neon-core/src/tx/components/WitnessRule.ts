@@ -28,7 +28,7 @@ export class WitnessRule implements NeonSerializable {
   }
 
   public static deserialize(ss: StringStream): WitnessRule {
-    const action = parseEnum(ss.read(1), WitnessRuleAction);
+    const action = parseEnum(parseInt(ss.read(1), 16), WitnessRuleAction);
     const condition = WitnessCondition.deserialize(ss);
     return new WitnessRule({ action, condition });
   }
