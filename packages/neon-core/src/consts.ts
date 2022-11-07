@@ -7,7 +7,7 @@ export const DEFAULT_ADDRESS_VERSION = 0x35;
 
 export enum MAGIC_NUMBER {
   MainNet = 860833102,
-  TestNet = 877933390,
+  TestNet = 894710606,
   SoloNet = 1234567890,
 }
 
