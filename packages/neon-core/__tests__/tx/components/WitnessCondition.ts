@@ -1,7 +1,11 @@
 import {
   AndWitnessCondition,
   BooleanWitnessCondition,
+  CalledByContractWitnessCondition,
+  CalledByGroupWitnessCondition,
   GroupWitnessCondition,
+  NotWitnessCondition,
+  OrWitnessCondition,
   ScriptHashWitnessCondition,
   WitnessCondition,
   WitnessConditionJson,
@@ -54,5 +58,84 @@ describe("static", () => {
     const serialized = result.serialize();
 
     expect(serialized).toEqual(bytes);
+  });
+});
+
+describe("deserialization", () => {
+  test("and condition", () => {
+    const bytes = "020200010000";
+    const result = WitnessCondition.deserialize(new StringStream(bytes));
+    expect(result.type).toBe(WitnessConditionType.And);
+    const castedResult = result as AndWitnessCondition;
+    expect(castedResult.expressions.length).toBe(2);
+
+    expect(castedResult.expressions[0].type).toBe(WitnessConditionType.Boolean);
+    const castedExpr1 = castedResult.expressions[0] as BooleanWitnessCondition;
+    expect(castedExpr1.expression).toBe(true);
+
+    expect(castedResult.expressions[1].type).toBe(WitnessConditionType.Boolean);
+    const castedExpr2 = castedResult.expressions[1] as BooleanWitnessCondition;
+    expect(castedExpr2.expression).toBe(false);
+  });
+
+  test("bool condition", () => {
+    const bytes = "0001";
+    const result = WitnessCondition.deserialize(new StringStream(bytes));
+    expect(result.type).toBe(WitnessConditionType.Boolean);
+    const castedResult = result as BooleanWitnessCondition;
+    expect(castedResult.expression).toBe(true);
+  });
+
+  test("not condition", () => {
+    const bytes = "010001";
+    const result = WitnessCondition.deserialize(new StringStream(bytes));
+    expect(result.type).toBe(WitnessConditionType.Not);
+    const castedResult = result as NotWitnessCondition;
+    expect(castedResult.expression).toBeInstanceOf(BooleanWitnessCondition);
+    const boolCondition = castedResult.expression as BooleanWitnessCondition;
+    expect(boolCondition.expression).toBe(true);
+  });
+
+  test("or condition", () => {
+    const bytes = "030200010000";
+    const result = WitnessCondition.deserialize(new StringStream(bytes));
+    expect(result.type).toBe(WitnessConditionType.Or);
+    const castedResult = result as OrWitnessCondition;
+    expect(castedResult.expressions.length).toBe(2);
+
+    expect(castedResult.expressions[0].type).toBe(WitnessConditionType.Boolean);
+    const castedExpr1 = castedResult.expressions[0] as BooleanWitnessCondition;
+    expect(castedExpr1.expression).toBe(true);
+
+    expect(castedResult.expressions[1].type).toBe(WitnessConditionType.Boolean);
+    const castedExpr2 = castedResult.expressions[1] as BooleanWitnessCondition;
+    expect(castedExpr2.expression).toBe(false);
+  });
+
+  test("CalledByContract condition", () => {
+    const bytes = "28e462182f173259281896e95bd8bb851435989e48";
+    const result = WitnessCondition.deserialize(new StringStream(bytes));
+    expect(result.type).toBe(WitnessConditionType.CalledByContract);
+    const castedResult = result as CalledByContractWitnessCondition;
+    expect(castedResult.hash.toString()).toBe(
+      "489e98351485bbd85be99618285932172f1862e4"
+    );
+  });
+
+  test("CalledByEntry condition", () => {
+    const bytes = "20";
+    const result = WitnessCondition.deserialize(new StringStream(bytes));
+    expect(result.type).toBe(WitnessConditionType.CalledByEntry);
+  });
+
+  test("CalledByGroup condition", () => {
+    const bytes =
+      "2902158c4a4810fa2a6a12f7d33d835680429e1a68ae61161c5b3fbc98c7f1f17765";
+    const result = WitnessCondition.deserialize(new StringStream(bytes));
+    expect(result.type).toBe(WitnessConditionType.CalledByGroup);
+    const castedResult = result as CalledByGroupWitnessCondition;
+    expect(castedResult.group.toString()).toBe(
+      "02158c4a4810fa2a6a12f7d33d835680429e1a68ae61161c5b3fbc98c7f1f17765"
+    );
   });
 });
