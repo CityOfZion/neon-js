@@ -154,6 +154,10 @@ export class BooleanWitnessCondition extends WitnessCondition {
     super();
   }
 
+  public serialize(): string {
+    return super.serialize() + (this.expression ? "01" : "00");
+  }
+
   public toJson(): BooleanWitnessConditionJson {
     return {
       type: "Boolean",
@@ -439,7 +443,7 @@ export class CalledByContractWitnessCondition extends WitnessCondition {
   public toJson(): CalledByContractWitnessConditionJson {
     return {
       type: "CalledByContract",
-      hash: this.hash.toString(),
+      hash: "0x" + this.hash.toString(),
     };
   }
 }

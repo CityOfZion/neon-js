@@ -2,6 +2,7 @@ import {
   AndWitnessCondition,
   BooleanWitnessCondition,
   CalledByContractWitnessCondition,
+  CalledByEntryWitnessCondition,
   CalledByGroupWitnessCondition,
   GroupWitnessCondition,
   NotWitnessCondition,
@@ -58,6 +59,121 @@ describe("static", () => {
     const serialized = result.serialize();
 
     expect(serialized).toEqual(bytes);
+  });
+});
+
+describe("serialization", () => {
+  test("and condition", () => {
+    const input: WitnessConditionJson = {
+      type: "And",
+      expressions: [
+        {
+          type: "Boolean",
+          expression: true,
+        },
+        {
+          type: "Boolean",
+          expression: false,
+        },
+      ],
+    };
+    const result = WitnessCondition.fromJson(input);
+    expect(result.type).toBe(WitnessConditionType.And);
+
+    const castedResult = result as AndWitnessCondition;
+    const bytes = castedResult.serialize();
+    expect(bytes).toEqual("020200010000");
+  });
+
+  test("bool condition", () => {
+    const input: WitnessConditionJson = {
+      type: "Boolean",
+      expression: true,
+    };
+    const result = WitnessCondition.fromJson(input);
+    expect(result.type).toBe(WitnessConditionType.Boolean);
+    const castedResult = result as BooleanWitnessCondition;
+    const bytes = castedResult.serialize();
+    expect(bytes).toEqual("0001");
+  });
+
+  test("not condition", () => {
+    const input: WitnessConditionJson = {
+      type: "Not",
+      expression: {
+        type: "Boolean",
+        expression: true,
+      },
+    };
+    const result = WitnessCondition.fromJson(input);
+    expect(result.type).toBe(WitnessConditionType.Not);
+
+    const castedResult = result as NotWitnessCondition;
+    const bytes = castedResult.serialize();
+    expect(bytes).toEqual("010001");
+  });
+
+  test("or condition", () => {
+    const input: WitnessConditionJson = {
+      type: "Or",
+      expressions: [
+        {
+          type: "Boolean",
+          expression: true,
+        },
+        {
+          type: "Boolean",
+          expression: false,
+        },
+      ],
+    };
+    const result = WitnessCondition.fromJson(input);
+    expect(result.type).toBe(WitnessConditionType.Or);
+
+    const castedResult = result as OrWitnessCondition;
+    const bytes = castedResult.serialize();
+    expect(bytes).toEqual("030200010000");
+  });
+
+  test("CalledByContract condition", () => {
+    const input: WitnessConditionJson = {
+      type: "CalledByContract",
+      hash: "0x489e98351485bbd85be99618285932172f1862e4",
+    };
+    const result = WitnessCondition.fromJson(input);
+    expect(result.type).toBe(WitnessConditionType.CalledByContract);
+
+    const castedResult = result as CalledByContractWitnessCondition;
+    const bytes = castedResult.serialize();
+    expect(bytes).toEqual("28e462182f173259281896e95bd8bb851435989e48");
+  });
+
+  test("CalledByEntry condition", () => {
+    const input: WitnessConditionJson = {
+      type: "CalledByEntry",
+    };
+    const result = WitnessCondition.fromJson(input);
+    expect(result.type).toBe(WitnessConditionType.CalledByEntry);
+
+    const castedResult = result as CalledByEntryWitnessCondition;
+    const bytes = castedResult.serialize();
+    expect(bytes).toEqual("20");
+  });
+
+  test("CalledByGroup condition", () => {
+    const input: WitnessConditionJson = {
+      type: "CalledByGroup",
+      group:
+        "02158c4a4810fa2a6a12f7d33d835680429e1a68ae61161c5b3fbc98c7f1f17765",
+    };
+    const result = WitnessCondition.fromJson(input);
+    expect(result.type).toBe(WitnessConditionType.CalledByGroup);
+
+    const castedResult = result as CalledByGroupWitnessCondition;
+    const bytes = castedResult.serialize();
+    expect(bytes).toEqual(
+      "2902158c4a4810fa2a6a12f7d33d835680429e1a68ae61161c5b3fbc98c7f1f17765"
+    );
   });
 });
 
