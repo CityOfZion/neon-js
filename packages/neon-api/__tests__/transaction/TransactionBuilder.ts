@@ -9,25 +9,6 @@ const account2 = new wallet.Account(
 );
 
 describe("setter", () => {
-  test("addAttributes", () => {
-    const transaction = new TransactionBuilder()
-      .addAttributes(
-        {
-          usage: 129,
-          data: "abcd",
-        },
-        {
-          usage: 129,
-          data: "dcba",
-        }
-      )
-      .build();
-    expect(transaction.attributes.map((attr) => attr.export())).toEqual([
-      { data: "abcd", usage: 129 },
-      { data: "dcba", usage: 129 },
-    ]);
-  });
-
   describe("addSigner", () => {
     test("adds correctly", () => {
       const transaction = new TransactionBuilder()

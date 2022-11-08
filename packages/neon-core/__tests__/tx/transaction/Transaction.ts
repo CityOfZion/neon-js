@@ -221,16 +221,6 @@ describe("Add Methods", () => {
     expect(addDuplicate).toThrowError();
   });
 
-  test("addAttribute", () => {
-    const tx1 = createTxforTestAddMethods();
-    tx1.addAttribute({
-      usage: 129,
-      data: "72e9a2",
-    });
-    expect(tx1.attributes[0].usage).toBe(129);
-    expect(tx1.attributes[0].data.toBigEndian()).toBe("72e9a2");
-  });
-
   describe("addWitness", () => {
     test("simple", () => {
       const tx1 = createTxforTestAddMethods();

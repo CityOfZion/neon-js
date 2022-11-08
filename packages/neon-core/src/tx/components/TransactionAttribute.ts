@@ -1,139 +1,216 @@
-import { num2hexstring, num2VarInt, StringStream, HexString } from "../../u";
-import { TxAttrUsage } from "./txAttrUsage";
-import { NeonObject } from "../../model";
+import {
+  num2VarInt,
+  StringStream,
+  HexString,
+  NeonSerializable,
+  reverseHex,
+  base642hex,
+} from "../../u";
+import { parseEnum } from "../../internal";
 
-const maxTransactionAttributeSize = 252;
+export enum TransactionAttributeType {
+  HighPriority = 0x1,
+  OracleResponse = 0x11,
+}
+
+export enum OracleResponseCode {
+  // Indicates that the request has been successfully completed.
+  Success = 0x00,
+  // Indicates that the protocol of the request is not supported.
+  ProtocolNotSupported = 0x10,
+  // Indicates that the oracle nodes cannot reach a consensus on the result of the request.
+  ConsensusUnreachable = 0x12,
+  // Indicates that the requested Uri does not exist.
+  NotFound = 0x14,
+  // Indicates that the request was not completed within the specified time.
+  Timeout = 0x16,
+  // Indicates that there is no permission to request the resource.
+  Forbidden = 0x18,
+  // Indicates that the data for the response is too large.
+  ResponseTooLarge = 0x1a,
+  // Indicates that the request failed due to insufficient balance.
+  InsufficientFunds = 0x1c,
+  // Indicates that the content-type of the request is not supported.
+  ContentTypeNotSupported = 0x1f,
+  // Indicates that the request failed due to other errors.
+  Error = 0xff,
+}
+
+export interface HighPriorityTransactionAttributeJson {
+  type: string;
+}
+
+export interface OracleResponseTransactionAttributeJson {
+  type: string;
+  // request id
+  id: number;
+  // response code
+  code: string;
+  // base64 encoded result for the request
+  result: string | HexString;
+}
+
+export type TransactionAttributeJson =
+  | HighPriorityTransactionAttributeJson
+  | OracleResponseTransactionAttributeJson;
 
 export interface TransactionAttributeLike {
-  usage: number | string;
-  data: string | HexString;
+  type: number;
 }
 
-export interface TransactionAttributeJson {
-  // Name of TransactionAttributeUsage in English
-  usage: string;
-  // Base64-encoded data
-  data: string;
+export interface OracleResponseAttributeLike extends TransactionAttributeLike {
+  id: number;
+  code: OracleResponseCode;
+  result: string | HexString;
 }
 
-export function toTxAttrUsage(
-  type: TxAttrUsage | string | number
-): TxAttrUsage {
-  if (typeof type === "string") {
-    if (type in TxAttrUsage) {
-      return TxAttrUsage[type as keyof typeof TxAttrUsage];
-    }
-    throw new Error(`${type} not found in TxAttrUsage!`);
-  } else if (typeof type === "number") {
-    if (TxAttrUsage.Url !== type) {
-      throw new Error(`${type} not found in TxAttrUsage!`);
-    }
-  }
+export abstract class TransactionAttribute implements NeonSerializable {
+  public abstract get type(): TransactionAttributeType;
+  public abstract export(): TransactionAttributeLike;
+  public abstract toJson(): TransactionAttributeJson;
 
-  return type as TxAttrUsage;
-}
-
-/**
- * An attribute that is used to decorate the transaction.
- * Used for appending additional information to the transaction.
- *
- * For example, a remark is attached as an attribute.
- */
-export class TransactionAttribute
-  implements NeonObject<TransactionAttributeLike>
-{
-  public static deserialize(hex: string): TransactionAttribute {
-    const ss = new StringStream(hex);
-    return this.fromStream(ss);
+  public get size(): number {
+    return 1;
   }
 
   public static fromJson(
     input: TransactionAttributeJson
   ): TransactionAttribute {
-    return new TransactionAttribute({
-      usage: toTxAttrUsage(input.usage),
-      data: HexString.fromBase64(input.data, true),
-    });
+    const attrType = parseEnum(input.type, TransactionAttributeType);
+    const implementingClass = this.getImplementation(attrType);
+    return implementingClass.fromJson(input as never);
   }
 
   public static fromStream(ss: StringStream): TransactionAttribute {
-    const usage = parseInt(ss.read(1), 16);
-    const data: string = ss.readVarBytes();
-    if (data.length > maxTransactionAttributeSize * 2) {
-      throw new Error("Data too big! Only 252 bytes allowed in data");
+    return TransactionAttribute.deserialize(ss);
+  }
+
+  public static deserialize(ss: StringStream): TransactionAttribute {
+    const rawType = parseInt(ss.peek(1), 16);
+    const attrType = parseEnum(rawType, TransactionAttributeType);
+    const implementingClass = this.getImplementation(attrType);
+    return implementingClass.deserialize(ss);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  private static getImplementation(type: TransactionAttributeType) {
+    switch (type) {
+      case TransactionAttributeType.HighPriority:
+        return HighPriorityAttribute;
+      case TransactionAttributeType.OracleResponse:
+        return OracleResponseAttribute;
+      default:
+        throw new Error(`Unknown TransactionAttributeType: ${type}`);
     }
-    return new TransactionAttribute({ usage, data });
   }
 
-  public usage: TxAttrUsage;
+  serialize(): string {
+    return this.type.toString(16).padStart(2, "0");
+  }
+}
 
-  /**
-   * data in hex format
-   */
-  public data: HexString;
-
-  public constructor(
-    obj: Partial<TransactionAttributeLike | TransactionAttribute> = {}
-  ) {
-    if (!obj.usage || !obj.data) {
-      throw new Error("TransactionAttribute requires usage and data fields");
-    }
-    const { usage, data } = obj;
-    this.usage = toTxAttrUsage(usage);
-    this.data = HexString.fromHex(data);
+export class HighPriorityAttribute extends TransactionAttribute {
+  private static _type = TransactionAttributeType.HighPriority;
+  public get type(): TransactionAttributeType {
+    return HighPriorityAttribute._type;
   }
 
-  public get size(): number {
-    return (
-      1 + num2VarInt(this.data.byteLength).length / 2 + this.data.byteLength
-    );
+  public static fromJson(
+    _: HighPriorityTransactionAttributeJson
+  ): HighPriorityAttribute {
+    return new HighPriorityAttribute();
   }
 
-  /**
-   * Constructs a Url Attribute
-   * @param url - URL string in ASCII
-   */
-  public static Url(url: string): TransactionAttribute {
-    return new TransactionAttribute({
-      usage: TxAttrUsage.Url,
-      data: HexString.fromAscii(url),
-    });
+  public static deserialize(ss: StringStream): HighPriorityAttribute {
+    readAndAssertType(ss, this._type);
+    return new HighPriorityAttribute();
   }
 
-  public get [Symbol.toStringTag](): string {
-    return "TransactionAttribute";
-  }
-
-  public serialize(): string {
-    if (this.data.length > maxTransactionAttributeSize) {
-      throw new Error(`Data size too big!`);
-    }
-    let out = num2hexstring(this.usage);
-    out += num2VarInt(this.data.byteLength);
-    out += this.data;
-    return out;
+  public toJson(): TransactionAttributeJson {
+    return { type: TransactionAttributeType[this.type] };
   }
 
   public export(): TransactionAttributeLike {
     return {
-      usage: this.usage,
-      data: this.data.toBigEndian(),
+      type: this.type,
     };
   }
+}
 
+export class OracleResponseAttribute extends TransactionAttribute {
+  private static _type = TransactionAttributeType.OracleResponse;
+  public get type(): TransactionAttributeType {
+    return OracleResponseAttribute._type;
+  }
+
+  public get size(): number {
+    return this.serialize().length / 2;
+  }
+
+  public static fromJson(
+    input: OracleResponseTransactionAttributeJson
+  ): OracleResponseAttribute {
+    const code = parseEnum(input.code, OracleResponseCode);
+    return new OracleResponseAttribute(input.id, code, input.result);
+  }
+
+  public static deserialize(ss: StringStream): OracleResponseAttribute {
+    readAndAssertType(ss, this._type);
+    const id = parseInt(ss.read(8), 16);
+    const codeName = OracleResponseCode[parseInt(ss.read(1), 16)];
+    const code = parseEnum(codeName, OracleResponseCode);
+
+    const resultSize = ss.readVarInt();
+    if (resultSize > 0xffff) {
+      throw new Error(`Results size exceeds maximum`);
+    }
+    const result = ss.read(resultSize);
+    return new OracleResponseAttribute(id, code, result);
+  }
+
+  constructor(
+    public id: number,
+    public code: OracleResponseCode,
+    public result: string | HexString
+  ) {
+    super();
+  }
   public toJson(): TransactionAttributeJson {
     return {
-      usage: TxAttrUsage[this.usage],
-      data: this.data.toBase64(true),
+      type: TransactionAttributeType[this.type],
+      id: this.id,
+      code: OracleResponseCode[this.code],
+      result: this.result,
     };
   }
 
-  public equals(
-    other: Partial<TransactionAttributeLike | TransactionAttribute>
-  ): boolean {
-    return (
-      this.usage === toTxAttrUsage(other.usage ?? 0) &&
-      this.data.equals(other.data ?? "")
+  public serialize(): string {
+    const id = reverseHex(this.id.toString(16).padStart(16, "0"));
+    const code = this.code.toString(16).padStart(2, "0");
+    const result = base642hex(this.result.toString());
+    const resultLen = num2VarInt(result.length / 2);
+    return super.serialize() + id + code + resultLen + result;
+  }
+
+  public export(): OracleResponseAttributeLike {
+    return {
+      type: this.type,
+      id: this.id,
+      code: this.code,
+      result: this.result,
+    };
+  }
+}
+
+function readAndAssertType(
+  ss: StringStream,
+  type: TransactionAttributeType
+): void {
+  const rawType = parseInt(ss.read(1), 16);
+  const txType = parseEnum(rawType, TransactionAttributeType);
+  if (txType !== type) {
+    throw new Error(
+      `Wrong TransactionAttributeType. Wanted ${TransactionAttributeType[type]} but got ${txType}`
     );
   }
 }

@@ -135,7 +135,7 @@ export class Transaction implements NeonObject<TransactionLike> {
       systemFee: BigInteger.fromDecimal(input.sysfee, 0),
       networkFee: BigInteger.fromDecimal(input.netfee, 0),
       validUntilBlock: input.validuntilblock,
-      attributes: input.attributes.map((a) => TransactionAttribute.fromJson(a)),
+      attributes: [], //input.attributes.map((a) => TransactionAttribute.fromJson(a)),
       signers: input.signers.map((c) => Signer.fromJson(c)),
       script: HexString.fromBase64(input.script),
       witnesses: input.witnesses.map((w) => Witness.fromJson(w)),
@@ -158,7 +158,6 @@ export class Transaction implements NeonObject<TransactionLike> {
       systemFee,
       networkFee,
       validUntilBlock,
-      attributes,
       signers = [],
       witnesses,
       script,
@@ -166,11 +165,7 @@ export class Transaction implements NeonObject<TransactionLike> {
     this.version = version ?? TX_VERSION;
     this.nonce = nonce ?? parseInt(ab2hexstring(generateRandomArray(4)), 16);
     this.validUntilBlock = validUntilBlock ?? 0;
-    this.attributes = Array.isArray(attributes)
-      ? (attributes as (TransactionAttribute | TransactionAttributeLike)[]).map(
-          (a) => new TransactionAttribute(a)
-        )
-      : [];
+    this.attributes = [];
     this.signers = [];
     this.witnesses = [];
     signers.forEach((s) => this.addSigner(s));
@@ -260,11 +255,6 @@ export class Transaction implements NeonObject<TransactionLike> {
     }
     this.signers.push(new Signer(newSigner));
     this.orderWitnesses();
-    return this;
-  }
-
-  public addAttribute(attr: TransactionAttributeLike): this {
-    this.attributes.push(new TransactionAttribute(attr));
     return this;
   }
 
