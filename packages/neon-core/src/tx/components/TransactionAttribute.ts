@@ -1,7 +1,6 @@
 import {
   num2VarInt,
   StringStream,
-  HexString,
   NeonSerializable,
   reverseHex,
   base642hex,
@@ -37,17 +36,17 @@ export enum OracleResponseCode {
 }
 
 export interface HighPriorityTransactionAttributeJson {
-  type: string;
+  type: "HighPriority";
 }
 
 export interface OracleResponseTransactionAttributeJson {
-  type: string;
+  type: "OracleResponse";
   // request id
   id: number;
   // response code
   code: string;
   // base64 encoded result for the request
-  result: string | HexString;
+  result: string;
 }
 
 export type TransactionAttributeJson =
@@ -61,7 +60,7 @@ export interface TransactionAttributeLike {
 export interface OracleResponseAttributeLike extends TransactionAttributeLike {
   id: number;
   code: OracleResponseCode;
-  result: string | HexString;
+  result: string;
 }
 
 export abstract class TransactionAttribute implements NeonSerializable {
@@ -127,7 +126,7 @@ export class HighPriorityAttribute extends TransactionAttribute {
   }
 
   public toJson(): TransactionAttributeJson {
-    return { type: TransactionAttributeType[this.type] };
+    return { type: "HighPriority" };
   }
 
   public export(): TransactionAttributeLike {
@@ -171,13 +170,13 @@ export class OracleResponseAttribute extends TransactionAttribute {
   constructor(
     public id: number,
     public code: OracleResponseCode,
-    public result: string | HexString
+    public result: string
   ) {
     super();
   }
   public toJson(): TransactionAttributeJson {
     return {
-      type: TransactionAttributeType[this.type],
+      type: "OracleResponse",
       id: this.id,
       code: OracleResponseCode[this.code],
       result: this.result,
