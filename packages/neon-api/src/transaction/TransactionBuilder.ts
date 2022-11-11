@@ -133,18 +133,6 @@ export class TransactionBuilder {
   }
 
   /**
-   * Add an attribute.
-   * @param usage - The usage type. Do refer to txAttrUsage enum values for all available options.
-   * @param data - The data as hexstring.
-   */
-  public addAttributes(...attrs: tx.TransactionAttributeLike[]): this {
-    this.attributes = this.attributes.concat(
-      attrs.map((a) => new tx.TransactionAttribute(a))
-    );
-    return this;
-  }
-
-  /**
    * Adds an unsigned witness to the transaction.
    * Will deduplicate witnesses based on verificationScript.
    * Required to calculate the network fee correctly.
