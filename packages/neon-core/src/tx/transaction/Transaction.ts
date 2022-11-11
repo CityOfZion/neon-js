@@ -135,7 +135,7 @@ export class Transaction implements NeonObject<TransactionLike> {
       systemFee: BigInteger.fromDecimal(input.sysfee, 0),
       networkFee: BigInteger.fromDecimal(input.netfee, 0),
       validUntilBlock: input.validuntilblock,
-      attributes: [], //input.attributes.map((a) => TransactionAttribute.fromJson(a)),
+      attributes: input.attributes.map((a) => TransactionAttribute.fromJson(a)),
       signers: input.signers.map((c) => Signer.fromJson(c)),
       script: HexString.fromBase64(input.script),
       witnesses: input.witnesses.map((w) => Witness.fromJson(w)),
