@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-core",
   "description": "Neon-JS Core functionality",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "engines": {
     "node": ">=14.0.0"
   },
