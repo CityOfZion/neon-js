@@ -67,6 +67,15 @@ describe("JSONRPC spec", () => {
   });
 });
 describe("static", () => {
+  test("traverseIterator", () => {
+    const result = Query.traverseIterator(
+      "testSessionId",
+      "testIteratorId",
+      10
+    );
+    expect(result.method).toEqual("traverseiterator");
+    expect(result.params).toEqual(["testSessionId", "testIteratorId", 10]);
+  });
   test("calculateNetworkFee", () => {
     const result = Query.calculateNetworkFee("12345");
     expect(result.method).toEqual("calculatenetworkfee");

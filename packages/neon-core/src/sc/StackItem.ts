@@ -26,6 +26,15 @@ export interface StackItemLike {
 export interface StackItemJson {
   type: keyof typeof StackItemType;
   value?: string | boolean | number | StackItemJson[];
+  interface?: string;
+  id?: string;
+}
+
+export interface StackItemInteropInterfaceJson extends StackItemJson {
+  type: Extract<keyof typeof StackItemType, "InteropInterface">;
+  interface: "IIterator";
+  id: string;
+  value: undefined;
 }
 
 export interface StackItemMapLike {
