@@ -5,6 +5,7 @@ import {
   ContractParam,
   StackItemJson,
   NEFJson,
+  StackItem,
 } from "../sc";
 import { BlockJson, Validator, BlockHeaderJson } from "../types";
 import { HexString } from "../u";
@@ -49,7 +50,7 @@ export interface ApplicationLogJson {
 /**
  * Result from calling invokescript or invokefunction.
  */
-export interface InvokeResult {
+export interface InvokeResult<T extends StackItemJson = StackItemJson> {
   /** The script that is sent for execution on the blockchain as a base64 string. */
   script: string;
   /** State of VM on exit. HALT means a successful exit while FAULT means exit with error. */
@@ -60,12 +61,13 @@ export interface InvokeResult {
   gasconsumed: string;
   /** A human-readable string clarifying the exception that occurred. Only available when state is "FAULT". */
   exception: string | null;
-  stack: StackItemJson[];
+  stack: T[];
   /** A ready to send transaction that wraps the script.
    * Only available when signers are provided and the sender's private key is open in the RPC node.
    * Formatted in base64-encoding.
    */
   tx?: string;
+  session?: string;
 }
 
 export interface GetContractStateResult {
@@ -231,6 +233,24 @@ function isJsonRpcParamRecord(
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class Query<TParams extends JsonRpcParams, TResponse> {
+  /**
+   * Query returning the Iterator value from session and Iterator id returned by invokefunction or invokescript.
+   * @param sessionId - Cache id. It is session returned by invokefunction or invokescript.
+   * @param iteratorId - Iterator data id. It is the id of stack returned by invokefunction or invokescript .
+   * @param count - The number of values returned. It cannot exceed the value of the MaxIteratorResultItems field in config.json of the RpcServer plug-in.
+   * The result is the first count of data traversed in the Iterator, and follow-up requests will continue traversing from count + 1 .
+   */
+  public static traverseIterator(
+    sessionId: string,
+    iteratorId: string,
+    count: number
+  ): Query<[string, string, number], StackItem[]> {
+    return new Query({
+      method: "traverseiterator",
+      params: [sessionId, iteratorId, count],
+    });
+  }
+
   /**
    * Query returning the network fee required for a given transaction.
    */

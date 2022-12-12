@@ -14,6 +14,7 @@ import { BlockJson, BlockHeaderJson, Validator } from "../../types";
 import { RpcDispatcher, RpcDispatcherMixin } from "./RpcDispatcher";
 import { HexString } from "../../u";
 import { NativeContractState } from "..";
+import { StackItem, StackItemJson } from "../../sc";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
 export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
@@ -21,6 +22,24 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
 ) {
   return class NeoServerRpcInterface extends base {
     //#region Blockchain
+
+    /**
+     * Query returning the Iterator value from session and Iterator id returned by invokefunction or invokescript.
+     * @param sessionId - Cache id. It is session returned by invokefunction or invokescript.
+     * @param iteratorId - Iterator data id. It is the id of stack returned by invokefunction or invokescript .
+     * @param count - The number of values returned. It cannot exceed the value of the MaxIteratorResultItems field in config.json of the RpcServer plug-in.
+     * The result is the first count of data traversed in the Iterator, and follow-up requests will continue traversing from count + 1 .
+     */
+    public async traverseIterator(
+      sessionId: string,
+      iteratorId: string,
+      count: number
+    ): Promise<StackItem[]> {
+      const response = await this.execute(
+        Query.traverseIterator(sessionId, iteratorId, count)
+      );
+      return response;
+    }
 
     /**
      * Get the latest block hash.
@@ -260,13 +279,13 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
     /**
      * Submits a contract method call with parameters for the node to run. This method is a local invoke, results are not reflected on the blockchain.
      */
-    public async invokeFunction(
+    public async invokeFunction<T extends StackItemJson = StackItemJson>(
       scriptHash: string,
       operation: string,
       params: unknown[] = [],
       signers: (Signer | SignerJson)[] = []
-    ): Promise<InvokeResult> {
-      return await this.execute(
+    ): Promise<InvokeResult<T>> {
+      return await this.execute<InvokeResult<T>>(
         Query.invokeFunction(scriptHash, operation, params, signers)
       );
     }
