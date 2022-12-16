@@ -27,6 +27,9 @@ export function buildParser(...args: StackItemParser[]): VMResultParser {
  * This just returns the value of the StackItem.
  */
 export function NoOpParser(item: StackItemJson): unknown {
+  if (item.type === "InteropInterface")
+    throw new Error("Impossible to get value from InteropInterface type");
+
   return item.value;
 }
 
@@ -34,6 +37,9 @@ export function NoOpParser(item: StackItemJson): unknown {
  * Parses the result to an integer.
  */
 export function IntegerParser(item: StackItemJson): number {
+  if (item.type === "InteropInterface")
+    throw new Error("Impossible to get value from InteropInterface type");
+
   if (typeof item.value !== "string") {
     throw new Error("value received is not a string");
   }
@@ -44,6 +50,9 @@ export function IntegerParser(item: StackItemJson): number {
  *  Parses the result to a ASCII string.
  */
 export function StringParser(item: StackItemJson): string {
+  if (item.type === "InteropInterface")
+    throw new Error("Impossible to get value from InteropInterface type");
+
   if (typeof item.value !== "string") {
     throw new Error("value received is not a string");
   }

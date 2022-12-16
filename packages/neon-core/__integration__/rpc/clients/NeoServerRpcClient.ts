@@ -2,8 +2,11 @@ import { rpc, sc, tx, u, CONST, wallet } from "../../../src";
 import * as TestHelpers from "../../../../../testHelpers";
 import testWalletJson from "../../../__tests__/testWallet.json";
 import { HexString } from "../../../src/u";
+import { StackItemInteropInterfaceJson } from "../../../src/sc";
 
-const testWallet = new wallet.Wallet(testWalletJson);
+const testWallet = new wallet.Wallet(
+  testWalletJson as unknown as wallet.WalletJSON
+);
 
 let client: rpc.NeoServerRpcClient;
 const address = testWallet.accounts[0].address;
@@ -455,5 +458,45 @@ describe("NeoServerRpcClient", () => {
     );
 
     expect(parseInt(result)).toBeGreaterThan(0);
+  });
+
+  test.only("traverseIterator", async () => {
+    const newClient = new rpc.NeoServerRpcClient(
+      "https://testnet1.neo.coz.io:443"
+    );
+
+    const { session, stack } =
+      await newClient.invokeFunction<StackItemInteropInterfaceJson>(
+        CONST.NATIVE_CONTRACT_HASH.NeoToken,
+        "getAllCandidates",
+        []
+      );
+
+    expect(session).toEqual(expect.any(String));
+    expect(stack[0]).toEqual({
+      type: "InteropInterface",
+      interface: "IIterator",
+      id: expect.any(String),
+    });
+
+    const sessionid = session as string;
+
+    const iteratorId = stack[0].id;
+
+    const result = await newClient.traverseIterator(sessionid, iteratorId, 10);
+
+    expect(result).toContainEqual({
+      type: expect.any(String),
+      value: expect.arrayContaining([
+        {
+          type: expect.any(String),
+          value: expect.any(String),
+        },
+        {
+          type: expect.any(String),
+          value: expect.any(String),
+        },
+      ]),
+    });
   });
 });
