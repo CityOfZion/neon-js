@@ -81,15 +81,14 @@ jobs:
       - restore_cache:
           keys:
             - neon-npm-{{ checksum "package-lock.json" }}
-            - neon-fallback
       - run:
           name: node hid compilation requirements
           command: sudo apt-get update && sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
-      - run: npm install --cache-folder .cache/yarn
+      - run: npm ci
       - save_cache:
           key: neon-npm-{{ checksum "package-lock.json" }}
           paths:
-            - .cache/yarn
+            - node_modules
       - run:
           name: Bootstrap
           command: npm run bootstrap
