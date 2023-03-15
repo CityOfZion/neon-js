@@ -18,12 +18,12 @@ We are going to adhere to Conventional Commits style for commit messages so this
 
 ### Work from `dev`
 
-All our development work in progress happens on the `dev` branch. To start, please create a branch off `dev`. All your changes should live on this new branch and the pull request be created from this branch to either `dev` or `master`.
+All our development work in progress happens on the `dev` branch. To start, please create a branch off `dev` . All your changes should live on this new branch and the pull request be created from this branch to either `dev` or `master` .
 
 During development:
 
-- Ensure code is formatted through `yarn lint`.
-- Ensure tests pass through `npm run test:unit`.
+* Ensure code is formatted through `npm run lint`.
+* Ensure tests pass through `npm run test:unit`.
 
   Just before you submit, you can run `npm run test` to run integration tests together. We do not encourage running integration tests in `watch` mode or everytime as it performs real transactions on the blockchain and should be reserved for the final step.
 
@@ -37,10 +37,10 @@ Title your PR with a conventional commit message as such:
 type(scope):desc
 ```
 
-Type can be `fix`, `feat`, `docs`, `test` or `refactor`. This list is not exhaustive.
+Type can be `fix` , `feat` , `docs` , `test` or `refactor` . This list is not exhaustive.
 
-Scope is the package folder that you are focusing on, `api`, `sc`, `wallet`, etc.
+Scope is the package folder that you are focusing on, `api` , `sc` , `wallet` , etc.
 
-For bugfixes, point the PR at `master`. For new features, please point it at `dev`.
+For bugfixes, point the PR at `master` . For new features, please point it at `dev` .
 
 ### And you are done!
