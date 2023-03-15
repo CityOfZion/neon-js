@@ -80,14 +80,14 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - neon-yarn-{{ checksum "yarn.lock" }}
+            - neon-npm-{{ checksum "package-lock.json" }}
             - neon-fallback
       - run:
           name: node hid compilation requirements
           command: sudo apt-get update && sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
       - run: npm install --cache-folder .cache/yarn
       - save_cache:
-          key: neon-yarn-{{ checksum "yarn.lock" }}
+          key: neon-npm-{{ checksum "package-lock.json" }}
           paths:
             - .cache/yarn
       - run:
