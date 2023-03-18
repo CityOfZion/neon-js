@@ -3,7 +3,7 @@
   "description": "Neon-JS Core functionality",
   "version": "5.3.0",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.19.0"
   },
   "repository": {
     "type": "git",
@@ -39,23 +39,22 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "abort-controller": "3.0.0",
-    "bn.js": "5.2.0",
+    "bn.js": "5.2.1",
     "bs58": "5.0.0",
     "buffer": "6.0.3",
     "cross-fetch": "^3.1.5",
     "crypto-js": "4.1.1",
     "elliptic": "6.5.4",
     "lodash": "4.17.21",
-    "loglevel": "1.8.0",
+    "loglevel": "1.8.1",
     "loglevel-plugin-prefix": "0.8.4",
     "scrypt-js": "3.0.1"
   },
   "devDependencies": {
-    "@types/bn.js": "5.1.0",
+    "@types/bn.js": "5.1.1",
     "@types/crypto-js": "4.1.1",
     "@types/elliptic": "6.4.14",
-    "@types/lodash": "4.14.180"
+    "@types/lodash": "4.14.191"
   },
   "files": [
     "dist/",

@@ -123,7 +123,7 @@ interface ApplicationLogJson {
         notifications: {
             contract: string;
             eventname: string;
-            state: ContractParamJson;
+            state: StackItemJson;
         }[];
     }[];
     // (undocumented)
@@ -218,6 +218,8 @@ class BooleanWitnessCondition extends WitnessCondition {
     expression: boolean;
     // (undocumented)
     static fromJson(input: BooleanWitnessConditionJson): BooleanWitnessCondition;
+    // (undocumented)
+    serialize(): string;
     // (undocumented)
     get size(): number;
     // (undocumented)
@@ -815,12 +817,6 @@ function encrypt(wifKey: string, keyphrase: string, scryptParams?: ScryptParams,
 // @public
 function ensureHex(str: string): void;
 
-// @public @deprecated
-function fixed82num(fixed8hex: string): number;
-
-// @public
-function Fixed8Parser(item: StackItemJson): number;
-
 // @public (undocumented)
 function fromHex(hexstring: string): OpCode;
 
@@ -1109,6 +1105,26 @@ function hexstring2str(hexstring: string): string;
 // @public
 function hexXor(str1: string, str2: string): string;
 
+// @public (undocumented)
+class HighPriorityAttribute extends TransactionAttribute {
+    // (undocumented)
+    static deserialize(ss: StringStream): HighPriorityAttribute;
+    // (undocumented)
+    export(): TransactionAttributeLike;
+    // (undocumented)
+    static fromJson(_: HighPriorityTransactionAttributeJson): HighPriorityAttribute;
+    // (undocumented)
+    toJson(): TransactionAttributeJson;
+    // (undocumented)
+    get type(): TransactionAttributeType;
+}
+
+// @public (undocumented)
+interface HighPriorityTransactionAttributeJson {
+    // (undocumented)
+    type: "HighPriority";
+}
+
 // @public
 function int2hex(num: number): string;
 
@@ -1145,6 +1161,8 @@ enum InteropServiceCode {
     SYSTEM_RUNTIME_CHECKWITNESS = "f827ec8c",
     // (undocumented)
     SYSTEM_RUNTIME_GASLEFT = "1488d8ce",
+    // (undocumented)
+    SYSTEM_RUNTIME_GETADDRESSVERSION = "4c4992dc",
     // (undocumented)
     SYSTEM_RUNTIME_GETCALLINGSCRIPTHASH = "39536e3c",
     // (undocumented)
@@ -1188,12 +1206,14 @@ enum InteropServiceCode {
 }
 
 // @public
-interface InvokeResult {
+interface InvokeResult<T extends StackItemJson = StackItemJson> {
     exception: string | null;
     gasconsumed: string;
     script: string;
     // (undocumented)
-    stack: StackItemJson[];
+    session?: string;
+    // (undocumented)
+    stack: T[];
     state: "HALT" | "FAULT";
     tx?: string;
 }
@@ -1250,7 +1270,7 @@ enum MAGIC_NUMBER {
     // (undocumented)
     SoloNet = 1234567890,
     // (undocumented)
-    TestNet = 877933390
+    TestNet = 894710606
 }
 
 // @public (undocumented)
@@ -1364,6 +1384,8 @@ class NEF {
     // (undocumented)
     get size(): number;
     // (undocumented)
+    source: string;
+    // (undocumented)
     toJson(): NEFJson;
     // (undocumented)
     tokens: MethodToken[];
@@ -1379,6 +1401,8 @@ interface NEFJson {
     magic: number;
     script: string;
     // (undocumented)
+    source: string;
+    // (undocumented)
     tokens: MethodTokenJson[];
 }
 
@@ -1387,6 +1411,8 @@ interface NEFLike {
     // (undocumented)
     compiler: string;
     script: string;
+    // (undocumented)
+    source: string;
     // (undocumented)
     tokens: MethodTokenLike[];
 }
@@ -1428,19 +1454,20 @@ class NeoServerRpcClient extends NeoServerRpcClient_base {
 // @public (undocumented)
 function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase): {
     new (...args: any[]): {
+        traverseIterator(sessionId: string, iteratorId: string, count: number): Promise<StackItem[]>;
         getBestBlockHash(): Promise<string>;
-        getBlock(indexOrHash: number | string, verbose?: false | 0 | undefined): Promise<string>;
+        getBlock(indexOrHash: number | string, verbose?: 0 | false): Promise<string>;
         getBlock(indexOrHash: number | string, verbose: 1 | true): Promise<BlockJson>;
         getBlockHash(index: number): Promise<string>;
         getBlockCount(): Promise<number>;
-        getBlockHeader(indexOrHash: number | string, verbose?: 0 | undefined): Promise<string>;
+        getBlockHeader(indexOrHash: number | string, verbose?: 0): Promise<string>;
         getBlockHeader(indexOrHash: number | string, verbose: 1): Promise<BlockHeaderJson>;
         getCommittee(): Promise<string[]>;
         getContractState(scriptHash: string): Promise<GetContractStateResult>;
         getNativeContracts(): Promise<NativeContractState[]>;
-        getRawMemPool(shouldGetUnverified?: false | 0 | undefined): Promise<string[]>;
+        getRawMemPool(shouldGetUnverified?: 0 | false): Promise<string[]>;
         getRawMemPool(shouldGetUnverified: 1 | true): Promise<GetRawMemPoolResult>;
-        getRawTransaction(txid: string, verbose?: false | 0 | undefined): Promise<string>;
+        getRawTransaction(txid: string, verbose?: 0 | false): Promise<string>;
         getRawTransaction(txid: string, verbose: 1 | true): Promise<GetRawTransactionResult>;
         getStorage(scriptHash: string, key: string): Promise<string>;
         getTransactionHeight(txid: string): Promise<number>;
@@ -1452,7 +1479,7 @@ function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase): {
         submitBlock(block: string): Promise<string>;
         getUnclaimedGas(addr: string): Promise<string>;
         invokeContractVerify(scriptHash: string, args: unknown[], signers?: (Signer | SignerJson)[]): Promise<InvokeResult>;
-        invokeFunction(scriptHash: string, operation: string, params?: unknown[], signers?: (Signer | SignerJson)[]): Promise<InvokeResult>;
+        invokeFunction<T extends StackItemJson = StackItemJson>(scriptHash: string, operation: string, params?: unknown[], signers?: (Signer | SignerJson)[]): Promise<InvokeResult<T>>;
         invokeScript(script: string | HexString, signers?: (Signer | SignerJson)[]): Promise<InvokeResult>;
         calculateNetworkFee(tx: Transaction | HexString | string): Promise<string>;
         listPlugins(): Promise<CliPlugin[]>;
@@ -1605,9 +1632,6 @@ interface NotWitnessConditionJson {
     // (undocumented)
     type: "Not";
 }
-
-// @public @deprecated
-function num2fixed8(num: number, size?: number): string;
 
 // @public
 function num2hexstring(num: number, size?: number, littleEndian?: boolean): string;
@@ -2208,6 +2232,77 @@ class OpToken {
 }
 
 // @public (undocumented)
+class OracleResponseAttribute extends TransactionAttribute {
+    constructor(id: number, code: OracleResponseCode, result: string);
+    // (undocumented)
+    code: OracleResponseCode;
+    // (undocumented)
+    static deserialize(ss: StringStream): OracleResponseAttribute;
+    // (undocumented)
+    export(): OracleResponseAttributeLike;
+    // (undocumented)
+    static fromJson(input: OracleResponseTransactionAttributeJson): OracleResponseAttribute;
+    // (undocumented)
+    id: number;
+    // (undocumented)
+    result: string;
+    // (undocumented)
+    serialize(): string;
+    // (undocumented)
+    get size(): number;
+    // (undocumented)
+    toJson(): TransactionAttributeJson;
+    // (undocumented)
+    get type(): TransactionAttributeType;
+}
+
+// @public (undocumented)
+interface OracleResponseAttributeLike extends TransactionAttributeLike {
+    // (undocumented)
+    code: OracleResponseCode;
+    // (undocumented)
+    id: number;
+    // (undocumented)
+    result: string;
+}
+
+// @public (undocumented)
+enum OracleResponseCode {
+    // (undocumented)
+    ConsensusUnreachable = 18,
+    // (undocumented)
+    ContentTypeNotSupported = 31,
+    // (undocumented)
+    Error = 255,
+    // (undocumented)
+    Forbidden = 24,
+    // (undocumented)
+    InsufficientFunds = 28,
+    // (undocumented)
+    NotFound = 20,
+    // (undocumented)
+    ProtocolNotSupported = 16,
+    // (undocumented)
+    ResponseTooLarge = 26,
+    // (undocumented)
+    Success = 0,
+    // (undocumented)
+    Timeout = 22
+}
+
+// @public (undocumented)
+interface OracleResponseTransactionAttributeJson {
+    // (undocumented)
+    code: string;
+    // (undocumented)
+    id: number;
+    // (undocumented)
+    result: string;
+    // (undocumented)
+    type: "OracleResponse";
+}
+
+// @public (undocumented)
 class OrWitnessCondition extends WitnessCondition {
     constructor(expressions: WitnessCondition[]);
     // (undocumented)
@@ -2353,6 +2448,7 @@ class Query<TParams extends JsonRpcParams, TResponse> {
     params: TParams;
     static sendRawTransaction(transaction: Transaction | string | HexString): Query<[string], SendResult>;
     static submitBlock(block: string): Query<[string], SendResult>;
+    static traverseIterator(sessionId: string, iteratorId: string, count: number): Query<[string, string, number], StackItem[]>;
     static validateAddress(addr: string): Query<[string], ValidateAddressResult>;
 }
 
@@ -2415,7 +2511,6 @@ declare namespace rpc {
         NoOpParser,
         IntegerParser,
         StringParser,
-        Fixed8Parser,
         SimpleParser,
         StackItemParser,
         VMResultParser,
@@ -2525,6 +2620,7 @@ declare namespace sc {
         StackItemValue,
         StackItemLike,
         StackItemJson,
+        StackItemInteropInterfaceJson,
         StackItemMapLike,
         StackItemMap,
         StackItem,
@@ -2726,7 +2822,23 @@ class StackItem {
 }
 
 // @public (undocumented)
+interface StackItemInteropInterfaceJson extends StackItemJson {
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    interface: "IIterator";
+    // (undocumented)
+    type: Extract<keyof typeof StackItemType, "InteropInterface">;
+    // (undocumented)
+    value: undefined;
+}
+
+// @public (undocumented)
 interface StackItemJson {
+    // (undocumented)
+    id?: string;
+    // (undocumented)
+    interface?: string;
     // (undocumented)
     type: keyof typeof StackItemType;
     // (undocumented)
@@ -2823,9 +2935,9 @@ class TokenTrackerRpcClient extends TokenTrackerRpcClient_base {
 // @public (undocumented)
 function TokenTrackerRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase): {
     new (...args: any[]): {
-        getNep17Transfers(accountIdentifier: string, startTime?: string | undefined, endTime?: string | undefined): Promise<GetNep17TransfersResult>;
+        getNep17Transfers(accountIdentifier: string, startTime?: string, endTime?: string): Promise<GetNep17TransfersResult>;
         getNep17Balances(accountIdentifier: string): Promise<GetNep17BalancesResult>;
-        getNep11Transfers(accountIdentifier: string, startTime?: string | undefined, endTime?: string | undefined): Promise<GetNep11TransfersResult>;
+        getNep11Transfers(accountIdentifier: string, startTime?: string, endTime?: string): Promise<GetNep11TransfersResult>;
         getNep11Balances(accountIdentifier: string): Promise<GetNep11BalancesResult>;
         url: string;
         execute<TResponse>(query: Query<JsonRpcParams, TResponse>, config?: RpcConfig | undefined): Promise<TResponse>;
@@ -2838,15 +2950,10 @@ function TokenTrackerRpcMixin<TBase extends RpcDispatcherMixin>(base: TBase): {
 function toString(flags: WitnessScope): string;
 
 // @public (undocumented)
-function toTxAttrUsage(type: TxAttrUsage | string | number): TxAttrUsage;
-
-// @public (undocumented)
 class Transaction implements NeonObject<TransactionLike> {
     // (undocumented)
     get [Symbol.toStringTag](): string;
     constructor(tx?: Partial<Pick<TransactionLike | Transaction, keyof TransactionLike>>);
-    // (undocumented)
-    addAttribute(attr: TransactionAttributeLike): this;
     // (undocumented)
     addSigner(newSigner: SignerLike | Signer): this;
     addWitness(obj: WitnessLike | Witness): this;
@@ -2886,18 +2993,12 @@ class Transaction implements NeonObject<TransactionLike> {
     witnesses: Witness[];
 }
 
-// @public
-class TransactionAttribute implements NeonObject<TransactionAttributeLike> {
+// @public (undocumented)
+abstract class TransactionAttribute implements NeonSerializable {
     // (undocumented)
-    get [Symbol.toStringTag](): string;
-    constructor(obj?: Partial<TransactionAttributeLike | TransactionAttribute>);
-    data: HexString;
+    static deserialize(ss: StringStream): TransactionAttribute;
     // (undocumented)
-    static deserialize(hex: string): TransactionAttribute;
-    // (undocumented)
-    equals(other: Partial<TransactionAttributeLike | TransactionAttribute>): boolean;
-    // (undocumented)
-    export(): TransactionAttributeLike;
+    abstract export(): TransactionAttributeLike;
     // (undocumented)
     static fromJson(input: TransactionAttributeJson): TransactionAttribute;
     // (undocumented)
@@ -2907,26 +3008,26 @@ class TransactionAttribute implements NeonObject<TransactionAttributeLike> {
     // (undocumented)
     get size(): number;
     // (undocumented)
-    toJson(): TransactionAttributeJson;
-    static Url(url: string): TransactionAttribute;
+    abstract toJson(): TransactionAttributeJson;
     // (undocumented)
-    usage: TxAttrUsage;
+    abstract get type(): TransactionAttributeType;
 }
 
 // @public (undocumented)
-interface TransactionAttributeJson {
-    // (undocumented)
-    data: string;
-    // (undocumented)
-    usage: string;
-}
+type TransactionAttributeJson = HighPriorityTransactionAttributeJson | OracleResponseTransactionAttributeJson;
 
 // @public (undocumented)
 interface TransactionAttributeLike {
     // (undocumented)
-    data: string | HexString;
+    type: number;
+}
+
+// @public (undocumented)
+enum TransactionAttributeType {
     // (undocumented)
-    usage: number | string;
+    HighPriority = 1,
+    // (undocumented)
+    OracleResponse = 17
 }
 
 // @public (undocumented)
@@ -2981,14 +3082,19 @@ interface TransactionLike {
 
 declare namespace tx {
     export {
-        toTxAttrUsage,
-        TransactionAttributeLike,
+        TransactionAttributeType,
+        OracleResponseCode,
+        HighPriorityTransactionAttributeJson,
+        OracleResponseTransactionAttributeJson,
         TransactionAttributeJson,
+        TransactionAttributeLike,
+        OracleResponseAttributeLike,
         TransactionAttribute,
+        HighPriorityAttribute,
+        OracleResponseAttribute,
         WitnessLike,
         WitnessJson,
         Witness,
-        TxAttrUsage,
         SignerLike,
         SignerJson,
         Signer,
@@ -3030,12 +3136,6 @@ export { tx }
 // @public (undocumented)
 const TX_VERSION = 0;
 
-// @public
-enum TxAttrUsage {
-    // (undocumented)
-    Url = 129
-}
-
 declare namespace u {
     export {
         getCurve,
@@ -3067,8 +3167,6 @@ declare namespace u {
         num2VarInt,
         StringStream,
         HexString,
-        num2fixed8,
-        fixed82num,
         BigInteger,
         getSerializedSize,
         deserializeArrayOf,
@@ -3319,9 +3417,9 @@ enum WitnessScope {
 
 // Warnings were encountered during analysis:
 //
-// src/rpc/clients/NeoServerRpcClient.ts:39:5 - (ae-forgotten-export) The symbol "BlockJson" needs to be exported by the entry point index.d.ts
-// src/rpc/clients/NeoServerRpcClient.ts:78:5 - (ae-forgotten-export) The symbol "BlockHeaderJson" needs to be exported by the entry point index.d.ts
-// src/rpc/clients/NeoServerRpcClient.ts:190:5 - (ae-forgotten-export) The symbol "Validator" needs to be exported by the entry point index.d.ts
+// src/rpc/clients/NeoServerRpcClient.ts:58:5 - (ae-forgotten-export) The symbol "BlockJson" needs to be exported by the entry point index.d.ts
+// src/rpc/clients/NeoServerRpcClient.ts:97:5 - (ae-forgotten-export) The symbol "BlockHeaderJson" needs to be exported by the entry point index.d.ts
+// src/rpc/clients/NeoServerRpcClient.ts:209:5 - (ae-forgotten-export) The symbol "Validator" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

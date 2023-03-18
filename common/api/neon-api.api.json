@@ -1,8 +1,8 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.19.5",
-    "schemaVersion": 1004,
+    "toolVersion": "7.34.4",
+    "schemaVersion": 1011,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
       "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
@@ -156,35 +156,34 @@
         "@betaDocumentation": true,
         "@internalRemarks": true,
         "@preapproved": true
-      }
+      },
+      "reportUnsupportedHtmlElements": false
     }
   },
   "kind": "Package",
   "canonicalReference": "@cityofzion/neon-api!",
   "docComment": "",
   "name": "@cityofzion/neon-api",
+  "preserveMemberOrder": false,
   "members": [
     {
       "kind": "EntryPoint",
       "canonicalReference": "@cityofzion/neon-api!",
       "name": "",
+      "preserveMemberOrder": false,
       "members": [
         {
           "kind": "Function",
           "canonicalReference": "@cityofzion/neon-api!calculateNetworkFee:function(1)",
-          "docComment": "/**\n * Calculates the network fee required to process the transaction. The fields signers, attributes and script needs to be fully populated for this to work.\n *\n * @deprecated\n *\n * use the RPC call calculateNetworkFee instead.\n *\n * @param txn - A partially filled out transaction.\n *\n * @param feePerByte - The current feePerByte in Policy contract.\n *\n * @param signingAccts - The accounts that will be signing this.\n */\n",
+          "docComment": "/**\n * Calculates the network fee required to process the transaction. The fields signers, attributes and script needs to be fully populated for this to work.\n *\n * @deprecated\n *\n * use the smartCalculateNetworkFee helper instead.\n *\n * @param txn - A partially filled out transaction.\n *\n * @param feePerByte - The current feePerByte in Policy contract.\n *\n * @param signingAccts - The accounts that will be signing this.\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export declare function calculateNetworkFee(txn: "
             },
             {
-              "kind": "Content",
-              "text": "tx."
-            },
-            {
               "kind": "Reference",
-              "text": "Transaction",
+              "text": "tx.Transaction",
               "canonicalReference": "@cityofzion/neon-core!Transaction:class"
             },
             {
@@ -193,11 +192,11 @@
             },
             {
               "kind": "Content",
-              "text": "number | u."
+              "text": "number | "
             },
             {
               "kind": "Reference",
-              "text": "BigInteger",
+              "text": "u.BigInteger",
               "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
             },
             {
@@ -206,11 +205,11 @@
             },
             {
               "kind": "Content",
-              "text": "number | u."
+              "text": "number | "
             },
             {
               "kind": "Reference",
-              "text": "BigInteger",
+              "text": "u.BigInteger",
               "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
             },
             {
@@ -218,12 +217,8 @@
               "text": "): "
             },
             {
-              "kind": "Content",
-              "text": "u."
-            },
-            {
               "kind": "Reference",
-              "text": "BigInteger",
+              "text": "u.BigInteger",
               "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
             },
             {
@@ -231,9 +226,10 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/api/calculateNetworkFee.ts",
           "returnTypeTokenRange": {
-            "startIndex": 10,
-            "endIndex": 12
+            "startIndex": 9,
+            "endIndex": 10
           },
           "releaseTag": "Public",
           "overloadIndex": 1,
@@ -242,22 +238,25 @@
               "parameterName": "txn",
               "parameterTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 3
-              }
+                "endIndex": 2
+              },
+              "isOptional": false
             },
             {
               "parameterName": "feePerByte",
               "parameterTypeTokenRange": {
-                "startIndex": 4,
-                "endIndex": 6
-              }
+                "startIndex": 3,
+                "endIndex": 5
+              },
+              "isOptional": false
             },
             {
               "parameterName": "executionFeeFactor",
               "parameterTypeTokenRange": {
-                "startIndex": 7,
-                "endIndex": 9
-              }
+                "startIndex": 6,
+                "endIndex": 8
+              },
+              "isOptional": false
             }
           ],
           "name": "calculateNetworkFee"
@@ -272,12 +271,8 @@
               "text": "export declare function getFeeInformation(client: "
             },
             {
-              "kind": "Content",
-              "text": "rpc."
-            },
-            {
               "kind": "Reference",
-              "text": "NeoServerRpcClient",
+              "text": "rpc.NeoServerRpcClient",
               "canonicalReference": "@cityofzion/neon-core!NeoServerRpcClient:class"
             },
             {
@@ -291,20 +286,20 @@
             },
             {
               "kind": "Content",
-              "text": "<{\n    feePerByte: u."
+              "text": "<{\n    feePerByte: "
             },
             {
               "kind": "Reference",
-              "text": "BigInteger",
+              "text": "u.BigInteger",
               "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
             },
             {
               "kind": "Content",
-              "text": ";\n    executionFeeFactor: u."
+              "text": ";\n    executionFeeFactor: "
             },
             {
               "kind": "Reference",
-              "text": "BigInteger",
+              "text": "u.BigInteger",
               "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
             },
             {
@@ -316,9 +311,10 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/api/getFeeInformation.ts",
           "returnTypeTokenRange": {
-            "startIndex": 4,
-            "endIndex": 10
+            "startIndex": 3,
+            "endIndex": 9
           },
           "releaseTag": "Public",
           "overloadIndex": 1,
@@ -327,8 +323,9 @@
               "parameterName": "client",
               "parameterTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 3
-              }
+                "endIndex": 2
+              },
+              "isOptional": false
             }
           ],
           "name": "getFeeInformation"
@@ -352,11 +349,11 @@
             },
             {
               "kind": "Content",
-              "text": "(string | sc."
+              "text": "(string | "
             },
             {
               "kind": "Reference",
-              "text": "Nep17Contract",
+              "text": "sc.Nep17Contract",
               "canonicalReference": "@cityofzion/neon-core!Nep17Contract:class"
             },
             {
@@ -368,12 +365,8 @@
               "text": ", client: "
             },
             {
-              "kind": "Content",
-              "text": "rpc."
-            },
-            {
               "kind": "Reference",
-              "text": "NeoServerRpcClient",
+              "text": "rpc.NeoServerRpcClient",
               "canonicalReference": "@cityofzion/neon-core!NeoServerRpcClient:class"
             },
             {
@@ -394,9 +387,10 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/api/getTokenBalances.ts",
           "returnTypeTokenRange": {
-            "startIndex": 10,
-            "endIndex": 12
+            "startIndex": 9,
+            "endIndex": 11
           },
           "releaseTag": "Public",
           "overloadIndex": 1,
@@ -406,21 +400,24 @@
               "parameterTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "isOptional": false
             },
             {
               "parameterName": "contracts",
               "parameterTypeTokenRange": {
                 "startIndex": 3,
                 "endIndex": 6
-              }
+              },
+              "isOptional": false
             },
             {
               "parameterName": "client",
               "parameterTypeTokenRange": {
                 "startIndex": 7,
-                "endIndex": 9
-              }
+                "endIndex": 8
+              },
+              "isOptional": false
             }
           ],
           "name": "getTokenBalances"
@@ -436,11 +433,11 @@
             },
             {
               "kind": "Content",
-              "text": "(string | sc."
+              "text": "(string | "
             },
             {
               "kind": "Reference",
-              "text": "Nep17Contract",
+              "text": "sc.Nep17Contract",
               "canonicalReference": "@cityofzion/neon-core!Nep17Contract:class"
             },
             {
@@ -452,12 +449,8 @@
               "text": ", client: "
             },
             {
-              "kind": "Content",
-              "text": "rpc."
-            },
-            {
               "kind": "Reference",
-              "text": "NeoServerRpcClient",
+              "text": "rpc.NeoServerRpcClient",
               "canonicalReference": "@cityofzion/neon-core!NeoServerRpcClient:class"
             },
             {
@@ -487,9 +480,10 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/api/getTokenInfos.ts",
           "returnTypeTokenRange": {
-            "startIndex": 8,
-            "endIndex": 12
+            "startIndex": 7,
+            "endIndex": 11
           },
           "releaseTag": "Public",
           "overloadIndex": 1,
@@ -499,14 +493,16 @@
               "parameterTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 4
-              }
+              },
+              "isOptional": false
             },
             {
               "parameterName": "client",
               "parameterTypeTokenRange": {
                 "startIndex": 5,
-                "endIndex": 7
-              }
+                "endIndex": 6
+              },
+              "isOptional": false
             }
           ],
           "name": "getTokenInfos"
@@ -521,8 +517,10 @@
               "text": "export interface Nep17TransferIntent "
             }
           ],
+          "fileUrlPath": "src/NetworkFacade.ts",
           "releaseTag": "Public",
           "name": "Nep17TransferIntent",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -542,6 +540,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "contractHash",
@@ -568,6 +567,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": true,
               "releaseTag": "Public",
               "name": "decimalAmt",
@@ -586,12 +586,8 @@
                   "text": "from: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "wallet."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -599,12 +595,13 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "from",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 3
+                "endIndex": 2
               }
             },
             {
@@ -618,11 +615,11 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "number | string | u."
+                  "text": "number | string | "
                 },
                 {
                   "kind": "Reference",
-                  "text": "BigInteger",
+                  "text": "u.BigInteger",
                   "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
                 },
                 {
@@ -630,6 +627,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": true,
               "releaseTag": "Public",
               "name": "integerAmt",
@@ -656,6 +654,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "to",
@@ -677,8 +676,11 @@
               "text": "export declare class NetworkFacade "
             }
           ],
+          "fileUrlPath": "src/NetworkFacade.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "NetworkFacade",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Method",
@@ -690,12 +692,8 @@
                   "text": "claimGas(acct: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "wallet."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -725,30 +723,34 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 6,
-                "endIndex": 8
+                "startIndex": 5,
+                "endIndex": 7
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "acct",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "config",
                   "parameterTypeTokenRange": {
-                    "startIndex": 4,
-                    "endIndex": 5
-                  }
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "claimGas"
             },
             {
@@ -761,12 +763,8 @@
                   "text": "client: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "rpc."
-                },
-                {
                   "kind": "Reference",
-                  "text": "NeoServerRpcClient",
+                  "text": "rpc.NeoServerRpcClient",
                   "canonicalReference": "@cityofzion/neon-core!NeoServerRpcClient:class"
                 },
                 {
@@ -774,14 +772,17 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "client",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 3
+                "endIndex": 2
               },
-              "isStatic": false
+              "isStatic": false,
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Method",
@@ -824,13 +825,13 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": true,
               "returnTypeTokenRange": {
                 "startIndex": 3,
                 "endIndex": 7
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
@@ -838,9 +839,12 @@
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
                     "endIndex": 2
-                  }
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "fromConfig"
             },
             {
@@ -864,7 +868,7 @@
                 {
                   "kind": "Reference",
                   "text": "Candidate",
-                  "canonicalReference": "@cityofzion/neon-api!Candidate:interface"
+                  "canonicalReference": "@cityofzion/neon-api!~Candidate:interface"
                 },
                 {
                   "kind": "Content",
@@ -875,15 +879,17 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 5
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "getCandidates"
             },
             {
@@ -896,12 +902,8 @@
                   "text": "getRpcNode(): "
                 },
                 {
-                  "kind": "Content",
-                  "text": "rpc."
-                },
-                {
                   "kind": "Reference",
-                  "text": "NeoServerRpcClient",
+                  "text": "rpc.NeoServerRpcClient",
                   "canonicalReference": "@cityofzion/neon-core!NeoServerRpcClient:class"
                 },
                 {
@@ -909,15 +911,17 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 3
+                "endIndex": 2
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "getRpcNode"
             },
             {
@@ -943,15 +947,17 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 3
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "initialize"
             },
             {
@@ -964,12 +970,8 @@
                   "text": "invoke(contractCall: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "sc."
-                },
-                {
                   "kind": "Reference",
-                  "text": "ContractCall",
+                  "text": "sc.ContractCall",
                   "canonicalReference": "@cityofzion/neon-core!ContractCall:interface"
                 },
                 {
@@ -983,11 +985,11 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<rpc."
+                  "text": "<"
                 },
                 {
                   "kind": "Reference",
-                  "text": "InvokeResult",
+                  "text": "rpc.InvokeResult",
                   "canonicalReference": "@cityofzion/neon-core!InvokeResult:interface"
                 },
                 {
@@ -999,23 +1001,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 4,
-                "endIndex": 8
+                "startIndex": 3,
+                "endIndex": 7
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "contractCall",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "invoke"
             },
             {
@@ -1036,6 +1041,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "magicNumber",
@@ -1043,7 +1049,9 @@
                 "startIndex": 1,
                 "endIndex": 2
               },
-              "isStatic": false
+              "isStatic": false,
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Method",
@@ -1055,12 +1063,8 @@
                   "text": "sign(txn: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Transaction",
+                  "text": "tx.Transaction",
                   "canonicalReference": "@cityofzion/neon-core!Transaction:class"
                 },
                 {
@@ -1083,11 +1087,11 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<tx."
+                  "text": "<"
                 },
                 {
                   "kind": "Reference",
-                  "text": "Transaction",
+                  "text": "tx.Transaction",
                   "canonicalReference": "@cityofzion/neon-core!Transaction:class"
                 },
                 {
@@ -1099,30 +1103,34 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 6,
-                "endIndex": 10
+                "startIndex": 5,
+                "endIndex": 9
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "txn",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "config",
                   "parameterTypeTokenRange": {
-                    "startIndex": 4,
-                    "endIndex": 5
-                  }
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "sign"
             },
             {
@@ -1170,13 +1178,13 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 6,
                 "endIndex": 8
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
@@ -1184,16 +1192,20 @@
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
                     "endIndex": 3
-                  }
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "config",
                   "parameterTypeTokenRange": {
                     "startIndex": 4,
                     "endIndex": 5
-                  }
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "transferToken"
             },
             {
@@ -1206,12 +1218,8 @@
                   "text": "validate(txn: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Transaction",
+                  "text": "tx.Transaction",
                   "canonicalReference": "@cityofzion/neon-core!Transaction:class"
                 },
                 {
@@ -1241,23 +1249,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 4,
-                "endIndex": 8
+                "startIndex": 3,
+                "endIndex": 7
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "txn",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "validate"
             },
             {
@@ -1270,12 +1281,8 @@
                   "text": "vote(acct: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "wallet."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -1313,37 +1320,42 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 8,
-                "endIndex": 10
+                "startIndex": 7,
+                "endIndex": 9
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "acct",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "candidatePublicKey",
                   "parameterTypeTokenRange": {
-                    "startIndex": 4,
-                    "endIndex": 5
-                  }
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "config",
                   "parameterTypeTokenRange": {
-                    "startIndex": 6,
-                    "endIndex": 7
-                  }
+                    "startIndex": 5,
+                    "endIndex": 6
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "vote"
             }
           ],
@@ -1359,8 +1371,10 @@
               "text": "export interface NetworkFacadeConfig "
             }
           ],
+          "fileUrlPath": "src/NetworkFacade.ts",
           "releaseTag": "Public",
           "name": "NetworkFacadeConfig",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -1373,11 +1387,11 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "string | rpc."
+                  "text": "string | "
                 },
                 {
                   "kind": "Reference",
-                  "text": "NeoServerRpcClient",
+                  "text": "rpc.NeoServerRpcClient",
                   "canonicalReference": "@cityofzion/neon-core!NeoServerRpcClient:class"
                 },
                 {
@@ -1385,6 +1399,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "node",
@@ -1406,8 +1421,10 @@
               "text": "export interface signingConfig "
             }
           ],
+          "fileUrlPath": "src/NetworkFacade.ts",
           "releaseTag": "Public",
           "name": "signingConfig",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -1428,6 +1445,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "signingCallback",
@@ -1446,15 +1464,15 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare type SigningFunction = "
+              "text": "export type SigningFunction = "
             },
             {
               "kind": "Content",
-              "text": "(tx: tx."
+              "text": "(tx: "
             },
             {
               "kind": "Reference",
-              "text": "Transaction",
+              "text": "tx.Transaction",
               "canonicalReference": "@cityofzion/neon-core!Transaction:class"
             },
             {
@@ -1475,6 +1493,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/transaction/signing.ts",
           "releaseTag": "Public",
           "name": "SigningFunction",
           "typeTokenRange": {
@@ -1492,12 +1511,8 @@
               "text": "export declare function signWithAccount(acct: "
             },
             {
-              "kind": "Content",
-              "text": "wallet."
-            },
-            {
               "kind": "Reference",
-              "text": "Account",
+              "text": "wallet.Account",
               "canonicalReference": "@cityofzion/neon-core!Account:class"
             },
             {
@@ -1514,9 +1529,10 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/transaction/signing.ts",
           "returnTypeTokenRange": {
-            "startIndex": 4,
-            "endIndex": 5
+            "startIndex": 3,
+            "endIndex": 4
           },
           "releaseTag": "Public",
           "overloadIndex": 1,
@@ -1525,11 +1541,89 @@
               "parameterName": "acct",
               "parameterTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 3
-              }
+                "endIndex": 2
+              },
+              "isOptional": false
             }
           ],
           "name": "signWithAccount"
+        },
+        {
+          "kind": "Function",
+          "canonicalReference": "@cityofzion/neon-api!smartCalculateNetworkFee:function(1)",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare function smartCalculateNetworkFee(txn: "
+            },
+            {
+              "kind": "Reference",
+              "text": "tx.Transaction",
+              "canonicalReference": "@cityofzion/neon-core!Transaction:class"
+            },
+            {
+              "kind": "Content",
+              "text": ", client: "
+            },
+            {
+              "kind": "Reference",
+              "text": "RPCClient",
+              "canonicalReference": "@cityofzion/neon-core!RPCClient:class"
+            },
+            {
+              "kind": "Content",
+              "text": "): "
+            },
+            {
+              "kind": "Reference",
+              "text": "Promise",
+              "canonicalReference": "!Promise:interface"
+            },
+            {
+              "kind": "Content",
+              "text": "<"
+            },
+            {
+              "kind": "Reference",
+              "text": "u.BigInteger",
+              "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
+            },
+            {
+              "kind": "Content",
+              "text": ">"
+            },
+            {
+              "kind": "Content",
+              "text": ";"
+            }
+          ],
+          "fileUrlPath": "src/api/calculateNetworkFee.ts",
+          "returnTypeTokenRange": {
+            "startIndex": 5,
+            "endIndex": 9
+          },
+          "releaseTag": "Public",
+          "overloadIndex": 1,
+          "parameters": [
+            {
+              "parameterName": "txn",
+              "parameterTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isOptional": false
+            },
+            {
+              "parameterName": "client",
+              "parameterTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 4
+              },
+              "isOptional": false
+            }
+          ],
+          "name": "smartCalculateNetworkFee"
         },
         {
           "kind": "Interface",
@@ -1541,8 +1635,10 @@
               "text": "export interface TokenInfo "
             }
           ],
+          "fileUrlPath": "src/api/getTokenInfos.ts",
           "releaseTag": "Public",
           "name": "TokenInfo",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -1562,6 +1658,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "decimals",
@@ -1588,6 +1685,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "symbol",
@@ -1614,6 +1712,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "totalSupply",
@@ -1635,63 +1734,12 @@
               "text": "export declare class TransactionBuilder "
             }
           ],
+          "fileUrlPath": "src/transaction/TransactionBuilder.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "TransactionBuilder",
+          "preserveMemberOrder": false,
           "members": [
-            {
-              "kind": "Method",
-              "canonicalReference": "@cityofzion/neon-api!TransactionBuilder#addAttributes:member(1)",
-              "docComment": "/**\n * Add an attribute.\n *\n * @param usage - The usage type. Do refer to txAttrUsage enum values for all available options.\n *\n * @param data - The data as hexstring.\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "addAttributes(...attrs: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
-                  "kind": "Reference",
-                  "text": "TransactionAttributeLike",
-                  "canonicalReference": "@cityofzion/neon-core!TransactionAttributeLike:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "[]"
-                },
-                {
-                  "kind": "Content",
-                  "text": "): "
-                },
-                {
-                  "kind": "Content",
-                  "text": "this"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isOptional": false,
-              "isStatic": false,
-              "returnTypeTokenRange": {
-                "startIndex": 5,
-                "endIndex": 6
-              },
-              "releaseTag": "Public",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "attrs",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 4
-                  }
-                }
-              ],
-              "name": "addAttributes"
-            },
             {
               "kind": "Method",
               "canonicalReference": "@cityofzion/neon-api!TransactionBuilder#addBasicSignatureField:member(1)",
@@ -1702,12 +1750,8 @@
                   "text": "addBasicSignatureField(account: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "wallet."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -1723,23 +1767,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 4,
-                "endIndex": 5
+                "startIndex": 3,
+                "endIndex": 4
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "account",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "addBasicSignatureField"
             },
             {
@@ -1752,12 +1799,8 @@
                   "text": "addContractCall(...contractCalls: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "sc."
-                },
-                {
                   "kind": "Reference",
-                  "text": "ContractCall",
+                  "text": "sc.ContractCall",
                   "canonicalReference": "@cityofzion/neon-core!ContractCall:interface"
                 },
                 {
@@ -1777,23 +1820,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 5,
-                "endIndex": 6
+                "startIndex": 4,
+                "endIndex": 5
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "contractCalls",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 4
-                  }
+                    "endIndex": 3
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "addContractCall"
             },
             {
@@ -1806,12 +1852,8 @@
                   "text": "addEmptyWitness(account: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "wallet."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -1827,23 +1869,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 4,
-                "endIndex": 5
+                "startIndex": 3,
+                "endIndex": 4
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "account",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "addEmptyWitness"
             },
             {
@@ -1856,12 +1901,8 @@
                   "text": "addEmptyWitnesses(...accounts: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "wallet."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -1881,23 +1922,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 5,
-                "endIndex": 6
+                "startIndex": 4,
+                "endIndex": 5
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "accounts",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 4
-                  }
+                    "endIndex": 3
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "addEmptyWitnesses"
             },
             {
@@ -1910,12 +1954,8 @@
                   "text": "addGasClaim(account: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "wallet."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -1932,23 +1972,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 4,
-                "endIndex": 5
+                "startIndex": 3,
+                "endIndex": 4
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "account",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "addGasClaim"
             },
             {
@@ -1961,12 +2004,8 @@
                   "text": "addNep17Transfer(account: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "wallet."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -1991,11 +2030,11 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "number | string | u."
+                  "text": "number | string | "
                 },
                 {
                   "kind": "Reference",
-                  "text": "BigInteger",
+                  "text": "u.BigInteger",
                   "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
                 },
                 {
@@ -2012,44 +2051,50 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 11,
-                "endIndex": 12
+                "startIndex": 10,
+                "endIndex": 11
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "account",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "destination",
                   "parameterTypeTokenRange": {
-                    "startIndex": 4,
-                    "endIndex": 5
-                  }
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "tokenScriptHash",
                   "parameterTypeTokenRange": {
-                    "startIndex": 6,
-                    "endIndex": 7
-                  }
+                    "startIndex": 5,
+                    "endIndex": 6
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "amt",
                   "parameterTypeTokenRange": {
-                    "startIndex": 8,
-                    "endIndex": 10
-                  }
+                    "startIndex": 7,
+                    "endIndex": 9
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "addNep17Transfer"
             },
             {
@@ -2078,13 +2123,13 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 3,
                 "endIndex": 4
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
@@ -2092,9 +2137,12 @@
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
                     "endIndex": 2
-                  }
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "addScript"
             },
             {
@@ -2107,12 +2155,8 @@
                   "text": "addSigners(...signers: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
                   "kind": "Reference",
-                  "text": "SignerLike",
+                  "text": "tx.SignerLike",
                   "canonicalReference": "@cityofzion/neon-core!SignerLike:interface"
                 },
                 {
@@ -2132,23 +2176,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 5,
-                "endIndex": 6
+                "startIndex": 4,
+                "endIndex": 5
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "signers",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 4
-                  }
+                    "endIndex": 3
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "addSigners"
             },
             {
@@ -2161,12 +2208,8 @@
                   "text": "addVote(account: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "wallet."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -2191,30 +2234,34 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 6,
-                "endIndex": 7
+                "startIndex": 5,
+                "endIndex": 6
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "account",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "candidatePublicKey",
                   "parameterTypeTokenRange": {
-                    "startIndex": 4,
-                    "endIndex": 5
-                  }
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "addVote"
             },
             {
@@ -2227,12 +2274,8 @@
                   "text": "build(): "
                 },
                 {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Transaction",
+                  "text": "tx.Transaction",
                   "canonicalReference": "@cityofzion/neon-core!Transaction:class"
                 },
                 {
@@ -2240,15 +2283,17 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 3
+                "endIndex": 2
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "build"
             },
             {
@@ -2270,15 +2315,17 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": true,
               "returnTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "newBuilder"
             },
             {
@@ -2291,12 +2338,8 @@
                   "text": "setFeeAccount(account: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "wallet."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -2312,23 +2355,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 4,
-                "endIndex": 5
+                "startIndex": 3,
+                "endIndex": 4
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "account",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "setFeeAccount"
             },
             {
@@ -2341,12 +2387,8 @@
                   "text": "setNetworkFee(fee: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "u."
-                },
-                {
                   "kind": "Reference",
-                  "text": "BigInteger",
+                  "text": "u.BigInteger",
                   "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
                 },
                 {
@@ -2362,23 +2404,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 4,
-                "endIndex": 5
+                "startIndex": 3,
+                "endIndex": 4
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "fee",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "setNetworkFee"
             },
             {
@@ -2391,12 +2436,8 @@
                   "text": "setSystemFee(fee: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "u."
-                },
-                {
                   "kind": "Reference",
-                  "text": "BigInteger",
+                  "text": "u.BigInteger",
                   "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
                 },
                 {
@@ -2412,23 +2453,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 4,
-                "endIndex": 5
+                "startIndex": 3,
+                "endIndex": 4
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "fee",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "setSystemFee"
             }
           ],
@@ -2444,8 +2488,11 @@
               "text": "export declare class TransactionSigner "
             }
           ],
+          "fileUrlPath": "src/transaction/signer.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "TransactionSigner",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Constructor",
@@ -2457,12 +2504,8 @@
                   "text": "constructor(transaction: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Transaction",
+                  "text": "tx.Transaction",
                   "canonicalReference": "@cityofzion/neon-core!Transaction:class"
                 },
                 {
@@ -2471,14 +2514,16 @@
                 }
               ],
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "transaction",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 }
               ]
             },
@@ -2493,11 +2538,11 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "(wallet."
+                  "text": "("
                 },
                 {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -2517,13 +2562,13 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 5,
                 "endIndex": 6
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
@@ -2531,9 +2576,12 @@
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
                     "endIndex": 4
-                  }
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "signWithAccount"
             },
             {
@@ -2546,12 +2594,8 @@
                   "text": "signWithMultiSigAccount(multisigAccount: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "wallet."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Account",
+                  "text": "wallet.Account",
                   "canonicalReference": "@cityofzion/neon-core!Account:class"
                 },
                 {
@@ -2559,12 +2603,8 @@
                   "text": ", ...witnesses: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Witness",
+                  "text": "tx.Witness",
                   "canonicalReference": "@cityofzion/neon-core!Witness:class"
                 },
                 {
@@ -2584,30 +2624,34 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 8,
-                "endIndex": 9
+                "startIndex": 6,
+                "endIndex": 7
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "multisigAccount",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "witnesses",
                   "parameterTypeTokenRange": {
-                    "startIndex": 4,
-                    "endIndex": 7
-                  }
+                    "startIndex": 3,
+                    "endIndex": 5
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "signWithMultiSigAccount"
             },
             {
@@ -2620,12 +2664,8 @@
                   "text": "signWithWitness(...witnesses: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Witness",
+                  "text": "tx.Witness",
                   "canonicalReference": "@cityofzion/neon-core!Witness:class"
                 },
                 {
@@ -2645,23 +2685,26 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 5,
-                "endIndex": 6
+                "startIndex": 4,
+                "endIndex": 5
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "witnesses",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 4
-                  }
+                    "endIndex": 3
+                  },
+                  "isOptional": false
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "signWithWitness"
             },
             {
@@ -2674,12 +2717,8 @@
                   "text": "transaction: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Transaction",
+                  "text": "tx.Transaction",
                   "canonicalReference": "@cityofzion/neon-core!Transaction:class"
                 },
                 {
@@ -2687,14 +2726,17 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "transaction",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 3
+                "endIndex": 2
               },
-              "isStatic": false
+              "isStatic": false,
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []
@@ -2709,8 +2751,11 @@
               "text": "export declare class TransactionValidator "
             }
           ],
+          "fileUrlPath": "src/transaction/validator.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "TransactionValidator",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Constructor",
@@ -2722,12 +2767,8 @@
                   "text": "constructor(rpc: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "rpc."
-                },
-                {
                   "kind": "Reference",
-                  "text": "NeoServerRpcClient",
+                  "text": "rpc.NeoServerRpcClient",
                   "canonicalReference": "@cityofzion/neon-core!NeoServerRpcClient:class"
                 },
                 {
@@ -2735,12 +2776,8 @@
                   "text": ", transaction: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Transaction",
+                  "text": "tx.Transaction",
                   "canonicalReference": "@cityofzion/neon-core!Transaction:class"
                 },
                 {
@@ -2749,21 +2786,24 @@
                 }
               ],
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
                   "parameterName": "rpc",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  }
+                    "endIndex": 2
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "transaction",
                   "parameterTypeTokenRange": {
-                    "startIndex": 4,
-                    "endIndex": 6
-                  }
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "isOptional": false
                 }
               ]
             },
@@ -2777,12 +2817,8 @@
                   "text": "rpcClient: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "rpc."
-                },
-                {
                   "kind": "Reference",
-                  "text": "NeoServerRpcClient",
+                  "text": "rpc.NeoServerRpcClient",
                   "canonicalReference": "@cityofzion/neon-core!NeoServerRpcClient:class"
                 },
                 {
@@ -2790,14 +2826,17 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "rpcClient",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 3
+                "endIndex": 2
               },
-              "isStatic": false
+              "isStatic": false,
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -2809,12 +2848,8 @@
                   "text": "transaction: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "tx."
-                },
-                {
                   "kind": "Reference",
-                  "text": "Transaction",
+                  "text": "tx.Transaction",
                   "canonicalReference": "@cityofzion/neon-core!Transaction:class"
                 },
                 {
@@ -2822,14 +2857,17 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "transaction",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 3
+                "endIndex": 2
               },
-              "isStatic": false
+              "isStatic": false,
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -2849,6 +2887,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "TX_LIFESPAN_SUGGESTION",
@@ -2856,7 +2895,9 @@
                 "startIndex": 1,
                 "endIndex": 2
               },
-              "isStatic": true
+              "isStatic": true,
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Method",
@@ -2908,13 +2949,13 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 5,
                 "endIndex": 9
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
@@ -2922,16 +2963,20 @@
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
                     "endIndex": 2
-                  }
+                  },
+                  "isOptional": false
                 },
                 {
                   "parameterName": "autoFix",
                   "parameterTypeTokenRange": {
                     "startIndex": 3,
                     "endIndex": 4
-                  }
+                  },
+                  "isOptional": true
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "validate"
             },
             {
@@ -2967,11 +3012,11 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<u."
+                  "text": "<"
                 },
                 {
                   "kind": "Reference",
-                  "text": "BigInteger",
+                  "text": "u.BigInteger",
                   "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
                 },
                 {
@@ -2983,13 +3028,13 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 3,
                 "endIndex": 9
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
@@ -2997,9 +3042,12 @@
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
                     "endIndex": 2
-                  }
+                  },
+                  "isOptional": true
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "validateNetworkFee"
             },
             {
@@ -3034,15 +3082,17 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 5
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "validateScript"
             },
             {
@@ -3078,11 +3128,11 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<u."
+                  "text": "<"
                 },
                 {
                   "kind": "Reference",
-                  "text": "BigInteger",
+                  "text": "u.BigInteger",
                   "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
                 },
                 {
@@ -3094,13 +3144,13 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 3,
                 "endIndex": 9
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
@@ -3108,9 +3158,12 @@
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
                     "endIndex": 2
-                  }
+                  },
+                  "isOptional": true
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "validateSystemFee"
             },
             {
@@ -3153,13 +3206,13 @@
                   "text": ";"
                 }
               ],
-              "isOptional": false,
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 3,
                 "endIndex": 7
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
@@ -3167,9 +3220,12 @@
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
                     "endIndex": 2
-                  }
+                  },
+                  "isOptional": true
                 }
               ],
+              "isOptional": false,
+              "isAbstract": false,
               "name": "validateValidUntilBlock"
             }
           ],
@@ -3185,8 +3241,10 @@
               "text": "export declare enum ValidationAttributes "
             }
           ],
+          "fileUrlPath": "src/transaction/validator.ts",
           "releaseTag": "Public",
           "name": "ValidationAttributes",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "EnumMember",
@@ -3202,12 +3260,12 @@
                   "text": "15"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "All",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "All"
             },
             {
               "kind": "EnumMember",
@@ -3223,12 +3281,12 @@
                   "text": "4"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "NetworkFee",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "NetworkFee"
             },
             {
               "kind": "EnumMember",
@@ -3244,12 +3302,12 @@
                   "text": "0"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "None",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "None"
             },
             {
               "kind": "EnumMember",
@@ -3265,12 +3323,12 @@
                   "text": "8"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Script",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Script"
             },
             {
               "kind": "EnumMember",
@@ -3286,12 +3344,12 @@
                   "text": "2"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "SystemFee",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "SystemFee"
             },
             {
               "kind": "EnumMember",
@@ -3307,12 +3365,12 @@
                   "text": "1"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "ValidUntilBlock",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "ValidUntilBlock"
             }
           ]
         },
@@ -3326,8 +3384,10 @@
               "text": "export interface ValidationResult "
             }
           ],
+          "fileUrlPath": "src/transaction/validator.ts",
           "releaseTag": "Public",
           "name": "ValidationResult",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -3367,11 +3427,11 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<u."
+                  "text": "<"
                 },
                 {
                   "kind": "Reference",
-                  "text": "BigInteger",
+                  "text": "u.BigInteger",
                   "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
                 },
                 {
@@ -3385,11 +3445,11 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<u."
+                  "text": "<"
                 },
                 {
                   "kind": "Reference",
-                  "text": "BigInteger",
+                  "text": "u.BigInteger",
                   "canonicalReference": "@cityofzion/neon-core!BigInteger:class"
                 },
                 {
@@ -3401,6 +3461,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "result",
@@ -3427,6 +3488,7 @@
                   "text": ";"
                 }
               ],
+              "isReadonly": false,
               "isOptional": false,
               "releaseTag": "Public",
               "name": "valid",
@@ -3445,7 +3507,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare type ValidationSuggestion<T> = "
+              "text": "export type ValidationSuggestion<T> = "
             },
             {
               "kind": "Content",
@@ -3456,6 +3518,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/transaction/validator.ts",
           "releaseTag": "Public",
           "name": "ValidationSuggestion",
           "typeParameters": [
