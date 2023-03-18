@@ -1,7 +1,6 @@
 import { Query, RPCResponse, RPCErrorResponse, JsonRpcParams } from "../Query";
 import logger from "../../logging";
 import { fetch } from "cross-fetch";
-import { AbortController } from "abort-controller";
 import { BatchQuery } from "../BatchQuery";
 
 const log = logger("rpc");

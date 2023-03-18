@@ -5,6 +5,7 @@
 ```ts
 
 import { rpc } from '@cityofzion/neon-core';
+import RPCClient from '@cityofzion/neon-core/lib/rpc/RPCClient';
 import { sc } from '@cityofzion/neon-core';
 import { tx } from '@cityofzion/neon-core';
 import { u } from '@cityofzion/neon-core';
@@ -85,6 +86,9 @@ export type SigningFunction = (tx: tx.Transaction, details: {
 export function signWithAccount(acct: wallet.Account): SigningFunction;
 
 // @public (undocumented)
+export function smartCalculateNetworkFee(txn: tx.Transaction, client: RPCClient): Promise<u.BigInteger>;
+
+// @public (undocumented)
 export interface TokenInfo {
     // (undocumented)
     decimals: number;
@@ -96,7 +100,6 @@ export interface TokenInfo {
 
 // @public (undocumented)
 export class TransactionBuilder {
-    addAttributes(...attrs: tx.TransactionAttributeLike[]): this;
     addBasicSignatureField(account: wallet.Account): this;
     addContractCall(...contractCalls: sc.ContractCall[]): this;
     addEmptyWitness(account: wallet.Account): this;

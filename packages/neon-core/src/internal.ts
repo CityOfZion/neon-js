@@ -1,7 +1,7 @@
 /**
  * Parses a string, number or enum to an enum.
  */
-export function parseEnum<T>(
+export function parseEnum<T extends object>(
   input: string | number | T[keyof T],
   enumType: T
 ): T[keyof T] {

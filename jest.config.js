@@ -2,10 +2,6 @@ module.exports = {
   testRunner: "jest-circus/runner",
   testEnvironment: "node",
   globals: {
-    "ts-jest": {
-      tsconfig: "<rootDir>/tsconfig-test.json",
-      diagnostics: false,
-    },
     __TARGETNET__: "LocalNet",
   },
   watchPlugins: [
@@ -13,7 +9,13 @@ module.exports = {
     "jest-watch-typeahead/testname",
   ],
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "<rootDir>/tsconfig-test.json",
+        diagnostics: false,
+      },
+    ],
   },
   coveragePathIgnorePatterns: [
     "<rootDir>/packages/.*/lib/",

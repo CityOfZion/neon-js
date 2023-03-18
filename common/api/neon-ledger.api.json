@@ -1,8 +1,8 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.19.5",
-    "schemaVersion": 1004,
+    "toolVersion": "7.34.4",
+    "schemaVersion": 1011,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
       "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
@@ -156,18 +156,21 @@
         "@betaDocumentation": true,
         "@internalRemarks": true,
         "@preapproved": true
-      }
+      },
+      "reportUnsupportedHtmlElements": false
     }
   },
   "kind": "Package",
   "canonicalReference": "@cityofzion/neon-ledger!",
   "docComment": "",
   "name": "@cityofzion/neon-ledger",
+  "preserveMemberOrder": false,
   "members": [
     {
       "kind": "EntryPoint",
       "canonicalReference": "@cityofzion/neon-ledger!",
       "name": "",
+      "preserveMemberOrder": false,
       "members": [
         {
           "kind": "Function",
@@ -211,6 +214,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/BIP44.ts",
           "returnTypeTokenRange": {
             "startIndex": 7,
             "endIndex": 8
@@ -223,21 +227,24 @@
               "parameterTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "isOptional": true
             },
             {
               "parameterName": "change",
               "parameterTypeTokenRange": {
                 "startIndex": 3,
                 "endIndex": 4
-              }
+              },
+              "isOptional": true
             },
             {
               "parameterName": "account",
               "parameterTypeTokenRange": {
                 "startIndex": 5,
                 "endIndex": 6
-              }
+              },
+              "isOptional": true
             }
           ],
           "name": "BIP44"
@@ -270,6 +277,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/ErrorCode.ts",
           "returnTypeTokenRange": {
             "startIndex": 3,
             "endIndex": 4
@@ -282,7 +290,8 @@
               "parameterTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "isOptional": false
             }
           ],
           "name": "evalTransportError"
@@ -319,6 +328,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/main.ts",
           "returnTypeTokenRange": {
             "startIndex": 3,
             "endIndex": 5
@@ -331,7 +341,8 @@
               "parameterTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "isOptional": false
             }
           ],
           "name": "getAppName"
@@ -368,6 +379,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/main.ts",
           "returnTypeTokenRange": {
             "startIndex": 3,
             "endIndex": 5
@@ -380,7 +392,8 @@
               "parameterTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "isOptional": false
             }
           ],
           "name": "getAppVersion"
@@ -430,6 +443,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/main.ts",
           "returnTypeTokenRange": {
             "startIndex": 4,
             "endIndex": 8
@@ -442,7 +456,8 @@
               "parameterTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 3
-              }
+              },
+              "isOptional": false
             }
           ],
           "name": "getDevicePaths"
@@ -495,6 +510,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/main.ts",
           "returnTypeTokenRange": {
             "startIndex": 7,
             "endIndex": 9
@@ -507,21 +523,24 @@
               "parameterTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "isOptional": false
             },
             {
               "parameterName": "bip44String",
               "parameterTypeTokenRange": {
                 "startIndex": 3,
                 "endIndex": 4
-              }
+              },
+              "isOptional": false
             },
             {
               "parameterName": "showAddressOnDevice",
               "parameterTypeTokenRange": {
                 "startIndex": 5,
                 "endIndex": 6
-              }
+              },
+              "isOptional": true
             }
           ],
           "name": "getPublicKey"
@@ -582,6 +601,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/main.ts",
           "returnTypeTokenRange": {
             "startIndex": 9,
             "endIndex": 11
@@ -594,28 +614,32 @@
               "parameterTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "isOptional": false
             },
             {
               "parameterName": "payload",
               "parameterTypeTokenRange": {
                 "startIndex": 3,
                 "endIndex": 4
-              }
+              },
+              "isOptional": false
             },
             {
               "parameterName": "bip44String",
               "parameterTypeTokenRange": {
                 "startIndex": 5,
                 "endIndex": 6
-              }
+              },
+              "isOptional": false
             },
             {
               "parameterName": "network",
               "parameterTypeTokenRange": {
                 "startIndex": 7,
                 "endIndex": 8
-              }
+              },
+              "isOptional": false
             }
           ],
           "name": "getSignature"
