@@ -39,7 +39,7 @@ commands:
             JEST_JUNIT_OUTPUT_DIR: reports/unit
             JEST_JUNIT_OUTPUT_NAME: results.xml
           command: npm run test:unit --ci --runInBand --detectOpenHandles
-            --reporters="jest-junit" --reporters="default" --maxWorkers=4
+            --reporters="jest-junit" --reporters="default" --maxWorkers=3
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -62,7 +62,7 @@ commands:
             JEST_JUNIT_OUTPUT_DIR: reports/integration
             JEST_JUNIT_OUTPUT_NAME: results.xml
           command: npm run test:integration --ci --runInBand --detectOpenHandles
-            --reporters="jest-junit" --reporters="default" --maxWorkers=4
+            --reporters="jest-junit" --reporters="default" --maxWorkers=3
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -122,7 +122,7 @@ jobs:
             [ -z "$FILES" ] && echo "No files found" && exit 0
             echo "Found:"
             echo $FILES
-            npm run eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
+            npx eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
       - run:
           name: Format docs
           command: npm run lint:docs

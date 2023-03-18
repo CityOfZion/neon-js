@@ -60,7 +60,7 @@ describe("add account, default account", () => {
 describe("encrypt", () => {
   test("success", async () => {
     const wallet = new Wallet();
-    wallet.addAccount(new Account(WALLET_JSON.accounzts[1].extra.WIF));
+    wallet.addAccount(new Account(WALLET_JSON.accounts[1].extra.WIF));
 
     const result = await wallet.encrypt(0, PASSWORD);
 
@@ -77,7 +77,7 @@ describe("encrypt", () => {
 
 describe("encryptAll", () => {
   test("success", async () => {
-    const wallet = new Wallet({ scrypt: { n: 256, r: 1, p: 1 } });
+    const wallet = new Wallet();
     wallet.addAccount(new Account(WALLET_JSON.accounts[0].extra.WIF));
     wallet.addAccount(new Account(WALLET_JSON.accounts[1].extra.WIF));
 
