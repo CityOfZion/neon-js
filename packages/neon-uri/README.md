@@ -61,7 +61,7 @@ neo:vote-02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef
 ## Installation
 
 ```sh
-yarn i @cityofzion/neon-uri @cityofzion/neon-core
+npm i @cityofzion/neon-uri @cityofzion/neon-core
 ```
 
 ```js

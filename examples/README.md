@@ -9,4 +9,4 @@ node basic/facade.js
 
 ## Develop
 
-`yarn generate` will parse the files and use `ljs2` to invert the comments and codeblocks. The outputs will override all the files in docs/guides.
+`npm run generate` will parse the files and use `ljs2` to invert the comments and codeblocks. The outputs will override all the files in docs/guides.

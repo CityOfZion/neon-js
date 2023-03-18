@@ -7,13 +7,13 @@ Wrapper for interacting with Ledger.
 ## Installation
 
 ```sh
-yarn i @cityofzion/neon-node-ledger @cityofzion-neon-core
+npm i @cityofzion/neon-node-ledger @cityofzion-neon-core
 ```
 
 This package only provides an easy wrapper for communicating with the Ledger. You will need one of the ledger libraries depending on your use-case:
 
-- `@ledgerhq/hw-transport-node-hid` (NodeJs)
-- `@ledgerhq/hw-transport-u2f` (Browser)
+* `@ledgerhq/hw-transport-node-hid` (NodeJs)
+* `@ledgerhq/hw-transport-u2f` (Browser)
 
 You will need the library to instantiate the Ledger instance. After that, most of the methods can run off the Ledger instance.
 
@@ -55,8 +55,8 @@ Returns the signature as a 64 bit hexstring. You will need some assembling of th
 
 ```js
 const signature = await neonJs.ledger.getSignature(
-  ledgerInstance,
-  tx,
-  bipString
+    ledgerInstance,
+    tx,
+    bipString
 );
 ```

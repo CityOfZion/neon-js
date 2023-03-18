@@ -36,8 +36,7 @@ commands:
           environment:
             JEST_JUNIT_OUTPUT_DIR: reports/unit
             JEST_JUNIT_OUTPUT_NAME: results.xml
-          command: yarn test:unit --ci --runInBand --detectOpenHandles
-            --reporters="jest-junit" --reporters="default"
+          command: npm run test:unit -- --ci --maxWorkers=4 --detectOpenHandles --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -59,8 +58,7 @@ commands:
           environment:
             JEST_JUNIT_OUTPUT_DIR: reports/integration
             JEST_JUNIT_OUTPUT_NAME: results.xml
-          command: yarn test:integration --ci --runInBand --detectOpenHandles
-            --reporters="jest-junit" --reporters="default"
+          command: npm run test:integration -- --ci --maxWorkers=4 --detectOpenHandles --reporters="jest-junit" --reporters="default"
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -75,28 +73,26 @@ jobs:
           command: |
             node --version
             npm --version
-            yarn --version
             git --version
       - checkout
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - neon-yarn-{{ checksum "yarn.lock" }}
-            - neon-fallback
+            - neon-npm-{{ checksum "package-lock.json" }}
       - run:
           name: node hid compilation requirements
           command: sudo apt-get update && sudo apt-get -y install libusb-1.0-0-dev libusb-1.0-0 libudev-dev
-      - run: yarn install --cache-folder .cache/yarn
+      - run: npm ci
       - save_cache:
-          key: neon-yarn-{{ checksum "yarn.lock" }}
+          key: neon-npm-{{ checksum "package-lock.json" }}
           paths:
-            - .cache/yarn
+            - node_modules
       - run:
           name: Bootstrap
-          command: yarn bootstrap
+          command: npm run bootstrap
       - run:
           name: Build
-          command: yarn build && yarn dist
+          command: npm run build && npm run dist
       - persist_to_workspace:
           root: .
           paths:
@@ -122,10 +118,10 @@ jobs:
             [ -z "$FILES" ] && echo "No files found" && exit 0
             echo "Found:"
             echo $FILES
-            yarn run eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
+            npx eslint --max-warnings 0 --format junit -o reports/lint/lint.xml $FILES
       - run:
           name: Format docs
-          command: yarn lint:docs
+          command: npm run lint:docs
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -160,7 +156,7 @@ jobs:
           command: npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
       - run:
           name: Publish to npm
-          command: yarn release:latest --yes
+          command: npm run release:latest -- --yes
 
   publish-next:
     executor: env_node
@@ -173,7 +169,7 @@ jobs:
           command: npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
       - run:
           name: Publish to npm
-          command: yarn release:next --yes
+          command: npm run release:next -- --yes
 
   publish-docs:
     executor: env_node
@@ -189,8 +185,8 @@ jobs:
           name: Build and release docs
           command: |
             cd website
-            yarn install
-            yarn run release
+            npm i
+            npm run release
 
 # Branch based workflows
 workflows:
