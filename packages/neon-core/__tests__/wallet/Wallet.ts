@@ -89,7 +89,7 @@ describe("encryptAll", () => {
   }, 20000);
 });
 
-describe.skip("decrypt", () => {
+describe("decrypt", () => {
   test("success", async () => {
     const wallet = new Wallet(WALLET_JSON);
 
@@ -105,7 +105,7 @@ describe.skip("decrypt", () => {
   }, 10000);
 });
 
-describe.skip("decryptAll", () => {
+describe("decryptAll", () => {
   test("success", async () => {
     const wallet = new Wallet(WALLET_JSON);
 

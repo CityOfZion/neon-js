@@ -39,7 +39,7 @@ commands:
             JEST_JUNIT_OUTPUT_DIR: reports/unit
             JEST_JUNIT_OUTPUT_NAME: results.xml
           command: npm run test:unit --ci --runInBand --detectOpenHandles
-            --reporters="jest-junit" --reporters="default"
+            --reporters="jest-junit" --reporters="default" --maxWorkers=4
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -62,7 +62,7 @@ commands:
             JEST_JUNIT_OUTPUT_DIR: reports/integration
             JEST_JUNIT_OUTPUT_NAME: results.xml
           command: npm run test:integration --ci --runInBand --detectOpenHandles
-            --reporters="jest-junit" --reporters="default"
+            --reporters="jest-junit" --reporters="default" --maxWorkers=4
       - store_test_results:
           path: reports
       - store_artifacts:
