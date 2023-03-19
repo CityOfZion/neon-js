@@ -8,7 +8,8 @@ export const TESTNET_URLS = [
   "http://seed5t4.neo.org:20332",
 ];
 
-export const LOCALNET_URLS = ["http://localhost:20332"];
+//Node17+ defaults to resolving IPv6 by default so localhost does not work anymore.
+export const LOCALNET_URLS = ["http://127.0.0.1:20332"];
 
 export async function getIntegrationEnvUrl(): Promise<string> {
   const urls = isTestNet() ? TESTNET_URLS : LOCALNET_URLS;
@@ -42,6 +43,7 @@ async function safelyCheckHeight(url: string): Promise<number> {
     });
     return res.result;
   } catch (_e) {
+    console.log("Error while checking RPC height:" + _e);
     return -1;
   }
 }

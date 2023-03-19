@@ -109,7 +109,7 @@ export class ScriptBuilder extends StringStream {
   //TODO: Add EmitCall(offset)
 
   public emitBoolean(bool: boolean): this {
-    return this.emit(bool ? OpCode.PUSH1 : OpCode.PUSH0);
+    return this.emit(bool ? OpCode.PUSHT : OpCode.PUSHF);
   }
 
   /**
