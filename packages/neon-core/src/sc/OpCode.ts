@@ -7,6 +7,8 @@ export enum OpCode {
   PUSHINT64 = 0x03,
   PUSHINT128 = 0x04,
   PUSHINT256 = 0x05,
+  PUSHT = 0x08,
+  PUSHF = 0x09,
   // Convert the next four bytes to an address, and push the address onto the stack.
   PUSHA = 0x0a,
   // The item <see langword="null"/> is pushed onto the stack.

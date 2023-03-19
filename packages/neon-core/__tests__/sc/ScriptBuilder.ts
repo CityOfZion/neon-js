@@ -88,8 +88,8 @@ describe("emitContractCall", () => {
 describe("emitPush", () => {
   test.each([
     ["short string", "a".repeat(5), "0c05" + "61".repeat(5)],
-    ["true", true, "11"],
-    ["false", false, "10"],
+    ["true", true, "08"],
+    ["false", false, "09"],
     [
       "ContractParam(integer) 1",
       ContractParam.integer(1),
@@ -118,8 +118,8 @@ describe("emitPush", () => {
 
 describe("emitBoolean", () => {
   test.each([
-    ["true", true, "11"],
-    ["false", false, "10"],
+    ["true", true, "08"],
+    ["false", false, "09"],
   ])("%s", (_msg: string, data: boolean, expected: string) => {
     const result = new ScriptBuilder().emitBoolean(data).build();
     expect(result).toBe(expected);

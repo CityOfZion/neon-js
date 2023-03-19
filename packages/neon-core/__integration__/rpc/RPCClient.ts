@@ -6,18 +6,9 @@ import { HexString } from "../../src/u";
 import { NATIVE_CONTRACT_HASH } from "../../src/consts";
 import testWallet from "../../__tests__/testWallet.json";
 import { ValidateAddressResult } from "../../src/rpc";
+import * as TestHelpers from "../../../../testHelpers";
 
 const wallet = new Wallet(testWallet);
-
-const TESTNET_URLS = [
-  "http://seed1t4.neo.org:20332",
-  "http://seed2t4.neo.org:20332",
-  "http://seed3t4.neo.org:20332",
-  "http://seed4t4.neo.org:20332",
-  "http://seed5t4.neo.org:20332",
-];
-
-const LOCALNET_URLS = ["http://localhost:20332"];
 
 let client: rpc.RPCClient;
 const address = wallet.accounts[0].address;
@@ -28,34 +19,9 @@ let txid: string;
 let blockhash: string;
 let blockHeight: number;
 
-async function safelyCheckHeight(url: string): Promise<number> {
-  try {
-    const res = await rpc.sendQuery(url, rpc.Query.getBlockCount(), {
-      timeout: 10000,
-    });
-    return res.result;
-  } catch (_e) {
-    return -1;
-  }
-}
-
-function isTestNet(): boolean {
-  return (global["__TARGETNET__"] as string).toLowerCase() === "testnet";
-}
-
 beforeAll(async () => {
-  const urls = isTestNet() ? TESTNET_URLS : LOCALNET_URLS;
-  const data = await Promise.all(urls.map((url) => safelyCheckHeight(url)));
-  const heights = data.map((h, i) => ({ height: h, url: urls[i] }));
-  const best = heights.reduce(
-    (bestSoFar, h) => (bestSoFar.height >= h.height ? bestSoFar : h),
-    { height: -1, url: "" }
-  );
-  console.log(`isTestNet: ${isTestNet()} best: ${JSON.stringify(best)}`);
-  if (!best.url) {
-    throw new Error("No good endpoint found");
-  }
-  client = new rpc.RPCClient(best.url);
+  const url = await TestHelpers.getIntegrationEnvUrl();
+  client = new rpc.RPCClient(url);
   let height = 0;
   while (!txid) {
     const block = await client.getBlock(height, true);

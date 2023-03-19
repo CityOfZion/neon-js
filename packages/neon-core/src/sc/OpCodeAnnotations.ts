@@ -16,6 +16,8 @@ export const OpCodeAnnotations: Record<OpCode, OpCodeAnnotation> = {
   [OpCode.PUSHINT64]: { operandSize: 8 },
   [OpCode.PUSHINT128]: { operandSize: 16 },
   [OpCode.PUSHINT256]: { operandSize: 32 },
+  [OpCode.PUSHT]: {},
+  [OpCode.PUSHF]: {},
   [OpCode.PUSHA]: { operandSize: 4 },
   [OpCode.PUSHNULL]: {},
   [OpCode.PUSHDATA1]: { operandSizePrefix: 1 },

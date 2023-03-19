@@ -9,6 +9,8 @@ export const OpCodePrices = {
   [OpCode.PUSHINT64]: 1 << 0,
   [OpCode.PUSHINT128]: 1 << 2,
   [OpCode.PUSHINT256]: 1 << 2,
+  [OpCode.PUSHT]: 1 << 0,
+  [OpCode.PUSHF]: 1 << 0,
   [OpCode.PUSHA]: 1 << 2,
   [OpCode.PUSHNULL]: 1 << 0,
   [OpCode.PUSHDATA1]: 1 << 3,
