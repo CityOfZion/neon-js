@@ -11,7 +11,7 @@ import ECBMode from "crypto-js/mode-ecb";
 import NoPadding from "crypto-js/pad-nopadding";
 import SHA256 from "crypto-js/sha256";
 import { lib } from "crypto-js";
-import { scrypt } from "scrypt-js";
+import { scrypt } from "ethereum-cryptography/scrypt";
 import {
   DEFAULT_ADDRESS_VERSION,
   DEFAULT_SCRYPT,
