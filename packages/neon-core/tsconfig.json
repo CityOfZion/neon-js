@@ -4,6 +4,6 @@
     "rootDir": "src",
     "outDir": "lib"
   },
-  // default include without extensions only inclues typescript stuff
-  "include": ["src/**/*", "src/**/*.json","./typings/*"]
+  // default include without extensions only includes typescript stuff
+  "include": ["src/**/*", "src/**/*.json"]
 }
