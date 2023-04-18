@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-core",
   "description": "Neon-JS Core functionality",
-  "version": "5.3.0",
+  "version": "5.4.0",
   "engines": {
     "node": ">=16.19.0"
   },
@@ -45,10 +45,10 @@
     "cross-fetch": "^3.1.5",
     "crypto-js": "4.1.1",
     "elliptic": "6.5.4",
+    "ethereum-cryptography": "2.0.0",
     "lodash": "4.17.21",
     "loglevel": "1.8.1",
-    "loglevel-plugin-prefix": "0.8.4",
-    "ethereum-cryptography": "2.0.0"
+    "loglevel-plugin-prefix": "0.8.4"
   },
   "devDependencies": {
     "@types/bn.js": "5.1.1",

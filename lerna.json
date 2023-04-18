@@ -1,27 +1,15 @@
 {
-  "packages": [
-    "packages/*"
-  ],
-  "version": "5.3.0",
+  "packages": ["packages/*"],
+  "version": "5.4.0",
   "npmClient": "npm",
   "useWorkspaces": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": ["packages/*"],
   "command": {
     "version": {
-      "allowBranch": [
-        "master",
-        "next",
-        "archive/*"
-      ]
+      "allowBranch": ["master", "next", "archive/*"]
     },
     "publish": {
-      "allowBranch": [
-        "master",
-        "next",
-        "archive/*"
-      ]
+      "allowBranch": ["master", "next", "archive/*"]
     }
   }
 }
