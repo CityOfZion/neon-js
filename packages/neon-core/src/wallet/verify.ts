@@ -9,7 +9,7 @@
  */
 
 import base58 from "bs58";
-import { ab2hexstring, hash256, isHex, reverseHex } from "../u";
+import { ab2hexstring, remove0xPrefix, hash256, isHex, reverseHex } from "../u";
 import {
   getAddressFromScriptHash,
   getPublicKeyEncoded,
@@ -107,7 +107,8 @@ export function isPublicKey(key: string, encoded?: boolean): boolean {
  * Verifies if string is a scripthash. Any 20 byte hexstring is a valid scriptHash.
  */
 export function isScriptHash(scriptHash: string): boolean {
-  return isHex(scriptHash) && scriptHash.length === 40;
+  const formattedScriptHash = remove0xPrefix(scriptHash);
+  return isHex(formattedScriptHash) && formattedScriptHash.length === 40;
 }
 
 /**

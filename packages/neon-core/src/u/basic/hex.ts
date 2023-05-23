@@ -1,6 +1,17 @@
 const hexRegex = /^([0-9A-Fa-f]{2})*$/;
 
 /**
+ * Format a hexstring to a supported format.
+ */
+export function remove0xPrefix(str: string): string {
+  if (str.startsWith("0x")) {
+    str = str.substring(2);
+  }
+
+  return str;
+}
+
+/**
  * Checks if input is a hexstring. Empty string is considered a hexstring.
  */
 export function isHex(str: string): boolean {

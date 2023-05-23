@@ -26,6 +26,13 @@ describe("constructor", () => {
     expect(result.address).toBe("NMBfzaEq2c5zodiNbLPoohVENARMbJim1r");
   });
 
+  test("script hash with 0x", () => {
+    const result = new Account("0x118ba6f59931a56ec469770f7fc790ece96df00d");
+    expect(result instanceof Account).toBeTruthy();
+    expect(result.address).toBe("NMBfzaEq2c5zodiNbLPoohVENARMbJim1r");
+    expect(result.scriptHash).toBe("118ba6f59931a56ec469770f7fc790ece96df00d");
+  });
+
   test("custom address version", () => {
     const result = new Account(
       "L2QTooFoDFyRFTxmtiVHt5CfsXfVnexdbENGDkkrrgTTryiLsPMG",
