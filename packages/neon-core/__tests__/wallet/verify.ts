@@ -40,12 +40,12 @@ describe("Verify: Valid", () => {
     expect(verify.isPublicKey(i, false)).toBeTruthy();
   });
 
-  test.each(["0000000000000000000000000000000000000000"])(
-    "ScriptHash: %s",
-    (i: string) => {
-      expect(verify.isScriptHash(i)).toBeTruthy();
-    }
-  );
+  test.each([
+    "0000000000000000000000000000000000000000",
+    "0x0000000000000000000000000000000000000000",
+  ])("ScriptHash: %s", (i: string) => {
+    expect(verify.isScriptHash(i)).toBeTruthy();
+  });
 
   test.each([
     "NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM",
