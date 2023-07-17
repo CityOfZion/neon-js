@@ -40,6 +40,7 @@
     "lerna": "6.5.1",
     "prettier": "2.8.4",
     "rimraf": "4.4.0",
+    "terser-webpack-plugin": "^5.3.9",
     "ts-jest": "29.0.5",
     "ts-loader": "9.4.2",
     "tslint-config-prettier": "1.18.0",
