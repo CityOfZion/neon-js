@@ -30,8 +30,8 @@ Visit the [docs](https://dojo.coz.io/neo3/neon-js/index.html) to learn how to us
 
 ### Nodejs
 
-```js
-npm i @cityofzion / neon - js
+```bash
+npm i @cityofzion/neon-js
 ```
 
 ### Browser through CDN
