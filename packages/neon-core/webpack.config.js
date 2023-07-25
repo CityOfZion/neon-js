@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
+const TerserPlugin = require("terser-webpack-plugin");
 const common = require("../../webpack.common");
 const base = common(__dirname);
 module.exports = function () {
@@ -28,6 +29,17 @@ module.exports = function () {
         Buffer: ["buffer", "Buffer"],
       }),
     ],
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            format: {
+              ascii_only: true
+            }
+          }
+        })
+      ]
+    }
   });
 
   return [nodeOutput, webOutput];
