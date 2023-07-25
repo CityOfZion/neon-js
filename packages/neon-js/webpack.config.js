@@ -34,12 +34,12 @@ module.exports = function () {
         new TerserPlugin({
           terserOptions: {
             format: {
-              ascii_only: true
-            }
-          }
-        })
-      ]
-    }
+              ascii_only: true,
+            },
+          },
+        }),
+      ],
+    },
   });
 
   return [nodeOutput, webOutput];
