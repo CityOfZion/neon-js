@@ -14,7 +14,7 @@
     "@docusaurus/core": "2.0.0-beta.17",
     "@docusaurus/plugin-client-redirects": "2.0.0-beta.17",
     "@docusaurus/preset-classic": "2.0.0-beta.17",
-    "@microsoft/api-documenter": "^7.15.3",
+    "@microsoft/api-documenter": "^7.22.30",
     "clsx": "^1.1.1",
     "ljs2": "^2.0.3",
     "react": "^17.0.1",
