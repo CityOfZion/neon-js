@@ -12,6 +12,17 @@ export function isHex(str: string): boolean {
 }
 
 /**
+ * Remove the 0x prefix.
+ */
+export function remove0xPrefix(str: string): string {
+  if (str.startsWith("0x")) {
+    str = str.substring(2);
+  }
+
+  return str;
+}
+
+/**
  * Throws an error if input is not hexstring.
  */
 export function ensureHex(str: string): void {

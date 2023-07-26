@@ -16,22 +16,44 @@ export enum ContractParamType {
   Signature = 0x17, // TODO: Implement support
 
   Array = 0x20,
-  Map = 0x22, // TODO: Implement support
+  Map = 0x22,
 
   InteropInterface = 0x30, // TODO: Implement support
 
   Void = 0xff,
 }
 
+export type ContractParamMap = {
+  key: ContractParam;
+  value: ContractParam;
+}[];
+
+export type ContractParamMapJson = {
+  key: ContractParamJson;
+  value: ContractParamJson;
+}[];
+
+export type ContractParamsMapLike = {
+  key: ContractParamLike;
+  value: ContractParamLike;
+}[];
+
 export interface ContractParamJson {
   type: string;
-  value?: string | boolean | number | ContractParamJson[] | null;
+  value?:
+    | string
+    | boolean
+    | number
+    | ContractParamJson[]
+    | ContractParamMapJson
+    | null;
 }
 
 export type ContractParamLike = Pick<
   ContractParamJson | ContractParam,
   keyof ContractParamJson
 >;
+
 /**
  * These are the parameters used for interacting with smart contracts.
  * Depending on the type, the data is stored differently.
@@ -201,8 +223,66 @@ export class ContractParam implements NeonObject<ContractParamLike> {
     return new ContractParam({ type: ContractParamType.Array, value });
   }
 
+  private static validateMap(params: ContractParamsMapLike): void {
+    const validKeysTypes = [
+      ContractParamType.String,
+      ContractParamType.Boolean,
+      ContractParamType.Integer,
+      ContractParamType.ByteArray,
+    ];
+
+    params.forEach((param) => {
+      if (
+        typeof param !== "object" ||
+        !("key" in param) ||
+        !("value" in param)
+      ) {
+        throw new Error("Please provide a valid map for value");
+      }
+
+      if (
+        !validKeysTypes.includes(parseEnum(param.key.type, ContractParamType))
+      ) {
+        throw new Error("Map keys only support primitive types");
+      }
+    });
+  }
+
+  private static parseMap(params: ContractParamsMapLike): ContractParamMap {
+    this.validateMap(params);
+
+    const value: ContractParamMap = params.map((param) => ({
+      key:
+        param.key instanceof ContractParam
+          ? param.key
+          : ContractParam.fromJson(param.key),
+      value:
+        param.value instanceof ContractParam
+          ? param.value
+          : ContractParam.fromJson(param.value),
+    }));
+
+    return value;
+  }
+
+  /**
+   * Creates an Map ContractParam. Value field will be a ContractParam array.
+   * @param params - object that contains key and value properties, each being a ContractParamLike.
+   * @param key - key of the map entry. Should be a Primitive type as string, boolean or integer.
+   */
+  public static map(...params: ContractParamsMapLike): ContractParam {
+    const value = this.parseMap(params);
+    return new ContractParam({ type: ContractParamType.Map, value });
+  }
+
   public type: ContractParamType;
-  public value: string | boolean | HexString | ContractParam[] | null;
+  public value:
+    | string
+    | boolean
+    | HexString
+    | ContractParam[]
+    | ContractParamMap
+    | null;
 
   public constructor(input: ContractParamLike) {
     if (typeof input !== "object") {
@@ -280,6 +360,10 @@ export class ContractParam implements NeonObject<ContractParamLike> {
           throw new Error("Void should not have any value provided.");
         }
 
+      case ContractParamType.Map:
+        this.value = ContractParam.parseMap(arg as ContractParamsMapLike);
+        return;
+
       default:
         throw new Error(`${ContractParamType[this.type]} not supported!`);
     }
@@ -312,7 +396,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
         break;
       case ContractParamType.Array:
         if (Array.isArray(arg)) {
-          return ContractParam.array(...arg);
+          return ContractParam.array(...(arg as ContractParamLike[]));
         }
         break;
 
@@ -364,6 +448,13 @@ export class ContractParam implements NeonObject<ContractParamLike> {
 
       case ContractParamType.Void:
         return ContractParam.void();
+
+      case ContractParamType.Map:
+        if (Array.isArray(arg)) {
+          return ContractParam.map(...(arg as ContractParamMapJson));
+        }
+        break;
+
       default:
         throw new Error(`${ContractParamType[type]} not supported!`);
     }
@@ -421,6 +512,14 @@ export class ContractParam implements NeonObject<ContractParamLike> {
           type: ContractParamType[this.type],
           value: this.value as string,
         };
+      case ContractParamType.Map:
+        return {
+          type: ContractParamType[this.type],
+          value: (this.value as ContractParamMap).map((cp) => ({
+            key: cp.key.toJson(),
+            value: cp.value.toJson(),
+          })),
+        };
 
       default:
         throw new Error("Unsupported!");
@@ -435,14 +534,27 @@ export class ContractParam implements NeonObject<ContractParamLike> {
     if (this.type === parseEnum(other.type, ContractParamType)) {
       switch (this.type) {
         case ContractParamType.Array:
+          if (
+            Array.isArray(this.value) &&
+            Array.isArray(other.value) &&
+            this.value.length === other.value.length
+          ) {
+            return (this.value as ContractParam[]).every((cp, i) =>
+              cp.equals((other.value as ContractParamLike[])[i])
+            );
+          }
+          return false;
+
         case ContractParamType.Map:
           if (
             Array.isArray(this.value) &&
             Array.isArray(other.value) &&
             this.value.length === other.value.length
           ) {
-            return this.value.every((cp, i) =>
-              cp.equals((other.value as ContractParamLike[])[i])
+            return (this.value as ContractParamMap).every(
+              (cp, i) =>
+                cp.key.equals((other.value as ContractParamMap)[i].key) &&
+                cp.value.equals((other.value as ContractParamMap)[i].value)
             );
           }
           return false;

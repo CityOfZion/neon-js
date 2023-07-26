@@ -4,7 +4,7 @@ import {
   DEFAULT_SCRYPT,
 } from "../consts";
 import logger from "../logging";
-import { hash160, HexString, reverseHex } from "../u";
+import { hash160, HexString, remove0xPrefix, reverseHex } from "../u";
 import { isMultisigContract } from "../sc";
 import * as core from "./core";
 import { constructMultiSigVerificationScript } from "./multisig";
@@ -138,7 +138,7 @@ export class Account implements NeonObject<AccountJSON> {
     } else if (isPublicKey(str, true)) {
       this._publicKey = str;
     } else if (isScriptHash(str)) {
-      this._scriptHash = str;
+      this._scriptHash = remove0xPrefix(str);
     } else if (isAddress(str)) {
       this._address = str;
       const addressVersionFromAddress = core.getAddressVersion(str);
