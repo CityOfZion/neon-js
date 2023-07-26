@@ -195,6 +195,42 @@ describe("Static constructors", () => {
       );
     });
   });
+
+  describe("map", () => {
+    test("invalid object", () => {
+      const key = ContractParam.string("");
+      const value = ContractParam.boolean(true);
+
+      expect(() => ContractParam.map("" as never)).toThrow(
+        "Please provide a valid map for value"
+      );
+      expect(() => ContractParam.map({ key } as never)).toThrow(
+        "Please provide a valid map for value"
+      );
+      expect(() => ContractParam.map({ value } as never)).toThrow(
+        "Please provide a valid map for value"
+      );
+    });
+
+    test("invalid primitive key", () => {
+      const key = ContractParam.void();
+      const value = ContractParam.boolean(true);
+
+      expect(() => ContractParam.map({ key, value })).toThrow(
+        "Map keys only support primitive types"
+      );
+    });
+
+    test("valid map", () => {
+      const key = ContractParam.string("key");
+      const value = ContractParam.boolean(true);
+
+      const result = ContractParam.map({ key, value });
+      expect(result instanceof ContractParam).toBeTruthy();
+      expect(result.type).toBe(ContractParamType.Map);
+      expect(result.value).toEqual([{ key, value }]);
+    });
+  });
 });
 
 describe("likeContractParam", () => {
@@ -335,6 +371,34 @@ describe("toJson", () => {
       ],
     });
   });
+
+  test("map", () => {
+    const testObject = ContractParam.map(
+      {
+        key: ContractParam.string("hello world"),
+        value: ContractParam.integer(999),
+      },
+      {
+        key: ContractParam.string("hello world2"),
+        value: ContractParam.boolean(false),
+      }
+    );
+    const result = testObject.toJson();
+
+    expect(result).toEqual({
+      type: "Map",
+      value: [
+        {
+          key: { type: "String", value: "hello world" },
+          value: { type: "Integer", value: "999" },
+        },
+        {
+          key: { type: "String", value: "hello world2" },
+          value: { type: "Boolean", value: false },
+        },
+      ],
+    });
+  });
 });
 
 describe("toString", () => {
@@ -372,9 +436,25 @@ describe("equals", () => {
     type: "Void",
   };
 
+  const obj4 = {
+    type: "Map",
+    value: [
+      {
+        key: {
+          type: "Boolean",
+          value: true,
+        },
+        value: {
+          type: "Integer",
+          value: 1234,
+        },
+      },
+    ],
+  };
   const param1 = ContractParam.fromJson(obj1);
   const param2 = ContractParam.fromJson(obj2);
   const param3 = ContractParam.fromJson(obj3);
+  const param4 = ContractParam.fromJson(obj4);
 
   test.each([
     ["Param1 === Param1", param1, param1, true],
@@ -383,6 +463,8 @@ describe("equals", () => {
     ["Param1 !== Obj2", param1, obj2, false],
     ["Param2 === Obj2", param2, obj2, true],
     ["Param3 === Obj3", param3, obj3, true],
+    ["Param4 === Obj4", param4, obj4, true],
+    ["Param4 !== Obj3", param4, obj3, false],
   ] as [string, ContractParam, ContractParamLike, boolean][])(
     "%s",
     (
