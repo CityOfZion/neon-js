@@ -214,6 +214,14 @@ describe("emitContractParam", () => {
       ContractParam.string("hello world"),
       "0c0b68656c6c6f20776f726c64",
     ],
+    [
+      "ContractParam(map)",
+      ContractParam.map({
+        key: ContractParam.integer(1),
+        value: ContractParam.integer(2),
+      }),
+      "121111be",
+    ],
   ])("%s", (_msg: string, data: ContractParam, expected: string) => {
     const result = new ScriptBuilder().emitContractParam(data).build();
     expect(result).toBe(expected);
