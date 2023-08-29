@@ -103,6 +103,14 @@ describe("emitPush", () => {
     ],
     ["ContractParam(integer) -1", ContractParam.integer(-1), "0f"],
     ["ContractParam(integer) -12345", ContractParam.integer(-12345), "01c7cf"],
+    [
+      "ContractParam(map) {1: 2}",
+      ContractParam.map({
+        key: ContractParam.integer(1),
+        value: ContractParam.integer(2),
+      }),
+      "121111be",
+    ],
   ] as [string, ContractParam | string | boolean | number, string][])(
     "%s",
     (
