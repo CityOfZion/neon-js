@@ -1,17 +1,6 @@
 import BN from "bn.js";
-import {
-  ab2hexstring,
-  HexString,
-  int2hex,
-  num2hexstring,
-  StringStream,
-} from "../u";
-import {
-  ContractParam,
-  ContractParamMap,
-  ContractParamType,
-  likeContractParam,
-} from "./ContractParam";
+import { ab2hexstring, HexString, int2hex, num2hexstring, StringStream } from "../u";
+import { ContractParam, ContractParamMap, ContractParamType, likeContractParam } from "./ContractParam";
 import { OpCode } from "./OpCode";
 import { InteropServiceCode } from "./InteropServiceCode";
 import { ContractCall, ContractCallJson } from "./types";
@@ -132,7 +121,8 @@ export class ScriptBuilder extends StringStream {
       if (
         keyType !== ContractParamType.Boolean &&
         keyType !== ContractParamType.Integer &&
-        keyType !== ContractParamType.String
+        keyType !== ContractParamType.String &&
+        keyType !== ContractParamType.ByteArray
       ) {
         throw new Error(`Unsupported key type: ${keyType}`);
       }
