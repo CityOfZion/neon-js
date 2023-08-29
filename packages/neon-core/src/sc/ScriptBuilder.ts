@@ -1,6 +1,17 @@
 import BN from "bn.js";
-import { ab2hexstring, HexString, int2hex, num2hexstring, StringStream } from "../u";
-import { ContractParam, ContractParamMap, ContractParamType, likeContractParam } from "./ContractParam";
+import {
+  ab2hexstring,
+  HexString,
+  int2hex,
+  num2hexstring,
+  StringStream,
+} from "../u";
+import {
+  ContractParam,
+  ContractParamMap,
+  ContractParamType,
+  likeContractParam,
+} from "./ContractParam";
 import { OpCode } from "./OpCode";
 import { InteropServiceCode } from "./InteropServiceCode";
 import { ContractCall, ContractCallJson } from "./types";
