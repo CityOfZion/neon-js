@@ -103,6 +103,14 @@ describe("emitPush", () => {
     ],
     ["ContractParam(integer) -1", ContractParam.integer(-1), "0f"],
     ["ContractParam(integer) -12345", ContractParam.integer(-12345), "01c7cf"],
+    [
+      "ContractParam(map) {1: 2}",
+      ContractParam.map({
+        key: ContractParam.integer(1),
+        value: ContractParam.integer(2),
+      }),
+      "121111be",
+    ],
   ] as [string, ContractParam | string | boolean | number, string][])(
     "%s",
     (
@@ -213,6 +221,14 @@ describe("emitContractParam", () => {
       "ContractParam(string)",
       ContractParam.string("hello world"),
       "0c0b68656c6c6f20776f726c64",
+    ],
+    [
+      "ContractParam(map)",
+      ContractParam.map({
+        key: ContractParam.integer(1),
+        value: ContractParam.integer(2),
+      }),
+      "121111be",
     ],
   ])("%s", (_msg: string, data: ContractParam, expected: string) => {
     const result = new ScriptBuilder().emitContractParam(data).build();
