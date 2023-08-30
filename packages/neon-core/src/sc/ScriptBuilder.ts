@@ -8,6 +8,7 @@ import {
 } from "../u";
 import {
   ContractParam,
+  ContractParamMap,
   ContractParamType,
   likeContractParam,
 } from "./ContractParam";
@@ -120,6 +121,27 @@ export class ScriptBuilder extends StringStream {
       this.emitPush(arr[i]);
     }
     return this.emitNumber(arr.length).emit(OpCode.PACK);
+  }
+
+  /**
+   * Private method to append a map
+   */
+  private emitMap(m: ContractParamMap): this {
+    for (let i = 0; i < m.length; i++) {
+      const keyType = m[i].key.type;
+      if (
+        keyType !== ContractParamType.Boolean &&
+        keyType !== ContractParamType.Integer &&
+        keyType !== ContractParamType.String &&
+        keyType !== ContractParamType.ByteArray
+      ) {
+        throw new Error(`Unsupported key type: ${keyType}`);
+      }
+      this.emitPush(m[i].value);
+      this.emitPush(m[i].key);
+    }
+    this.emitPush(m.length);
+    return this.emit(OpCode.PACKMAP);
   }
 
   /**
@@ -300,6 +322,8 @@ export class ScriptBuilder extends StringStream {
         return this.emitHexString(param.value as HexString);
       case ContractParamType.PublicKey:
         return this.emitPublicKey(param.value as HexString);
+      case ContractParamType.Map:
+        return this.emitMap(param.value as ContractParamMap);
       default:
         throw new Error(`Unaccounted ContractParamType!: ${param.type}`);
     }
