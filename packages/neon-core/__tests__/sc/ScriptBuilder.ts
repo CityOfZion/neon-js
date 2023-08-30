@@ -191,6 +191,13 @@ describe("emitNumber", () => {
     ["long min", "-9223372036854775808", "030000000000000080"],
     ["long max", "9223372036854775807", "03ffffffffffffff7f"],
     ["ulong max", "18446744073709551615", "04ffffffffffffffff0000000000000000"],
+    ["pushint8", 0x1f, "001f"],
+    ["pushint16", 0xff, "01ff00"],
+    ["pushin32", 0xffff, "02ffff0000"],
+    ["pushint64", 0xffffffff, "03ffffffff00000000"],
+    ["issue #911 #1", -129, "017fff"],
+    ["issue #911 #2", -150, "016aff"],
+    ["issue #911 #3", -255, "0101ff"],
   ])("%s", (_msg: string, data: number | string, expected: string) => {
     const result = new ScriptBuilder().emitNumber(data).build();
     expect(result).toBe(expected);

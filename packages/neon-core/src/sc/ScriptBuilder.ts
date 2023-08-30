@@ -1,6 +1,6 @@
 import BN from "bn.js";
 import {
-  ab2hexstring,
+  BigInteger,
   HexString,
   int2hex,
   num2hexstring,
@@ -229,20 +229,17 @@ export class ScriptBuilder extends StringStream {
       return this.emit(OpCode.PUSH0 + bn.toNumber());
     }
     const negative = bn.isNeg();
-    const msbSet = bn.testn(bn.byteLength() * 8 - 1);
-    const occupiedBytes = bn.byteLength();
-    const targetBytes = this.roundToBestIntSize(
-      !negative && msbSet ? occupiedBytes + 1 : occupiedBytes
-    );
+    const bigint = BigInteger.fromNumber(num);
+    const occupiedBytes = bigint.toReverseTwos().length / 2;
+    const targetBytes = this.roundToBestIntSize(occupiedBytes);
 
     // Catch case 64
     if (targetBytes > 32) {
       throw new Error(`Number too long to be emitted: ${num.toString()}`);
     }
 
-    const hex = ab2hexstring(
-      bn.toTwos(bn.byteLength() * 8).toArray("le", targetBytes)
-    );
+    let hex = bigint.toReverseTwos();
+    hex = this.padRight(hex, targetBytes, negative);
 
     switch (targetBytes) {
       case 1:
@@ -280,6 +277,19 @@ export class ScriptBuilder extends StringStream {
       default:
         return 64;
     }
+  }
+
+  private padRight(
+    data: string,
+    targetLength: number,
+    isSigned: boolean
+  ): string {
+    if (data.length / 2 >= targetLength) return data;
+    const pad = isSigned ? "ff" : "00";
+    while (data.length / 2 != targetLength) {
+      data = data + pad;
+    }
+    return data;
   }
 
   /**
