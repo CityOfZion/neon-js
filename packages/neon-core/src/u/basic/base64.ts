@@ -9,7 +9,7 @@ export function base642hex(input: string): string {
 }
 
 export function utf82base64(input: string): string {
-  return enc.Utf8.stringify(enc.Base64.parse(input));
+  return enc.Base64.stringify(enc.Utf8.parse(input));
 }
 
 export function base642utf8(input: string): string {
