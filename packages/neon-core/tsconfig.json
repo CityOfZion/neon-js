@@ -2,7 +2,8 @@
   "extends": "../../tsconfig-base.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib"
+    "outDir": "lib",
+    "module": "commonjs"
   },
   // default include without extensions only includes typescript stuff
   "include": ["src/**/*", "src/**/*.json"]
