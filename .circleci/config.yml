@@ -6,7 +6,7 @@ executors:
       version: &parameter-version
         description: "Node version"
         type: enum
-        enum: ["16.19", "lts", "current"]
+        enum: ["18.19", "lts", "current"]
         default: "lts"
     working_directory: ~/repo
     docker:
@@ -17,12 +17,12 @@ executors:
       version:
         description: "Node version"
         type: enum
-        enum: ["16.19", "lts", "current"]
+        enum: ["18.19", "lts", "current"]
         default: "lts"
     working_directory: ~/repo
     docker:
       - image: cimg/node:<< parameters.version >>
-      - image: snowypowers/n3-csharp-solonet:3.5.0
+      - image: snowypowers/n3-csharp-solonet:3.6.2
 
 commands:
   run-unittest:
@@ -206,14 +206,14 @@ workflows:
           name: unittest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["16.19", "lts", "current"]
+              version: ["18.19", "lts", "current"]
           requires:
             - setup
       - integrationtest:
           name: integrationtest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["16.19", "lts", "current"]
+              version: ["18.19", "lts", "current"]
           requires:
             - lint
             - unittest-<< matrix.version >>
