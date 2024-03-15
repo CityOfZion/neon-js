@@ -226,6 +226,52 @@ describe("NeoServerRpcClient", () => {
     expect(result).toBe("AOH1BQ==");
   });
 
+  describe.only("findStorage", () => {
+    test("find NEOs totalSupply storage", async () => {
+      const findTotalSupplyPrefixResult = await client.findStorage(
+        contractHash,
+        "0b",
+        0
+      );
+
+      const findTotalSupplyPrefixWithDefaultArgResult =
+        await client.findStorage(contractHash, "0b");
+
+      // This find will only get the totalSupply of NEO. Should be safe and static for usage.
+      expect(findTotalSupplyPrefixResult.truncated).toBe(false);
+      expect(findTotalSupplyPrefixResult.next).toBe(1);
+      expect(findTotalSupplyPrefixResult.results.length).toBe(1);
+      expect(findTotalSupplyPrefixResult.results[0].key).toBe("Cw==");
+      expect(findTotalSupplyPrefixResult.results[0].value).toBe("AOH1BQ==");
+
+      expect(findTotalSupplyPrefixWithDefaultArgResult).toEqual(
+        findTotalSupplyPrefixResult
+      );
+    });
+
+    test("find NEOs balance storage", async () => {
+      // This find will only get a list of accounts on NEOs storage. Will only be used to check the truncated and next values.
+      const findAccountPrefix0Result = await client.findStorage(
+        contractHash,
+        "14",
+        0
+      );
+      expect(findAccountPrefix0Result.truncated).toBe(false);
+      expect(findAccountPrefix0Result.next).toBeLessThan(50);
+      expect(findAccountPrefix0Result.results.length).toBeLessThan(50);
+
+      // There isn't 50 or more accounts with NEO on this blockchain instance.
+      const findAccountPrefix50Result = await client.findStorage(
+        contractHash,
+        "14",
+        50
+      );
+      expect(findAccountPrefix50Result.truncated).toBe(false);
+      expect(findAccountPrefix50Result.next).toBe(50);
+      expect(findAccountPrefix50Result.results.length).toBe(0);
+    });
+  });
+
   test("getTransactionHeight", async () => {
     const result = await client.getTransactionHeight(txid);
     expect(result).toBe(blockHeight);

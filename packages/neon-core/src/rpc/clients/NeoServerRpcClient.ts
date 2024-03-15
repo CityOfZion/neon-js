@@ -9,6 +9,7 @@ import {
   BooleanLikeParam,
   GetVersionResult,
   GetContractStateResult,
+  FindStorageResult,
 } from "../Query";
 import { BlockJson, BlockHeaderJson, Validator } from "../../types";
 import { RpcDispatcher, RpcDispatcherMixin } from "./RpcDispatcher";
@@ -179,6 +180,26 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
      */
     public async getStorage(scriptHash: string, key: string): Promise<string> {
       const response = await this.execute(Query.getStorage(scriptHash, key));
+      return response;
+    }
+
+    /**
+     * Finds all values with a given prefix key in the storage of a contract address.
+     *
+     * @param scriptHash - contract script hash
+     * @param searchPrefix - prefix to search for, can be empty string to return all keys in storage
+     * @param start - start index, the page size is limited to 50 items, if more than 50 values exist on the
+     * storage, you can use the return of the previous call to get next items. The default value is 0
+     * @returns a json object with the contract storage keys and values
+     */
+    public async findStorage(
+      scriptHash: string,
+      searchPrefix: string,
+      start = 0
+    ): Promise<FindStorageResult> {
+      const response = await this.execute(
+        Query.findStorage(scriptHash, searchPrefix, start)
+      );
       return response;
     }
 

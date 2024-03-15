@@ -204,6 +204,14 @@ export interface GetUnclaimedGasResult {
   unclaimed: string;
   address: string;
 }
+export interface FindStorageResult {
+  truncated: boolean;
+  next: number;
+  results: {
+    key: string;
+    value: string;
+  }[];
+}
 
 function transformInputTransaction(
   tx: Transaction | HexString | string
@@ -521,6 +529,23 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
     return new Query({
       method: "getstorage",
       params: [scriptHash, HexString.fromHex(key).toBase64()],
+    });
+  }
+
+  /**
+   * This Query returns the keys and values stored with a specific key prefix under a specific contract.
+   * @param scriptHash - contract script hash
+   * @param searchPrefix - prefix to search for
+   * @param start - start index.
+   */
+  public static findStorage(
+    scriptHash: string,
+    searchPrefix: string,
+    start = 0
+  ): Query<[string, string, number], FindStorageResult> {
+    return new Query({
+      method: "findstorage",
+      params: [scriptHash, HexString.fromHex(searchPrefix).toBase64(), start],
     });
   }
 
