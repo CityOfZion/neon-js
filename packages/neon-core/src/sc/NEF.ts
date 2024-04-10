@@ -80,7 +80,10 @@ export class NEF {
 
     const compilerHexArray = Buffer.from(reader.read(64), "hex");
     const idx = compilerHexArray.indexOf(0x0);
-    const compiler = compilerHexArray.slice(0, idx).toString();
+    const compiler =
+      idx === -1
+        ? compilerHexArray.toString()
+        : compilerHexArray.slice(0, idx).toString();
 
     const sourceSize = reader.readVarInt();
     if (sourceSize > 256)
