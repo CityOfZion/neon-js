@@ -88,6 +88,20 @@ export class Account implements NeonObject<AccountJSON> {
     });
   }
 
+  public static validateKey(str: string): string | void {
+    switch (true) {
+      case isPrivateKey(str): return "PrivateKey";
+      case isPublicKey(str, false): return "PublicKey_Decoded";
+      case isPublicKey(str, true): return "PublicKey_Encoded"
+      case isScriptHash(str): return "ScriptHash"
+      case isAddress(str): "Address"
+      case isWIF(str): return "WIF";
+      case isNEP2(str): return "NEP2"
+      default:
+        return;
+    }
+  }
+
   public isDefault: boolean;
   public lock: boolean;
   public contract: {
