@@ -177,6 +177,24 @@ describe("static", () => {
     expect(result.params).toEqual(["contract", "Cw=="]);
   });
 
+  describe("findStorage", () => {
+    test("with the default start argument", () => {
+      const result = Query.findStorage("contract", "0b");
+      expect(result.method).toEqual("findstorage");
+      expect(result.params).toEqual(["contract", "Cw==", 0]);
+    });
+
+    test("with the user start argument", () => {
+      let result = Query.findStorage("contract", "0b", 0);
+      expect(result.method).toEqual("findstorage");
+      expect(result.params).toEqual(["contract", "Cw==", 0]);
+
+      result = Query.findStorage("contract", "0b", 50);
+      expect(result.method).toEqual("findstorage");
+      expect(result.params).toEqual(["contract", "Cw==", 50]);
+    });
+  });
+
   test("getTransactionHeight", () => {
     const result = Query.getTransactionHeight("hash");
     expect(result.method).toEqual("gettransactionheight");

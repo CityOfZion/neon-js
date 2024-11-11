@@ -20,9 +20,11 @@
 
 This is the JS SDK for the NEO blockchain platform. This project aims to be a lightweight library focused on providing blockchain interactions in the browser.
 
-It is currently in use by [Neon](https://github.com/CityOfZion/neon-wallet/).
+Neon-JS is used internally by [Neon Wallet](https://github.com/CityOfZion/neon-wallet/) and many other libraries and applications.
 
 Visit the [docs](https://dojo.coz.io/neo3/neon-js/index.html) to learn how to use this library!
+
+> For `Dapp development`, [NeonDappkit](https://github.com/CityOfZion/neon-dappkit) and [WalletConnectSDK](https://github.com/CityOfZion/wallet-connect-sdk) offer a more user-friendly experience, specifically tailored for this purpose. While Neon-JS provides a comprehensive set of features, these two alternatives are better suited for developing decentralized applications.
 
 # Getting started
 
