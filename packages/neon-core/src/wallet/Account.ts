@@ -29,6 +29,7 @@ export enum KeyType {
   Address = "Address",
   WIF = "WIF",
   NEP2 = "NEP2",
+  unknown = "",
 }
 
 export interface AccountJSON {
@@ -100,7 +101,7 @@ export class Account implements NeonObject<AccountJSON> {
 
 
 
-  public static validateKey(str: string): string {
+  public static validateKey(str: string): KeyType {
     switch (true) {
       case isPrivateKey(str): return KeyType.PrivateKey;
       case isPublicKey(str, false): return KeyType.PublicKeyUnencoded;
