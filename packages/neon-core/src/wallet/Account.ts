@@ -29,7 +29,7 @@ export enum KeyType {
   Address = "Address",
   WIF = "WIF",
   NEP2 = "NEP2",
-  unknown = "",
+  Unknown = "",
 }
 
 export interface AccountJSON {
@@ -112,7 +112,7 @@ export class Account implements NeonObject<AccountJSON> {
       case isNEP2(str): return KeyType.NEP2;
       default:
         // returning empty string enables falsly checks
-        return KeyType.unknown;
+        return KeyType.Unknown;
     }
   }
 
