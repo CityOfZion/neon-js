@@ -21,6 +21,17 @@ import { NeonObject } from "../model";
 
 const log = logger("wallet");
 
+export enum KeyType {
+  PrivateKey = "PrivateKey",
+  PublicKeyUnencoded = "PublicKeyUnencoded",
+  PublicKeyEncoded = "PublicKeyEncoded",
+  ScriptHash = "ScriptHash",
+  Address = "Address",
+  WIF = "WIF",
+  NEP2 = "NEP2",
+  Unknown = "",
+}
+
 export interface AccountJSON {
   /** Base58 encoded string */
   address: string;
@@ -86,6 +97,23 @@ export class Account implements NeonObject<AccountJSON> {
         deployed: false,
       },
     });
+  }
+
+
+
+  public static validateKey(str: string): KeyType {
+    switch (true) {
+      case isPrivateKey(str): return KeyType.PrivateKey;
+      case isPublicKey(str, false): return KeyType.PublicKeyUnencoded;
+      case isPublicKey(str, true): return KeyType.PublicKeyEncoded;
+      case isScriptHash(str): return KeyType.ScriptHash;
+      case isAddress(str): return KeyType.Address;
+      case isWIF(str): return KeyType.WIF;
+      case isNEP2(str): return KeyType.NEP2;
+      default:
+        // returning empty string enables falsly checks
+        return KeyType.Unknown;
+    }
   }
 
   public isDefault: boolean;
