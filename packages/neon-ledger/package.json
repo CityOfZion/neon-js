@@ -42,7 +42,7 @@
     "lodash": "4.17.21"
   },
   "peerDependencies": {
-    "@cityofzion/neon-core": "^5.3.0"
+    "@cityofzion/neon-core": "^5.6.0"
   },
   "files": [
     "lib/",
