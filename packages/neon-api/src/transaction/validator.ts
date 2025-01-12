@@ -58,7 +58,7 @@ export class TransactionValidator {
    * @param autoFix - autofix when number is below current height.
    */
   public async validateValidUntilBlock(
-    autoFix = false
+    autoFix = false,
   ): Promise<ValidationSuggestion<number>> {
     const { validUntilBlock: prev } = this.transaction;
     const height = await this.rpcClient.getBlockCount();
@@ -75,14 +75,14 @@ export class TransactionValidator {
       return invalid(
         prev,
         suggestion,
-        "Your transaction lifespan was out of range."
+        "Your transaction lifespan was out of range.",
       );
     }
     if (prev - height <= 20) {
       return suggest(
         prev,
         suggestion,
-        "Your transaction has a very limited lifespan. Consider increasing it."
+        "Your transaction has a very limited lifespan. Consider increasing it.",
       );
     }
     return valid();
@@ -94,7 +94,7 @@ export class TransactionValidator {
   public async validateScript(): Promise<ValidationSuggestion<void>> {
     const { state } = await this.rpcClient.invokeScript(
       this.transaction.script,
-      this.transaction.signers
+      this.transaction.signers,
     );
     if (state !== "HALT") {
       return err("Encountered FAULT when validating script.");
@@ -107,14 +107,14 @@ export class TransactionValidator {
    * @param autoFix - autofix when fee is too low.
    */
   public async validateSystemFee(
-    autoFix = false
+    autoFix = false,
   ): Promise<ValidationSuggestion<u.BigInteger>> {
     const { script, signers, systemFee: prev } = this.transaction;
     const invokeResponse = await this.rpcClient.invokeScript(script, signers);
 
     if (invokeResponse.state === "FAULT") {
       return err(
-        "Cannot get precise systemFee as script execution on node reports FAULT."
+        "Cannot get precise systemFee as script execution on node reports FAULT.",
       );
     }
     const gasConsumed = invokeResponse.gasconsumed;
@@ -129,7 +129,7 @@ export class TransactionValidator {
       return invalid(
         prev,
         suggestion,
-        "Insufficient fees attached to run the script."
+        "Insufficient fees attached to run the script.",
       );
     } else if (compareResult < 0) {
       // Overpaying for the script.
@@ -143,12 +143,12 @@ export class TransactionValidator {
    * @param autoFix - autofix when fee is too low.
    */
   public async validateNetworkFee(
-    autoFix = false
+    autoFix = false,
   ): Promise<ValidationSuggestion<u.BigInteger>> {
     const { networkFee: prev } = this.transaction;
 
     const calculateResponse = await this.rpcClient.calculateNetworkFee(
-      this.transaction
+      this.transaction,
     );
 
     const suggestion = u.BigInteger.fromNumber(calculateResponse);
@@ -169,7 +169,7 @@ export class TransactionValidator {
 
   public async validate(
     attrs: ValidationAttributes,
-    autoFix: ValidationAttributes = ValidationAttributes.None
+    autoFix: ValidationAttributes = ValidationAttributes.None,
   ): Promise<ValidationResult> {
     const validationTasks: Promise<ValidationSuggestion<unknown>>[] = [];
     const output: ValidationResult = {
@@ -181,8 +181,8 @@ export class TransactionValidator {
       validationTasks.push(
         this.validateValidUntilBlock(
           (autoFix & ValidationAttributes.ValidUntilBlock) ===
-            ValidationAttributes.ValidUntilBlock
-        ).then((s) => (output.result.validUntilBlock = s))
+            ValidationAttributes.ValidUntilBlock,
+        ).then((s) => (output.result.validUntilBlock = s)),
       );
     }
 
@@ -190,8 +190,8 @@ export class TransactionValidator {
       validationTasks.push(
         this.validateSystemFee(
           (autoFix & ValidationAttributes.SystemFee) ===
-            ValidationAttributes.SystemFee
-        ).then((s) => (output.result.systemFee = s))
+            ValidationAttributes.SystemFee,
+        ).then((s) => (output.result.systemFee = s)),
       );
     }
 
@@ -199,14 +199,14 @@ export class TransactionValidator {
       validationTasks.push(
         this.validateNetworkFee(
           (autoFix & ValidationAttributes.NetworkFee) ===
-            ValidationAttributes.NetworkFee
-        ).then((s) => (output.result.networkFee = s))
+            ValidationAttributes.NetworkFee,
+        ).then((s) => (output.result.networkFee = s)),
       );
     }
 
     if (attrs & ValidationAttributes.Script) {
       validationTasks.push(
-        this.validateScript().then((s) => (output.result.script = s))
+        this.validateScript().then((s) => (output.result.script = s)),
       );
     }
 
@@ -225,7 +225,7 @@ function valid<T>(): ValidationSuggestion<T> {
 function fixed<T>(
   prev: T,
   suggestion?: T,
-  message?: string
+  message?: string,
 ): ValidationSuggestion<T> {
   return {
     valid: true,
@@ -246,7 +246,7 @@ function err<T>(message: string): ValidationSuggestion<T> {
 function suggest<T>(
   prev: T,
   suggestion?: T,
-  message?: string
+  message?: string,
 ): ValidationSuggestion<T> {
   return {
     valid: true,
@@ -260,7 +260,7 @@ function suggest<T>(
 function invalid<T>(
   prev: T,
   suggestion?: T,
-  message?: string
+  message?: string,
 ): ValidationSuggestion<T> {
   return {
     valid: false,

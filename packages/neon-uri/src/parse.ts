@@ -77,7 +77,7 @@ function reduceParamsToDict(params: string): Record<string, string> {
 
 function createPayIntent(
   toAddress: string,
-  queryParams: Record<string, string>
+  queryParams: Record<string, string>,
 ): UriIntent {
   if (!queryParams["asset"]) {
     throw new Error("Parse error: payment uri requires a 'asset' parameter. ");
@@ -87,7 +87,7 @@ function createPayIntent(
   const description = createPayDescription(
     assetString,
     toAddress,
-    queryParams["amount"]
+    queryParams["amount"],
   );
 
   return {
@@ -108,7 +108,7 @@ function createPayIntent(
 function createPayDescription(
   assetString: string,
   toAddress: string,
-  amount?: string
+  amount?: string,
 ): string {
   const tokenName =
     assetString === "neo" || assetString === "gas"
@@ -124,7 +124,7 @@ function parseAssetToScriptHash(assetString: string): string {
   }
   if (assetString.length !== 40) {
     throw new Error(
-      `Parse error:  ${assetString} does not look like a contract hash.`
+      `Parse error:  ${assetString} does not look like a contract hash.`,
     );
   }
   return assetString;
@@ -132,7 +132,7 @@ function parseAssetToScriptHash(assetString: string): string {
 
 function createVoteIntent(
   publicKey: string,
-  _queryParams: Record<string, string>
+  _queryParams: Record<string, string>,
 ): UriIntent {
   return {
     intent: "vote",

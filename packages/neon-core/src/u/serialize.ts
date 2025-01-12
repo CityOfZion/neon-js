@@ -43,7 +43,7 @@ export function getSerializedSize(value: Serializables): number {
 
 export function deserializeArrayOf<T>(
   type: (ss: StringStream) => T,
-  ss: StringStream
+  ss: StringStream,
 ): T[] {
   const output = [];
   const len = ss.readVarInt();

@@ -53,7 +53,7 @@ describe("call", () => {
     ]);
 
     expect(() => contract.call("boolMethod")).toThrow(
-      "Invalid number of parameters"
+      "Invalid number of parameters",
     );
   });
 

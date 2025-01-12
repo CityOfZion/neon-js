@@ -24,7 +24,7 @@ const ACCOUNTS_WITNESSES: Array<tx.WitnessLike> = [
 
 const MULTISIG_ACCOUNT = wallet.Account.createMultiSig(
   2,
-  ACCOUNTS.map((account) => account.publicKey)
+  ACCOUNTS.map((account) => account.publicKey),
 );
 
 function createTransactionSigner(): TransactionSigner {
@@ -42,7 +42,7 @@ function createTransactionSigner(): TransactionSigner {
           scopes: tx.WitnessScope.Global,
         },
       ],
-    }).build()
+    }).build(),
   );
 }
 
@@ -51,7 +51,7 @@ describe.skip("signWithAccount", () => {
     const signer = createTransactionSigner();
     signer.signWithAccount(PRIVATE_KEYS[0]);
     expect(signer.transaction.scripts[0].export()).toEqual(
-      ACCOUNTS_WITNESSES[0]
+      ACCOUNTS_WITNESSES[0],
     );
   });
 
@@ -59,7 +59,7 @@ describe.skip("signWithAccount", () => {
     const signer = createTransactionSigner();
     signer.signWithAccount(ACCOUNTS[1]);
     expect(signer.transaction.scripts[0].export()).toEqual(
-      ACCOUNTS_WITNESSES[1]
+      ACCOUNTS_WITNESSES[1],
     );
   });
 
@@ -67,10 +67,10 @@ describe.skip("signWithAccount", () => {
     const signer = createTransactionSigner();
     signer.signWithAccount(PRIVATE_KEYS[0], ACCOUNTS[1]);
     expect(signer.transaction.scripts[0].export()).toEqual(
-      ACCOUNTS_WITNESSES[0]
+      ACCOUNTS_WITNESSES[0],
     );
     expect(signer.transaction.scripts[1].export()).toEqual(
-      ACCOUNTS_WITNESSES[1]
+      ACCOUNTS_WITNESSES[1],
     );
   });
 
@@ -88,7 +88,7 @@ describe.skip("signWithWitness", () => {
     const signer = createTransactionSigner();
     signer.signWithWitness(new tx.Witness(ACCOUNTS_WITNESSES[0]));
     expect(signer.transaction.scripts[0].export()).toEqual(
-      ACCOUNTS_WITNESSES[0]
+      ACCOUNTS_WITNESSES[0],
     );
   });
 
@@ -96,13 +96,13 @@ describe.skip("signWithWitness", () => {
     const signer = createTransactionSigner();
     signer.signWithWitness(
       new tx.Witness(ACCOUNTS_WITNESSES[0]),
-      new tx.Witness(ACCOUNTS_WITNESSES[1])
+      new tx.Witness(ACCOUNTS_WITNESSES[1]),
     );
     expect(signer.transaction.scripts[0].export()).toEqual(
-      ACCOUNTS_WITNESSES[0]
+      ACCOUNTS_WITNESSES[0],
     );
     expect(signer.transaction.scripts[1].export()).toEqual(
-      ACCOUNTS_WITNESSES[1]
+      ACCOUNTS_WITNESSES[1],
     );
   });
 
@@ -114,7 +114,7 @@ describe.skip("signWithWitness", () => {
           invocationScript: "abcd",
           verificationScript:
             "21032879f12ac79b9305bf768bb50f1c1c889330361fee037fe886f820bcaa521553ac",
-        })
+        }),
       );
     };
     expect(signWithInvalidWitness).toThrowError();
@@ -127,11 +127,11 @@ describe.skip("addMultiSig", () => {
       new TransactionBuilder({
         nonce: 1,
         sender: u.reverseHex(MULTISIG_ACCOUNT.scriptHash),
-      }).build()
+      }).build(),
     );
     signer.signWithMultiSigAccount(
       MULTISIG_ACCOUNT,
-      ...ACCOUNTS_WITNESSES.map((obj) => new tx.Witness(obj))
+      ...ACCOUNTS_WITNESSES.map((obj) => new tx.Witness(obj)),
     );
     expect(signer.transaction.scripts[0].export()).toEqual({
       invocationScript:
@@ -146,7 +146,7 @@ describe.skip("addMultiSig", () => {
     const signWithMultiAcc = (): void => {
       signer.signWithMultiSigAccount(
         MULTISIG_ACCOUNT,
-        ...ACCOUNTS_WITNESSES.map((obj) => new tx.Witness(obj))
+        ...ACCOUNTS_WITNESSES.map((obj) => new tx.Witness(obj)),
       );
     };
 

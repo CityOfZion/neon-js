@@ -63,7 +63,7 @@ describe("constructor", () => {
 describe("hasChildren", () => {
   test.each(["Array", "Struct", "Map"])("%s has children", (type: string) => {
     const result = hasChildren(
-      StackItemType[type as keyof typeof StackItemType]
+      StackItemType[type as keyof typeof StackItemType],
     );
     expect(result).toBeTruthy();
   });
@@ -72,9 +72,9 @@ describe("hasChildren", () => {
     "%s do not have children",
     (type: string) => {
       const result = hasChildren(
-        StackItemType[type as keyof typeof StackItemType]
+        StackItemType[type as keyof typeof StackItemType],
       );
       expect(result).toBeFalsy();
-    }
+    },
   );
 });

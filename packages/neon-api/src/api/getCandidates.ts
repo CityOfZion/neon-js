@@ -12,13 +12,13 @@ type getCandidatesStack = [
       type: "Struct";
       value: [
         { type: "ByteArray"; value: string },
-        { type: "Integer"; value: string }
+        { type: "Integer"; value: string },
       ];
     }[];
-  }
+  },
 ];
 export async function getCandidates(
-  client: rpc.NeoServerRpcClient
+  client: rpc.NeoServerRpcClient,
 ): Promise<Candidate[]> {
   const script = new sc.ScriptBuilder()
     .emitContractCall(sc.NeoContract.INSTANCE.getCandidates())

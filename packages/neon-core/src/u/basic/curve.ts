@@ -32,7 +32,7 @@ export class EllipticCurve {
   public sign(
     message: string,
     privateKey: string,
-    k?: number | string
+    k?: number | string,
   ): EcdsaSignature {
     if (k !== undefined) {
       const kNumber =
@@ -48,7 +48,7 @@ export class EllipticCurve {
         Buffer.from(message, "hex"),
         Buffer.from(privateKey, "hex"),
         // typing error
-        { k: (i: number) => new BN(kNumber).divn(i + 1) } as never
+        { k: (i: number) => new BN(kNumber).divn(i + 1) } as never,
       );
       return {
         r: signature.r.toString("hex", 32),
@@ -57,7 +57,7 @@ export class EllipticCurve {
     }
     const signature = this.curve.sign(
       Buffer.from(message, "hex"),
-      Buffer.from(privateKey, "hex")
+      Buffer.from(privateKey, "hex"),
     );
     return {
       r: signature.r.toString("hex", 32),
@@ -74,7 +74,7 @@ export class EllipticCurve {
   public verify(
     message: string,
     signature: EcdsaSignature,
-    publicKey: string
+    publicKey: string,
   ): boolean {
     return this.curve.verify(
       message,
@@ -83,7 +83,7 @@ export class EllipticCurve {
         s: new BN(signature.s, 16, "be"),
       },
       Buffer.from(publicKey, "hex"),
-      "hex"
+      "hex",
     );
   }
 

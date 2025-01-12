@@ -94,7 +94,7 @@ export class HexString {
   public toNumber(asLittleEndian = false): number {
     return parseInt(
       asLittleEndian ? this.toLittleEndian() : this.toBigEndian(),
-      16
+      16,
     );
   }
 
@@ -104,7 +104,7 @@ export class HexString {
    */
   public toArrayBuffer(asLittleEndian = false): Uint8Array {
     return hexstring2ab(
-      asLittleEndian ? this.toLittleEndian() : this.toBigEndian()
+      asLittleEndian ? this.toLittleEndian() : this.toBigEndian(),
     );
   }
 
@@ -114,7 +114,7 @@ export class HexString {
    */
   public toBase64(asLittleEndian = false): string {
     return hex2base64(
-      asLittleEndian ? this.toLittleEndian() : this.toBigEndian()
+      asLittleEndian ? this.toLittleEndian() : this.toBigEndian(),
     );
   }
 
@@ -127,7 +127,7 @@ export class HexString {
   public static fromHex(str: string | HexString): HexString;
   public static fromHex(
     str: string | HexString,
-    littleEndian = false
+    littleEndian = false,
   ): HexString {
     if (typeof str === "object" && str instanceof HexString) {
       return new HexString(str.toBigEndian());
@@ -161,7 +161,7 @@ export class HexString {
    */
   public static fromArrayBuffer(
     arr: ArrayBuffer | ArrayLike<number>,
-    littleEndian = false
+    littleEndian = false,
   ): HexString {
     return new HexString(ab2hexstring(arr), littleEndian);
   }
@@ -172,7 +172,7 @@ export class HexString {
    */
   public static fromBase64(
     encodedString: string,
-    littleEndian = false
+    littleEndian = false,
   ): HexString {
     return new HexString(base642hex(encodedString), littleEndian);
   }

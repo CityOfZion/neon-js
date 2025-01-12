@@ -97,7 +97,7 @@ describe("getSignature", () => {
       mockLedgerInstance,
       inputMsg,
       bip44Input,
-      networkMagic
+      networkMagic,
     );
     expect(result).rejects.toThrowError("did not return signature");
   });
@@ -109,14 +109,12 @@ describe("getSignature", () => {
     const mockDer = "9999999999";
     const expectedSig = "9876";
     const mockLedgerInstance = {
-      send: jest
-        .fn()
-        .mockImplementation(async (_cla, _ins, _p1, p2, ..._args) => {
-          if (p2 === 0x00) {
-            return Buffer.from(mockDer, "hex");
-          }
-          return Buffer.from("9000", "hex");
-        }),
+      send: jest.fn().mockImplementation(async (_cla, _ins, _p1, p2) => {
+        if (p2 === 0x00) {
+          return Buffer.from(mockDer, "hex");
+        }
+        return Buffer.from("9000", "hex");
+      }),
     } as unknown as Transport;
     DerToHexSignature.mockImplementationOnce(() => expectedSig);
 
@@ -124,7 +122,7 @@ describe("getSignature", () => {
       mockLedgerInstance,
       inputMsg,
       bip44Input,
-      networkMagic
+      networkMagic,
     );
 
     expect(result).toBe(expectedSig);

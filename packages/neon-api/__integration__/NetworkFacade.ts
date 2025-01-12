@@ -28,7 +28,7 @@ describe("NetworkFacade", () => {
       ],
       {
         signingCallback: signWithAccount(fromAccount),
-      }
+      },
     );
 
     expect(txid).toBeDefined();
@@ -42,11 +42,11 @@ describe("NetworkFacade", () => {
 
     const currentHeight = await facade.getRpcNode().getBlockCount();
     const unclaimedGasResult = await facade.invoke(
-      sc.NeoContract.INSTANCE.unclaimedGas(acct.address, currentHeight)
+      sc.NeoContract.INSTANCE.unclaimedGas(acct.address, currentHeight),
     );
 
     const expectedMinGasClaimed = parseInt(
-      unclaimedGasResult.stack[0].value as string
+      unclaimedGasResult.stack[0].value as string,
     );
     const txid = await facade.claimGas(acct, {
       signingCallback: signWithAccount(acct),
@@ -64,7 +64,7 @@ describe("NetworkFacade", () => {
     expect(logs.executions[0].notifications.length).toBe(2);
 
     const gasNotification = logs.executions[0].notifications.find((n) =>
-      n.contract.includes(CONST.NATIVE_CONTRACT_HASH.GasToken)
+      n.contract.includes(CONST.NATIVE_CONTRACT_HASH.GasToken),
     );
     if (gasNotification === undefined) {
       throw new Error("gasNotification is undefined");
@@ -78,7 +78,7 @@ describe("NetworkFacade", () => {
       value: u.HexString.fromHex(acct.scriptHash).toBase64(true),
     });
     expect(
-      parseInt(gasNotification.state.value[2].value as string)
+      parseInt(gasNotification.state.value[2].value as string),
     ).toBeGreaterThanOrEqual(expectedMinGasClaimed);
   }, 30000);
 
@@ -99,7 +99,7 @@ describe("NetworkFacade", () => {
       candidateToVoteFor.publicKey,
       {
         signingCallback: signWithAccount(votingAccount),
-      }
+      },
     );
 
     expect(txid).toBeDefined();
@@ -109,7 +109,7 @@ describe("NetworkFacade", () => {
     const candidatesAfterVoting = await facade.getCandidates();
 
     const newCandidateStatus = candidatesAfterVoting.find(
-      (c) => c.publicKey === candidateToVoteFor.publicKey
+      (c) => c.publicKey === candidateToVoteFor.publicKey,
     );
 
     const newVotes = parseInt(newCandidateStatus.votes);

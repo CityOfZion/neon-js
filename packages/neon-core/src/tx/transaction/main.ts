@@ -14,7 +14,7 @@ const log = logger("tx");
 
 export function deserializeVersion(
   ss: StringStream,
-  tx: Partial<TransactionLike> = {}
+  tx: Partial<TransactionLike> = {},
 ): Partial<TransactionLike> {
   const byte = ss.read();
   const version = parseInt(byte, 16);
@@ -26,7 +26,7 @@ export function deserializeVersion(
 
 export function deserializeNonce(
   ss: StringStream,
-  tx: Partial<TransactionLike> = {}
+  tx: Partial<TransactionLike> = {},
 ): Partial<TransactionLike> {
   const nonce = parseInt(reverseHex(ss.read(4)), 16);
   return Object.assign(tx, { nonce });
@@ -34,7 +34,7 @@ export function deserializeNonce(
 
 export function deserializeScript(
   ss: StringStream,
-  tx: Partial<TransactionLike> = {}
+  tx: Partial<TransactionLike> = {},
 ): Partial<TransactionLike> {
   const script = ss.readVarBytes();
   if (script.length === 0) {
@@ -45,7 +45,7 @@ export function deserializeScript(
 
 export function deserializeFee(
   ss: StringStream,
-  tx: Partial<TransactionLike> = {}
+  tx: Partial<TransactionLike> = {},
 ): Partial<TransactionLike> {
   const systemFee = BigInteger.fromTwos(ss.read(8), true);
   const networkFee = BigInteger.fromTwos(ss.read(8), true);
@@ -54,7 +54,7 @@ export function deserializeFee(
 
 export function deserializeValidUntilBlock(
   ss: StringStream,
-  tx: Partial<TransactionLike>
+  tx: Partial<TransactionLike>,
 ): Partial<TransactionLike> {
   const validUntilBlock = parseInt(reverseHex(ss.read(4)), 16);
   return Object.assign(tx, { validUntilBlock });
@@ -62,21 +62,21 @@ export function deserializeValidUntilBlock(
 
 export function deserializeAttributes(
   ss: StringStream,
-  tx: Partial<TransactionLike>
+  tx: Partial<TransactionLike>,
 ): Partial<TransactionLike> {
   const attributes = deserializeArrayOf(
     TransactionAttribute.fromStream,
-    ss
+    ss,
   ).map((i) => i.export());
   return Object.assign(tx, { attributes });
 }
 
 export function deserializeWitnesses(
   ss: StringStream,
-  tx: Partial<TransactionLike>
+  tx: Partial<TransactionLike>,
 ): Partial<TransactionLike> {
   const witnesses = deserializeArrayOf(Witness.fromStream, ss).map((i) =>
-    i.export()
+    i.export(),
   );
   return Object.assign(tx, { witnesses });
 }
@@ -101,7 +101,7 @@ export function formatSender(sender: string | undefined): string {
 
 export function deserializeSigners(
   ss: StringStream,
-  tx: Partial<TransactionLike>
+  tx: Partial<TransactionLike>,
 ): Partial<TransactionLike> {
   const signers = deserializeArrayOf(Signer.deserialize, ss);
   if (!signers.every((s) => signers.indexOf(s) === signers.lastIndexOf(s))) {

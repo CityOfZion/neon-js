@@ -27,7 +27,7 @@ export class OpToken {
       throw new Error(
         `Expected a hexstring but got ${
           script.length > 20 ? script.substr(0, 20) + "..." : script
-        }`
+        }`,
       );
     }
     const ss = new StringStream(script);
@@ -39,8 +39,8 @@ export class OpToken {
       const paramsExtracter = annotation.operandSize
         ? readParams(annotation.operandSize)
         : annotation.operandSizePrefix
-        ? readParamsWithPrefix(annotation.operandSizePrefix)
-        : () => undefined;
+          ? readParamsWithPrefix(annotation.operandSizePrefix)
+          : () => undefined;
       operations.push(new OpToken(opCode, paramsExtracter(ss)));
     }
     return operations;
@@ -61,15 +61,15 @@ export class OpToken {
         ? parseInt(
             BigInteger.fromTwos(
               opToken.params.substr(0, charactersToRead),
-              true
-            ).toString()
+              true,
+            ).toString(),
           )
         : 0;
     } else if (opToken.code >= 0x0f && opToken.code <= 0x20) {
       return opToken.code - 16;
     } else {
       throw new Error(
-        `given OpToken ${OpCode[opToken.code]} isnt a parsable integer.`
+        `given OpToken ${OpCode[opToken.code]} isnt a parsable integer.`,
       );
     }
   }
@@ -99,7 +99,10 @@ export class OpToken {
     }
   }
 
-  constructor(public code: OpCode, public params?: string) {}
+  constructor(
+    public code: OpCode,
+    public params?: string,
+  ) {}
 
   /**
    * Helps to print the token in a formatted way.
@@ -148,7 +151,7 @@ export class OpToken {
         throw new Error(
           `Expected params to be less than ${maxExpectedSize} but got ${
             params.length / 2
-          }`
+          }`,
         );
       }
 
@@ -165,7 +168,7 @@ export class OpToken {
         throw new Error(
           `Expected params to be ${annotation.operandSize} bytes long but got ${
             params.length / 2
-          } instead.`
+          } instead.`,
         );
       }
     }

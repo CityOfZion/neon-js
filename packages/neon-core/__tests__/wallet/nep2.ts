@@ -58,7 +58,7 @@ describe("NEP2", () => {
     test("decrypt", async () => {
       const result = await NEP2.decrypt(
         testKey.encryptedWif,
-        testKey.passphrase
+        testKey.passphrase,
       );
       expect(isWIF(result)).toBeTruthy();
       expect(result).toBe(testKey.wif);
@@ -73,13 +73,13 @@ describe("NEP2", () => {
     "%s",
     (
       msg: string,
-      data: { wif: string; encryptedWif: string; passphrase: string }
+      data: { wif: string; encryptedWif: string; passphrase: string },
     ) => {
       test("encrypt", async () => {
         const result = await NEP2.encrypt(
           data.wif,
           data.passphrase,
-          simpleScrypt
+          simpleScrypt,
         );
         expect(isNEP2(result)).toBeTruthy();
         expect(result).toBe(data.encryptedWif);
@@ -89,12 +89,12 @@ describe("NEP2", () => {
         const result = await NEP2.decrypt(
           data.encryptedWif,
           data.passphrase,
-          simpleScrypt
+          simpleScrypt,
         );
         expect(isWIF(result)).toBeTruthy();
         expect(result).toBe(data.wif);
       });
-    }
+    },
   );
 
   describe("Error", () => {
@@ -102,7 +102,7 @@ describe("NEP2", () => {
       const thrower = NEP2.decrypt(
         simpleKeys.a.encryptedWif,
         "wrongpassword",
-        simpleScrypt
+        simpleScrypt,
       );
       expect(thrower).rejects.toThrow("Wrong password");
     });
@@ -110,7 +110,7 @@ describe("NEP2", () => {
     test("Errors on wrong scrypt params", () => {
       const thrower = NEP2.decrypt(
         simpleKeys.a.encryptedWif,
-        simpleKeys.a.passphrase
+        simpleKeys.a.passphrase,
       );
       expect(thrower).rejects.toThrow("scrypt parameters");
     });
@@ -125,16 +125,16 @@ describe.each([
   "%s",
   (
     msg: string,
-    data: { wif: string; encryptedWif: string; passphrase: string }
+    data: { wif: string; encryptedWif: string; passphrase: string },
   ) => {
     test("decrypt neo2 key", async () => {
       const result = await NEP2.decryptNeo2(
         data.encryptedWif,
         data.passphrase,
-        simpleScrypt
+        simpleScrypt,
       );
       expect(isWIF(result)).toBeTruthy();
       expect(result).toBe(data.wif);
     });
-  }
+  },
 );

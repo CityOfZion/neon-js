@@ -18,7 +18,7 @@ describe("Nep17Contract", () => {
     const result = await rpcClient.invokeFunction(
       contractCall.scriptHash,
       contractCall.operation,
-      contractCall.args
+      contractCall.args,
     );
 
     expect(result.state).toBe("HALT");
@@ -37,7 +37,7 @@ describe("Nep17Contract", () => {
     const result = await rpcClient.invokeFunction(
       contractCall.scriptHash,
       contractCall.operation,
-      contractCall.args
+      contractCall.args,
     );
 
     expect(result.state).toBe("HALT");
@@ -56,7 +56,7 @@ describe("Nep17Contract", () => {
     const result = await rpcClient.invokeFunction(
       contractCall.scriptHash,
       contractCall.operation,
-      contractCall.args
+      contractCall.args,
     );
 
     expect(result.state).toBe("HALT");
@@ -75,7 +75,7 @@ describe("Nep17Contract", () => {
     const result = await rpcClient.invokeFunction(
       contractCall.scriptHash,
       contractCall.operation,
-      contractCall.args
+      contractCall.args,
     );
 
     expect(result.state).toBe("HALT");

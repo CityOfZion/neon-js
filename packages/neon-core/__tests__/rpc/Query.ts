@@ -37,10 +37,10 @@ describe("equals", () => {
       msg: string,
       a: Query<unknown[], unknown>,
       b: Partial<Query<unknown[], unknown> | QueryLike<unknown[]>>,
-      cond: boolean
+      cond: boolean,
     ) => {
       expect(a.equals(b)).toBe(cond);
-    }
+    },
   );
 });
 
@@ -71,7 +71,7 @@ describe("static", () => {
     const result = Query.traverseIterator(
       "testSessionId",
       "testIteratorId",
-      10
+      10,
     );
     expect(result.method).toEqual("traverseiterator");
     expect(result.params).toEqual(["testSessionId", "testIteratorId", 10]);
@@ -224,7 +224,7 @@ describe("static", () => {
       const result = Query.invokeContractVerify(
         "hash",
         [ContractParam.integer(1)],
-        [new Signer({ account: "ab".repeat(20), scopes: "CalledByEntry" })]
+        [new Signer({ account: "ab".repeat(20), scopes: "CalledByEntry" })],
       );
 
       expect(result.method).toEqual("invokecontractverify");

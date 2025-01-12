@@ -17,9 +17,9 @@ import { HexString } from "../../u";
 import { NativeContractState } from "..";
 import { StackItem, StackItemJson } from "../../sc";
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
-  base: TBase
+  base: TBase,
 ) {
   return class NeoServerRpcInterface extends base {
     //#region Blockchain
@@ -34,10 +34,10 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
     public async traverseIterator(
       sessionId: string,
       iteratorId: string,
-      count: number
+      count: number,
     ): Promise<StackItem[]> {
       const response = await this.execute(
-        Query.traverseIterator(sessionId, iteratorId, count)
+        Query.traverseIterator(sessionId, iteratorId, count),
       );
       return response;
     }
@@ -58,15 +58,15 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
      */
     public async getBlock(
       indexOrHash: number | string,
-      verbose?: 0 | false
+      verbose?: 0 | false,
     ): Promise<string>;
     public async getBlock(
       indexOrHash: number | string,
-      verbose: 1 | true
+      verbose: 1 | true,
     ): Promise<BlockJson>;
     public async getBlock(
       indexOrHash: number | string,
-      verbose?: BooleanLikeParam
+      verbose?: BooleanLikeParam,
     ): Promise<string | BlockJson> {
       return verbose
         ? await this.execute(Query.getBlock(indexOrHash, 1))
@@ -97,15 +97,15 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
      */
     public async getBlockHeader(
       indexOrHash: number | string,
-      verbose?: 0
+      verbose?: 0,
     ): Promise<string>;
     public async getBlockHeader(
       indexOrHash: number | string,
-      verbose: 1
+      verbose: 1,
     ): Promise<BlockHeaderJson>;
     public async getBlockHeader(
       indexOrHash: number | string,
-      verbose?: 0 | 1
+      verbose?: 0 | 1,
     ): Promise<string | BlockHeaderJson> {
       return verbose
         ? await this.execute(Query.getBlockHeader(indexOrHash, 1))
@@ -122,7 +122,7 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
      * Gets the state of the contract at the given scriptHash.
      */
     public async getContractState(
-      scriptHash: string
+      scriptHash: string,
     ): Promise<GetContractStateResult> {
       const response = await this.execute(Query.getContractState(scriptHash));
       return response;
@@ -139,13 +139,13 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
      * shouldGetUnverified = 1, get current block height and confirmed and unconfirmed tx hash
      */
     public async getRawMemPool(
-      shouldGetUnverified?: 0 | false
+      shouldGetUnverified?: 0 | false,
     ): Promise<string[]>;
     public async getRawMemPool(
-      shouldGetUnverified: 1 | true
+      shouldGetUnverified: 1 | true,
     ): Promise<GetRawMemPoolResult>;
     public async getRawMemPool(
-      shouldGetUnverified: BooleanLikeParam = 0
+      shouldGetUnverified: BooleanLikeParam = 0,
     ): Promise<string[] | GetRawMemPoolResult> {
       return shouldGetUnverified
         ? await this.execute(Query.getRawMemPool(1))
@@ -160,15 +160,15 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
      */
     public async getRawTransaction(
       txid: string,
-      verbose?: 0 | false
+      verbose?: 0 | false,
     ): Promise<string>;
     public async getRawTransaction(
       txid: string,
-      verbose: 1 | true
+      verbose: 1 | true,
     ): Promise<GetRawTransactionResult>;
     public async getRawTransaction(
       txid: string,
-      verbose?: BooleanLikeParam
+      verbose?: BooleanLikeParam,
     ): Promise<string | GetRawTransactionResult> {
       return verbose
         ? await this.execute(Query.getRawTransaction(txid, 1))
@@ -195,10 +195,10 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
     public async findStorage(
       scriptHash: string,
       searchPrefix: string,
-      start = 0
+      start = 0,
     ): Promise<FindStorageResult> {
       const response = await this.execute(
-        Query.findStorage(scriptHash, searchPrefix, start)
+        Query.findStorage(scriptHash, searchPrefix, start),
       );
       return response;
     }
@@ -253,10 +253,10 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
      * @returns transaction id
      */
     public async sendRawTransaction(
-      transaction: Transaction | string | HexString
+      transaction: Transaction | string | HexString,
     ): Promise<string> {
       const response = await this.execute(
-        Query.sendRawTransaction(transaction)
+        Query.sendRawTransaction(transaction),
       );
       return response.hash;
     }
@@ -291,10 +291,10 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
     public async invokeContractVerify(
       scriptHash: string,
       args: unknown[],
-      signers: (Signer | SignerJson)[] = []
+      signers: (Signer | SignerJson)[] = [],
     ): Promise<InvokeResult> {
       return await this.execute(
-        Query.invokeContractVerify(scriptHash, args, signers)
+        Query.invokeContractVerify(scriptHash, args, signers),
       );
     }
     /**
@@ -304,10 +304,10 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
       scriptHash: string,
       operation: string,
       params: unknown[] = [],
-      signers: (Signer | SignerJson)[] = []
+      signers: (Signer | SignerJson)[] = [],
     ): Promise<InvokeResult<T>> {
       return await this.execute<InvokeResult<T>>(
-        Query.invokeFunction(scriptHash, operation, params, signers)
+        Query.invokeFunction(scriptHash, operation, params, signers),
       );
     }
 
@@ -319,7 +319,7 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
      */
     public async invokeScript(
       script: string | HexString,
-      signers: (Signer | SignerJson)[] = []
+      signers: (Signer | SignerJson)[] = [],
     ): Promise<InvokeResult> {
       return await this.execute(Query.invokeScript(script, signers));
     }
@@ -339,7 +339,7 @@ export function NeoServerRpcMixin<TBase extends RpcDispatcherMixin>(
      * @returns GAS fee as an stringified integer
      */
     public async calculateNetworkFee(
-      tx: Transaction | HexString | string
+      tx: Transaction | HexString | string,
     ): Promise<string> {
       const response = await this.execute(Query.calculateNetworkFee(tx));
       return response.networkfee;

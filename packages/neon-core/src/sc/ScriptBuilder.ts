@@ -51,7 +51,7 @@ export class ScriptBuilder extends StringStream {
     scriptHash: string | HexString,
     operation: string,
     args: unknown[] = [],
-    callFlags: CallFlags = CallFlags.All
+    callFlags: CallFlags = CallFlags.All,
   ): this {
     if (args.length === 0) {
       this.emit(OpCode.NEWARRAY0);
@@ -178,12 +178,12 @@ export class ScriptBuilder extends StringStream {
     } else if (size < 0x10000) {
       return this.emit(
         OpCode.PUSHDATA2,
-        num2hexstring(size, 2, true) + littleEndianHex
+        num2hexstring(size, 2, true) + littleEndianHex,
       );
     } else if (size < 0x100000000) {
       return this.emit(
         OpCode.PUSHDATA4,
-        num2hexstring(size, 4, true) + littleEndianHex
+        num2hexstring(size, 4, true) + littleEndianHex,
       );
     } else {
       throw new Error(`Data too big to emit!`);
@@ -282,7 +282,7 @@ export class ScriptBuilder extends StringStream {
   private padRight(
     data: string,
     targetLength: number,
-    isSigned: boolean
+    isSigned: boolean,
   ): string {
     if (data.length / 2 >= targetLength) return data;
     const pad = isSigned ? "ff" : "00";
@@ -305,7 +305,7 @@ export class ScriptBuilder extends StringStream {
           return this.emit(OpCode.PUSHNULL);
         }
         return this.emitHexString(
-          (param.value as string | HexString | null) ?? ""
+          (param.value as string | HexString | null) ?? "",
         );
       case ContractParamType.String:
         return this.emitString(param.value as string);
@@ -338,7 +338,7 @@ export class ScriptBuilder extends StringStream {
       contractCall.scriptHash,
       contractCall.operation,
       contractCall.args,
-      contractCall.callFlags
+      contractCall.callFlags,
     );
   }
 

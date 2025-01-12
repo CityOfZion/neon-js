@@ -35,16 +35,16 @@ export enum WitnessScope {
 }
 
 export function parse(stringFlags: string): WitnessScope {
-  const flags = stringFlags.split(/\,/g);
+  const flags = stringFlags.split(/,/g);
   return flags.reduce(
     (p, c) => p | WitnessScope[c.trim() as keyof typeof WitnessScope],
-    WitnessScope.None
+    WitnessScope.None,
   );
 }
 
 function getEnums(): WitnessScope[] {
   return Object.values(WitnessScope).filter(
-    (k) => typeof k === "number"
+    (k) => typeof k === "number",
   ) as WitnessScope[];
 }
 

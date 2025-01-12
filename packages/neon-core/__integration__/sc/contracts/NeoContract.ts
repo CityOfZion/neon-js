@@ -17,7 +17,7 @@ describe("NeoContract", () => {
     const response = await rpcClient.invokeFunction(
       call.scriptHash,
       call.operation,
-      call.args
+      call.args,
     );
 
     expect(response.state).toBe("HALT");
@@ -28,7 +28,7 @@ describe("NeoContract", () => {
     const response = await rpcClient.invokeFunction(
       call.scriptHash,
       call.operation,
-      call.args
+      call.args,
     );
 
     expect(response.state).toBe("HALT");
@@ -38,7 +38,7 @@ describe("NeoContract", () => {
 
   test("registerCandidate", async () => {
     const call = NeoContract.INSTANCE.registerCandidate(
-      testWallet.accounts[0].publicKey
+      testWallet.accounts[0].publicKey,
     );
     const response = await rpcClient.invokeFunction(
       call.scriptHash,
@@ -49,7 +49,7 @@ describe("NeoContract", () => {
           account: testWallet.accounts[0].scriptHash,
           scopes: "CalledByEntry",
         },
-      ]
+      ],
     );
 
     expect(response.state).toBe("HALT");
@@ -63,7 +63,7 @@ describe("NeoContract", () => {
   test("vote", async () => {
     const call = NeoContract.INSTANCE.vote(
       testWallet.accounts[0].address,
-      testWallet.accounts[0].publicKey
+      testWallet.accounts[0].publicKey,
     );
     const response = await rpcClient.invokeFunction(
       call.scriptHash,
@@ -74,7 +74,7 @@ describe("NeoContract", () => {
           account: testWallet.accounts[0].scriptHash,
           scopes: "CalledByEntry",
         },
-      ]
+      ],
     );
 
     expect(response.state).toBe("HALT");

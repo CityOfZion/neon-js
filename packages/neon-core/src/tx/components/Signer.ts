@@ -167,15 +167,15 @@ export class Signer {
 
     if (otherSigner.allowedContracts) {
       const deduplicatedContracts = otherSigner.allowedContracts.filter(
-        (i) => !this.allowedContracts.some((j) => j.equals(i))
+        (i) => !this.allowedContracts.some((j) => j.equals(i)),
       );
       this.allowedContracts = this.allowedContracts.concat(
-        deduplicatedContracts
+        deduplicatedContracts,
       );
     }
     if (otherSigner.allowedGroups) {
       const deduplicatedGroups = otherSigner.allowedGroups.filter(
-        (i) => !this.allowedGroups.some((j) => j.equals(i))
+        (i) => !this.allowedGroups.some((j) => j.equals(i)),
       );
       this.allowedGroups = this.allowedGroups.concat(deduplicatedGroups);
     }
@@ -188,7 +188,7 @@ export class Signer {
     out += num2hexstring(this.scopes, 1);
     if (this.scopes & WitnessScope.CustomContracts) {
       out += serializeArrayOf(
-        this.allowedContracts.map((i) => i.toLittleEndian())
+        this.allowedContracts.map((i) => i.toLittleEndian()),
       );
     }
     if (this.scopes & WitnessScope.CustomGroups) {

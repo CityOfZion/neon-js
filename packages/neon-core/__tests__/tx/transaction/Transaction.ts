@@ -81,7 +81,7 @@ describe("getters", () => {
     });
 
     expect(tx.sender.toBigEndian()).toBe(
-      "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26"
+      "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
     );
   });
 
@@ -176,10 +176,10 @@ describe("equals", () => {
       _msg: string,
       a: Transaction,
       b: Partial<TransactionLike | Transaction>,
-      cond: boolean
+      cond: boolean,
     ) => {
       expect(a.equals(b)).toBe(cond);
-    }
+    },
   );
 });
 
@@ -210,7 +210,7 @@ describe("Add Methods", () => {
       scopes: WitnessScope.Global,
     });
     expect(tx1.signers[1].account.toBigEndian()).toBe(
-      "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26"
+      "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
     );
     expect(tx1.signers[1].scopes).toBe(WitnessScope.Global);
     const addDuplicate = (): Transaction =>
@@ -231,7 +231,7 @@ describe("Add Methods", () => {
       });
       expect(tx1.witnesses[0].invocationScript.toBigEndian()).toBe("ab");
       expect(tx1.witnesses[0].verificationScript.toBigEndian()).toBe(
-        "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4"
+        "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4",
       );
     });
 
@@ -250,7 +250,7 @@ describe("Add Methods", () => {
       expect(tx1.witnesses.length).toBe(1);
       expect(tx1.witnesses[0].invocationScript.toBigEndian()).toBe("cd");
       expect(tx1.witnesses[0].verificationScript.toBigEndian()).toBe(
-        "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4"
+        "4c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba0b680a906ad4",
       );
     });
 
@@ -264,13 +264,13 @@ describe("Add Methods", () => {
         Witness.fromJson({
           invocation: "",
           verification: account2.contract.script,
-        })
+        }),
       );
       tx1.addWitness(
         Witness.fromJson({
           invocation: "",
           verification: account1.contract.script,
-        })
+        }),
       );
 
       expect(tx1.witnesses.length).toBe(2);
@@ -284,15 +284,15 @@ describe("Add Methods", () => {
   test("sign", () => {
     const tx1 = createTxforTestAddMethods();
     const account = new Account(
-      "9600debdb033bae62179baadb439c65088a450d5eecff782f641778fab23e21d"
+      "9600debdb033bae62179baadb439c65088a450d5eecff782f641778fab23e21d",
     );
     tx1.witnesses = [];
     tx1.sign(account, 1024);
     expect(tx1.witnesses[0].verificationScript.toBigEndian()).toBe(
-      "0c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba4156e7b327"
+      "0c210317595a739cfe90ea90b6392814bcdebcd4c920cb149d0ac2d88676f1b0894fba4156e7b327",
     );
     expect(tx1.witnesses[0].invocationScript.toBigEndian()).toBe(
-      "0c408fb54a60e1763ec91876f57e6133e7f6e86b11525f016fe26cf85a15f1d8b24d5cc50f3269b64dc0450d32887c8dc73a21ff33bab7547c53f5745165625e2900"
+      "0c408fb54a60e1763ec91876f57e6133e7f6e86b11525f016fe26cf85a15f1d8b24d5cc50f3269b64dc0450d32887c8dc73a21ff33bab7547c53f5745165625e2900",
     );
   });
 });
@@ -301,7 +301,7 @@ const dataSet: [string, string, TransactionJson][] = Object.keys(samples).map(
   (k) => {
     const s = samples[k as keyof typeof samples];
     return [s.txid, s.serialized, s.deserialized];
-  }
+  },
 );
 
 describe.each(dataSet)(
@@ -327,5 +327,5 @@ describe.each(dataSet)(
       const result = neonObj.hash();
       expect(result).toEqual(txid);
     });
-  }
+  },
 );

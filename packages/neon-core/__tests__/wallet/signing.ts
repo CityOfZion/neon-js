@@ -38,14 +38,14 @@ describe("Key combinations", () => {
       msg: string,
       priKey: string,
       pubKey: string,
-      expectedSignature: string
+      expectedSignature: string,
     ) => {
       const hex = str2hexstring(msg);
       const sig = sign(hex, priKey, k);
       expect(sig).toBe(expectedSignature);
       const result = verify(hex, sig, pubKey);
       expect(result).toBe(true);
-    }
+    },
   );
 });
 

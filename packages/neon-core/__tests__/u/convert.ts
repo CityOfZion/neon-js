@@ -40,8 +40,7 @@ describe.each([
 });
 
 test("str2ab: throw if input is non-string", () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  // @ts-expect-error Providing wrong types
   expect(() => convert.str2ab(1)).toThrow();
 });
 
@@ -100,7 +99,7 @@ describe("num2hexstring", () => {
         const reversedHex = (hex.match(/.{1,2}/g) ?? []).reverse().join("");
         expect(result).toBe(reversedHex);
       });
-    }
+    },
   );
 });
 

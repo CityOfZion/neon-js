@@ -5,7 +5,7 @@ import { HexString } from "../../../src/u";
 import { StackItemInteropInterfaceJson } from "../../../src/sc";
 
 const testWallet = new wallet.Wallet(
-  testWalletJson as unknown as wallet.WalletJSON
+  testWalletJson as unknown as wallet.WalletJSON,
 );
 
 let client: rpc.NeoServerRpcClient;
@@ -47,9 +47,9 @@ describe("NeoServerRpcClient", () => {
       new tx.Witness({
         invocationScript: "",
         verificationScript: HexString.fromBase64(
-          acct.contract.script
+          acct.contract.script,
         ).toString(),
-      })
+      }),
     );
 
     const result = await client.calculateNetworkFee(testTx);
@@ -81,7 +81,7 @@ describe("NeoServerRpcClient", () => {
           "tx",
           "confirmations",
           "nextblockhash",
-        ].sort()
+        ].sort(),
       );
     });
 
@@ -132,7 +132,7 @@ describe("NeoServerRpcClient", () => {
           "size",
           "witnesses",
           "version",
-        ].sort()
+        ].sort(),
       );
     });
   });
@@ -183,7 +183,7 @@ describe("NeoServerRpcClient", () => {
   test("getPeers", async () => {
     const result = await client.getPeers();
     expect(Object.keys(result)).toEqual(
-      expect.arrayContaining(["unconnected", "connected", "bad"])
+      expect.arrayContaining(["unconnected", "connected", "bad"]),
     );
   });
 
@@ -196,7 +196,7 @@ describe("NeoServerRpcClient", () => {
     test("get confirmed and unconfirmed", async () => {
       const result = await client.getRawMemPool(true);
       expect(Object.keys(result)).toEqual(
-        expect.arrayContaining(["height", "verified", "unverified"])
+        expect.arrayContaining(["height", "verified", "unverified"]),
       );
     });
   });
@@ -231,7 +231,7 @@ describe("NeoServerRpcClient", () => {
       const findTotalSupplyPrefixResult = await client.findStorage(
         contractHash,
         "0b",
-        0
+        0,
       );
 
       const findTotalSupplyPrefixWithDefaultArgResult =
@@ -245,7 +245,7 @@ describe("NeoServerRpcClient", () => {
       expect(findTotalSupplyPrefixResult.results[0].value).toBe("AOH1BQ==");
 
       expect(findTotalSupplyPrefixWithDefaultArgResult).toEqual(
-        findTotalSupplyPrefixResult
+        findTotalSupplyPrefixResult,
       );
     });
 
@@ -254,7 +254,7 @@ describe("NeoServerRpcClient", () => {
       const findAccountPrefix0Result = await client.findStorage(
         contractHash,
         "14",
-        0
+        0,
       );
       expect(findAccountPrefix0Result.truncated).toBe(false);
       expect(findAccountPrefix0Result.next).toBeLessThan(50);
@@ -264,7 +264,7 @@ describe("NeoServerRpcClient", () => {
       const findAccountPrefix50Result = await client.findStorage(
         contractHash,
         "14",
-        50
+        50,
       );
       expect(findAccountPrefix50Result.truncated).toBe(false);
       expect(findAccountPrefix50Result.next).toBe(50);
@@ -379,7 +379,7 @@ describe("NeoServerRpcClient", () => {
             account: fromAccount.scriptHash,
             scopes: tx.WitnessScope.CalledByEntry,
           }),
-        ]
+        ],
       );
 
       expect(result).toMatchObject({
@@ -394,8 +394,8 @@ describe("NeoServerRpcClient", () => {
     test("invokeScript", async () => {
       const result = await client.invokeScript(
         HexString.fromHex(
-          new sc.ScriptBuilder().emitAppCall(contractHash, "symbol").build()
-        )
+          new sc.ScriptBuilder().emitAppCall(contractHash, "symbol").build(),
+        ),
       );
 
       expect(result).toMatchObject({
@@ -409,7 +409,7 @@ describe("NeoServerRpcClient", () => {
       expect(result.state).toContain("HALT");
       expect(result.stack.length).toEqual(1);
       expect(result.stack[0].value).toEqual(
-        u.HexString.fromAscii("NEO").toBase64()
+        u.HexString.fromAscii("NEO").toBase64(),
       );
     });
 
@@ -474,7 +474,7 @@ describe("NeoServerRpcClient", () => {
       script: script,
     }).sign(fromAccount, 1234567890);
     const result = await client.sendRawTransaction(
-      HexString.fromHex(transaction.serialize(true))
+      HexString.fromHex(transaction.serialize(true)),
     );
     expect(typeof result).toBe("string");
   }, 20000);
@@ -500,7 +500,7 @@ describe("NeoServerRpcClient", () => {
 
   test("getUnclaimedGas", async () => {
     const result = await client.getUnclaimedGas(
-      "NR4SHeS9kfgN5EXVcAuFwfu6Y56xaSPxg9"
+      "NR4SHeS9kfgN5EXVcAuFwfu6Y56xaSPxg9",
     );
 
     expect(parseInt(result)).toBeGreaterThan(0);
@@ -508,14 +508,14 @@ describe("NeoServerRpcClient", () => {
 
   test.only("traverseIterator", async () => {
     const newClient = new rpc.NeoServerRpcClient(
-      "https://testnet1.neo.coz.io:443"
+      "https://testnet1.neo.coz.io:443",
     );
 
     const { session, stack } =
       await newClient.invokeFunction<StackItemInteropInterfaceJson>(
         CONST.NATIVE_CONTRACT_HASH.NeoToken,
         "getAllCandidates",
-        []
+        [],
       );
 
     expect(session).toEqual(expect.any(String));

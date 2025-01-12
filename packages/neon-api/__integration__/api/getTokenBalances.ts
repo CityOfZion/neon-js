@@ -19,7 +19,7 @@ describe("getTokenBalances", () => {
     const result = await getTokenBalances(
       address,
       [neoScriptHash, gasScriptHash],
-      client
+      client,
     );
     expect(result).toStrictEqual([expect.any(String), expect.any(String)]);
     expect(parseInt(result[0])).toBeGreaterThan(0);
@@ -32,7 +32,7 @@ describe("getTokenBalances", () => {
     const result = await getTokenBalances(
       new wallet.Account().address,
       [neoScriptHash, gasScriptHash],
-      client
+      client,
     );
     expect(result).toStrictEqual(["0", "0.00000000"]);
   });

@@ -81,11 +81,11 @@ export class Account implements NeonObject<AccountJSON> {
    */
   public static createMultiSig(
     signingThreshold: number,
-    publicKeys: string[]
+    publicKeys: string[],
   ): Account {
     const verificationScript = constructMultiSigVerificationScript(
       signingThreshold,
-      publicKeys
+      publicKeys,
     );
     return new Account({
       contract: {
@@ -99,17 +99,22 @@ export class Account implements NeonObject<AccountJSON> {
     });
   }
 
-
-
   public static validateKey(str: string): KeyType {
     switch (true) {
-      case isPrivateKey(str): return KeyType.PrivateKey;
-      case isPublicKey(str, false): return KeyType.PublicKeyUnencoded;
-      case isPublicKey(str, true): return KeyType.PublicKeyEncoded;
-      case isScriptHash(str): return KeyType.ScriptHash;
-      case isAddress(str): return KeyType.Address;
-      case isWIF(str): return KeyType.WIF;
-      case isNEP2(str): return KeyType.NEP2;
+      case isPrivateKey(str):
+        return KeyType.PrivateKey;
+      case isPublicKey(str, false):
+        return KeyType.PublicKeyUnencoded;
+      case isPublicKey(str, true):
+        return KeyType.PublicKeyEncoded;
+      case isScriptHash(str):
+        return KeyType.ScriptHash;
+      case isAddress(str):
+        return KeyType.Address;
+      case isWIF(str):
+        return KeyType.WIF;
+      case isNEP2(str):
+        return KeyType.NEP2;
       default:
         // returning empty string enables falsly checks
         return KeyType.Unknown;
@@ -138,7 +143,7 @@ export class Account implements NeonObject<AccountJSON> {
 
   public constructor(
     str: string | Partial<AccountJSON> = "",
-    config = { addressVersion: 0 }
+    config = { addressVersion: 0 },
   ) {
     this.label = "";
     this.isDefault = false;
@@ -176,7 +181,7 @@ export class Account implements NeonObject<AccountJSON> {
         config.addressVersion !== addressVersionFromAddress
       ) {
         throw new Error(
-          `Uncompatible address versions! Address ${str} uses version ${addressVersionFromAddress} but config declares version ${config.addressVersion}`
+          `Uncompatible address versions! Address ${str} uses version ${addressVersionFromAddress} but config declares version ${config.addressVersion}`,
         );
       }
     } else if (isWIF(str)) {
@@ -193,7 +198,7 @@ export class Account implements NeonObject<AccountJSON> {
     if (!this.label) {
       try {
         this.label = this.address;
-      } catch (err) {
+      } catch {
         this.label = "";
       }
     }
@@ -271,7 +276,7 @@ export class Account implements NeonObject<AccountJSON> {
       // Disassemble and attempt to pull the public key
       try {
         const verificationScript = HexString.fromBase64(
-          this.contract.script
+          this.contract.script,
         ).toBigEndian();
         this._publicKey =
           core.getPublicKeyFromVerificationScript(verificationScript);
@@ -324,7 +329,7 @@ export class Account implements NeonObject<AccountJSON> {
     } else {
       this._address = core.getAddressFromScriptHash(
         this.scriptHash,
-        this.addressVersion
+        this.addressVersion,
       );
       return this._address;
     }
@@ -340,7 +345,7 @@ export class Account implements NeonObject<AccountJSON> {
       | "publicKey"
       | "encrypted"
       | "scriptHash"
-      | "address"
+      | "address",
   ): string {
     switch (keyType) {
       case "encrypted":
@@ -363,7 +368,7 @@ export class Account implements NeonObject<AccountJSON> {
    */
   public async encrypt(
     keyphrase: string,
-    scryptParams: ScryptParams = DEFAULT_SCRYPT
+    scryptParams: ScryptParams = DEFAULT_SCRYPT,
   ): Promise<this> {
     this._encrypted = await encrypt(this.privateKey, keyphrase, scryptParams);
     return this;
@@ -374,7 +379,7 @@ export class Account implements NeonObject<AccountJSON> {
    */
   public async decrypt(
     keyphrase: string,
-    scryptParams: ScryptParams = DEFAULT_SCRYPT
+    scryptParams: ScryptParams = DEFAULT_SCRYPT,
   ): Promise<this> {
     this._WIF = await decrypt(this.encrypted, keyphrase, scryptParams);
     this._updateContractScript();
@@ -411,12 +416,12 @@ export class Account implements NeonObject<AccountJSON> {
       if (this.contract.script === "") {
         const publicKey = this.publicKey;
         this.contract.script = HexString.fromHex(
-          core.getVerificationScriptFromPublicKey(publicKey)
+          core.getVerificationScriptFromPublicKey(publicKey),
         ).toBase64();
         this._scriptHash = this._getScriptHashFromVerificationScript();
         log.debug(`Updated ContractScript for Account: ${this.address}`);
       }
-    } catch (e) {
+    } catch {
       return;
     }
   }

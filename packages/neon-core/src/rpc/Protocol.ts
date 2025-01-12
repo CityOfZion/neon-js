@@ -75,7 +75,7 @@ export class Protocol implements NeonObject<ProtocolLike> {
       compareStrings(this.seedList, other.seedList ?? other.SeedList ?? []) &&
       compareStrings(
         this.standbyValidators,
-        other.standbyValidators ?? other.StandbyValidators ?? []
+        other.standbyValidators ?? other.StandbyValidators ?? [],
       )
     );
   }

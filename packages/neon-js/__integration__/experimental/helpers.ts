@@ -32,22 +32,22 @@ beforeAll(async () => {
   nef = sc.NEF.fromBuffer(
     await fs.readFile(
       path.resolve(__dirname, "./contract3.nef"),
-      null // specifying 'binary' causes extra junk bytes, because apparently it is an alias for 'latin1' *crazy*
-    )
+      null, // specifying 'binary' causes extra junk bytes, because apparently it is an alias for 'latin1' *crazy*
+    ),
   );
 
   manifest = sc.ContractManifest.fromJson(
     JSON.parse(
       (await fs.readFile(
-        path.resolve(__dirname, "./contract3.manifest.json")
-      )) as unknown as string
-    )
+        path.resolve(__dirname, "./contract3.manifest.json"),
+      )) as unknown as string,
+    ),
   );
 
   contractHash = experimental.getContractHash(
     u.HexString.fromHex(acc.scriptHash),
     nef.checksum,
-    manifest.name
+    manifest.name,
   );
 });
 
@@ -69,7 +69,7 @@ describe("contract", () => {
     expect(state).toBeDefined();
     const contract = new experimental.SmartContract(
       u.HexString.fromHex(contractHash),
-      config
+      config,
     );
     const result = await contract.testInvoke("test_func");
     expect(result.state).toBe("HALT");
@@ -99,7 +99,7 @@ describe("contract", () => {
         networkFeeOverride: u.BigInteger.fromDecimal(20, 8),
         systemFeeOverride: u.BigInteger.fromDecimal(20, 8),
       },
-      config
+      config,
     );
 
     console.log(`Deploying contract with hash: 0x${contractHash}`);
@@ -115,7 +115,7 @@ describe("contract", () => {
     const execution = txLog["executions"][0];
     expect(execution["vmstate"] as string).toBe("FAULT");
     expect(execution["exception"] as string).toContain(
-      "Contract Already Exists"
+      "Contract Already Exists",
     );
   });
 });

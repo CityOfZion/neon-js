@@ -26,7 +26,7 @@ export class BigInteger {
   public static fromTwos(hexstring: string, littleEndian?: boolean): BigInteger;
   public static fromTwos(
     hexstring: string | HexString,
-    littleEndian = false
+    littleEndian = false,
   ): BigInteger {
     const cleanedInput =
       hexstring instanceof HexString
@@ -34,8 +34,8 @@ export class BigInteger {
         : HexString.fromHex(hexstring, littleEndian);
     return new BigInteger(
       new BN(cleanedInput.toBigEndian(), 16).fromTwos(
-        cleanedInput.byteLength * 8
-      )
+        cleanedInput.byteLength * 8,
+      ),
     );
   }
 
@@ -55,7 +55,7 @@ export class BigInteger {
   public static fromHex(hexstring: string, littleEndian?: boolean): BigInteger;
   public static fromHex(
     hexstring: string | HexString,
-    littleEndian = false
+    littleEndian = false,
   ): BigInteger {
     const cleanedInput =
       hexstring instanceof HexString
@@ -93,7 +93,7 @@ export class BigInteger {
         return new BigInteger(new BN(input.toString(16), 16));
       default:
         throw new Error(
-          `Input was not stringified number or number: ${typeof input} ${input}`
+          `Input was not stringified number or number: ${typeof input} ${input}`,
         );
     }
   }
@@ -118,7 +118,7 @@ export class BigInteger {
    */
   public static fromDecimal(
     input: number | string,
-    decimals: number
+    decimals: number,
   ): BigInteger {
     const stringNumber =
       typeof input === "number" ? input.toFixed(decimals) : input;
@@ -130,7 +130,7 @@ export class BigInteger {
     // Throw if the right side is too long as it affects how we form the final number.
     if (rightOfDecimal.length > decimals) {
       throw new Error(
-        `Input had more decimal places than provided. Got ${rightOfDecimal} but only got ${decimals} decimal places.`
+        `Input had more decimal places than provided. Got ${rightOfDecimal} but only got ${decimals} decimal places.`,
       );
     }
 

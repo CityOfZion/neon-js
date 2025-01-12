@@ -31,7 +31,7 @@ const signers: tx.SignerLike[] = [
   },
   {
     account: wallet.getScriptHashFromVerificationScript(
-      multiSig.invocationScript
+      multiSig.invocationScript,
     ),
     scopes: 1,
   },
@@ -144,7 +144,7 @@ describe("validateSystemFee", () => {
 
     test("script execution error in neoVM", async () => {
       const addressInHash160 = sc.ContractParam.hash160(
-        "NPTmAHDxo6Pkyic8Nvu3kwyXoYJCvcCB6i"
+        "NPTmAHDxo6Pkyic8Nvu3kwyXoYJCvcCB6i",
       );
       const script = sc.createScript({
         scriptHash: CONST.NATIVE_CONTRACT_HASH.NeoToken,
@@ -315,7 +315,7 @@ describe("validateAll", () => {
       const validator = new TransactionValidator(rpcClient, transaction);
       const validation = await validator.validate(
         ValidationAttributes.All,
-        ValidationAttributes.All
+        ValidationAttributes.All,
       );
       expect(validation).toMatchObject({
         valid: true,
@@ -363,7 +363,7 @@ describe("validateAll", () => {
       const validator = new TransactionValidator(rpcClient, transaction);
       const validation = await validator.validate(
         ValidationAttributes.All,
-        ValidationAttributes.SystemFee
+        ValidationAttributes.SystemFee,
       );
       expect(validation).toMatchObject({
         valid: false,

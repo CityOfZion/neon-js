@@ -31,7 +31,7 @@ export class NetworkFacade {
   public client: rpc.NeoServerRpcClient;
 
   public static async fromConfig(
-    config: NetworkFacadeConfig
+    config: NetworkFacadeConfig,
   ): Promise<NetworkFacade> {
     const i = new NetworkFacade(config);
     await i.initialize();
@@ -60,7 +60,7 @@ export class NetworkFacade {
    */
   public async transferToken(
     intents: Nep17TransferIntent[],
-    config: signingConfig
+    config: signingConfig,
   ): Promise<string> {
     const client = this.getRpcNode();
     const txBuilder = new TransactionBuilder();
@@ -69,20 +69,20 @@ export class NetworkFacade {
         const [tokenInfo] = await getTokenInfos([intent.contractHash], client);
         const amt = u.BigInteger.fromDecimal(
           intent.decimalAmt,
-          tokenInfo.decimals
+          tokenInfo.decimals,
         );
         txBuilder.addNep17Transfer(
           intent.from,
           intent.to,
           intent.contractHash,
-          amt
+          amt,
         );
       } else if (intent.integerAmt) {
         txBuilder.addNep17Transfer(
           intent.from,
           intent.to,
           intent.contractHash,
-          intent.integerAmt
+          intent.integerAmt,
         );
       } else {
         throw new Error("no amount specified!");
@@ -109,7 +109,7 @@ export class NetworkFacade {
    */
   public async claimGas(
     acct: wallet.Account,
-    config: signingConfig
+    config: signingConfig,
   ): Promise<string> {
     const txn = TransactionBuilder.newBuilder().addGasClaim(acct).build();
     const validateResult = await this.validate(txn);
@@ -132,7 +132,7 @@ export class NetworkFacade {
   public async vote(
     acct: wallet.Account,
     candidatePublicKey: string,
-    config: signingConfig
+    config: signingConfig,
   ): Promise<string> {
     const txn = TransactionBuilder.newBuilder()
       .addVote(acct, candidatePublicKey)
@@ -157,7 +157,7 @@ export class NetworkFacade {
     const validator = new TransactionValidator(this.getRpcNode(), txn);
     return await validator.validate(
       ValidationAttributes.All,
-      ValidationAttributes.All
+      ValidationAttributes.All,
     );
   }
 
@@ -169,7 +169,7 @@ export class NetworkFacade {
    */
   public async sign(
     txn: tx.Transaction,
-    config: signingConfig
+    config: signingConfig,
   ): Promise<tx.Transaction> {
     for (const [idx, w] of txn.witnesses.entries()) {
       const signature = await config.signingCallback(txn, {
@@ -179,7 +179,7 @@ export class NetworkFacade {
 
       const invocationScript = new sc.OpToken(
         sc.OpCode.PUSHDATA1,
-        signature
+        signature,
       ).toScript();
       w.invocationScript = u.HexString.fromHex(invocationScript);
     }
@@ -188,12 +188,12 @@ export class NetworkFacade {
   }
 
   public async invoke(
-    contractCall: sc.ContractCall
+    contractCall: sc.ContractCall,
   ): Promise<rpc.InvokeResult> {
     return this.getRpcNode().invokeFunction(
       contractCall.scriptHash,
       contractCall.operation,
-      contractCall.args
+      contractCall.args,
     );
   }
 }

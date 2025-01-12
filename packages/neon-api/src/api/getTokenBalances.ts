@@ -5,13 +5,13 @@ const CHUNK_SIZE = 2;
 export async function getTokenBalances(
   address: string,
   contracts: (string | sc.Nep17Contract)[],
-  client: rpc.NeoServerRpcClient
+  client: rpc.NeoServerRpcClient,
 ): Promise<string[]> {
   const script = contracts
     .map((scriptHash) =>
       scriptHash instanceof sc.Nep17Contract
         ? scriptHash
-        : new sc.Nep17Contract(scriptHash)
+        : new sc.Nep17Contract(scriptHash),
     )
     .map((contract) => [contract.decimals(), contract.balanceOf(address)])
     .reduce((sb, contractCalls) => {
@@ -25,14 +25,14 @@ export async function getTokenBalances(
     throw new Error(
       response.exception
         ? `Invoke exception: ${response.exception}}`
-        : "No exception message returned."
+        : "No exception message returned.",
     );
   }
 
   const expectedStackLength = contracts.length * CHUNK_SIZE;
   if (response.stack.length !== expectedStackLength) {
     throw new Error(
-      `Received unexpected results. Expected ${expectedStackLength} but got ${response.stack.length} instead.`
+      `Received unexpected results. Expected ${expectedStackLength} but got ${response.stack.length} instead.`,
     );
   }
 
@@ -44,7 +44,7 @@ export async function getTokenBalances(
   return results.map((result) => {
     const decimals = parseInt(result[0].value as string);
     return u.BigInteger.fromNumber(result[1].value as string).toDecimal(
-      decimals
+      decimals,
     );
   });
 }

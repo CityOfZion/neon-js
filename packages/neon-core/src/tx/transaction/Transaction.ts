@@ -150,7 +150,9 @@ export class Transaction implements NeonObject<TransactionLike> {
   }
 
   public constructor(
-    tx: Partial<Pick<TransactionLike | Transaction, keyof TransactionLike>> = {}
+    tx: Partial<
+      Pick<TransactionLike | Transaction, keyof TransactionLike>
+    > = {},
   ) {
     const {
       version,
@@ -267,7 +269,7 @@ export class Transaction implements NeonObject<TransactionLike> {
   public addWitness(obj: WitnessLike | Witness): this {
     const newWitness = new Witness(obj);
     const existingWitness = this.witnesses.find((w) =>
-      w.verificationScript.equals(newWitness.verificationScript)
+      w.verificationScript.equals(newWitness.verificationScript),
     );
 
     if (existingWitness && newWitness.invocationScript.byteLength !== 0) {
@@ -285,7 +287,7 @@ export class Transaction implements NeonObject<TransactionLike> {
     this.signers.forEach((signer, ind) => {
       const signerScriptHash = signer.account.toBigEndian();
       const witnessIndex = this.witnesses.findIndex(
-        (w) => w.scriptHash === signerScriptHash
+        (w) => w.scriptHash === signerScriptHash,
       );
       if (witnessIndex !== -1) {
         const extractedWitness = this.witnesses.splice(witnessIndex, 1)[0];
@@ -328,7 +330,7 @@ export class Transaction implements NeonObject<TransactionLike> {
   public sign(
     signingKey: Account | string,
     networkMagic: number = MAGIC_NUMBER.MainNet,
-    k?: string | number
+    k?: string | number,
   ): this {
     if (typeof signingKey === "string") {
       signingKey = new Account(signingKey);
@@ -336,7 +338,7 @@ export class Transaction implements NeonObject<TransactionLike> {
     const signature = sign(
       num2hexstring(networkMagic, 4, true) + reverseHex(this.hash()),
       signingKey.privateKey,
-      k
+      k,
     );
     log.info(`Signed Transaction with Account: ${signingKey.label}`);
     this.addWitness(Witness.fromSignature(signature, signingKey.publicKey));
@@ -382,7 +384,7 @@ export class Transaction implements NeonObject<TransactionLike> {
           ? ""
           : getAddressFromScriptHash(
               this.sender.toBigEndian(),
-              this.#addressVersion
+              this.#addressVersion,
             ),
       sysfee: this.systemFee.toDecimal(0),
       netfee: this.networkFee.toDecimal(0),

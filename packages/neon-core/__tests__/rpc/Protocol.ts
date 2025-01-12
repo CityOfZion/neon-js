@@ -108,9 +108,9 @@ describe("equals", () => {
       msg: string,
       a: Protocol,
       b: Partial<ProtocolLike & ProtocolJSON>,
-      cond: boolean
+      cond: boolean,
     ) => {
       expect(a.equals(b)).toBe(cond);
-    }
+    },
   );
 });

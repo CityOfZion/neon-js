@@ -30,7 +30,7 @@ export class Nep17Contract {
       const response = await this.rpcClient.invokeFunction(
         this.contractHash.toString(),
         "balanceOf",
-        [sc.ContractParam.hash160(address)]
+        [sc.ContractParam.hash160(address)],
       );
       if (response.state == "FAULT") {
         throw Error;
@@ -56,7 +56,7 @@ export class Nep17Contract {
     try {
       const response = await this.rpcClient.invokeFunction(
         this.contractHash.toString(),
-        "decimals"
+        "decimals",
       );
       if (response.state === "FAULT") {
         throw Error;
@@ -65,7 +65,7 @@ export class Nep17Contract {
       return this._decimals;
     } catch (e) {
       throw new Error(
-        `Failed to get decimals for contract: ${this.contractHash.toString()}. Error: ${e}`
+        `Failed to get decimals for contract: ${this.contractHash.toString()}. Error: ${e}`,
       );
     }
   }
@@ -77,13 +77,13 @@ export class Nep17Contract {
     if (this._name) return this._name;
     try {
       const response = await this.rpcClient.getContractState(
-        this.contractHash.toString()
+        this.contractHash.toString(),
       );
       this._name = response.manifest.name as string;
       return this._name;
     } catch (e) {
       throw new Error(
-        `Failed to get name for contract: ${this.contractHash.toString()}. Error: ${e}`
+        `Failed to get name for contract: ${this.contractHash.toString()}. Error: ${e}`,
       );
     }
   }
@@ -97,7 +97,7 @@ export class Nep17Contract {
     try {
       const response = await this.rpcClient.invokeFunction(
         this.contractHash.toString(),
-        "symbol"
+        "symbol",
       );
       if (response.state === "FAULT") {
         throw Error;
@@ -107,7 +107,7 @@ export class Nep17Contract {
       return this._symbol;
     } catch (e) {
       throw new Error(
-        `Failed to get symbol for contract: ${this.contractHash.toString()}. Error: ${e}`
+        `Failed to get symbol for contract: ${this.contractHash.toString()}. Error: ${e}`,
       );
     }
   }
@@ -122,7 +122,7 @@ export class Nep17Contract {
     try {
       const response = await this.rpcClient.invokeFunction(
         this.contractHash.toString(),
-        "totalSupply"
+        "totalSupply",
       );
       if (response.state === "FAULT") {
         throw Error;
@@ -130,7 +130,7 @@ export class Nep17Contract {
       return parseInt(response.stack[0].value as string);
     } catch (e) {
       throw new Error(
-        `Failed to get total supply for contract: ${this.contractHash.toString()}. Error: ${e}`
+        `Failed to get total supply for contract: ${this.contractHash.toString()}. Error: ${e}`,
       );
     }
   }
@@ -144,7 +144,7 @@ export class Nep17Contract {
   public async transfer(
     from: string,
     to: string,
-    amount: number
+    amount: number,
   ): Promise<string> {
     if (!wallet.isAddress(from)) {
       throw new Error("From address is not a valid NEO address");
@@ -160,7 +160,7 @@ export class Nep17Contract {
       this.config.account.address != from
     ) {
       throw new Error(
-        "Invalid account or account address does not match 'from' address"
+        "Invalid account or account address does not match 'from' address",
       );
     }
     const balance = await this.balanceOf(from);
@@ -186,7 +186,7 @@ export class Nep17Contract {
     await setBlockExpiry(
       transaction,
       this.config,
-      this.config.blocksTillExpiry
+      this.config.blocksTillExpiry,
     );
 
     // add a sender
@@ -222,7 +222,7 @@ export class NEOContract extends Nep17Contract {
   public async transfer(
     from: string,
     to: string,
-    amount: number
+    amount: number,
   ): Promise<string> {
     if (!Number.isInteger(amount)) {
       throw new Error("Amount must be an integer");

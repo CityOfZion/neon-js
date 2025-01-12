@@ -86,9 +86,9 @@ export class Wallet {
     try {
       const address = acct.address;
       log.info(`Added Account: ${address} to Wallet ${this.name}`);
-    } catch (err) {
+    } catch {
       log.warn(
-        `Encrypted account added to Wallet ${this.name}. You will not be able to export this wallet without first decrypting this account`
+        `Encrypted account added to Wallet ${this.name}. You will not be able to export this wallet without first decrypting this account`,
       );
     }
     return index;
@@ -106,7 +106,7 @@ export class Wallet {
     }
     if (index >= this.accounts.length) {
       throw new Error(
-        `Index cannot larger than Accounts array! index: ${index}`
+        `Index cannot larger than Accounts array! index: ${index}`,
       );
     }
     await this.accounts[index].decrypt(keyphrase, this.scrypt);
@@ -119,7 +119,7 @@ export class Wallet {
    */
   public decryptAll(keyphrase: string): Promise<boolean[]> {
     return Promise.all(
-      this.accounts.map((acct, i) => this.decrypt(i, keyphrase))
+      this.accounts.map((acct, i) => this.decrypt(i, keyphrase)),
     );
   }
 
@@ -147,7 +147,7 @@ export class Wallet {
    */
   public encryptAll(keyphrase: string): Promise<boolean[]> {
     return Promise.all(
-      this.accounts.map((acct, i) => this.encrypt(i, keyphrase))
+      this.accounts.map((acct, i) => this.encrypt(i, keyphrase)),
     );
   }
 
@@ -172,7 +172,7 @@ export class Wallet {
       this.accounts[i].isDefault = i === index;
     }
     log.info(
-      `Set Account: ${this.accounts[index]} as default for Wallet ${this.name}`
+      `Set Account: ${this.accounts[index]} as default for Wallet ${this.name}`,
     );
     return this;
   }

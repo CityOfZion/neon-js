@@ -5,8 +5,8 @@ import SHA256 from "crypto-js/sha256";
 function hash(
   hex: string,
   hashingFunction: (
-    i: CryptoJS.lib.WordArray | string
-  ) => CryptoJS.lib.WordArray
+    i: CryptoJS.lib.WordArray | string,
+  ) => CryptoJS.lib.WordArray,
 ): string {
   const hexEncoded = hexEncoding.parse(hex);
   const result = hashingFunction(hexEncoded);

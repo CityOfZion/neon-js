@@ -63,7 +63,7 @@ export class MethodToken {
     const method = hexstring2str(reader.readVarBytes());
     if (method.startsWith("_"))
       throw new Error(
-        "MethodToken deserialization failure - method cannot start with '_'"
+        "MethodToken deserialization failure - method cannot start with '_'",
       );
     const parametersCount = Buffer.from(reader.read(2), "hex").readUInt16LE();
     const hasReturnValue = reader.read(1) !== "00";

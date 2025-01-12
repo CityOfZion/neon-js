@@ -31,7 +31,7 @@ export class NeoContract extends Nep17Contract {
     return this.call(
       "unclaimedGas",
       ContractParam.hash160(address),
-      ContractParam.integer(end)
+      ContractParam.integer(end),
     );
   }
 
@@ -51,7 +51,7 @@ export class NeoContract extends Nep17Contract {
     return this.call(
       "vote",
       ContractParam.hash160(address),
-      ContractParam.publicKey(voteTo)
+      ContractParam.publicKey(voteTo),
     );
   }
 }

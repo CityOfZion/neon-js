@@ -33,7 +33,7 @@ describe("prettyPrint", () => {
 
   test("custom padding", () => {
     const result = OpToken.fromScript("210c0500000000014101020304").map((t) =>
-      t.prettyPrint(8)
+      t.prettyPrint(8),
     );
 
     expect(result).toEqual([
@@ -58,7 +58,7 @@ const scriptAndOpCodes = [
     [
       new OpToken(
         OpCode.PUSHINT256,
-        "faffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        "faffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
       ),
     ],
   ],
@@ -85,20 +85,20 @@ const scriptAndOpCodes = [
       new OpToken(OpCode.PUSH2),
       new OpToken(
         OpCode.PUSHDATA1,
-        "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef"
+        "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
       ),
       new OpToken(
         OpCode.PUSHDATA1,
-        "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9"
+        "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
       ),
       new OpToken(
         OpCode.PUSHDATA1,
-        "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa"
+        "02232ce8d2e2063dce0451131851d47421bfc4fc1da4db116fca5302c0756462fa",
       ),
       new OpToken(OpCode.PUSH3),
       new OpToken(
         OpCode.SYSCALL,
-        InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG
+        InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG,
       ),
     ],
   ],
@@ -111,7 +111,7 @@ describe("fromScript", () => {
       const result = OpToken.fromScript(script);
 
       expect(result).toEqual(expect.arrayContaining(tokens));
-    }
+    },
   );
 });
 
@@ -122,7 +122,7 @@ describe("toScript", () => {
       const result = tokens.reduce((r, t) => r + t.toScript(), "");
 
       expect(result).toEqual(script);
-    }
+    },
   );
 
   test("throws on incorrectly sized OpToken (operandSize)", () => {
@@ -154,7 +154,7 @@ describe("parseInt", () => {
       -6,
       new OpToken(
         OpCode.PUSHINT256,
-        "faffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        "faffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
       ),
     ],
   ])("%d", (expected: number, input: OpToken) => {

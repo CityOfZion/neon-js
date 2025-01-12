@@ -10,8 +10,8 @@ export interface RpcConfig {
   timeout?: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
-export type GConstructor<T = {}> = new (...args: any[]) => T;
+// eslint-disable-next-line
+export type GConstructor<T = object> = new (...args: any[]) => T;
 export type RpcDispatcherMixin = GConstructor<RpcDispatcher>;
 
 /**
@@ -24,7 +24,7 @@ export type RpcDispatcherMixin = GConstructor<RpcDispatcher>;
 export async function sendQuery<TResponse>(
   url: string,
   query: Query<JsonRpcParams, TResponse>,
-  config: RpcConfig = {}
+  config: RpcConfig = {},
 ): Promise<RPCResponse<TResponse>> {
   log.info(`RPC: ${url} executing Query[${query.method}]`);
   const fetchConfig = _createFetchReq(query.export(), config);
@@ -34,7 +34,7 @@ export async function sendQuery<TResponse>(
     return response.json();
   }
   throw new Error(
-    `Encountered HTTP code ${response.status} while executing Query[${query.method}]`
+    `Encountered HTTP code ${response.status} while executing Query[${query.method}]`,
   );
 }
 
@@ -49,11 +49,11 @@ export async function sendQuery<TResponse>(
 export async function sendQueryList(
   url: string,
   batch: Query<JsonRpcParams, unknown>[],
-  config: RpcConfig = {}
+  config: RpcConfig = {},
 ): Promise<RPCResponse<unknown>[]> {
   const fetchConfig = _createFetchReq(
     batch.map((q) => q.export()),
-    config
+    config,
   );
 
   const response = await fetch(url, fetchConfig);
@@ -64,7 +64,7 @@ export async function sendQueryList(
   throw new Error(
     `Encountered HTTP code ${response.status} while executing Query[${batch
       .map((q) => q.method)
-      .join(",")}]`
+      .join(",")}]`,
   );
 }
 
@@ -103,7 +103,7 @@ export class RpcDispatcher {
   public constructor(url: string) {
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
       throw new Error(
-        "Please provide an url that starts with http:// or https://"
+        "Please provide an url that starts with http:// or https://",
       );
     }
     this.url = url;
@@ -114,7 +114,7 @@ export class RpcDispatcher {
    */
   public async execute<TResponse>(
     query: Query<JsonRpcParams, TResponse>,
-    config?: RpcConfig
+    config?: RpcConfig,
   ): Promise<TResponse> {
     const rpcResponse = await sendQuery(this.url, query, config ?? {});
     if (rpcResponse.error) {
@@ -152,22 +152,22 @@ export class RpcDispatcher {
    */
   public async executeAll<TResponses extends unknown[]>(
     batchQuery: BatchQuery<JsonRpcParams[], TResponses>,
-    config?: RpcConfig
+    config?: RpcConfig,
   ): Promise<TResponses>;
   public async executeAll<TResponses extends unknown[]>(
     batchQuery: Query<JsonRpcParams, unknown>[],
-    config?: RpcConfig
+    config?: RpcConfig,
   ): Promise<TResponses>;
   public async executeAll<TResponses extends unknown[]>(
     batchQuery:
       | BatchQuery<JsonRpcParams[], TResponses>
       | Query<JsonRpcParams, unknown>[],
-    config?: RpcConfig
+    config?: RpcConfig,
   ): Promise<TResponses> {
     const responses = await sendQueryList(
       this.url,
       Array.isArray(batchQuery) ? batchQuery : batchQuery.queries,
-      config ?? {}
+      config ?? {},
     );
     if (responses.some((r) => r.error)) {
       const allErrs: Record<string, RPCErrorResponse> = {};

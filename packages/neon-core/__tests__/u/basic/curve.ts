@@ -53,15 +53,15 @@ describe("EllipticCurve", () => {
       (
         privateKey: string,
         unencodedPublicKey: string,
-        encodedPublicKey: string
+        encodedPublicKey: string,
       ) => {
         expect(curve.getPublicKey(privateKey, false)).toBe(
-          unencodedPublicKey.toLowerCase()
+          unencodedPublicKey.toLowerCase(),
         );
         expect(curve.getPublicKey(privateKey)).toBe(
-          encodedPublicKey.toLowerCase()
+          encodedPublicKey.toLowerCase(),
         );
-      }
+      },
     );
 
     test.each(curveData)(
@@ -69,12 +69,12 @@ describe("EllipticCurve", () => {
       (
         _unused: string,
         unencodedPublicKey: string,
-        encodedPublicKey: string
+        encodedPublicKey: string,
       ) => {
         expect(curve.decodePublicKey(encodedPublicKey)).toBe(
-          unencodedPublicKey.toLowerCase()
+          unencodedPublicKey.toLowerCase(),
         );
-      }
+      },
     );
 
     describe("signing", () => {
@@ -105,17 +105,17 @@ describe("EllipticCurve", () => {
 
       test("k <=0 throws error", () => {
         expect(() => curve.sign(msg, privateKey, -1)).toThrowError(
-          "k must be a positive number"
+          "k must be a positive number",
         );
         expect(() => curve.sign(msg, privateKey, 0)).toThrowError(
-          "k must be a positive number"
+          "k must be a positive number",
         );
       });
 
       test("k >= n throws error", () => {
         const largerThanN = "f".repeat(64);
         expect(() => curve.sign(msg, privateKey, largerThanN)).toThrowError(
-          "k must be smaller"
+          "k must be smaller",
         );
       });
     });

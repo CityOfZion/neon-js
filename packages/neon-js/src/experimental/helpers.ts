@@ -14,11 +14,11 @@ import { smartCalculateNetworkFee } from "@cityofzion/neon-api";
 export async function calculateNetworkFee(
   transaction: tx.Transaction,
   account: wallet.Account,
-  config: CommonConfig
+  config: CommonConfig,
 ): Promise<u.BigInteger> {
   if (transaction.signers.length < 1) {
     throw new Error(
-      "Cannot calculate the network fee without a sender in the transaction."
+      "Cannot calculate the network fee without a sender in the transaction.",
     );
   }
 
@@ -36,7 +36,7 @@ export async function calculateNetworkFee(
   try {
     const response = await rpcClient.invokeFunction(
       CONST.NATIVE_CONTRACT_HASH.PolicyContract,
-      "getExecFeeFactor"
+      "getExecFeeFactor",
     );
     if (response.state === "FAULT") {
       throw Error;
@@ -44,7 +44,7 @@ export async function calculateNetworkFee(
     execFeeFactor = parseInt(response.stack[0].value as string);
   } catch (e) {
     throw new Error(
-      `Failed to get 'Execution Fee factor' from Policy contract. Error: ${e}`
+      `Failed to get 'Execution Fee factor' from Policy contract. Error: ${e}`,
     );
   }
 
@@ -69,7 +69,7 @@ export async function calculateNetworkFee(
       // then execute the script with a verification trigger (not yet supported)
       // and collect the gas consumed
       throw new Error(
-        "Using a smart contract as a witness is not yet supported in neon-js"
+        "Using a smart contract as a witness is not yet supported in neon-js",
       );
     else if (sc.isSignatureContract(witnessScript)) {
       networkFeeSize += 67 + u.getSerializedSize(witnessScript);
@@ -78,14 +78,14 @@ export async function calculateNetworkFee(
         (sc.OpCodePrices[sc.OpCode.PUSHDATA1] * 2 +
           sc.OpCodePrices[sc.OpCode.SYSCALL] +
           sc.getInteropServicePrice(
-            sc.InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG
+            sc.InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG,
           ));
     } else if (sc.isMultisigContract(witnessScript)) {
       const publicKeyCount = wallet.getPublicKeysFromVerificationScript(
-        witnessScript.toString()
+        witnessScript.toString(),
       ).length;
       const signatureCount = wallet.getSigningThresholdFromVerificationScript(
-        witnessScript.toString()
+        witnessScript.toString(),
       );
       const invocationScriptSize = 66 * signatureCount;
       networkFeeSize +=
@@ -97,7 +97,7 @@ export async function calculateNetworkFee(
 
       const builder = new sc.ScriptBuilder();
       let pushOpcode = sc.fromHex(
-        builder.emitPush(signatureCount).build().slice(0, 2)
+        builder.emitPush(signatureCount).build().slice(0, 2),
       );
       // price for pushing the signature count
       networkFee += execFeeFactor * sc.OpCodePrices[pushOpcode];
@@ -105,14 +105,14 @@ export async function calculateNetworkFee(
       // now do the same for the public keys
       builder.reset();
       pushOpcode = sc.fromHex(
-        builder.emitPush(publicKeyCount).build().slice(0, 2)
+        builder.emitPush(publicKeyCount).build().slice(0, 2),
       );
       // price for pushing the public key count
       networkFee += execFeeFactor * sc.OpCodePrices[pushOpcode];
       networkFee +=
         execFeeFactor *
         (sc.getInteropServicePrice(
-          sc.InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG
+          sc.InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG,
         ) *
           publicKeyCount);
     }
@@ -122,18 +122,18 @@ export async function calculateNetworkFee(
   try {
     const response = await rpcClient.invokeFunction(
       CONST.NATIVE_CONTRACT_HASH.PolicyContract,
-      "getFeePerByte"
+      "getFeePerByte",
     );
     if (response.state === "FAULT") {
       throw Error;
     }
     const nativeContractPolicyFeePerByte = parseInt(
-      response.stack[0].value as string
+      response.stack[0].value as string,
     );
     networkFee += networkFeeSize * nativeContractPolicyFeePerByte;
   } catch (e) {
     throw new Error(
-      `Failed to get 'fee per byte' from Policy contract. Error: ${e}`
+      `Failed to get 'fee per byte' from Policy contract. Error: ${e}`,
     );
   }
 
@@ -149,14 +149,14 @@ export async function calculateNetworkFee(
 export async function getSystemFee(
   script: u.HexString,
   config: CommonConfig,
-  signers?: tx.Signer[]
+  signers?: tx.Signer[],
 ): Promise<u.BigInteger> {
   const rpcClient = new rpc.RPCClient(config.rpcAddress);
   try {
     const response = await rpcClient.invokeScript(script, signers);
     if (response.state === "FAULT") {
       throw Error(
-        `Script execution failed. ExecutionEngine state = FAULT. ${response.exception}`
+        `Script execution failed. ExecutionEngine state = FAULT. ${response.exception}`,
       );
     }
     return u.BigInteger.fromDecimal(response.gasconsumed, 0);
@@ -178,7 +178,7 @@ export async function getSystemFee(
 export async function setBlockExpiry(
   transaction: tx.Transaction,
   config: CommonConfig,
-  blocksTillExpiry?: number
+  blocksTillExpiry?: number,
 ): Promise<void> {
   let blockLifeSpan = tx.Transaction.MAX_TRANSACTION_LIFESPAN;
   if (
@@ -205,11 +205,11 @@ export async function setBlockExpiry(
  */
 export async function addFees(
   transaction: tx.Transaction,
-  config: CommonConfig
+  config: CommonConfig,
 ): Promise<void> {
   if (config.networkFeeOverride && config.prioritisationFee) {
     throw new Error(
-      "networkFeeOverride and prioritisationFee are mutually exclusive"
+      "networkFeeOverride and prioritisationFee are mutually exclusive",
     );
   }
 
@@ -219,13 +219,13 @@ export async function addFees(
     transaction.systemFee = await getSystemFee(
       transaction.script,
       config,
-      transaction.signers
+      transaction.signers,
     );
   }
 
   if (config.account === undefined)
     throw new Error(
-      "Cannot determine network fee and validate balances without an account in your config"
+      "Cannot determine network fee and validate balances without an account in your config",
     );
 
   if (config.networkFeeOverride) {
@@ -239,9 +239,9 @@ export async function addFees(
         new tx.Witness({
           invocationScript: "",
           verificationScript: u.HexString.fromBase64(
-            config.account.contract.script
+            config.account.contract.script,
           ).toString(),
-        })
+        }),
       );
     }
     transaction.networkFee = await smartCalculateNetworkFee(txClone, rpcClient);
@@ -249,18 +249,18 @@ export async function addFees(
 
   if (config.prioritisationFee) {
     transaction.networkFee = transaction.networkFee.add(
-      u.BigInteger.fromNumber(config.prioritisationFee)
+      u.BigInteger.fromNumber(config.prioritisationFee),
     );
   }
 
   const GAS = new GASContract(config);
   const gasBalance = await GAS.balanceOf(config.account.address);
   const requiredGAS = parseFloat(
-    transaction.systemFee.add(transaction.networkFee).toDecimal(8)
+    transaction.systemFee.add(transaction.networkFee).toDecimal(8),
   );
   if (gasBalance < requiredGAS) {
     throw new Error(
-      `Insufficient GAS. Required: ${requiredGAS} Available: ${gasBalance}`
+      `Insufficient GAS. Required: ${requiredGAS} Available: ${gasBalance}`,
     );
   }
 }
@@ -274,7 +274,7 @@ export async function addFees(
 export async function deployContract(
   nef: sc.NEF,
   manifest: sc.ContractManifest,
-  config: CommonConfig
+  config: CommonConfig,
 ): Promise<string> {
   const builder = new sc.ScriptBuilder();
   builder.emitContractCall({
@@ -317,7 +317,7 @@ export async function deployContract(
 export function getContractHash(
   sender: u.HexString,
   nefChecksum: number,
-  contractName: string
+  contractName: string,
 ): string {
   const assembledScript = new sc.ScriptBuilder()
     .emit(sc.OpCode.ABORT)

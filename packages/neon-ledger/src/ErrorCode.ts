@@ -36,7 +36,7 @@ export interface TransportStatusError extends Error {
 }
 
 export function looksLikeTransportStatusError(
-  err: unknown
+  err: unknown,
 ): err is TransportStatusError {
   return (err as TransportStatusError).statusCode != undefined;
 }
@@ -61,7 +61,7 @@ export function evalTransportError(err: Error): Error {
       break;
     default:
       transportErr.message = `Unknown status 0x${transportErr.statusCode.toString(
-        16
+        16,
       )}`;
   }
   return err;

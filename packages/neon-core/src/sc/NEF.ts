@@ -88,7 +88,7 @@ export class NEF {
     const sourceSize = reader.readVarInt();
     if (sourceSize > 256)
       throw new Error(
-        "NEF deserialization failure - source field size exceeds maximum length of 256"
+        "NEF deserialization failure - source field size exceeds maximum length of 256",
       );
     const source = Buffer.from(reader.read(sourceSize), "hex").toString();
 
@@ -98,7 +98,7 @@ export class NEF {
     const tokenLength = reader.readVarInt();
     if (tokenLength > 128)
       throw new Error(
-        "NEF deserialization failure - token array exceeds maximum length of 128"
+        "NEF deserialization failure - token array exceeds maximum length of 128",
       );
     const tokens = [];
     for (let i = 0; i < tokenLength; i++) {
@@ -113,7 +113,7 @@ export class NEF {
       throw new Error("NEF deserialization failure - script length can't be 0");
     if (scriptLength > this.MAX_SCRIPT_LENGTH)
       throw new Error(
-        "NEF deserialization failure - max script length exceeded"
+        "NEF deserialization failure - max script length exceeded",
       );
     const script = reader.read(scriptLength);
 

@@ -20,7 +20,7 @@ export class TransactionBuilder {
   public addGasClaim(account: wallet.Account): TransactionBuilder {
     const address = account.address;
     return this.addContractCall(
-      sc.NeoContract.INSTANCE.transfer(address, address, 0)
+      sc.NeoContract.INSTANCE.transfer(address, address, 0),
     ).addBasicSignatureField(account);
   }
 
@@ -35,12 +35,12 @@ export class TransactionBuilder {
     account: wallet.Account,
     destination: string,
     tokenScriptHash: string,
-    amt: number | string | u.BigInteger
+    amt: number | string | u.BigInteger,
   ): TransactionBuilder {
     const address = account.address;
     const contract = new sc.Nep17Contract(tokenScriptHash);
     return this.addContractCall(
-      contract.transfer(address, destination, amt)
+      contract.transfer(address, destination, amt),
     ).addBasicSignatureField(account);
   }
 
@@ -51,12 +51,12 @@ export class TransactionBuilder {
    */
   public addVote(
     account: wallet.Account,
-    candidatePublicKey: string
+    candidatePublicKey: string,
   ): TransactionBuilder {
     const address = account.address;
 
     return this.addContractCall(
-      sc.NeoContract.INSTANCE.vote(address, candidatePublicKey)
+      sc.NeoContract.INSTANCE.vote(address, candidatePublicKey),
     ).addBasicSignatureField(account);
   }
 
@@ -80,7 +80,7 @@ export class TransactionBuilder {
    */
   public setFeeAccount(account: wallet.Account): this {
     const ind = this.signers.findIndex((s) =>
-      s.account.equals(account.scriptHash)
+      s.account.equals(account.scriptHash),
     );
 
     // Signer exists. We shift it to first in array to become the sender.
@@ -93,7 +93,7 @@ export class TransactionBuilder {
         new tx.Signer({
           account: account.scriptHash,
           scopes: tx.WitnessScope.None,
-        })
+        }),
       );
       return this.addEmptyWitness(account);
     }
@@ -108,7 +108,7 @@ export class TransactionBuilder {
   public addSigners(...signers: tx.SignerLike[]): this {
     for (const newSigner of signers) {
       const ind = this.signers.findIndex((s) =>
-        s.account.equals(newSigner.account)
+        s.account.equals(newSigner.account),
       );
       if (ind !== -1) {
         this.signers[ind].merge(newSigner);
@@ -141,14 +141,14 @@ export class TransactionBuilder {
     const verificationScript = u.HexString.fromBase64(account.contract.script);
     if (
       !this.witnesses.some((w) =>
-        w.verificationScript.equals(verificationScript)
+        w.verificationScript.equals(verificationScript),
       )
     ) {
       this.witnesses.push(
         new tx.Witness({
           verificationScript,
           invocationScript: u.HexString.fromHex(""),
-        })
+        }),
       );
     }
     return this;
@@ -182,7 +182,7 @@ export class TransactionBuilder {
             typeof cc === "string"
               ? sb.appendScript(cc)
               : sb.emitContractCall(cc),
-          new sc.ScriptBuilder()
+          new sc.ScriptBuilder(),
         )
         .build(),
       witnesses: this.witnesses,

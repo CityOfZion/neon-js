@@ -5,7 +5,7 @@ const scriptHash = "cc5e4edd9f5f8dba8bb65734541df7a1c081c67b";
 
 test("scriptHash", () => {
   expect(contract.scriptHash).toEqual(
-    "cc5e4edd9f5f8dba8bb65734541df7a1c081c67b"
+    "cc5e4edd9f5f8dba8bb65734541df7a1c081c67b",
   );
 });
 

@@ -66,13 +66,13 @@ export class Witness implements NeonObject<WitnessLike> {
   public static buildMultiSig(
     tx: string,
     sigs: (string | Witness)[],
-    acctOrVerificationScript: Account | string
+    acctOrVerificationScript: Account | string,
   ): Witness {
     const verificationScript =
       typeof acctOrVerificationScript === "string"
         ? acctOrVerificationScript
         : HexString.fromBase64(
-            acctOrVerificationScript.contract.script
+            acctOrVerificationScript.contract.script,
           ).toBigEndian();
 
     const publicKeys = getPublicKeysFromVerificationScript(verificationScript);
@@ -80,7 +80,7 @@ export class Witness implements NeonObject<WitnessLike> {
     sigs.forEach((element) => {
       if (typeof element === "string") {
         const position = publicKeys.findIndex((key) =>
-          verify(tx, element, key)
+          verify(tx, element, key),
         );
         if (position === -1) {
           throw new Error(`Invalid signature given: ${element}`);
@@ -88,14 +88,14 @@ export class Witness implements NeonObject<WitnessLike> {
         orderedSigs[position] = element;
       } else if (element instanceof Witness) {
         const keys = getPublicKeysFromVerificationScript(
-          element.verificationScript.toBigEndian()
+          element.verificationScript.toBigEndian(),
         );
         if (keys.length !== 1) {
           throw new Error("Given witness contains more than 1 public key!");
         }
         const position = publicKeys.indexOf(keys[0]);
         orderedSigs[position] = getSignaturesFromInvocationScript(
-          element.invocationScript.toBigEndian()
+          element.invocationScript.toBigEndian(),
         )[0];
       } else {
         throw new Error("Unable to process given signature");
@@ -106,7 +106,7 @@ export class Witness implements NeonObject<WitnessLike> {
     const validSigs = orderedSigs.filter((s) => s !== "");
     if (validSigs.length < signingThreshold) {
       throw new Error(
-        `Insufficient signatures: expected ${signingThreshold} but got ${validSigs.length} instead`
+        `Insufficient signatures: expected ${signingThreshold} but got ${validSigs.length} instead`,
       );
     }
     return new Witness({
@@ -124,14 +124,14 @@ export class Witness implements NeonObject<WitnessLike> {
   #scriptHash = "";
 
   public constructor(
-    obj: Partial<Pick<WitnessLike | Witness, keyof WitnessLike>> = {}
+    obj: Partial<Pick<WitnessLike | Witness, keyof WitnessLike>> = {},
   ) {
     if (
       typeof obj.invocationScript === "undefined" ||
       typeof obj.verificationScript === "undefined"
     ) {
       throw new Error(
-        "Witness requires invocationScript and verificationScript fields"
+        "Witness requires invocationScript and verificationScript fields",
       );
     }
     this.invocationScript = HexString.fromHex(obj.invocationScript);
@@ -152,12 +152,12 @@ export class Witness implements NeonObject<WitnessLike> {
       return this.#scriptHash;
     } else if (this.verificationScript) {
       this.#scriptHash = reverseHex(
-        hash160(this.verificationScript.toBigEndian())
+        hash160(this.verificationScript.toBigEndian()),
       );
       return this.#scriptHash;
     } else {
       throw new Error(
-        "Unable to produce scriptHash from empty verificationScript"
+        "Unable to produce scriptHash from empty verificationScript",
       );
     }
   }
@@ -196,7 +196,7 @@ export class Witness implements NeonObject<WitnessLike> {
 
   private generateScriptHash(): void {
     this.#scriptHash = reverseHex(
-      hash160(this.verificationScript.toBigEndian())
+      hash160(this.verificationScript.toBigEndian()),
     );
   }
 }

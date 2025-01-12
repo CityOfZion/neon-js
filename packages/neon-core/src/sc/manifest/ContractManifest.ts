@@ -76,7 +76,7 @@ export class ContractManifest {
     this.supportedStandards = supportedStandards;
     this.abi = new ContractAbi(abi);
     this.permissions = permissions.map(
-      (permission) => new ContractPermission(permission)
+      (permission) => new ContractPermission(permission),
     );
     this.trusts = Array.isArray(trusts)
       ? trusts.map((t) => ContractPermission.parseJsonDescriptor(t))

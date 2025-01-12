@@ -13,14 +13,14 @@ export function hexXor(str1: string, str2: string): string {
   ensureHex(str2);
   if (str1.length !== str2.length) {
     throw new Error(
-      `strings are disparate lengths. Inputs are of length ${str1.length} and ${str2.length}`
+      `strings are disparate lengths. Inputs are of length ${str1.length} and ${str2.length}`,
     );
   }
   const result = [];
   for (let i = 0; i < str1.length; i += 2) {
     result.push(
       // tslint:disable-next-line:no-bitwise
-      parseInt(str1.substr(i, 2), 16) ^ parseInt(str2.substr(i, 2), 16)
+      parseInt(str1.substr(i, 2), 16) ^ parseInt(str2.substr(i, 2), 16),
     );
   }
   return ab2hexstring(result);
