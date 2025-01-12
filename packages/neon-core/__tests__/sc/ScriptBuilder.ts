@@ -44,7 +44,7 @@ describe("emitSysCall", () => {
       .emitSysCall(
         InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG,
         HexString.fromHex("a45f"),
-        HexString.fromHex("2bc5")
+        HexString.fromHex("2bc5"),
       )
       .build();
     expect(result).toBe("0c02c52b0c025fa4419ed0dc3a");
@@ -81,7 +81,7 @@ describe("emitContractCall", () => {
     (_msg: string, data: ContractCallJson, expected: string) => {
       const result = new ScriptBuilder().emitContractCall(data).build();
       expect(result).toBe(expected);
-    }
+    },
   );
 });
 
@@ -116,11 +116,11 @@ describe("emitPush", () => {
     (
       _msg: string,
       data: ContractParam | string | number | boolean,
-      expected: string
+      expected: string,
     ) => {
       const result = new ScriptBuilder().emitPush(data).build();
       expect(result).toBe(expected);
-    }
+    },
   );
 });
 
@@ -215,7 +215,7 @@ describe("emitContractParam", () => {
     [
       "ContractParam(byteArray)",
       ContractParam.byteArray(
-        HexString.fromHex("5461c33e9bbc7de7076754540ba9e62b255ea9fc")
+        HexString.fromHex("5461c33e9bbc7de7076754540ba9e62b255ea9fc"),
       ),
       "0c14fca95e252be6a90b54546707e77dbc9b3ec36154",
     ],

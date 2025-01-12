@@ -20,7 +20,7 @@ export class ContractEventDefiniton {
   public parameters: ContractParameterDefinition[];
 
   public static fromJson(
-    json: ContractEventDefinitionJson
+    json: ContractEventDefinitionJson,
   ): ContractEventDefiniton {
     return new ContractEventDefiniton({
       name: json.name,

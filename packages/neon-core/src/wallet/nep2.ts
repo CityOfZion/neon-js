@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * NEP2 - Private Key Encryption based on AES.
  * This encrypts your private key with a passphrase, protecting your private key from being stolen and used.
@@ -52,14 +51,12 @@ async function createNep2Key(
   privateKey: string,
   keyphrase: string,
   address: string,
-  scryptParams: ScryptParams
+  scryptParams: ScryptParams,
 ): Promise<string> {
   const { n, r, p } = scryptParams;
   // SHA Salt (use the first 4 bytes)
   const firstSha = SHA256(enc.Latin1.parse(address));
-  const addressHash = SHA256(firstSha as any)
-    .toString()
-    .slice(0, 8);
+  const addressHash = SHA256(firstSha).toString().slice(0, 8);
 
   const key = await scrypt(
     Buffer.from(keyphrase.normalize("NFC"), "utf8"),
@@ -79,7 +76,7 @@ async function createNep2Key(
   const encrypted = AES.encrypt(
     enc.Hex.parse(xor),
     enc.Hex.parse(derived2),
-    AES_OPTIONS
+    AES_OPTIONS,
   );
   const assembled =
     NEP2_HEADER + NEP2_FLAG + addressHash + encrypted.ciphertext.toString();
@@ -92,11 +89,11 @@ async function createNep2Key(
 
 function getAddressFromPrivateKey(
   privateKey: string,
-  addressVersion: number
+  addressVersion: number,
 ): string {
   return getAddressFromScriptHash(
     getScriptHashFromPublicKey(getPublicKeyFromPrivateKey(privateKey)),
-    addressVersion
+    addressVersion,
   );
 }
 
@@ -106,7 +103,7 @@ function getNeo2AddressFromPrivateKey(privateKey: string): string {
   const scriptHash = hash160(verificationScript);
   const shaChecksum = hash256(NEO2_ADDRESS_VERSION + scriptHash).substr(0, 8);
   return base58.encode(
-    Buffer.from(NEO2_ADDRESS_VERSION + scriptHash + shaChecksum, "hex")
+    Buffer.from(NEO2_ADDRESS_VERSION + scriptHash + shaChecksum, "hex"),
   );
 }
 
@@ -121,7 +118,7 @@ export function encrypt(
   wifKey: string,
   keyphrase: string,
   scryptParams: ScryptParams = DEFAULT_SCRYPT,
-  addressVersion = DEFAULT_ADDRESS_VERSION
+  addressVersion = DEFAULT_ADDRESS_VERSION,
 ): Promise<string> {
   const privateKey = isWIF(wifKey) ? getPrivateKeyFromWIF(wifKey) : wifKey;
   const address = getAddressFromPrivateKey(privateKey, addressVersion);
@@ -130,7 +127,7 @@ export function encrypt(
     privateKey,
     keyphrase,
     address,
-    scryptParams
+    scryptParams,
   );
 }
 
@@ -138,13 +135,13 @@ async function decipherNep2Key(
   encryptedKey: string,
   keyphrase: string,
   generateAddress: (privatekey: string) => string,
-  scryptParams: ScryptParams
+  scryptParams: ScryptParams,
 ): Promise<string> {
   const { n, r, p } = scryptParams;
   const assembledWithChecksum = ab2hexstring(base58.decode(encryptedKey));
   const assembled = assembledWithChecksum.substr(
     0,
-    assembledWithChecksum.length - 8
+    assembledWithChecksum.length - 8,
   );
   const checksum = assembledWithChecksum.substr(-8);
   if (hash256(assembled).substr(0, 8) !== checksum) {
@@ -172,11 +169,11 @@ async function decipherNep2Key(
   const decrypted = AES.decrypt(
     ciphertext,
     enc.Hex.parse(derived2),
-    AES_OPTIONS
+    AES_OPTIONS,
   );
   const privateKey = hexXor(decrypted.toString(), derived1);
   const address = generateAddress(privateKey);
-  const newAddressHash = SHA256(SHA256(enc.Latin1.parse(address)) as any)
+  const newAddressHash = SHA256(SHA256(enc.Latin1.parse(address)))
     .toString()
     .slice(0, 8);
   if (addressHash !== newAddressHash) {
@@ -197,13 +194,13 @@ export async function decrypt(
   encryptedKey: string,
   keyphrase: string,
   scryptParams: ScryptParams = DEFAULT_SCRYPT,
-  addressVersion = DEFAULT_ADDRESS_VERSION
+  addressVersion = DEFAULT_ADDRESS_VERSION,
 ): Promise<string> {
   const privateKey = await decipherNep2Key(
     encryptedKey,
     keyphrase,
     (privateKey) => getAddressFromPrivateKey(privateKey, addressVersion),
-    scryptParams
+    scryptParams,
   );
   return getWIFFromPrivateKey(privateKey);
 }
@@ -211,13 +208,13 @@ export async function decrypt(
 export async function decryptNeo2(
   encryptedKey: string,
   keyphrase: string,
-  scryptParams: ScryptParams = DEFAULT_SCRYPT
+  scryptParams: ScryptParams = DEFAULT_SCRYPT,
 ): Promise<string> {
   const privateKey = await decipherNep2Key(
     encryptedKey,
     keyphrase,
     getNeo2AddressFromPrivateKey,
-    scryptParams
+    scryptParams,
   );
   return getWIFFromPrivateKey(privateKey);
 }

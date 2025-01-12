@@ -6,7 +6,7 @@ const hexRegex = /^([0-9A-Fa-f]{2})*$/;
 export function isHex(str: string): boolean {
   try {
     return hexRegex.test(str);
-  } catch (err) {
+  } catch {
     return false;
   }
 }

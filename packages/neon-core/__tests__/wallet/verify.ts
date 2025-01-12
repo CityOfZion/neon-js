@@ -13,7 +13,7 @@ describe("Verify: Valid", () => {
     "NEP2: %s",
     (i: string) => {
       expect(verify.isNEP2(i)).toBeTruthy();
-    }
+    },
   );
 
   test.each([
@@ -57,19 +57,19 @@ describe("Verify: Valid", () => {
 
   test("Able to validate addresses with custom version", () => {
     expect(
-      verify.isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW", 23)
+      verify.isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW", 23),
     ).toBeTruthy();
     expect(
-      verify.isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM", 53)
+      verify.isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM", 53),
     ).toBeTruthy();
   });
 
   test("Address with wrong version returns false", () => {
     expect(
-      verify.isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW", 53)
+      verify.isAddress("ALq7AWrhAueN6mJNqk6FHJjnsEoPRytLdW", 53),
     ).toBeFalsy();
     expect(
-      verify.isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM", 23)
+      verify.isAddress("NQ9NEvVrutLL6JDtUMKMrkEG6QpWNxgNBM", 23),
     ).toBeFalsy();
   });
 });

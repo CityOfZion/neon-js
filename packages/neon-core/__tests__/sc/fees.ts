@@ -18,7 +18,7 @@ describe("calculateExecutionFees", () => {
         new OpToken(OpCode.PUSHDATA1, "0".repeat(66)),
         new OpToken(OpCode.SYSCALL, InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG),
       ],
-      30
+      30,
     );
 
     expect(result.toString()).toBe("983280");
@@ -34,10 +34,10 @@ describe("calculateExecutionFees", () => {
         new OpToken(OpCode.PUSH3),
         new OpToken(
           OpCode.SYSCALL,
-          InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG
+          InteropServiceCode.SYSTEM_CRYPTO_CHECKMULTISIG,
         ),
       ],
-      30
+      30,
     );
 
     expect(result.toString()).toBe("1966860");
@@ -46,7 +46,7 @@ describe("calculateExecutionFees", () => {
   test("invocationScript fee", () => {
     const result = calculateExecutionFee(
       [new OpToken(OpCode.PUSHDATA1, "0".repeat(128))],
-      30
+      30,
     );
 
     expect(result.toString()).toBe("240");

@@ -37,7 +37,7 @@ describe("TokenTrackerRpcClient", () => {
       const result = await client.getNep17Transfers(
         address,
         "0",
-        Date.now().toString()
+        Date.now().toString(),
       );
       expect(result.address).toBe(address);
       expect(result.received.length).toBeGreaterThan(0);
@@ -53,7 +53,7 @@ describe("TokenTrackerRpcClient", () => {
             "blockindex",
             "transfernotifyindex",
             "txhash",
-          ])
+          ]),
         );
       });
       result.sent.forEach((i) => {
@@ -66,7 +66,7 @@ describe("TokenTrackerRpcClient", () => {
             "blockindex",
             "transfernotifyindex",
             "txhash",
-          ])
+          ]),
         );
       });
     });
@@ -84,7 +84,7 @@ describe("TokenTrackerRpcClient", () => {
       expect(result.balance.length).toBeGreaterThan(0);
       result.balance.forEach((b) => {
         expect(Object.keys(b)).toEqual(
-          expect.arrayContaining(["assethash", "lastupdatedblock", "amount"])
+          expect.arrayContaining(["assethash", "lastupdatedblock", "amount"]),
         );
       });
     });

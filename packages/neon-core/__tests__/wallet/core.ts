@@ -87,20 +87,20 @@ describe("generate", () => {
 describe("Public key", () => {
   test("encode", () => {
     const result = C.getPublicKeyEncoded(
-      "041d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c94617303f7408d9abfedfb6fbb00dd07e3e7735d918bbea7a7e2c1895ea1bc9b9"
+      "041d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c94617303f7408d9abfedfb6fbb00dd07e3e7735d918bbea7a7e2c1895ea1bc9b9",
     );
 
     expect(result).toBe(
-      "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9"
+      "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
     );
   });
 
   test("decode", () => {
     const result = C.getPublicKeyUnencoded(
-      "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9"
+      "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
     );
     expect(result).toBe(
-      "041d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c94617303f7408d9abfedfb6fbb00dd07e3e7735d918bbea7a7e2c1895ea1bc9b9"
+      "041d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c94617303f7408d9abfedfb6fbb00dd07e3e7735d918bbea7a7e2c1895ea1bc9b9",
     );
   });
 });
@@ -109,7 +109,7 @@ describe("getAddressFromScriptHash", () => {
   test("custom address version", () => {
     const result = C.getAddressFromScriptHash(
       "118ba6f59931a56ec469770f7fc790ece96df00d",
-      77
+      77,
     );
 
     expect(result).toBe("Y1J9dBPk4wD2S34TBQPTSi27UGbzezrfdf");

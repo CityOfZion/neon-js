@@ -12,7 +12,7 @@ import { OpToken } from "./OpToken";
  */
 export function calculateExecutionFee(
   script: string | OpToken[],
-  executionFeeFactor: number | BigInteger
+  executionFeeFactor: number | BigInteger,
 ): BigInteger {
   const opTokens =
     typeof script === "string" ? OpToken.fromScript(script) : script;
@@ -34,10 +34,10 @@ export function calculateExecutionFee(
           const threshold = extractThresholdForMultiSig(opTokens, i);
           return BigInteger.fromNumber(OpCodePrices[token.code]).add(
             BigInteger.fromNumber(
-              getInteropServicePrice(InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG)
+              getInteropServicePrice(InteropServiceCode.SYSTEM_CRYPTO_CHECKSIG),
             )
               .mul(threshold)
-              .mul(factor)
+              .mul(factor),
           );
         }
 
@@ -54,7 +54,7 @@ export function calculateExecutionFee(
 
 function extractThresholdForMultiSig(
   tokens: OpToken[],
-  sysCallIndex: number
+  sysCallIndex: number,
 ): number {
   // We know that for a multisig of threshold t & no.of keys k the order is:
   // t, key1, key2, ...keyk, k, SYSCALL

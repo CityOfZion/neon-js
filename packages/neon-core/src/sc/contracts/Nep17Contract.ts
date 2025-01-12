@@ -18,7 +18,7 @@ export class Nep17Contract extends BaseContract {
 
   constructor(
     scriptHash: string,
-    additionalMethods: ContractMethodDefinition[] = []
+    additionalMethods: ContractMethodDefinition[] = [],
   ) {
     super(scriptHash, Nep17Contract.getMethods().concat(additionalMethods));
   }
@@ -61,14 +61,14 @@ export class Nep17Contract extends BaseContract {
     from: string,
     to: string,
     amount: string | number | BigInteger,
-    data?: string
+    data?: string,
   ): ContractCall {
     return this.call(
       "transfer",
       ContractParam.hash160(from),
       ContractParam.hash160(to),
       ContractParam.integer(amount),
-      ContractParam.any(data)
+      ContractParam.any(data),
     );
   }
 }

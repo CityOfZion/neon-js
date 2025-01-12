@@ -105,7 +105,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       value instanceof HexString ? value.toBigEndian() : value;
     if (!isPublicKey(stringValue)) {
       throw new Error(
-        `publicKey expected valid public key but got ${stringValue}`
+        `publicKey expected valid public key but got ${stringValue}`,
       );
     }
     return new ContractParam({
@@ -124,11 +124,11 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       value instanceof HexString
         ? value
         : HexString.fromHex(
-            isAddress(value) ? getScriptHashFromAddress(value) : value
+            isAddress(value) ? getScriptHashFromAddress(value) : value,
           );
     if (hexStringValue.byteLength !== 20) {
       throw new Error(
-        `hash160 expected 20 bytes but got ${hexStringValue.byteLength} bytes instead.`
+        `hash160 expected 20 bytes but got ${hexStringValue.byteLength} bytes instead.`,
       );
     }
     return new ContractParam({
@@ -146,7 +146,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       value instanceof HexString ? value : HexString.fromHex(value);
     if (hexStringValue.byteLength !== 32) {
       throw new Error(
-        `hash256 expected 32 bytes but got ${hexStringValue.byteLength} bytes instead.`
+        `hash256 expected 32 bytes but got ${hexStringValue.byteLength} bytes instead.`,
       );
     }
     return new ContractParam({
@@ -287,7 +287,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
   public constructor(input: ContractParamLike) {
     if (typeof input !== "object") {
       throw new Error(
-        "Please provide an object for constructing ContractParam."
+        "Please provide an object for constructing ContractParam.",
       );
     }
 
@@ -345,7 +345,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       case ContractParamType.Array:
         if (Array.isArray(arg)) {
           this.value = (arg as (ContractParam | ContractParamLike)[]).map(
-            (i: ContractParam | ContractParamLike) => ContractParam.fromJson(i)
+            (i: ContractParam | ContractParamLike) => ContractParam.fromJson(i),
           );
           return;
         } else {
@@ -459,7 +459,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
         throw new Error(`${ContractParamType[type]} not supported!`);
     }
     throw new Error(
-      `got ${typeof arg} which is not convertable to ${ContractParamType[type]}`
+      `got ${typeof arg} which is not convertable to ${ContractParamType[type]}`,
     );
   }
 
@@ -540,7 +540,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
             this.value.length === other.value.length
           ) {
             return (this.value as ContractParam[]).every((cp, i) =>
-              cp.equals((other.value as ContractParamLike[])[i])
+              cp.equals((other.value as ContractParamLike[])[i]),
             );
           }
           return false;
@@ -554,7 +554,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
             return (this.value as ContractParamMap).every(
               (cp, i) =>
                 cp.key.equals((other.value as ContractParamMap)[i].key) &&
-                cp.value.equals((other.value as ContractParamMap)[i].value)
+                cp.value.equals((other.value as ContractParamMap)[i].value),
             );
           }
           return false;
@@ -596,7 +596,7 @@ export class ContractParam implements NeonObject<ContractParamLike> {
 export default ContractParam;
 
 export function likeContractParam(
-  cp: Partial<ContractParamLike>
+  cp: Partial<ContractParamLike>,
 ): cp is ContractParamLike {
   if (cp === null || cp === undefined) {
     return false;

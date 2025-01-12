@@ -48,7 +48,7 @@ export interface StackItemMap {
 }
 
 function toStackItemType(
-  type: StackItemType | keyof typeof StackItemType | number
+  type: StackItemType | keyof typeof StackItemType | number,
 ): StackItemType {
   if (typeof type === "string") {
     return StackItemType[type];
@@ -116,7 +116,7 @@ export class StackItem {
       case StackItemType.ByteString:
         if (typeof obj.value !== "string") {
           throw new Error(
-            "value of a ByteString/Buffer StackItem should be a string."
+            "value of a ByteString/Buffer StackItem should be a string.",
           );
         }
         this.value = obj.value;
@@ -176,7 +176,7 @@ function isStackItemLikeArray(arr: unknown[]): arr is StackItemLike[] {
 
 function isStackItemMapLikeArray(arr: unknown[]): arr is StackItemMap[] {
   return arr.every(
-    (i) => i && typeof i === "object" && "key" in i && "value" in i
+    (i) => i && typeof i === "object" && "key" in i && "value" in i,
   );
 }
 export default StackItem;

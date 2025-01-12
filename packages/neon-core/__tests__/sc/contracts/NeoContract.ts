@@ -8,7 +8,7 @@ const addressScriptHash = testWallet.accounts[0].extra.scriptHash as string;
 
 test("scriptHash", () => {
   expect(contract.scriptHash).toEqual(
-    "ef4073a0f2b305a38ec4050e4d3d28bc40ea63f5"
+    "ef4073a0f2b305a38ec4050e4d3d28bc40ea63f5",
   );
 });
 

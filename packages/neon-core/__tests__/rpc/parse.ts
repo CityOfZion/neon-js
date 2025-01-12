@@ -17,7 +17,7 @@ describe("buildParser", () => {
         gasconsumed: "0",
         stack: [{ type: "Integer", value: "1" }],
         exception: null,
-      })
+      }),
     ).toThrow("Wrong number of items to parse!");
   });
 });
@@ -39,7 +39,7 @@ describe("IntegerParser", () => {
     (_msg: string, item: StackItemJson, expected: number) => {
       const result = IntegerParser(item);
       expect(result).toBe(expected);
-    }
+    },
   );
 });
 
@@ -74,10 +74,10 @@ describe("SimpleParser", () => {
         script: "",
         state: "HALT",
         gasconsumed: "0",
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+
+        // @ts-expect-error Providing unknown types outside of TS
         stack: [{ type: "Weird", value: null }],
-      })
+      }),
     ).toThrow("Unknown type");
   });
 });

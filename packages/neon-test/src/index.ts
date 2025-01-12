@@ -11,6 +11,6 @@ rpcClient
   .then(() => api.getFeeInformation(rpcClient))
   .then((feeInfo) =>
     console.log(
-      `Current fees: ${feeInfo.feePerByte} per byte, ${feeInfo.executionFeeFactor} multipler`
-    )
+      `Current fees: ${feeInfo.feePerByte} per byte, ${feeInfo.executionFeeFactor} multipler`,
+    ),
   );

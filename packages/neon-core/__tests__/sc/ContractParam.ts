@@ -57,7 +57,7 @@ describe("Static constructors", () => {
         expect(result instanceof ContractParam).toBeTruthy();
         expect(result.type).toBe(ContractParamType.Boolean);
         expect(result.value).toBe(expected);
-      }
+      },
     );
   });
 
@@ -104,7 +104,7 @@ describe("Static constructors", () => {
 
     test("errors when not 20 bytes", () => {
       expect(() => ContractParam.hash160(HexString.fromHex("12"))).toThrow(
-        "expected 20 bytes"
+        "expected 20 bytes",
       );
     });
   });
@@ -134,7 +134,7 @@ describe("Static constructors", () => {
 
     test("errors when not 32 bytes", () => {
       expect(() => ContractParam.hash256(HexString.fromHex("12"))).toThrow(
-        "expected 32 bytes"
+        "expected 32 bytes",
       );
     });
   });
@@ -177,7 +177,7 @@ describe("Static constructors", () => {
   describe("publicKey", () => {
     test("valid key", () => {
       const result = ContractParam.publicKey(
-        "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee"
+        "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee",
       );
 
       expect(result instanceof ContractParam).toBeTruthy();
@@ -185,13 +185,13 @@ describe("Static constructors", () => {
       expect(result.value).toBeInstanceOf(HexString);
       const hexStringValue = result.value as HexString;
       expect(hexStringValue.toBigEndian()).toBe(
-        "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee"
+        "026d3ca98c83dd2490a134ba4f874b59292afaac8abc2f9b34b690fcd2b44648ee",
       );
     });
 
     test("invalid key", () => {
       expect(() => ContractParam.publicKey("")).toThrow(
-        "expected valid public key"
+        "expected valid public key",
       );
     });
   });
@@ -202,13 +202,13 @@ describe("Static constructors", () => {
       const value = ContractParam.boolean(true);
 
       expect(() => ContractParam.map("" as never)).toThrow(
-        "Please provide a valid map for value"
+        "Please provide a valid map for value",
       );
       expect(() => ContractParam.map({ key } as never)).toThrow(
-        "Please provide a valid map for value"
+        "Please provide a valid map for value",
       );
       expect(() => ContractParam.map({ value } as never)).toThrow(
-        "Please provide a valid map for value"
+        "Please provide a valid map for value",
       );
     });
 
@@ -217,7 +217,7 @@ describe("Static constructors", () => {
       const value = ContractParam.boolean(true);
 
       expect(() => ContractParam.map({ key, value })).toThrow(
-        "Map keys only support primitive types"
+        "Map keys only support primitive types",
       );
     });
 
@@ -273,7 +273,7 @@ describe("likeContractParam", () => {
     (msg: string, data: Partial<ContractParamLike>, expected: boolean) => {
       const result = likeContractParam(data);
       expect(result).toBe(expected);
-    }
+    },
   );
 });
 
@@ -330,7 +330,7 @@ describe("toJson", () => {
 
   test("publicKey", () => {
     const testObject = ContractParam.publicKey(
-      "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef"
+      "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
     );
     const result = testObject.toJson();
 
@@ -355,7 +355,7 @@ describe("toJson", () => {
     const testObject = ContractParam.array(
       ContractParam.integer(999),
       ContractParam.boolean(false),
-      ContractParam.string("hello world")
+      ContractParam.string("hello world"),
     );
     const result = testObject.toJson();
 
@@ -381,7 +381,7 @@ describe("toJson", () => {
       {
         key: ContractParam.string("hello world2"),
         value: ContractParam.boolean(false),
-      }
+      },
     );
     const result = testObject.toJson();
 
@@ -471,9 +471,9 @@ describe("equals", () => {
       _msg: string,
       a: ContractParam,
       b: ContractParamLike,
-      expected: boolean
+      expected: boolean,
     ) => {
       expect(a.equals(b)).toEqual(expected);
-    }
+    },
   );
 });

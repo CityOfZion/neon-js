@@ -29,7 +29,7 @@ async function sendDataToSign(
   ledger: Transport,
   msg: string,
   chunk: number,
-  finalChunk = false
+  finalChunk = false,
 ): Promise<Buffer> {
   return await ledger.send(
     0x80,
@@ -37,7 +37,7 @@ async function sendDataToSign(
     chunk,
     finalChunk ? 0x00 : 0x80,
     Buffer.from(msg, "hex"),
-    DEFAULT_STATUSLIST
+    DEFAULT_STATUSLIST,
   );
 }
 
@@ -54,7 +54,7 @@ export async function getAppName(ledger: Transport): Promise<string> {
       0x00,
       0x00,
       undefined,
-      DEFAULT_STATUSLIST
+      DEFAULT_STATUSLIST,
     );
     const version = response.toString("ascii");
     return version.substring(0, version.length - 2); // take of status word
@@ -79,7 +79,7 @@ export async function getAppVersion(ledger: Transport): Promise<string> {
       0x00,
       0x00,
       undefined,
-      DEFAULT_STATUSLIST
+      DEFAULT_STATUSLIST,
     );
     const major = response.readUInt8(0);
     const minor = response.readUInt8(1);
@@ -98,7 +98,7 @@ export async function getAppVersion(ledger: Transport): Promise<string> {
  * @param ledgerLibrary - Ledger library
  */
 export async function getDevicePaths(
-  ledgerLibrary: typeof Transport
+  ledgerLibrary: typeof Transport,
 ): Promise<ReadonlyArray<string>> {
   const supported = await ledgerLibrary.isSupported();
   if (!supported) {
@@ -118,7 +118,7 @@ export async function getDevicePaths(
 export async function getPublicKey(
   ledger: Transport,
   bip44String: string,
-  showAddressOnDevice = false
+  showAddressOnDevice = false,
 ): Promise<string> {
   try {
     const response = await ledger.send(
@@ -127,7 +127,7 @@ export async function getPublicKey(
       0x00,
       showAddressOnDevice ? 0x01 : 0x0,
       Buffer.from(bip44String, "hex"),
-      DEFAULT_STATUSLIST
+      DEFAULT_STATUSLIST,
     );
     return response.toString("hex").substring(0, 130);
   } catch (e) {
@@ -150,7 +150,7 @@ export async function getSignature(
   ledger: Transport,
   payload: string,
   bip44String: string,
-  network: number
+  network: number,
 ): Promise<string> {
   await sendDataToSign(ledger, bip44String, 0);
   await sendDataToSign(ledger, u.num2hexstring(network, 4, true), 1);
@@ -164,7 +164,7 @@ export async function getSignature(
       ledger,
       chunks[chunks.length - 1],
       2 + chunks.length,
-      true
+      true,
     );
     // Expected signature + 2 status bytes to be returned here upon completion
     if (response.length <= 2) {

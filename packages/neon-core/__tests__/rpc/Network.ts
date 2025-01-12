@@ -122,9 +122,9 @@ describe("equals", () => {
       msg: string,
       a: Network,
       b: Partial<NetworkLike & NetworkJSON>,
-      cond: boolean
+      cond: boolean,
     ) => {
       expect(a.equals(b)).toBe(cond);
-    }
+    },
   );
 });

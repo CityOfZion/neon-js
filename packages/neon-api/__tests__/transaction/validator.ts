@@ -20,7 +20,7 @@ describe("validate", () => {
     });
     const validator = new TransactionValidator(rpcClient, txn);
     const result = await validator.validate(
-      ValidationAttributes.ValidUntilBlock | ValidationAttributes.SystemFee
+      ValidationAttributes.ValidUntilBlock | ValidationAttributes.SystemFee,
     );
 
     expect(result).toMatchObject({
@@ -50,7 +50,7 @@ describe("validate", () => {
       ValidationAttributes.ValidUntilBlock |
         ValidationAttributes.SystemFee |
         ValidationAttributes.Script,
-      ValidationAttributes.ValidUntilBlock
+      ValidationAttributes.ValidUntilBlock,
     );
 
     expect(result).toMatchObject({
@@ -160,7 +160,7 @@ describe("validateValidUntilBlock", () => {
       suggestion: 10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
     });
     expect(txn.validUntilBlock).toBe(
-      10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1
+      10 + TransactionValidator.TX_LIFESPAN_SUGGESTION - 1,
     );
   });
 });

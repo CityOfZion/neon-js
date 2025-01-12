@@ -92,14 +92,14 @@ describe("add methods", () => {
     expect(cosigner.scopes & WitnessScope.CustomContracts).toBeFalsy();
     cosigner.addAllowedContracts(
       "43cf98eddbe047e198a3e5d57006311442a0ca15",
-      "a1760976db5fcdfab2a9930e8f6ce875b2d18225"
+      "a1760976db5fcdfab2a9930e8f6ce875b2d18225",
     );
     expect(!!(cosigner.scopes & WitnessScope.CustomContracts)).toBeTruthy();
     expect(cosigner.allowedContracts.map((i) => i.toBigEndian())).toStrictEqual(
       [
         "43cf98eddbe047e198a3e5d57006311442a0ca15",
         "a1760976db5fcdfab2a9930e8f6ce875b2d18225",
-      ]
+      ],
     );
   });
 
@@ -108,7 +108,7 @@ describe("add methods", () => {
     expect(!!(cosigner.scopes & WitnessScope.CustomGroups)).toBeFalsy();
     cosigner.addAllowedGroups(
       "031d8e1630ce640966967bc6d95223d21f44304133003140c3b52004dc981349c9",
-      "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef"
+      "02028a99826edc0c97d18e22b6932373d908d323aa7f92656a77ec26e8861699ef",
     );
     expect(!!(cosigner.scopes & WitnessScope.CustomGroups)).toBeTruthy();
     expect(cosigner.allowedGroups.map((i) => i.toBigEndian())).toStrictEqual([
@@ -136,7 +136,7 @@ describe.each(data)(
       const result = deserialized.serialize();
       expect(result).toEqual(serialized);
     });
-  }
+  },
 );
 
 describe("merge", () => {
@@ -150,7 +150,7 @@ describe("merge", () => {
       new Signer({
         account: "0".repeat(40),
         scopes: WitnessScope.CalledByEntry,
-      })
+      }),
     );
 
     expect(result).toBe(base);
@@ -181,7 +181,7 @@ describe("merge", () => {
         scopes: WitnessScope.CustomContracts | WitnessScope.CustomGroups,
         allowedContracts: ["1".repeat(40)],
         allowedGroups: ["2".repeat(66)],
-      })
+      }),
     );
 
     expect(result).toBe(base);
@@ -210,7 +210,7 @@ describe("merge", () => {
         scopes: WitnessScope.CustomContracts | WitnessScope.CustomGroups,
         allowedContracts: ["1".repeat(40), "2".repeat(40)],
         allowedGroups: ["2".repeat(66), "3".repeat(66)],
-      })
+      }),
     );
 
     expect(result).toBe(base);
@@ -237,7 +237,7 @@ describe("merge", () => {
     });
 
     const result = base.merge(
-      new Signer({ account: "0".repeat(40), scopes: WitnessScope.Global })
+      new Signer({ account: "0".repeat(40), scopes: WitnessScope.Global }),
     );
 
     expect(result).toBe(base);

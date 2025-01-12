@@ -27,13 +27,13 @@ export class SmartContract {
   public async testInvoke(
     operation: string,
     params?: sc.ContractParam[],
-    signers?: tx.Signer[]
+    signers?: tx.Signer[],
   ): Promise<rpc.InvokeResult> {
     return this.rpcClient.invokeFunction(
       this.contractHash.toString(),
       operation,
       params,
-      signers
+      signers,
     );
   }
 
@@ -54,7 +54,7 @@ export class SmartContract {
   public async invoke(
     operation: string,
     params?: sc.ContractParam[],
-    signers?: tx.Signer[]
+    signers?: tx.Signer[],
   ): Promise<string> {
     const builder = new sc.ScriptBuilder();
     builder.emitAppCall(this.contractHash.toString(), operation, params);
@@ -65,7 +65,7 @@ export class SmartContract {
     await setBlockExpiry(
       transaction,
       this.config,
-      this.config.blocksTillExpiry
+      this.config.blocksTillExpiry,
     );
 
     if (this.config.account === undefined)

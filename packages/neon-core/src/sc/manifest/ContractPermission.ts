@@ -33,7 +33,7 @@ export class ContractPermission {
         return jsonDescriptor.slice(2);
       default:
         throw new Error(
-          `This is not a ContractPermissionDescriptor: ${jsonDescriptor}`
+          `This is not a ContractPermissionDescriptor: ${jsonDescriptor}`,
         );
     }
   }

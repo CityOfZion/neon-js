@@ -17,7 +17,7 @@ describe("hex and base64", () => {
     (input: string, expected: string) => {
       const result = hex2base64(input);
       expect(result).toBe(expected);
-    }
+    },
   );
 
   test.each(hexBase64testCases)(
@@ -25,7 +25,7 @@ describe("hex and base64", () => {
     (expected: string, input: string) => {
       const result = base642hex(input);
       expect(result).toBe(expected);
-    }
+    },
   );
 });
 
@@ -44,7 +44,7 @@ describe("utf8 and base64", () => {
     (input: string, expected: string) => {
       const result = utf82base64(input);
       expect(result).toBe(expected);
-    }
+    },
   );
 
   test.each(utf8Base64testCases)(
@@ -52,6 +52,6 @@ describe("utf8 and base64", () => {
     (expected: string, input: string) => {
       const result = base642utf8(input);
       expect(result).toBe(expected);
-    }
+    },
   );
 });

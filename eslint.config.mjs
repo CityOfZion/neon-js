@@ -17,9 +17,12 @@ export default tseslint.config(
       "packages/**/node_modules/",
     ],
   },
-  eslint.configs.recommended,
   {
     files: ["**/*.ts"],
+    extends: [
+      eslint.configs.recommended,
+      tseslint.configs.recommended,
+    ],
     plugins: {
       "@typescript-eslint": tseslint.plugin,
       tsdoc: tsdoceslint,
@@ -30,7 +33,9 @@ export default tseslint.config(
         project: ['./tsconfig.lint.json'],
       },
       globals: {
-        ...globals.jest
+        ...globals.jest,
+        ...globals.browser,
+        ...globals.node
       }
     },
     rules: {

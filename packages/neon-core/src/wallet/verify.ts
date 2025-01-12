@@ -38,7 +38,7 @@ export function isNEP2(nep2: string): boolean {
       return false;
     }
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
@@ -98,7 +98,7 @@ export function isPublicKey(key: string, encoded?: boolean): boolean {
       return true;
     }
     return false;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
@@ -142,9 +142,9 @@ export function isAddress(address: string, verifyAddressVersion = -1): boolean {
       return false;
     }
 
-    const shaChecksum = hash256(programHash.slice(0, 42)).substr(0, 8);
+    const shaChecksum = hash256(programHash.slice(0, 42)).slice(0, 8);
     // We use the checksum to verify the address
-    if (shaChecksum !== programHash.substr(42, 8)) {
+    if (shaChecksum !== programHash.slice(42, 42 + 8)) {
       return false;
     }
     // As other chains use similar checksum methods, we need to attempt to transform the programHash back into the address
@@ -154,7 +154,7 @@ export function isAddress(address: string, verifyAddressVersion = -1): boolean {
       return false;
     }
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 }

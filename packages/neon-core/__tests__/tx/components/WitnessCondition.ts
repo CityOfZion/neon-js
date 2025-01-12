@@ -37,7 +37,7 @@ describe("static", () => {
     expect(castedResult.expressions.length).toBe(2);
     expect(castedResult.expressions[0]).toBeInstanceOf(BooleanWitnessCondition);
     expect(castedResult.expressions[1]).toBeInstanceOf(
-      ScriptHashWitnessCondition
+      ScriptHashWitnessCondition,
     );
 
     const jsonResult = result.toJson();
@@ -53,7 +53,7 @@ describe("static", () => {
     expect(result.type).toBe(WitnessConditionType.Group);
     const castedResult = result as GroupWitnessCondition;
     expect(castedResult.group.toString()).toEqual(
-      "03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c"
+      "03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c",
     );
 
     const serialized = result.serialize();
@@ -172,7 +172,7 @@ describe("serialization", () => {
     const castedResult = result as CalledByGroupWitnessCondition;
     const bytes = castedResult.serialize();
     expect(bytes).toEqual(
-      "2902158c4a4810fa2a6a12f7d33d835680429e1a68ae61161c5b3fbc98c7f1f17765"
+      "2902158c4a4810fa2a6a12f7d33d835680429e1a68ae61161c5b3fbc98c7f1f17765",
     );
   });
 });
@@ -234,7 +234,7 @@ describe("deserialization", () => {
     expect(result.type).toBe(WitnessConditionType.CalledByContract);
     const castedResult = result as CalledByContractWitnessCondition;
     expect(castedResult.hash.toString()).toBe(
-      "489e98351485bbd85be99618285932172f1862e4"
+      "489e98351485bbd85be99618285932172f1862e4",
     );
   });
 
@@ -251,7 +251,7 @@ describe("deserialization", () => {
     expect(result.type).toBe(WitnessConditionType.CalledByGroup);
     const castedResult = result as CalledByGroupWitnessCondition;
     expect(castedResult.group.toString()).toBe(
-      "02158c4a4810fa2a6a12f7d33d835680429e1a68ae61161c5b3fbc98c7f1f17765"
+      "02158c4a4810fa2a6a12f7d33d835680429e1a68ae61161c5b3fbc98c7f1f17765",
     );
   });
 });

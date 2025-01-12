@@ -55,9 +55,8 @@ describe("batch", () => {
       rpc.Query.validateAddress("helloworld"),
       rpc.Query.getBlockHash(0),
     ];
-    const responses = await client.executeAll<
-      [number, ValidateAddressResult, string]
-    >(batch);
+    const responses =
+      await client.executeAll<[number, ValidateAddressResult, string]>(batch);
 
     expect(responses.length).toBe(3);
     expect(responses[0]).toEqual(expect.any(Number));
@@ -99,7 +98,7 @@ describe("RPC Methods", () => {
           "tx",
           "confirmations",
           "nextblockhash",
-        ].sort()
+        ].sort(),
       );
     });
 
@@ -150,7 +149,7 @@ describe("RPC Methods", () => {
           "witnesses",
           "confirmations",
           "nextblockhash",
-        ].sort()
+        ].sort(),
       );
     });
   });
@@ -175,7 +174,7 @@ describe("RPC Methods", () => {
   test("getPeers", async () => {
     const result = await client.getPeers();
     expect(Object.keys(result)).toEqual(
-      expect.arrayContaining(["unconnected", "connected", "bad"])
+      expect.arrayContaining(["unconnected", "connected", "bad"]),
     );
   });
 
@@ -188,7 +187,7 @@ describe("RPC Methods", () => {
     test("get comfirmed and unconfirmed", async () => {
       const result = await client.getRawMemPool(true);
       expect(Object.keys(result)).toEqual(
-        expect.arrayContaining(["height", "verified", "unverified"])
+        expect.arrayContaining(["height", "verified", "unverified"]),
       );
     });
   });
@@ -228,7 +227,7 @@ describe("RPC Methods", () => {
       expect(v).toMatchObject({
         publickey: expect.any(String),
         votes: expect.any(Number),
-      })
+      }),
     );
   });
 
@@ -278,7 +277,7 @@ describe("RPC Methods", () => {
           "gasconsumed",
           "stack",
           "exception",
-        ])
+        ]),
       );
       expect(result.state).toContain("HALT");
     });
@@ -300,7 +299,7 @@ describe("RPC Methods", () => {
             account: fromAccount.scriptHash,
             scopes: WitnessScope.CalledByEntry,
           }),
-        ]
+        ],
       );
 
       expect(Object.keys(result)).toEqual(
@@ -310,7 +309,7 @@ describe("RPC Methods", () => {
           "gasconsumed",
           "stack",
           "exception",
-        ])
+        ]),
       );
       expect(result.state).toContain("HALT");
     });
@@ -318,8 +317,8 @@ describe("RPC Methods", () => {
     test("invokeScript", async () => {
       const result = await client.invokeScript(
         HexString.fromHex(
-          new ScriptBuilder().emitAppCall(contractHash, "symbol").build()
-        )
+          new ScriptBuilder().emitAppCall(contractHash, "symbol").build(),
+        ),
       );
       expect(Object.keys(result)).toEqual(
         expect.arrayContaining([
@@ -328,12 +327,12 @@ describe("RPC Methods", () => {
           "gasconsumed",
           "stack",
           "exception",
-        ])
+        ]),
       );
       expect(result.state).toContain("HALT");
       expect(result.stack.length).toEqual(1);
       expect(result.stack[0].value).toEqual(
-        HexString.fromAscii("NEO").toBase64()
+        HexString.fromAscii("NEO").toBase64(),
       );
     });
 
@@ -365,7 +364,7 @@ describe("RPC Methods", () => {
           "gasconsumed",
           "stack",
           "exception",
-        ])
+        ]),
       );
       expect(result.state).toContain("HALT");
     });
@@ -401,7 +400,7 @@ describe("RPC Methods", () => {
       script: script,
     }).sign(fromAccount, 1234567890);
     const result = await client.sendRawTransaction(
-      HexString.fromHex(transaction.serialize(true))
+      HexString.fromHex(transaction.serialize(true)),
     );
     expect(typeof result).toBe("string");
   }, 20000);

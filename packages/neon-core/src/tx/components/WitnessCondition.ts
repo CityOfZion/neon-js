@@ -141,7 +141,7 @@ export class BooleanWitnessCondition extends WitnessCondition {
   }
 
   public static fromJson(
-    input: BooleanWitnessConditionJson
+    input: BooleanWitnessConditionJson,
   ): BooleanWitnessCondition {
     return new BooleanWitnessCondition(input.expression);
   }
@@ -180,7 +180,7 @@ export class AndWitnessCondition extends WitnessCondition {
 
   public static fromJson(input: AndWitnessConditionJson): AndWitnessCondition {
     return new AndWitnessCondition(
-      input.expressions.map((e) => WitnessCondition.fromJson(e))
+      input.expressions.map((e) => WitnessCondition.fromJson(e)),
     );
   }
 
@@ -249,7 +249,7 @@ export class OrWitnessCondition extends WitnessCondition {
 
   public static fromJson(input: OrWitnessConditionJson): OrWitnessCondition {
     return new OrWitnessCondition(
-      input.expressions.map((e) => WitnessCondition.fromJson(e))
+      input.expressions.map((e) => WitnessCondition.fromJson(e)),
     );
   }
 
@@ -287,7 +287,7 @@ export class ScriptHashWitnessCondition extends WitnessCondition {
   }
 
   public static fromJson(
-    input: ScriptHashWitnessConditionJson
+    input: ScriptHashWitnessConditionJson,
   ): ScriptHashWitnessCondition {
     return new ScriptHashWitnessCondition(input.hash);
   }
@@ -302,7 +302,7 @@ export class ScriptHashWitnessCondition extends WitnessCondition {
     this.hash = HexString.fromHex(inputHash);
     if (this.hash.length !== 40) {
       throw new Error(
-        `ScriptHashWitnessCondition only accepts a scripthash of 20 bytes but got ${this.hash.toString()}`
+        `ScriptHashWitnessCondition only accepts a scripthash of 20 bytes but got ${this.hash.toString()}`,
       );
     }
   }
@@ -333,7 +333,7 @@ export class GroupWitnessCondition extends WitnessCondition {
   }
 
   public static fromJson(
-    input: GroupWitnessConditionJson
+    input: GroupWitnessConditionJson,
   ): GroupWitnessCondition {
     return new GroupWitnessCondition(input.group);
   }
@@ -349,7 +349,7 @@ export class GroupWitnessCondition extends WitnessCondition {
 
     if (this.group.length !== 66) {
       throw new Error(
-        `GroupWitnessCondition only accepts a encoded public key of 33 bytes but got ${this.group.toString()}`
+        `GroupWitnessCondition only accepts a encoded public key of 33 bytes but got ${this.group.toString()}`,
       );
     }
   }
@@ -379,7 +379,7 @@ export class CalledByEntryWitnessCondition extends WitnessCondition {
   }
 
   public static fromJson(
-    _input: CalledByEntryWitnessConditionJson
+    _input: CalledByEntryWitnessConditionJson,
   ): CalledByEntryWitnessCondition {
     return new CalledByEntryWitnessCondition();
   }
@@ -408,7 +408,7 @@ export class CalledByContractWitnessCondition extends WitnessCondition {
   }
 
   public static deserialize(
-    ss: StringStream
+    ss: StringStream,
   ): CalledByContractWitnessCondition {
     readAndAssertType(ss, this._type);
     const hash = HexString.fromHex(ss.read(20), true);
@@ -416,7 +416,7 @@ export class CalledByContractWitnessCondition extends WitnessCondition {
   }
 
   public static fromJson(
-    input: CalledByContractWitnessConditionJson
+    input: CalledByContractWitnessConditionJson,
   ): CalledByContractWitnessCondition {
     return new CalledByContractWitnessCondition(input.hash);
   }
@@ -431,7 +431,7 @@ export class CalledByContractWitnessCondition extends WitnessCondition {
     this.hash = HexString.fromHex(inputHash);
     if (this.hash.length !== 40) {
       throw new Error(
-        `CalledByContractWitnessCondition only accepts a scripthash of 20 bytes but got ${this.hash.toString()}`
+        `CalledByContractWitnessCondition only accepts a scripthash of 20 bytes but got ${this.hash.toString()}`,
       );
     }
   }
@@ -462,7 +462,7 @@ export class CalledByGroupWitnessCondition extends WitnessCondition {
   }
 
   public static fromJson(
-    input: CalledByGroupWitnessConditionJson
+    input: CalledByGroupWitnessConditionJson,
   ): CalledByGroupWitnessCondition {
     return new CalledByGroupWitnessCondition(input.group);
   }
@@ -478,7 +478,7 @@ export class CalledByGroupWitnessCondition extends WitnessCondition {
 
     if (this.group.length !== 66) {
       throw new Error(
-        `CalledByGroupWitnessCondition only accepts a encoded public key of 33 bytes but got ${this.group.toString()}`
+        `CalledByGroupWitnessCondition only accepts a encoded public key of 33 bytes but got ${this.group.toString()}`,
       );
     }
   }
@@ -500,7 +500,7 @@ function readAndAssertType(ss: StringStream, type: WitnessConditionType): void {
   const witnessType = parseEnum(rawType, WitnessConditionType);
   if (witnessType !== type) {
     throw new Error(
-      `Wrong WitnessConditionType. Wanted ${WitnessConditionType[type]} but got ${witnessType}`
+      `Wrong WitnessConditionType. Wanted ${WitnessConditionType[type]} but got ${witnessType}`,
     );
   }
 }

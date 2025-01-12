@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as api from "@cityofzion/neon-api";
 import * as neonCore from "@cityofzion/neon-core";
 import * as experimental from "./experimental";
@@ -22,13 +21,13 @@ const create = {
       | boolean
       | neonCore.sc.ContractParamJson[]
       | null
-      | undefined
+      | undefined,
   ): neonCore.sc.ContractParam => sc.ContractParam.fromJson({ type, value }),
   script: sc.createScript,
   scriptBuilder: (): neonCore.sc.ScriptBuilder => new sc.ScriptBuilder(),
   rpcClient: (net: string): neonCore.rpc.RPCClient => new rpc.RPCClient(net),
   query: (
-    req: neonCore.rpc.QueryLike<unknown[]>
+    req: neonCore.rpc.QueryLike<unknown[]>,
   ): neonCore.rpc.Query<unknown[], unknown> => new rpc.Query(req),
   network: (net: Partial<neonCore.rpc.NetworkJSON>): neonCore.rpc.Network =>
     new rpc.Network(net),

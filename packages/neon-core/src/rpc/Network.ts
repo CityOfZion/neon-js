@@ -25,7 +25,7 @@ function compareStrings(a: string[], b: string[]): boolean {
 
 function compareMaps(
   a: { [key: string]: string },
-  b: { [key: string]: string }
+  b: { [key: string]: string },
 ): boolean {
   const keys = Array.from(a.keys ?? []);
   if (!compareStrings(keys, Array.from(b.keys ?? []))) return false;
@@ -45,18 +45,18 @@ export class Network implements NeonObject<NetworkLike> {
 
   public constructor(
     config: Partial<NetworkLike & NetworkJSON> = {},
-    name = null
+    name = null,
   ) {
     this.name = config.Name || config.name || name || "RandomNet";
     const protocolLike = Object.assign(
       {},
-      config.protocol || config.ProtocolConfiguration || {}
+      config.protocol || config.ProtocolConfiguration || {},
     );
     this.protocol = new Protocol(protocolLike);
     this.nodes = config.Nodes || config.nodes || [];
     this.extra = Object.assign(
       {},
-      config.ExtraConfiguration || config.extra || {}
+      config.ExtraConfiguration || config.extra || {},
     );
   }
 

@@ -8,7 +8,7 @@ describe("constructor", () => {
   test("empty", () => {
     const f = (): Witness => new Witness(undefined);
     expect(f).toThrow(
-      "Witness requires invocationScript and verificationScript fields"
+      "Witness requires invocationScript and verificationScript fields",
     );
   });
 
@@ -21,10 +21,10 @@ describe("constructor", () => {
     const result = new Witness(testObject);
     expect(result instanceof Witness).toBeTruthy();
     expect(result.invocationScript.toBigEndian()).toEqual(
-      testObject.invocationScript
+      testObject.invocationScript,
     );
     expect(result.verificationScript.toBigEndian()).toEqual(
-      testObject.verificationScript
+      testObject.verificationScript,
     );
   });
 
@@ -52,7 +52,7 @@ describe("ScriptHash property", () => {
     });
 
     expect(testObject.scriptHash).toEqual(
-      "dec317f6e4335db8a98418bd16960bf4e7fce4c7"
+      "dec317f6e4335db8a98418bd16960bf4e7fce4c7",
     );
   });
 });
@@ -93,10 +93,10 @@ describe("equals", () => {
       _msg: string,
       a: Witness,
       b: Partial<WitnessLike> | Witness,
-      cond: boolean
+      cond: boolean,
     ) => {
       expect(a.equals(b)).toBe(cond);
-    }
+    },
   );
 });
 
@@ -119,7 +119,7 @@ describe("serialize", () => {
     (_msg: string, data: WitnessLike, expected: string) => {
       const result = new Witness(data);
       expect(result.serialize()).toBe(expected);
-    }
+    },
   );
 });
 
@@ -129,7 +129,7 @@ describe("deserialize", () => {
     (_msg: string, expected: WitnessLike, data: string) => {
       const result = Witness.deserialize(data);
       expect(result.export()).toEqual(expected);
-    }
+    },
   );
 });
 
@@ -215,17 +215,17 @@ describe.skip("buildMultiSig", () => {
       tx: string,
       sigs: (Witness | string)[],
       vScript: string | Account,
-      expectedInvocationScript: string
+      expectedInvocationScript: string,
     ) => {
       const result = Witness.buildMultiSig(tx, sigs, vScript);
 
       expect(result.verificationScript.toBigEndian()).toEqual(
-        verificationScript
+        verificationScript,
       );
       expect(result.invocationScript.toBigEndian()).toEqual(
-        expectedInvocationScript
+        expectedInvocationScript,
       );
-    }
+    },
   );
 
   test("throws if invalid signature given", () => {
@@ -275,12 +275,12 @@ describe("JSON", () => {
     (_: string, json: WitnessJson, neonObj: Witness) => {
       const result = Witness.fromJson(json);
       expect(result.invocationScript.toBigEndian()).toBe(
-        neonObj.invocationScript.toBigEndian()
+        neonObj.invocationScript.toBigEndian(),
       );
       expect(result.verificationScript.toBigEndian()).toBe(
-        neonObj.verificationScript.toBigEndian()
+        neonObj.verificationScript.toBigEndian(),
       );
-    }
+    },
   );
 
   test.each(jsonTestCases)(
@@ -288,6 +288,6 @@ describe("JSON", () => {
     (_: string, json: WitnessJson, neonObj: Witness) => {
       const result = neonObj.toJson();
       expect(result).toEqual(json);
-    }
+    },
   );
 });

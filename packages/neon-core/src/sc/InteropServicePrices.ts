@@ -31,7 +31,7 @@ const fixedPrices = {
 type fixedPriceInteropServiceCode = keyof typeof fixedPrices;
 
 function isFixedPrice(
-  code: InteropServiceCode
+  code: InteropServiceCode,
 ): code is fixedPriceInteropServiceCode {
   return code in fixedPrices;
 }
@@ -42,6 +42,6 @@ export function getInteropServicePrice(service: InteropServiceCode): number {
   }
 
   throw new Error(
-    `InteropServiceCode ${service} not supported as it is dynamically priced.`
+    `InteropServiceCode ${service} not supported as it is dynamically priced.`,
   );
 }

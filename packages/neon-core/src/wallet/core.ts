@@ -76,7 +76,7 @@ export function getWIFFromPrivateKey(privateKey: string): string {
  */
 export function getPublicKeyFromPrivateKey(
   privateKey: string,
-  encode = true
+  encode = true,
 ): string {
   return curve.getPublicKey(privateKey, encode);
 }
@@ -122,7 +122,7 @@ export function getPublicKeyFromVerificationScript(script: string): string {
  * @param verificationScript - hexstring
  */
 export function getScriptHashFromVerificationScript(
-  verificationScript: string
+  verificationScript: string,
 ): string {
   return reverseHex(hash160(verificationScript));
 }
@@ -144,13 +144,13 @@ export function getScriptHashFromPublicKey(publicKey: string): string {
  */
 export function getAddressFromScriptHash(
   scriptHash: string,
-  addressVersion = DEFAULT_ADDRESS_VERSION
+  addressVersion = DEFAULT_ADDRESS_VERSION,
 ): string {
   scriptHash = reverseHex(scriptHash);
   const addressVersionHex = addressVersion.toString(16);
   const shaChecksum = hash256(addressVersionHex + scriptHash).substr(0, 8);
   return base58.encode(
-    Buffer.from(addressVersionHex + scriptHash + shaChecksum, "hex")
+    Buffer.from(addressVersionHex + scriptHash + shaChecksum, "hex"),
   );
 }
 

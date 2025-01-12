@@ -10,13 +10,13 @@ const CHUNK_SIZE = 3;
 
 export async function getTokenInfos(
   contracts: (string | sc.Nep17Contract)[],
-  client: rpc.NeoServerRpcClient
+  client: rpc.NeoServerRpcClient,
 ): Promise<TokenInfo[]> {
   const script = contracts
     .map((scriptHash) =>
       scriptHash instanceof sc.Nep17Contract
         ? scriptHash
-        : new sc.Nep17Contract(scriptHash)
+        : new sc.Nep17Contract(scriptHash),
     )
     .map((contract) => [
       contract.symbol(),
@@ -34,14 +34,14 @@ export async function getTokenInfos(
     throw new Error(
       response.exception
         ? `Invoke exception: ${response.exception}}`
-        : "No exception message returned."
+        : "No exception message returned.",
     );
   }
 
   const expectedStackLength = contracts.length * CHUNK_SIZE;
   if (response.stack.length !== expectedStackLength) {
     throw new Error(
-      `Received unexpected results. Expected ${expectedStackLength} but got ${response.stack.length} instead.`
+      `Received unexpected results. Expected ${expectedStackLength} but got ${response.stack.length} instead.`,
     );
   }
 
@@ -56,7 +56,7 @@ export async function getTokenInfos(
       symbol: u.HexString.fromBase64(result[0].value as string).toAscii(),
       decimals,
       totalSupply: u.BigInteger.fromNumber(result[2].value as string).toDecimal(
-        decimals
+        decimals,
       ),
     };
   });

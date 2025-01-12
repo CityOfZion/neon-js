@@ -8,7 +8,7 @@ import { Query } from "./Query";
 
 const PING_TIMEOUT = 2000;
 class FullRpcClient extends TokenTrackerRpcMixin(
-  ApplicationLogsRpcMixin(NeoServerRpcMixin(RpcDispatcher))
+  ApplicationLogsRpcMixin(NeoServerRpcMixin(RpcDispatcher)),
 ) {
   public get [Symbol.toStringTag](): string {
     return `FullRpcClient(${this.url})`;
@@ -45,7 +45,7 @@ export class RPCClient extends FullRpcClient {
       return 99999;
     }
     return Math.floor(
-      this._latencies.reduce((p, c) => p + c, 0) / this._latencies.length
+      this._latencies.reduce((p, c) => p + c, 0) / this._latencies.length,
     );
   }
 
@@ -67,7 +67,7 @@ export class RPCClient extends FullRpcClient {
       const newPing = Date.now() - timeStart;
       this.latency = newPing;
       return newPing;
-    } catch (err) {
+    } catch {
       this.latency = PING_TIMEOUT;
       return PING_TIMEOUT;
     }

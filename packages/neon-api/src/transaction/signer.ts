@@ -50,7 +50,7 @@ export class TransactionSigner {
     const multisigWitness = tx.Witness.buildMultiSig(
       this.transaction.serialize(),
       witnesses,
-      multisigAccount
+      multisigAccount,
     );
     this.transaction.addWitness(multisigWitness);
   }
@@ -62,14 +62,14 @@ export class TransactionSigner {
 
   private _checkWitness(witness: tx.Witness): void {
     this._assertShouldSign(
-      u.reverseHex(u.hash160(witness.verificationScript.toBigEndian()))
+      u.reverseHex(u.hash160(witness.verificationScript.toBigEndian())),
     );
   }
 
   private _checkMultisigAcc(multisigAcc: wallet.Account): void {
     if (!multisigAcc.isMultiSig) {
       throw new Error(
-        `${multisigAcc} is not a multi-sig account or cannot get verificationScript from it`
+        `${multisigAcc} is not a multi-sig account or cannot get verificationScript from it`,
       );
     }
 
@@ -86,7 +86,7 @@ export class TransactionSigner {
   private _assertShouldSign(scriptHash: string): void {
     if (!this._getSignerHashes().some((hash) => hash === scriptHash)) {
       throw new Error(
-        `account with scripthash: ${scriptHash} is neither sender nor cosigner`
+        `account with scripthash: ${scriptHash} is neither sender nor cosigner`,
       );
     }
   }

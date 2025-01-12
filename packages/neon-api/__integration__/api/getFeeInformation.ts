@@ -14,7 +14,7 @@ describe("getFeeInformation", () => {
     const result = await getFeeInformation(client);
 
     expect(Object.keys(result)).toEqual(
-      expect.arrayContaining(["feePerByte", "executionFeeFactor"])
+      expect.arrayContaining(["feePerByte", "executionFeeFactor"]),
     );
   });
 });

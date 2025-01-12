@@ -29,7 +29,7 @@ export class ContractMethodDefinition {
   public safe: boolean;
 
   public static fromJson(
-    json: ContractMethodDefinitionJson
+    json: ContractMethodDefinitionJson,
   ): ContractMethodDefinition {
     return new ContractMethodDefinition({
       name: json.name,

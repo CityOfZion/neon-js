@@ -58,7 +58,7 @@ describe("JSON", () => {
       const result = WitnessRule.fromJson(json);
       expect(result.action).toEqual(neonObj.action);
       expect(result.condition).toEqual(neonObj.condition);
-    }
+    },
   );
 
   test.each(jsonTestCases)(
@@ -66,6 +66,6 @@ describe("JSON", () => {
     (_: string, json: WitnessRuleJson, neonObj: WitnessRule) => {
       const result = neonObj.toJson();
       expect(result).toEqual(json);
-    }
+    },
   );
 });

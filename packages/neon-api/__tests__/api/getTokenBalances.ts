@@ -46,7 +46,7 @@ describe("getTokenBalances", () => {
         "0000000000000000000000000000000000000001",
         "0000000000000000000000000000000000000002",
       ],
-      mockClient
+      mockClient,
     );
 
     expect(result).toStrictEqual(["1", "2.000", "3.00000000"]);
@@ -74,8 +74,8 @@ describe("getTokenBalances", () => {
             "0000000000000000000000000000000000000001",
             "0000000000000000000000000000000000000002",
           ],
-          mockClient
-        )
+          mockClient,
+        ),
     ).rejects.toThrow("expected exception message");
   });
 
@@ -100,8 +100,8 @@ describe("getTokenBalances", () => {
             "0000000000000000000000000000000000000001",
             "0000000000000000000000000000000000000002",
           ],
-          mockClient
-        )
+          mockClient,
+        ),
     ).rejects.toThrow("No exception message returned");
   });
 });

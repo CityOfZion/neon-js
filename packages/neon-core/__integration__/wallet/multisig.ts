@@ -57,7 +57,7 @@ describe("multisig", () => {
     const multisigWitness = Witness.buildMultiSig(
       tx.serialize(false),
       tx.witnesses,
-      multisigAcct
+      multisigAcct,
     );
 
     // Replace the single witnesses with the combined witness.

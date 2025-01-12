@@ -214,13 +214,13 @@ export interface FindStorageResult {
 }
 
 function transformInputTransaction(
-  tx: Transaction | HexString | string
+  tx: Transaction | HexString | string,
 ): string {
   return tx instanceof Transaction
     ? HexString.fromHex(tx.serialize(true)).toBase64()
     : tx instanceof HexString
-    ? tx.toBase64()
-    : tx;
+      ? tx.toBase64()
+      : tx;
 }
 
 /**
@@ -228,7 +228,7 @@ function transformInputTransaction(
  * @returns
  */
 function isJsonRpcParamRecord(
-  i?: JsonRpcParams
+  i?: JsonRpcParams,
 ): i is Record<string | number, unknown> {
   return i !== undefined && i !== null && typeof i === "object";
 }
@@ -251,7 +251,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
   public static traverseIterator(
     sessionId: string,
     iteratorId: string,
-    count: number
+    count: number,
   ): Query<[string, string, number], StackItem[]> {
     return new Query({
       method: "traverseiterator",
@@ -263,7 +263,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    * Query returning the network fee required for a given transaction.
    */
   public static calculateNetworkFee(
-    tx: Transaction | HexString | string
+    tx: Transaction | HexString | string,
   ): Query<[string], { networkfee: string }> {
     const base64Tx = transformInputTransaction(tx);
     return new Query({ method: "calculatenetworkfee", params: [base64Tx] });
@@ -281,7 +281,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    * Query returning the application log.
    */
   public static getApplicationLog(
-    hash: string
+    hash: string,
   ): Query<[string], ApplicationLogJson> {
     return new Query({
       method: "getapplicationlog",
@@ -296,15 +296,15 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    */
   public static getBlock(
     indexOrHash: number | string,
-    verbose: 1 | true
+    verbose: 1 | true,
   ): Query<[number | string, 1 | true], BlockJson>;
   public static getBlock(
     indexOrHash: number | string,
-    verbose?: 0 | false
+    verbose?: 0 | false,
   ): Query<[number | string, 0 | false], string>;
   public static getBlock(
     indexOrHash: number | string,
-    verbose: BooleanLikeParam = 0
+    verbose: BooleanLikeParam = 0,
   ): Query<[number | string, BooleanLikeParam], string | BlockJson> {
     return new Query({
       method: "getblock",
@@ -340,15 +340,15 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    */
   public static getBlockHeader(
     indexOrHash: string | number,
-    verbose: 1 | true
+    verbose: 1 | true,
   ): Query<[string | number, 1 | true], BlockHeaderJson>;
   public static getBlockHeader(
     indexOrHash: string | number,
-    verbose?: 0 | false
+    verbose?: 0 | false,
   ): Query<[string | number, 0 | false], string>;
   public static getBlockHeader(
     indexOrHash: string | number,
-    verbose: BooleanLikeParam = 0
+    verbose: BooleanLikeParam = 0,
   ): Query<[string | number, BooleanLikeParam], string | BlockHeaderJson> {
     return new Query({
       method: "getblockheader",
@@ -379,7 +379,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    * @param scriptHash - hash of contract
    */
   public static getContractState(
-    scriptHash: string
+    scriptHash: string,
   ): Query<[string], GetContractStateResult> {
     return new Query({
       method: "getcontractstate",
@@ -397,7 +397,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
   }
 
   public static getNep11Balances(
-    accountIdentifier: string
+    accountIdentifier: string,
   ): Query<[string], GetNep11BalancesResult> {
     return new Query({
       method: "getnep11balances",
@@ -407,7 +407,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
 
   public static getNep11Properties(
     contractHash: string,
-    tokenId: string
+    tokenId: string,
   ): Query<[string, string], Record<string, unknown>> {
     return new Query({
       method: "getnep11properties",
@@ -418,7 +418,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
   public static getNep11Transfers(
     accountIdentifer: string,
     startTime?: string,
-    endTime?: string
+    endTime?: string,
   ): Query<[string, string?, string?], GetNep11TransfersResult> {
     const params: [string, string?, string?] = [accountIdentifer];
     if (startTime) params.push(startTime);
@@ -438,7 +438,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
   public static getNep17Transfers(
     accountIdentifer: string,
     startTime?: string,
-    endTime?: string
+    endTime?: string,
   ): Query<[string, string?, string?], GetNep17TransfersResult> {
     const params: [string, string?, string?] = [accountIdentifer];
     if (startTime) params.push(startTime);
@@ -454,7 +454,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    * @param accountIdentifer - address or scriptHash of account
    */
   public static getNep17Balances(
-    accountIdentifer: string
+    accountIdentifer: string,
   ): Query<[string], GetNep17BalancesResult> {
     return new Query({
       method: "getnep17balances",
@@ -480,13 +480,13 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    * shouldGetUnverified = 1, get current block height and confirmed and unconfirmed tx hash
    */
   public static getRawMemPool(
-    shouldGetUnverified?: BooleanLikeParam
+    shouldGetUnverified?: BooleanLikeParam,
   ): Query<[0 | false], string[]>;
   public static getRawMemPool(
-    shouldGetUnverified: 1 | true
+    shouldGetUnverified: 1 | true,
   ): Query<[1], GetRawMemPoolResult>;
   public static getRawMemPool(
-    shouldGetUnverified: BooleanLikeParam = 0
+    shouldGetUnverified: BooleanLikeParam = 0,
   ): Query<[BooleanLikeParam], string[] | GetRawMemPoolResult> {
     return new Query({
       method: "getrawmempool",
@@ -501,15 +501,15 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    */
   public static getRawTransaction(
     txid: string,
-    verbose?: 0 | false
+    verbose?: 0 | false,
   ): Query<[string, 0 | false], string>;
   public static getRawTransaction(
     txid: string,
-    verbose: 1 | true
+    verbose: 1 | true,
   ): Query<[string, 1 | true], GetRawTransactionResult>;
   public static getRawTransaction(
     txid: string,
-    verbose: BooleanLikeParam = 0
+    verbose: BooleanLikeParam = 0,
   ): Query<[string, BooleanLikeParam], string | GetRawTransactionResult> {
     return new Query({
       method: "getrawtransaction",
@@ -524,7 +524,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    */
   public static getStorage(
     scriptHash: string,
-    key: string
+    key: string,
   ): Query<[string, string], string> {
     return new Query({
       method: "getstorage",
@@ -541,7 +541,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
   public static findStorage(
     scriptHash: string,
     searchPrefix: string,
-    start = 0
+    start = 0,
   ): Query<[string, string, number], FindStorageResult> {
     return new Query({
       method: "findstorage",
@@ -588,7 +588,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
   public static invokeContractVerify(
     scriptHash: string,
     args: unknown[] = [],
-    signers: (Signer | SignerJson)[] = []
+    signers: (Signer | SignerJson)[] = [],
   ): Query<[string, unknown[], SignerJson[]], InvokeResult> {
     return new Query({
       method: "invokecontractverify",
@@ -611,7 +611,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
     scriptHash: string,
     operation: string,
     params: unknown[] = [],
-    signers: (Signer | SignerJson)[] = []
+    signers: (Signer | SignerJson)[] = [],
   ): Query<[string, string, unknown[], SignerJson[]], InvokeResult> {
     return new Query({
       method: "invokefunction",
@@ -631,7 +631,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    */
   public static invokeScript(
     script: string | HexString,
-    signers: (Signer | SignerJson)[] = []
+    signers: (Signer | SignerJson)[] = [],
   ): Query<[string, SignerJson[]], InvokeResult> {
     return new Query({
       method: "invokescript",
@@ -657,7 +657,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    * @param transaction - transaction as a Transaction object or base64 hexstring.
    */
   public static sendRawTransaction(
-    transaction: Transaction | string | HexString
+    transaction: Transaction | string | HexString,
   ): Query<[string], SendResult> {
     const base64Tx = transformInputTransaction(transaction);
     return new Query({
@@ -682,7 +682,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    * @param addr - address to validate.
    */
   public static validateAddress(
-    addr: string
+    addr: string,
   ): Query<[string], ValidateAddressResult> {
     return new Query({
       method: "validateaddress",
@@ -695,7 +695,7 @@ export class Query<TParams extends JsonRpcParams, TResponse> {
    * @param addr - a NEO address
    */
   public static getUnclaimedGas(
-    addr: string
+    addr: string,
   ): Query<[string], GetUnclaimedGasResult> {
     return new Query({
       method: "getunclaimedgas",

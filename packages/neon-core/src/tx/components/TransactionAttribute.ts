@@ -73,7 +73,7 @@ export abstract class TransactionAttribute implements NeonSerializable {
   }
 
   public static fromJson(
-    input: TransactionAttributeJson
+    input: TransactionAttributeJson,
   ): TransactionAttribute {
     const attrType = parseEnum(input.type, TransactionAttributeType);
     const implementingClass = this.getImplementation(attrType);
@@ -115,7 +115,7 @@ export class HighPriorityAttribute extends TransactionAttribute {
   }
 
   public static fromJson(
-    _: HighPriorityTransactionAttributeJson
+    _: HighPriorityTransactionAttributeJson,
   ): HighPriorityAttribute {
     return new HighPriorityAttribute();
   }
@@ -147,7 +147,7 @@ export class OracleResponseAttribute extends TransactionAttribute {
   }
 
   public static fromJson(
-    input: OracleResponseTransactionAttributeJson
+    input: OracleResponseTransactionAttributeJson,
   ): OracleResponseAttribute {
     const code = parseEnum(input.code, OracleResponseCode);
     return new OracleResponseAttribute(input.id, code, input.result);
@@ -170,7 +170,7 @@ export class OracleResponseAttribute extends TransactionAttribute {
   constructor(
     public id: number,
     public code: OracleResponseCode,
-    public result: string
+    public result: string,
   ) {
     super();
   }
@@ -203,13 +203,13 @@ export class OracleResponseAttribute extends TransactionAttribute {
 
 function readAndAssertType(
   ss: StringStream,
-  type: TransactionAttributeType
+  type: TransactionAttributeType,
 ): void {
   const rawType = parseInt(ss.read(1), 16);
   const txType = parseEnum(rawType, TransactionAttributeType);
   if (txType !== type) {
     throw new Error(
-      `Wrong TransactionAttributeType. Wanted ${TransactionAttributeType[type]} but got ${txType}`
+      `Wrong TransactionAttributeType. Wanted ${TransactionAttributeType[type]} but got ${txType}`,
     );
   }
 }

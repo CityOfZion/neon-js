@@ -7,22 +7,22 @@ import {
 } from "../Query";
 import { RpcDispatcher, RpcDispatcherMixin } from "./RpcDispatcher";
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function TokenTrackerRpcMixin<TBase extends RpcDispatcherMixin>(
-  base: TBase
+  base: TBase,
 ) {
   return class TokenTrackerRpcInterface extends base {
     public async getNep17Transfers(
       accountIdentifier: string,
       startTime?: string,
-      endTime?: string
+      endTime?: string,
     ): Promise<GetNep17TransfersResult> {
       return this.execute(
-        Query.getNep17Transfers(accountIdentifier, startTime, endTime)
+        Query.getNep17Transfers(accountIdentifier, startTime, endTime),
       );
     }
     public async getNep17Balances(
-      accountIdentifier: string
+      accountIdentifier: string,
     ): Promise<GetNep17BalancesResult> {
       return this.execute(Query.getNep17Balances(accountIdentifier));
     }
@@ -30,15 +30,15 @@ export function TokenTrackerRpcMixin<TBase extends RpcDispatcherMixin>(
     public async getNep11Transfers(
       accountIdentifier: string,
       startTime?: string,
-      endTime?: string
+      endTime?: string,
     ): Promise<GetNep11TransfersResult> {
       return this.execute(
-        Query.getNep11Transfers(accountIdentifier, startTime, endTime)
+        Query.getNep11Transfers(accountIdentifier, startTime, endTime),
       );
     }
 
     public async getNep11Balances(
-      accountIdentifier: string
+      accountIdentifier: string,
     ): Promise<GetNep11BalancesResult> {
       return this.execute(Query.getNep11Balances(accountIdentifier));
     }

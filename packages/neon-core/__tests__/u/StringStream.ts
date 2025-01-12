@@ -6,7 +6,7 @@ describe("constructor", () => {
     (data: string) => {
       const result = new StringStream(data);
       expect(result.str).toBe(data);
-    }
+    },
   );
 });
 
@@ -48,7 +48,7 @@ describe("peek", () => {
       const ss = new StringStream("0102030405");
       const result = ss.peek(num);
       expect(result).toBe(expected);
-    }
+    },
   );
 });
 

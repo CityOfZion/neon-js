@@ -8,14 +8,14 @@ import { isPublicKey } from "./verify";
  */
 export function constructMultiSigVerificationScript(
   signingThreshold: number,
-  keys: string[]
+  keys: string[],
 ): string {
   if (signingThreshold <= 0) {
     throw new Error("signingThreshold must be bigger than zero.");
   }
   if (signingThreshold > keys.length) {
     throw new Error(
-      "signingThreshold must be smaller than or equal to number of keys"
+      "signingThreshold must be smaller than or equal to number of keys",
     );
   }
 
@@ -38,7 +38,7 @@ export function constructMultiSigVerificationScript(
  * @param verificationScript - verification Script of an Account.
  */
 export function getPublicKeysFromVerificationScript(
-  verificationScript: string
+  verificationScript: string,
 ): string[] {
   const operations = OpToken.fromScript(verificationScript);
   return operations.filter(looksLikePublicKey).map((t) => t.params);
@@ -57,7 +57,7 @@ function looksLikePublicKey(token: OpToken): token is Required<OpToken> {
  * @param verificationScript - verification script of a multi-sig Account.
  */
 export function getSigningThresholdFromVerificationScript(
-  verificationScript: string
+  verificationScript: string,
 ): number {
   const operations = OpToken.fromScript(verificationScript);
   return OpToken.parseInt(operations[0]);
@@ -68,14 +68,14 @@ export function getSigningThresholdFromVerificationScript(
  * @param invocationScript - invocationScript of a Witness.
  */
 export function getSignaturesFromInvocationScript(
-  invocationScript: string
+  invocationScript: string,
 ): string[] {
   return OpToken.fromScript(invocationScript)
     .filter(
       (token): token is Required<OpToken> =>
         token.code === OpCode.PUSHDATA1 &&
         !!token.params &&
-        token.params.length === 128
+        token.params.length === 128,
     )
     .map((token) => token.params);
 }

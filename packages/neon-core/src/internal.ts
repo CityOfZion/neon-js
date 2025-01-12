@@ -3,7 +3,7 @@
  */
 export function parseEnum<T extends object>(
   input: string | number | T[keyof T],
-  enumType: T
+  enumType: T,
 ): T[keyof T] {
   if (typeof input === "string") {
     if (input in enumType) {

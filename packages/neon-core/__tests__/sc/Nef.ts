@@ -27,7 +27,7 @@ describe("fromJson", () => {
         tokens: [],
         script: "00",
         checksum: 0,
-      })
+      }),
     ).toThrowError("Incorrect magic");
   });
 
@@ -40,7 +40,7 @@ describe("fromJson", () => {
         tokens: [],
         script: "00",
         checksum: 0,
-      })
+      }),
     ).toThrowError("Invalid checksum");
   });
 
@@ -82,7 +82,7 @@ describe("fromBuffer", () => {
      */
     const data = Buffer.from(
       "4e454633746573742d636f6d70696c657220302e31000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006676974687562000100000000000000000000000000000000000000000b746573745f6d6574686f6400000100000001403374b4fd",
-      "hex"
+      "hex",
     );
     const nef = NEF.fromBuffer(data);
     expect(nef.compiler).toBe("test-compiler 0.1");
@@ -99,7 +99,7 @@ describe("fromBuffer", () => {
 
   test("local file: djnicholson.NeoPetShopContract", () => {
     const nefFile = readFileSync(
-      joinPath(__dirname, "./djnicholson.NeoPetShopContract.nef")
+      joinPath(__dirname, "./djnicholson.NeoPetShopContract.nef"),
     );
 
     const nef = NEF.fromBuffer(nefFile);
@@ -110,7 +110,7 @@ describe("fromBuffer", () => {
   test("incorrect magic", () => {
     const data = Buffer.from("00010203", "hex");
     expect(() => NEF.fromBuffer(data)).toThrowError(
-      "NEF deserialization failure - incorrect magic"
+      "NEF deserialization failure - incorrect magic",
     );
   });
 
@@ -120,7 +120,7 @@ describe("fromBuffer", () => {
     const source = "fd0101"; // var size of 257 (limit is 256)
     const data = Buffer.from(magic + compiler + source, "hex");
     expect(() => NEF.fromBuffer(data)).toThrowError(
-      "NEF deserialization failure - source field size exceeds maximum length of 256"
+      "NEF deserialization failure - source field size exceeds maximum length of 256",
     );
   });
 
@@ -130,7 +130,7 @@ describe("fromBuffer", () => {
     const source = "00";
     const data = Buffer.from(magic + compiler + source + "01", "hex");
     expect(() => NEF.fromBuffer(data)).toThrowError(
-      "NEF deserialization failure - reserved bytes must be 0"
+      "NEF deserialization failure - reserved bytes must be 0",
     );
   });
 
@@ -141,10 +141,10 @@ describe("fromBuffer", () => {
     const reserved = "00";
     const data = Buffer.from(
       magic + compiler + source + reserved + "ffff",
-      "hex"
+      "hex",
     );
     expect(() => NEF.fromBuffer(data)).toThrowError(
-      "NEF deserialization failure - token array exceeds maximum length of 128"
+      "NEF deserialization failure - token array exceeds maximum length of 128",
     );
   });
 
@@ -156,10 +156,10 @@ describe("fromBuffer", () => {
     const methodLength = "00";
     const data = Buffer.from(
       magic + compiler + source + reserved + methodLength + "0001",
-      "hex"
+      "hex",
     );
     expect(() => NEF.fromBuffer(data)).toThrowError(
-      "NEF deserialization failure - reserved bytes must be 0"
+      "NEF deserialization failure - reserved bytes must be 0",
     );
   });
 
@@ -172,10 +172,10 @@ describe("fromBuffer", () => {
     const methodLength = "00";
     const data = Buffer.from(
       magic + compiler + source + reserved1 + methodLength + reserved2 + "00",
-      "hex"
+      "hex",
     );
     expect(() => NEF.fromBuffer(data)).toThrowError(
-      "NEF deserialization failure - script length can't be 0"
+      "NEF deserialization failure - script length can't be 0",
     );
   });
 
@@ -194,10 +194,10 @@ describe("fromBuffer", () => {
         methodLength +
         reserved2 +
         "ffffffffffffffff",
-      "hex"
+      "hex",
     );
     expect(() => NEF.fromBuffer(data)).toThrowError(
-      "NEF deserialization failure - max script length exceeded"
+      "NEF deserialization failure - max script length exceeded",
     );
   });
 });

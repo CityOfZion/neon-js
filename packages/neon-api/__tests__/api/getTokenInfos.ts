@@ -45,7 +45,7 @@ describe("getTokenInfos", () => {
         "668e0c1f9d7b70a99dd9e06eadd4c784d641afbc",
         "de5f57d430d3dece511cf975a8d37848cb9e0525",
       ],
-      mockClient
+      mockClient,
     );
 
     expect(result).toStrictEqual([
@@ -79,8 +79,8 @@ describe("getTokenInfos", () => {
       async () =>
         await getTokenInfos(
           ["668e0c1f9d7b70a99dd9e06eadd4c784d641afbc"],
-          mockClient
-        )
+          mockClient,
+        ),
     ).rejects.toThrow("expected exception message");
   });
 
@@ -100,8 +100,8 @@ describe("getTokenInfos", () => {
       async () =>
         await getTokenInfos(
           ["668e0c1f9d7b70a99dd9e06eadd4c784d641afbc"],
-          mockClient
-        )
+          mockClient,
+        ),
     ).rejects.toThrow("No exception message returned");
   });
 });

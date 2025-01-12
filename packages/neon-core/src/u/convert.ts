@@ -89,26 +89,26 @@ export function int2hex(num: number): string {
 export function num2hexstring(
   num: number,
   size = 1,
-  littleEndian = false
+  littleEndian = false,
 ): string {
   if (typeof num !== "number") {
     throw new Error(
-      `num2hexstring expected a number but got ${typeof num} instead.`
+      `num2hexstring expected a number but got ${typeof num} instead.`,
     );
   }
   if (num < 0) {
     throw new RangeError(
-      `num2hexstring expected a positive integer but got ${num} instead.`
+      `num2hexstring expected a positive integer but got ${num} instead.`,
     );
   }
   if (size % 1 !== 0) {
     throw new Error(
-      `num2hexstring expected a positive integer but got ${num} instead.`
+      `num2hexstring expected a positive integer but got ${num} instead.`,
     );
   }
   if (!Number.isSafeInteger(num)) {
     throw new RangeError(
-      `num2hexstring expected a safe integer but got ${num} instead.`
+      `num2hexstring expected a safe integer but got ${num} instead.`,
     );
   }
   size = size * 2;

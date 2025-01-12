@@ -8,7 +8,7 @@ import { DEFAULT_SCRYPT } from "../consts";
 export async function upgrade(
   account: Account,
   passphrase = "",
-  scryptParams = DEFAULT_SCRYPT
+  scryptParams = DEFAULT_SCRYPT,
 ): Promise<Account> {
   // Checks that account is upgradable
   if (!account.tryGet("privateKey") && passphrase === "") {
@@ -23,7 +23,7 @@ export async function upgrade(
     const wifKey = await decryptNeo2(
       account.encrypted,
       passphrase,
-      scryptParams
+      scryptParams,
     );
     const neo3Account = new Account(wifKey);
     return await neo3Account.encrypt(passphrase, scryptParams);

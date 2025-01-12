@@ -29,7 +29,7 @@ describe("constructMultiSigVerificationScript", () => {
     (_: string, threshold: number, keys: string[], script: string) => {
       const result = constructMultiSigVerificationScript(threshold, keys);
       expect(result).toBe(script);
-    }
+    },
   );
 });
 
@@ -39,7 +39,7 @@ describe("getPublicKeysFromVerificationScript", () => {
     (_: string, _threshold: number, keys: string[], script: string) => {
       const result = getPublicKeysFromVerificationScript(script);
       expect(result).toStrictEqual(keys);
-    }
+    },
   );
 });
 
@@ -49,6 +49,6 @@ describe("getSigningThresholdFromVerificationScript", () => {
     (_: string, threshold: number, _keys: string[], script: string) => {
       const result = getSigningThresholdFromVerificationScript(script);
       expect(result).toBe(threshold);
-    }
+    },
   );
 });

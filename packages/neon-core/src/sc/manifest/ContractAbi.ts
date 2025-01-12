@@ -33,7 +33,7 @@ export class ContractAbi {
     const { methods = [], events = [] } = obj;
 
     this.methods = methods.map(
-      (method) => new ContractMethodDefinition(method)
+      (method) => new ContractMethodDefinition(method),
     );
     this.events = events.map((event) => new ContractEventDefiniton(event));
   }

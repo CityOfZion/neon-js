@@ -94,13 +94,13 @@ describe("number", () => {
   describe("fromNumber", () => {
     test("throws when non-integer number", () => {
       expect(() => BigInteger.fromNumber(1.1)).toThrowError(
-        "BigInteger only accepts integers"
+        "BigInteger only accepts integers",
       );
     });
 
     test("throws when non-integer numeric string", () => {
       expect(() => BigInteger.fromNumber("1.1")).toThrowError(
-        "BigInteger only accepts integers"
+        "BigInteger only accepts integers",
       );
     });
 
@@ -132,12 +132,12 @@ describe("decimals", () => {
       (
         decimalNumber: number | string,
         decimalPlaces: number,
-        expected: string
+        expected: string,
       ) => {
         const result = BigInteger.fromDecimal(decimalNumber, decimalPlaces);
 
         expect(result.toString()).toBe(expected);
-      }
+      },
     );
 
     test("throws if provided number has more decimals than provides places", () => {
@@ -160,7 +160,7 @@ describe("decimals", () => {
         const result = BigInteger.fromNumber(input).toDecimal(decimalPlaces);
 
         expect(result).toBe(expected);
-      }
+      },
     );
   });
 });
@@ -177,7 +177,7 @@ describe("math", () => {
       const result = BigInteger.fromNumber(base).add(other);
 
       expect(result.toString()).toEqual(expected);
-    }
+    },
   );
 
   test.each([
@@ -189,11 +189,11 @@ describe("math", () => {
     "BI + BI: %s + %s = %s",
     (base: string | number, other: number | string, expected: string) => {
       const result = BigInteger.fromNumber(base).add(
-        BigInteger.fromNumber(other)
+        BigInteger.fromNumber(other),
       );
 
       expect(result.toString()).toEqual(expected);
-    }
+    },
   );
 
   test.each([
@@ -207,7 +207,7 @@ describe("math", () => {
       const result = BigInteger.fromNumber(base).sub(other);
 
       expect(result.toString()).toEqual(expected);
-    }
+    },
   );
 
   test.each([
@@ -219,11 +219,11 @@ describe("math", () => {
     "BI - BI: %s - %s = %s",
     (base: string | number, other: number | string, expected: string) => {
       const result = BigInteger.fromNumber(base).sub(
-        BigInteger.fromNumber(other)
+        BigInteger.fromNumber(other),
       );
 
       expect(result.toString()).toEqual(expected);
-    }
+    },
   );
 
   test.each([
@@ -237,7 +237,7 @@ describe("math", () => {
       const result = BigInteger.fromNumber(base).mul(other);
 
       expect(result.toString()).toEqual(expected);
-    }
+    },
   );
 
   test.each([
@@ -249,11 +249,11 @@ describe("math", () => {
     "BI * BI: %s * %s = %s",
     (base: string | number, other: number | string, expected: string) => {
       const result = BigInteger.fromNumber(base).mul(
-        BigInteger.fromNumber(other)
+        BigInteger.fromNumber(other),
       );
 
       expect(result.toString()).toEqual(expected);
-    }
+    },
   );
 
   test.each([
@@ -268,7 +268,7 @@ describe("math", () => {
       const result = BigInteger.fromNumber(base).div(other);
 
       expect(result.toString()).toEqual(expected);
-    }
+    },
   );
 
   test.each([
@@ -281,11 +281,11 @@ describe("math", () => {
     "BI / BI: %s / %s = %s",
     (base: string | number, other: number | string, expected: string) => {
       const result = BigInteger.fromNumber(base).div(
-        BigInteger.fromNumber(other)
+        BigInteger.fromNumber(other),
       );
 
       expect(result.toString()).toEqual(expected);
-    }
+    },
   );
 
   test.each([
@@ -300,7 +300,7 @@ describe("math", () => {
       const result = BigInteger.fromNumber(base).mod(other);
 
       expect(result.toString()).toEqual(expected);
-    }
+    },
   );
 
   test.each([
@@ -313,11 +313,11 @@ describe("math", () => {
     "BI % BI: %s % %s = %s",
     (base: string | number, other: number | string, expected: string) => {
       const result = BigInteger.fromNumber(base).mod(
-        BigInteger.fromNumber(other)
+        BigInteger.fromNumber(other),
       );
 
       expect(result.toString()).toEqual(expected);
-    }
+    },
   );
 });
 
@@ -360,7 +360,7 @@ describe("compare", () => {
 
   test("accepts unsafe numbers", () => {
     const result =
-      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
+      // eslint-disable-next-line
       BigInteger.fromNumber(5).compare(9999999999999999999999999999999999);
 
     expect(result).toBe(-1);

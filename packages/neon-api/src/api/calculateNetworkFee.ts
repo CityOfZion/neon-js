@@ -14,7 +14,7 @@ import RPCClient from "@cityofzion/neon-core/lib/rpc/RPCClient";
 export function calculateNetworkFee(
   txn: tx.Transaction,
   feePerByte: number | u.BigInteger,
-  executionFeeFactor: number | u.BigInteger
+  executionFeeFactor: number | u.BigInteger,
 ): u.BigInteger {
   const feePerByteBigInteger =
     feePerByte instanceof u.BigInteger
@@ -26,7 +26,7 @@ export function calculateNetworkFee(
     const verificationScript = w.verificationScript;
     if (sc.isMultisigContract(verificationScript)) {
       const threshold = wallet.getSigningThresholdFromVerificationScript(
-        verificationScript.toBigEndian()
+        verificationScript.toBigEndian(),
       );
 
       return new tx.Witness({
@@ -48,17 +48,17 @@ export function calculateNetworkFee(
         .add(
           sc.calculateExecutionFee(
             witness.invocationScript.toBigEndian(),
-            executionFeeFactor
-          )
+            executionFeeFactor,
+          ),
         )
         .add(
           sc.calculateExecutionFee(
             witness.verificationScript.toBigEndian(),
-            executionFeeFactor
-          )
+            executionFeeFactor,
+          ),
         );
     },
-    u.BigInteger.fromNumber(0)
+    u.BigInteger.fromNumber(0),
   );
   const sizeFee = feePerByteBigInteger.mul(txClone.serialize(true).length / 2);
 
@@ -71,13 +71,13 @@ function generateFakeInvocationScript(): sc.OpToken {
 
 export async function smartCalculateNetworkFee(
   txn: tx.Transaction,
-  client: RPCClient
+  client: RPCClient,
 ): Promise<u.BigInteger> {
   const txClone = new tx.Transaction(txn);
 
   if (txn.witnesses.length < 1) {
     throw new Error(
-      "Cannot calculate network fee without at least one witness"
+      "Cannot calculate network fee without at least one witness",
     );
   }
 
@@ -85,7 +85,7 @@ export async function smartCalculateNetworkFee(
     const verificationScript = w.verificationScript;
     if (sc.isMultisigContract(verificationScript)) {
       const threshold = wallet.getSigningThresholdFromVerificationScript(
-        verificationScript.toBigEndian()
+        verificationScript.toBigEndian(),
       );
 
       return new tx.Witness({

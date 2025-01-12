@@ -23,10 +23,13 @@ export class BaseContract {
 
   constructor(scriptHash: string, methods: ContractMethodDefinition[] = []) {
     this.#scriptHash = scriptHash;
-    this.#abi = methods.reduce((map, method) => {
-      map[method.name] = method;
-      return map;
-    }, {} as Record<string, ContractMethodDefinition>);
+    this.#abi = methods.reduce(
+      (map, method) => {
+        map[method.name] = method;
+        return map;
+      },
+      {} as Record<string, ContractMethodDefinition>,
+    );
   }
 
   public call(
@@ -48,12 +51,12 @@ export class BaseContract {
 
     if (methodDefinition.parameters.length !== inputArgs.length) {
       throw new Error(
-        `Invalid number of parameters provided. Method requires ${methodDefinition.parameters.length} parameters but got ${inputArgs.length}.`
+        `Invalid number of parameters provided. Method requires ${methodDefinition.parameters.length} parameters but got ${inputArgs.length}.`,
       );
     }
 
     const args = inputArgs.map((arg, index) =>
-      convertParameter(arg, methodDefinition.parameters[index].type)
+      convertParameter(arg, methodDefinition.parameters[index].type),
     );
 
     return {
@@ -67,7 +70,7 @@ export class BaseContract {
 
 function convertParameter(
   arg: string | boolean | number | ContractParam | ContractParamJson,
-  type: ContractParamType
+  type: ContractParamType,
 ): ContractParam {
   if (typeof arg === "object") {
     const contractParamInstance =
@@ -77,7 +80,7 @@ function convertParameter(
       return contractParamInstance;
     } else {
       throw new Error(
-        `Provided ${contractParamInstance.type} when trying to get ${type}`
+        `Provided ${contractParamInstance.type} when trying to get ${type}`,
       );
     }
   }
@@ -90,7 +93,7 @@ function convertParameter(
 
 function isCompatibleType(
   givenType: ContractParamType,
-  requiredType: ContractParamType
+  requiredType: ContractParamType,
 ): boolean {
   return (
     // same type

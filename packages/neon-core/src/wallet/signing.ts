@@ -14,7 +14,7 @@ const curve = getCurve(EllipticCurvePreset.SECP256R1);
 export function sign(
   hex: string,
   privateKey: string,
-  k?: number | string
+  k?: number | string,
 ): string {
   if (isWIF(privateKey)) {
     privateKey = getPrivateKeyFromWIF(privateKey);

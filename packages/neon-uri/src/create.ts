@@ -25,7 +25,7 @@ export function createVoteUri(publicKey: string): string {
 export function createPayUri(
   toAddress: string,
   asset: string,
-  amount?: number
+  amount?: number,
 ): string {
   let uri = `neo:${toAddress}?asset=${asset}`;
   if (amount) {
