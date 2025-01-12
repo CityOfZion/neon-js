@@ -51,9 +51,9 @@
     "loglevel-plugin-prefix": "0.8.4"
   },
   "devDependencies": {
-    "@types/bn.js": "5.1.1",
-    "@types/crypto-js": "4.2.0",
-    "@types/elliptic": "6.4.14",
+    "@types/bn.js": "5.1.6",
+    "@types/crypto-js": "4.2.2",
+    "@types/elliptic": "6.4.18",
     "@types/lodash": "4.14.191"
   },
   "files": [
