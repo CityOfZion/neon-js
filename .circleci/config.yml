@@ -88,9 +88,6 @@ jobs:
           paths:
             - node_modules
       - run:
-          name: Bootstrap
-          command: npm run bootstrap
-      - run:
           name: Build
           command: npm run build && npm run dist
       - persist_to_workspace:
