@@ -1,0 +1,15 @@
+{
+    // extend your base config to share compilerOptions, etc
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      // ensure that nobody can accidentally use this config for a build
+      "noEmit": true,
+      "types":["jest"],
+    },
+    "include": [
+      // whatever paths you intend to lint
+      "packages/**/src/**/*.ts",
+      "packages/**/__integration__/**/*.ts",
+      "packages/**/__tests__/**/*.ts",
+    ],
+  }
