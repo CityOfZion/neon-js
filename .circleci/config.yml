@@ -203,14 +203,14 @@ workflows:
           name: unittest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["18.19", "lts", "current"]
+              version: ["20.18", "lts", "current"]
           requires:
             - setup
       - integrationtest:
           name: integrationtest-<< matrix.version >>
           matrix:
             parameters:
-              version: ["18.19", "lts", "current"]
+              version: ["20.18", "lts", "current"]
           requires:
             - lint
             - unittest-<< matrix.version >>
