@@ -1,4 +1,3 @@
-
 export enum StatusWord {
   OK = 0x9000,
   DENY = 0x6985,
