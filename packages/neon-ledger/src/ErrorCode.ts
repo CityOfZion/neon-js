@@ -1,5 +1,3 @@
-import { cloneDeep } from "lodash";
-
 export enum StatusWord {
   OK = 0x9000,
   DENY = 0x6985,
@@ -45,7 +43,7 @@ export function looksLikeTransportStatusError(
  * @returns error with modified message if found.
  */
 export function evalTransportError(err: Error): Error {
-  const transportErr = cloneDeep(err) as TransportStatusError;
+  const transportErr = structuredClone(err) as TransportStatusError;
   switch (transportErr.statusCode) {
     case StatusWord.APP_CLOSED:
       transportErr.message = "Your NEO app is closed! Please login.";
