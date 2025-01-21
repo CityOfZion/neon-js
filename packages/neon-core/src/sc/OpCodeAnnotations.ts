@@ -163,6 +163,8 @@ export const OpCodeAnnotations: Record<OpCode, OpCodeAnnotation> = {
   [OpCode.MOD]: {},
   [OpCode.POW]: {},
   [OpCode.SQRT]: {},
+  [OpCode.MODMUL]: {},
+  [OpCode.MODPOW]: {},
   [OpCode.SHL]: {},
   [OpCode.SHR]: {},
   [OpCode.NOT]: {},
@@ -202,4 +204,6 @@ export const OpCodeAnnotations: Record<OpCode, OpCodeAnnotation> = {
   [OpCode.ISNULL]: {},
   [OpCode.ISTYPE]: { operandSize: 1 },
   [OpCode.CONVERT]: { operandSize: 1 },
+  [OpCode.ABORTMSG]: {},
+  [OpCode.ASSERTMSG]: {},
 };
