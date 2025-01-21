@@ -313,6 +313,10 @@ export enum OpCode {
   POW = 0xa3,
   // Returns the square root of a specified number.
   SQRT = 0xa4,
+  // Performs modulus division on a number multiplied by another number.
+  MODMUL = 0xa5,
+  // Performs modulus division on a number raised to the power of another number. If the exponent is -1, it will have the calculation of the modular inverse.
+  MODPOW = 0xa6,
   // Shifts a left b bits, preserving sign.
   SHL = 0xa8,
   // Shifts a right b bits, preserving sign.
@@ -397,6 +401,16 @@ export enum OpCode {
   ISTYPE = 0xd9,
   // Converts the top item to the specified type.
   CONVERT = 0xdb,
+
+  /* Extensions */
+
+  // Pops the top stack item. Then, turns the vm state to FAULT immediately, and cannot be caught. The top stack
+  // value is used as reason.
+  ABORTMSG = 0xe0,
+
+  // Pops the top two stack items. If the second-to-top stack value is false, exits the vm execution and sets the
+  // vm state to FAULT. In this case, the top stack value is used as reason for the exit. Otherwise, it is ignored.
+  ASSERTMSG = 0xe1,
 }
 
 export function fromHex(hexstring: string): OpCode {
