@@ -48,7 +48,10 @@ export interface ApplicationLogJson {
     invocations?: {
       hash: string;
       method: string;
-      arguments: StackItemJson[];
+      arguments: {
+        type: "Array";
+        value: StackItemJson[];
+      };
       argumentscount: number;
       truncated: boolean;
     }[];
