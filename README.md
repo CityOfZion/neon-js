@@ -81,8 +81,7 @@ This repository is a typescript mono-repo using Lerna. Please ensure the followi
 ```sh
 git clone https://github.com/CityOfZion/neon-js.git
 cd neon-js
-yarn
-npm run bootstrap
+npm install
 npm run build
 ```
 
@@ -95,6 +94,8 @@ npm run dist
 npm run test:unit
 npm run test:integration
 ```
+> **Note**
+> `test:integration` requires running the Docker image in `.devcontainer`
 
 # Docs
 
