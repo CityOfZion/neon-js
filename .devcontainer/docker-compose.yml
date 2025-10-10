@@ -25,7 +25,6 @@ services:
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   solonet:
-#    image: my-custom-solonet:latest
     image: snowypowers/n3-csharp-solonet:3.6.2
     restart: unless-stopped
     volumes:
