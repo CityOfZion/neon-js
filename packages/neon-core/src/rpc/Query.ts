@@ -44,6 +44,17 @@ export interface ApplicationLogJson {
       eventname: string;
       state: StackItemJson;
     }[];
+    exception?: string;
+    invocations?: {
+      hash: string;
+      method: string;
+      arguments: {
+        type: "Array";
+        value: StackItemJson[];
+      };
+      argumentscount: number;
+      truncated: boolean;
+    }[];
   }[];
 }
 
