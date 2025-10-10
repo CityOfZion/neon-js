@@ -78,6 +78,11 @@ export interface InvokeResult<T extends StackItemJson = StackItemJson> {
    * Formatted in base64-encoding.
    */
   tx?: string;
+  notifications: {
+    contract: string;
+    eventname: string;
+    state: StackItemJson;
+  }[];
   session?: string;
 }
 
