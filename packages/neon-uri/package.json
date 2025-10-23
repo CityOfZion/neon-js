@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-uri",
   "description": "Neon-uri Module",
-  "version": "5.7.0",
+  "version": "5.8.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
