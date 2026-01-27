@@ -133,7 +133,11 @@ export class ScriptBuilder extends StringStream {
         keyType !== ContractParamType.Boolean &&
         keyType !== ContractParamType.Integer &&
         keyType !== ContractParamType.String &&
-        keyType !== ContractParamType.ByteArray
+        keyType !== ContractParamType.ByteArray &&
+        keyType !== ContractParamType.Hash160 &&
+        keyType !== ContractParamType.Hash256 &&
+        keyType !== ContractParamType.PublicKey &&
+        keyType !== ContractParamType.Signature
       ) {
         throw new Error(`Unsupported key type: ${keyType}`);
       }

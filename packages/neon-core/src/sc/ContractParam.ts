@@ -229,6 +229,10 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       ContractParamType.Boolean,
       ContractParamType.Integer,
       ContractParamType.ByteArray,
+      ContractParamType.Hash160,
+      ContractParamType.Hash256,
+      ContractParamType.PublicKey,
+      ContractParamType.Signature,
     ];
 
     params.forEach((param) => {
