@@ -11,6 +11,7 @@ import {
   ContractParamMap,
   ContractParamType,
   likeContractParam,
+  isAllowedMapKeyType,
 } from "./ContractParam";
 import { OpCode } from "./OpCode";
 import { InteropServiceCode } from "./InteropServiceCode";
@@ -129,16 +130,7 @@ export class ScriptBuilder extends StringStream {
   private emitMap(m: ContractParamMap): this {
     for (let i = 0; i < m.length; i++) {
       const keyType = m[i].key.type;
-      if (
-        keyType !== ContractParamType.Boolean &&
-        keyType !== ContractParamType.Integer &&
-        keyType !== ContractParamType.String &&
-        keyType !== ContractParamType.ByteArray &&
-        keyType !== ContractParamType.Hash160 &&
-        keyType !== ContractParamType.Hash256 &&
-        keyType !== ContractParamType.PublicKey &&
-        keyType !== ContractParamType.Signature
-      ) {
+      if (!isAllowedMapKeyType(keyType)) {
         throw new Error(`Unsupported key type: ${keyType}`);
       }
       this.emitPush(m[i].value);
