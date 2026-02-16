@@ -194,10 +194,14 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       });
     }
 
-    return new ContractParam({
-      type: ContractParamType.Integer,
-      value: value.toString(),
-    });
+    if (value instanceof BigInteger) {
+      return new ContractParam({
+        type: ContractParamType.Integer,
+        value: value.toString(),
+      });
+    }
+
+    throw new Error(`Unknown input provided: ${value}`);
   }
 
   /**
