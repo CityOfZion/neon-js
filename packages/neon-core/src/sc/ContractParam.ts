@@ -216,7 +216,11 @@ export class ContractParam implements NeonObject<ContractParamLike> {
       });
     }
 
-    return new ContractParam({ type: ContractParamType.ByteArray, value });
+    if (value instanceof HexString) {
+      return new ContractParam({ type: ContractParamType.ByteArray, value });
+    }
+
+    throw new Error(`Unknown input provided: ${value}`);
   }
 
   /**
