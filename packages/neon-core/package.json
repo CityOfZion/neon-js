@@ -39,22 +39,22 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
-    "bn.js": "5.2.1",
+    "bn.js": "5.2.3",
     "bs58": "6.0.0",
     "buffer": "6.0.3",
     "cross-fetch": "4.1.0",
     "crypto-js": "4.2.0",
     "elliptic": "6.6.1",
-    "ethereum-cryptography": "3.0.0",
-    "lodash": "4.17.21",
+    "ethereum-cryptography": "3.2.0",
+    "lodash": "4.17.23",
     "loglevel": "1.9.2",
     "loglevel-plugin-prefix": "0.8.4"
   },
   "devDependencies": {
-    "@types/bn.js": "5.1.6",
+    "@types/bn.js": "5.2.0",
     "@types/crypto-js": "4.2.2",
     "@types/elliptic": "6.4.18",
-    "@types/lodash": "4.14.191"
+    "@types/lodash": "4.17.23"
   },
   "files": [
     "dist/",
