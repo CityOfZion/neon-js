@@ -104,17 +104,17 @@ describe("EllipticCurve", () => {
       });
 
       test("k <=0 throws error", () => {
-        expect(() => curve.sign(msg, privateKey, -1)).toThrowError(
+        expect(() => curve.sign(msg, privateKey, -1)).toThrow(
           "k must be a positive number",
         );
-        expect(() => curve.sign(msg, privateKey, 0)).toThrowError(
+        expect(() => curve.sign(msg, privateKey, 0)).toThrow(
           "k must be a positive number",
         );
       });
 
       test("k >= n throws error", () => {
         const largerThanN = "f".repeat(64);
-        expect(() => curve.sign(msg, privateKey, largerThanN)).toThrowError(
+        expect(() => curve.sign(msg, privateKey, largerThanN)).toThrow(
           "k must be smaller",
         );
       });

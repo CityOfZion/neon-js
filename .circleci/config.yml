@@ -107,9 +107,7 @@ jobs:
           name: Lint
           command: |
             CURRENT_BRANCH=$(git symbolic-ref -q --short HEAD)
-            echo "Current branch is $CURRENT_BRANCH"
             BASE_BRANCH=$(curl -s https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pulls/${CIRCLE_PR_NUMBER} | jq -r '.base.ref')
-            echo "Base branch is $BASE_BRANCH"
             git fetch origin $BASE_BRANCH:$BASE_BRANCH
             echo "Finding files to lint"
             FILES=$(git diff --name-only --diff-filter=bd $(git merge-base HEAD $BASE_BRANCH) | grep '^packages/.*\.[tj]s$') || true

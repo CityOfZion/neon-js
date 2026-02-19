@@ -79,7 +79,7 @@ describe.skip("signWithAccount", () => {
     const signWithInvlidAccount = (): void => {
       signer.signWithAccount(new wallet.Account());
     };
-    expect(signWithInvlidAccount).toThrowError();
+    expect(signWithInvlidAccount).toThrow();
   });
 });
 
@@ -117,7 +117,7 @@ describe.skip("signWithWitness", () => {
         }),
       );
     };
-    expect(signWithInvalidWitness).toThrowError();
+    expect(signWithInvalidWitness).toThrow();
   });
 });
 
@@ -150,6 +150,6 @@ describe.skip("addMultiSig", () => {
       );
     };
 
-    expect(signWithMultiAcc).toThrowError();
+    expect(signWithMultiAcc).toThrow();
   });
 });
