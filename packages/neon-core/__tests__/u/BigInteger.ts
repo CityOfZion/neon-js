@@ -93,13 +93,13 @@ describe("hexstring", () => {
 describe("number", () => {
   describe("fromNumber", () => {
     test("throws when non-integer number", () => {
-      expect(() => BigInteger.fromNumber(1.1)).toThrowError(
+      expect(() => BigInteger.fromNumber(1.1)).toThrow(
         "BigInteger only accepts integers",
       );
     });
 
     test("throws when non-integer numeric string", () => {
-      expect(() => BigInteger.fromNumber("1.1")).toThrowError(
+      expect(() => BigInteger.fromNumber("1.1")).toThrow(
         "BigInteger only accepts integers",
       );
     });

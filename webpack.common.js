@@ -32,6 +32,5 @@ module.exports = function (rootDir) {
         },
       ],
     },
-    // plugins: [new CleanWebpackPlugin({verbose: true})]
   };
 };

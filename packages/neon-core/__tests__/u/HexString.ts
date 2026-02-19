@@ -14,7 +14,7 @@ describe("Initiator", () => {
 
     test("non-hex string", () => {
       const initHexWithNonHex = (): HexString => HexString.fromHex("h69j");
-      expect(initHexWithNonHex).toThrowError();
+      expect(initHexWithNonHex).toThrow();
     });
   });
 
@@ -36,7 +36,7 @@ describe("Initiator", () => {
 
     test("negative as param", () => {
       const initWithNegativeNum = (): HexString => HexString.fromNumber(-9999);
-      expect(initWithNegativeNum).toThrowError();
+      expect(initWithNegativeNum).toThrow();
     });
   });
 

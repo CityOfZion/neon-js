@@ -36,8 +36,7 @@
     "test:node": "node test.node.js"
   },
   "dependencies": {
-    "@ledgerhq/hw-transport": "6.31.4",
-    "@types/lodash": "^4.14.191"
+    "@ledgerhq/hw-transport": "6.32.0"
   },
   "peerDependencies": {
     "@cityofzion/neon-core": "^5.6.0"
@@ -49,6 +48,7 @@
   ],
   "devDependencies": {
     "@cityofzion/neon-js": "^5.8.0",
-    "@ledgerhq/hw-transport-node-hid": "6.29.5"
+    "@ledgerhq/hw-transport-node-hid": "6.29.5",
+    "@types/lodash": "^4.17.23"
   }
 }

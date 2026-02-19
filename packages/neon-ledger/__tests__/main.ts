@@ -46,7 +46,7 @@ describe("getPublicKey", () => {
     });
 
     const result = getPublicKey(mockLedgerInstance, "");
-    expect(result).rejects.toThrowError(expectedError);
+    expect(result).rejects.toThrow(expectedError);
   });
 
   test("sends correctly constructed message", async () => {
@@ -80,7 +80,7 @@ describe("getSignature", () => {
     });
 
     const result = getSignature(mockLedgerInstance, "cdcd", "abab", 123);
-    expect(result).rejects.toThrowError(expectedError);
+    expect(result).rejects.toThrow(expectedError);
   });
 
   test("throws error if ledger does not return signature after finalising", () => {
@@ -99,7 +99,7 @@ describe("getSignature", () => {
       bip44Input,
       networkMagic,
     );
-    expect(result).rejects.toThrowError("did not return signature");
+    expect(result).rejects.toThrow("did not return signature");
   });
 
   test("returns signature successfully after sending message", async () => {
@@ -127,7 +127,7 @@ describe("getSignature", () => {
 
     expect(result).toBe(expectedSig);
 
-    expect(DerToHexSignature).toBeCalledWith(mockDer);
-    expect(mockLedgerInstance.send).toBeCalledTimes(5);
+    expect(DerToHexSignature).toHaveBeenCalledWith(mockDer);
+    expect(mockLedgerInstance.send).toHaveBeenCalledTimes(5);
   });
 });

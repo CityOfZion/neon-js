@@ -232,14 +232,14 @@ describe.skip("buildMultiSig", () => {
     const wrongSigs = [signatures[0].replace("1", "0"), signatures[1]];
     const throwingFunc = (): Witness =>
       Witness.buildMultiSig(msg, wrongSigs, verificationScript);
-    expect(throwingFunc).toThrowError("Invalid signature given");
+    expect(throwingFunc).toThrow("Invalid signature given");
   });
 
   test("throws if insufficient signatures", () => {
     const oneSig = [signatures[1]];
     const throwingFunc = (): Witness =>
       Witness.buildMultiSig(msg, oneSig, verificationScript);
-    expect(throwingFunc).toThrowError("Insufficient signatures");
+    expect(throwingFunc).toThrow("Insufficient signatures");
   });
 });
 

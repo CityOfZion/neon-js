@@ -218,7 +218,7 @@ describe("Add Methods", () => {
         account: "9b58c48f384a4cf14d98c97fc09a9ba9c42d0e26",
         scopes: WitnessScope.Global,
       });
-    expect(addDuplicate).toThrowError();
+    expect(addDuplicate).toThrow();
   });
 
   describe("addWitness", () => {
