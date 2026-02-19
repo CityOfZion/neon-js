@@ -108,8 +108,7 @@ jobs:
           command: |
             CURRENT_BRANCH=$(git symbolic-ref -q --short HEAD)
             BASE_BRANCH=$(curl -s https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pulls/${CIRCLE_PR_NUMBER} | jq -r '.base.ref')
-            git checkout --track origin/$BASE_BRANCH
-            git checkout $CURRENT_BRANCH
+            git fetch origin $BASE_BRANCH:$BASE_BRANCH
             echo "Finding files to lint"
             FILES=$(git diff --name-only --diff-filter=bd $(git merge-base HEAD $BASE_BRANCH) | grep '^packages/.*\.[tj]s$') || true
             [ -z "$FILES" ] && echo "No files found" && exit 0

@@ -1,5 +1,5 @@
 # Update the VARIANT arg in docker-compose.yml to pick a Node version: 14, 16, 18
-ARG VARIANT=16
+ARG VARIANT=22
 
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:${VARIANT}
 

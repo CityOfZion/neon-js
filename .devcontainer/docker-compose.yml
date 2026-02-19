@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   main:
     build:
@@ -7,7 +5,7 @@ services:
       dockerfile: Dockerfile
       args:
         # [Choice] Node.js version: 16, 18, 19
-        VARIANT: 18
+        VARIANT: 22
         # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
         USER_UID: 1000
         USER_GID: 1000
@@ -27,7 +25,10 @@ services:
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   solonet:
-    image: snowypowers/n3-csharp-solonet:3.5.0
+    image: snowypowers/n3-csharp-solonet:3.6.2
     restart: unless-stopped
     volumes:
       - ../tmp/:/opt/neo-cli:consistent
+    ports:
+      - "20332:20332"
+      - "3000:3000"

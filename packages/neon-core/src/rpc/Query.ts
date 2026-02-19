@@ -44,6 +44,17 @@ export interface ApplicationLogJson {
       eventname: string;
       state: StackItemJson;
     }[];
+    exception?: string;
+    invocations?: {
+      hash: string;
+      method: string;
+      arguments: {
+        type: "Array";
+        value: StackItemJson[];
+      };
+      argumentscount: number;
+      truncated: boolean;
+    }[];
   }[];
 }
 
@@ -67,6 +78,11 @@ export interface InvokeResult<T extends StackItemJson = StackItemJson> {
    * Formatted in base64-encoding.
    */
   tx?: string;
+  notifications: {
+    contract: string;
+    eventname: string;
+    state: StackItemJson;
+  }[];
   session?: string;
 }
 

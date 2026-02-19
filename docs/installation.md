@@ -25,12 +25,11 @@ This will give you the release that is compatible for the neo3 mainnet and testn
 
 ## Node
 
-Support policy is to support the maintainence and LTS versions of Node. At the
+Support policy is to support the maintenance and LTS versions of Node. At the
 time of writing, this is:
 
-- Node 12
-- Node 14
-- Node 16
+- Node 20
+- Node 22
 
 ## Web
 

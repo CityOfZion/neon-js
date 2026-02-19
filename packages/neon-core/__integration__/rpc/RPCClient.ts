@@ -277,6 +277,7 @@ describe("RPC Methods", () => {
           "gasconsumed",
           "stack",
           "exception",
+          "notifications",
         ]),
       );
       expect(result.state).toContain("HALT");
@@ -309,6 +310,7 @@ describe("RPC Methods", () => {
           "gasconsumed",
           "stack",
           "exception",
+          "notifications",
         ]),
       );
       expect(result.state).toContain("HALT");
@@ -327,6 +329,7 @@ describe("RPC Methods", () => {
           "gasconsumed",
           "stack",
           "exception",
+          "notifications",
         ]),
       );
       expect(result.state).toContain("HALT");
@@ -364,6 +367,7 @@ describe("RPC Methods", () => {
           "gasconsumed",
           "stack",
           "exception",
+          "notifications",
         ]),
       );
       expect(result.state).toContain("HALT");
