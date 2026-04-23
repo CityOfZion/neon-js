@@ -1,10 +1,99 @@
-import { ec as EC } from "elliptic";
-import BN from "bn.js";
+import { p256 } from "@noble/curves/p256";
+import { secp256k1 } from "@noble/curves/secp256k1";
 import { Buffer } from "buffer";
 
 export interface EcdsaSignature {
   r: string;
   s: string;
+}
+
+type NobleCurve = typeof p256;
+
+function bytesToHex(bytes: Uint8Array): string {
+  return Buffer.from(bytes).toString("hex");
+}
+
+function hexToBytes(hex: string): Uint8Array {
+  return Buffer.from(hex, "hex");
+}
+
+function numberToPaddedHex(value: bigint, bytesLength: number): string {
+  return value.toString(16).padStart(bytesLength * 2, "0");
+}
+
+function hexToNumber(hex: string): bigint {
+  if (hex.length === 0) {
+    return 0n;
+  }
+  return BigInt(`0x${hex}`);
+}
+
+function bytesToNumber(bytes: Uint8Array): bigint {
+  return hexToNumber(bytesToHex(bytes));
+}
+
+function mod(value: bigint, modulo: bigint): bigint {
+  const result = value % modulo;
+  return result >= 0n ? result : result + modulo;
+}
+
+function invert(value: bigint, modulo: bigint): bigint {
+  if (value === 0n || modulo <= 0n) {
+    throw new Error("invert: expected positive integers");
+  }
+
+  let a = mod(value, modulo);
+  let b = modulo;
+  let x = 0n;
+  let y = 1n;
+  let u = 1n;
+  let v = 0n;
+
+  while (a !== 0n) {
+    const q = b / a;
+    const r = b % a;
+    const m = x - u * q;
+    const n = y - v * q;
+    b = a;
+    a = r;
+    x = u;
+    y = v;
+    u = m;
+    v = n;
+  }
+
+  if (b !== 1n) {
+    throw new Error("invert: does not exist");
+  }
+
+  return mod(x, modulo);
+}
+
+function bitsToNumber(bytes: Uint8Array, bitsLength: number): bigint {
+  const num = bytesToNumber(bytes);
+  const excess = BigInt(bytes.length * 8 - bitsLength);
+  return excess > 0n ? num >> excess : num;
+}
+
+function getNobleCurve(preset: string): NobleCurve {
+  switch (preset) {
+    case "p256":
+      return p256;
+    case "secp256k1":
+      return secp256k1;
+    default:
+      throw new Error(`Unsupported curve preset: ${preset}`);
+  }
+}
+
+function parseNonce(k: number | string): bigint {
+  if (typeof k === "number") {
+    if (!Number.isInteger(k)) {
+      throw new Error("k must be an integer");
+    }
+    return BigInt(k);
+  }
+  return hexToNumber(k);
 }
 
 /**
@@ -17,10 +106,10 @@ export interface EcdsaSignature {
  * const signature = curve.sign(message, privateKey);
  */
 export class EllipticCurve {
-  private curve: EC;
+  private curve: NobleCurve;
 
   public constructor(preset: string) {
-    this.curve = new EC(preset);
+    this.curve = getNobleCurve(preset);
   }
 
   /**
@@ -35,33 +124,26 @@ export class EllipticCurve {
     k?: number | string,
   ): EcdsaSignature {
     if (k !== undefined) {
-      const kNumber =
-        typeof k === "number" ? new BN(k) : new BN(k, "hex", "be");
-      if (kNumber.cmpn(0) <= 0) {
+      const kNumber = parseNonce(k);
+      const n = this.curve.CURVE.n;
+      if (kNumber <= 0n) {
         throw new Error("k must be a positive number");
       }
-      if (this.curve.n && kNumber.cmp(this.curve.n) >= 0) {
-        throw new Error(`k must be smaller than ${this.curve.n.toString(10)}`);
+      if (kNumber >= n) {
+        throw new Error(`k must be smaller than ${n.toString(10)}`);
       }
 
-      const signature = this.curve.sign(
-        Buffer.from(message, "hex"),
-        Buffer.from(privateKey, "hex"),
-        // typing error
-        { k: (i: number) => new BN(kNumber).divn(i + 1) } as never,
-      );
-      return {
-        r: signature.r.toString("hex", 32),
-        s: signature.s.toString("hex", 32),
-      };
+      return this.signWithNonce(message, privateKey, kNumber);
     }
     const signature = this.curve.sign(
-      Buffer.from(message, "hex"),
-      Buffer.from(privateKey, "hex"),
+      hexToBytes(message),
+      hexToBytes(privateKey),
+      { lowS: false },
     );
+    const bytesLength = this.getScalarBytesLength();
     return {
-      r: signature.r.toString("hex", 32),
-      s: signature.s.toString("hex", 32),
+      r: numberToPaddedHex(signature.r, bytesLength),
+      s: numberToPaddedHex(signature.s, bytesLength),
     };
   }
 
@@ -77,13 +159,10 @@ export class EllipticCurve {
     publicKey: string,
   ): boolean {
     return this.curve.verify(
-      message,
-      {
-        r: new BN(signature.r, 16, "be"),
-        s: new BN(signature.s, 16, "be"),
-      },
-      Buffer.from(publicKey, "hex"),
-      "hex",
+      hexToBytes(signature.r + signature.s),
+      hexToBytes(message),
+      hexToBytes(publicKey),
+      { lowS: false },
     );
   }
 
@@ -93,11 +172,7 @@ export class EllipticCurve {
    * @param encode - whether to return the compressed form.
    */
   public getPublicKey(privateKey: string, encode = true): string {
-    const privateKeyBuffer = Buffer.from(privateKey, "hex");
-    return this.curve
-      .keyFromPrivate(privateKeyBuffer, "hex")
-      .getPublic()
-      .encode("hex", encode);
+    return bytesToHex(this.curve.getPublicKey(hexToBytes(privateKey), encode));
   }
 
   /**
@@ -105,11 +180,69 @@ export class EllipticCurve {
    * @param publicKey - 33 byte hexstring starting with 02 or 03.
    */
   public decodePublicKey(publicKey: string): string {
-    const publicKeyBuffer = Buffer.from(publicKey, "hex");
-    return this.curve
-      .keyFromPublic(publicKeyBuffer, "hex")
-      .getPublic()
-      .encode("hex", false);
+    return bytesToHex(
+      this.curve.ProjectivePoint.fromHex(hexToBytes(publicKey)).toRawBytes(
+        false,
+      ),
+    );
+  }
+
+  private signWithNonce(
+    message: string,
+    privateKey: string,
+    requestedNonce: bigint,
+  ): EcdsaSignature {
+    const n = this.curve.CURVE.n;
+    const bytesLength = this.getScalarBytesLength();
+    const msg = mod(
+      bitsToNumber(hexToBytes(message), this.getScalarBitsLength()),
+      n,
+    );
+    const privateScalar = bytesToNumber(hexToBytes(privateKey));
+
+    let attempt = 0n;
+    while (attempt < requestedNonce) {
+      const nonce = requestedNonce / (attempt + 1n);
+      if (nonce <= 0n) {
+        break;
+      }
+
+      const point = this.curve.ProjectivePoint.BASE.multiply(nonce).toAffine();
+      const r = mod(point.x, n);
+      if (r === 0n) {
+        attempt += 1n;
+        continue;
+      }
+
+      const s = mod(invert(nonce, n) * mod(msg + r * privateScalar, n), n);
+      if (s === 0n) {
+        attempt += 1n;
+        continue;
+      }
+
+      return {
+        r: numberToPaddedHex(r, bytesLength),
+        s: numberToPaddedHex(s, bytesLength),
+      };
+    }
+
+    throw new Error("Unable to generate signature with provided k");
+  }
+
+  private getScalarBytesLength(): number {
+    const bytesLength = this.curve.CURVE.nByteLength;
+    if (bytesLength === undefined) {
+      throw new Error("Curve scalar byte length is unavailable");
+    }
+    return bytesLength;
+  }
+
+  private getScalarBitsLength(): number {
+    const bitsLength = this.curve.CURVE.nBitLength;
+    if (bitsLength === undefined) {
+      throw new Error("Curve scalar bit length is unavailable");
+    }
+    return bitsLength;
   }
 }
 
@@ -124,5 +257,9 @@ const curves = {
 };
 
 export function getCurve(curveName: EllipticCurvePreset): EllipticCurve {
-  return curves[curveName];
+  const curve = curves[curveName];
+  if (curve === undefined) {
+    throw new Error(`Unsupported curve preset: ${curveName}`);
+  }
+  return curve;
 }

@@ -4,8 +4,8 @@ Issue: https://github.com/CityOfZion/neon-js/issues/954
 
 ## Goal
 
-Replace the direct `elliptic` dependency used by `@cityofzion/neon-core` with a maintained
-Noble-based implementation while preserving Neon-JS 5.x behavior.
+Replace the direct `elliptic` dependency used by `@cityofzion/neon-core` with a
+maintained Noble-based implementation while preserving Neon-JS 5.x behavior.
 
 ## Current Dependency Chain
 
@@ -65,31 +65,34 @@ Working direction:
 
 - use `@noble/curves` rather than a local long-term fork;
 - keep the first implementation focused on `neon-core` curve/signing behavior;
-- preserve the existing Neon-JS public API unless a maintainer approves a behavior change.
+- preserve the existing Neon-JS public API unless a maintainer approves a
+  behavior change.
 
 ## Explicit `k` Parameter
 
 Neon-JS currently exposes:
 
 ```ts
-curve.sign(message, privateKey, k)
+curve.sign(message, privateKey, k);
 ```
 
-Existing tests assert deterministic signatures when `k` is provided, including exact wallet
-signing vectors with `k = "0400"`.
+Existing tests assert deterministic signatures when `k` is provided, including
+exact wallet signing vectors with `k = "0400"`.
 
-Ethereum tooling supports the Noble direction but does not fully answer this compatibility point:
+Ethereum tooling supports the Noble direction but does not fully answer this
+compatibility point:
 
 - `ethereum-cryptography@3.2.0` depends on `@noble/curves@1.9.0`;
 - `ethers@6.16.0` depends on `@noble/curves`;
-- `ethereum-cryptography`'s secp256k1 compatibility wrapper rejects custom nonce options and
-  relies on Noble's normal deterministic signing path.
+- `ethereum-cryptography`'s secp256k1 compatibility wrapper rejects custom nonce
+  options and relies on Noble's normal deterministic signing path.
 
 Assumption for the first implementation:
 
 - preserve the public `k` parameter if practical;
-- if exact `k` compatibility requires too much custom crypto code, isolate that decision and ask
-  for maintainer approval before changing public behavior or test expectations.
+- if exact `k` compatibility requires too much custom crypto code, isolate that
+  decision and ask for maintainer approval before changing public behavior or
+  test expectations.
 
 ## Noble Version Choice
 
@@ -98,6 +101,7 @@ Initial implementation should prefer `@noble/curves@1.9.x`.
 Reason:
 
 - Neon-JS currently emits CommonJS-compatible package output;
-- the current Jest setup does not transform ESM dependencies from `node_modules`;
+- the current Jest setup does not transform ESM dependencies from
+  `node_modules`;
 - `@noble/curves@2.x` is ESM-only;
 - `@noble/curves@1.9.x` exposes both `import` and `require` paths.
