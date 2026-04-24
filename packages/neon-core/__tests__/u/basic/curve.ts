@@ -96,27 +96,9 @@ describe("EllipticCurve", () => {
         expect(curve.verify(msg, sig2, publicKey)).toBeTruthy();
       });
 
-      test("provided k makes signature deterministic", () => {
-        const sig1 = curve.sign(msg, privateKey, "123456");
-        const sig2 = curve.sign(msg, privateKey, "123456");
-        expect(sig1).toStrictEqual(sig2);
-        expect(curve.verify(msg, sig1, publicKey)).toBeTruthy();
-      });
-
-      test("k <=0 throws error", () => {
-        expect(() => curve.sign(msg, privateKey, -1)).toThrow(
-          "k must be a positive number",
-        );
-        expect(() => curve.sign(msg, privateKey, 0)).toThrow(
-          "k must be a positive number",
-        );
-      });
-
-      test("k >= n throws error", () => {
-        const largerThanN = "f".repeat(64);
-        expect(() => curve.sign(msg, privateKey, largerThanN)).toThrow(
-          "k must be smaller",
-        );
+      test("deprecated k argument is accepted but ignored", () => {
+        const sig = curve.sign(msg, privateKey, "123456");
+        expect(curve.verify(msg, sig, publicKey)).toBeTruthy();
       });
     });
   });

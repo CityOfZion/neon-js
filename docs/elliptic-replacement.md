@@ -65,8 +65,7 @@ Working direction:
 
 - use `@noble/curves` rather than a local long-term fork;
 - keep the first implementation focused on `neon-core` curve/signing behavior;
-- preserve the existing Neon-JS public API unless a maintainer approves a
-  behavior change.
+- avoid custom ECDSA implementation code for the legacy test-only nonce path.
 
 ## Explicit `k` Parameter
 
@@ -85,14 +84,19 @@ compatibility point:
 - `ethereum-cryptography@3.2.0` depends on `@noble/curves@1.9.0`;
 - `ethers@6.16.0` depends on `@noble/curves`;
 - `ethereum-cryptography`'s secp256k1 compatibility wrapper rejects custom nonce
-  options and relies on Noble's normal deterministic signing path.
+  options and relies on Noble's normal signing path.
 
-Assumption for the first implementation:
+Maintainer follow-up on
+https://github.com/CityOfZion/neon-js/pull/955#issuecomment-4309561523 approved
+dropping custom `k` support because it is only used by tests and the
+implementation overhead is too high.
 
-- preserve the public `k` parameter if practical;
-- if exact `k` compatibility requires too much custom crypto code, isolate that
-  decision and ask for maintainer approval before changing public behavior or
-  test expectations.
+Implementation decision:
+
+- keep the optional `k` argument accepted at the public TypeScript boundaries
+  for source compatibility;
+- ignore `k` when signing with Noble;
+- replace exact legacy `k` signature assertions with sign-and-verify coverage.
 
 ## Noble Version Choice
 
