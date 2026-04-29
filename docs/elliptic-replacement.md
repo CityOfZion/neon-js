@@ -97,6 +97,8 @@ Implementation decision:
   for source compatibility;
 - ignore `k` when signing with Noble;
 - replace exact legacy `k` signature assertions with sign-and-verify coverage.
+- emit low-S signatures through Noble's normal signing path while keeping
+  verification permissive for legacy high-S signatures.
 
 ## Noble Version Choice
 

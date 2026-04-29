@@ -5,7 +5,21 @@ import {
 } from "../../../src/u/basic/curve";
 
 type CurveData = string[][];
+
+function isLowS(s: string, curveOrder: bigint): boolean {
+  return BigInt(`0x${s}`) <= curveOrder / 2n;
+}
+
 describe("EllipticCurve", () => {
+  const curveOrders: Record<string, bigint> = {
+    SECP256R1: BigInt(
+      "0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551",
+    ),
+    SECP256K1: BigInt(
+      "0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
+    ),
+  };
+
   // http://point-at-infinity.org/ecc/nisttv
   const secp256r1Data = [
     [
@@ -47,7 +61,7 @@ describe("EllipticCurve", () => {
   describe.each([
     ["SECP256R1", getCurve(EllipticCurvePreset.SECP256R1), secp256r1Data],
     ["SECP256K1", getCurve(EllipticCurvePreset.SECP256K1), secp256k1Data],
-  ])("%s", (_unused: string, curve: EllipticCurve, curveData: CurveData) => {
+  ])("%s", (curveName: string, curve: EllipticCurve, curveData: CurveData) => {
     test.each(curveData)(
       "getPublicKey: %s",
       (
@@ -88,12 +102,16 @@ describe("EllipticCurve", () => {
         expect(verificationResult).toBeTruthy();
       });
 
-      test("no k provided, signature is different but verifies correctly", () => {
+      test("signature verifies correctly without k", () => {
         const sig1 = curve.sign(msg, privateKey);
         const sig2 = curve.sign(msg, privateKey);
-        expect(sig1).not.toBe(sig2);
         expect(curve.verify(msg, sig1, publicKey)).toBeTruthy();
         expect(curve.verify(msg, sig2, publicKey)).toBeTruthy();
+      });
+
+      test("emits low-s signatures", () => {
+        const sig = curve.sign(msg, privateKey);
+        expect(isLowS(sig.s, curveOrders[curveName])).toBe(true);
       });
 
       test("deprecated k argument is accepted but ignored", () => {

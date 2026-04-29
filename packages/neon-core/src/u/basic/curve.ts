@@ -1,6 +1,6 @@
 import { p256 } from "@noble/curves/p256";
 import { secp256k1 } from "@noble/curves/secp256k1";
-import { Buffer } from "buffer";
+import { bytesToHex, hexToBytes } from "@noble/curves/utils";
 
 export interface EcdsaSignature {
   r: string;
@@ -9,17 +9,7 @@ export interface EcdsaSignature {
 
 type NobleCurve = typeof p256;
 
-function bytesToHex(bytes: Uint8Array): string {
-  return Buffer.from(bytes).toString("hex");
-}
-
-function hexToBytes(hex: string): Uint8Array {
-  return Buffer.from(hex, "hex");
-}
-
-function numberToPaddedHex(value: bigint, bytesLength: number): string {
-  return value.toString(16).padStart(bytesLength * 2, "0");
-}
+const SIGNATURE_COMPONENT_HEX_LENGTH = 32 * 2;
 
 function getNobleCurve(preset: string): NobleCurve {
   switch (preset) {
@@ -59,15 +49,13 @@ export class EllipticCurve {
     privateKey: string,
     _k?: number | string,
   ): EcdsaSignature {
-    const signature = this.curve.sign(
-      hexToBytes(message),
-      hexToBytes(privateKey),
-      { lowS: false },
-    );
-    const bytesLength = this.getScalarBytesLength();
+    const signature = this.curve.sign(hexToBytes(message), privateKey, {
+      lowS: true,
+    });
+    const compactSignature = signature.toHex("compact");
     return {
-      r: numberToPaddedHex(signature.r, bytesLength),
-      s: numberToPaddedHex(signature.s, bytesLength),
+      r: compactSignature.slice(0, SIGNATURE_COMPONENT_HEX_LENGTH),
+      s: compactSignature.slice(SIGNATURE_COMPONENT_HEX_LENGTH),
     };
   }
 
@@ -96,7 +84,7 @@ export class EllipticCurve {
    * @param encode - whether to return the compressed form.
    */
   public getPublicKey(privateKey: string, encode = true): string {
-    return bytesToHex(this.curve.getPublicKey(hexToBytes(privateKey), encode));
+    return bytesToHex(this.curve.getPublicKey(privateKey, encode));
   }
 
   /**
@@ -104,19 +92,7 @@ export class EllipticCurve {
    * @param publicKey - 33 byte hexstring starting with 02 or 03.
    */
   public decodePublicKey(publicKey: string): string {
-    return bytesToHex(
-      this.curve.ProjectivePoint.fromHex(hexToBytes(publicKey)).toRawBytes(
-        false,
-      ),
-    );
-  }
-
-  private getScalarBytesLength(): number {
-    const bytesLength = this.curve.CURVE.nByteLength;
-    if (bytesLength === undefined) {
-      throw new Error("Curve scalar byte length is unavailable");
-    }
-    return bytesLength;
+    return this.curve.ProjectivePoint.fromHex(publicKey).toHex(false);
   }
 }
 
