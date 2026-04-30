@@ -1,10 +1,25 @@
-import { ec as EC } from "elliptic";
-import BN from "bn.js";
-import { Buffer } from "buffer";
+import { p256 } from "@noble/curves/p256";
+import { secp256k1 } from "@noble/curves/secp256k1";
+import { bytesToHex, hexToBytes } from "@noble/curves/utils";
 
 export interface EcdsaSignature {
   r: string;
   s: string;
+}
+
+type NobleCurve = typeof p256;
+
+const SIGNATURE_COMPONENT_HEX_LENGTH = 32 * 2;
+
+function getNobleCurve(preset: string): NobleCurve {
+  switch (preset) {
+    case "p256":
+      return p256;
+    case "secp256k1":
+      return secp256k1;
+    default:
+      throw new Error(`Unsupported curve preset: ${preset}`);
+  }
 }
 
 /**
@@ -17,51 +32,30 @@ export interface EcdsaSignature {
  * const signature = curve.sign(message, privateKey);
  */
 export class EllipticCurve {
-  private curve: EC;
+  private curve: NobleCurve;
 
   public constructor(preset: string) {
-    this.curve = new EC(preset);
+    this.curve = getNobleCurve(preset);
   }
 
   /**
    * Signs a message with the given private key.
    * @param message - hexstring message.
    * @param privateKey - hexstring.
-   * @param k - number or hexstring between 0 and the n parameter of the curve. Provide this if you wish to generate a deterministic signature. Do note that there are security implications if you do.
+   * @param _k - deprecated and ignored. Custom nonce signing is not supported.
    */
   public sign(
     message: string,
     privateKey: string,
-    k?: number | string,
+    _k?: number | string,
   ): EcdsaSignature {
-    if (k !== undefined) {
-      const kNumber =
-        typeof k === "number" ? new BN(k) : new BN(k, "hex", "be");
-      if (kNumber.cmpn(0) <= 0) {
-        throw new Error("k must be a positive number");
-      }
-      if (this.curve.n && kNumber.cmp(this.curve.n) >= 0) {
-        throw new Error(`k must be smaller than ${this.curve.n.toString(10)}`);
-      }
-
-      const signature = this.curve.sign(
-        Buffer.from(message, "hex"),
-        Buffer.from(privateKey, "hex"),
-        // typing error
-        { k: (i: number) => new BN(kNumber).divn(i + 1) } as never,
-      );
-      return {
-        r: signature.r.toString("hex", 32),
-        s: signature.s.toString("hex", 32),
-      };
-    }
-    const signature = this.curve.sign(
-      Buffer.from(message, "hex"),
-      Buffer.from(privateKey, "hex"),
-    );
+    const signature = this.curve.sign(hexToBytes(message), privateKey, {
+      lowS: true,
+    });
+    const compactSignature = signature.toHex("compact");
     return {
-      r: signature.r.toString("hex", 32),
-      s: signature.s.toString("hex", 32),
+      r: compactSignature.slice(0, SIGNATURE_COMPONENT_HEX_LENGTH),
+      s: compactSignature.slice(SIGNATURE_COMPONENT_HEX_LENGTH),
     };
   }
 
@@ -77,13 +71,10 @@ export class EllipticCurve {
     publicKey: string,
   ): boolean {
     return this.curve.verify(
-      message,
-      {
-        r: new BN(signature.r, 16, "be"),
-        s: new BN(signature.s, 16, "be"),
-      },
-      Buffer.from(publicKey, "hex"),
-      "hex",
+      hexToBytes(signature.r + signature.s),
+      hexToBytes(message),
+      hexToBytes(publicKey),
+      { lowS: false },
     );
   }
 
@@ -93,11 +84,7 @@ export class EllipticCurve {
    * @param encode - whether to return the compressed form.
    */
   public getPublicKey(privateKey: string, encode = true): string {
-    const privateKeyBuffer = Buffer.from(privateKey, "hex");
-    return this.curve
-      .keyFromPrivate(privateKeyBuffer, "hex")
-      .getPublic()
-      .encode("hex", encode);
+    return bytesToHex(this.curve.getPublicKey(privateKey, encode));
   }
 
   /**
@@ -105,11 +92,7 @@ export class EllipticCurve {
    * @param publicKey - 33 byte hexstring starting with 02 or 03.
    */
   public decodePublicKey(publicKey: string): string {
-    const publicKeyBuffer = Buffer.from(publicKey, "hex");
-    return this.curve
-      .keyFromPublic(publicKeyBuffer, "hex")
-      .getPublic()
-      .encode("hex", false);
+    return this.curve.ProjectivePoint.fromHex(publicKey).toHex(false);
   }
 }
 
@@ -124,5 +107,9 @@ const curves = {
 };
 
 export function getCurve(curveName: EllipticCurvePreset): EllipticCurve {
-  return curves[curveName];
+  const curve = curves[curveName];
+  if (curve === undefined) {
+    throw new Error(`Unsupported curve preset: ${curveName}`);
+  }
+  return curve;
 }

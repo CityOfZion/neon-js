@@ -8,19 +8,19 @@ const curve = getCurve(EllipticCurvePreset.SECP256R1);
  * Generates a ECDSA signature from a hexstring using the given private key.
  * @param hex - hexstring to hash.
  * @param privateKey - hexstring or WIF format.
- * @param k - optional nonce for generating a signature. Providing this value will cause the signature generated to be deterministic.
+ * @param _k - deprecated and ignored. Custom nonce signing is not supported.
  * @returns a 64 byte hexstring made from (r+s)
  */
 export function sign(
   hex: string,
   privateKey: string,
-  k?: number | string,
+  _k?: number | string,
 ): string {
   if (isWIF(privateKey)) {
     privateKey = getPrivateKeyFromWIF(privateKey);
   }
   const msgHash = sha256(hex);
-  const sig = curve.sign(msgHash, privateKey, k);
+  const sig = curve.sign(msgHash, privateKey);
   return sig.r + sig.s;
 }
 

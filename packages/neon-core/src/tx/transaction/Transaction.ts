@@ -325,12 +325,12 @@ export class Transaction implements NeonObject<TransactionLike> {
    * Signs a transaction.
    * @param signingKey - Account, privateKey or WIF
    * @param networkMagic - Magic number of network found in protocol.json.
-   * @param k - optional nonce for signature generation. Setting this causes the signature to be deterministic.
+   * @param _k - deprecated and ignored. Custom nonce signing is not supported.
    */
   public sign(
     signingKey: Account | string,
     networkMagic: number = MAGIC_NUMBER.MainNet,
-    k?: string | number,
+    _k?: string | number,
   ): this {
     if (typeof signingKey === "string") {
       signingKey = new Account(signingKey);
@@ -338,7 +338,6 @@ export class Transaction implements NeonObject<TransactionLike> {
     const signature = sign(
       num2hexstring(networkMagic, 4, true) + reverseHex(this.hash()),
       signingKey.privateKey,
-      k,
     );
     log.info(`Signed Transaction with Account: ${signingKey.label}`);
     this.addWitness(Witness.fromSignature(signature, signingKey.publicKey));

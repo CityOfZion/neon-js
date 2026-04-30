@@ -39,12 +39,12 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "dependencies": {
+    "@noble/curves": "1.9.7",
     "bn.js": "5.2.3",
     "bs58": "6.0.0",
     "buffer": "6.0.3",
     "cross-fetch": "4.1.0",
     "crypto-js": "4.2.0",
-    "elliptic": "6.6.1",
     "ethereum-cryptography": "3.2.0",
     "lodash": "4.17.23",
     "loglevel": "1.9.2",
@@ -53,7 +53,6 @@
   "devDependencies": {
     "@types/bn.js": "5.2.0",
     "@types/crypto-js": "4.2.2",
-    "@types/elliptic": "6.4.18",
     "@types/lodash": "4.17.23"
   },
   "files": [
