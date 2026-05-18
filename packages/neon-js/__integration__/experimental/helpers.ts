@@ -19,9 +19,39 @@ const config: CommonConfig = {
   rpcAddress: "",
   account: acc,
 };
+const applicationLogTimeoutMs = 15000;
+const applicationLogRetryDelayMs = 1000;
 
 async function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isPendingApplicationLogError(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    error.message.includes("Unknown transaction/blockhash")
+  );
+}
+
+async function getApplicationLogWithRetry(
+  txid: string,
+): Promise<rpc.ApplicationLogJson> {
+  const deadline = Date.now() + applicationLogTimeoutMs;
+  let lastError: unknown;
+
+  while (Date.now() < deadline) {
+    try {
+      return await rpcClient.getApplicationLog(txid);
+    } catch (error) {
+      if (!isPendingApplicationLogError(error)) {
+        throw error;
+      }
+      lastError = error;
+      await sleep(applicationLogRetryDelayMs);
+    }
+  }
+
+  throw lastError;
 }
 
 beforeAll(async () => {
@@ -60,8 +90,7 @@ describe("contract", () => {
 
     console.log(`TXID: ${txid}`);
 
-    await sleep(3000);
-    const txLog = await rpcClient.getApplicationLog(txid);
+    const txLog = await getApplicationLogWithRetry(txid);
     expect(txLog["executions"][0]["vmstate"] as string).toBe("HALT");
 
     const state = await rpcClient.getContractState(contractHash);
@@ -110,12 +139,11 @@ describe("contract", () => {
 
     console.log(`TXID: ${txid}`);
 
-    await sleep(3000);
-    const txLog = await rpcClient.getApplicationLog(txid);
+    const txLog = await getApplicationLogWithRetry(txid);
     const execution = txLog["executions"][0];
     expect(execution["vmstate"] as string).toBe("FAULT");
     expect(execution["exception"] as string).toContain(
       "Contract Already Exists",
     );
-  });
+  }, 30000);
 });
