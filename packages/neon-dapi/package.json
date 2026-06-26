@@ -1,0 +1,46 @@
+{
+  "name": "@cityofzion/neon-dapi",
+  "description": "Neon Ledger integration for Node.js",
+  "version": "5.9.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CityOfZion/neon-js.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "neo",
+    "dapi",
+    "javascript",
+    "libraries"
+  ],
+  "author": "Raul Duarte Pereira (https://github.com/raulduartep)",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "ae": "api-extractor run --local",
+    "build": "tsc -b tsconfig.source.json",
+    "dist": "tsc -p tsconfig.source.json -m commonjs --outDir dist",
+    "dist:prod": "tsc -p tsconfig.source.json -m commonjs --outDir dist",
+    "clean": "rimraf ./lib ./dist ./temp tsconfig.tsbuildinfo",
+    "prepublishOnly": "npm run clean && npm run build && npm run dist:prod",
+    "lint": "eslint src/**/*.ts __tests__/**/*.ts",
+    "pretty": "prettier --write --loglevel=warn \"./{src,__{tests,integration}__}/**/*.ts\"",
+    "start": "jest --watch",
+    "test": "jest --config jest.config.js",
+    "test:unit": "jest --config jest.config.js"
+  },
+  "dependencies": {
+    "@ledgerhq/hw-transport": "6.32.0"
+  },
+  "peerDependencies": {
+    "@cityofzion/neon-core": "^5.9.0"
+  },
+  "files": [
+    "lib/",
+    "dist/"
+  ]
+}

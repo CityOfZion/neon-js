@@ -24,4 +24,8 @@ module.exports = {
   testRegex:
     "((/packages/.*/)?__(tests|integration)__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  moduleNameMapper: {
+    "^@cityofzion/neon-core$": "<rootDir>/packages/neon-core/src/index.ts",
+    "^(\\.{1,2}/.+)\\.js$": "$1",
+  },
 };
