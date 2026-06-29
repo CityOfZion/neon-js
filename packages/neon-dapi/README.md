@@ -38,15 +38,15 @@ Methods that require direct wallet UI interaction (`pickAddress`, `on`, `removeL
 
 Standardized error class thrown by all `DapiOperations` methods. Each error carries a `DapiErrorCode` so dApps can handle failure cases programmatically.
 
-### `ENetwork`
+### `DapiNetwork`
 
 Enum with the canonical Neo N3 network magic numbers.
 
 ```ts
-import { ENetwork } from "@cityofzion/neon-dapi";
+import { DapiNetwork } from "@cityofzion/neon-dapi";
 
-ENetwork.MAINNET // 860833102
-ENetwork.TESTNET // 894710606
+DapiNetwork.MAINNET // 860833102
+DapiNetwork.TESTNET // 894710606
 ```
 
 ## Conformance Suite

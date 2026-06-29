@@ -72,11 +72,13 @@ describe("DapiOperations.authenticate", () => {
     const payload = makePayload();
     const response = await ops.authenticate(payload);
 
-    const networkHex = u.num2hexstring(response.network, 1, true);
+    const networkHex = u.num2hexstring(response.network, 4, true);
     const nonceHex = u.num2hexstring(Number(payload.nonce), 8, true);
-    const timestampHex = u.num2hexstring(response.timestamp, 8, true);
+    const timestampHex = u.num2hexstring(response.timestamp, 4, true);
     const hashHex = account.scriptHash.replace(/^0x/i, "");
-    const message = `${networkHex}${nonceHex}${timestampHex}${hashHex}`;
+    const actionHex = u.str2hexstring(payload.action);
+    const domainHex = u.str2hexstring(payload.domain);
+    const message = `${networkHex}${nonceHex}${timestampHex}${hashHex}${actionHex}${domainHex}`;
 
     const signatureHex = u.base642hex(response.signature);
     const isValid = wallet.verify(message, signatureHex, account.publicKey);

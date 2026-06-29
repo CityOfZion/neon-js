@@ -27,6 +27,7 @@ import type {
   Account,
 } from "./types.js";
 import {
+  buildSendInvokeParams,
   calculateFee,
   getAttributes,
   getNetworkFee,
@@ -93,20 +94,22 @@ export class DapiOperations {
         throw new DapiError(DapiErrorCode.INVALID, "Network is not supported");
       }
 
-      const network = payload.networks[0];
-      const networkHex = u.num2hexstring(network, 1, true);
+      const networkHex = u.num2hexstring(this.network, 4, true);
       const nonceHex = u.num2hexstring(Number(payload.nonce), 8, true);
-      const timestampHex = u.num2hexstring(timestamp, 8, true);
+      const timestampHex = u.num2hexstring(timestamp, 4, true);
       const hashHex = this.account.scriptHash.replace(/^0x/i, "");
+      const actionHex = u.str2hexstring(payload.action);
+      const domainHex = u.str2hexstring(payload.domain);
 
-      const hash = `${networkHex}${nonceHex}${timestampHex}${hashHex}`;
+      const hash =
+        networkHex + nonceHex + timestampHex + hashHex + actionHex + domainHex;
 
       const signature = wallet.sign(hash, this.account.privateKey);
 
       return {
         address: this.account.address,
         algorithm: "ECDSA-P256",
-        network,
+        network: this.network,
         pubkey: this.account.publicKey,
         nonce: payload.nonce,
         timestamp,
@@ -192,6 +195,7 @@ export class DapiOperations {
           gasconsumed: execution.gasconsumed,
           stack: execution.stack ?? [],
           notifications: execution.notifications,
+          exception: execution.exception,
         })),
       };
     } catch (error) {
@@ -595,21 +599,15 @@ export class DapiOperations {
     data?: Argument,
   ): Promise<UInt256> {
     try {
-      return await this.invoke(
-        [
-          {
-            hash: asset,
-            operation: "transfer",
-            args: [
-              { type: "Hash160", value: from },
-              { type: "Hash160", value: to },
-              { type: "Integer", value: amount },
-              { type: "Any", value: data },
-            ],
-          },
-        ],
-        [{ account: this.account.scriptHash, scopes: "CalledByEntry" }],
+      const { invocations, signers } = buildSendInvokeParams(
+        this.account,
+        asset,
+        from,
+        to,
+        amount,
+        data,
       );
+      return await this.invoke(invocations, signers);
     } catch (error) {
       throw DapiError.parseError(error);
     }
@@ -633,23 +631,15 @@ export class DapiOperations {
     data?: Argument,
   ): Promise<number> {
     try {
-      return await calculateFee(
+      const { invocations, signers } = buildSendInvokeParams(
         this.account,
-        this.rpcClient,
-        [
-          {
-            hash: asset,
-            operation: "transfer",
-            args: [
-              { type: "Hash160", value: from },
-              { type: "Hash160", value: to },
-              { type: "Integer", value: amount },
-              { type: "Any", value: data },
-            ],
-          },
-        ],
-        [{ account: this.account.scriptHash, scopes: "CalledByEntry" }],
+        asset,
+        from,
+        to,
+        amount,
+        data,
       );
+      return await this.calculateInvokeFee(invocations, signers);
     } catch (error) {
       throw DapiError.parseError(error);
     }
@@ -827,7 +817,7 @@ export class DapiOperations {
       const signature = wallet.sign(hexMessage, this.account.privateKey);
 
       return {
-        payload: u.utf82base64(message),
+        payload: u.hex2base64(hexMessage),
         signature: u.hex2base64(signature),
         account: this.account.scriptHash,
         pubkey: this.account.publicKey,

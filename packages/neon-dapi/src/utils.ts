@@ -1,11 +1,14 @@
 import { rpc, sc, tx, u, wallet } from "@cityofzion/neon-core";
 
 import type {
+  Argument,
+  Integer,
   InvocationArguments,
   Signer,
   Transaction,
   TransactionAttribute,
   TransactionOptions,
+  UInt160,
   WitnessRule,
   WitnessScope,
 } from "./types.js";
@@ -14,6 +17,11 @@ export type TransactionToTransform = tx.TransactionJson & {
   blockhash: string;
   blocktime: number;
   confirmations: number;
+};
+
+export type SendInvokeParams = {
+  invocations: InvocationArguments[];
+  signers: Signer[];
 };
 
 export function transformTransaction(
@@ -65,7 +73,7 @@ export function getScriptBuilder(
     });
 
     if (invocation.abortOnFail) {
-      scriptBuilder.emit(sc.OpCode.ABORT);
+      scriptBuilder.emit(sc.OpCode.ASSERT);
     }
   }
 
@@ -181,7 +189,7 @@ export async function getNetworkFee(
 }
 
 export function getWitnesses(
-  neonjsAccount: wallet.Account,
+  account: wallet.Account,
   signers: Signer[],
 ): tx.Witness[] {
   const witnesses: tx.Witness[] = [];
@@ -191,8 +199,8 @@ export function getWitnesses(
       new tx.Witness({
         invocationScript: "",
         verificationScript:
-          signer.account === neonjsAccount.scriptHash
-            ? wallet.getVerificationScriptFromPublicKey(neonjsAccount.publicKey)
+          signer.account === account.scriptHash
+            ? wallet.getVerificationScriptFromPublicKey(account.publicKey)
             : "",
       }),
     );
@@ -202,7 +210,7 @@ export function getWitnesses(
 }
 
 export async function calculateFee(
-  neonjsAccount: wallet.Account,
+  account: wallet.Account,
   rpcClient: rpc.RPCClient,
   invocations: InvocationArguments[],
   signers?: Signer[],
@@ -219,7 +227,7 @@ export async function calculateFee(
 
   transaction.signers = signers?.map((signer) => new tx.Signer(signer)) || [];
 
-  transaction.witnesses = await getWitnesses(neonjsAccount, signers || []);
+  transaction.witnesses = await getWitnesses(account, signers || []);
 
   transaction.attributes = await getAttributes(attributes);
 
@@ -233,4 +241,29 @@ export async function calculateFee(
   transaction.networkFee = await getNetworkFee(rpcClient, transaction);
 
   return Number(transaction.networkFee.add(transaction.systemFee).toDecimal(8));
+}
+
+export function buildSendInvokeParams(
+  account: wallet.Account,
+  asset: UInt160,
+  from: UInt160,
+  to: UInt160,
+  amount: Integer,
+  data?: Argument,
+): SendInvokeParams {
+  return {
+    invocations: [
+      {
+        hash: asset,
+        operation: "transfer",
+        args: [
+          { type: "Hash160", value: from },
+          { type: "Hash160", value: to },
+          { type: "Integer", value: amount },
+          data ?? { type: "Any" },
+        ],
+      },
+    ],
+    signers: [{ account: account.scriptHash, scopes: "CalledByEntry" }],
+  };
 }
