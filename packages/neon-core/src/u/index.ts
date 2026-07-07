@@ -5,3 +5,4 @@ export * from "./StringStream";
 export * from "./HexString";
 export * from "./BigInteger";
 export * from "./serialize";
+export * from "./BinaryWriter";

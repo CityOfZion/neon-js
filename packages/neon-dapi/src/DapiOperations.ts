@@ -37,7 +37,7 @@ import {
   getWitnesses,
   transformTransaction,
 } from "./utils.js";
-import type { DapiNetwork } from "./constants.js";
+import { DapiNetwork } from "./constants.js";
 
 type DapiOperationsConfig = {
   rpcClient: string | rpc.RPCClient;
@@ -84,8 +84,6 @@ export class DapiOperations {
     payload: AuthenticationChallengePayload,
   ): Promise<AuthenticationResponsePayload> {
     try {
-      const timestamp = Math.floor(Date.now() / 1000);
-
       if (!payload.networks.length) {
         throw new DapiError(DapiErrorCode.INVALID, "Networks is empty");
       }
@@ -94,15 +92,17 @@ export class DapiOperations {
         throw new DapiError(DapiErrorCode.INVALID, "Network is not supported");
       }
 
-      const networkHex = u.num2hexstring(this.network, 4, true);
-      const nonceHex = u.num2hexstring(Number(payload.nonce), 8, true);
-      const timestampHex = u.num2hexstring(timestamp, 4, true);
-      const hashHex = this.account.scriptHash.replace(/^0x/i, "");
-      const actionHex = u.str2hexstring(payload.action);
-      const domainHex = u.str2hexstring(payload.domain);
+      const bw = new u.BinaryWriter();
 
-      const hash =
-        networkHex + nonceHex + timestampHex + hashHex + actionHex + domainHex;
+      const timestamp = Math.floor(Date.now() / 1000);
+      bw.writeUint64(Number(payload.nonce));
+      bw.writeUint32(timestamp);
+      bw.writeUint32(this.network);
+      bw.writeUInt160(this.account.scriptHash);
+      bw.writeVarString(payload.action);
+      bw.writeVarString(payload.domain);
+
+      const hash = bw.toHex();
 
       const signature = wallet.sign(hash, this.account.privateKey);
 
