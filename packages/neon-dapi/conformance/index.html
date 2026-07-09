@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neo DAPI Conformance Suite</title>
+  <link rel="stylesheet" href="conformance.css" />
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">
+        <div class="logo-mark">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 1L15 5V11L8 15L1 11V5L8 1Z" fill="#000" opacity=".5" />
+            <path d="M8 3.5L12.5 6V10L8 12.5L3.5 10V6L8 3.5Z" fill="#000" />
+          </svg>
+        </div>
+        <h1>Neo DAPI Conformance Suite</h1>
+      </div>
+      <p class="sub">Open in a browser with a Neo wallet extension active · tests run against the injected provider</p>
+    </header>
+
+    <div class="pill">
+      <div class="dot" id="pdot"></div>
+      <span id="ptxt">Waiting for provider…</span>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn btn-primary" id="btnRun" onclick="runAll()" disabled>▶ Run All</button>
+      <button class="btn btn-ghost" onclick="resetAll()">↺ Reset</button>
+      <span class="spacer"></span>
+      <span class="sbar" id="sbar">—</span>
+    </div>
+
+    <div id="groups"></div>
+
+    <div class="summary hide" id="summary">
+      <div><span class="sv sv-pass" id="sPass">0</span> passed</div>
+      <div><span class="sv sv-fail" id="sFail">0</span> failed</div>
+      <div><span class="sv sv-skip" id="sSkip">0</span> skipped</div>
+      <span class="st" id="sTime"></span>
+    </div>
+  </div>
+
+  <script src="conformance.js"></script>
+  <script src="ui.js"></script>
+</body>
+
+</html>
