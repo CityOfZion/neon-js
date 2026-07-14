@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-dapi",
   "description": "Neon Ledger integration for Node.js",
-  "version": "5.9.0",
+  "version": "5.10.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
