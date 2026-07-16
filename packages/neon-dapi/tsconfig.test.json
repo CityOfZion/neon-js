@@ -1,9 +1,0 @@
-{
-  "extends": "../../tsconfig-test.json",
-  "compilerOptions": {
-    "paths": {
-      "@cityofzion/neon-core": ["../neon-core/src/index.ts"]
-    }
-  },
-  "include": ["src/**/*", "__tests__/**/*"]
-}

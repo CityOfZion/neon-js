@@ -6,6 +6,7 @@
     { "path": "./packages/neon-api" },
     { "path": "./packages/neon-uri" },
     { "path": "./packages/neon-ledger"},
-    { "path": "./packages/neon-js" }
+    { "path": "./packages/neon-js" },
+    { "path": "./packages/neon-dapi" }
   ]
 }
