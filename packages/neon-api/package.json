@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-api",
   "description": "Neon-API module: High level API for neon-js",
-  "version": "5.10.0",
+  "version": "5.10.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
@@ -35,7 +35,7 @@
     "test:unit": "jest /packages/.*/__tests__/.*"
   },
   "peerDependencies": {
-    "@cityofzion/neon-core": "^5.10.0"
+    "@cityofzion/neon-core": "^5.10.1"
   },
   "files": [
     "dist/",

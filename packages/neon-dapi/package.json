@@ -1,7 +1,7 @@
 {
   "name": "@cityofzion/neon-dapi",
   "description": "Neon implementation of dApi(NEP-21)",
-  "version": "5.10.0",
+  "version": "5.10.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CityOfZion/neon-js.git"
@@ -34,7 +34,7 @@
     "test:unit": "jest --config jest.config.js"
   },
   "peerDependencies": {
-    "@cityofzion/neon-core": "^5.10.0"
+    "@cityofzion/neon-core": "^5.10.1"
   },
   "files": [
     "lib/",
