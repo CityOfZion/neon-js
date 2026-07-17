@@ -1,10 +1,9 @@
 {
-  "references": [
-    {
-      "path": "./tsconfig.source.json"
-    },
-    {
-      "path": "./tsconfig.test.json"
-    }
-  ]
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib"
+  },
+  "references": [{ "path": "../neon-core" }],
+  "include": ["src/**/*"]
 }
